@@ -8,7 +8,7 @@ Summary:        Parser for Python internal Marshal format
 # SPDX
 License:        MIT
 URL:            https://github.com/fedora-python/%{name}
-Source0:        https://github.com/fedora-python/marshalparser/archive/v0.5.0/marshalparser-0.5.0.tar.gz
+Source0:        https://github.com/fedora-python/marshalparser/archive/refs/tags/v0.5.0/marshalparser-0.5.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

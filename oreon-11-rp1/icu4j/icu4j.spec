@@ -11,7 +11,7 @@ License:        Unicode-3.0
 URL:            https://icu.unicode.org/
 VCS:            git:%{giturl}.git
 
-Source:        https://github.com/unicode-org/icu/archive/release-78.3.tar.gz
+Source:        https://github.com/unicode-org/icu/archive/refs/tags/release-78.3.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.gson:gson)

@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-sec-dispatcher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-sec-dispatcher/archive/plexus-sec-dispatcher-2.0/plexus-sec-dispatcher-2.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-sec-dispatcher/archive/refs/tags/plexus-sec-dispatcher-2.0/plexus-sec-dispatcher-2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

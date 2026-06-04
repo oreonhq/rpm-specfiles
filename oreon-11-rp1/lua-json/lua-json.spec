@@ -9,7 +9,7 @@ Release:        12%{?dist}
 Summary:        JSON Parser/Constructor for Lua
 License:        MIT
 URL:            https://github.com/harningt/luajson
-Source0:        https://github.com/harningt/luajson/archive/%{version}/luajson-%{version}.tar.gz
+Source0:        https://github.com/harningt/luajson/archive/refs/tags/%{version}/luajson-%{version}.tar.gz
 # Support for lpeg 1.1.0
 Patch0:         https://github.com/harningt/luajson/pull/48.patch
 BuildRequires:  lua-devel

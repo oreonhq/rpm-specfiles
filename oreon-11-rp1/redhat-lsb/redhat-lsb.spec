@@ -1,4 +1,4 @@
-%global source0_hash 753e61615912b6e9773653753696d789aaf4c0903a502db745f76f9d4ae7cf8f
+%global source0_hash none
 
 # globals for redhat-lsb-20231006git8d00acdc.tar.gz
 %global gitdate 20231006
@@ -23,7 +23,7 @@ Version: 5.0
 Release: 0.18%{gver}%{?dist}
 URL: https://wiki.linuxfoundation.org/lsb/start
 # https://github.com/LinuxStandardBase/lsb-samples/
-Source0:        https://github.com/LinuxStandardBase/lsb-samples/archive/%{gitversion}.tar.gz#/redhat-lsb-5.0.tar.gz
+Source0:        https://github.com/LinuxStandardBase/lsb-samples/archive/%{gitversion}.tar.gz#/redhat-lsb-%{snapshot}.tar.gz
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 BuildRequires: make

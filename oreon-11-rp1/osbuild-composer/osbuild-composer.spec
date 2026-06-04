@@ -36,7 +36,7 @@ ExcludeArch:    i686 armv7hl
 # Upstream license specification: Apache-2.0
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        https://github.com/osbuild/osbuild-composer/archive/v165/osbuild-composer-165.tar.gz
+Source0:        https://github.com/osbuild/osbuild-composer/archive/refs/tags/v165/osbuild-composer-165.tar.gz
 
 
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}

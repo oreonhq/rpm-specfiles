@@ -7,7 +7,7 @@ Summary:        Source-stage rpm automation for R packages
 
 License:        MIT
 URL:            https://github.com/rpm-software-management/R-rpm-macros
-Source0:        https://github.com/rpm-software-management/R-rpm-macros/archive/v1.3.7/R-rpm-macros-1.3.7.tar.gz
+Source0:        https://github.com/rpm-software-management/R-rpm-macros/archive/refs/tags/v1.3.7/R-rpm-macros-1.3.7.tar.gz
 Patch0:         0001-tests-expect-R-4.6-ABI.patch
 
 BuildArch:      noarch

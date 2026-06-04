@@ -13,7 +13,7 @@ Release:        0.30%{?dist}
 Summary:        Detect changes in the ABI between kernel builds
 License:        GPL-3.0-or-later
 URL:            %{forgeurl}
-Source0:        https://github.com/skozina/kabi-dw/archive/bd56a6004d5d409d7d03c386400da3f49a8c4c03/kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz
+Source0:        https://github.com/skozina/kabi-dw/archive/refs/tags/bd56a6004d5d409d7d03c386400da3f49a8c4c03/kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz
 
 BuildRequires:  elfutils-devel
 BuildRequires:  gcc

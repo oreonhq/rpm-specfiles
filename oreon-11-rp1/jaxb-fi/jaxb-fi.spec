@@ -11,7 +11,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-fi
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-fi/archive/2.1.1/jaxb-fi-2.1.1.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-fi/archive/refs/tags/2.1.1/jaxb-fi-2.1.1.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)

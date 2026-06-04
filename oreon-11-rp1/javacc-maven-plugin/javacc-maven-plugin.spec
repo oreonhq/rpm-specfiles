@@ -18,7 +18,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 URL:            https://www.mojohaus.org/javacc-maven-plugin/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/mojohaus/javacc-maven-plugin/archive/javacc-maven-plugin-3.2.0.tar.gz
+Source0:        https://github.com/mojohaus/javacc-maven-plugin/archive/refs/tags/javacc-maven-plugin-3.2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

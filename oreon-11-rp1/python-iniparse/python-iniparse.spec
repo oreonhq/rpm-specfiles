@@ -15,7 +15,7 @@ Summary:        Accessing and Modifying INI files
 #   as well.  The Python license (LICENSE-PSF) applies to that code.
 License:        MIT AND Python-2.0.1
 URL:            https://github.com/candlepin/python-iniparse
-Source0:        https://github.com/candlepin/python-iniparse/archive/0.5.1/python-iniparse-0.5.1.tar.gz
+Source0:        https://github.com/candlepin/python-iniparse/archive/refs/tags/0.5.1/python-iniparse-0.5.1.tar.gz
 
 # Python 3.14 support: Avoid the multiprocessing forkserver method
 Patch:          https://github.com/candlepin/python-iniparse/pull/38.patch

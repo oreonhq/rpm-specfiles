@@ -11,7 +11,7 @@ Summary:       JAX-RS 2.0: The Java API for RESTful Web Services
 # ASL 2.0 src/main/java/javax/ws/rs/core/GenericEntity.java
 License:       (CDDL-1.0 or GPL-2.0-only WITH Classpath-exception-2.0) and Apache-2.0
 URL:           https://github.com/jboss/jboss-jaxrs-api_spec
-Source0:        https://github.com/jboss/jboss-jaxrs-api_spec/archive/jboss-jaxrs-api_2.0_spec-1.0.0%{?namedreltag}.tar.gz
+Source0:        https://github.com/jboss/jboss-jaxrs-api_spec/archive/refs/tags/jboss-jaxrs-api_2.0_spec-1.0.0%{?namedreltag}.tar.gz
 Patch1:        0001-Update-to-use-jakarta.xml.bind-package.patch
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42

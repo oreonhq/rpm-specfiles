@@ -64,7 +64,7 @@ Source16: unbound-munin.README
 Source17: unbound-anchor.service
 Source18:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz.asc
 # https://nlnetlabs.nl/signing-keys/
-Source19: https://nlnetlabs.nl/downloads/keys/releases-g2.asc#/nlnetlabs2026-g2.asc
+Source19:        nlnetlabs2026-g2.asc
 Source20: unbound.sysusers
 Source21: remote-control.conf
 Source22: https://nlnetlabs.nl/downloads/keys/Yorgos.asc

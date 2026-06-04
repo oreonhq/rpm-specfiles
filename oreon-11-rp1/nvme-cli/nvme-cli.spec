@@ -12,7 +12,7 @@ Summary:        NVMe management command line interface
 
 License:        GPL-2.0-only
 URL:            https://github.com/linux-nvme/nvme-cli
-Source0:        https://github.com/linux-nvme/nvme-cli/archive/v2.16/nvme-cli-2.16.tar.gz
+Source0:        https://github.com/linux-nvme/nvme-cli/archive/refs/tags/v2.16/nvme-cli-2.16.tar.gz
 Source1:        99-nvme-nbft-connect.sh
 Source2:        99-nvme-nbft-no-ignore-carrier.conf
 

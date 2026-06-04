@@ -9,7 +9,7 @@ Summary:       FasterXML parent pom
 License:       Apache-2.0
 
 URL:           https://github.com/FasterXML/oss-parent
-Source0:        https://github.com/FasterXML/oss-parent/archive/oss-parent-62.tar.gz
+Source0:        https://github.com/FasterXML/oss-parent/archive/refs/tags/oss-parent-62.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires: maven-local

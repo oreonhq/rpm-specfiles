@@ -6,7 +6,7 @@ Release:        25%{?dist}
 Summary:        Unicode Text Segmentation Package
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND (GPL-2.0-or-later OR Artistic-1.0-Perl)
 URL:            http://sf.net/projects/linefold/
-Source0:        https://github.com/hatukanezumi/sombok/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/hatukanezumi/sombok/archive/refs/tags/%{name}-%{version}.tar.gz
 # A multilib-safe wrapper, bug #1853260
 Source1:        sombok.h
 

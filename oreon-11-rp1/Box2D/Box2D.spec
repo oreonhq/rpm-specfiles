@@ -7,7 +7,7 @@ Summary: A 2D Physics Engine for Games
 
 License: Zlib
 URL: http://box2d.org/
-Source0:        https://github.com/erincatto/box2d/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/erincatto/box2d/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires: cmake

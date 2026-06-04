@@ -13,7 +13,7 @@ Summary:	Library and tools for handling papersize
 License:	LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND GPL-3.0-or-later AND LGPL-2.0-or-later AND FSFAP
 URL:		https://github.com/rrthomas/libpaper/
 # Upstream GitHub archive has no generated configure. Fedora ships this dist tarball (lookaside).
-Source0:        https://github.com/rrthomas/libpaper/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rrthomas/libpaper/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 # Pulled from paper
 Source1:	localepaper.c
 # from libpaper-1.x

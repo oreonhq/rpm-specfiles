@@ -38,7 +38,7 @@ Source0:        https://media.inkscape.org/dl/resources/file/inkscape-%{version}
 Source1:        https://media.inkscape.org/media/resources/sigs/inkscape-1.4.4_2026-05-05_dcaf3e7d9e.tar.xz.sig
 
 # Keyring(s)
-Source10:        https://inkscape.org/~MarcJeanmougin/gpg/#/MarcJeanmougin.gpg
+Source10:        MarcJeanmougin.gpg
 
 
 # Should we split this package and mark it as a Enhance,

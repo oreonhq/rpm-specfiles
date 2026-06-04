@@ -38,7 +38,7 @@ Release:          %{release_number}%{?phase:.}%{?phase}%{?timestamp:.}%{?timesta
 #     --prefix ldap-sdk-<version>/ \
 #     -o ldap-sdk-<version>.tar.gz \
 #     <version tag>
-Source:        https://github.com/dogtagpki/ldap-sdk/archive/v%{version}%{?phase:-}%{?phase}/ldap-sdk-%{version}%{?phase:-}%{?phase}.tar.gz
+Source:        https://github.com/dogtagpki/ldap-sdk/archive/refs/tags/v%{version}%{?phase:-}%{?phase}/ldap-sdk-%{version}%{?phase:-}%{?phase}.tar.gz
 
 # To create a patch for all changes since a version tag:
 # $ git format-patch \

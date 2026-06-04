@@ -11,7 +11,7 @@ License: LicenseRef-Fedora-Public-Domain
 # Note that Moby Project officially does not exist any more. The most complete
 # information about the project is in Wikipedia.
 URL: https://en.wikipedia.org/wiki/Moby_Project
-Source: https://web.archive.org/web/20060527013227/http://www.dcs.shef.ac.uk/research/ilash/Moby/mwords.tar.Z
+Source: mwords.tar.Z
 
 BuildArch: noarch
 BuildRequires: dos2unix

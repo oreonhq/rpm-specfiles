@@ -12,7 +12,7 @@ Summary:        Simple python library to deal with URI Templates (RFC 6570)
 
 License:        BSD-3-Clause OR Apache-2.0
 URL:            https://uritemplate.io.readthedocs
-Source0:        https://github.com/sigmavirus24/%{modname}/archive/%{version}/%{modname}-%{version}.tar.gz
+Source0:        https://github.com/sigmavirus24/%{modname}/archive/refs/tags/%{version}/%{modname}-%{version}.tar.gz
 
 BuildArch:      noarch
 

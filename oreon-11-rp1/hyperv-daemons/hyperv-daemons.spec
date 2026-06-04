@@ -1,4 +1,4 @@
-%global source0_hash c3270f01b63089c7f6a952aabde75840c2c352bbd372fadd24a46e565c0228d6
+%global source0_hash none
 
 # snapshot version
 %global snapver .20240616git
@@ -17,7 +17,7 @@ URL:      http://www.kernel.org
 
 # Source files obtained from kernel upstream 6.10-rc4 (6ba59ff4227927d3a8530fc2973b80e94b54d58f)
 # git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-Source0:        https://github.com/microsoft/hyperv-daemons/archive/refs/heads/master.tar.gz#/tools-hv-6ba59ff42279.tar.gz
+Source0:        tools-hv-6ba59ff42279.tar.gz
 Source1:        COPYING
 
 # HYPERV KVP DAEMON

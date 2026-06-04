@@ -13,7 +13,7 @@ Summary:        Equivalent of the C preprocessor for OCaml programs
 License:        BSD-3-Clause
 URL:            https://ocaml-community.github.io/cppo/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/ocaml-community/cppo/archive/v1.8.0/cppo-1.8.0.tar.gz
+Source0:        https://github.com/ocaml-community/cppo/archive/refs/tags/v1.8.0/cppo-1.8.0.tar.gz
 
 BuildRequires:  ocaml >= 4.02.3
 BuildRequires:  ocaml-dune

@@ -33,7 +33,7 @@ Source12:           %{name}-sd.service
 Source15:           %{name}-fd.sysconfig
 Source16:           %{name}-dir.sysconfig
 Source17:           %{name}-sd.sysconfig
-Source19:           https://salsa.debian.org/bacula-team/bacula/-/raw/master/debian/additions/bacula-tray-monitor.png#/bacula-tray-monitor.png
+Source19:        bacula-tray-monitor.png
 
 # LGPL-3.0-only - S3 libs with AWS glacier support
 # https://gitlab.bacula.org/bacula-community-edition/libs3/-/commits/master?ref_type=heads

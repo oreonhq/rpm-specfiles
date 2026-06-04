@@ -4,7 +4,7 @@ Summary:        A console-based network monitoring utility
 Name:           iptraf-ng
 Version:        1.2.2
 Release:        20%{?dist}
-Source0:        https://github.com/iptraf-ng/iptraf-ng/archive/v%{version}.tar.gz
+Source0:        https://github.com/iptraf-ng/iptraf-ng/archive/refs/tags/v%{version}.tar.gz
 
 Source1:        %{name}-logrotate.conf
 Source2:        %{name}-tmpfiles.conf

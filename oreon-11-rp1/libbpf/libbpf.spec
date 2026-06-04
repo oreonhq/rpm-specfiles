@@ -19,7 +19,7 @@ License:        LGPL-2.1-only OR BSD-2-Clause
 URL:            https://github.com/%{githubname}/%{githubname}
 Source0:        https://github.com/libbpf/libbpf/archive/refs/tags/v1.6.3.tar.gz
 
-Source1:        https://github.com/libbpf/usdt/archive/f4ea2f524efa80d062f4d586d78daafb83dc7d24/usdt-0.1.0.tar.gz
+Source1:        https://github.com/libbpf/usdt/archive/refs/tags/f4ea2f524efa80d062f4d586d78daafb83dc7d24/usdt-0.1.0.tar.gz
 
 BuildRequires:  gcc elfutils-libelf-devel elfutils-devel
 BuildRequires: make

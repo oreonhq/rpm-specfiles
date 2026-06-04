@@ -9,7 +9,7 @@ Name: crash
 Version: 9.0.1
 Release: 6%{?dist}
 License: GPL-3.0-only
-Source0:        https://github.com/crash-utility/crash/archive/crash-%{version}.tar.gz
+Source0:        https://github.com/crash-utility/crash/archive/refs/tags/crash-%{version}.tar.gz
 Source1: https://ftp.gnu.org/gnu/gdb/gdb-16.2.tar.gz
 URL: https://crash-utility.github.io
 ExclusiveOS: Linux

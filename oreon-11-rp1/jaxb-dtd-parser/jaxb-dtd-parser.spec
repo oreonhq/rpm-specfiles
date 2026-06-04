@@ -9,7 +9,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-dtd-parser
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-dtd-parser/archive/1.5.1/jaxb-dtd-parser-1.5.1.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-dtd-parser/archive/refs/tags/1.5.1/jaxb-dtd-parser-1.5.1.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)

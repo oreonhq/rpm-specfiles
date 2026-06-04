@@ -48,7 +48,6 @@ Summary:        Software implementation of the OpenAL 3D audio API
 # https://forums.nesdev.org/viewtopic.php?p=251534#p251534>
 # Archival:
 #  - https://archive.is/wViJG
-#  - https://web.archive.org/web/20250130174430/https://forums.nesdev.org/viewtopic.php?p=251534#p251534
 # Close license review regarding datasets:
 # https://gitlab.com/fedora/legal/fedora-license-data/-/issues/629
 # https://gitlab.com/fedora/legal/fedora-license-data/-/issues/635

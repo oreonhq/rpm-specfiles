@@ -9,7 +9,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-stax-ex
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-stax-ex/archive/2.1.0/jaxb-stax-ex-2.1.0.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-stax-ex/archive/refs/tags/2.1.0/jaxb-stax-ex-2.1.0.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)

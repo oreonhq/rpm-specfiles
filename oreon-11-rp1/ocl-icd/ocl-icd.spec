@@ -7,7 +7,7 @@ Summary:        OpenCL Library (Installable Client Library) Bindings
 License:        BSD-2-Clause
 URL:            https://github.com/OCL-dev/%{name}/
 
-Source0:        https://github.com/OCL-dev/ocl-icd//archive/v2.3.4/ocl-icd-2.3.4.tar.gz
+Source0:        https://github.com/OCL-dev/ocl-icd//archive/refs/tags/v2.3.4/ocl-icd-2.3.4.tar.gz
 
 BuildRequires:  asciidoc
 BuildRequires:  automake

@@ -10,7 +10,7 @@ Summary: A tool maintaining translations anywhere
 License: GPL-2.0-or-later
 URL: https://po4a.org/
 
-Source0:        https://github.com/mquinson/po4a/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mquinson/po4a/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 BuildRequires: /usr/bin/xsltproc

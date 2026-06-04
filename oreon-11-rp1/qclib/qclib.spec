@@ -6,7 +6,7 @@ Release:	3%{?dist}
 Summary:	Library for extraction of system information for Linux on z Systems
 License:	BSD-3-Clause
 URL:		https://github.com/ibm-s390-linux/qclib
-Source0:        https://github.com/ibm-s390-linux/qclib/archive/2.5.1/qclib-2.5.1.tar.gz
+Source0:        https://github.com/ibm-s390-linux/qclib/archive/refs/tags/2.5.1/qclib-2.5.1.tar.gz
 ExclusiveArch:	s390 s390x
 BuildRequires:	make
 BuildRequires:	gcc

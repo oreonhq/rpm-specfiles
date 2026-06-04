@@ -35,7 +35,7 @@ Summary:        JSON implementation in C
 
 License:        MIT
 URL:            https://github.com/%{name}/%{name}
-Source0:        https://github.com/json-c/json-c/archive/json-c-0.18-20240915.tar.gz
+Source0:        https://github.com/json-c/json-c/archive/refs/tags/json-c-0.18-20240915.tar.gz
 
 # Add libver to mingw dll
 Patch0:         json-c_mingw-libver.patch

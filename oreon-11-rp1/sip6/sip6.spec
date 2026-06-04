@@ -10,7 +10,7 @@ Summary:        SIP - Python/C++ Bindings Generator
 
 License:        BSD-2-Clause
 URL:            https://github.com/Python-SIP/sip
-Source0:        https://github.com/Python-SIP/sip/archive/6.15.1/sip-6.15.1.tar.gz
+Source0:        https://github.com/Python-SIP/sip/archive/refs/tags/6.15.1/sip-6.15.1.tar.gz
 
 BuildArch:      noarch
 

@@ -26,7 +26,7 @@ Summary: The Point-to-Point Protocol daemon
 License: bsd-3-clause AND zlib AND licenseref-fedora-public-domain AND bsd-attribution-hpnd-disclaimer AND bsd-4.3tahoe AND bsd-4-clause-uc AND apache-2.0 AND lgpl-2.0-or-later AND (gpl-2.0-or-later OR bsd-2-clause OR bsd-3-clause OR bsd-4-clause) AND gpl-2.0-or-later AND xlock AND gpl-1.0-or-later AND mackerras-3-clause-acknowledgment AND mackerras-3-clause AND hpnd-fenneberg-Livingston AND sun-ppp AND hpnd-inria-imag AND sun-ppp-2000
 URL:     http://www.samba.org/ppp
 
-Source0:        https://github.com/paulusmack/ppp/archive/ppp-%{version}.tar.gz
+Source0:        https://github.com/paulusmack/ppp/archive/refs/tags/ppp-%{version}.tar.gz
 Source1:        ppp-pam.conf
 Source2:        ppp-logrotate.conf
 Source3:        ppp-tmpfiles.conf

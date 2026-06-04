@@ -11,7 +11,7 @@ Release:        23%{?dist}
 License:        LicenseRef-Callaway-BSD
 
 URL:            https://github.com/jaxen-xpath/jaxen
-Source0:        https://github.com/jaxen-xpath/jaxen/archive/v1.2.0/jaxen-1.2.0.tar.gz
+Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v1.2.0/jaxen-1.2.0.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

@@ -15,7 +15,7 @@ URL:            https://junit.org/junit5/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/junit-team/junit5/archive/r%{version}/junit5-%{version}.tar.gz
+Source0:        https://github.com/junit-team/junit5/archive/refs/tags/r%{version}/junit5-%{version}.tar.gz
 # Aggregator POM (used for packaging only)
 Source100:      aggregator.pom
 # Platform POMs

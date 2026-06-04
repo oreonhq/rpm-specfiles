@@ -20,7 +20,7 @@ License:       LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:           https://garrigue.github.io/labltk/
 VCS:           git:%{giturl}.git
-Source0:        https://github.com/garrigue/labltk/archive/8.06.15/labltk-8.06.15.tar.gz
+Source0:        https://github.com/garrigue/labltk/archive/refs/tags/8.06.15/labltk-8.06.15.tar.gz
 
 # This adds debugging (-g) everywhere.
 Patch1:        labltk-8.06.11-enable-debugging.patch

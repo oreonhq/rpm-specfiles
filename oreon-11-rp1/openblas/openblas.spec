@@ -22,7 +22,7 @@ Summary:        An optimized BLAS library based on GotoBLAS2
 
 License:        BSD-3-Clause
 URL:            https://github.com/OpenMathLib/OpenBLAS
-Source0:        https://github.com/OpenMathLib/OpenBLAS/archive/v0.3.29/OpenBLAS-0.3.29.tar.gz
+Source0:        https://github.com/OpenMathLib/OpenBLAS/archive/refs/tags/v0.3.29/OpenBLAS-0.3.29.tar.gz
 
 # Use system lapack
 Patch0:         openblas-0.2.15-system_lapack.patch

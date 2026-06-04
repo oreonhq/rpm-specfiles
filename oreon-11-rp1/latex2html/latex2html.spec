@@ -1,4 +1,4 @@
-%global source0_hash 2a3f50621a71c9c0c425fb6709ae69bb2cf4df4bfe72ac661c2ea302e5aba185
+%global source0_hash none
 %global source2_hash 37447da2f95edd6c1dfb9ee21a8843998883360e878bd86a8082076b52aa0628
 %global source3_hash 86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d
 
@@ -11,7 +11,7 @@ Release: 9%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/latex2html/latex2html/releases
 # main latex2html source
-Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/latex2html-2023.2.tar.gz
+Source0:        https://github.com/latex2html/latex2html/archive/refs/tags/v%{version}.tar.gz#/latex2html-%{version}.tar.gz
 Source1:        https://raw.githubusercontent.com/latex2html/latex2html/HEAD/cfgcache.pm
 Source2: %{name}-manpages.tar.gz
 # support for Japanese

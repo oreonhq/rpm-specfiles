@@ -6,7 +6,7 @@ Version:        3.0.3
 Release:        3%{?dist}
 License:        EPL-1.0
 URL:            https://github.com/ibm-s390-linux/libzfcphbaapi
-Source0:        https://github.com/ibm-s390-linux/libzfcphbaapi/archive/v3.0.3/libzfcphbaapi-3.0.3.tar.gz
+Source0:        https://github.com/ibm-s390-linux/libzfcphbaapi/archive/refs/tags/v3.0.3/libzfcphbaapi-3.0.3.tar.gz
 Patch1:         %{name}-3.0.2-fedora.patch
 
 ExclusiveArch:  s390 s390x

@@ -11,7 +11,7 @@ Summary: Libsmbios C/C++ shared libraries
 
 License: GPL-2.0-or-later or OSL-2.1
 URL: https://github.com/dell/libsmbios
-Source0:        https://github.com/dell/libsmbios/archive/v%{version}/libsmbios-%{version}.tar.gz
+Source0:        https://github.com/dell/libsmbios/archive/refs/tags/v%{version}/libsmbios-%{version}.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

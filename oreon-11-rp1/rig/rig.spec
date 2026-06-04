@@ -5,7 +5,7 @@ Summary:    Monitor a system for events and trigger specific actions
 Version:    1.1
 Release:    16%{?dist}
 Url:        https://github.com/TurboTurtle/rig
-Source0:        https://github.com/TurboTurtle/rig/archive/rig-1.1.tar.gz
+Source0:        https://github.com/TurboTurtle/rig/archive/refs/tags/rig-1.1.tar.gz
 License:    GPL-2.0-only
 BuildArch:  noarch
 

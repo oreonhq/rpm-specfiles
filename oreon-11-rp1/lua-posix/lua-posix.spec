@@ -9,7 +9,7 @@ Release:        %autorelease
 Summary:        POSIX library for Lua
 License:        MIT
 URL:            http://luaposix.github.io/luaposix/
-Source0:        https://github.com/luaposix/luaposix/archive/v%{version}/lua-posix-%{version}.tar.gz
+Source0:        https://github.com/luaposix/luaposix/archive/refs/tags/v%{version}/lua-posix-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  libxcrypt-devel
 BuildRequires:  lua-devel

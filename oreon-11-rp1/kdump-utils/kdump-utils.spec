@@ -9,7 +9,7 @@ Summary: Kernel crash dump collection utilities
 
 License: GPL-2.0-only
 URL: https://github.com/rhkdump/kdump-utils
-Source0:        https://github.com/rhkdump/kdump-utils/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rhkdump/kdump-utils/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 %ifarch ppc64 ppc64le
 Requires(post): servicelog

@@ -11,7 +11,7 @@ URL:            https://github.com/moditect/moditect
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/moditect/moditect/archive/1.1.0/moditect-1.1.0.tar.gz
+Source0:        https://github.com/moditect/moditect/archive/refs/tags/1.1.0/moditect-1.1.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

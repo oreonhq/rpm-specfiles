@@ -16,7 +16,7 @@ Release: %autorelease
 Summary: Seamless operability between C++11 and Python
 License: BSD-3-Clause
 URL:	 https://github.com/pybind/pybind11
-Source0:        https://github.com/pybind/pybind11/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/pybind/pybind11/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 # Use the `/usr` prefix for the python commands
 Patch1:  pybind11-2.13.6-Use_usr_prefix.patch

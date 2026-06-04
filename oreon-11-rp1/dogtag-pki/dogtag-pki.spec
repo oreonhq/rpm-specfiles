@@ -43,7 +43,7 @@ Release:          %{release_number}%{?phase:.}%{?phase}%{?timestamp:.}%{?timesta
 #     --prefix pki-<version>/ \
 #     -o pki-<version>.tar.gz \
 #     <version tag>
-Source:        https://github.com/dogtagpki/pki/archive/v%{version}%{?phase:-}%{?phase}/pki-%{version}%{?phase:-}%{?phase}.tar.gz
+Source:        https://github.com/dogtagpki/pki/archive/refs/tags/v%{version}%{?phase:-}%{?phase}/pki-%{version}%{?phase:-}%{?phase}.tar.gz
 
 # To create a patch for all changes since a version tag:
 # $ git format-patch \

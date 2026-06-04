@@ -11,7 +11,7 @@ License:        MIT
 URL:            https://github.com/ngtcp2/ngtcp2
 Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz
 Source1:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz.asc
-Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b91474d1eb29889bd0ef7e8403d5d673c366#/tatsuhiro-t.asc
+Source2:        tatsuhiro-t.asc
 # Release does not contain all parts to build documentation
 # https://github.com/ngtcp2/ngtcp2/pull/1404
 Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/mkapiref.py

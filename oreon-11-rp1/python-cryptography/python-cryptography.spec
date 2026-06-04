@@ -22,7 +22,7 @@ Summary:        PyCA's cryptography library
 # MIT OR Apache-2.0
 License:        (Apache-2.0 OR BSD-3-Clause) AND PSF-2.0 AND Apache-2.0 AND BSD-3-Clause AND MIT AND (MIT OR Apache-2.0)
 URL:            https://cryptography.io/en/latest/
-Source0:        https://github.com/pyca/cryptography/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/pyca/cryptography/archive/refs/tags/%{version}/%{srcname}-%{version}.tar.gz
 Source1:        conftest-skipper.py
 
 ExclusiveArch:  %{rust_arches}

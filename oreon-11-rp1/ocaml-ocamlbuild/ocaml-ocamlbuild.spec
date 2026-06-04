@@ -20,7 +20,7 @@ License:       LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:           https://github.com/ocaml/ocamlbuild
 VCS:           git:%{url}.git
-Source0:        https://github.com/ocaml/ocamlbuild/archive/0.16.1/ocamlbuild-0.16.1.tar.gz
+Source0:        https://github.com/ocaml/ocamlbuild/archive/refs/tags/0.16.1/ocamlbuild-0.16.1.tar.gz
 
 BuildRequires: make
 BuildRequires: ocaml >= 4.08

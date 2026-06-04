@@ -16,7 +16,7 @@ Summary:        Boot server configurator
 URL:            https://cobbler.github.io/
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
-Source0:        https://github.com/cobbler/cobbler/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/cobbler/cobbler/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 Source1:        migrate-settings.sh
 Source2:        %{name}.te
 Source3:        %{name}.if

@@ -7,7 +7,7 @@ Summary:        Bill of materials POM for Jackson projects
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-bom
-Source0:        https://github.com/FasterXML/jackson-bom/archive/jackson-bom-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-bom/archive/refs/tags/jackson-bom-2.18.2.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local

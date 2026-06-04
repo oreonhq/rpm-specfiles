@@ -30,7 +30,7 @@ Release:   9%{?dist}
 # SPDX:
 License:   BSD-3-Clause
 URL:       https://github.com/%{gh_owner}/%{gh_project}
-Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{gh_project}-%{version}-%{gh_short}.tar.gz
+Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/refs/tags/%{gh_commit}/%{gh_project}-%{version}-%{gh_short}.tar.gz
 
 # Fix test with memcached 1.6.40
 Patch0:    162.patch

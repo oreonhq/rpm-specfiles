@@ -7,7 +7,7 @@ Summary:       eSpeak NG Text-to-Speech
 
 License:       GPL-3.0-only AND GPL-3.0-or-later AND Apache-2.0 AND BSD-2-Clause AND Unicode-DFS-2016 AND CC-BY-SA-3.0
 URL:           https://github.com/espeak-ng/espeak-ng
-Source0:        https://github.com/espeak-ng/espeak-ng/archive/1.52.0/espeak-ng-1.52.0.tar.gz
+Source0:        https://github.com/espeak-ng/espeak-ng/archive/refs/tags/1.52.0/espeak-ng-1.52.0.tar.gz
 
 BuildRequires: gcc-g++
 BuildRequires: make

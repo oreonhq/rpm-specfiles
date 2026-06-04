@@ -7,7 +7,7 @@ Summary:        Core annotations for Jackson data processor
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-annotations
-Source0:        https://github.com/FasterXML/jackson-annotations/archive/jackson-annotations-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-annotations/archive/refs/tags/jackson-annotations-2.18.2.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local

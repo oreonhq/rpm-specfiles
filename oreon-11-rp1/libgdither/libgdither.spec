@@ -8,7 +8,7 @@ Summary:        Library for applying dithering to PCM audio sources
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://plugin.org.uk/libgdither/README
-Source0:        https://web.archive.org/web/20240101000000id_/http://plugin.org.uk/libgdither/libgdither-0.6.tar.gz
+Source0:        libgdither-0.6.tar.gz
 Patch0:         libgdither-0.6-default.patch
 Patch1:         libgdither-0.6-gavl.patch
 Patch2:         libgdither-0.6-ldflags.patch

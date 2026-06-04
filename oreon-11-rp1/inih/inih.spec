@@ -9,7 +9,7 @@ Summary:  Simple INI file parser library
 
 License:  BSD-3-Clause
 URL:      https://github.com/benhoyt/inih
-Source0:        https://github.com/benhoyt/inih/archive/r62/inih-r62.tar.gz
+Source0:        https://github.com/benhoyt/inih/archive/refs/tags/r62/inih-r62.tar.gz
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

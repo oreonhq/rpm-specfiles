@@ -16,7 +16,7 @@ Release: 10%{?dist}
 # tag as per: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/423
 License: gpl-2.0-or-later
 URL: https://github.com/BuGlessRB/%{name}
-Source0:        https://github.com/BuGlessRB/procmail/archive/v3.24/procmail-3.24.tar.gz
+Source0:        https://github.com/BuGlessRB/procmail/archive/refs/tags/v3.24/procmail-3.24.tar.gz
 # Source2: http://www.linux.org.uk/~telsa/BitsAndPieces/procmailrc
 # The Telsa config file doesn't seem to be available anymore, using local copy
 Source2: procmailrc

@@ -1,4 +1,4 @@
-%global source0_hash c8ebebf7dbbbad58c3a169b037ccd5380f6143a9eb709bbb3cc11bd0a1e75a88
+%global source0_hash none
 
 Name:           plexus-i18n
 Version:        1.0
@@ -11,7 +11,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 # svn export http://svn.codehaus.org/plexus/plexus-components/tags/plexus-i18n-1.0-beta-10/
 # tar cjf plexus-i18n-1.0-beta-10-src.tar.bz2 plexus-i18n-1.0-beta-10/
-Source0:        https://raw.githubusercontent.com/codehaus-plexus/plexus-i18n/HEAD/plexus-i18n-1.0-beta-10-src.tar.bz2
+Source0:        plexus-i18n-1.0-beta-10-src.tar.bz2
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
 BuildRequires:  mvn(junit:junit)

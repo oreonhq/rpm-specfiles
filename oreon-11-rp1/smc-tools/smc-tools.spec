@@ -7,7 +7,7 @@ Summary:        Shared Memory Communication Tools
 
 License:        EPL-1.0
 URL:            https://github.com/ibm-s390-linux/smc-tools
-Source0:        https://github.com/ibm-s390-linux/smc-tools/archive/1.8.7/smc-tools-1.8.7.tar.gz
+Source0:        https://github.com/ibm-s390-linux/smc-tools/archive/refs/tags/1.8.7/smc-tools-1.8.7.tar.gz
 
 BuildRequires:  make
 BuildRequires:  gcc

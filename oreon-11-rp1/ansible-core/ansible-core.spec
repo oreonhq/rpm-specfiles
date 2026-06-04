@@ -27,8 +27,8 @@ Summary:        A radically simple IT automation system
 License:        GPL-3.0-or-later AND BSD-2-Clause AND BSD-3-Clause AND PSF-2.0 AND MIT AND Apache-2.0
 URL:            https://ansible.com
 
-Source0:        https://github.com/ansible/ansible/archive/v%{uversion}/%{name}-%{uversion}.tar.gz
-Source1:        https://github.com/ansible/ansible-documentation/archive/v%{uversion}/ansible-documentation-%{uversion}.tar.gz
+Source0:        https://github.com/ansible/ansible/archive/refs/tags/v%{uversion}/%{name}-%{uversion}.tar.gz
+Source1:        https://github.com/ansible/ansible-documentation/archive/refs/tags/v%{uversion}/ansible-documentation-%{uversion}.tar.gz
 
 BuildArch:      noarch
 

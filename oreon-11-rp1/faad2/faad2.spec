@@ -7,7 +7,7 @@ Version:	2.11.2
 Release:	6%{?dist}
 License:	GPL-2.0-or-later
 URL:		https://github.com/knik0/faad2/
-Source:        https://github.com/knik0/faad2/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/knik0/faad2/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:	gcc-c++
 BuildRequires:	cmake

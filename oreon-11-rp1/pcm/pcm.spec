@@ -6,7 +6,7 @@ Release:        0%{?dist}
 Summary:        Intel(r) Performance Counter Monitor
 License:        BSD-3-Clause
 Url:            https://github.com/intel/pcm
-Source0:        https://github.com/intel/pcm/archive/202604/pcm-202604.tar.gz
+Source0:        https://github.com/intel/pcm/archive/refs/tags/202604/pcm-202604.tar.gz
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  make

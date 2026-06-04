@@ -12,7 +12,7 @@ Summary:        Extremely memory-efficient C++ hash_map implementation
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://code.google.com/p/sparsehash
-Source0:        https://github.com/sparsehash/sparsehash/archive/sparsehash-%{version}.tar.gz
+Source0:        https://github.com/sparsehash/sparsehash/archive/refs/tags/sparsehash-%{version}.tar.gz
 
 # fix build with -std=c++20
 # https://github.com/sparsehash/sparsehash/pull/165

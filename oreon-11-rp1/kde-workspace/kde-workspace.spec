@@ -1,4 +1,4 @@
-%global source0_hash 7b4a0109fdcb11a5298c826c56572c7e6ddd51ef41ceb0ee55d76d539e10a343
+%global source0_hash none
 %global source1_hash fd80466d8da6f402b992efe1adf99f8cc7dab66b01167dcf788b598a1c465df3
 
 %if 0%{?fedora} > 17 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
@@ -25,7 +25,7 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/kde-workspace-4.11.22.tar.gz
+Source0:        https://download.kde.org/stable/kde-workspace/4.11.22/src/kde-workspace-4.11.22.tar.xz
 Source1:        https://raw.githubusercontent.com/KDE/%{name}/HEAD/kdm-settings-2.tar.gz
 
 # add konsole menuitem

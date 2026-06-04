@@ -9,7 +9,7 @@ Summary:        Web Open Font Format 2.0 library
 
 License:        MIT
 URL:            https://github.com/google/woff2
-Source0:        https://github.com/google/woff2/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/woff2/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 # https://github.com/google/woff2/pull/121
 Patch0:         covscan.patch

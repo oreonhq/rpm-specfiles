@@ -13,7 +13,7 @@ Summary:        Daemon that manages block devices to create filesystems
 
 License:        (MIT OR Apache-2.0) AND Unicode-DFS-2016 AND Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND MIT AND MPL-2.0 AND (Unlicense OR MIT)
 URL:            https://github.com/stratis-storage/stratisd
-Source0:        https://github.com/stratis-storage/stratisd/archive/stratisd-v3.8.6/stratisd-3.8.6.tar.gz
+Source0:        https://github.com/stratis-storage/stratisd/archive/refs/tags/stratisd-v3.8.6/stratisd-3.8.6.tar.gz
 Source1:        https://github.com/stratis-storage/stratisd/releases/download/stratisd-v3.8.6/stratisd-3.8.6-vendor.tar.gz
 
 # * Allow procfs 0.18: https://github.com/stratis-storage/stratisd/pull/3951

@@ -8,7 +8,7 @@ Summary: fsverity utilities
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://github.com/ebiggers/fsverity-utils
-Source0:        https://github.com/ebiggers/fsverity-utils/archive/v1.6/fsverity-utils-1.6.tar.gz
+Source0:        https://github.com/ebiggers/fsverity-utils/archive/refs/tags/v1.6/fsverity-utils-1.6.tar.gz
 
 BuildRequires: gcc make
 BuildRequires: kernel-headers glibc-headers

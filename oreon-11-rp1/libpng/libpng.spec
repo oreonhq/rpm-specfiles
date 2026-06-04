@@ -8,7 +8,7 @@ Release:       1%{?dist}
 License:       zlib
 URL:           http://www.libpng.org/pub/png/
 
-Source0:        https://github.com/glennrp/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/glennrp/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 Source1:       pngusr.dfa
 
 Patch0:        libpng-multilib.patch

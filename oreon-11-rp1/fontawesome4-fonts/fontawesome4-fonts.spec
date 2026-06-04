@@ -12,7 +12,7 @@ Release:	26%{?dist}
 Summary:	Iconic font set
 License:	OFL-1.1-RFN
 URL:		https://github.com/FortAwesome/Font-Awesome
-Source0:        https://github.com/FortAwesome/Font-Awesome/archive/v%{version}.zip
+Source0:        https://github.com/FortAwesome/Font-Awesome/archive/refs/tags/v%{version}.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
 BuildArch:	noarch

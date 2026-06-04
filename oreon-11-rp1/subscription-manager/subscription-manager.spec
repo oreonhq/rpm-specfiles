@@ -113,7 +113,7 @@ URL:     http://www.candlepinproject.org/
 # git clone https://github.com/candlepin/subscription-manager.git
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
-Source0:        https://github.com/candlepin/subscription-manager/archive/%{version}/%{name}-%{version}.tar.gz#/subscription-manager-1.30.5.tar.gz
+Source0:        https://github.com/candlepin/subscription-manager/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Especially for the OpenSuse Build Service we need to have another lint config
 %if 0%{?suse_version}

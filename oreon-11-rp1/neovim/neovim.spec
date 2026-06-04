@@ -43,7 +43,7 @@ License:        Apache-2.0 AND Vim AND MIT
 Summary:        Vim-fork focused on extensibility and agility
 Url:            https://neovim.io
 
-Source0:        https://github.com/neovim/neovim/archive/v%{version}/%{name}-%{version}.tar.gz#/neovim-0.12.2.tar.gz
+Source0:        https://github.com/neovim/neovim/archive/refs/tags/v%{version}.tar.gz#/neovim-%{version}.tar.gz
 Source1:        https://raw.githubusercontent.com/neovim/neovim/v%{version}/runtime/sysinit.vim
 Source2:        https://raw.githubusercontent.com/neovim/neovim/v%{version}/runtime/template.spec
 # vendor built in %%prep via cmake.deps

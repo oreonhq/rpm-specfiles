@@ -11,7 +11,7 @@ Summary:        Reorganize tables in PostgreSQL databases without any locks
 
 License:        BSD-3-Clause
 URL:            http://reorg.github.io/%{majorname}/
-Source0:        https://github.com/reorg/%{majorname}/archive/ver_%{version}.tar.gz
+Source0:        https://github.com/reorg/%{majorname}/archive/refs/tags/ver_%{version}.tar.gz
 
 %if %?postgresql_default
 %global pkgname %{majorname}

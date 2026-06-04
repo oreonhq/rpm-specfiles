@@ -233,7 +233,7 @@ Source0:        https://sourceware.org/git/binutils-gdb.git/snapshot/binutils-gd
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %endif
 
-Source1: https://sourceware.org/git/binutils-gdb.git/plain/binutils-2.19.50.0.1-output-format.sed#/binutils-2.19.50.0.1-output-format.sed
+Source1:        binutils-2.19.50.0.1-output-format.sed
 
 %if "%{gold_tarball}" != "none"
 Source2: %{gold_tarball}.tar.xz

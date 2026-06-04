@@ -8,7 +8,7 @@ Release:	13%{?dist}
 Summary:	Configure accelerator subsystem devices
 License:	GPL-2.0-only
 URL:		https://github.com/intel/%{project_name}
-Source0:        https://github.com/intel/idxd-config/archive/accel-config-v4.1.8.tar.gz
+Source0:        https://github.com/intel/idxd-config/archive/refs/tags/accel-config-v4.1.8.tar.gz
 
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:	gcc

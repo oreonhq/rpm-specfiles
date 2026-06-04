@@ -12,7 +12,7 @@ License: GPL-2.0-or-later
 %global tag %{version}
 %forgemeta
 Url:     %{forgeurl}
-Source0:        https://github.com/rhinstaller/isomd5sum/archive/1.2.5/isomd5sum-1.2.5.tar.gz
+Source0:        https://github.com/rhinstaller/isomd5sum/archive/refs/tags/1.2.5/isomd5sum-1.2.5.tar.gz
 
 BuildRequires: gcc
 BuildRequires: popt-devel

@@ -48,7 +48,7 @@ Summary:        A parser/scanner generator for java
 License:        BSD-3-Clause AND BSD-2-Clause
 URL:            https://javacc.org/
 VCS:            git:%{giturl}.git
-Source:        https://github.com/javacc/javacc/archive/javacc-7.0.13.tar.gz
+Source:        https://github.com/javacc/javacc/archive/refs/tags/javacc-7.0.13.tar.gz
 # Fix javadoc errors in the JavaCharStream template
 # https://github.com/javacc/javacc/pull/257
 Patch:          0001-Fix-javadoc-errors-in-JavaCharStream.template.patch

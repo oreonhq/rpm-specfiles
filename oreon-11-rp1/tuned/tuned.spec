@@ -64,7 +64,7 @@ Release: 1%{?prerel1}%{?git_suffix:.%{git_suffix}}%{?dist}
 License: GPL-2.0-or-later AND CC-BY-SA-3.0
 %if 0%{?git_commit:1}
 %else
-Source0:        https://github.com/redhat-performance/%{name}/archive/v%{version}%{?prerel2}/%{name}-%{version}%{?prerel2}.tar.gz
+Source0:        https://github.com/redhat-performance/%{name}/archive/refs/tags/v%{version}%{?prerel2}/%{name}-%{version}%{?prerel2}.tar.gz
 %endif
 URL: http://www.tuned-project.org/
 BuildArch: noarch

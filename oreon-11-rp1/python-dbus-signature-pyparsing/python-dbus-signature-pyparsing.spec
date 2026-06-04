@@ -9,7 +9,7 @@ Summary:        Parser for a D-Bus Signature
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/dbus-signature-pyparsing
-Source0:        https://github.com/stratis-storage/dbus-signature-pyparsing/archive/v0.4.1/dbus-signature-pyparsing-0.4.1.tar.gz
+Source0:        https://github.com/stratis-storage/dbus-signature-pyparsing/archive/refs/tags/v0.4.1/dbus-signature-pyparsing-0.4.1.tar.gz
 
 BuildArch:      noarch
 

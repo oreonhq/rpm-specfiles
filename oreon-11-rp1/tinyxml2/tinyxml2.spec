@@ -25,7 +25,7 @@ License:        Zlib
 #   - docs/clipboard.js
 SourceLicense:  %{license} AND LicenseRef-Fedora-Public-Domain AND MIT
 URL:            https://github.com/leethomason/tinyxml2
-Source:        https://github.com/leethomason/tinyxml2/archive/11.0.0/tinyxml2-11.0.0.tar.gz
+Source:        https://github.com/leethomason/tinyxml2/archive/refs/tags/11.0.0/tinyxml2-11.0.0.tar.gz
 
 # Upstream supports CMake, meson, and plain makefiles. Of these, CMake and
 # meson are reasonable choices; choosing CMake allows us to generate and

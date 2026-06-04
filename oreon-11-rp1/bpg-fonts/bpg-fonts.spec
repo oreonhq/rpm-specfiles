@@ -23,7 +23,7 @@ License:	GPL-2.0-or-later WITH Font-exception-2.0
 # http://bpgfonts.wordpress.com/category/gpl-gnu/
 # But the link is annoying:
 # http://www.box.com/s/1f344f181567cb897395
-Source0:        https://github.com/web-fonts/bpg-fonts/archive/refs/heads/master.zip#/BPG_GPL_GNU_Fonts_2012.zip
+Source0:        https://deb.debian.org/debian/pool/main/f/fonts-bpg-georgian/fonts-bpg-georgian_2012.orig.tar.xz
 Source1:	%{name}-algeti-fontconfig.conf
 Source2:	%{name}-chveulebrivi-fontconfig.conf
 Source3:	%{name}-courier-fontconfig.conf
@@ -567,7 +567,7 @@ test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "o
 test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; }
 test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; }
 test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -n %{name} -a 81 -a 82 -a 83 -a 84 -a 85
+%setup -q -c -n fonts-bpg-georgian-2012 -a 81 -a 82 -a 83 -a 84 -a 85
 mkdir -p Docs/
 cp -p %{SOURCE100} %{SOURCE101} Docs/
 

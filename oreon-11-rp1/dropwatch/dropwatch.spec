@@ -7,7 +7,7 @@ Summary: Kernel dropped packet monitor
 
 License: GPL-2.0-or-later
 URL: https://github.com/nhorman/dropwatch
-Source0:        https://github.com/nhorman/dropwatch/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/nhorman/dropwatch/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

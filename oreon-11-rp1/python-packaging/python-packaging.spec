@@ -29,7 +29,7 @@ Summary:        Core utilities for Python packages
 
 License:        BSD-2-Clause OR Apache-2.0
 URL:            https://github.com/pypa/packaging
-Source0:        https://github.com/pypa/packaging/archive/26.0/packaging-26.0.tar.gz
+Source0:        https://github.com/pypa/packaging/archive/refs/tags/26.0/packaging-26.0.tar.gz
 
 BuildArch:      noarch
 

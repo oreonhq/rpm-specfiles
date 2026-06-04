@@ -12,7 +12,7 @@ Summary:       Iconv implementation using Win32 API
 BuildArch:     noarch
 License:       LicenseRef-Fedora-Public-Domain
 URL:           https://github.com/win-iconv/win-iconv
-Source0:        https://github.com/win-iconv/win-iconv/archive/v%{version}/%{pkgname}-%{version}.tar.gz
+Source0:        https://github.com/win-iconv/win-iconv/archive/refs/tags/v%{version}/%{pkgname}-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires: cmake

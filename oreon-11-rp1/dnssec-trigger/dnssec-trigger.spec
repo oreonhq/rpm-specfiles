@@ -17,7 +17,7 @@ Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{vers
 %else
 Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz
 Source1:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz.asc
-Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/EDFAA3F2CA4E6EB05681AF8E9F6F1C2D7E045F8D#/wouter.asc
+Source2:        wouter.asc
 %endif
 Source3: dnssec-trigger.tmpfiles.d
 #Source4: dnssec-trigger-default.conf

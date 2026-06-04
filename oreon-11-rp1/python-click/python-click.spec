@@ -10,7 +10,7 @@ Summary:        Simple wrapper around optparse for powerful command line utiliti
 
 License:        BSD-3-Clause
 URL:            https://github.com/pallets/click
-Source0:        https://github.com/pallets/click/archive/8.3.1/click-8.3.1.tar.gz
+Source0:        https://github.com/pallets/click/archive/refs/tags/8.3.1/click-8.3.1.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel

@@ -10,7 +10,7 @@ Summary:        A GSSAPI/SPNEGO authentication handler for python-requests
 
 License:        ISC
 URL:            https://github.com/pythongssapi/%{sname}
-Source0:        https://github.com/pythongssapi/%{sname}/archive/v%{version}/%{sname}-%{version}.tar.gz
+Source0:        https://github.com/pythongssapi/%{sname}/archive/refs/tags/v%{version}/%{sname}-%{version}.tar.gz
 BuildArch:      noarch
 
 # Patches

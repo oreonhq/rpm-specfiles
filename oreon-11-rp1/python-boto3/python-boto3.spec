@@ -15,7 +15,7 @@ Summary:        The AWS SDK for Python
 
 License:        Apache-2.0
 URL:            https://github.com/boto/boto3
-Source:        https://github.com/boto/boto3/archive/1.42.70/boto3-1.42.70.tar.gz
+Source:        https://github.com/boto/boto3/archive/refs/tags/1.42.70/boto3-1.42.70.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

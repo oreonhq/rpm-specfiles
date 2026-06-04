@@ -23,7 +23,7 @@ URL:            https://crates.io/crates/coreos-installer
 Source0:        %{crates_source}
 # not used on Fedora
 Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
-Source2:        https://github.com/coreos/coreos-installer-dracut/archive/%{dracutcommit}/coreos-installer-dracut-%{dracutshortcommit}.tar.gz
+Source2:        https://github.com/coreos/coreos-installer-dracut/archive/refs/tags/%{dracutcommit}/coreos-installer-dracut-%{dracutshortcommit}.tar.gz
 ExcludeArch:    %{ix86}
 
 %if 0%{?rhel}

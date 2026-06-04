@@ -8,7 +8,7 @@ Release:        %autorelease
 Summary:        Varlink C Library
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://github.com/varlink/%{name}
-Source:        https://github.com/varlink/libvarlink/archive/v24.0.1/libvarlink-24.0.1.tar.gz
+Source:        https://github.com/varlink/libvarlink/archive/refs/tags/v24.0.1/libvarlink-24.0.1.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc

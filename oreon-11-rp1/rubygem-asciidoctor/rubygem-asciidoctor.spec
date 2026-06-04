@@ -12,7 +12,7 @@ Version: 2.0.26
 Release: 2%{?dist}
 License: MIT
 URL: https://asciidoctor.org
-Source0:        https://github.com/asciidoctor/asciidoctor/archive/%{gittag}/%{gem_name}-%{version}%{pre}.tar.gz
+Source0:        https://github.com/asciidoctor/asciidoctor/archive/refs/tags/%{gittag}/%{gem_name}-%{version}%{pre}.tar.gz
 %if 0%{?el7}
 Requires: ruby(release)
 BuildRequires: ruby(release)

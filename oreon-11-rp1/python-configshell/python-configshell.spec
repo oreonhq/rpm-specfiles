@@ -10,7 +10,7 @@ Epoch:          1
 Version:        2.0.2
 Release:        5%{?dist}
 URL:            https://github.com/open-iscsi/configshell-fb
-Source:        https://github.com/open-iscsi/configshell-fb/archive/v2.0.2/configshell-fb-2.0.2.tar.gz
+Source:        https://github.com/open-iscsi/configshell-fb/archive/refs/tags/v2.0.2/configshell-fb-2.0.2.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

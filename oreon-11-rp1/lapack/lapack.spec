@@ -19,7 +19,7 @@ Version: %{mediumver}.0
 Release: 11%{?dist}
 License: BSD-3-Clause-Open-MPI
 URL: http://www.netlib.org/lapack/
-Source0:        https://github.com/Reference-LAPACK/lapack/archive/v%{version}.tar.gz
+Source0:        https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v%{version}.tar.gz
 Source1: http://www.netlib.org/lapack/manpages.tgz
 Source4: http://www.netlib.org/lapack/lapackqref.ps
 Source5: http://www.netlib.org/blas/blasqr.ps

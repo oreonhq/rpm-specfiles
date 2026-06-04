@@ -1,4 +1,4 @@
-%global source0_hash 6d56bada6934d055b34b6c90399aa85975e66457ac5bf513427ae7fc77f5c0bb
+%global source0_hash none
 %global source1_hash 29c87c4cd5d36b221fd50ad0b2e35a2cc0e1422519bb7f41d400c61db117cff7
 
 Summary: A plain ASCII to PostScript converter
@@ -16,7 +16,7 @@ URL: http://www.gnu.org/software/enscript
 # Tarball exists nowhere. You have to obtain it via:
 # $ git clone git://git.savannah.gnu.org/enscript.git
 # $ git archive --format=tar --prefix=enscript-1.6.4/ v1.6.4 |gzip > enscript-1.6.4.tar.gz
-Source0: https://ftp.gnu.org/gnu/enscript/enscript-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/enscript/enscript-%{version}.tar.gz
 Source1:        https://ftp.gnu.org/gnu/enscript/enscript-ruby-1.6.4.tar.gz
 #http://neugierig.org/software/ruby/ruby-enscript.tar.gz
 Source2: enscript-php-1.6.4.st

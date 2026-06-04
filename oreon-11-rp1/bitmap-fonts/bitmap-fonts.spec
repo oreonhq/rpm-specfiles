@@ -1,4 +1,4 @@
-%global source0_hash 11b77ba59659733ed93ca66dfa10fc4df6fbf5b8e70311110f5d29a43d963c34
+%global source0_hash none
 %global source1_hash f76459f98a870fba99f1a265b7c709ad7c0c01c23f6a5500c86c5b6f1fdddab9
 
 # SPDX-License-Identifier: MIT
@@ -131,8 +131,8 @@ Conflicts: bitmap-fixed-fonts
 }
 
 
-Source0:  https://ftp.x.org/pub/individual/font/bitmap-fonts-%{version}.tar.bz2
-Source1:        https://ftp.x.org/pub/individual/font/fixfont-3.5.tar.bz2
+Source0:        bitmap-fonts-%{version}.tar.bz2
+Source1:        fixfont-3.5.tar.bz2
 Source2:  LICENSE
 Source3:  COPYING
 Source11: 66-bitmap-console.conf

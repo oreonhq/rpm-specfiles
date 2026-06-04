@@ -7,7 +7,7 @@ Release: 18%{?dist}
 Summary: Kernel Samepage Merging services
 License: GPL-2.0-or-later
 URL: https://github.com/ksmtuned/ksmtuned
-Source0:        https://github.com/ksmtuned/ksmtuned/archive/v%{version}/ksmtuned-%{version}.tar.gz
+Source0:        https://github.com/ksmtuned/ksmtuned/archive/refs/tags/v%{version}/ksmtuned-%{version}.tar.gz
 
 # Package was originally 'ksm' as a subpackage of 'qemu'
 Obsoletes: ksm < 3.0.0-0.2

@@ -7,7 +7,7 @@ Summary:	Stress test a computer system in various ways
 
 License:	GPL-2.0-or-later
 URL:		https://github.com/ColinIanKing/stress-ng
-Source0:        https://github.com/ColinIanKing/stress-ng/archive/V%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ColinIanKing/stress-ng/archive/refs/tags/V%{version}/%{name}-%{version}.tar.gz
 # darn is not supported in Power ISA < 3.0, while Fedora aims for Power ISA 2.07
 Patch0:     0_18_01-poewrpc-remove-darn.patch
 

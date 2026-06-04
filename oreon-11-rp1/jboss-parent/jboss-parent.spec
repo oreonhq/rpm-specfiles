@@ -11,7 +11,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 %endif
 
-Source0:        https://github.com/jboss/jboss-parent-pom/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jboss/jboss-parent-pom/archive/refs/tags/%{name}-%{version}.tar.gz
 Source1:        http://repository.jboss.org/licenses/cc0-1.0.txt
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42

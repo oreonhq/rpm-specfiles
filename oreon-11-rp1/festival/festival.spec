@@ -1,4 +1,4 @@
-%global source0_hash 4c9007426b125290599d931df410e2def51e68a8aeebd89b4a61c7c96c09a4b4
+%global source0_hash none
 %global source100_hash e7c6e3642dbd5b0d64942bc015a986fdd6244a79e51ec2e8309e63d569e49ea3
 %global source101_hash c19430919bca45d5368cd4c82af6153fbcc96a487ebd30b78b5f3c08718b7c07
 %global source200_hash 809c4ab5ed9e4df4a658b58d5c56fe35055723f00d81a238168f5a1ebdaed08c
@@ -26,7 +26,7 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0:        https://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
+Source0:        https://festvox.org/packed/festival/%{version}/festival-%{version}-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary

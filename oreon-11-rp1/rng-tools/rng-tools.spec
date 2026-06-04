@@ -17,7 +17,7 @@ Version:        6.17
 Release:        8%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/nhorman/rng-tools
-Source0:        https://github.com/nhorman/rng-tools/archive/v6.17/rng-tools-6.17.tar.gz
+Source0:        https://github.com/nhorman/rng-tools/archive/refs/tags/v6.17/rng-tools-6.17.tar.gz
 Source1:        rngd.service
 Source2:        rngd.sysconfig
 

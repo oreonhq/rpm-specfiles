@@ -8,7 +8,7 @@ Version: 2.1.14
 Release: 3%{?dist}
 License: BSD-2-Clause
 Url: http://www.opendnssec.org/
-Source0:        https://dist.opendnssec.org/source/%{?prever:testing/}%{name}-%{version}%{?prever}.tar.gz
+Source0:        https://github.com/opendnssec/opendnssec/archive/refs/tags/%{version}.tar.gz#/opendnssec-%{version}.tar.gz
 Source10:        https://dist.opendnssec.org/source/%{?prever:testing/}%{name}-%{version}%{?prever}.tar.gz.sig
 Source1:        ods-enforcerd.service
 Source2:        ods-signerd.service

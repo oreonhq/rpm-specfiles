@@ -36,7 +36,7 @@ Source2: selinux-policy.conf
 Source3: https://raw.githubusercontent.com/fedora-selinux/macro-expander/%{macro_expander_commit}/macro-expander.sh#/macro-expander
 
 # https://github.com/containers/container-selinux
-Source4: https://github.com/containers/container-selinux/archive/%{container_selinux_commit}/container-selinux-%{container_selinux_commit}.tar.gz
+Source4:        https://github.com/containers/container-selinux/archive/refs/tags/%{container_selinux_commit}/container-selinux-%{container_selinux_commit}.tar.gz
 
 # modules enabled in -minimum policy
 Source16: modules-minimum.lst

@@ -9,7 +9,7 @@ Summary:        A C++ application logging library
 #   src/fuzz_demangle.cc
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/google/glog
-Source0:        https://github.com/google/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

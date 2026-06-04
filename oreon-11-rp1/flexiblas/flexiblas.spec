@@ -29,7 +29,7 @@ Summary:        A BLAS/LAPACK wrapper library with runtime exchangeable backends
 # contributed/ and test/ are BSD-3-Clause-Open-MPI
 License:        LGPL-3.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause-Open-MPI
 URL:            https://www.mpi-magdeburg.mpg.de/projects/%{name}
-Source:        https://github.com/mpimd-csc/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/mpimd-csc/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake, python
 BuildRequires:  gcc, gcc-fortran

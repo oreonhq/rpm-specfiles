@@ -9,7 +9,7 @@ Summary: A py.test fixture for benchmarking code
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL: https://pytest-benchmark.readthedocs.io
-Source:        https://github.com/ionelmc/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:        https://github.com/ionelmc/%{srcname}/archive/refs/tags/v%{version}/%{srcname}-%{version}.tar.gz
 BuildArch: noarch
 BuildRequires: python3-devel
 

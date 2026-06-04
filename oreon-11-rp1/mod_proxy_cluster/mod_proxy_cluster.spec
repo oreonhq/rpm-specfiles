@@ -16,7 +16,7 @@ Version:       1.3.22
 Release:       %{serial}%{?dist}.2
 License:       LGPL-3.0-only
 URL:           https://github.com/modcluster/mod_cluster
-Source0:        https://github.com/modcluster/mod_cluster/archive/1.3.22%{?namedreltag}/mod_cluster-1.3.22%{?namedreltag}.tar.gz
+Source0:        https://github.com/modcluster/mod_cluster/archive/refs/tags/1.3.22%{?namedreltag}/mod_cluster-1.3.22%{?namedreltag}.tar.gz
 Source1:       %{name}.conf.sample
 Source2:       %{name}.te
 Source3:       %{name}.fc

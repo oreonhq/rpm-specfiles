@@ -6,7 +6,7 @@ Release:	7%{?dist}
 Summary:	Python bindings to augeas
 License:	LGPL-2.1-or-later
 URL:		http://augeas.net/
-Source0:        https://github.com/hercules-team/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/hercules-team/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:	python3-devel
 BuildRequires:	augeas-devel

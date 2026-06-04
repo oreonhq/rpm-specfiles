@@ -9,7 +9,7 @@ Release:        2%{?dist}
 Summary:        Integrated icon taskbar and status panel for Gnome Shell
 License:        GPL-2.0-or-later
 URL:            https://github.com/home-sweet-gnome/dash-to-panel
-Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/v72/gnome-shell-extension-dash-to-panel-72.tar.gz
+Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/refs/tags/v72/gnome-shell-extension-dash-to-panel-72.tar.gz
 BuildArch:      noarch
 BuildRequires:  gettext
 BuildRequires:  make

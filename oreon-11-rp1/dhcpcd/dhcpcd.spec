@@ -12,7 +12,7 @@ URL: http://roy.marples.name/projects/%{name}/
 VCS: git:%{forgeurl0}
 Source0:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz
 Source1:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz.asc
-Source2: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa785ed2755955d9e93ea59f6597f97ea9ad45549#/roy-marples.name.asc
+Source2:        roy-marples.name.asc
 Source3: %{name}.service
 Source4: %{name}@.service
 Source5: systemd-sysusers.conf

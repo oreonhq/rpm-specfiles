@@ -1,4 +1,4 @@
-%global source0_hash 35331f75689863e5be595f2bb04a8bc934ce734b8d76fa5d6aeb4d85424e8996
+%global source0_hash none
 %global source1_hash fd6cf1da31f5e7a1ddc91799d3bfd174f7c8612468bffe58b37d1bed1c12d71f
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
@@ -45,7 +45,7 @@ ExclusiveArch: %{ix86} x86_64 ia64 aarch64 %{arm} riscv64
 BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
-Source0:        https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
+Source0:        https://github.com/rhboot/pesign/archive/refs/tags/%{version}.tar.gz#/pesign-%{version}.tar.bz2
 Source1:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/certs.tar.xz
 Source2:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/pesign.py
 Source3:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/pesign.patches

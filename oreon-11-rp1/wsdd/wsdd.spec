@@ -6,7 +6,7 @@ Release:        6%{?dist}
 Summary:        Web Services Dynamic Discovery host daemon
 License:        MIT 
 URL:            https://github.com/christgau/wsdd 
-Source0:        https://github.com/christgau/wsdd/archive/v%{version}/wsdd-%{version}.tar.gz
+Source0:        https://github.com/christgau/wsdd/archive/refs/tags/v%{version}/wsdd-%{version}.tar.gz
 
 Patch:          Modify-systemd-service-for-Fedora.patch
 

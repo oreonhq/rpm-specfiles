@@ -23,7 +23,7 @@ Summary:        Converts markdown into roff (man pages)
 
 License:        MIT
 URL:            %{gourl}
-Source0:        https://github.com/cpuguy83/go-md2man/archive/v2.0.7/go-md2man-2.0.7.tar.gz
+Source0:        https://github.com/cpuguy83/go-md2man/archive/refs/tags/v2.0.7/go-md2man-2.0.7.tar.gz
 
 Provides:       go-md2man = %{version}-%{release}
 

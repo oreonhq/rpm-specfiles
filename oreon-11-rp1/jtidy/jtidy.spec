@@ -9,7 +9,7 @@ License:          zlib
 URL:              http://jtidy.sourceforge.net/
 # svn export -r1125 https://jtidy.svn.sourceforge.net/svnroot/jtidy/trunk/jtidy/ jtidy
 # tar caf jtidy.tar.xz jtidy
-Source0:        https://github.com/jtidy/jtidy/archive/svn-r1125.tar.gz#/jtidy-1.0.tar.gz
+Source0:        https://github.com/jtidy/jtidy/archive/refs/tags/svn-r1125.tar.gz#/jtidy-1.0.tar.gz
 Source1:        jtidy.jtidy.script
 
 Patch0:           javac-1.8.patch

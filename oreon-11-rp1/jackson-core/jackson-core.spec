@@ -7,7 +7,7 @@ Summary:        Core part of Jackson
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-core
-Source0:        https://github.com/FasterXML/jackson-core/archive/jackson-core-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-core/archive/refs/tags/jackson-core-2.18.2.tar.gz
 Patch1:         0001-Remove-ch.randelshofer.fastdoubleparser.patch
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42

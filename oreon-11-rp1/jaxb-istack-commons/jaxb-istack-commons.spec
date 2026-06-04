@@ -9,7 +9,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-istack-commons
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-istack-commons/archive/4.2.0/jaxb-istack-commons-4.2.0.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-istack-commons/archive/refs/tags/4.2.0/jaxb-istack-commons-4.2.0.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)

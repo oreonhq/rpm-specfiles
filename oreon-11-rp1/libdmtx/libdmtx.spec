@@ -7,7 +7,7 @@ Summary:        Library for working with Data Matrix 2D bar-codes
 
 License:        BSD-2-Clause-Views
 URL:            https://github.com/dmtx
-Source0:        https://github.com/dmtx/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/dmtx/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libtool

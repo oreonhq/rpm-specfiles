@@ -5,7 +5,7 @@ Summary: Maori thesaurus
 %global upstreamid 20080630
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: https://web.archive.org/web/20240101000000id_/http://packages.papakupu.maori.nz/mythes/mythes-mi-0.1.%{upstreamid}-beta.tar.gz#/mythes-mi-0.1.%{upstreamid}-beta.tar.gz
+Source: mythes-mi-0.1.20080630-beta.tar.gz
 URL: http://papakupu.maori.nz/
 License: LicenseRef-Public-Domain
 BuildArch: noarch

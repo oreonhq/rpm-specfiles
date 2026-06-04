@@ -8,7 +8,7 @@ Summary:        Library implementing the jitter entropy source
 
 License:        BSD-3-Clause OR GPL-2.0-only
 URL:            https://github.com/smuellerDD/jitterentropy-library
-Source0:        https://github.com/smuellerDD/jitterentropy-library/archive/v3.6.0/jitterentropy-library-3.6.0.tar.gz
+Source0:        https://github.com/smuellerDD/jitterentropy-library/archive/refs/tags/v3.6.0/jitterentropy-library-3.6.0.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

@@ -19,7 +19,7 @@ BuildRequires: make
 Obsoletes: kexec-tools-anaconda-addon < 2.0.17-9
 Provides: kexec-tools-anaconda-addon = %{version}-%{release}
 
-Source0: https://github.com/rhinstaller/kdump-anaconda-addon/archive/%{gitcommit}/kdump-anaconda-addon-%{gitshortcommit}.tar.gz
+Source0:        https://github.com/rhinstaller/kdump-anaconda-addon/archive/refs/tags/%{gitcommit}/kdump-anaconda-addon-%{gitshortcommit}.tar.gz
 
 %description
 Kdump anaconda addon

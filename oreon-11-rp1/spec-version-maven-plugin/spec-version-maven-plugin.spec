@@ -10,7 +10,7 @@ License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 
 URL:            https://projects.eclipse.org/projects/ee4j.glassfish
 VCS:            git:%{giturl}.git
-Source:        https://github.com/eclipse-ee4j/glassfish-spec-version-maven-plugin/archive/2.2/spec-version-maven-plugin-2.2.tar.gz
+Source:        https://github.com/eclipse-ee4j/glassfish-spec-version-maven-plugin/archive/refs/tags/2.2/spec-version-maven-plugin-2.2.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

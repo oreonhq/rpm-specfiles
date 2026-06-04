@@ -7,7 +7,7 @@ Summary:        Core utilities and configuration for Linux VMs on Azure
 
 License:        MIT
 URL:            https://github.com/Azure/%{name}
-Source:        https://github.com/Azure/azure-vm-utils/archive/v0.7.0/azure-vm-utils-v0.7.0.tar.gz
+Source:        https://github.com/Azure/azure-vm-utils/archive/refs/tags/v0.7.0/azure-vm-utils-v0.7.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

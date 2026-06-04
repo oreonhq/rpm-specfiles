@@ -9,7 +9,7 @@ Release:        3%{?dist}
 Summary:        Tool for checking common errors in RPM packages
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/rpmlint
-Source0:        https://github.com/rpm-software-management/rpmlint/archive/2.8.0/rpmlint-2.8.0.tar.gz
+Source0:        https://github.com/rpm-software-management/rpmlint/archive/refs/tags/2.8.0/rpmlint-2.8.0.tar.gz
 
 # Taken from https://github.com/rpm-software-management/rpmlint/tree/main/configs/Fedora
 Source1:        fedora.toml

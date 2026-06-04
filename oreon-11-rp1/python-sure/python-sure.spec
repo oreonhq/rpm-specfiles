@@ -7,7 +7,7 @@ Summary:        Idiomatic assertion toolkit with human-friendly failure messages
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/gabrielfalcao/sure
-Source0:        https://github.com/gabrielfalcao/sure/archive/2.0.1/sure-2.0.1.tar.gz
+Source0:        https://github.com/gabrielfalcao/sure/archive/refs/tags/2.0.1/sure-2.0.1.tar.gz
 
 # Trivial downstream man page for (nearly pointless) executable
 Source1:        sure.1

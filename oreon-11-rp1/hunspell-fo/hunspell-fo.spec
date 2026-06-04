@@ -1,4 +1,4 @@
-%global source0_hash dceff597c9cebf69f3fee6ceaa1d93665bef9b546a534f1dc74f95ea7331ba90
+%global source0_hash none
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -10,7 +10,7 @@ Name: hunspell-fo
 Summary: Faroese hunspell dictionaries
 Version: 0.4.2
 Release: 27%{?dist}
-Source:        https://web.archive.org/web/20240101000000id_/http://fo.speling.org/filer/myspell-fo-0.4.2.tar.bz2#/hunspell-fo-0.4.2.tar.gz
+Source:        myspell-fo-0.4.2.tar.bz2
 URL: http://fo.speling.org/
 License: GPL-2.0-or-later
 BuildArch: noarch

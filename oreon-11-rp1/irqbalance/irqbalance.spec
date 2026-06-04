@@ -7,7 +7,7 @@ Epoch:          2
 Summary:        IRQ balancing daemon
 License:        GPL-2.0-only
 URL:            https://github.com/Irqbalance/irqbalance
-Source0:        https://github.com/Irqbalance/irqbalance/archive/v1.9.5/irqbalance-1.9.5.tar.gz
+Source0:        https://github.com/Irqbalance/irqbalance/archive/refs/tags/v1.9.5/irqbalance-1.9.5.tar.gz
 
 BuildRequires: gcc
 BuildRequires: glib2-devel

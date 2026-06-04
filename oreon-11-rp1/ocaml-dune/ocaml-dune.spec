@@ -55,7 +55,7 @@ Summary:        Composable build system for OCaml and Reason
 License:        MIT AND BSD-2-Clause AND BSD-3-Clause AND ISC AND LGPL-2.1-only AND LGPL-2.1-only WITH OCaml-LGPL-linking-exception AND LGPL-2.1-or-later
 URL:            https://dune.build
 VCS:            git:%{giturl}.git
-Source:        https://github.com/ocaml/dune/archive/3.23.1/dune-3.23.1.tar.gz
+Source:        https://github.com/ocaml/dune/archive/refs/tags/3.23.1/dune-3.23.1.tar.gz
 # Unbundle lmdb
 Patch:          %{name}-unbundle-lmdb.patch
 # Unbundle libev

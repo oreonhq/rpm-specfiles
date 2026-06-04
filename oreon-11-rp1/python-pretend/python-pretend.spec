@@ -7,7 +7,7 @@ Summary:        A library for stubbing in Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/alex/pretend
-Source0:        https://github.com/alex/pretend/archive/v1.0.9/pretend-1.0.9.tar.gz
+Source0:        https://github.com/alex/pretend/archive/refs/tags/v1.0.9/pretend-1.0.9.tar.gz
 
 BuildArch:      noarch
 

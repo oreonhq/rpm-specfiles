@@ -10,7 +10,7 @@ Release:        2%{?dist}
 Summary:        Small build system with a focus on speed
 License:        Apache-2.0
 URL:            https://ninja-build.org/
-Source0:        https://github.com/ninja-build/ninja/archive/v%{version}/ninja-%{version}.tar.gz
+Source0:        https://github.com/ninja-build/ninja/archive/refs/tags/v%{version}/ninja-%{version}.tar.gz
 Source1:        ninja.vim
 Source2:        macros.ninja
 # https://github.com/ninja-build/ninja/pull/2640

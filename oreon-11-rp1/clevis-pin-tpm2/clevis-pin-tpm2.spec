@@ -28,7 +28,7 @@ License:        MIT AND Apache-2.0 AND EUPL-1.2 AND Unicode-DFS-2016 AND (0BSD O
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/fedora-iot/clevis-pin-tpm2/
-Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/v0.5.4/clevis-pin-tpm2-0.5.4.tar.gz
+Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/refs/tags/v0.5.4/clevis-pin-tpm2-0.5.4.tar.gz
 # To create the vendor tarball:
 #   tar xf %%{name}-%%{version}.crate ; pushd %%{name}-%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd

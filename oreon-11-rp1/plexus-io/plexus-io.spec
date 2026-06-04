@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-io
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-io/archive/plexus-io-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-io/archive/refs/tags/plexus-io-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

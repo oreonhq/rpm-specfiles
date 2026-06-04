@@ -9,7 +9,7 @@ Summary:        CSS selector library
 
 License:        MIT
 URL:            https://github.com/facelessuser/soupsieve
-Source0:        https://github.com/facelessuser/soupsieve/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/facelessuser/soupsieve/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 

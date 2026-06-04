@@ -13,7 +13,7 @@ Summary:        Zero-dependency DBus library for Python with asyncio support
 License:        MIT
 URL:            https://github.com/altdesktop/python-dbus-next
 # pypi_source archive does not include test data
-Source:        https://github.com/altdesktop/python-dbus-next/archive/v0.2.3/python-dbus-next-0.2.3.tar.gz
+Source:        https://github.com/altdesktop/python-dbus-next/archive/refs/tags/v0.2.3/python-dbus-next-0.2.3.tar.gz
 Patch:          0001-glib-destroy-the-_AuthLineSource-explicitly.patch
 Patch:          0002-Address-Python-3.15-and-3.16-deprecations.patch
 Patch:          0003-Fix-compatibility-with-pytest-asyncio-1.x.patch

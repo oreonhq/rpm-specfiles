@@ -12,7 +12,7 @@ URL:            https://github.com/codehaus-plexus/plexus-interpolation
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-interpolation/archive/plexus-interpolation-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-interpolation/archive/refs/tags/plexus-interpolation-%{version}.tar.gz
 
 Patch:          0001-Use-PATH-env-variable-instead-of-JAVA_HOME.patch
 

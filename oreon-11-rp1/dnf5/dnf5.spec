@@ -13,7 +13,7 @@ Release:        3%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
-Source0:        https://github.com/rpm-software-management/dnf5/archive/5.4.0.0/dnf5-5.4.0.0.tar.gz
+Source0:        https://github.com/rpm-software-management/dnf5/archive/refs/tags/5.4.0.0/dnf5-5.4.0.0.tar.gz
 Patch1:         0001-Honor-localpkg_gpgcheck-in-RPM-transaction-per-eleme.patch
 Patch2:         0002-Fix-segmentation-fault-in-cmd_requires_privileges.patch
 Patch3:         0003-dnf5daemon-server-Fix-daemon-crash-for-invalid-local.patch

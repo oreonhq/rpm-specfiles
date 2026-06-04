@@ -9,7 +9,7 @@ Summary:        Linux Distribution - a Linux OS platform information API
 
 License:        Apache-2.0
 URL:            https://github.com/python-distro/distro
-Source0:        https://github.com/python-distro/distro/archive/v1.9.0/distro-1.9.0.tar.gz
+Source0:        https://github.com/python-distro/distro/archive/refs/tags/v1.9.0/distro-1.9.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest

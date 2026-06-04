@@ -10,7 +10,7 @@ Summary:	%{summary}
 
 License:	Apache-2.0
 URL:		https://github.com/snapshotmanager/boom-boot
-Source0:        https://github.com/snapshotmanager/boom-boot/archive/1.6.8/boom-boot-1.6.8.tar.gz
+Source0:        https://github.com/snapshotmanager/boom-boot/archive/refs/tags/1.6.8/boom-boot-1.6.8.tar.gz
 
 BuildArch:	noarch
 

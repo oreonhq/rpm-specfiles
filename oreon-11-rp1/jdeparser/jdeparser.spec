@@ -10,7 +10,7 @@ Summary:          Source generator library for Java
 License:          Apache-2.0
 URL:              https://github.com/jdeparser/jdeparser2
 # old repos https://github.com/jdeparser/jdeparser
-Source0:        https://github.com/jdeparser/jdeparser2/archive/2.0.3.Final/jdeparser-2.0.3.Final.tar.gz
+Source0:        https://github.com/jdeparser/jdeparser2/archive/refs/tags/2.0.3.Final/jdeparser-2.0.3.Final.tar.gz
 Patch1:           0001-Drop-Assertions.callerIs.patch
 
 BuildArch:        noarch

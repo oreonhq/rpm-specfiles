@@ -56,7 +56,7 @@ Release:        20%{?dist}
 #   conformance/third_party/jsoncpp/jsoncpp.cpp
 License:        BSD-3-Clause
 URL:            https://github.com/protocolbuffers/protobuf
-Source0:        https://github.com/protocolbuffers/protobuf/archive/v3.19.6/protobuf-3.19.6-all.tar.gz
+Source0:        https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.19.6/protobuf-3.19.6-all.tar.gz
 
 Source1:        ftdetect-proto.vim
 Source2:        protobuf-init.el
@@ -72,7 +72,7 @@ Source2:        protobuf-init.el
 %global gtest_commit 5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081
 %global gtest_dir googletest-%{gtest_commit}
 # For tests (using exactly the same version as the release)
-Source3:        https://github.com/google/googletest/archive/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
+Source3:        https://github.com/google/googletest/archive/refs/tags/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
 
 # Man page hand-written for Fedora in groff_man(7) format based on “protoc
 # --help” output.

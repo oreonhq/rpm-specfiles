@@ -10,7 +10,7 @@ Summary:          The JBoss Logging Framework
 License:          Apache-2.0
 
 URL:              https://github.com/jboss-logging/jboss-logging
-Source0:        https://github.com/jboss-logging/jboss-logging/archive/3.6.0.Final/jboss-logging-3.6.0.Final.tar.gz
+Source0:        https://github.com/jboss-logging/jboss-logging/archive/refs/tags/3.6.0.Final/jboss-logging-3.6.0.Final.tar.gz
 Patch1:           0001-Drop-log4j-dependency.patch
 Patch2:           0002-Drop-jboss-logmanager-dependency.patch
 Patch3:           0003-Drop-TestCase-that-depend-on-retired-package.patch

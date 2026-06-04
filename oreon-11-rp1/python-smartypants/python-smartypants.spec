@@ -9,7 +9,7 @@ Summary:        plug-in that easily translates ASCII punctuation characters into
 
 License:        BSD-3-Clause AND BSD-2-Clause
 URL:            https://github.com/leohemsted/smartypants.py
-Source0:        https://github.com/leohemsted/smartypants.py/archive/v2.0.1/smartypants-2.0.1.tar.gz
+Source0:        https://github.com/leohemsted/smartypants.py/archive/refs/tags/v2.0.1/smartypants-2.0.1.tar.gz
 BuildArch:      noarch
 
 # https://github.com/leohemsted/smartypants.py/pull/21

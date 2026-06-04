@@ -11,7 +11,7 @@ Summary:        Header files from the SPIR-V registry
 
 License:        MIT
 URL:            https://github.com/KhronosGroup/SPIRV-Headers/
-Source0:        https://github.com/KhronosGroup/SPIRV-Headers//archive/04f10f650d514df88b76d25e83db360142c7b174/spirv-headers-04f10f6.tar.gz
+Source0:        https://github.com/KhronosGroup/SPIRV-Headers//archive/refs/tags/04f10f650d514df88b76d25e83db360142c7b174/spirv-headers-04f10f6.tar.gz
 
 BuildArch:      noarch
 

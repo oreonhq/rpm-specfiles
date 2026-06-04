@@ -13,7 +13,7 @@ Summary:        Cloud instance init scripts
 License:        Apache-2.0 OR GPL-3.0-only
 URL:            https://github.com/canonical/cloud-init
 
-Source0:        https://github.com/canonical/cloud-init/archive/25.3/cloud-init-25.3.tar.gz
+Source0:        https://github.com/canonical/cloud-init/archive/refs/tags/25.3/cloud-init-25.3.tar.gz
 Source1:        cloud-init-tmpfiles.conf
 
 # https://github.com/canonical/cloud-init/pull/6423

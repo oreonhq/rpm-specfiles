@@ -1,5 +1,4 @@
 %global source0_hash none
-%global source1_hash none
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -12,9 +11,8 @@ Summary: Farsi hunspell dictionaries
 %global upstreamid 20070116
 Version: 0.%{upstreamid}
 Release: 38%{?dist}
-Source0: https://github.com/LibreOffice/dictionaries/raw/refs/heads/master/fa_IR/fa_IR.dic
-Source1: https://github.com/LibreOffice/dictionaries/raw/refs/heads/master/fa_IR/fa_IR.aff
-URL: https://ftp.gnu.org/gnu/aspell/dict/fa
+Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz
+URL:            https://github.com/LibreOffice/dictionaries
 License: GPL-2.0-or-later
 BuildArch: noarch
 
@@ -25,16 +23,14 @@ Supplements: (hunspell and langpacks-fa)
 Farsi hunspell dictionaries.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -T
+%autosetup -c -T -n dictionaries-master
 
 %build
 # nothing to build here
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p %{SOURCE0} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fa_IR.dic
-cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fa_IR.aff
+cp -p fa_IR/fa_IR.dic fa_IR/fa_IR.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 
 %files
 %{_datadir}/%{dict_dirname}/*

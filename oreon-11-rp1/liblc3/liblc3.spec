@@ -7,7 +7,7 @@ Summary:       Low Complexity Communication Codec (LC3)
 
 License:       Apache-2.0
 URL:           https://github.com/google/liblc3
-Source0:        https://github.com/google/liblc3/archive/v1.1.3/liblc3-1.1.3.tar.gz
+Source0:        https://github.com/google/liblc3/archive/refs/tags/v1.1.3/liblc3-1.1.3.tar.gz
 Patch0:        0001-Revert-build-fix-rpath-issue.patch
 
 BuildRequires: gcc

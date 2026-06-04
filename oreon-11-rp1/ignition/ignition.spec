@@ -31,7 +31,7 @@ Summary:        First boot installer and configuration tool
 License:        Apache-2.0
 URL:            %{gourl}
 Source0:        %{gosource}
-Source1:        https://github.com/fedora-iot/ignition-edge/archive/%{ignedgecommit}/ignition-edge-%{ignedgeshortcommit}.tar.gz
+Source1:        https://github.com/fedora-iot/ignition-edge/archive/refs/tags/%{ignedgecommit}/ignition-edge-%{ignedgeshortcommit}.tar.gz
 Source2:        91-ignition-authorized-keys-file.conf
 
 # Fix format specifier for systemd version warning (Go 1.26 compatibility)

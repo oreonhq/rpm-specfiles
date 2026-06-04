@@ -1,4 +1,4 @@
-%global source0_hash d9ef11948442197c9fa44bd6fbadc842b7280a60dfc40577af66fded637af356
+%global source0_hash none
 
 Name:           kdsoap
 Version:        2.2.0
@@ -14,7 +14,7 @@ Summary:        A Qt-based client-side and server-side SOAP component
 # and are not used in the library code itself.
 License:        MIT
 URL:            https://github.com/KDAB/KDSoap
-Source0:        https://github.com/KDAB/KDSoap/archive/refs/tags/v2.2.0.tar.gz#/kdsoap-2.2.0.tar.gz
+Source0:        https://github.com/KDAB/KDSoap/archive/refs/tags/v%{version}.tar.gz#/kdsoap-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
