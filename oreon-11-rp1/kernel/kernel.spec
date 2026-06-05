@@ -1,4 +1,4 @@
-%global source0_hash 127d301ba500ef7fd527d48e1a0a4bedc623b2eb5263fd8cb80b8db859ebac14
+%global source0_hash e56c8356dda01136a6041c6ef832bd0ec99bd2d35dff97832aa5ec10ed014304
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -189,19 +189,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.10
-%define specversion 7.0.10
+%define specrpmversion 7.0.11
+%define specversion 7.0.11
 %define patchversion 7.0
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.0.10
+%define tarfile_release 7.0.11
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.0.10
+%define kabiversion 7.0.11
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error

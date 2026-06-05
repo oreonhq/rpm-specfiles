@@ -1,4 +1,4 @@
-%global source0_hash b7812ed6d59f6b09ecceddaa0be842a7e82a79cc0e46ca60478a4ebf02f1e178
+%global source0_hash b14e7197a290a7e5569f5ef790cde289bddc47e32126f2eb262a8e677fc39727
 
 %global debug_package %{nil}
 
@@ -6,7 +6,7 @@
 %define _binaries_in_noarch_packages_terminate_build 0
 
 Name:		linux-firmware
-Version:	20260410
+Version:	20260519
 Release:	2%{?dist}
 Summary:	Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
