@@ -112,6 +112,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DDATA_INSTALL_DIR:PATH=%{_kde4_appsdir} \
   -DQT_DOC_DIR=%{?_qt4_docdir}%{!?_qt4_docdir:%(pkg-config --variable=docdir Qt)} \
   -DSOPRANO_BUILD_API_DOCS:BOOL=%{!?apidocs:0}%{?apidocs} \

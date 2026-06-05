@@ -53,7 +53,7 @@ popd
 %endif
 
 %build
-%cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DGSSAPI=ON -DSKIP_STATIC=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DGSSAPI=ON -DSKIP_STATIC=ON
 %cmake_build
 
 %install

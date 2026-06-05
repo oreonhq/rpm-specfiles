@@ -42,13 +42,7 @@ License:        Apache-2.0 AND (GPL-2.0-or-later OR LicenseRef-Callaway-AFL)
 Source0:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/%{version}/tagsoup-%{version}-sources.jar#/tagsoup-%{version}-src.zip
 URL:            https://home.ccil.org/~cowan/XML/tagsoup/
 Source1:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/%{version}/tagsoup-%{version}.pom
-# fix version
-Patch0:         tagsoup-1.2.1-man.patch
-Patch1:         sourceTargetJdk8.patch
 BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
-BuildRequires:  ant-apache-xalan2
-BuildRequires:  xalan-j2
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -75,33 +69,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find . -name '*.class' -delete
 find . -name "*.jar" -delete
 
-%patch -P0 -p0
-%patch -P1 -p1
-
 %build
-
-export CLASSPATH=$(build-classpath xalan-j2-serializer xalan-j2)
-ant \
-  -Dtagsoup.version=%{version} \
-  -Dj2se.apiurl=%{_javadocdir}/java \
-  dist docs-api
+mkdir -p build/classes build/docs
+javac --release 8 -d build/classes $(find org -name '*.java')
+jar --create --file build/%{name}-%{version}.jar -C build/classes .
+javadoc -quiet -source 8 -d build/docs $(find org -name '*.java')
 
 %install
 %mvn_file : %{name}
-%mvn_artifact %{SOURCE1} dist/lib/%{name}-%{version}.jar
+%mvn_artifact %{SOURCE1} build/%{name}-%{version}.jar
 
 %mvn_install
 
-mkdir -p %{buildroot}%{_mandir}/man1
-install -m 644 %{name}.1 %{buildroot}%{_mandir}/man1/
-
 %files -f .mfiles
-%{_mandir}/man1/%{name}.1.gz
-%doc CHANGES README TODO %{name}.txt
-%license LICENSE
 
 %files javadoc
-%license LICENSE
+%doc build/docs
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0:1.2.1-38

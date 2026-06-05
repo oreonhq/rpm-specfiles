@@ -84,7 +84,7 @@ rm -rf %{buildroot}%{gem_instdir}/ext
 %check
 pushd .%{gem_instdir}
 # Move the tests into place
-ln -s %{_builddir}/spec spec
+ln -s %{_builddir}/%{gem_name}-%{version}/spec spec
 
 TOP_DIR=$(pwd)
 

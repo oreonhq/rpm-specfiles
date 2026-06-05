@@ -33,7 +33,7 @@ parse command line parameters (with annotations).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n beust-jcommander-1.82
+%autosetup -p1 -n jcommander-dcf154b6d40dd3865e317de7250b7019044543a9
 chmod -x license.txt
 
 cp -p %SOURCE1 pom.xml

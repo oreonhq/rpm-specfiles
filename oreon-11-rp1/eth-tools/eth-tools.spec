@@ -44,10 +44,10 @@ Contains tools for managing fabric on a management node.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n OpenIb_Host
+%autosetup -n eth-fast-fabric-%{version_no_tilde}
 
 %build
-cd eth-fast-fabric-%{version_no_tilde}/OpenIb_Host
+cd OpenIb_Host
 OPA_FEATURE_SET=opa10 CLOCAL='%build_cflags' CCLOCAL='%build_cxxflags' LDLOCAL='%build_ldflags' ./ff_build.sh %{_builddir}
 
 %install

@@ -109,7 +109,7 @@ sed -i -e 's/\r//g' TODO.txt README.md WhatsNew.txt BUGS.txt LICENSE.txt CREDITS
 # Deal with new CMake policy around whitespace in LDFLAGS...
 export LDFLAGS="%{shrink:%{build_ldflags}}"
 
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DSDL_DLOPEN=ON \
     -DSDL_VIDEO_KMSDRM=ON \
     -DSDL_ARTS=OFF \

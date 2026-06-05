@@ -188,7 +188,7 @@ test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "ore
 chmod -x poppler/CairoFontEngine.cc
 
 %build
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DENABLE_CMS=lcms2 \
   -DENABLE_DCTDECODER=libjpeg \
   -DENABLE_GTK_DOC=ON \

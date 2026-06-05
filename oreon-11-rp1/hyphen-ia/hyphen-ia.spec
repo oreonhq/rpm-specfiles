@@ -12,7 +12,6 @@ BuildArch: noarch
 BuildRequires: hyphen-devel
 Requires: hyphen
 Supplements: (hyphen and langpacks-ia)
-Patch0: hyphen-ia-cleantex.patch
 
 %description
 Interlingua hyphenation rules.
@@ -21,8 +20,6 @@ Interlingua hyphenation rules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-ia
 cp -p %{SOURCE0} .
-%patch -P0 -p0 -b .clean
-
 %build
 substrings.pl iahyphen.tex hyph_ia.dic ISO8859-1
 echo "Created with substring.pl by substrings.pl iahyphen.tex hyph_ia.dic ISO8859-1" > README

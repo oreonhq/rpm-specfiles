@@ -19,7 +19,9 @@ Patch0002:        0001-udev-Fix-exit-value-when-device-is-already-handled.patch
 
 
 # needed for macro AM_GNU_GETTEXT in configure.ac
+BuildRequires: autoconf
 BuildRequires: autoconf-archive
+BuildRequires: automake
 # uses CUPS API functions
 BuildRequires: cups-devel >= 1.2
 # we install a desktop file
@@ -132,6 +134,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/setup.py install --prefix=$(DESTDIR)$(prefix)/setup.py install --root $(DESTDIR) --prefix=$(prefix)/' Makefile*
 
 %build
+autoreconf -fi
 %configure --with-udev-rules
 %make_build
 

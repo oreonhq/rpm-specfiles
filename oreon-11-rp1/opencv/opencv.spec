@@ -440,7 +440,7 @@ cd modules/python/package
 # GTK, GSTREAMER, 1394, V4L, eigen3
 # disabling IPP because it is closed source library from intel
 
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 %if 0%{?fedora} > 38 || 0%{?rhel} > 10
  -DCMAKE_CXX_STANDARD=17 \
 %endif

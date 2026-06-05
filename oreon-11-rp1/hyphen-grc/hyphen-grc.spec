@@ -16,7 +16,6 @@ BuildRequires: glibc-langpack-el
 
 Requires: hyphen
 Supplements: (hyphen and langpacks-grc)
-Patch0: hyphen-grc-cleantex.patch
 
 %description
 Ancient Greek hyphenation rules.
@@ -25,8 +24,6 @@ Ancient Greek hyphenation rules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-grc
 cp -p %{SOURCE0} hyph-grc.tex
-%patch -P0 -p0 -b .clean
-
 %build
 grep -v "^%" hyph-grc.tex | tr ' ' '\n' > temp.tex
 substrings.pl temp.tex temp.dic UTF-8

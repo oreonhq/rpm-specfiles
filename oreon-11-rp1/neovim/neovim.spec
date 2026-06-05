@@ -141,7 +141,7 @@ mkdir -p .deps/build/
 ln -sfr ../%{name}-%{version}-vendor .deps/build/downloads
 %define _vpath_srcdir cmake.deps
 %define __cmake_builddir .deps
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DUSE_BUNDLED=OFF \
 %if %{without system_treesitter}
        -DUSE_BUNDLED_TS=ON \
@@ -152,7 +152,7 @@ ln -sfr ../%{name}-%{version}-vendor .deps/build/downloads
 # Build neovim
 %define _vpath_srcdir .
 %define __cmake_builddir redhat-linux-build
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DPREFER_LUA=%{?with_luajit:OFF}%{!?with_luajit:ON} \
        -DLUA_PRG=%{lua_prg} \
        -DENABLE_JEMALLOC=%{?with_jemalloc:ON}%{!?with_jemalloc:OFF} \

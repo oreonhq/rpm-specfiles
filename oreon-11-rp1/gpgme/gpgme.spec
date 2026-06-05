@@ -254,7 +254,7 @@ mv src gpg
 
 # build c++ bindings gpgmepp
 cd $GPGME_TOPDIR/gpgmepp
-%cmake -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}
 %cmake_build
 #temp install for qgpgme
 DESTDIR=$GPGME_TOPDIR/gpgmepp/buildroot/ cmake --install redhat-linux-build/
@@ -264,13 +264,13 @@ cd $GPGME_TOPDIR/qgpgme
 export CMAKE_APPBUNDLE_PATH=$GPGME_TOPDIR/gpgmepp/buildroot%{_libdir}/cmake/
 
 %if %{with qt5}
-%cmake -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}  -DBUILD_WITH_QT5=ON -DBUILD_WITH_QT6=OFF
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}  -DBUILD_WITH_QT5=ON -DBUILD_WITH_QT6=OFF
 %cmake_build
 mv redhat-linux-build build-qt5
 %endif
 
 %if %{with qt6}
-%cmake -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}  -DBUILD_WITH_QT5=OFF -DBUILD_WITH_QT6=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENALE_SHARED=yes -DENABLE_STATIC=no -DGpgme_INCLUDE_DIR=$GPGME_TOPDIR/build/src -DGpgme_LIBRARIES='-L$(GPGME_LIB_DIR) -lgpgme' -DGpgme_VERSION=%{version}  -DBUILD_WITH_QT5=OFF -DBUILD_WITH_QT6=ON
 %cmake_build
 mv redhat-linux-build build-qt6
 %endif

@@ -1,5 +1,5 @@
 %global source0_hash dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112
-%global source1_hash 0399e0dcd2c675a1242bcb0d567e67a629188e4133e8619ccea3d41ebca45a04
+%global source1_hash 95edc8ff8b4323c8f962a621846cd3b393707ea9734940efa6aaab0b8a6fe555
 
 %if !0%{?bootstrap} && (0%{?fedora} || 0%{?rhel} > 6) || (0%{?oreon} >= 11)
 %global tests 1
@@ -112,7 +112,7 @@ sed -i.shbang \
 sed -i -e 's@CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR@CMAKE_MINIMUM_REQUIRED(VERSION 3.5@' CMakeLists.txt
 
 %build
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DBUILD_DOC:BOOL=ON \
   -DBUILD_TESTS:BOOL=%{?tests:ON}%{!?tests:OFF} \
   -DCMAKE_BUILD_TYPE:STRING=Release \

@@ -22,8 +22,11 @@ License:	BSD-3-Clause OR LGPL-2.1-or-later OR GPL-2.0-or-later
 URL:		http://mecab.sourceforge.net/
 Source0:        https://github.com/taku910/mecab/archive/master/%{name}-%{version}.tar.gz#/mecab-%{mainver}.tar.gz
 
-BuildRequires:	make
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	gcc-c++
+BuildRequires:	libtool
+BuildRequires:	make
 
 %description
 MeCab is a open source morphological analyzer which uses 
@@ -43,11 +46,11 @@ for MeCab.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n mecab-0.996
+%setup -q -n mecab-master
 
 
-mv doc/doxygen .
 find . -name \*.cpp -print0 | xargs -0 %{__chmod} 0644
+autoreconf -fi
 
 # compiler flags fix
 %{__sed} -i.flags \
@@ -105,7 +108,6 @@ cd ..
 %dir %{_libdir}/%{name}/dic/
 
 %files devel
-%doc doxygen/
 %{_bindir}/%{name}-config
 %{_libdir}/lib%{name}.so
 %{_includedir}/%{name}.h

@@ -14,8 +14,6 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        https://github.com/paul-hammant/qdox/archive/refs/tags/qdox-%{version}.tar.gz#/qdox-%{version}.tar.gz
 Source1:        qdox-MANIFEST.MF
-# Remove bundled binaries which are possibly proprietary
-Patch:          qdox-port-tests-to-java-21.patch
 
 BuildRequires:  byaccj
 %if %{with bootstrap}
@@ -39,9 +37,7 @@ generators or documentation tools.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n qdox-2.1.0
-%setup -q -n qdox-2.1.0
-%autosetup -p1 -n qdox-2.1.0
+%setup -q -n qdox-qdox-%{version}
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent

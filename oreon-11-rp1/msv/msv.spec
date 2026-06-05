@@ -74,8 +74,7 @@ rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java
 %mvn_install
 
 %files xsdlib -f .mfiles-xsdlib
-%doc README.md README-xsdlib.md
-%license Apache-LICENSE-1.1.txt license.txt
+%doc README.md
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2022.7-1

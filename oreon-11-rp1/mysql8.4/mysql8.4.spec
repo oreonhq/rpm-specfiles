@@ -542,7 +542,7 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
 
 # The INSTALL_xxx macros have to be specified relative to CMAKE_INSTALL_PREFIX
 # so we can't use %%{_datadir} and so forth here.
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
          -DBUILD_CONFIG=mysql_release \
          -DINSTALL_LAYOUT=RPM \
          -DDAEMON_NAME="%{daemon_name}" \

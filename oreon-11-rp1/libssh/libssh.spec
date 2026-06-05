@@ -87,7 +87,7 @@ The %{name}-config package provides the default configuration files for %{name}.
 %autosetup -p1
 
 %build
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DUNIT_TESTING=ON \
     -DCLIENT_TESTING=ON \
     -DSERVER_TESTING=ON \

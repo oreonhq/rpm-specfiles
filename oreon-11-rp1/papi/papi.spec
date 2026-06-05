@@ -97,7 +97,7 @@ the PAPI user-space libraries and interfaces.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n papi-papi-7-2-0-t
 %patch 1 -p1 -b papi-nostatic.patch
 %patch 2 -p1 -b papi-avail-path-fix.patch
 %patch 3 -p1 -b revert-event-depr.patch

@@ -17,6 +17,9 @@ BuildArch:      noarch
 
 BuildRequires:  python3-libxml2
 BuildRequires:  python3-devel
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 BuildRequires: make
 Requires:       python3-libxml2
 
@@ -30,6 +33,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 %patch -P0 -p1 -b .encoding
 %patch -P1 -p1 -b .py312-regex
+autoreconf -fi
 
 %build
 export PYTHON=%{__python3}

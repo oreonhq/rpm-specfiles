@@ -53,7 +53,7 @@ echo "HTML_TIMESTAMP      = NO" >> Doxyfile.cmake
 
 
 %build
-%cmake
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %cmake_build
 

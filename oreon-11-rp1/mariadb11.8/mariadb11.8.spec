@@ -1,5 +1,5 @@
-%global source0_hash 23241e66c86f4c738a6b7b24622a6c4215cf1b43f428ff7d0684d25832ce7c11
-%global source1_hash 49b039601196e1a765e81c5c9a05a61ed3d33f23b3961323d7322e4fe213d3e6
+%global source0_hash b126581a8ca89376d2a3ce63fee97c114c3e15315345e769b9d00c51e1b7d619
+%global source1_hash 695fd197fa5aff8fc67b5f2bbc110490a875cdf7a41686ac8512fb480fa8ada7
 %global source4_hash 59c8556fd45e68599897cd5d74efad9c4a43f85e981fe7ac3ac5fd7aa70672ac
 
 # Plain package name for cases, where %%{name} differs (e.g. for versioned packages)
@@ -137,7 +137,7 @@
 %endif
 
 %if %{with bundled_fmt}
-%global fmt_bundled_version 11.1.4
+%global fmt_bundled_version 12.1.0
 %endif
 
 # Include systemd files
@@ -226,8 +226,6 @@ Patch4:           %{majorname}-logrotate.patch
 Patch7:           %{majorname}-scripts.patch
 #   Patch9: pre-configure to comply with guidelines
 Patch9:           %{majorname}-ownsetup.patch
-#   Patch13: bundle the FMT library
-Patch13:          %{majorname}-libfmt.patch
 #   Patch14: make MTR port calculation reasonably predictable
 Patch14:          %{majorname}-mtr.patch
 #   Patch15: mark RISC-V64 as 64-bit architecture
@@ -846,7 +844,9 @@ sources.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+%if %{with bundled_pcre}
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
+%endif
 %setup -q -n %{majorname}-%{version}
 
 # Remove bundled code that is unused (all cases in which we use the system version of the library instead)
@@ -860,6 +860,7 @@ rm -r debian
 %if %{with bundled_fmt}
 mkdir -p %{_vpath_builddir}/extra/libfmt/
 mv %{SOURCE1} %{_vpath_builddir}/extra/libfmt/
+sed -i 's|"https://github.com/fmtlib/fmt/releases/download/%{fmt_bundled_version}/fmt-%{fmt_bundled_version}.zip"|"file:///%{_vpath_builddir}/extra/libfmt/fmt-%{fmt_bundled_version}.zip"|' cmake/libfmt.cmake
 %endif
 %if %{with bundled_pcre}
 mkdir -p %{_vpath_builddir}/extra/pcre2/
@@ -878,10 +879,6 @@ rm -r storage/rocksdb/
 %patch -P4 -p1
 %patch -P7 -p1
 %patch -P9 -p1
-%if %{with bundled_fmt}
-%patch -P13 -p1
-%endif
-
 %patch -P14 -p1
 %patch -P15 -p1
 %patch -P16 -p1

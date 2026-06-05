@@ -1,4 +1,4 @@
-%global source0_hash a440d0b61d0b2264cd98ae6b06ed7e091bbd6ba0d84c2c2787d866b801b417cd
+%global source0_hash a4bbdc881128bdbe920a38e134c9add5db47f9aa814a0a018ba940b0f3c278c3
 
 Name:       lpsolve
 Version:    5.5.2.14
@@ -43,10 +43,6 @@ Source0:     https://github.com/lp-solve/lp_solve/releases/download/%{version}/l
 Patch0:     lp_solve-5.5.2.14-Respect-CC-CFLAGS-and-LDFLAGS.patch
 # Do not duplicate library code in the the tool
 Patch1:     lp_solve-5.5.2.11-Link-a-tool-to-a-shared-library.patch
-# 1/2 Rebase bundled COLAMD to 3.0.4, proposed to the upstream.
-Patch2:     lp_solve-5.5.2.11-Rebase-COLAMD-to-3.0.4.patch
-# 2/2 Rebase bundled COLAMD to 3.0.4, proposed to the upstream.
-Patch3:     lp_solve-5.5.2.11-Port-lp_MDO-to-colamd-3.0.4.patch
 BuildRequires:  bash
 # binutils for ar and ranlib
 BuildRequires:  binutils
@@ -71,7 +67,6 @@ Header files for developing with lpsolve library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n lp_solve
-mv colamd/License.txt colamd/colamd_license
 chmod -x lp_lib.h
 
 %build
@@ -105,7 +100,7 @@ ${CC} ${CFLAGS} -I. demo/demo.c ${LDFLAGS} -L"$LP_PATH" -llpsolve55
 LD_LIBRARY_PATH="$LP_PATH" ./a.out </dev/null
 
 %files
-%license colamd/colamd_license LICENSE
+%license LICENSE
 %doc README.txt
 %{_bindir}/lp_solve
 %{_libdir}/liblpsolve55.so

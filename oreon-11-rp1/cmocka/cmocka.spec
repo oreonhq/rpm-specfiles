@@ -120,7 +120,7 @@ test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "ore
 # Disable LTO
 %define _lto_cflags %{nil}
 
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DWITH_STATIC_LIB=ON \
   -DUNIT_TESTING=ON \
   -DDOXYGEN_AWESOME_CSS_DIR=%{_sourcedir}/doxygen-awesome-css-2.4.1

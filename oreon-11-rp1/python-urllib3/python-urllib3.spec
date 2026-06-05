@@ -32,7 +32,7 @@ Source0:        https://github.com/urllib3/urllib3/archive/2.7.0/urllib3-2.7.0.t
 # installed in the buildroot or otherwise included in any of the binary RPMs.
 %global hypercorn_url https://github.com/urllib3/hypercorn
 %global hypercorn_commit d1719f8c1570cbd8e6a3719ffdb14a4d72880abb
-Source1:        https://github.com/urllib3/hypercorn/archive/d1719f8c1570cbd8e6a3719ffdb14a4d72880abb/hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz#/python-urllib3-2.7.0.tar.gz
+Source1:        https://github.com/urllib3/hypercorn/archive/d1719f8c1570cbd8e6a3719ffdb14a4d72880abb/hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz#/python-urllib3-hypercorn-%{hypercorn_commit}.tar.gz
 
 BuildArch:      noarch
 

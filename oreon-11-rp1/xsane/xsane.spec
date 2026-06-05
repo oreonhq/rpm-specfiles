@@ -178,7 +178,7 @@ done
 %patch -P 17 -p1 -b .replace-gtk-timeout
 %patch -P 18 -p1 -b .gcc15-c23
 
-%patch -P 100 -p1 -b .autoconf
+bzip2 -dc %{PATCH100} | patch -p1 -b --suffix .autoconf
 %patch -P 101 -p1 -b .c99
 
 # in-root config.h breaks off-root building

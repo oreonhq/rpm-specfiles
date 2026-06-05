@@ -10,14 +10,4 @@ diff -up pnm2ppa-1.13/Makefile.am.rh pnm2ppa-1.13/Makefile.am
  CPPFLAGS_FOR_BUILD = -I$(top_srcdir)
  LDFLAGS_FOR_BUILD =
  LDLIBS_FOR_BUILD =
-diff -up pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.rh pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile
---- pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.rh	2023-10-20 13:18:54.058176682 +0200
-+++ pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile	2023-10-20 13:18:54.061176659 +0200
-@@ -1,5 +1,5 @@
- CC=gcc
--CFLAGS=-Wall -O2 
-+CFLAGS=$(RPM_OPT_FLAGS)
- LDFLAGS=
- PRINTER=HP720
- 
 diff -up pnm2ppa-1.13/pnm2ppa.conf.rh pnm2ppa-1.13/pnm2ppa.conf

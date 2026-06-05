@@ -27,7 +27,7 @@ cp -p dictionaries/gl/hyph_gl.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_gl_ES.
 
 
 %files
-%doc dictionaries/gl/README_hyph_gl.txt
+%doc dictionaries/gl/README_hyph-gl.txt
 %{_datadir}/hyphen/*
 
 %changelog

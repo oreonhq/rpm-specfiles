@@ -10,7 +10,7 @@ URL:           https://sourceforge.net/projects/paktype/
 %global foundry           paktype
 %global fontlicense       GPL-2.0-only WITH Font-exception-2.0
 %global fontlicenses      PakType_Naskh_Basic_License.txt
-%global fontdocs          For\ Code\ and\ Features.txt
+%global fontdocs          For_Code_and_Features.txt
 
 %global fontfamily        PakType Naskh Basic
 %global fontsummary       Fonts for Arabic, Farsi, Urdu and Sindhi from PakType
@@ -36,7 +36,8 @@ sed -i 's/\r$//' "PakType Naskh Basic License.txt"
 popd
 
 mv License\ files/PakType\ Naskh\ Basic\ License.txt PakType_Naskh_Basic_License.txt
-chmod 644 For\ Code\ and\ Features.txt
+mv 'For Code and Features.txt' For_Code_and_Features.txt
+chmod 644 For_Code_and_Features.txt
 
 %build
 %fontbuild

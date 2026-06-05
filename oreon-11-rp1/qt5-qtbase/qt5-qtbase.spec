@@ -479,7 +479,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P90 -p1 -b .gcc11
 
 ## upstream patches
-%patch -P100 -p1
+gzip -dc %{PATCH100} | patch -p1
 %patch -P101 -p1
 %patch -P102 -p1
 %patch -P103 -p1

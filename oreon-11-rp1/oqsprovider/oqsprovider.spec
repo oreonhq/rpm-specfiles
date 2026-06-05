@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -T -b 0 -p1 -n oqs-provider-%{oqs_version}
 
 %build
-%cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DOQS_KEM_ENCODERS=ON -LAH ..
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -GNinja -DCMAKE_BUILD_TYPE=Debug -DOQS_KEM_ENCODERS=ON -LAH ..
 %cmake_build
 
 %check

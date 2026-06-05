@@ -12,7 +12,6 @@ BuildArch: noarch
 BuildRequires: hyphen-devel
 Requires: hyphen
 Supplements: (hyphen and langpacks-fa)
-Patch0: hyphen-fa-cleantex.patch
 
 %description
 Farsi hyphenation rules.

@@ -47,10 +47,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
-
-pushd ..
 %patch -P0 -p1
-popd
 
 %build
 gem build ../%{gem_name}-%{version}.gemspec
@@ -71,8 +68,8 @@ find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
 
 %check
 pushd .%{gem_instdir}
-cp -r %{_builddir}/spec .
-cp -r %{_builddir}/test .
+cp -r %{_builddir}/%{gem_name}-%{version}/spec .
+cp -r %{_builddir}/%{gem_name}-%{version}/test .
 
 # Comment out simplecov.
 for file in \

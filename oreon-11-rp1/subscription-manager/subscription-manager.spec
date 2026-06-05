@@ -371,7 +371,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 
 %if %{use_dnf}
 pushd src/plugins/libdnf
-%cmake -DCMAKE_BUILD_TYPE="Release"
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE="Release"
 %if (0%{?rhel} && 0%{?rhel} <= 8) || (0%{?oreon} >= 11)
 %make_build
 %else

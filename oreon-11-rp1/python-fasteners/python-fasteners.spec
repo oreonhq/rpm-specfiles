@@ -31,7 +31,8 @@ Summary:        A python package that provides useful locks
 %description -n python3-fasteners %{common_description}
 
 
-%prep -a
+%prep
+%autosetup -n fasteners-%{version}
 # Omit eventlet integration tests: retired since Fedora 41
 tomcli set pyproject.toml lists delitem dependency-groups.test eventlet
 

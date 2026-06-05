@@ -33,7 +33,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%cmake -DBUILD_TESTING:BOOL=ON \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_TESTING:BOOL=ON \
        -DINSTALL_HEADERS:BOOL=ON \
        -DREGISTER_BUILD_DIR:BOOL=OFF \
        -DREGISTER_INSTALL_PREFIX:BOOL=OFF

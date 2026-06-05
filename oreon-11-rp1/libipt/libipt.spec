@@ -47,7 +47,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %patch -P 1 -p1
 
 %build
-%cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DPTUNIT:BOOL=ON \
 %if 0%{?_with_docs:1}
        -DMAN:BOOL=ON \

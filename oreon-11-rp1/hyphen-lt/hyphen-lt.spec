@@ -12,7 +12,6 @@ BuildArch: noarch
 BuildRequires: hyphen-devel
 Requires: hyphen
 Supplements: (hyphen and langpacks-lt)
-Patch0: hyphen-lt-cleantex.patch
 
 %description
 Lithuanian hyphenation rules.
@@ -21,8 +20,6 @@ Lithuanian hyphenation rules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-lt
 cp -p %{SOURCE0} .
-%patch -P0 -p0 -b .clean
-
 %build
 substrings.pl hyph-lt.tex hyph_lt_LT.dic UTF-8
 echo "Created with substring.pl by substrings.pl hyph-lt.tex hyph_lt_LT.dic UTF-8" > README

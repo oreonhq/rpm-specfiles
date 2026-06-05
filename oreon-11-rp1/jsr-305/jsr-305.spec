@@ -16,7 +16,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
 Source0:        https://github.com/amaembo/jsr-305/archive/d7734b13c61492982784560ed5b4f4bd6cf9bb2c/%{name}-%{version}.tar.gz#/jsr-305-3.0.2.tar.gz
-Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz#/jsr-305-3.0.2.tar.gz
+Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz#/jcip-annotations-1.0-1.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

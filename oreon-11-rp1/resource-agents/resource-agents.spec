@@ -1,4 +1,4 @@
-%global source0_hash 8a67ea71ba7be94503008a4f44d5a0a2a2c81fd14b22204965e94fe8b2f9bf41
+%global source0_hash 415841c3b29d6b506649bf9c17dbb89b0b07e44a6cb5d085370531d5861e9201
 
 #
 # All modifications and additions to the file contributed by third parties
@@ -21,8 +21,8 @@
 # git archive --prefix=$distdir/ HEAD | gzip > $TARFILE
 #
 
-%global upstream_prefix ClusterLabs-resource-agents
-%global upstream_version 496e9a45
+%global upstream_prefix resource-agents
+%global upstream_version 496e9a452b586b94c2508b5ca009bab3d3d0849b
 
 # Whether this platform defaults to using systemd as an init system
 # (needs to be evaluated prior to BuildRequires being enumerated and
@@ -36,9 +36,11 @@
 #   propagated by systemd project
 # - when not good enough, there's always a possibility to check
 #   particular distro-specific macros (incl. version comparison)
-%define systemd_native (%{?_unitdir:1}%{!?_unitdir:0}%{nil \
-  } || %{?__transaction_systemd_inhibit:1}%{!?__transaction_systemd_inhibit:0}%{nil \
-  } || %(test -f /usr/lib/os-release; test $? -ne 0; echo $?))
+%if 0%{?fedora} || 0%{?rhel} || 0%{?centos} || 0%{?suse_version} || (0%{?oreon} >= 11)
+%global systemd_native 1
+%else
+%global systemd_native 0
+%endif
 
 # SSLeay (required by ldirectord)
 %if 0%{?suse_version}
@@ -214,7 +216,7 @@ See 'ldirectord -h' and linux-ha/doc/ldirectord for more information.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0 || (0%{?oreon} >= 11)
+%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0
 %{error:Unable to determine the distribution/version. This is generally caused by missing /etc/rpm/macros.dist. Please install the correct build packages or define the required macros manually.}
 exit 1
 %endif

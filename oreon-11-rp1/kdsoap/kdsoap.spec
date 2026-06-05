@@ -76,13 +76,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %global _vpath_builddir %{_target_platform}-qt5
-%cmake -DKDSoap_EXAMPLES=false -DKDSoap_QT6=OFF
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DKDSoap_EXAMPLES=false -DKDSoap_QT6=OFF
 %cmake_build
 
 %global _vpath_builddir %{_target_platform}-qt6
 # qhelpgenerator needs to be in $PATH to be detected
 export PATH=%{_qt6_libexecdir}:$PATH
-%cmake -DKDSoap_EXAMPLES=false -DKDSoap_QT6=ON -DKDSoap_DOCS=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DKDSoap_EXAMPLES=false -DKDSoap_QT6=ON -DKDSoap_DOCS=ON
 %cmake_build
 
 %install

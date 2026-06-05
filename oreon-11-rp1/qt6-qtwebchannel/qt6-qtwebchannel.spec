@@ -98,7 +98,6 @@ popd
 %{_qt6_libdir}/libQt6WebChannel.so.6*
 %{_qt6_libdir}/libQt6WebChannelQuick.so.6*
 %{_qt6_archdatadir}/qml/QtWebChannel/
-%{_qt6_datadir}/webchannel/
 
 %files devel
 %{_qt6_headerdir}/QtWebChannel/

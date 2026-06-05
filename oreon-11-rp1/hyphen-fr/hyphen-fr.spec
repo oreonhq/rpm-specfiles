@@ -1,11 +1,11 @@
-%global source0_hash 2806b2f49903b3f77ded3204f580eb0d7b8d9a74775ca2801f6394211d86e2d7
+%global source0_hash none
 
 Name: hyphen-fr
 Summary: French hyphenation rules
 Version: 3.0
 Release: 20%{?dist}
-Source: https://www.dicollecte.org/download/fr/hyph-fr-v3.0.zip#/hyphen-fr-3.0.tar.gz
-URL: http://www.dicollecte.org/download.php?prj=fr
+Source: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+URL: https://github.com/LibreOffice/dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch
 
@@ -17,14 +17,14 @@ French hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T -n %{name}-%{version}
-unzip -q %{SOURCE0}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
+chmod -x dictionaries/fr_FR/hyph_fr.dic
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p hyph_fr.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_fr_FR.dic
+cp -p dictionaries/fr_FR/hyph_fr.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_fr_FR.dic
 
 pushd $RPM_BUILD_ROOT/%{_datadir}/hyphen/
 fr_FR_aliases="fr_BE fr_CA fr_CH fr_LU fr_MC"
@@ -33,9 +33,8 @@ for lang in $fr_FR_aliases; do
 done
 popd
 
-
 %files
-%doc README_hyph_fr-3.0.txt
+%doc dictionaries/fr_FR/README_hyph_fr.txt
 %{_datadir}/hyphen/*
 
 %changelog

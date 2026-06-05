@@ -57,7 +57,7 @@ socket_wrapper_enabled().
 %autosetup -p1
 
 %build
-%cmake \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DUNIT_TESTING=ON
 
 %cmake_build

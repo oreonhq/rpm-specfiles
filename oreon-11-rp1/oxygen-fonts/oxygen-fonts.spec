@@ -67,7 +67,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{name}-%{version}
 
 %build
-%{cmake_kf5} %{?fontforge} -DOXYGEN_FONT_INSTALL_DIR=%{_fontdir}
+%{cmake_kf5} %{?fontforge} -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DOXYGEN_FONT_INSTALL_DIR=%{_fontdir}
 %cmake_build
 
 

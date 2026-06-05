@@ -76,7 +76,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 mkdir -p build
 cd build
-%cmake -S .. -B . -DLINK_APPS_SHARED=ON
+%cmake -S .. -B . -DLINK_APPS_SHARED=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 make VERBOSE=1 %{?_smp_mflags}
 # These items are deprecated as of 8.0.2
 make VERBOSE=1 %{?_smp_mflags} libqhull qhull_p

@@ -30,11 +30,12 @@ make %{?_smp_mflags} CFLAGS="%{optflags}"
 
 %install
 %make_install
+install -D -m 0755 plotnetcfg %{buildroot}%{_bindir}/plotnetcfg
 
 %files
 %license COPYING
 %doc README
-%{_sbindir}/plotnetcfg
+%{_bindir}/plotnetcfg
 %{_mandir}/man5/*
 %{_mandir}/man8/*
 

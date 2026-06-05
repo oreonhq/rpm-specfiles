@@ -73,8 +73,8 @@ install -m0644 -D realtime-setup.sysusers.conf %{buildroot}%{_sysusersdir}/realt
 %config(noreplace) %{_sysconfdir}/udev/rules.d/99-rhel-rt.rules
 %config(noreplace) %{_sysconfdir}/sysconfig/realtime-setup
 %{_bindir}/slub_cpu_partial_off
-%{_bindir}/realtime-entsk
-%{_bindir}/kernel-is-rt
+%{_sbindir}/realtime-entsk
+%{_sbindir}/kernel-is-rt
 %{_unitdir}/realtime-setup.service
 %{_bindir}/realtime-setup
 %{_unitdir}/realtime-entsk.service

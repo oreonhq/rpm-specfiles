@@ -113,7 +113,7 @@ done
 
 
 %build
-%cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_CXX_COMPILER=/usr/bin/g++
 
 %cmake_build
 

@@ -450,7 +450,7 @@ This subpackage provides support for rebuilding your own grub-%{xen_pvh_grub_tar
 %global do_common_setup()					\
 %setup -q -n grub-%{tarversion}					\
 rm -fv docs/*.info						\
-cp %{SOURCE4} .gitignore					\
+cp %{SOURCE4} unifont.pcf.gz					\
 cp %{SOURCE5} bootstrap						\
 cp %{SOURCE6} bootstrap.conf					\
 cp %{SOURCE7} ./grub-core/tests/strtoull_test.c			\

@@ -109,7 +109,7 @@ configuration, available on http://localhost/apcu-panel/
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%forgesetup
+%setup -q -n %{pecl_name}-%{version}
 
 # Sanity check, really often broken
 extver=$(sed -n '/#define PHP_APCU_VERSION/{s/.* "//;s/".*$//;p}' php_apc.h)
@@ -173,7 +173,6 @@ TEST_PHP_ARGS="-n -d extension=%{buildroot}%{php_extdir}/%{pecl_name}.so" \
 
 %files
 %license LICENSE
-%doc composer.json
 %doc NOTICE
 %doc README.md
 %doc TECHNOTES.txt

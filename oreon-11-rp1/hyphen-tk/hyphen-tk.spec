@@ -12,7 +12,6 @@ BuildArch: noarch
 BuildRequires: hyphen-devel
 Requires: hyphen
 Supplements: (hyphen and langpacks-tk)
-Patch0: hyphen-tk-cleantex.patch
 
 %description
 Turkmen hyphenation rules.
@@ -21,8 +20,6 @@ Turkmen hyphenation rules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-tk
 cp -p %{SOURCE0} .
-%patch -P0 -p0 -b .clean
-
 %build
 substrings.pl hyph-tk.tex hyph_tk_TM.dic UTF-8
 echo "Created with substring.pl by substrings.pl hyph-tk.tex hyph_tk_TM.dic UTF-8" > README

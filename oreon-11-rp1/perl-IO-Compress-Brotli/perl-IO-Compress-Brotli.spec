@@ -8,7 +8,6 @@ Summary:        Perl bindings for Brotli compression
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Compress-Brotli/
 Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/IO-Compress-Brotli-%{cpan_version}.tar.gz
-Patch0:        IO-Compress-Brotli-0.019-Use-pkgconfig-instead-of-bundled-libbrotli.patch
 
 # Build
 BuildRequires:  coreutils
@@ -54,7 +53,41 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n IO-Compress-Brotli-%{cpan_version}
-%patch -P0 -p1
+
+cat > Makefile.PL <<'EOF'
+use 5.008000;
+use ExtUtils::MakeMaker;
+use ExtUtils::PkgConfig;
+
+my @requirements = qw(libbrotlidec libbrotlienc);
+my ($libs, $inc) = ('', '');
+for my $req (@requirements) {
+    my %pkgcfg = ExtUtils::PkgConfig->find($req);
+    $libs .= $pkgcfg{libs} . ' ';
+    $inc  .= $pkgcfg{cflags} . ' ';
+}
+
+WriteMakefile(
+    NAME             => 'IO::Compress::Brotli',
+    VERSION_FROM     => 'lib/IO/Compress/Brotli.pm',
+    ABSTRACT         => 'Read/write Brotli buffers/streams',
+    AUTHOR           => 'Marius Gavrilescu <marius@ieval.ro>',
+    MIN_PERL_VERSION => '5.08.0',
+    LICENSE          => 'perl',
+    PREREQ_PM        => {
+        'Exporter' => '0',
+        'File::Slurper' => '0',
+        'Getopt::Long' => '0',
+        'Time::HiRes' => '0',
+        'XSLoader' => '0',
+        'parent' => '0',
+        'strict' => '0',
+        'warnings' => '0',
+    },
+    LIBS             => $libs,
+    INC              => $inc,
+);
+EOF
 
 # Remove bundled source
 for F in `find brotli -type f | grep -v testdata`; do 

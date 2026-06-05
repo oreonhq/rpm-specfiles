@@ -33,7 +33,7 @@ cat src/CMakeLists.txt | sed 's/CMAKE_INSTALL_SBINDIR/CMAKE_INSTALL_BINDIR/g' > 
 mv src/CMakeLists.txt.no-sbin src/CMakeLists.txt
 cat src/pcm-sensor-server.service.in | sed 's/CMAKE_INSTALL_SBINDIR/CMAKE_INSTALL_BINDIR/g' > src/pcm-sensor-server.service.in.no-sbin
 mv src/pcm-sensor-server.service.in.no-sbin src/pcm-sensor-server.service.in
-%cmake -DCMAKE_BUILD_TYPE=CUSTOM -DLINUX_SYSTEMD=TRUE -DLINUX_SYSTEMD_UNITDIR=%{_unitdir}/
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=CUSTOM -DLINUX_SYSTEMD=TRUE -DLINUX_SYSTEMD_UNITDIR=%{_unitdir}/
 %cmake_build
 
 %install

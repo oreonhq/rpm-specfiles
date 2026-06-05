@@ -85,7 +85,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 # Native build
-%cmake -DDISABLE_GEOS_INLINE=ON -DBUILD_DOCUMENTATION=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DDISABLE_GEOS_INLINE=ON -DBUILD_DOCUMENTATION=ON
 %cmake_build
 %cmake_build --target docs
 

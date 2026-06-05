@@ -53,7 +53,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 #   -DBUILD_TEST=ON : Build the test program.
 #   -DBUILD_DOC=ON : Build the html and latex doc.
 %build
-%cmake
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
 
 

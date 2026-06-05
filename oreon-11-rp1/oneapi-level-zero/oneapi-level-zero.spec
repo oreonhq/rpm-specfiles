@@ -56,7 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 # spdlog uses fmt, but since this doesn't setup linking, use it in header only mode
 export CXXFLAGS="%{build_cxxflags} -DFMT_HEADER_ONLY=1"
-%cmake -DSYSTEM_SDPLOG=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSYSTEM_SDPLOG=ON
 %cmake_build
 
 %install

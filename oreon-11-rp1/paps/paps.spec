@@ -146,10 +146,7 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="/usr/bin/install -p"
 
 %files
 %doc AUTHORS COPYING.LIB README
-%dir %{_datadir}/paps
 %{_bindir}/paps
-%{_bindir}/src-to-paps
-%{_datadir}/paps/pango_markup.outlang
 %{_mandir}/man1/paps.1*
 
 %files -n texttopaps

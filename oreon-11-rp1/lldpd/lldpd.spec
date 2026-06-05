@@ -12,10 +12,12 @@ Source1:  %{name}-fedora.service
 Source2:  %{name}-tmpfiles
 Source3:  %{name}-fedora.sysconfig
 Source4:  %{name}-systemd-sysusers.conf
-Patch1:        lldpd-configure-c99.patch
 
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: check-devel
 BuildRequires: gcc
+BuildRequires: libtool
 BuildRequires: libxml2-devel
 BuildRequires: libevent-devel
 BuildRequires: make
@@ -45,6 +47,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
+autoreconf -fi
 %configure --disable-static --with-snmp --disable-silent-rules \
   --with-privsep-user=%{name} --with-privsep-group=%{name} \
   --with-privsep-chroot=%{_rundir}/%{name}/chroot \

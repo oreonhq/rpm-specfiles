@@ -51,7 +51,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %files -n python3-%{srcname} -f %{pyproject_files}
-%license %{python3_sitelib}/%{srcname}-%{version}.dist-info/LICENSE
+%license LICENSE
 %doc README.rst
 
 %changelog

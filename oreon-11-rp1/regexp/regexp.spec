@@ -30,12 +30,8 @@ It includes complete Javadoc documentation as well as a simple Applet
 for visual debugging and testing suite for compatibility.
 
 %prep
-_tar="jakarta-regexp-%{version}.tar.gz"
-if test ! -f "$_tar"; then
-  curl -sfL -o "$_tar" "https://archive.apache.org/dist/jakarta/regexp/source/jakarta-regexp-%{version}.tar.gz"
-fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n regexp-1.5
+%autosetup -p1 -n jakarta-regexp-%{version}
 cp -p %{SOURCE2} MANIFEST.MF
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
