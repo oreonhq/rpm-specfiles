@@ -560,7 +560,7 @@ export NINJAFLAGS="%{__ninja_common_opts}"
 export NINJA_PATH=%{__ninja}
 
 # this follows the logic of the Configure summary to turn on and off
-%cmake_qt6 \
+%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
   -DFEATURE_webengine_build_gn:BOOL=ON \
   -DFEATURE_webengine_jumbo_build:BOOL=ON \

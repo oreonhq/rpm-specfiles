@@ -11,7 +11,7 @@ Summary: Farsi hunspell dictionaries
 %global upstreamid 20070116
 Version: 0.%{upstreamid}
 Release: 38%{?dist}
-Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz#/hunspell-fa-0.%{upstreamid}.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 URL:            https://github.com/LibreOffice/dictionaries
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -23,16 +23,18 @@ Supplements: (hunspell and langpacks-fa)
 Farsi hunspell dictionaries.
 
 %prep
-%autosetup -c -T -n dictionaries-master
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-# nothing to build here
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p fa_IR/fa_IR.dic fa_IR/fa_IR.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/fa_IR/fa-IR.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fa_IR.dic
+install -pm 0644 dictionaries/fa_IR/fa-IR.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fa_IR.aff
 
 %files
+%doc dictionaries/fa_IR/README_fa_IR.txt
 %{_datadir}/%{dict_dirname}/*
 
 %changelog

@@ -283,7 +283,7 @@ rm -rf src/plugins/help/qlitehtml/litehtml
 
 
 %build
-%cmake_qt6 \
+%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DBUILD_PLUGIN_CLANGREFACTORING=ON \
     -DBUILD_PLUGIN_CLANGPCHMANAGER=ON \
     -DCLANGTOOLING_LINK_CLANG_DYLIB=ON \

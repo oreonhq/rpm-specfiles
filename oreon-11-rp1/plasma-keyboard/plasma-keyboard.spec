@@ -66,7 +66,7 @@ sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 
 
 %build
-%cmake_kf6
+%cmake_kf6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
 
 

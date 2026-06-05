@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{archivename}
 
 %build
-%cmake3 \
+%cmake3 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DLDAC_SOFT_FLOAT=OFF \
     -DINSTALL_LIBDIR=%{_libdir}
 

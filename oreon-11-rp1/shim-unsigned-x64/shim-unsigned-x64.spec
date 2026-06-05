@@ -48,11 +48,10 @@ Source1:        fedora-ca-20200709.cer
 Source2:	%{dbxfile}
 %endif
 Source3:        sbat.redhat.csv
-Source4:        shim.patches
 
 Source100:        shim-find-debuginfo.sh
 
-%include shim.patches
+
 
 BuildRequires:	gcc make
 BuildRequires:	elfutils-libelf-devel

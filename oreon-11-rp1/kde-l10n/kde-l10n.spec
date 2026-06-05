@@ -1296,7 +1296,7 @@ for i in $(cat %{SOURCE1000}) ; do
  pushd %{name}-$i-%{version}
   mkdir %{_target_platform}
   pushd %{_target_platform}
-  %{cmake_kde4} .. -DKDE_INSTALL_DATADIR:PATH=%{_kf5_datadir}
+  %{cmake_kde4} .. -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DKDE_INSTALL_DATADIR:PATH=%{_kf5_datadir}
   make %{?_smp_mflags}
   popd
  popd

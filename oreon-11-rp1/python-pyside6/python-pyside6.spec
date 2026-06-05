@@ -279,7 +279,7 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
 # https://src.fedoraproject.org/rpms/polyclipping/c/02c70e17ef9e9fcdfbc65021418a3e332e465b20?branch=rawhide
 # Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
 # cmake %["%%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
-%cmake_qt6 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
+%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
     -DCMAKE_C_COMPILER:FILEPATH=%{_bindir}/gcc \
     -DCMAKE_CXX_COMPILER:FILEPATH=%{_bindir}/g++ \
     -DCMAKE_BUILD_TYPE=None \

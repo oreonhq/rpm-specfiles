@@ -764,6 +764,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 12 -p1
 %patch -P 13 -p1
 
+go mod vendor
+make gen-go
+
 %patch -P 1001 -p1
 %if %{enable_fips_mode}
 %patch -P 1002 -p1
@@ -772,9 +775,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 1003 -p1
 %endif
 %patch -P 1004 -p1
-
-go mod vendor
-make gen-go
 
 %build
 # Build the frontend

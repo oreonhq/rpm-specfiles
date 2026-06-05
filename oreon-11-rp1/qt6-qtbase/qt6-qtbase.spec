@@ -373,7 +373,7 @@ export CXXFLAGS="$CXXFLAGS $RPM_OPT_FLAGS"
 export LDFLAGS="$LDFLAGS $RPM_LD_FLAGS"
 export MAKEFLAGS="%{?_smp_mflags}"
 
-%cmake_qt6 \
+%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
  -DFEATURE_accessibility=ON \
  -DFEATURE_fontconfig=ON \
  -DFEATURE_glib=ON \

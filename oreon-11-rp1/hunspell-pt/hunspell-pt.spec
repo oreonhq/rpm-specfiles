@@ -61,7 +61,6 @@ popd
 
 %files
 %doc dictionaries/pt_PT/README_pt_PT.txt
-%license COPYING
 %{_datadir}/%{dict_dirname}/*
 %exclude %{_datadir}/%{dict_dirname}/pt_BR.*
 

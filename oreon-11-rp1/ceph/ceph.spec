@@ -1438,6 +1438,7 @@ env | sort
 
 # TODO: drop this step once we can use `cmake -B`
 %{cmake} \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -GNinja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_CONFIG=rpmbuild \

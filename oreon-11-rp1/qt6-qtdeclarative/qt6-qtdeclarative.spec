@@ -107,7 +107,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
-%cmake_qt6 \
+%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 
