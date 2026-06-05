@@ -1,0 +1,1 @@
+This package includes Oreon-specific service, sysconfig, PAM, cron, sysusers, and tmpfiles integration for cyrus-imapd.

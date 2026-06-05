@@ -24,7 +24,7 @@ Summary:        MinGW port of the OpenSSL toolkit
 License:        OpenSSL
 URL:            http://www.openssl.org/
 
-Source:  openssl-%{version}.tar.gz
+Source:  https://www.openssl.org/source/openssl-%{version}.tar.gz
 Source2:        Makefile.certificate
 Source3:        genpatches
 Source6:        make-dummy-cert

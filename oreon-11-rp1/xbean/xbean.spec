@@ -85,4 +85,3 @@ sed -i '/testGetBytecode/i@org.junit.Ignore' xbean-finder/src/test/java/org/apac
 %files -f .mfiles
 %license LICENSE NOTICE
 
-%autochangelog

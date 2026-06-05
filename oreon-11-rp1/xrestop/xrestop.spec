@@ -10,6 +10,8 @@ Source0:        https://gitlab.freedesktop.org/xorg/app/xrestop/-/archive/xresto
 
 BuildRequires: make
 BuildRequires:  gcc
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: ncurses-devel libXres-devel libXext-devel libX11-devel
 BuildRequires: libXau-devel
 
@@ -23,6 +25,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n xrestop-xrestop-%{version}
 
 %build
+autoreconf -fi
 %configure
 make
 # SUBDIRS=

@@ -1,4 +1,4 @@
-%global source0_hash 3b5e692f2d09696775d8f647cf6acd3d0093cbc6caa3b0107d5b6c68ba2891e3
+%global source0_hash a0ce30381657dce8e694df9a09e95d818d13beb03698fd2cf79d0c8d564a9b8e
 
 # Run test
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
@@ -19,9 +19,7 @@ Release:        7%{?dist}
 Summary:        YAML Ain't Markup Language (tm)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML
-# Tarball created from https://cpan.metacpan.org/modules/by-module/YAML/YAML-%%{version}.tar.gz
-# using script YAML-free (see https://bugzilla.redhat.com/show_bug.cgi?id=1813197)
-Source0:        YAML-free-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/YAML-%{version}.tar.gz
 # Script to remove non-free content from upstream tarball
 # Usage: YAML-free YAML-%%{version}.tar.gz
 Source1:        YAML-free
@@ -89,6 +87,8 @@ Please consider using these first:
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n YAML-%{version}
+rm t/load-slides.t
+sed -i -e '/^t\/load-slides.t/d' MANIFEST
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1

@@ -18,7 +18,6 @@ Source0:        https://github.com/xmlunit/xmlunit/archive/refs/tags/v%{version}
 Patch:          0001-Disable-tests-requiring-network-access.patch
 # This also solves the problem of tests requiring network. The files that would
 # be fetched are identical to the local file
-Patch:          0002-Use-local-schema.patch
 Patch:          0003-Drop-support-for-JAXB.patch
 Patch:          0004-Port-to-assertj-core-3.patch
 

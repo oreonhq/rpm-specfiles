@@ -7,7 +7,7 @@ Summary: Sample Authorization Protocol for X
 License: MIT-open-group
 URL: http://www.x.org
 
-Source0:        libXau-1.0.12.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXau-1.0.12.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

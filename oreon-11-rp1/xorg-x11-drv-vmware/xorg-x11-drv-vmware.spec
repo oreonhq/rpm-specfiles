@@ -13,7 +13,7 @@ Release:    12%{?dist}
 URL:        http://www.x.org
 License:    MIT AND X11
 
-Source0:        xf86-video-vmware-13.4.0.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 Source30:        xserver-sdk-abi-requires
 
 ExclusiveArch: %{ix86} x86_64 ia64

@@ -12,10 +12,10 @@ License: MIT-open-group AND SMLNJ AND MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        libXi-1.8.3.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXi-1.8.3.tar.xz
 Source1:        make-git-snapshot.sh
 %else
-Source0:        libXi-1.8.3.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXi-1.8.3.tar.xz
 %endif
 
 BuildRequires: make

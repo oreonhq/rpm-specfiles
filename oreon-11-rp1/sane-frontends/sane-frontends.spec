@@ -1,4 +1,4 @@
-%global source0_hash 4c9daa7b4c07c5408b0dbc429c13153f45ec5de3d6aed083d2deafd333ba89e8
+%global source0_hash 510b220a406a93f1a7fb2858e7a30fde15d5c3258c6f94e8f72b1ce2ec4b8793
 
 Name: sane-frontends
 Version: 1.0.14
@@ -6,10 +6,7 @@ Release: 54%{?dist}
 Summary: Graphical frontend to SANE
 URL: http://www.sane-project.org
 
-# Repacked the upstream source to remove bundled glibc functions
-# reported here https://gitlab.com/sane-project/frontends/-/merge_requests/11
-#Source0: https://ftp.sane-project.org/pub/sane/%%{name}-%%{version}/%%{name}-%%{version}.tar.gz
-Source0: %{name}-%{version}-repacked.tar.gz
+Source0: https://gitlab.com/sane-project/frontends/-/archive/%{version}/frontends-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Fix array subscript out of bounds errors (#133121).
 # Upstream commit 5113e3de39846a8226909088ad5c1aa4969f3030 and commit
@@ -49,18 +46,9 @@ BuildRequires: sane-backends-devel >= 1.0.19-15
 This packages includes the scanadf and xcam programs.
 
 %prep
-_repacked="%{name}-%{version}-repacked.tar.gz"
-if test ! -f "$_repacked"; then
-  curl -sfL -o _up.tar.gz "https://gitlab.com/sane-project/frontends/-/archive/%{version}/frontends-%{version}.tar.gz"
-  rm -rf _sf _out && mkdir _sf _out
-  tar xf _up.tar.gz -C _sf --strip-components=1
-  rm -f _sf/lstat.c _sf/lstat.h _sf/mkdir.c _sf/mkdir.h _sf/readlink.c _sf/readlink.h
-  ( cd _sf && tar czf "../$_repacked" . )
-  rm -rf _sf _up.tar.gz
-fi
-
-test "%{source0_hash}" = "none" || { f="$_repacked"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{version}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n frontends-%{version}
+rm -f lstat.c lstat.h mkdir.c mkdir.h readlink.c readlink.h
 
 %build
 # have to regenerate configure, the old one caused f.e.:

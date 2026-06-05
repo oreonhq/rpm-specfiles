@@ -96,7 +96,7 @@ Source2:        %{name}_extra-clean-%{version}.tar.gz
 }
 Source3:        face_landmark_model.dat.xz
 # SRC=v0.1.2d.zip ; wget https://github.com/opencv/ade/archive/$SRC; mv $SRC $(md5sum $SRC | cut -d' ' -f1)-$SRC
-Source4:        962ce79e0b95591f226431f7b5f152cd-v0.1.2e.zip
+Source4:        https://github.com/opencv/ade/archive/v0.1.2e.zip#/962ce79e0b95591f226431f7b5f152cd-v0.1.2e.zip
 Source5:        xorg.conf
 %global wechat_commit 3487ef7cde71d93c6a01bb0b84aa0f22c6128f6b
 %global wechat_shortcommit %(c=%{wechat_commit}; echo ${c:0:7})

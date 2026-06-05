@@ -12,11 +12,11 @@ License: MIT AND HPND-sell-variant AND SMLNJ AND MIT-open-group AND X11
 URL: https://www.x.org
 
 %if 0%{?gitdate}
-Source0:        libXt-1.3.1.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXt-1.3.1.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        libXt-1.3.1.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXt-1.3.1.tar.xz
 %endif
 
 Requires: libX11%{?_isa} >= 1.6

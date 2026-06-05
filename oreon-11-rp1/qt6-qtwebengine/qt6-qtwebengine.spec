@@ -101,16 +101,12 @@ URL:     http://www.qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
 
-# cleaned tarball with patent-encumbered codecs removed from the bundled FFmpeg
-# ./qtwebengine-release.sh
-# ./clean_qtwebengine.sh 6.9.0
 %if 0%{?unstable}
-Source0: %{qt_module}-everywhere-src-%{qt_version}-%{prerelease}-clean.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
-Source0: %{qt_module}-everywhere-src-%{version}-clean.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
-# cleanup scripts used above
 Source2:        clean_qtwebengine.sh
 Source3:        clean_ffmpeg.sh
 Source4:        get_free_ffmpeg_source_files.py
@@ -477,6 +473,11 @@ Requires: qt6-qtsvg%{?_isa}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}} -a20
+
+cp -p %{SOURCE4} get_free_ffmpeg_source_files.py
+bash %{SOURCE3} src/3rdparty/chromium
+find src/3rdparty/chromium/third_party/openh264/src -type f -not -name '*.h' -delete
+rm get_free_ffmpeg_source_files.py
 
 mv pulse src/3rdparty/chromium/
 

@@ -1,5 +1,3 @@
-%global source0_hash ccceb68090754c60cbc09ebcd662a3224820fb4d1c9c3590ca45f8f14a98ab83
-
 Name:    qt5-doc
 Summary: Qt5 - Complete documentation
 Version: 5.15.16
@@ -10,8 +8,9 @@ BuildArch: noarch
 License: LicenseRef-Callaway-GFDL
 # The tarball for this docs are self generated through provided script on SOURCES generate-qt-doc.sh
 Url: http://qt-project.org/
-Source0: qt-doc-opensource-src-%{version}.tar.xz
-Source1:        generate-qt-doc.sh
+Source0: qt-doc-opensource-src-%{version}.tar.xz.part-00
+Source1: qt-doc-opensource-src-%{version}.tar.xz.part-01
+Source10:        generate-qt-doc.sh
 
 # optimize build, skip unecessary steps
 %global debug_package   %{nil}
@@ -354,7 +353,7 @@ Summary: Documentation for qtgamepad
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# intentionally left blank
+# intentionally left blank
 # though could be used to initially unpack (rex)
 
 
@@ -364,7 +363,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 mkdir -p %{buildroot}
-tar xf %{SOURCE0} -C %{buildroot}
+cat %{SOURCE0} %{SOURCE1} > qt-doc-opensource-src-%{version}.tar.xz
+tar xf qt-doc-opensource-src-%{version}.tar.xz -C %{buildroot}
 
 ## unpackaged files
 pushd %{buildroot}%{_qt5_docdir}

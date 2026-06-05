@@ -1,4 +1,4 @@
-%global source0_hash 044404d4fdb52485bf143e2661eb4b59de955d4805231befad1bb41bfb715a6f
+%global source0_hash 4506c387043aa6a77b455f00f57409f3720aa7e553495ab2535263b4ed1ea12a
 
 Summary:        SAX parser access API for Perl
 Name:           perl-XML-SAX
@@ -7,9 +7,7 @@ Release:        20%{?dist}
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-SAX
-# Original source
-# http://www.cpan.org/authors/id/G/GR/GRANTM/XML-SAX-%%{version}.tar.gz
-Source0:        XML-SAX-%{version}-nopatents.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-%{version}.tar.gz
 # XML-SAX contains patented code that we cannot ship. Therefore we use
 # this script to remove the patented code before shipping it.
 # Download the upstream tarball and invoke this script while in the
@@ -77,6 +75,10 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n XML-SAX-%{version}
+rm testfiles/xmltest.xml
+rm t/16large.t
+sed -i -e '/testfiles\/xmltest.xml/ d' MANIFEST
+sed -i -e '/t\/16large.t/ d' MANIFEST
 %patch -P0 -p1
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

@@ -52,7 +52,11 @@ sed -i '/distributionManagement/,/\/distributionManagement/ {d}' *.pom
 %mvn_alias :xml-apis-ext xerces:dom3-xml-apis
 
 %build
-%ant -Dant.build.javac.source=1.8 -Dant.build.javac.target=1.8 jar
+mkdir -p build/classes build/ext-classes build/docs/javadoc
+javac --release 8 -d build/classes $(find javax org/apache org/xml -name '*.java')
+jar cf build/xml-apis.jar -C build/classes .
+javac --release 8 -d build/ext-classes $(find org/w3c -name '*.java')
+jar cf build/xml-apis-ext.jar -C build/ext-classes .
 
 # inject OSGi manifests
 jar ufm build/xml-apis.jar %{SOURCE1}
