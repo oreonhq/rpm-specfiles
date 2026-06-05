@@ -16,8 +16,7 @@
 # Run the testsuite
 %global enable_tests 0
 
-%global DATE 20260501
-%global gitrev f4e68dc3bdc8f1c5d202db92c8c7bcd89c638688
+%global DATE 20260502
 %global gcc_version 16.1.1
 %global gcc_major 16
 
@@ -30,14 +29,8 @@ Summary:        MinGW Windows cross-compiler (GCC) for C
 License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
 URL:            http://gcc.gnu.org
 
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone --depth 1 git://gcc.gnu.org/git/gcc.git gcc-dir.tmp
-# git --git-dir=gcc-dir.tmp/.git fetch --depth 1 origin %%{gitrev}
-# git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
-# rm -rf gcc-dir.tmp
-%global srcdir gcc-%{version}-%{DATE}
-Source0:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/mingw-gcc/%{srcdir}.tar.xz
+%global srcdir gcc-%{gcc_major}-%{DATE}
+Source0:        https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/%{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
 Patch0:        0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch

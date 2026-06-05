@@ -1,5 +1,4 @@
 %global source0_hash none
-%global source100_hash f8ec761e6a1e210be81bb062a215f0e504deecc21bc3801f176e77dc650d6fba
 
 Name:           nodejs24
 Epoch:          1
@@ -153,9 +152,6 @@ Source007:        nodejs_abi.req.in
 Source010:        test-runner.sh
 Source011:        test-should-pass.txt
 Source020:        i18n-btest402.js
-# Source 100+: Packaging support files that won't be installed
-# - Packaging supports scripts and Makefile, used to semi-automate RPM updates. See the Makefile in the tarball on how this is created.
-Source100:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/nodejs24/packaging-scripts.tar.gz
 # - Additional SRPM macros
 Source101:        nodejs.srpm.macros
 
@@ -282,7 +278,6 @@ Binary symlinks for Node.js Package Manager.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; }
 %autosetup -n node-v%{node_version} -S git_am
 # clean the archive of the de-vendored dependencies, ensuring they are not used
 readonly -a devendored_paths=(
