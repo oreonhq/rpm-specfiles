@@ -11,7 +11,6 @@ Summary: Malagasy hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/mg_MG.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -19,12 +18,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mg)
 
+Source0:        https://github.com/openela-main/hunspell-mg/raw/el9/SOURCES/mg_MG.zip
+
 %description
 Malagasy hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-mg
+%setup -q -c -n hunspell-mg
 
 %build
 for i in README_mg_MG.txt; do
@@ -50,7 +51,6 @@ for lang in $plt_aliases; do
         ln -s plt.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README_mg_MG.txt

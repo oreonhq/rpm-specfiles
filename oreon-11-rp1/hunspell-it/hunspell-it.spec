@@ -1,55 +1,46 @@
-%global source0_hash ed840e5e90fa7752761edc5729a5c5bcb66caa3cc31fcd738235d235160ccc88
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
 
-Name:         hunspell-it
-Summary:      Italian hunspell dictionaries
-Version:      5.1.1
-Release:      %autorelease
-# The license text is embedded within the README files
-# Here we specify the hunspell files license only as other files are not packaged 
-License:      GPL-3.0-only
-URL:          https://pagure.io/dizionario_italiano
-Source:        https://pagure.io/dizionario_italiano/archive/5.1.1/dizionario_italiano-5.1.1.tar.gz
+Name: hunspell-it
+Summary: Italian hunspell dictionaries
+Version: 25.2.3
+Release: %autorelease
+License: GPL-3.0-only
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/it_IT
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+BuildArch: noarch
 
-BuildArch:    noarch
-Requires:     hunspell-filesystem
-Supplements:  (hunspell and langpacks-it)
+Requires: hunspell-filesystem
+Supplements: (hunspell and langpacks-it)
 
 %description
-Italian hunspell dictionaries.
-
+Italian hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n dizionario_italiano-%{version}
-
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-# Nothing to do
-
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p it_IT.dic it_IT.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-it_IT_aliases="it_CH"
-for lang in $it_IT_aliases; do
-        ln -s it_IT.aff $lang.aff
-        ln -s it_IT.dic $lang.dic
-done
-
-
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/it_IT/it_IT.aff dictionaries/it_IT/it_IT.dic %{buildroot}%{_datadir}/%{dict_dirname}/
+pushd %{buildroot}%{_datadir}/%{dict_dirname}/
+ln -s it_IT.aff it_CH.aff
+ln -s it_IT.dic it_CH.dic
+popd
 
 %files
-%license LICENSES/gpl-3.0.txt
-%doc CHANGELOG.txt README.md README_it_IT.txt
+%doc dictionaries/it_IT/README_it_IT.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

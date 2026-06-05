@@ -1,6 +1,6 @@
-%global source0_hash 638984ed883a313ee1633bfe87ba6260b4c7771f22c1a0113d3d49138be8eead
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,43 +8,37 @@
 
 Name: hunspell-el
 Summary: Greek hunspell dictionaries
-Epoch: 1
-Version: 0.9
-Release: 20%{?dist}
-Source:        http://ispell.math.upatras.gr/files/ooffice/el_GR-%{version}.zip
-URL: http://www.elspell.gr/
+Version: 25.2.3
+Release: 1%{?dist}
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/el_GR
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-el)
 
 %description
-Greek hunspell dictionaries.
+Greek hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-el
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-chmod -x *
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
-pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-el_GR_aliases="el_CY"
-for lang in $el_GR_aliases; do
-        ln -s el_GR.aff $lang.aff
-        ln -s el_GR.dic $lang.dic
-done
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/el_GR/el_GR.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/el_GR/el_GR.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc README_el_GR.txt
+%doc dictionaries/el_GR/README_el_GR.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9-20
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

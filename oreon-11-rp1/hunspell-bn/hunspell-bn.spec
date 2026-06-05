@@ -1,6 +1,6 @@
-%global source0_hash 378f40fc81f176b31122bf2d1eb2da13858f660c808f853bed49b726dffe2674
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,45 +8,36 @@
 
 Name: hunspell-bn
 Summary: Bengali hunspell dictionaries
-Version: 1.0.0
-Release: 29%{?dist}
-Epoch: 1
-Source:        http://anishpatil.fedorapeople.org/bn_in.%{version}.tar.gz
-URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
-License: GPL-2.0-or-later
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/bn_BD
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-bn)
 
 %description
-Bengali hunspell dictionaries.
+Bengali hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n bn_IN
-# fix file permissions
-chmod 644 bn_IN/*
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p bn_IN/*.dic bn_IN/*.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-bn_IN_aliases="bn_BD"
-for lang in ${bn_IN_aliases}; do
-    ln -s bn_IN.aff $lang.aff
-    ln -s bn_IN.dic $lang.dic
-done
-popd
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/bn_BD/bn_BD.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/bn_BD/bn_BD.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc bn_IN/README
-%license bn_IN/COPYING bn_IN/Copyright
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-29
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

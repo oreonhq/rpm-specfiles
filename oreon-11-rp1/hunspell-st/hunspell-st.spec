@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash eb73e67ac4796014dd466324546702c41d8ecdfb8655cb06b0adbe5e8a6f01cf
 
 %if 0%{?fedora} > 35
 %global dict_dirname hunspell 
@@ -10,7 +10,6 @@ Summary: Southern Sotho hunspell dictionaries
 %global upstreamid 20091030
 Version: 0.%{upstreamid}
 Release: 33%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/3138/0/dict-st_za-2009.10.30.oxt
 URL: http://www.translate.org.za/
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -18,12 +17,14 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-st)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/3138/0/dict-st_za-2009.10.30.oxt
+
 %description
 Southern Sotho hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-st
+%setup -q -c -n hunspell-st
 
 %build
 for i in README-st_ZA.txt release-notes-st_ZA.txt package-description.txt; do
@@ -40,7 +41,6 @@ done
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc README-st_ZA.txt release-notes-st_ZA.txt package-description.txt

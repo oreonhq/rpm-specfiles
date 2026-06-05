@@ -1,43 +1,44 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
-%global dict_dirname hunspell 
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
+%global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
 
 Name: hunspell-oc
 Summary: Occitan hunspell dictionaries
-Version: 1.5
-Release: 8%{?dist}
-Source:        https://addons.mozilla.org/firefox/downloads/file/4085695/diccionari_occitan_lengadocian-%{version}.xpi
-URL: https://addons.mozilla.org/en-US/firefox/addon/diccionari-occitan-lengadocian/
-# https://www.mozilla.org/en-US/MPL/2.0/combining-mpl-and-gpl/
-# oc_FR.aff is MPL-2.0
-License: GPL-2.0-or-later
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/oc_FR
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
-Requires: hunspell
+Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-oc)
 
 %description
-Occitan hunspell dictionaries.
+Occitan hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-oc
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-# nothing here
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p dictionaries/oc_FR.aff dictionaries/oc_FR.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/oc_FR/oc_FR.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/oc_FR/oc_FR.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
+%doc dictionaries/oc_FR/README_oc_FR.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

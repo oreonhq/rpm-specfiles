@@ -11,13 +11,14 @@ Summary: Friulian hunspell dictionaries
 %global upstreamid 20050912
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: http://digilander.libero.it/paganf/coretors/myspell-fur-12092005.zip
 URL: http://digilander.libero.it/paganf/coretors/dizionaris.html
 License: GPL-2.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-fur)
+
+Source0:        http://digilander.libero.it/paganf/coretors/myspell-fur-12092005.zip
 
 %description
 Friulian hunspell dictionaries.
@@ -42,7 +43,6 @@ done
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p fur_IT.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-
 
 %files
 %doc COPYING.txt LEIMI.txt LICENCE.txt

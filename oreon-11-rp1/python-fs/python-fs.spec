@@ -29,7 +29,7 @@ BuildRequires:  python3dist(six)
 # Required for running tests
 BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pytest-randomly)
-BuildRequires:  python3dist(parameterized)
+BuildRequires:  python3-parameterized
 %endif
 
 %global _description %{expand:

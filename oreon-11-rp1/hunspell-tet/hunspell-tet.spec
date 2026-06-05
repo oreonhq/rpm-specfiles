@@ -11,13 +11,14 @@ Summary: Tetum hunspell dictionaries
 %global upstreamid 20050108
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/tet_ID.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-tet)
+
+Source0:        https://github.com/openela-main/hunspell-tet/raw/el9/SOURCES/tet_ID.zip
 
 %description
 Tetum hunspell dictionaries.
@@ -48,7 +49,6 @@ for lang in $tet_ID_aliases; do
         ln -s tet_ID.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README_tet_ID.txt

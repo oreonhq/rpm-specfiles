@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d830c66f3e858a1cfbaee188a00d876482fbf172bb32026bdd479ea1a632c2d2
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
@@ -11,7 +11,6 @@ Summary: Latin hunspell dictionaries
 %global upstreamid 20130331
 Version: 0.%{upstreamid}
 Release: 30%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/1141/3/dict-la_2013-03-31.oxt
 URL: http://extensions.services.openoffice.org/project/dict-la
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -19,12 +18,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-la)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/1141/3/dict-la_2013-03-31.oxt
+
 %description
 Latin hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-la
+%setup -q -c -n hunspell-la
 
 %build
 for i in README_extension_owner-la.txt la/README_la.txt la/COPYING*; do
@@ -42,7 +43,6 @@ done
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p la/la.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/la.dic
 cp -p la/la.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/la.aff
-
 
 %files
 %doc README_extension_owner-la.txt la/README_la.txt

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ac112fadff1f5977965f6328170bdad7b20d1c0bdebeec933f10076fa143d2c6
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -10,10 +10,7 @@ Name: hunspell-ur
 Summary: Urdu hunspell dictionaries
 Version: 0.64
 Release: 35%{?dist}
-#http://urdudictionary.codeplex.com/Release/ProjectReleases.aspx?ReleaseId=30004#DownloadId=74761
-#and click yes to agree to LGPLv2+, which stinks as a download-url :-(
-Source: UrduDictionary.xpi
-# This URL is dead now
+Source0:        https://github.com/gooselinux/hunspell-ur/raw/master/UrduDictionary.xpi
 URL: http://urdudictionary.codeplex.com
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -30,20 +27,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 unzip -q %{SOURCE0}
 
 %build
-# nothing here
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p dictionaries/ur.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ur_PK.aff
-cp -p dictionaries/ur.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ur_PK.dic
-pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-ur_PK_aliases="ur_IN"
-for lang in $ur_PK_aliases; do
-        ln -s ur_PK.aff $lang.aff
-        ln -s ur_PK.dic $lang.dic
-done
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/ur.aff %{buildroot}%{_datadir}/%{dict_dirname}/ur_PK.aff
+install -pm 0644 dictionaries/ur.dic %{buildroot}%{_datadir}/%{dict_dirname}/ur_PK.dic
+pushd %{buildroot}%{_datadir}/%{dict_dirname}/
+ln -s ur_PK.aff ur_IN.aff
+ln -s ur_PK.dic ur_IN.dic
 popd
-
 
 %files
 %{_datadir}/%{dict_dirname}/*

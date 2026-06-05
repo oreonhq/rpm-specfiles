@@ -11,13 +11,14 @@ Summary: Amazigh hunspell dictionaries
 %global upstreamid 20080210
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: http://ayaspell.sourceforge.net/data/hunspell-am_test.tar.gz
 URL: http://ayaspell.sourceforge.net/am.html
 License: GPL-1.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ber)
+
+Source0:        http://ayaspell.sourceforge.net/data/hunspell-am_test.tar.gz
 
 %description
 Amazigh hunspell dictionaries.
@@ -32,7 +33,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p tifinagh.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ber_MA.dic
 cp -p tifinagh.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ber_MA.aff
-
 
 %files
 %doc README

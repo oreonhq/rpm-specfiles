@@ -11,12 +11,13 @@ Summary: Mossi hunspell dictionaries
 %global upstreamid 20101130
 Version: 0.%{upstreamid}
 Release: 32%{?dist}
-Source: http://www.abcburkina.net/ancien/documents/lingu/DicoMoore.zip
 URL: http://www.abcburkina.net/content/view/377/48/lang,fr
 License: LGPL-3.0-only
 BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mos)
+
+Source0:        http://www.abcburkina.net/ancien/documents/lingu/DicoMoore.zip
 
 %description
 Mossi hunspell dictionaries.
@@ -30,7 +31,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p mos_BF.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc lgpl-3.0.txt

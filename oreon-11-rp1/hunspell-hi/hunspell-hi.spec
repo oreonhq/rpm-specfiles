@@ -1,6 +1,6 @@
-%global source0_hash ce9229b1d6484d79c66a5d21917911ed7215f3e21f21cc6a4978626622785b31
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,37 +8,37 @@
 
 Name: hunspell-hi
 Summary: Hindi hunspell dictionaries
-Version: 1.0.0
-Release: 28%{?dist}
-Epoch:   1
-Source:        http://anishpatil.fedorapeople.org/hi_in.%{version}.tar.gz
-URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
-License: GPL-2.0-or-later
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/hi_IN
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-hi)
 
 %description
-Hindi hunspell dictionaries.
+Hindi hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hi_IN
-iconv -f ISO-8859-1 -t UTF-8 hi_IN/Copyright > hi_IN/Copyright.utf8
-mv hi_IN/Copyright.utf8 hi_IN/Copyright
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p hi_IN/*.dic hi_IN/*.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/hi_IN/hi_IN.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/hi_IN/hi_IN.dic %{buildroot}%{_datadir}/%{dict_dirname}/
+
 
 %files
-%doc hi_IN/README
-%license hi_IN/COPYING hi_IN/Copyright
+%doc dictionaries/hi_IN/README_hi_IN.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-28
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

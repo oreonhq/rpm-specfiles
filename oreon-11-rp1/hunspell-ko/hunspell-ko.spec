@@ -1,6 +1,6 @@
-%global source0_hash 98ee3400994203680e464a072845da59d31f10281b1e6f092df3503ca5005a16
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,42 +8,37 @@
 
 Name: hunspell-ko
 Summary: Korean hunspell dictionaries
-Version: 0.7.0
-Release: 23%{?dist}
-Source:        https://github.com/spellcheck-ko/hunspell-dict-ko/archive/refs/tags/%{version}.tar.gz#/hunspell-ko-0.7.0.tar.gz
-
-URL: https://github.com/spellcheck-ko/hunspell-dict-ko
-License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-only
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/ko_KR
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
-BuildRequires: python3
-BuildRequires: hunspell
-BuildRequires: make
+
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ko)
 
 %description
-Korean hunspell dictionaries.
+Korean hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n hunspell-dict-ko-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-make
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p ko.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ko_KR.aff
-cp -p ko.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ko_KR.dic
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/ko_KR/ko_KR.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/ko_KR/ko_KR.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
-%check
-make test
 
 %files
-%doc README.md
-%license LICENSE LICENSE.GPL LICENSE.LGPL LICENSE.MPL
+%doc dictionaries/ko_KR/README_ko_KR.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.0-23
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

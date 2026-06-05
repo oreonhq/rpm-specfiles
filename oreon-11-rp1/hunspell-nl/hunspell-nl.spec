@@ -1,50 +1,47 @@
-%global source0_hash 0a86ec393450d7070bd69ee83f69c37ff27dbbc5fe684803375f113d7128bd87
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
-%global dict_dirname hunspell 
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
+%global dict_dirname hunspell
 %else
 %global dict_dirname myspell
-%endif 
+%endif
 
 Name: hunspell-nl
 Summary: Dutch hunspell dictionaries
-Version: 2.20.19
+Version: 25.2.3
 Release: 17%{?dist}
-Source:        https://github.com/OpenTaal/opentaal-hunspell/archive/refs/tags/2.20.19.tar.gz#/hunspell-nl-2.20.19.tar.gz
-
-URL: https://opentaal.org/
 License: BSD-3-Clause OR CC-BY-3.0
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/nl_NL
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell
 Supplements: (hunspell and langpacks-nl)
 
 %description
-Dutch hunspell dictionaries.
+Dutch hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n opentaal-hunspell-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p nl.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/nl_NL.dic
-cp -p nl.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/nl_NL.aff
-
-pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-nl_NL_aliases="nl_AW nl_BE"
-for lang in $nl_NL_aliases; do
-        ln -s nl_NL.aff $lang.aff
-        ln -s nl_NL.dic $lang.dic
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/nl_NL/nl_NL.aff dictionaries/nl_NL/nl_NL.dic %{buildroot}%{_datadir}/%{dict_dirname}/
+pushd %{buildroot}%{_datadir}/%{dict_dirname}/
+for lang in nl_AW nl_BE; do
+    ln -s nl_NL.aff $lang.aff
+    ln -s nl_NL.dic $lang.dic
 done
-
+popd
 
 %files
-%doc LICENSE.txt README.md
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.19-17
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

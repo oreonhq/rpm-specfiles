@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 52a523b561688c417e214c53026d89cb89edf4ddeb19aeced84d59de0a87f919
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell 
@@ -10,7 +10,6 @@ Summary: Northern Sotho hunspell dictionaries
 %global upstreamid 20091201
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/3139/1/dict-ns_za-2009.12.01.oxt
 URL: https://extensions.openoffice.org/en/project/northern-sotho-spell-checker
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -18,12 +17,14 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-nso)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/3139/1/dict-ns_za-2009.12.01.oxt
+
 %description
 Northern Sotho hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-nso
+%setup -q -c -n hunspell-nso
 
 %build
 for i in README-ns_ZA.txt package-description.txt release-notes-ns_ZA.txt; do
@@ -41,7 +42,6 @@ done
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p ns_ZA.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/nso_ZA.dic
 cp -p ns_ZA.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/nso_ZA.aff
-
 
 %files
 %doc README-ns_ZA.txt package-description.txt release-notes-ns_ZA.txt

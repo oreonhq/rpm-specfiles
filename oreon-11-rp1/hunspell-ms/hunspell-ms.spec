@@ -11,7 +11,6 @@ Summary: Malay hunspell dictionaries
 %global upstreamid 20050117
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/ms_MY.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 # affix file is under GPL+
 # rest package under GFDL
@@ -21,12 +20,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ms)
 
+Source0:        https://github.com/openela-main/hunspell-ms/raw/el9/SOURCES/ms_MY.zip
+
 %description
 Malay hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-ms
+%setup -q -c -n hunspell-ms
 
 %build
 chmod -x *
@@ -41,7 +42,6 @@ for lang in $ms_MY_aliases; do
         ln -s ms_MY.aff $lang.aff
         ln -s ms_MY.dic $lang.dic
 done
-
 
 %files
 %doc README_ms_MY.txt

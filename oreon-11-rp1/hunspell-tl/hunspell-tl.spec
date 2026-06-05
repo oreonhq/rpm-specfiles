@@ -11,7 +11,6 @@ Summary: Tagalog hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/tl_PH.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -19,12 +18,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-tl)
 
+Source0:        https://github.com/openela-main/hunspell-tl/raw/el9/SOURCES/tl_PH.zip
+
 %description
 Tagalog hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-tl
+%setup -q -c -n hunspell-tl
 
 %build
 for i in README_tl_PH.txt; do
@@ -48,7 +49,6 @@ for lang in $tl_PH_aliases; do
         ln -s tl_PH.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README_tl_PH.txt

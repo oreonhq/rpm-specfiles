@@ -1,6 +1,6 @@
-%global source0_hash a02697a885da3655c55c15eb155148b79d25ca57c5ac7578cb1ca9ac8f141b89
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,43 +8,36 @@
 
 Name: hunspell-eo
 Summary: Esperanto hunspell dictionaries
-%global upstreamid 20100218
-Version: 0.%{upstreamid}
-Epoch: 1
-Release: 19%{?dist}
-Source: http://www.esperantilo.org/literumilo-fontoj.tar.gz
-URL: http://www.esperantilo.org
+Version: 25.2.3
+Release: 1%{?dist}
 License: GPL-2.0-or-later
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/eo
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-eo)
 
 %description
-Esperanto hunspell dictionaries.
+Esperanto hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n literumilo-fontoj
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-chmod -x *
-for i in LEGUMIN.txt; do
-  tr -d '\r' < $i > $i.new
-  touch -r $i $i.new
-  mv -f $i.new $i
-done
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p eo_morf.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/eo.dic
-cp -p eo_morf.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/eo.aff
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/eo/eo.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/eo/eo.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc LEGUMIN.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-19
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

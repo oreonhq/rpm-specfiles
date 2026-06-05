@@ -1,4 +1,4 @@
-%global source0_hash adb36c4e51bfcccff204450aff5b13f2b0406895b2b2b3efc69b4749529871a9
+%global source0_hash 421028e1585556086d6686c7f2080c4ad6809c6f73d8497cbc8d66668981b04b
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -12,7 +12,6 @@ Version: 0.%{upstreamid}
 Release: 32%{?dist}
 # Following links are dead now
 # don't report any bugs
-Source: https://www.runasimipi.org/quh_BO-pack.zip
 URL: http://www.runasimipi.org/blanco-en.php?file=desarrollar-orto
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -20,20 +19,21 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-quh)
 
+Source0:        http://www.runasimipi.org/quh_BO-pack.zip
+
 %description
 Quechua South Bolivia hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T -n quh_BO-pack
-unzip -q %{SOURCE0}
+%setup -q -n quh_BO-pack
+unzip -qq quh_BO.zip
 
 %build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p quh_BO/quh_BO.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-
 
 %files
 %doc quh_BO/Copyright quh_BO/README_quh_BO.txt

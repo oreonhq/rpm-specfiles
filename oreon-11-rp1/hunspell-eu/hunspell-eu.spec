@@ -10,13 +10,14 @@ Name: hunspell-eu
 Summary: Basque hunspell dictionaries
 Version: 5.1
 Release: 15%{?dist}
-Source0:        http://xuxen.eus/static/hunspell/xuxen_%{version}_hunspell.zip
 URL: http://xuxen.eus
 License: LGPL-3.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-eu)
+
+Source0:        https://xuxen.eus/static/hunspell/xuxen_5.1_hunspell.zip
 
 %description
 Basque hunspell dictionaries.
@@ -28,13 +29,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 %install
-mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
-cp -p eu_ES.dic %{buildroot}%{_datadir}/%{dict_dirname}/eu_ES.dic
-cp -p eu_ES.aff %{buildroot}%{_datadir}/%{dict_dirname}/eu_ES.aff
-
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p eu-ES/eu-ES.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/eu_ES.dic
+cp -p eu-ES/eu-ES.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/eu_ES.aff
 
 %files
-%license LICENSE.txt
+%doc XUXEN_kode_irekia_eskuliburua-LINUX-OO.pdf
 %{_datadir}/%{dict_dirname}/*
 
 %changelog

@@ -10,13 +10,14 @@ Name: hunspell-hy
 Summary: Armenian hunspell dictionaries
 Version: 0.20.0
 Release: 32%{?dist}
-Source:        https://downloads.sourceforge.net/armspell/myspell-hy-%{version}.tar.gz
 URL: http://sourceforge.net/projects/armspell
 License: GPL-2.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-hy)
+
+Source0:        https://downloads.sourceforge.net/armspell/myspell-hy-0.20.0.tar.gz
 
 %description
 Armenian hunspell dictionaries.
@@ -30,7 +31,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p hy_AM.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-
 
 %files
 %doc Copyright ChangeLog COPYING

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ffd6d136202ee51f58346db0c4ca1e33f57ff810e20a2a1b762b5243010433a2
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
@@ -10,26 +10,27 @@ Name: hunspell-tpi
 Summary: Tok Pisin hunspell dictionaries
 Version: 0.07
 Release: 29%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/4824/3/hunspell-tpi-0.07.oxt
 URL: http://extensions.services.openoffice.org/en/project/tok-pisin-spell-checker
 License: GPL-3.0-or-later
 BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-tpi)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/4824/3/hunspell-tpi-0.07.oxt
+
 %description
 Tok Pisin hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
+%setup -q -c -T
+unzip -q %{SOURCE0}
 
 %build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/tpi_PG.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc dictionaries/README_tpi_PG.txt

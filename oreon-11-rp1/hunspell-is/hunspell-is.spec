@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,45 +8,35 @@
 
 Name: hunspell-is
 Summary: Icelandic hunspell dictionaries
-%global upstreamid 20090823
-Version: 0.%{upstreamid}
+Version: 25.2.3
 Release: 33%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/2829/1/icelandic-dict-2009-08-23.oxt
-URL: http://extensions.services.openoffice.org/project/dict-is
 License: GPL-2.0-or-later
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/is
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-is)
 
 %description
-Icelandic hunspell dictionaries.
+Icelandic hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-is
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-for i in LICENSE_en_US.txt; do
-  if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
-    iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
-    touch -r $i $i.new
-    mv -f $i.new $i
-  fi
-  tr -d '\r' < $i > $i.new
-  touch -r $i $i.new
-  mv -f $i.new $i
-done
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p dictionaries/is_IS.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/is/is.aff %{buildroot}%{_datadir}/%{dict_dirname}/is_IS.aff
+install -pm 0644 dictionaries/is/is.dic %{buildroot}%{_datadir}/%{dict_dirname}/is_IS.dic
 
 %files
-%doc LICENSE_en_US.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-33
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

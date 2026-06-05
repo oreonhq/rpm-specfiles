@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,34 +8,37 @@
 
 Name: hunspell-gd
 Summary: Scots Gaelic hunspell dictionaries
-Version: 2.6
+Version: 25.2.3
 Release: 29%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/4587/8/hunspell-gd-2.6.oxt
-URL: http://extensions.services.openoffice.org/en/project/faclair-afb
 License: GPL-2.0-or-later AND GPL-3.0-or-later
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/gd_GB
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-gd)
 
 %description
-Scots Gaelic hunspell dictionaries.
+Scots Gaelic hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c hunspell-gd-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p dictionaries/gd_GB.dic dictionaries/gd_GB.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/gd_GB/gd_GB.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/gd_GB/gd_GB.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc dictionaries/README_gd_GB.txt LICENSES-en.txt
+%doc dictionaries/gd_GB/README_gd_GB.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6-29
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

@@ -10,12 +10,13 @@ Name: hunspell-ln
 Summary: Lingala hunspell dictionaries
 Version: 0.02
 Release: 33%{?dist}
-Source: https://downloads.sourceforge.net/lingala/hunspell-ln-0.02.zip
 URL: http://lingala.sourceforge.net/
 License: GPL-2.0-or-later
 BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ln)
+
+Source0:        https://downloads.sourceforge.net/lingala/hunspell-ln-0.02.zip
 
 %description
 Lingala hunspell dictionaries.
@@ -29,7 +30,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p ln_CD.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc README_ln_CD.txt

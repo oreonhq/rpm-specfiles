@@ -1,6 +1,6 @@
-%global source0_hash 49b4b9323dd8728b4350c5240708dfc6ac89a09355b011a6bbedc3b49ed889af
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,35 +8,37 @@
 
 Name: hunspell-gu
 Summary: Gujarati hunspell dictionaries
-Version: 1.0.0
-Release: 28%{?dist}
-Epoch: 1
-Source:        http://anishpatil.fedorapeople.org/gu_in.%{version}.tar.gz
-URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
-License: GPL-1.0-or-later
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/gu_IN
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-gu)
 
 %description
-Gujarati hunspell dictionaries.
+Gujarati hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n gu_IN
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
-
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p gu_IN/gu_IN.dic gu_IN/gu_IN.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/gu_IN/gu_IN.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/gu_IN/gu_IN.dic %{buildroot}%{_datadir}/%{dict_dirname}/
+
 
 %files
-%doc gu_IN/README_gu_IN.txt
+%doc dictionaries/gu_IN/README_gu_IN.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-28
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

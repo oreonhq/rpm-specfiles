@@ -11,7 +11,6 @@ Summary: Hiligaynon hunspell dictionaries
 Epoch: 1
 Version: 0.14
 Release: 33%{?dist}
-Source:        litreoir_hiligaynon-0.14-tb+fx+sm.xpi
 URL: http://extensions.services.openoffice.org/project/hunspell-hil
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -19,12 +18,15 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-hil)
 
+Source0:        https://github.com/openela-main/hunspell-hil/raw/el9/SOURCES/litreoir_hiligaynon-0.14-tb+fx+sm.xpi
+
 %description
 Hiligaynon hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
+%setup -q -c -T
+unzip -q %{SOURCE0}
 
 %build
 for i in dictionaries/README_hil_PH.txt; do
@@ -42,7 +44,6 @@ done
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/hil.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hil_PH.dic
 cp -p dictionaries/hil.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hil_PH.aff
-
 
 %files
 %doc dictionaries/README_hil_PH.txt

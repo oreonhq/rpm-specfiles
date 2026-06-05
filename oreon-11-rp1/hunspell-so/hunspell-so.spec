@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b90fc80766fb60040b681d51930d3c377974bac12150972e1805f05f452af99a
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -9,19 +9,20 @@ Name: hunspell-so
 Summary: Somali hunspell dictionaries
 Version: 1.0.2
 Release: 32%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/2727/2/dict-so.oxt
 URL: http://www.opensourcesomalia.org/index.php?page=hingaad-saxe
 License: GPL-2.0-or-later
 BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-so)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/2727/2/dict-so.oxt
+
 %description
 Somali hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T -n %{name}-%{version}
+%setup -q -c -T
 unzip -q %{SOURCE0}
 
 %build
@@ -37,8 +38,6 @@ for lang in $so_SO_aliases; do
         ln -s so_SO.dic $lang.dic
 done
 popd
-
-
 
 %files
 %doc README_so_SO.txt

@@ -10,13 +10,14 @@ Name: hunspell-hsb
 Summary: Upper Sorbian hunspell dictionaries
 Version: 0.20060327.3
 Release: 31%{?dist}
-Source:        upper_sorbian_spelling_dictionary-0.0.20060327.3-tb+fx+sm.xpi
 URL: http://sorbzilla.de/
 License: GPL-2.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-hsb)
+
+Source0:        https://github.com/openela-main/hunspell-hsb/raw/el9/SOURCES/upper_sorbian_spelling_dictionary-0.0.20060327.3-tb+fx+sm.xpi
 
 %description
 Upper Sorbian hunspell dictionaries.
@@ -31,7 +32,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/hsb.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hsb_DE.aff
 cp -p dictionaries/hsb.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hsb_DE.dic
-
 
 %files
 %doc COPYING README

@@ -10,13 +10,14 @@ Name: hunspell-nds
 Summary: Lowlands Saxon hunspell dictionaries
 Version: 0.1
 Release: 34%{?dist}
-Source: https://downloads.sourceforge.net/aspell-nds/hunspell-nds-0.1.zip
 URL: http://aspell-nds.sourceforge.net/
 License: GPL-2.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-nds)
+
+Source0:        https://downloads.sourceforge.net/aspell-nds/hunspell-nds-0.1.zip
 
 %description
 Lowlands Saxon hunspell dictionaries.
@@ -38,7 +39,6 @@ for lang in $nds_DE_aliases; do
         ln -s nds_DE.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README_nds.txt Copyright COPYING

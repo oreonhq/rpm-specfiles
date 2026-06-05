@@ -1,6 +1,6 @@
-%global source0_hash 4aea338eef90a977134e81e075277912938ce1a97344d7a0dbf238e274a86116
+%global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -8,51 +8,37 @@
 
 Name: hunspell-et
 Summary: Estonian hunspell dictionaries
-%global upstreamid 20030606
-Version: 0.%{upstreamid}
-Release: 38%{?dist}
-Source:        http://www.meso.ee/~jjpp/speller/ispell-et_20030606.tar.gz
-URL: http://www.meso.ee/~jjpp/speller/
-License: LGPL-2.1-or-later AND LPPL-1.3a
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/et_EE
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-et)
-Provides: hunspell-ee = 0.20030606-4
-Obsoletes: hunspell-ee < 0.20030606-4
 
 %description
-Estonian hunspell dictionaries.
-
-%package -n hyphen-et
-Requires: hyphen
-Summary: Estonian hyphenation rules
-Supplements: (hyphen and langpacks-et)
-
-%description -n hyphen-et
-Estonian hyphenation rules.
+Estonian hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n ispell-et-%{upstreamid}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p latin-1/et_EE.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p hyph_et.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_et_EE.dic
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/et_EE/et_EE.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/et_EE/et_EE.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc README COPYRIGHT ChangeLog
+%doc dictionaries/et_EE/README_et_EE.txt
 %{_datadir}/%{dict_dirname}/*
 
-%files -n hyphen-et
-%doc README COPYRIGHT ChangeLog
-%{_datadir}/hyphen/*
+
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-38
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

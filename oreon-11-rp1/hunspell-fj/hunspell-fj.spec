@@ -11,7 +11,6 @@ Summary: Fijian hunspell dictionaries
 Version: 1.2
 Release: 34%{?dist}
 #Source: http://www.foss.usp.ac.fj/OOo_fj/OOo_fj_FJ.zip
-Source:        fijian_spelling_dictionary-1.2-fx+tb+sm.xpi
 URL: http://www.iosn.net/pacific-islands/usp-microgrants/fijian-spellchecker
 License: LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-1.1
 BuildArch: noarch
@@ -20,12 +19,15 @@ BuildRequires: hunspell-devel
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-fj)
 
+Source0:        https://github.com/openela-main/hunspell-fj/raw/el9/SOURCES/fijian_spelling_dictionary-1.2-fx+tb+sm.xpi
+
 %description
 Fijian hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
+%setup -q -c -T
+unzip -q %{SOURCE0}
 
 %build
 cd dictionaries
@@ -40,7 +42,6 @@ chmod -x fj_FJ.*
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/fj_FJ.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fj.aff
 cp -p dictionaries/fj_FJ.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fj.dic
-
 
 %files
 %doc dictionaries/README_fj_FJ.txt

@@ -1,42 +1,44 @@
-%global source0_hash b5f4b671c2d002b69e6cf766a429237cfe872ef64ca315ca0863422e7e0f2393
+%global source0_hash none
 
-%if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
-%global dict_dirname hunspell 
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
+%global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
+
 Name: hunspell-sl
 Summary: Slovenian hunspell dictionaries
-%global upstreamid 20070127
-Version: 0.%{upstreamid}
-Release: 37%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/sl_SI.zip
-URL: http://ftp.services.openoffice.org/pub/OpenOffice.org/contrib/dictionaries/
-License: GPL-1.0-or-later OR LGPL-2.1-or-later
+Version: 25.2.3
+Release: 1%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/sl_SI
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
-Requires: hunspell
+Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-sl)
 
 %description
-Slovenian hunspell dictionaries.
+Slovenian hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-sl
+%setup -q -n libreoffice-25.2.3.2
 
 %build
-chmod -x *
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/sl_SI/sl_SI.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/sl_SI/sl_SI.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc README_sl_SI.txt
+%doc dictionaries/sl_SI/README_sl_SI.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20070127-37
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
 - Import

@@ -1,42 +1,44 @@
-%global source0_hash 216ad718fc761bd3a95c9271d8e1cfdf0e0d5967093da9e0ba4a7cfabbfd90c6
+%global source0_hash none
 
-%if 0%{?fedora} > 35
-%global dict_dirname hunspell 
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
+%global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
+
 Name: hunspell-sk
 Summary: Slovak hunspell dictionaries
-Epoch: 1
-%global upstreamid 20110228
-Version: 0.%{upstreamid}
-Release: 31%{?dist}
-Source:        http://www.sk-spell.sk.cx/files/hunspell-sk-20110228.zip
-URL: http://www.sk-spell.sk.cx/
-License: LGPL-2.1-only OR GPL-2.0-only OR MPL-1.1
+Version: 25.2.3
+Release: 17%{?dist}
+License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/sk_SK
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
-Requires: hunspell
+Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-sk)
 
 %description
-Slovak hunspell dictionaries.
+Slovak hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{upstreamid}
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
+install -pm 0644 dictionaries/sk_SK/sk_SK.aff %{buildroot}%{_datadir}/%{dict_dirname}/
+install -pm 0644 dictionaries/sk_SK/sk_SK.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc doc/*
+%doc dictionaries/sk_SK/README_sk.txt
 %{_datadir}/%{dict_dirname}/*
 
+
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-31
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
+- Import

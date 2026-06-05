@@ -10,7 +10,6 @@ Name: hunspell-fy
 Summary: Frisian hunspell dictionaries
 Version: 3.0.0
 Release: 21%{?dist}
-Source:        frysk_wurdboek-3.0.0-tb+fx+sm.xpi
 URL: http://www.mozilla-nl.org/projecten/frysk
 License: GPL-3.0-or-later
 BuildArch: noarch
@@ -18,12 +17,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-fy)
 
+Source0:        https://github.com/openela-main/hunspell-fy/raw/el9/SOURCES/frysk_wurdboek-3.0.0-tb+fx+sm.xpi
+
 %description
 Frisian hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-fy
+%setup -q -c -n hunspell-fy
 
 %build
 for i in README-fy.txt; do
@@ -45,7 +46,6 @@ for lang in $fy_NL_aliases; do
         ln -s fy_NL.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README-fy.txt

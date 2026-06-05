@@ -10,7 +10,6 @@ Name: hunspell-ml
 Summary: Malayalam hunspell dictionaries
 Version: 0.1
 Release: 37%{?dist}
-Source:        http://download.savannah.gnu.org/releases/smc/Spellchecker/ooo-hunspell-ml-%{version}.tar.bz2
 URL: http://download.savannah.gnu.org/releases/smc/Spellchecker/
 License: GPL-3.0-or-later
 BuildArch: noarch
@@ -18,12 +17,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ml)
 
+Source0:        http://download.savannah.gnu.org/releases/smc/Spellchecker/ooo-hunspell-ml-0.1.tar.bz2
+
 %description
 Malayalam hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n ooo-hunspell-ml-%{version}
+%setup -q -n ooo-hunspell-ml-%{version}
 
 %build
 echo "Nothing to build..."

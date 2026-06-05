@@ -11,13 +11,14 @@ Summary: Amharic hunspell dictionaries
 %global upstreamid 20090704
 Version: 0.%{upstreamid}
 Release: 33%{?dist}
-Source: http://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
 URL: http://www.cs.ru.nl/~biniam/geez/index.php
 License: GPL-1.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-am)
+
+Source0:        http://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
 
 %description
 Amharic hunspell dictionaries.
@@ -34,7 +35,6 @@ mv -f README.txt.new README.txt
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p am_ET.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-
 
 %files
 %doc README.txt

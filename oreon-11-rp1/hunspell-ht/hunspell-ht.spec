@@ -10,13 +10,14 @@ Name: hunspell-ht
 Summary: Haitian Creole hunspell dictionaries
 Version: 0.06
 Release: 32%{?dist}
-Source:        https://downloads.sourceforge.net/project/aoo-extensions/3247/3/hunspell-ht-0.06.oxt
 URL: http://kok.logipam.org/
 License: GPL-3.0-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ht)
+
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/3247/3/hunspell-ht-0.06.oxt
 
 %description
 Haitian Creole hunspell dictionaries.
@@ -30,7 +31,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/ht_HT.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc dictionaries/README_ht_HT.txt LICENSES-en.txt

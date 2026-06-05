@@ -13,7 +13,6 @@ Epoch: 1
 Release: 31%{?dist}
 # Following link is dead now
 # Do not report bugs to fix it
-Source:        turkmen_spell_checker-0.02-tb+fx+sm.xpi
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -21,12 +20,14 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-tk)
 
+Source0:        https://github.com/openela-main/hunspell-tk/raw/el9/SOURCES/turkmen_spell_checker-0.02-tb+fx+sm.xpi
+
 %description
 Turkmen hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-tk
+%setup -q -c -n hunspell-tk
 
 %build
 
@@ -34,7 +35,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/tk-TM.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tk.aff
 cp -p dictionaries/tk-TM.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tk.dic
-
 
 %files
 %doc dictionaries/README_tk_TM.txt

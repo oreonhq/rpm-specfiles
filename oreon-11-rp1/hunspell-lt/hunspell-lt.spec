@@ -33,7 +33,6 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 install -pm 0644 dictionaries/lt_LT/lt.dic dictionaries/lt_LT/lt.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 
 %files
-%doc dictionaries/lt_LT/README dictionaries/lt_LT/README_hyph
 %license dictionaries/lt_LT/COPYING
 %{_datadir}/%{dict_dirname}/*
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f9a018d3a3e2776ad993c9c86193a645895f183e5f87c83535eb91951a96232c
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
@@ -10,13 +10,14 @@ Name: hunspell-grc
 Summary: Ancient Greek hunspell dictionaries
 Version: 2.1.5
 Release: 35%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/2313/1/grc.oxt
 URL: http://www.himeros.eu/
 License: GPL-1.0-or-later OR LGPL-2.1-or-later
 BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-grc)
+
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/2313/1/grc.oxt
 
 %description
 Ancient Greek hunspell dictionaries.
@@ -31,7 +32,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/grc_GR.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/grc.aff
 cp -p dictionaries/grc_GR.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/grc.dic
-
 
 %files
 %doc LICENSES-en.txt         

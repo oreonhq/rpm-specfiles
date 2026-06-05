@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c1bd5bc224ecdda9f0c0f596ed9c58917ae67e1eb5c7da73ca34ec414cd7a0bd
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell 
@@ -11,7 +11,6 @@ Summary: Southern Ndebele hunspell dictionaries
 %global upstreamid 20091030
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/3141/0/dict-nr_za-2009.10.30.oxt
 URL: https://extensions.openoffice.org/en/project/ndebele-south-spell-checker
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -19,12 +18,14 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-nr)
 
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/3141/0/dict-nr_za-2009.10.30.oxt
+
 %description
 Southern Ndebele hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n hunspell-nr
+%setup -q -c -n hunspell-nr
 
 %build
 for i in README-nr_ZA.txt release-notes-nr_ZA.txt package-description.txt; do
@@ -41,7 +42,6 @@ done
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
 
 %files
 %doc README-nr_ZA.txt release-notes-nr_ZA.txt package-description.txt

@@ -8,34 +8,12 @@
 
 Name: hunspell-es
 Summary: Spanish hunspell dictionaries
-Version: 2.9
+Version: 25.2.3
 Release: 4%{?dist}
 Epoch: 1
-Source0:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_AR.oxt
-Source1:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_BO.oxt
-Source2:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_CL.oxt
-Source3:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_CO.oxt
-Source4:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_CR.oxt
-Source5:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_CU.oxt
-Source6:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_DO.oxt
-Source7:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_EC.oxt
-Source8:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_ES.oxt
-Source9:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_GQ.oxt
-Source10:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_GT.oxt
-Source11:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_HN.oxt
-Source12:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_MX.oxt
-Source13:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_NI.oxt
-Source14:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_PA.oxt
-Source16:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_PE.oxt
-Source17:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_PH.oxt
-Source18:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_PR.oxt
-Source19:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_PY.oxt
-Source20:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_SV.oxt
-Source21:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_US.oxt
-Source22:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_UY.oxt
-Source23:        https://github.com/sbosio/rla-es/releases/download/v%{version}/es_VE.oxt
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 
-URL: https://github.com/sbosio/rla-es/
+URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/es
 License: LGPL-3.0-or-later OR GPL-3.0-or-later OR MPL-1.1
 BuildArch: noarch
 
@@ -233,160 +211,153 @@ Venezuelan Spanish hunspell dictionary
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -n hunspell-es
-
-for REGION in %{es_REGIONS}; do
-    unzip -q -o %{_sourcedir}/${REGION}.oxt
-done
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-
-# supported Spanish language regions:
+mkdir -p %{buildroot}%{_datadir}/%{dict_dirname}
 for REGION in %{es_REGIONS}; do
-    cp -p $REGION.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
-    cp -p $REGION.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
+    install -pm 0644 dictionaries/es/${REGION}.aff dictionaries/es/${REGION}.dic %{buildroot}%{_datadir}/%{dict_dirname}/
 done
 
 %files
 
 %files ES
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_ES.*
 
 
 %files AR
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_AR.*
 
 
 %files BO
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_BO.*
 
 
 %files CL
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_CL.*
 
 
 %files CO
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_CO.*
 
 
 %files CR
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_CR.*
 
 
 %files CU
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_CU.*
 
 
 %files DO
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_DO.*
 
 
 %files EC
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_EC.*
 
 
 %files GQ
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_GQ.*
 
 
 %files GT
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_GT.*
 
 
 %files HN
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_HN.*
 
 
 %files MX
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_MX.*
 
 
 %files NI
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_NI.*
 
 
 %files PA
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_PA.*
 
 
 %files PE
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_PE.*
 
 
 %files PH
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_PH.*
 
 
 %files PR
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_PR.*
 
 
 %files PY
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_PY.*
 
 
 %files SV
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_SV.*
 
 
 %files US
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_US.*
 
 
 %files UY
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_UY.*
 
 
 %files VE
-%doc README.txt
-%license GPLv3.txt MPL-1.1.txt LGPLv3.txt
+%doc dictionaries/es/README_hunspell_es.txt
+%license dictionaries/es/GPLv3.txt dictionaries/es/LGPLv3.txt dictionaries/es/LGPLv2.1.txt
 %{_datadir}/%{dict_dirname}/es_VE.*
 
 %changelog

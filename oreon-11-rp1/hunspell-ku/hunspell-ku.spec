@@ -11,7 +11,6 @@ Summary: Kurdish hunspell dictionaries
 Version: 0.21
 Release: 37%{?dist}
 #http://hunspell-ku.googlecode.com/files/ku_TR-021_source.zip ?
-Source0: https://downloads.sourceforge.net/myspellkurdish/ku_TR-021.zip
 #http://code.google.com/p/hunspell-ku/ ?
 URL: https://sourceforge.net/projects/myspellkurdish/
 License: GPL-3.0-only OR LGPL-3.0-only OR MPL-1.1
@@ -19,6 +18,8 @@ BuildArch: noarch
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ku)
+
+Source0:        https://downloads.sourceforge.net/myspellkurdish/ku_TR-021.zip
 
 %description
 Kurdish hunspell dictionaries.
@@ -49,7 +50,6 @@ for lang in $ku_TR_aliases; do
         ln -s ku_TR.dic $lang.dic
 done
 popd
-
 
 %files
 %doc README_ku_TR.txt gpl-3.0.txt lgpl-3.0.txt MPL-1.1.txt

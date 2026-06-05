@@ -11,7 +11,6 @@ Summary: Punjabi hunspell dictionaries
 Version: 1.0.0
 Release: 29%{?dist}
 Epoch: 1
-Source:        http://anishpatil.fedorapeople.org/pa_in.%{version}.tar.gz
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -19,12 +18,14 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-pa)
 
+Source0:        http://anishpatil.fedorapeople.org/pa_in.1.0.0.tar.gz
+
 %description
 Punjabi hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -n pa_IN
+%setup -q -c -n pa_IN
 iconv -f ISO-8859-1 -t UTF-8 pa_IN/Copyright > pa_IN/Copyright.utf8
 mv pa_IN/Copyright.utf8 pa_IN/Copyright
 
