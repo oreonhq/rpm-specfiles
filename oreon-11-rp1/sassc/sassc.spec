@@ -17,7 +17,7 @@ Source0:        https://github.com/sass/sassc/archive/refs/tags/3.6.2.tar.gz#/sa
 # https://github.com/sass/libsass/issues/2258#issuecomment-268196004
 # https://github.com/sass/sass-spec/archive/master.zip
 # https://github.com/sass/sass-spec/archive/v%%{testspec_version}.tar.gz
-Source1:        https://github.com/sass/sass-spec/archive/refs/tags/%{testspec_version}.tar.gz#/sass-spec-libsass-%{testspec_version}.tar.gz
+Source1:        https://github.com/sass/sass-spec/archive/refs/tags/libsass-%{testspec_version}.tar.gz#/sass-spec-libsass-%{testspec_version}.tar.gz
 
 BuildRequires:  automake
 BuildRequires:  libtool

@@ -15,7 +15,7 @@ Summary:        OpenPegasus WBEM Services for Linux
 
 License:        MIT
 URL:            http://www.openpegasus.org
-Source0:        https://collaboration.opengroup.org/pegasus/documents/27211/pegasus-%{version}.tar.gz
+Source0:        https://collaboration.opengroup.org/pegasus/documents/32572/pegasus-%{version}.tar.gz
 #  1: Description of security enhacements
 Source1:        README.RedHat.Security
 #  3: Description of SSL settings
@@ -31,7 +31,7 @@ Source7:        cimprovagt-wrapper.sh
 #  8: Example wrapper confining Operating System Provider from sblim-cmpi-base package
 Source8:        cmpiOSBase_OperatingSystemProvider-cimprovagt.example
 #  9: DMTF CIM schema
-Source9:        cim_schema_2.38.0Experimental-MOFs.zip
+Source9:        https://www.dmtf.org/sites/default/files/cim/cim_schema_v2380/cim_schema_2.38.0Experimental-MOFs.zip
 # 10: Fedora/RHEL script for adding self-signed certificates to the local CA
 #     trust store
 Source10:        generate-certs

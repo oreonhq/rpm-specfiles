@@ -7,7 +7,7 @@ Summary: X.Org X11 libXss runtime library
 License: X11
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        libXScrnSaver-1.2.4.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

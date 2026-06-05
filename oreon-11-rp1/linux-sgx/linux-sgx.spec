@@ -294,20 +294,20 @@ Provides: bundled(tinyxml2) = %{tinyxml2_version}
 ############################################################
 # Misc distro integration files SourceN in (40..59)
 
-Source40:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/aesmd.sysusers.conf
-Source41:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/aesmd.service
+Source40:        aesmd.sysusers.conf
+Source41:        aesmd.service
 
-Source42:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/sgxprv.sysusers.conf
-Source43:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/92-sgx-provision.rules
+Source42:        sgxprv.sysusers.conf
+Source43:        92-sgx-provision.rules
 
-Source44:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/qgs.sysusers.conf
-Source45:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/qgs.service
-Source46:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/qgs.sysconfig
+Source44:        qgs.sysusers.conf
+Source45:        qgs.service
+Source46:        qgs.sysconfig
 
-Source48:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/mpa_registration.service
+Source48:        mpa_registration.service
 
-Source50:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.sysusers.conf
-Source51:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.service
+Source50:        pccs.sysusers.conf
+Source51:        pccs.service
 # RPM build doesn't run this, but we want it in the src.rpm
 # as record of what was used to create Source54
 Source52:        pccs-nodejs-bundler

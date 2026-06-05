@@ -1,5 +1,4 @@
 %global source0_hash none
-%global source1_hash none
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -11,8 +10,7 @@ Summary: Portuguese hunspell dictionaries
 %global upstreamid 20131030
 Version: 0.%{upstreamid}
 Release: 16%{?dist}
-Source0:        https://github.com/ivandrofly/hunspell-pt/archive/refs/heads/main.tar.gz#/hunspell-pt.tar.gz
-Source1: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/ptBR-2013-10-30AOC-2.zip
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero
 # pt_BR dicts are under LGPLv3 or MPL, pt_PT under GPLv2 or LGPLv2 or MPLv1.1
 License: ( ( LGPL-3.0-only OR MPL-1.1 ) AND LGPL-2.1-only ) AND ( GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1 )
@@ -34,10 +32,8 @@ Brazilian Portuguese hunspell dictionaries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -n hunspell-pt_PT-20130125
-unzip -q -o %{SOURCE1}
-for i in README_pt_BR.TXT README_pt_PT.txt; do
+%setup -q -n libreoffice-25.2.3.2
+for i in dictionaries/pt_BR/package-description.txt dictionaries/pt_PT/README_pt_PT.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
     touch -r $i $i.new
@@ -52,7 +48,7 @@ done
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p pt*.dic pt*.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p dictionaries/pt_PT/pt_PT.dic dictionaries/pt_PT/pt_PT.aff dictionaries/pt_BR/pt_BR.dic dictionaries/pt_BR/pt_BR.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 
 pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 pt_PT_aliases="pt_AO"
@@ -64,13 +60,13 @@ popd
 
 
 %files
-%doc README_pt_PT.txt
+%doc dictionaries/pt_PT/README_pt_PT.txt
 %license COPYING
 %{_datadir}/%{dict_dirname}/*
 %exclude %{_datadir}/%{dict_dirname}/pt_BR.*
 
 %files BR
-%doc README_pt_BR.TXT README_en.TXT
+%doc dictionaries/pt_BR/package-description.txt
 %{_datadir}/%{dict_dirname}/pt_BR.*
 
 %changelog

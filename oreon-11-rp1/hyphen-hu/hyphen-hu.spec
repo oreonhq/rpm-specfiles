@@ -1,4 +1,4 @@
-%global source0_hash e2db16201e32c38fd02346d3f59a99ff559487c7afbd3843d1ff6203aaa57ae3
+%global source0_hash none
 
 Name: hyphen-hu
 Summary: Hungarian hyphenation rules
@@ -7,11 +7,10 @@ Version: 0.%{upstreamid}
 Release: 37%{?dist}
 # Source URL is dead now
 # Source: http://download.github.com/nagybence-huhyphn-aa3fc85.tar.gz
-Source:        https://github.com/nagybence/huhyphn/archive/aa3fc85.tar.gz#/nagybence-huhyphn-aa3fc85.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 URL: http://www.tipogral.hu/
 License: GPL-2.0-only
 BuildArch: noarch
-BuildRequires: make
 Requires: hyphen
 Supplements: (hyphen and langpacks-hu)
 
@@ -20,22 +19,21 @@ Hungarian hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n nagybence-huhyphn-aa3fc85
+%setup -q -n libreoffice-25.2.3.2
 #disable for now as built-in patgen has too small a limit to rebuild
 #ln -sf /usr/bin/patgen patgen
 #touch words/*.txt
 
 %build
-make
+# nothing to build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p hyph_hu.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_hu_HU.dic
+cp -p dictionaries/hu_HU/hyph_hu_HU.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_hu_HU.dic
 
 
 %files
-%doc README doc/huhyphn.pdf
-%license gpl.txt
+%doc dictionaries/hu_HU/README_hyph_hu_HU.txt
 %{_datadir}/hyphen/*
 
 %changelog

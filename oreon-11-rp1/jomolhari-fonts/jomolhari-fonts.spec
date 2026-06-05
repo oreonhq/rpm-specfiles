@@ -21,7 +21,7 @@ Tibetan text. It is based on Bhutanese manuscript examples, supports the
 Unicode and the Chinese encoding for Tibetan.
 The font supports the standard combinations used in most texts.}
 
-Source0:        https://chris.fynn.googlepages.com/jomolhari-alpha003c.zip
+Source0:        jomolhari-alpha003c.zip
 Source1:        65-0-jomolhari-fonts.conf 
 
 %fontpkg

@@ -354,7 +354,7 @@ local subpackages = {
     { alias="sans-serif", family="Sans SignWriting" },
     { alias="sans-serif", family="Sans Sinhala", lang={ "si" },
       default=true, fallback={ "monospace" },
-      fcconfexfile=rpm.expand('%{SOURCE8}')
+      fcconfexfile="google-noto-sans-sinhala-ex.conf"
     },
     { alias="system-ui",  family="Sans Sinhala UI", lang={ "si" },
       priority=rpm.expand('%{lprio}'), nogroup=1,
@@ -445,7 +445,7 @@ local subpackages = {
     },
 
     { alias="serif",      family="Naskh Arabic",
-      fcconfexfile=rpm.expand('%{SOURCE3}'),
+      fcconfexfile="google-noto-naskh-arabic-ex.conf",
       default=true
     },
     { alias="system-ui",  family="Naskh Arabic UI",
@@ -536,7 +536,7 @@ local subpackages = {
     -- It may be symbol but is a part of. no alias is intentional.
     { alias="",           family="Znamenny Musical Notation",
       priority=rpm.expand('%{lprio}'), nogroup=1,
-      fcconffile=rpm.expand('%{SOURCE4}'),
+      fcconffile="google-noto-znamenny-musical-notation.conf",
     },
 
     { alias="cursive",    variable=true, family="Nastaliq Urdu", lang={ "ur" } },
@@ -647,7 +647,7 @@ local subpackages = {
     },
     { alias="sans-serif", variable=true, family="Sans Sinhala", lang={ "si" },
       default=true, fallback={ "monospace" },
-      fcconfexfile=rpm.expand('%{SOURCE8}')
+      fcconfexfile="google-noto-sans-sinhala-ex.conf"
     },
     { alias="sans-serif", variable=true, family="Sans Sora Sompeng" },
     { alias="sans-serif", variable=true, family="Sans Sundanese" },
@@ -683,7 +683,7 @@ local subpackages = {
     },
     { alias="sans-serif", variable=true, family="Sans Vithkuqi" },
     { alias="serif",      variable=true, family="Naskh Arabic",
-      fcconfexfile=rpm.expand('%{SOURCE3}'),
+      fcconfexfile="google-noto-naskh-arabic-ex.conf",
       default=true
     },
     { alias="system-ui",  variable=true, family="Naskh Arabic UI",

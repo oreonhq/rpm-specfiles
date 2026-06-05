@@ -114,10 +114,10 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-s390x.ta
 
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/macros.dotnet
+Source10:        macros.dotnet
 
-Source20:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/check-debug-symbols.py
-Source21:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/dotnet.sh.in
+Source20:        check-debug-symbols.py
+Source21:        dotnet.sh.in
 
 # https://github.com/dotnet/runtime/pull/95216#issuecomment-1842799314
 Patch0:         runtime-re-enable-implicit-rejection.patch

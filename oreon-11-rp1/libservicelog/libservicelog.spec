@@ -11,7 +11,7 @@ License:       LGPL-2.0-only AND GPL-2.0-or-later
 URL:           https://github.com/power-ras/%{name}/releases
 Source:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/libservicelog-1.1.19.tar.gz
 # sysusers.d config file
-Source1:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/libservicelog.sysusers.conf
+Source1:        libservicelog.sysusers.conf
 
 # Link with needed libraries
 Patch0: libservicelog-1.1.9-libs.patch

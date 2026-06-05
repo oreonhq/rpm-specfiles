@@ -76,16 +76,16 @@ Source0:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{nam
 %if 0%{verify_tarball_signature}
 Source1:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
-Source2:        https://gitlab.com/nbdkit/nbdkit/-/raw/HEAD/libguestfs.keyring
+Source2:        libguestfs.keyring
 %endif
 
 # Maintainer script which helps with handling patches.
-Source3:        https://gitlab.com/nbdkit/nbdkit/-/raw/HEAD/copy-patches.sh
+Source3:        copy-patches.sh
 
 # For automatic RPM Provides generation.
 # See: https://rpm-software-management.github.io/rpm/manual/dependency_generators.html
-Source4:        https://gitlab.com/nbdkit/nbdkit/-/raw/HEAD/nbdkit.attr
-Source5:        https://gitlab.com/nbdkit/nbdkit/-/raw/HEAD/nbdkit-find-provides
+Source4:        nbdkit.attr
+Source5:        nbdkit-find-provides
 
 # For nbdkit-selinux package:
 Source6:        %{modulename}.te

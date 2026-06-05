@@ -11,7 +11,7 @@ Summary:	Fonts for Arabic from PakType
 
 License:	GPL-2.0-only WITH Font-exception-2.0
 URL:		https://sourceforge.net/projects/paktype/
-Source0:        https://downloads.sourceforge.net/project/paktype/PakType-Naqsh-6.0.tar.gz#/paktype-naqsh-fonts-6.0.tar.gz
+Source0:        https://sourceforge.net/projects/paktype/files/PakType-Release-2026-02-27.tar.gz/download#/paktype-naqsh-fonts-6.0.tar.gz
 Source1:	%{fontconf}.conf
 BuildArch:	noarch
 BuildRequires:	fontpackages-devel
@@ -26,13 +26,10 @@ Arabic from the PakType by Lateef Sagar.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
-rm -rf Code
-# get rid of the white space (' ')
-mv PakType\ Naqsh\ License.txt  PakType_Naqsh_License.txt
-mv PakType\ Naqsh\ Features.pdf PakTypeNaqshFeatures.pdf
+mv License\ files/PakType\ Naqsh\ License.txt PakType_Naqsh_License.txt
 
 %{__sed} -i 's/\r//' PakType_Naqsh_License.txt
-chmod a-x PakType_Naqsh_License.txt PakTypeNaqshFeatures.pdf
+chmod a-x PakType_Naqsh_License.txt
 
 
 %build
@@ -54,7 +51,8 @@ ln -s %{_fontconfig_templatedir}/%{fontconf}.conf \
 %_font_pkg -f %{fontconf}.conf PakTypeNaqsh.ttf
 %ghost %attr(644, root, root) %{_fontdir}/.uuid
 
-%doc PakType_Naqsh_License.txt PakTypeNaqshFeatures.pdf 
+%license PakType_Naqsh_License.txt
+%doc For\ Code\ and\ Features.txt
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0-13

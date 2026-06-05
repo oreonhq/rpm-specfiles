@@ -37,7 +37,7 @@ URL:            http://gcc.gnu.org
 # git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
 # rm -rf gcc-dir.tmp
 %global srcdir gcc-%{version}-%{DATE}
-Source0:        https://gcc.gnu.org/pub/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz#/%{srcdir}.tar.xz
+Source0:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/mingw-gcc/%{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
 Patch0:        0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
@@ -387,16 +387,7 @@ MinGW Windows cross-compiler for FORTRAN for the win64 target.
 
 
 %prep
-_tar="%{srcdir}.tar.xz"
-if test ! -f "$_tar"; then
-  rm -rf _gcc.tmp
-  curl -sfL -o "$_tar" "https://gcc.gnu.org/pub/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz" || \
-  curl -sfL -o "$_tar" "https://ftpmirror.gnu.org/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz" || \
-  (rm -rf _gcc.tmp && git clone --filter=blob:none --no-checkout https://gcc.gnu.org/git/gcc.git _gcc.tmp && \
-  git -C _gcc.tmp fetch --depth 1 origin %{gitrev} && \
-  git -C _gcc.tmp archive --prefix=%{srcdir}/ %{gitrev} | xz -9e > "$_tar" && rm -rf _gcc.tmp)
-fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcdir}
 echo 'Fedora MinGW %{version}-%{release}' > gcc/DEV-PHASE
 

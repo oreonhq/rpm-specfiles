@@ -10,7 +10,7 @@ Release:     13%{?dist}
 Summary:     Fonts for Arabic from PakType
 License:     GPL-2.0-only WITH Font-exception-2.0
 URL:	     https://sourceforge.net/projects/paktype/
-Source0:        https://downloads.sourceforge.net/project/paktype/PakType-Tehreer-6.0.tar.gz#/paktype-tehreer-fonts-6.0.tar.gz
+Source0:        https://sourceforge.net/projects/paktype/files/PakType-Release-2026-02-27.tar.gz/download#/paktype-tehreer-fonts-6.0.tar.gz
 
 Source1:     %{fontconf}.conf
 BuildArch:   noarch
@@ -25,13 +25,10 @@ Arabic from the PakType by Lateef Sagar.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
-rm -rf Code
-# get rid of the white space (' ')
-mv PakType\ Tehreer\ License.txt  PakType_Tehreer_License.txt
-mv PakType\ Tehreer\ Features.pdf PakTypeTehreerFeatures.pdf
+mv License\ files/PakType\ Tehreer\ License.txt PakType_Tehreer_License.txt
 
 %{__sed} -i 's/\r//' PakType_Tehreer_License.txt
-chmod a-x PakType_Tehreer_License.txt PakTypeTehreerFeatures.pdf
+chmod a-x PakType_Tehreer_License.txt
 
 
 %build
@@ -53,7 +50,8 @@ ln -s %{_fontconfig_templatedir}/%{fontconf}.conf \
 %_font_pkg -f %{fontconf}.conf PakTypeTehreer.ttf
 %ghost %attr(644, root, root) %{_fontdir}/.uuid
 
-%doc PakType_Tehreer_License.txt PakTypeTehreerFeatures.pdf 
+%license PakType_Tehreer_License.txt
+%doc For\ Code\ and\ Features.txt
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0-13

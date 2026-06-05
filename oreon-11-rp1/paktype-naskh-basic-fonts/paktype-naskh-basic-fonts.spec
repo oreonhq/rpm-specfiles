@@ -10,7 +10,7 @@ URL:           https://sourceforge.net/projects/paktype/
 %global foundry           paktype
 %global fontlicense       GPL-2.0-only WITH Font-exception-2.0
 %global fontlicenses      PakType_Naskh_Basic_License.txt
-%global fontdocs          PakTypeNaskhBasicFeatures.pdf
+%global fontdocs          For\ Code\ and\ Features.txt
 
 %global fontfamily        PakType Naskh Basic
 %global fontsummary       Fonts for Arabic, Farsi, Urdu and Sindhi from PakType
@@ -22,7 +22,7 @@ The paktype-naskh-basic-fonts package contains fonts for the display of \
 Arabic, Farsi, Urdu and Sindhi from PakType by Lateef Sagar.
 }
 
-Source0:        https://github.com/paktype/paktype-naskh/archive/refs/heads/master.zip#/paktype-naskh-basic-fonts.zip
+Source0:        https://sourceforge.net/projects/paktype/files/PakType-Release-2026-02-27.tar.gz/download#/paktype-naskh-basic-fonts.zip
 Source10:       55-0-%{fontpkgname}.conf
 
 %fontpkg
@@ -32,12 +32,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -c
 pwd
 pushd License\ files/
-%linuxtext -e ascii "PakType Naskh Basic License.txt"
+sed -i 's/\r$//' "PakType Naskh Basic License.txt"
 popd
 
 mv License\ files/PakType\ Naskh\ Basic\ License.txt PakType_Naskh_Basic_License.txt
-mv Features/PakType\ Naskh\ Basic\ Features.pdf PakTypeNaskhBasicFeatures.pdf
-chmod 644 PakTypeNaskhBasicFeatures.pdf
+chmod 644 For\ Code\ and\ Features.txt
 
 %build
 %fontbuild

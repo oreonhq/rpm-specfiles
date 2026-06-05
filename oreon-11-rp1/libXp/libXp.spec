@@ -16,7 +16,7 @@ Release: 10%{?dist}
 License: X11 AND X11-distribute-modifications-variant
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        libXp-1.0.4.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

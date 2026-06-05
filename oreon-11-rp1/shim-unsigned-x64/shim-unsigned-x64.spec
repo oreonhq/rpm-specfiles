@@ -43,16 +43,16 @@ URL:		https://github.com/rhboot/shim
 Provides:	bundled(openssl) = %{openssl_vre}
 
 Source0:        https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
-Source1:        https://raw.githubusercontent.com/rhboot/shim/HEAD/fedora-ca-20200709.cer
+Source1:        fedora-ca-20200709.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
-Source3:        https://raw.githubusercontent.com/rhboot/shim/HEAD/sbat.redhat.csv
+Source3:        sbat.redhat.csv
 Source4:        shim.patches
 
-Source100:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim-find-debuginfo.sh
+Source100:        shim-find-debuginfo.sh
 
-%include %{SOURCE4}
+%include shim.patches
 
 BuildRequires:	gcc make
 BuildRequires:	elfutils-libelf-devel

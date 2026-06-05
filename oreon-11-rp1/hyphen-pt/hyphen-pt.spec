@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source1_hash 2846f6079d8965447b22c1637696be71b69bdca91f5558c0c2a2b9b3b8de8dd2
+%global source1_hash none
 
 Name: hyphen-pt
 Summary: Portuguese hyphenation rules
@@ -7,11 +7,11 @@ Summary: Portuguese hyphenation rules
 Version: 0.%{upstreamid}
 Release: 13%{?dist}
 # latest seen in Hifenizador section of https://download.documentfoundation.org/libreoffice/src/projetos/vero/
-Source0:        https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/hyphptBR-213.zip
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 # The contents of Source1 are the same rules that are currently (2022-05-16) in
 # use for pt-PT at https://cgit.freedesktop.org/libreoffice/dictionaries/tree/pt_PT
 # so we continue to use those rules in the absence of a contrary opinion
-Source1:        https://download.services.openoffice.org/contrib/dictionaries/hyph_pt_PT.zip
+Source1:        hyph_pt_PT.zip
 URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero/
 License: LGPL-3.0-only AND GPL-1.0-or-later
 BuildArch: noarch
@@ -32,15 +32,12 @@ Brazilian Portuguese hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T -n %{name}-%{version}
-unzip -q %{SOURCE0}
-unzip -q -o %{SOURCE1}
+%setup -q -n libreoffice-25.2.3.2
 
 # Fix world writable permission on files
-chmod 644 hyph_pt_PT.dic README_hyph_pt_PT.txt
+chmod 644 dictionaries/pt_PT/hyph_pt_PT.dic dictionaries/pt_PT/README_hyph_pt_PT.txt dictionaries/pt_BR/hyph_pt_BR.dic dictionaries/pt_BR/README_hyph_pt_BR.txt
 
-for i in README_hyph_pt_BR.txt; do
+for i in dictionaries/pt_BR/README_hyph_pt_BR.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
     touch -r $i $i.new
@@ -57,7 +54,7 @@ done
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p *.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen
+cp -p dictionaries/pt_PT/hyph_pt_PT.dic dictionaries/pt_BR/hyph_pt_BR.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen
 pushd $RPM_BUILD_ROOT/%{_datadir}/hyphen/
 pt_PT_aliases="pt_AO"
 for lang in $pt_PT_aliases; do
@@ -65,12 +62,12 @@ for lang in $pt_PT_aliases; do
 done
 
 %files
-%doc README_hyph_pt_PT.txt
+%doc dictionaries/pt_PT/README_hyph_pt_PT.txt
 %{_datadir}/hyphen/hyph_pt_*.dic
 %exclude %{_datadir}/hyphen/hyph_pt_BR.dic
 
 %files BR
-%doc README_hyph_pt_BR.txt
+%doc dictionaries/pt_BR/README_hyph_pt_BR.txt
 %{_datadir}/hyphen/hyph_pt_BR.dic
 
 %changelog

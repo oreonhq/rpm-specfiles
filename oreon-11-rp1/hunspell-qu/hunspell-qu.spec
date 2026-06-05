@@ -10,7 +10,7 @@ Summary: Quechua Ecuador hunspell dictionaries
 Version: 0.9
 Release: 32%{?dist}
 # Following links is dead now
-Source:        https://downloads.sourceforge.net/project/aoo-extensions/2121/8/qu_EC-0.9.oxt
+Source:        https://extensions.openoffice.org/en/download/4809#/qu_EC-0.9.oxt
 URL: http://extensions.services.openoffice.org/project/KichwaSpellchecker
 License: AGPL-3.0-only
 BuildArch: noarch

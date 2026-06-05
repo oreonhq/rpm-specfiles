@@ -105,7 +105,7 @@ Recommends:       qt6-doc
 Provides:       qtcreator = %{version}-%{release}
 
 # long list of private shared lib names to filter out
-%include %{SOURCE1}
+%include qt-creator-Fedora-privlibs
 %global __provides_exclude ^(%{privlibs})\.so
 %global __requires_exclude ^(%{privlibs})\.so
 

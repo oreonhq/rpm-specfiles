@@ -1,3 +1,6 @@
 /*.tar.zst
+!/javapackages-bootstrap-vendor-archives.tar.zst.part-00
+!/javapackages-bootstrap-vendor-archives.tar.zst.part-01
+!/javapackages-bootstrap-vendor-archives.tar.zst.part-02
 /*.src.rpm
 /archive/

@@ -24,9 +24,9 @@ Requires(preun):	systemd
 Requires(postun):	systemd
 
 Source0:        https://github.com/open-power/%{project}/archive/v%{version}/%{project}-%{version}.tar.gz#/opal-prd-7.1.tar.gz
-Source1:        https://raw.githubusercontent.com/open-power/skiboot/HEAD/opal-prd-rsyslog
-Source2:        https://raw.githubusercontent.com/open-power/skiboot/HEAD/opal-prd-logrotate
-Source3:        https://raw.githubusercontent.com/open-power/skiboot/HEAD/ffspart.man
+Source1:        opal-prd-rsyslog
+Source2:        opal-prd-logrotate
+Source3:        ffspart.man
 
 # Annocheck FAIL: bind-now fortify pie
 Patch0: opal-prd-ffspart-annocheck.patch

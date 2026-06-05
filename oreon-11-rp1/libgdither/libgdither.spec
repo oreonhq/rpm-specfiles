@@ -8,7 +8,7 @@ Summary:        Library for applying dithering to PCM audio sources
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://plugin.org.uk/libgdither/README
-Source0:        libgdither-0.6.tar.gz
+Source0:        https://github.com/aybe/libgdither-0.6/archive/refs/heads/master.tar.gz#/libgdither-0.6.tar.gz
 Patch0:         libgdither-0.6-default.patch
 Patch1:         libgdither-0.6-gavl.patch
 Patch2:         libgdither-0.6-ldflags.patch
@@ -36,7 +36,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n libgdither-0.6-master
 %patch -P0 -p1 -b .default
 %patch -P1 -p1 -b .gavl_fix
 %patch -P2 -p1 -b .ldflags

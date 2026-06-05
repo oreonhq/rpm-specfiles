@@ -5,7 +5,7 @@ Summary: Faroese hyphenation rules
 %global upstreamid 20040420
 Version: 0.%{upstreamid}
 Release: 31%{?dist}
-Source:        hyph_fo_FO-20040420a.zip
+Source:        https://ftp.fau.de/gentoo/distfiles/92/hyph_fo_FO-20040420a.zip
 URL: http://fo.speling.org/
 License: GPL-1.0-or-later
 BuildArch: noarch

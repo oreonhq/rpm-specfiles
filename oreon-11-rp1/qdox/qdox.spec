@@ -13,7 +13,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
 Source0:        https://github.com/paul-hammant/qdox/archive/refs/tags/qdox-%{version}.tar.gz#/qdox-%{version}.tar.gz
-Source1:        https://raw.githubusercontent.com/paul-hammant/qdox/HEAD/qdox-MANIFEST.MF
+Source1:        qdox-MANIFEST.MF
 # Remove bundled binaries which are possibly proprietary
 Patch:          qdox-port-tests-to-java-21.patch
 

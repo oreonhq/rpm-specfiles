@@ -3,7 +3,7 @@
 
 # This should be moved to rpm-redhat-config or similar as soon as feasible
 # NOTE: %%SOURCE macros are not yet defined, so explicit path is needed
-%{load:%{_sourcedir}/nodejs.srpm.macros}
+%{load:nodejs.srpm.macros}
 
 # === Versions of any software shipped in the main nodejs tarball
 %nodejs_define_version node 1:22.22.2-%{autorelease} -p
@@ -143,7 +143,7 @@ Provides:   nodejs(engine) = %{node_version}
 %obsolete_default_stream_rpm
 
 # Main source tarball; see packaging/make-nodejs-tarball.sh on how it is created
-Source:         node-v%{node_version}-stripped.tar.gz
+Source:         https://nodejs.org/dist/v%{node_version}/node-v%{node_version}.tar.gz
 # Sources 001-099: reserved for additional sources to be installed
 # - Full ICU database data
 Source001:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-b.zip
@@ -159,7 +159,7 @@ Source011:        test-should-pass.txt
 Source020:        i18n-btest402.js
 # Source 100+: Packaging support files that won't be installed
 # - Packaging supports scripts and Makefile, used to semi-automate RPM updates. See the Makefile in the tarball on how this is created.
-Source100:        packaging-scripts.tar.gz
+Source100:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/nodejs22/packaging-scripts.tar.gz
 # - Additional SRPM macros
 Source101:        nodejs.srpm.macros
 
@@ -298,6 +298,7 @@ test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo 
 %autosetup -n node-v%{node_version} -S git_am
 # clean the archive of the de-vendored dependencies, ensuring they are not used
 readonly -a devendored_paths=(
+    deps/openssl
     deps/v8/third_party/jinja2 tools/inspector_protocol/jinja2
     %{?!with_bundled_brotli:deps/brotli}
     %{?!with_bundled_c_ares:deps/cares}

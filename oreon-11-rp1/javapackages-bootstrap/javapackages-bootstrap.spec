@@ -27,9 +27,9 @@ ExclusiveArch:  %{java_arches} noarch
 Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
 # License breakdown
 Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
-# 132 *.tar.zst component archives ship in Fedora SRPM (not on upstream GitHub release).
-# %%prep unpacks them from Source200; or run fetch-jpb-vendor-tarballs.sh for local copies.
-Source200:        javapackages-bootstrap-vendor-archives.tar.zst
+Source200:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-00
+Source201:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
+Source202:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-02
 
 Patch:          0001-Switch-Dola-to-Lua-5.5.patch
 
@@ -66,10 +66,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p archive
 if ls archive/*.tar.zst >/dev/null 2>&1; then
   :
-elif test -f %{SOURCE200}; then
-  rpm2cpio %{SOURCE200} | (cd archive && cpio -idmv '*.tar.zst')
+elif test -f %{SOURCE200} && test -f %{SOURCE201} && test -f %{SOURCE202}; then
+  cat %{SOURCE200} %{SOURCE201} %{SOURCE202} > javapackages-bootstrap-vendor-archives.tar.zst
+  tar --zstd -xf javapackages-bootstrap-vendor-archives.tar.zst -C archive
 else
-  echo "No archive/*.tar.zst and missing %{SOURCE200}" >&2
+  echo "No archive/*.tar.zst and missing vendor archive parts" >&2
   exit 1
 fi
 ./downstream.sh prep-from-archive

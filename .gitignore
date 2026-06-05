@@ -44,4 +44,13 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/or11-**/*.zip
 !oreon-11-rp1/or11-**/*.zst
 
+!oreon-11-rp1/hyphen-mi/hunspell-hyphen-mi-0.1.20080630-beta.tar.gz
+!oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-00
+!oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
+!oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-02
+!oreon-11-rp1/mingw-gcc/gcc-16.1.1-20260501.tar.xz
+!oreon-11-rp1/nodejs20/packaging-scripts.tar.gz
+!oreon-11-rp1/nodejs22/packaging-scripts.tar.gz
+!oreon-11-rp1/nodejs24/packaging-scripts.tar.gz
+
 .vscode/

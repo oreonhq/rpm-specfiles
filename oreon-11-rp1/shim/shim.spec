@@ -34,7 +34,7 @@ Source22:        shimx64.efi
 #Source13:	BOOTARM.CSV
 #Source23:	shimarm.efi
 
-%include %{SOURCE0}
+%include shim.rpmmacros
 
 BuildRequires:	pesign >= 0.112-20.fc27
 # We need this because %%{efi} won't expand before choosing where to make

@@ -11,7 +11,7 @@ Summary:	Tibetan Machine Uni font for Tibetan, Dzongkha and Ladakhi
 # .ttf file now states GPLv3+ with fonts exceptions
 License:	GPL-3.0-or-later WITH Font-exception-2.0
 URL:		http://www.thlib.org/tools/#wiki=/access/wiki/site/26a34146-33a6-48ce-001e-f16ce7908a6a/tibetan%20machine%20uni.html
-Source0:        TibetanMachineUnicodeFont.zip
+Source0:        https://download.dlackware.com/slackware/slackware/source/x/tibmachuni-font-ttf/TibetanMachineUnicodeFont.zip
 Source1:        %{fontname}.metainfo.xml
 
 BuildArch:	noarch

@@ -105,7 +105,7 @@ Patch27: haddock-remove-googleapis-fonts.patch
 Patch30: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/11578.patch
 
 # riscv64
-Patch40: https://src.opensuse.org/pool/ghc/raw/branch/factory/riscv64-ncg.patch
+Patch40: riscv64-ncg.patch
 
 # ppc64le
 # https://bugzilla.redhat.com/show_bug.cgi?id=2435862

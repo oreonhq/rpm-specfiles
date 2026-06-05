@@ -28,10 +28,10 @@ Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 Source2:        gpgme-multilib.h
 Source3:        https://gnupg.org/signature_key.asc
-Source4:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz
+Source4:        https://www.gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz
 Source5:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz
 Source6:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2
-Source7:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz.sig
+Source7:        https://www.gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz.sig
 Source8:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz.sig
 Source9:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2.sig
 

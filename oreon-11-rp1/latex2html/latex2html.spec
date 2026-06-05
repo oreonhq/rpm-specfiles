@@ -16,7 +16,9 @@ Source1:        cfgcache.pm
 Source2: %{name}-manpages.tar.gz
 # support for Japanese
 # http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/
+%if %{enable_japanese}
 Source3:        l2h-2023-jp3.2b1.37.tar.gz
+%endif
 Patch1: latex2html-2018.2-teTeX-l2h-config.patch
 Patch2: latex2html-2002-2-1-SHLIB.patch
 Requires: tex(latex), tex(dvips), tex(url.sty), tex(preview.sty), netpbm-progs, poppler-utils

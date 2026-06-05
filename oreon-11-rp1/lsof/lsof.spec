@@ -15,7 +15,7 @@ URL: https://github.com/lsof-org/lsof
 
 %global lsofrh lsof-%{version}-rh
 Source0: %{lsofrh}.tar.xz
-Source1:        https://raw.githubusercontent.com/lsof-org/lsof/HEAD/upstream2downstream.sh
+Source1:        upstream2downstream.sh
 
 # BZ#1260300 - move lsof man page to section 1
 Patch0: lsof-man-page-section.patch

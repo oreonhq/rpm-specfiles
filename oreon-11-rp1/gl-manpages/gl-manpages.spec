@@ -28,7 +28,7 @@ Source3:        https://www.w3.org/Math/DTD/mathml2.tgz
 # When matching install the khronos version.
 Source4:        https://gitlab.freedesktop.org/mesa/gl-manpages/-/archive/main/gl-manpages-main.tar.bz2#/gl-manpages-1.0.1.tar.bz2
 #Silence author/version/manual etc. warnings
-Source5:        https://raw.githubusercontent.com/KhronosGroup/OpenGL-Refpages/HEAD/metainfo.xsl
+Source5:        metainfo.xsl
 
 BuildArch:      noarch
 

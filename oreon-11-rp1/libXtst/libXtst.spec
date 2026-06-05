@@ -12,11 +12,11 @@ License: MIT-open-group AND HPND-sell-variant AND X11 AND HPND-doc AND HPND-doc-
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        libXtst-1.2.5.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        libXtst-1.2.5.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

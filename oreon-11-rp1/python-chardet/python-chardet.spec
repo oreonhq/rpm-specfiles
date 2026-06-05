@@ -30,9 +30,9 @@ URL:            https://github.com/chardet/chardet
 #   https://github.com/chardet/chardet/issues/231
 # Source0:        chardet-%%{version}-filtered.tar.zst
 Source0:        chardet-%{commit}-filtered.tar.zst
-Source1:        https://raw.githubusercontent.com/chardet/chardet/HEAD/get_source
+Source1:        get_source
 # Hand-written for Fedora in groff_man(7) format based on --help output
-Source2:        https://raw.githubusercontent.com/chardet/chardet/HEAD/chardetect.1
+Source2:        chardetect.1
 
 
 BuildArch:      noarch

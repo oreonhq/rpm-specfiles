@@ -12,7 +12,7 @@ Summary: Afrikaans hunspell dictionary
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
 # Following URL is dead now
-Source:        https://downloads.translate.org.za/spellchecker/afrikaans/myspell-af_ZA-0.%{upstreamid}.zip#/hunspell-af-0.%{upstreamid}.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 URL: http://www.translate.org.za/
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -25,13 +25,13 @@ Afrikaans hunspell dictionary
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -n hunspell-af_ZA
+%setup -q -n libreoffice-25.2.3.2
 
 %build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p dictionaries/af_ZA/*.dic dictionaries/af_ZA/*.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 
 pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 af_ZA_aliases="af_NA"
@@ -43,7 +43,7 @@ popd
 
 
 %files
-%doc README_af_ZA.txt
+%doc dictionaries/af_ZA/README_af_ZA.txt
 %{_datadir}/%{dict_dirname}/*
 
 %changelog
