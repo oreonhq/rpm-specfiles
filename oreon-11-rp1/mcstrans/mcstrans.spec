@@ -13,7 +13,7 @@ Url: https://github.com/SELinuxProject/selinux/wiki
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
-Source3: secolor.conf.8
+Source3:        secolor.conf.8
 # fedora-selinux/selinux: git format-patch -N 3.10 -- mcstrans
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start

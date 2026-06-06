@@ -1,6 +1,8 @@
-%global source0_hash b43e9898e74a44c602fa27307550575638171530050aae5a69eb068422422da1
-%global source1_hash e5028403e98e52a173f1d6500ad99023647a177e370638959569d5b5577a2624
-%global source2_hash 13d3488ed1f083b106fddaf97e83e8d02cd7ca58bea8093a84ca1939bf1bf313
+%global source0_hash 1d40ca017ea51c533cf9fd5cbde5b5fe7ae248291ddf2af99d4c17cf8e13017d
+%global source1_hash 1e0077a4fd2960a7d2f4c9e49d6ba7bb891cac2d1be36d7e8e47aa97a9d1039b
+%global source2_hash 73eda44b867b898c3266db6b0c31c1641a7b6ca6e46914c43508e780a7d56d66
+%global source3_hash eeab592db2861a6c94d592a48456cf59945d31483ce94a6bc4d3a4e318049ba3
+%global face_landmark_commit 8afa57abc8229d611c4937165d20e2a2d9fc5a12
 %global source4_hash 3be62c864dcdd8b925e92f6a5b15a7a039819e04a6b3cf088827f08cf2cc07bf
 
 %bcond_with  tests
@@ -83,18 +85,13 @@ Summary:        Collection of algorithms for computer vision
 # This is normal three clause BSD.
 License:        BSD-3-Clause AND Apache-2.0 AND ISC
 URL:            https://opencv.org
-# TO PREPARE TARBALLS FOR FEDORA
-# Edit opencv-clean.sh and set VERSION, save file and run opencv-clean.sh
-#
-# Need to remove copyrighted lena.jpg images (rhbz#1295173)
-# and SIFT/SURF (module xfeatures2d) from tarball, due to legal concerns.
-#
-Source0:        %{name}-clean-%{version}.tar.gz
-Source1:        %{name}_contrib-clean-%{version}.tar.gz
+# strip lena/lenna and xfeatures2d in %%prep (rhbz#1295173)
+Source0:        https://github.com/opencv/opencv/archive/refs/tags/%{version}.tar.gz#/opencv-%{version}.tar.gz
+Source1:        https://github.com/opencv/opencv_contrib/archive/refs/tags/%{version}.tar.gz#/opencv_contrib-%{version}.tar.gz
 %{?with_extras_tests:
-Source2:        %{name}_extra-clean-%{version}.tar.gz
+Source2:        https://github.com/opencv/opencv_extra/archive/refs/tags/%{version}.tar.gz#/opencv_extra-%{version}.tar.gz
 }
-Source3:        face_landmark_model.dat.xz
+Source3:        https://raw.githubusercontent.com/opencv/opencv_3rdparty/%{face_landmark_commit}/face_landmark_model.dat#/face_landmark_model.dat
 # SRC=v0.1.2d.zip ; wget https://github.com/opencv/ade/archive/$SRC; mv $SRC $(md5sum $SRC | cut -d' ' -f1)-$SRC
 Source4:        https://github.com/opencv/ade/archive/v0.1.2e.zip#/962ce79e0b95591f226431f7b5f152cd-v0.1.2e.zip
 Source5:        xorg.conf
@@ -103,11 +100,11 @@ Source5:        xorg.conf
 %global wechat_gitdate 20230712
 Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-4.13.0.tar.gz
 
-Patch0:         opencv-4.1.0-install_3rdparty_licenses.patch
+Patch0:        opencv-4.1.0-install_3rdparty_licenses.patch
 # Fix build with vtk 9.6 - https://github.com/opencv/opencv_contrib/pull/4085
-Patch1:         opencv-vtk.patch
-Patch3:         opencv.python.patch
-Patch4:         Fix-macro-definition-for-Power10-architecture.patch
+Patch1:        opencv-vtk.patch
+Patch3:        opencv.python.patch
+Patch4:        Fix-macro-definition-for-Power10-architecture.patch
 
 
 BuildRequires:  gcc-c++
@@ -395,9 +392,24 @@ This package contains Java bindings for the OpenCV library.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }# autosetup doesn't work with 2 sources
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 # https://github.com/rpm-software-management/rpm/issues/1204
 %setup -q -a1 %{?with_extras_tests:-a2} -a6
+
+_opencv_legal_scrub() {
+  find "$1" -iname '*lena*' -delete
+  find "$1" -iname '*lenna*' -delete
+  rm -rf "$1/modules/xfeatures2d"
+}
+_opencv_extra_scrub() {
+  find "$1" -iname '*lena*' -delete
+  find "$1" -iname '*lenna*' -delete
+  find "$1" \( -iname 'len*.*' -o -iname '*lena*.png' -o -iname '*lena*.jpg' \) -delete
+}
+_opencv_legal_scrub opencv-%{version}
+_opencv_legal_scrub opencv_contrib-%{version}
+%{?with_extras_tests:_opencv_extra_scrub opencv_extra-%{version}}
 
 # we don't use pre-built contribs except quirc
 pushd 3rdparty
@@ -416,11 +428,7 @@ popd
 
 # Install face_landmark_model
 mkdir -p .cache/data
-install -pm 0644 %{S:3} .cache/data
-pushd .cache/data
-  xz -d face_landmark_model.dat.xz
-  mv face_landmark_model.dat 7505c44ca4eb54b4ab1e4777cb96ac05-face_landmark_model.dat
-popd
+install -pm 0644 %{S:3} .cache/data/7505c44ca4eb54b4ab1e4777cb96ac05-face_landmark_model.dat
 mkdir -p .cache/wechat_qrcode
 mv opencv_3rdparty-%{wechat_commit}/detect.caffemodel .cache/wechat_qrcode/238e2b2d6f3c18d6c3a30de0c31e23cf-detect.caffemodel
 mv opencv_3rdparty-%{wechat_commit}/detect.prototxt .cache/wechat_qrcode/6fb4976b32695f9f5c6305c19f12537d-detect.prototxt

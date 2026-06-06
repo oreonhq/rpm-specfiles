@@ -22,7 +22,7 @@ Unicode and the Chinese encoding for Tibetan.
 The font supports the standard combinations used in most texts.}
 
 Source0:        https://nongnu.askapache.com/free-tibetan/jomolhari/jomolhari-alpha003c.zip
-Source1:        65-0-jomolhari-fonts.conf 
+Source1:        65-0-jomolhari-fonts.conf
 
 %fontpkg
 

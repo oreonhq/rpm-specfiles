@@ -67,64 +67,64 @@ Url:     http://qt-project.org/
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 Source0: https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295
-Source1: qtlogging.ini
+Source1:        qtlogging.ini
 
 # header file to workaround multilib issue
 # https://bugzilla.redhat.com/show_bug.cgi?id=1036956
-Source5: qconfig-multilib.h
+Source5:        qconfig-multilib.h
 
 # xinitrc script to check for OpenGL 1 only drivers and automatically set
 # QT_XCB_FORCE_SOFTWARE_OPENGL for them
-Source6: 10-qt5-check-opengl2.sh
+Source6:        10-qt5-check-opengl2.sh
 
 # macros
-Source10: macros.qt5-qtbase
+Source10:        macros.qt5-qtbase
 
 # support multilib optflags
-Patch2: qtbase-multilib_optflags.patch
+Patch2:        qtbase-multilib_optflags.patch
 
 # make mixing versions with private apis a warning instead of fatal error
-Patch3: qtbase-everywhere-src-5.15.6-private_api_warning.patch
+Patch3:        qtbase-everywhere-src-5.15.6-private_api_warning.patch
 
 # upstreamable patches
 # namespace QT_VERSION_CHECK to workaround major/minor being pre-defined (#1396755)
-Patch50: qtbase-opensource-src-5.8.0-QT_VERSION_CHECK.patch
+Patch50:        qtbase-opensource-src-5.8.0-QT_VERSION_CHECK.patch
 
 # 1381828 - Broken window scaling for some QT5 applications (#1381828)
 # This patch moves the threshold for 2x scaling from the DPI of 144 to 192,
 # the same value GNOME uses. It's not a complete solution...
-Patch51: qtbase-hidpi_scale_at_192.patch
+Patch51:        qtbase-hidpi_scale_at_192.patch
 
 # 1. Workaround moc/multilib issues
 # https://bugzilla.redhat.com/show_bug.cgi?id=1290020
 # https://bugreports.qt.io/browse/QTBUG-49972
 # 2. Workaround sysmacros.h (pre)defining major/minor a breaking stuff
-Patch52: qtbase-opensource-src-5.7.1-moc_macros.patch
+Patch52:        qtbase-opensource-src-5.7.1-moc_macros.patch
 
 # CMake generates wrong -isystem /usr/include compilations flags with Qt5::Gui
 # https://bugzilla.redhat.com/1704474
-Patch53: qtbase-everywhere-src-5.12.1-qt5gui_cmake_isystem_includes.patch
+Patch53:        qtbase-everywhere-src-5.12.1-qt5gui_cmake_isystem_includes.patch
 
 # respect QMAKE_LFLAGS_RELEASE when building qmake
-Patch54: qtbase-qmake_LFLAGS.patch
+Patch54:        qtbase-qmake_LFLAGS.patch
 
 # don't use relocatable heuristics to guess prefix when using -no-feature-relocatable
-Patch55: qtbase-everywhere-src-5.14.2-no_relocatable.patch
+Patch55:        qtbase-everywhere-src-5.14.2-no_relocatable.patch
 
 # fix FTBFS against libglvnd-1.3.4+
-Patch56: qtbase-everywhere-src-5.15.2-libglvnd.patch
+Patch56:        qtbase-everywhere-src-5.15.2-libglvnd.patch
 
 # drop -O3 and make -O2 by default
-Patch57: qt5-qtbase-cxxflag.patch
+Patch57:        qt5-qtbase-cxxflag.patch
 
 # support firebird version 3.x
-Patch58: qt5-qtbase-5.12.1-firebird.patch
+Patch58:        qt5-qtbase-5.12.1-firebird.patch
 
 # support firebird version 4.x
-Patch59: qt5-qtbase-5.12.1-firebird-4.0.0.patch
+Patch59:        qt5-qtbase-5.12.1-firebird-4.0.0.patch
 
 # fix for new mariadb
-Patch60: qtbase-opensource-src-5.9.0-mysql.patch
+Patch60:        qtbase-opensource-src-5.9.0-mysql.patch
 
 # FIXME This patch is completely meaningless in the context of C++.
 # It is a workaround for a pyside2 build failure with Qt 5.15.9,
@@ -135,7 +135,7 @@ Patch60: qtbase-opensource-src-5.9.0-mysql.patch
 # Since there are no side effects to superfluously specifying
 # QEvent::Type instead of plain "Type" in a QEvent derived class,
 # this workaround is acceptable, if not nice.
-Patch61: qtbase-5.15.10-work-around-pyside2-brokenness.patch
+Patch61:        qtbase-5.15.10-work-around-pyside2-brokenness.patch
 
 # Bug 1954359 - Many emoji don't show up in Qt apps because qt does not handle 'emoji' font family
 # Patch63: qtbase-cache-emoji-font.patch
@@ -151,50 +151,50 @@ Patch100: kde-5.15-rollup-20251104.patch.gz
 # HACK to make 'fedpkg sources' consider it 'used"
 Source100: kde-5.15-rollup-20251104.patch.gz
 
-Patch101: qtbase-5.15.10-fix-missing-qtsan-include.patch
+Patch101:        qtbase-5.15.10-fix-missing-qtsan-include.patch
 # Workaround for font rendering issue with cjk-vf-fonts
 # https://bugreports.qt.io/browse/QTBUG-111994
 # https://bugreports.qt.io/browse/QTBUG-112136
-Patch102: qtbase-QTBUG-111994.patch
-Patch103: qtbase-QTBUG-112136.patch
+Patch102:        qtbase-QTBUG-111994.patch
+Patch103:        qtbase-QTBUG-112136.patch
 
 # qt5 backport of https://codereview.qt-project.org/c/qt/qtbase/+/664056
 # to fix ssl trust store discovery with
 # 
-Patch104: 0001-Update-SSL-trust-store-locations-for-modern-Red-Hat-.patch
+Patch104:        0001-Update-SSL-trust-store-locations-for-modern-Red-Hat-.patch
 
 ## Qt 6 backports for better Gtk/GNOME integration
 # 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1732129
-Patch150: 0001-Use-Wayland-by-default-on-GNOME.patch
+Patch150:        0001-Use-Wayland-by-default-on-GNOME.patch
 
 # 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2226797
-Patch151: 0002-Add-enum-class-Qt-Appearance.patch
-Patch152: 0003-Sync-and-assert-StandardPixmap-enums-in-QPlatformThe.patch
-Patch153: 0004-QGtk3Theme-subscribe-to-theme-hint-changes.patch
+Patch151:        0002-Add-enum-class-Qt-Appearance.patch
+Patch152:        0003-Sync-and-assert-StandardPixmap-enums-in-QPlatformThe.patch
+Patch153:        0004-QGtk3Theme-subscribe-to-theme-hint-changes.patch
 # Patch154: 0005-Gtk3Theme-set-XCURSOR_SIZE-and-XCURSOR_THEME-for-way.patch
-Patch155: 0006-Re-implement-palette-standardPixmap-file-icons-fonts.patch
+Patch155:        0006-Re-implement-palette-standardPixmap-file-icons-fonts.patch
 # Patch156: 0007-GTK3-theme-simplify-code.patch
-Patch157: 0008-Fix-checkbox-and-radiobutton-background-in-QGtk3Them.patch
-Patch158: 0009-Cleanup-QGtk3Theme.patch
-Patch159: 0010-Detect-appearance-by-colors-unless-GTK-theme-name-co.patch
-Patch160: 0011-Change-parsing-log-output-in-QGtk3Json-from-qCDebug-.patch
-Patch161: 0012-Document-QGtk3Interface.patch
-Patch162: 0013-Document-QGtk3Storage.patch
-Patch163: 0014-QGtk3Theme-Improve-fixed-font-delivery.patch
-Patch164: 0015-QGtk3Theme-Do-not-default-Active-WindowText-to-butto.patch
-Patch165: 0016-Fix-memory-leak-in-QGtk3Interface-themename.patch
-Patch166: 0017-Fix-disabled-button-color-in-Linux-x11-wayland.patch
-Patch167: 0018-Fix-inactive-palette-in-gtk3-theme.patch
-Patch168: 0019-Fix-tooltip-palette-issue-in-gtk3-theme.patch
-Patch169: 0020-QGtk3Theme-define-light-midlight-mid-dark-shadow-colors.patch
+Patch157:        0008-Fix-checkbox-and-radiobutton-background-in-QGtk3Them.patch
+Patch158:        0009-Cleanup-QGtk3Theme.patch
+Patch159:        0010-Detect-appearance-by-colors-unless-GTK-theme-name-co.patch
+Patch160:        0011-Change-parsing-log-output-in-QGtk3Json-from-qCDebug-.patch
+Patch161:        0012-Document-QGtk3Interface.patch
+Patch162:        0013-Document-QGtk3Storage.patch
+Patch163:        0014-QGtk3Theme-Improve-fixed-font-delivery.patch
+Patch164:        0015-QGtk3Theme-Do-not-default-Active-WindowText-to-butto.patch
+Patch165:        0016-Fix-memory-leak-in-QGtk3Interface-themename.patch
+Patch166:        0017-Fix-disabled-button-color-in-Linux-x11-wayland.patch
+Patch167:        0018-Fix-inactive-palette-in-gtk3-theme.patch
+Patch168:        0019-Fix-tooltip-palette-issue-in-gtk3-theme.patch
+Patch169:        0020-QGtk3Theme-define-light-midlight-mid-dark-shadow-colors.patch
 
 # Security
 
 
 # Latest QGnomePlatform needs to be specified to be used
-Patch200: qtbase-use-qgnomeplatform-as-default-platform-theme-on-gnome.patch
+Patch200:        qtbase-use-qgnomeplatform-as-default-platform-theme-on-gnome.patch
 
 # Do not check any files in %%{_qt5_plugindir}/platformthemes/ for requires.
 # Those themes are there for platform integration. If the required libraries are

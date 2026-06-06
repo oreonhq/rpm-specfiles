@@ -15,10 +15,10 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.2.2/surefire-3.2.2-source-release.zip#/maven-surefire-3.2.2.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Source2:        https://eclipse.org/legal/cpl-v10.html
+Source1:        https://www.eclipse.org/legal/cpl-v10.html#/cpl-v10.html
 
-Patch:          0001-Port-to-TestNG-7.4.0.patch
-Patch:          0002-Disable-JUnit-4.8-test-grouping.patch
+Patch0:        0001-Port-to-TestNG-7.4.0.patch
+Patch1:        0002-Disable-JUnit-4.8-test-grouping.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -105,7 +105,7 @@ to execute.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -T -b1 -n surefire-%{upstream_version}
 %autopatch -p1
-cp -p %{SOURCE2} .
+cp -p %{SOURCE1} .
 
 
 # Disable strict doclint

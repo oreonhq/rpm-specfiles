@@ -37,22 +37,22 @@ Source9:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
-Patch1001:      0001-don-t-add-extra-libraries-for-linking.patch
+Patch1001:        0001-don-t-add-extra-libraries-for-linking.patch
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch1002:      gpgme-1.3.2-largefile.patch
+Patch1002:        gpgme-1.3.2-largefile.patch
 # Allow extra options to be passed to setup.py during installation
 #Patch1004:      0002-setup_py_extra_opts.patch
 
 ## temporary downstream fixes
 # Skip lang/qt/tests/t-remarks on gnupg 2.4+
-Patch3001:      1001-qt-skip-test-remarks-for-gnupg2-2.4.patch
+Patch3001:        1001-qt-skip-test-remarks-for-gnupg2-2.4.patch
 
 # prevent soname .so.15 conflict for qgpgme with compat-qgpgme124-qt{5,6}
-Patch3002:      gpgme-2.0.1-soname2.patch
+Patch3002:        gpgme-2.0.1-soname2.patch
 
 # for qgpgme <= 2.0.0, rhbz#2464335
 # https://github.com/gpg/gpgmeqt/commit/150b23c105f3ea7034e6f106e60686aea4e4a13e
-Patch3003:      qgpgme-2.0-fixdnparsing.patch
+Patch3003:        qgpgme-2.0-fixdnparsing.patch
 
 BuildRequires:  make
 BuildRequires:  cmake
@@ -183,7 +183,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-%autosetup -N -p1 -S gendiff
+%autosetup -N -p1 -S gendiff -n gpgme-2.0.1
 # verify sources
 gpg2 --import --import-options import-export,import-minimal %{SOURCE3} > ./gpg-keyring.gpg
 gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE1} %{SOURCE0}

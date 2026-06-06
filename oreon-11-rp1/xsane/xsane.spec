@@ -27,68 +27,68 @@ Source0:        https://ftp.osuosl.org/pub/blfs/conglomeration/xsane/%{name}-%{v
 Source1: xsane-256x256.png
 # use "xdg-open" instead of "netscape" to launch help browser
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04
-Patch0: xsane-0.995-xdg-open.patch
+Patch0:        xsane-0.995-xdg-open.patch
 # submitted to upstream (Oliver Rauch) via email, 2009-08-18
-Patch1: xsane-0.995-close-fds.patch
+Patch1:        xsane-0.995-close-fds.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=504344
 # distro-specific(?), upstream won't accept it: "don't show license dialog"
 # submitted to upstream (Oliver Rauch) anyway via email, 2013-06-04
-Patch2: xsane-0.996-no-eula.patch
+Patch2:        xsane-0.996-no-eula.patch
 # enable off-root building
 # submitted to upstream (Oliver Rauch) via email, 2010-06-23
-Patch3: xsane-0.997-off-root-build.patch
+Patch3:        xsane-0.997-off-root-build.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=608047
 # https://bugzilla.redhat.com/show_bug.cgi?id=621778
 # submitted to upstream (Oliver Rauch) via email, 2013-07-05
-Patch4: xsane-0.999-no-file-selected.patch
+Patch4:        xsane-0.999-no-file-selected.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=198422
 # submitted to upstream (Oliver Rauch) via email, 2010-06-29
-Patch5: xsane-0.997-ipv6.patch
+Patch5:        xsane-0.997-ipv6.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=624190
 # fix from: https://bugs.launchpad.net/ubuntu/+source/xsane/+bug/370818
 # submitted to upstream (Oliver Rauch) via email, 2011-06-01
-Patch6: xsane-0.998-preview-selection.patch
+Patch6:        xsane-0.998-preview-selection.patch
 # fix building with libpng >= 1.5
 # submitted to upstream (Oliver Rauch) via email, 2011-11-21
-Patch7: xsane-0.998-libpng.patch
+Patch7:        xsane-0.998-libpng.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=795085
 # set program name/wmclass so GNOME shell picks appropriate high resolution
 # icon file
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04
-Patch8: xsane-0.998-wmclass.patch
+Patch8:        xsane-0.998-wmclass.patch
 # partly distro-specific: customize desktop file
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04
-Patch9: xsane-0.998-desktop-file.patch
+Patch9:        xsane-0.998-desktop-file.patch
 # man page: update command line options
 # submitted to upstream (Oliver Rauch) via email, 2013-07-08
-Patch10: xsane-0.999-man-page.patch
+Patch10:        xsane-0.999-man-page.patch
 # avoid producing PDFs with bpp > 8
 # submitted to upstream (Oliver Rauch) via email, 2013-09-09
-Patch11: xsane-0.999-pdf-no-high-bpp.patch
+Patch11:        xsane-0.999-pdf-no-high-bpp.patch
 # build against lcms 2.x
 # submitted to upstream (Oliver Rauch) via email, 2013-09-23
-Patch12: xsane-0.999-lcms2.patch
+Patch12:        xsane-0.999-lcms2.patch
 # fix issues found during static analysis that don't require far-reaching
 # refactoring
 # submitted to upstream (Oliver Rauch) via email, 2014-04-02
-Patch13: xsane-0.999-coverity.patch
+Patch13:        xsane-0.999-coverity.patch
 # update lib/snprintf.c to the latest version from LPRng that has a Free license
 # submitted to upstream (Oliver Rauch) via email, 2014-05-29
-Patch14: xsane-0.999-snprintf-update.patch
+Patch14:        xsane-0.999-snprintf-update.patch
 # fix signal handling (#1073698)
 # submitted to upstream (Oliver Rauch) via email, 2014-07-03
-Patch15: xsane-0.999-signal-handling.patch
+Patch15:        xsane-0.999-signal-handling.patch
 # https://gitlab.com/sane-project/frontend/xsane/-/commit/96424e369f67
-Patch16: 0001-Follow-new-convention-for-registering-gimp-plugin.patch
+Patch16:        0001-Follow-new-convention-for-registering-gimp-plugin.patch
 # https://gitlab.com/sane-project/frontend/xsane/-/commit/bf9ef48ab57
-Patch17: 0001-replace-gtk_timeout-with-g_timeout.patch
+Patch17:        0001-replace-gtk_timeout-with-g_timeout.patch
 # https://gitlab.com/sane-project/frontend/xsane/-/merge_requests/32
-Patch18: xsane-gcc15-c23.patch
+Patch18:        xsane-gcc15-c23.patch
 
 # autoconf-generated files
 Patch100: xsane-0.999-7-autoconf.patch.bz2
 
-Patch101: xsane-configure-c99.patch
+Patch101:        xsane-configure-c99.patch
 
 # LGPL-3.0-or-later is due of using gimp libraries
 # src/* - GPL2+

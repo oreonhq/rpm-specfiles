@@ -239,7 +239,7 @@ sed -i \
 %license LICENSE
 %{python3_dbus_dir}/pyqt5.abi3.so
 %dir %{python3_sitearch}/PyQt5/
-%{python3_sitearch}/PyQt5-%{version}%{?snap:.%{snap}}.dist-info
+%glob %{python3_sitearch}/PyQt5-*.dist-info
 %{python3_sitearch}/PyQt5/__pycache__/__init__.*
 %{python3_sitearch}/PyQt5/__init__.py*
 %{python3_sitearch}/PyQt5/Qt.*

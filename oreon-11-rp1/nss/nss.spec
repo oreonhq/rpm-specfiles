@@ -129,29 +129,29 @@ Source101:        nspr-config.xml
 #
 # Once the buildroot has been bootstrapped the patch may be removed
 # but it doesn't hurt to keep it.
-Patch4:           iquote.patch
-Patch12:          nss-signtool-format.patch
-Patch13:          nss-dso-ldflags.patch
+Patch4:        iquote.patch
+Patch12:        nss-signtool-format.patch
+Patch13:        nss-dso-ldflags.patch
 # fedora disabled dbm by default
-Patch40:          nss-no-dbm-man-page.patch
+Patch40:        nss-no-dbm-man-page.patch
 
 # https://issues.redhat.com/browse/FC-1613
-Patch50:          nss-3.110-dissable_test-ssl_policy_pkix_oscp.patch
+Patch50:        nss-3.110-dissable_test-ssl_policy_pkix_oscp.patch
 
 # ML-DSA support patches that haven't made it to the 3.118.1 release
-Patch60:          nss-3.118-ml-dsa-leancrypto.patch
-Patch61:          nss-3.118-ml-dsa-tls.patch
+Patch60:        nss-3.118-ml-dsa-leancrypto.patch
+Patch61:        nss-3.118-ml-dsa-tls.patch
 #Patch62:          nss-3.118-prefer-all-hybrid.patch
 
-Patch65:          nss-3.118-ml-dsa-test-for-sign-verify-pkcs12.patch
-Patch66:          nss-3.118-ml-dsa-tls-test.patch
-Patch67:          nss-3.118-ml-dsa-unittests.patch
-Patch68:          nss-3.123-fix-mldsa-import-regeneration.patch
+Patch65:        nss-3.118-ml-dsa-test-for-sign-verify-pkcs12.patch
+Patch66:        nss-3.118-ml-dsa-tls-test.patch
+Patch67:        nss-3.118-ml-dsa-unittests.patch
+Patch68:        nss-3.123-fix-mldsa-import-regeneration.patch
 
 Patch70:          nss-dbtests-sqlite-mangling.patch
 
-Patch100:         nspr-config-pc.patch
-Patch101:         nspr-gcc-atomics.patch
+Patch100:        nspr-config-pc.patch
+Patch101:        nspr-gcc-atomics.patch
 
 %description
 Network Security Services (NSS) is a set of libraries designed to

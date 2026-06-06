@@ -347,13 +347,13 @@ Source0:        https://www.python.org/ftp/python/3.14.5/Python-3.14.5.tar.xz
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
 # Originally written by bkabrda
-Source8: check-pyc-timestamps.py
+Source8:        check-pyc-timestamps.py
 
 # Desktop menu entry for idle3
-Source10: idle3.desktop
+Source10:        idle3.desktop
 
 # AppData file for idle3
-Source11: idle3.appdata.xml
+Source11:        idle3.appdata.xml
 
 # Pre-generated JIT stencils (see PEP 774)
 # As the PEP was deferred, we use stencils we built for ourselves.
@@ -364,7 +364,7 @@ Source11: idle3.appdata.xml
 #  2. download the files from Koji:
 #    $ bash download-jit-stencils-from-koji.sh KOJI_TASK_URL|KOJI_TASK_ID
 #  3. add the files to lookaside cache with fedpkg new-sources
-Source30: download-jit-stencils-from-koji.sh
+Source30:        download-jit-stencils-from-koji.sh
 # This %%if-hack makes it easier to do step 1. from the above.
 # Use `fedpkg sources --force` to get the conditionally defined sources from the lookaside cache.
 %if (%{with jit} && %{without jit_build_stencils}) || %{exists:%{_sourcedir}/Python-%{upstream_version}-x86_64-optimized-jit_stencils.h}
@@ -393,7 +393,7 @@ Source34: Python-%{upstream_version}-x86_64-optimized-jit_stencils.h
 # see https://bugzilla.redhat.com/2026979 or https://bugzilla.redhat.com/2097183
 #
 # pypa/distutils integration: https://github.com/pypa/distutils/pull/70
-Patch251: 00251-change-user-install-location.patch
+Patch251:        00251-change-user-install-location.patch
 
 # 00464 # 292acffec7a379cb6d1f3c47b9e5a2f170bbadb6
 # Enable PAC and BTI protections for aarch64
@@ -410,7 +410,7 @@ Patch251: 00251-change-user-install-location.patch
 #
 # Since on Fedora we always compile with frame pointers the BTI/PAC
 # hardware protections can be enabled without losing Perf unwinding.
-Patch464: 00464-enable-pac-and-bti-protections-for-aarch64.patch
+Patch464:        00464-enable-pac-and-bti-protections-for-aarch64.patch
 
 # 00466 # e10760fb955ee33d2917f8a57bb4e24d71e5341c
 # Downstream only: Skip tests not working with older expat version
@@ -419,19 +419,19 @@ Patch464: 00464-enable-pac-and-bti-protections-for-aarch64.patch
 # which has too old version of expat. We set the upper bound version
 # in the conditionalized skip to a release available in CentOS Stream 10,
 # which is tested as working.
-Patch466: 00466-downstream-only-skip-tests-not-working-with-older-expat-version.patch
+Patch466:        00466-downstream-only-skip-tests-not-working-with-older-expat-version.patch
 
 # 00474 # 0d9da266d5ecb31d8a417a0a5daa251a2d99389f
 # CVE-2025-15366
 #
 # Downstream only: Reject control characters in IMAP commands
-Patch474: 00474-cve-2025-15366.patch
+Patch474:        00474-cve-2025-15366.patch
 
 # 00475 # 91e12ebfb2a88b265f3764a0d852b6fa53b2386a
 # CVE-2025-15367
 #
 # Downstream only: Reject control characters in POP3 commands
-Patch475: 00475-cve-2025-15367.patch
+Patch475:        00475-cve-2025-15367.patch
 
 # 00477 # f9f53e560d161531a0c3476c08ee26b89a628bde
 # Raise an error when importing stdlib modules compiled for a different Python version
@@ -447,11 +447,11 @@ Patch475: 00475-cve-2025-15367.patch
 # _tkinter, _tracemalloc and readline are not calling PyModuleDef_Init,
 # which is modified with this patch, hence they need a
 # direct call to the check function.
-Patch477: 00477-raise-an-error-when-importing-stdlib-modules-compiled-for-a-different-python-version.patch
+Patch477:        00477-raise-an-error-when-importing-stdlib-modules-compiled-for-a-different-python-version.patch
 
 # 00486 # 5ae0b81b3135319f8d75a886fb7a11fa40ac11f4
 # gh-148646: Add --enable-prebuilt-jit-stencils configure flag
-Patch486: 00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-flag.patch
+Patch486:        00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-flag.patch
 
 # (New patches go here ^^^)
 #

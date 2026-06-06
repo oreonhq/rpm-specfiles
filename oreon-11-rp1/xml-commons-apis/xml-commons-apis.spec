@@ -75,7 +75,7 @@ rm -rf build/docs/javadoc
 %doc LICENSE NOTICE
 %doc LICENSE.dom-documentation.txt README.dom.txt
 %doc LICENSE.dom-software.txt LICENSE.sac.html
-%doc LICENSE.sax.txt README-sax  README.sax.txt
+%doc LICENSE.sax.txt README.sax.txt
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.01-1

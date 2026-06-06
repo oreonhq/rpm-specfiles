@@ -30,7 +30,7 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 URL:            http://gcc.gnu.org
 
 %global srcdir gcc-%{gcc_major}-%{DATE}
-Source0:        https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/%{srcdir}.tar.xz
+Source0:        https://gcc.gnu.org/pub/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz#/%{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
 Patch0:        0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch

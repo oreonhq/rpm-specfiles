@@ -123,7 +123,7 @@ URL: https://sourceware.org/binutils
 # They are a "snapshot" of the about to be released branch sources, rather than
 # a snapshot of the mainline development sources.
 
-%define source snapshot
+%define source official-release
 # %%define source even-pre-release
 # %%define source odd-pre-release
 # %%define source snapshot
@@ -248,17 +248,17 @@ Source2: %{gold_tarball}.tar.xz
 #           libtool.m4 file).  These are based on a version released in 2009
 #           (2.2.6?) rather than the latest version.  (Definitely fixed in
 #           libtool version 2.4.6).
-Patch01: binutils-libtool-lib64.patch
+Patch01:        binutils-libtool-lib64.patch
 
 # Purpose:  Appends a RHEL or Fedora release string to the generic binutils
 #           version string.
 # Lifetime: Permanent.  This is a RHEL/Fedora specific patch.
-Patch02: binutils-version.patch
+Patch02:        binutils-version.patch
 
 # Purpose:  Exports the demangle.h header file (associated with the libiberty
 #           sources) with the binutils-devel rpm.
 # Lifetime: Permanent.  This is a RHEL/Fedora specific patch.
-Patch03: binutils-export-demangle.h.patch
+Patch03:        binutils-export-demangle.h.patch
 
 # Purpose:  Disables the check in the BFD library's bfd.h header file that
 #           config.h has been included before the bfd.h header.  See BZ
@@ -269,7 +269,7 @@ Patch03: binutils-export-demangle.h.patch
 # FIXME:    It would be better if the packages using the bfd.h header were
 #           fixed so that they do include the header files in the correct
 #           order.
-Patch04: binutils-no-config-h-check.patch
+Patch04:        binutils-no-config-h-check.patch
 
 # Purpose:  Disable an x86/x86_64 optimization that moves functions from the
 #           PLT into the GOTPLT for faster access.  This optimization is
@@ -277,88 +277,88 @@ Patch04: binutils-no-config-h-check.patch
 #           as ltrace and LD_AUDIT.  See BZs 1452111 and 1333481.
 # Lifetime: Permanent.  But it should not be.
 # FIXME:    Replace with a configure time option.
-Patch05: binutils-revert-PLT-elision.patch
+Patch05:        binutils-revert-PLT-elision.patch
 
 # Purpose:  Do not create PLT entries for AARCH64 IFUNC symbols referenced in
 #           debug sections.
 # Lifetime: Permanent.
 # FIXME:    Find related bug.  Decide on permanency.
-Patch06: binutils-2.27-aarch64-ifunc.patch
+Patch06:        binutils-2.27-aarch64-ifunc.patch
 
 # Purpose:  Stop the binutils from statically linking with libstdc++.
 # Lifetime: Permanent.
-Patch07: binutils-do-not-link-with-static-libstdc++.patch
+Patch07:        binutils-do-not-link-with-static-libstdc%2B%2B.patch
 
 # Purpose:  Allow the binutils to be configured with any (recent) version of
 #            autoconf.
 # Lifetime: Fixed in 2.46 (maybe ?)
-Patch08: binutils-autoconf-version.patch
+Patch08:        binutils-autoconf-version.patch
 
 # Purpose:  Stop libtool from inserting useless runpaths into binaries.
 # Lifetime: Who knows.
-Patch09: binutils-libtool-no-rpath.patch
+Patch09:        binutils-libtool-no-rpath.patch
 
 # Purpose:  Fix binutils testsuite failures.
 # Lifetime: Permanent, but varies with each rebase.
-Patch10: binutils-testsuite-fixes.patch
+Patch10:        binutils-testsuite-fixes.patch
 
 # Purpose:  Fix binutils testsuite failures for the RISCV-64 target.
 # Lifetime: Permanent, but varies with each rebase.
-Patch11: binutils-riscv-testsuite-fixes.patch
+Patch11:        binutils-riscv-testsuite-fixes.patch
 
 # Purpose:  Fix the ar test of non-deterministic archives.
 # Lifetime: Fixed in 2.46
-Patch12: binutils-fix-ar-test.patch
+Patch12:        binutils-fix-ar-test.patch
 
 # Purpose:  Fix a seg fault in the AArch64 linker when building u-boot.
 # Lifetime: Fixed in 2.46
-Patch13: binutils-aarch64-small-plt0.patch
+Patch13:        binutils-aarch64-small-plt0.patch
 
 %if %{with gold}
 
 # Purpose:  Make the GOLD linker ignore the "-z pack-relative-relocs" command line option.
 # Lifetime: Fixed in 2.46 (maybe)
-Patch14: binutils-gold-pack-relative-relocs.patch
+Patch14:        binutils-gold-pack-relative-relocs.patch
 
 # Purpose:  Let the gold linker ignore --error-execstack and --error-rwx-segments.
 # Lifetime: Fixed in 2.46 (maybe)
-Patch15: binutils-gold-ignore-execstack-error.patch
+Patch15:        binutils-gold-ignore-execstack-error.patch
 
 # Purpose:  Stop gold from aborting when input sections with the same name
 #            have different flags.
 # Lifetime: Fixed in 2.43 (maybe)
-Patch16: binutils-gold-mismatched-section-flags.patch
+Patch16:        binutils-gold-mismatched-section-flags.patch
 
 # Purpose:  Change the gold configuration script to only warn about
 #            unsupported targets.  This allows the binutils to be built with
 #            BPF support enabled.
 # Lifetime: Permanent.
-Patch17: binutils-gold-warn-unsupported.patch
+Patch17:        binutils-gold-warn-unsupported.patch
 
 # Purpose:  Enable the creation of .note.gnu.property sections by the GOLD
 #            linker for x86 binaries.
 # Lifetime: Permanent.
-Patch18: binutils-gold-i386-gnu-property-notes.patch
+Patch18:        binutils-gold-i386-gnu-property-notes.patch
 
 # Purpose:  Stop an abort when using dwp to process a file with no dwo links.
 # Lifetime: Fixed in 2.46 (maybe)
-Patch19: binutils-gold-empty-dwp.patch
+Patch19:        binutils-gold-empty-dwp.patch
 %endif
 
 # Purpose:  Fix ld testsuite failures when enable_textrel is set.
 # Lifetime: Permanent.
-Patch20: binutils-ld-default-z-text.patch
+Patch20:        binutils-ld-default-z-text.patch
 
 #----------------------------------------------------------------------------
 
 # Purpose:  Remove the Build protected-func-2 without PIE linker tests
 #            as these are currently failing.
 # Lifetime: TEMPORARY - should be fixed by the 2.46 release.
-Patch98: binutils-remove-ld-protected-func-2-test.patch
+Patch98:        binutils-remove-ld-protected-func-2-test.patch
 
 # Purpose:  Suppress the x86 linker's p_align-1 tests due to kernel bug on CentOS-10.
 # Lifetime: TEMPORARY
-Patch99: binutils-suppress-ld-align-tests.patch
+Patch99:        binutils-suppress-ld-align-tests.patch
 
 #----------------------------------------------------------------------------
 
@@ -632,7 +632,7 @@ mv ../%{gold_tarball}/elfcpp .
 %autopatch -p1 
 
 %elif "%{source}" == "snapshot"
-%autosetup -p1 -n binutils-with-gold-%{version}-%{commit_id}
+%autosetup -p1 -n binutils-with-gold-2.46-ba5838a98fb
 %elif "%{source}" == "official-release"
 %autosetup -p1 -n binutils-with-gold-%{version}
 %elif "%{source}" == "even-pre-release"

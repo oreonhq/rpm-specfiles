@@ -17,7 +17,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/junit-team/junit5/archive/refs/tags/r%{version}.tar.gz#/junit5-%{version}.tar.gz
 # Aggregator POM (used for packaging only)
-Source100:      aggregator.pom
+Source100:        aggregator.pom
 # Platform POMs
 Source200:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/%{platform_version}/junit-platform-commons-%{platform_version}.pom
 Source201:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console/%{platform_version}/junit-platform-console-%{platform_version}.pom
@@ -39,10 +39,10 @@ Source400:      https://repo1.maven.org/maven2/org/junit/vintage/junit-vintage-e
 # BOM POM
 Source500:      https://repo1.maven.org/maven2/org/junit/junit-bom/%{version}/junit-bom-%{version}.pom
 
-Patch:          0004-Add-JRE-class-generated-from-template.patch
-Patch:          0004-Add-JRE-class-generated-from-template.patch
-Patch:          0004-Add-JRE-class-generated-from-template.patch
-Patch:          0004-Add-JRE-class-generated-from-template.patch
+Patch:        0004-Add-JRE-class-generated-from-template.patch
+Patch:        0004-Add-JRE-class-generated-from-template.patch
+Patch:        0004-Add-JRE-class-generated-from-template.patch
+Patch:        0004-Add-JRE-class-generated-from-template.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

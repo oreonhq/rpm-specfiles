@@ -13,9 +13,9 @@ Source0: https://downloads.sourceforge.net/project/linux-hotplug/fxload/%{versio
 # copyright code before shipping it. Download the upstream tarball and
 # invoke this script while in the tarball's directory:
 # ./fxload-generate-tarball.sh 2008_10_13
-Source1: fxload-generate-tarball.sh
-Patch0: fxload-noa3load.patch
-Patch1: fxload-ldflags.patch
+Source1:        fxload-generate-tarball.sh
+Patch0:        fxload-noa3load.patch
+Patch1:        fxload-ldflags.patch
 
 BuildRequires: curl
 BuildRequires: gcc kernel-headers make

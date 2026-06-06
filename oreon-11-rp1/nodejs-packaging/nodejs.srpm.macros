@@ -1,92 +1,119 @@
+# ============================================================================
+# Vendored dependencies management
 
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Page not found :'( - src.fedoraproject.org</title>
-        <link rel="shortcut icon" type="image/vnd.microsoft.icon"
-        href="/theme/static/favicon.ico?version=5.14.1"/>
-    <link href="/theme/static/fedora-bootstrap-1.3.0/fedora-bootstrap.min.css?version=5.14.1"
-        type="text/css" rel="stylesheet" />
-    <link href="/theme/static/fonts/fonts.css?version=5.14.1"
-        rel="stylesheet" type="text/css" />
-    <link href="/theme/static/fonts/hack_fonts/css/hack-extended.min.css?version=5.14.1"
-        type="text/css" rel="stylesheet" />
-    <link href="/theme/static/theme.css?version=5.14.1"
-        type="text/css" rel="stylesheet" />
+# --- Version macros definition
+# Parse and normalize version string into several macros.
+# By default, stores the whole string in `%<name>_evr` macro,
+# then automatically strips any epoch and/or release parts
+# (specified in the standard "E:V-R" format)
+# and defines `%<name>_epoch`, `%<name>_version`, and `%<name>_release` macros.
+#
+# With the `-p` option, the version is additionally split into
+# `%<name>_version_major`, `%<name>_version_minor`, and `%<name>_version_patch` macros.
+#
+# Any would-be empty macro will evaluate to `%{nil}`.
+#
+# Options:
+# -p : Also define the partial macros.
+#
+# Arguments:
+# 1: Name of the dependency. Any `-' will be replaced by `_' in the macro names.
+# 2: The EVR string to parse.
+%nodejs_define_version(p) %{lua:
+local component <const> = arg[1] or error("No name provided!")
+local evr       <const> = arg[2] or error("No version string provided!")
 
-    <link type="text/css" rel="stylesheet" nonce="fAjw4VZnADS1ylf8QQ760bwYs" href="/static/vendor/font-awesome/font-awesome.css?version=5.14.1"/>
-    <link type="text/css" rel="stylesheet" nonce="fAjw4VZnADS1ylf8QQ760bwYs" href="/static/pagure.css?version=5.14.1"/>
-  </head>
-  <body id="error">
-    
-    <!-- start masthead -->
-    <nav class="navbar navbar-light masthead p-0 navbar-expand">
-      <div class="container">
-        <a href="/" class="navbar-brand">
-        <img height="40" src="/theme/static/pagure-logo.png?version=5.14.1"
-             alt="pagure Logo" id="pagureLogo"/>
-        </a>
-        <ul class="navbar-nav ml-auto">
+local name <const> = component:gsub("-", "_")  -- macro-safe name
 
-          
+macros[name .. "_evr"] = evr
 
-          <li class="nav-item">
-            <a class="btn btn-primary" href="/login/?next=https://src.fedoraproject.org/rpms/nodejs-packaging/raw/f44/f/nodejs.srpm.macros">Log In</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!-- close masthead-->
+local _, epoch_end, epoch <const> = evr:find("^(%d+):")
+macros[name .. "_epoch"] = epoch
 
-    <div class="bodycontent">
+local release_start, _, release <const> = evr:find("%-([^-]+)$")
+macros[name .. "_release"] = release
 
+local version_start, version_end = 0, -1
+if epoch_end then version_start = epoch_end + 1 end
+if release_start then version_end = release_start -1 end
 
-<div class="container p-t-3">
-  <div class="row">
-    <div class="col-md-8">
-      <h2>Page not found (404)</h2>
-      <p>With the message:</p>
-      <div class="card-block">
-      <p>File not found</p>
-      </div>
-      <p>You have either entered a bad URL or the page has moved, removed, or otherwise rendered unavailable.<br/>
-      Please use the main navigation menu to get (re)started.</p>
-    </div>
-  </div>
-</div>
-    </div>
+local version <const> = evr:sub(version_start, version_end)
+macros[name .. "_version"] = version
 
-        <div class="footer pt-4 text-white">
-        <div class="container">
-            <div class="d-flex align-items-center">
-                <div>
-                    <div>Powered by <a href="https://pagure.io/pagure" class="notblue">Pagure</a> 5.14.1</div>
-                    <div>
-                        <a href="https://docs.pagure.org/pagure/usage/index.html" class="notblue">Documentation</a> &bull;
-                        <a href="https://pagure.io/pagure/new_issue" class="notblue">File an Issue</a> &bull;
-                        <a href="/about">About this Instance</a> &bull;
-                        <a href="/ssh_info" class="notblue">SSH Hostkey/Fingerprint</a>
-                    </div>
-                </div>
-                <div class="ml-auto text-right">
-                    <div>&copy; Red Hat, Inc. and others.</div>
-                </div>
-            </div>
-        </div>
-    </div>
+if opt.p then
+    local parts = {}; for p in version:gmatch("[^.]+") do table.insert(parts, p) end
+    macros[name .. "_version_major"] = parts[1]
+    macros[name .. "_version_minor"] = parts[2]
+    macros[name .. "_version_patch"] = parts[3]
+end
+}
 
+# --- Declare vendored dependency
+# Emits bcond-controlled RPM tags for a (potentially) vendored dependency.
+#
+# By default, it emits `Provides: bundled(<name>) = <version>` for given arguments.
+# If de-vendoring option is provided, also defines a bcond that controls whether to de-vendor or not.
+# The default is to de-vendor when possible unless a global bcond (`all_deps_bundled`) is set.
+#
+# Options:
+# -a              : Autoversion – try using `<name>_version` macro if the version argument is empty.
+# -n[npmname,...] : Also provide the respective npm module name when vendoring.
+# -p[pkgname,...] : Use pkgconfig to BuildRequire de-vendored dependency.
+# -r[rpmname,...] : Also explicitly declare run time requirement.
+# -s[rpmname,...] : BuildRequire de-vendored dependency by RPM name.
+#
+# All above options accept optional parameter overriding the component name in respective tag.
+# If needed, multiple values can be requested by separating them with a comma.
+#
+# When a name is used in a macro context (for example, in the -a option),
+# the same name-mangling as for nodejs_define_version is used;
+# no need to adjust it by hand.
+#
+# Arguments:
+# 1: Name of the vendored component. Should be appropriate for `Provides: bundled(<name>)` tag.
+# 2: Version of the vendored component. Ignored if de-vendored.
+%nodejs_declare_bundled(an::p::r::s::) %{lua:
+local component <const> = arg[1] or error("Vendored component was not named!")
+local version   <const> = arg[2] or (opt.a and macros[component:gsub("-", "_") .. "_version"]) or error("Missing component version!")
 
-    <script type="text/javascript" nonce="fAjw4VZnADS1ylf8QQ760bwYs" src="/static/vendor/jquery/jquery.min.js?version=5.14.1"></script>
+local mapvalues <const> = function(fn, tbl)
+    local output = {}; for _, val in ipairs(tbl) do table.insert(output, fn(val)) end; return output
+end
+local splitnames <const> = function(input)
+    local output = {}; for m in input:gmatch("[^,]+") do table.insert(output, m) end; return output
+end
+local nl <const> = string.char(10);  -- \n does not work in rpmlua
 
-    <script src="/static/vendor/bootstrap/bootstrap.bundle.min.js?version=5.14.1"></script>
+local possible_to_devendor <const> = opt.p or opt.s
+local should_devendor <const> = possible_to_devendor and macros.with{"all_deps_bundled"} == "0"
 
-    <script type="text/javascript" nonce="fAjw4VZnADS1ylf8QQ760bwYs">
-      $('[data-toggle="tooltip"]').tooltip({placement : 'bottom'});
-      $(".cancel_btn").click(function() {
-        history.back();
-      });
-    </script>
+local bcond_name <const> = "bundled_" .. component:gsub("-", "_")
+macros.bcond{bcond_name, should_devendor and "0" or "1"}
 
-</body>
-</html>
+if macros.with{bcond_name} == "1" then
+    local provides = {string.format("bundled(%s) = %s", component, version)}
+    if opt.n then
+        local names = {component}; if opt.n ~= "" then names = splitnames(opt.n) end
+        for _, name in ipairs(names) do
+            table.insert(provides, string.format("npm(%s) = %s", name, version))
+        end
+    end
+    return "Provides: " .. table.concat(provides, ", ")
+end
+
+local buildrequire, require = nil, nil
+if opt.p then
+    local format <const> = function(n) return string.format("pkgconfig(%s)", n) end
+    local names = {component}; if opt.p ~= "" then names = splitnames(opt.p) end
+    buildrequire = "BuildRequires: " .. table.concat(mapvalues(format, names), ", ")
+elseif opt.s then
+    local names = {component}; if opt.s ~= "" then names = splitnames(opt.s) end
+    buildrequire = "BuildRequires: " .. table.concat(names, ", ")
+end
+if opt.r then
+    local names = {component}; if opt.r ~= "" then names = splitnames(opt.r) end
+    require = "Requires: " .. table.concat(names, ", ")
+end
+
+return table.concat({buildrequire, require}, nl)
+}

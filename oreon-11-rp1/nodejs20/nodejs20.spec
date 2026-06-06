@@ -1,9 +1,8 @@
 %global source0_hash none
 
+%{load:%{_sourcedir}/nodejs.srpm.macros}
 # This should be moved to rpm-redhat-config or similar as soon as feasible
 # NOTE: %%SOURCE macros are not yet defined, so explicit path is needed
-%{load:nodejs.srpm.macros}
-
 # === Versions of any software shipped in the main nodejs tarball
 %nodejs_define_version node 1:20.20.2-%{autorelease} -p
 
@@ -135,7 +134,7 @@ Provides:   nodejs(abi) = %{node_soversion}, nodejs(abi%{node_version_major}) = 
 Provides:   nodejs(engine) = %{node_version}
 
 # Main source tarball; see packaging/make-nodejs-tarball.sh on how it is created
-Source:         https://nodejs.org/dist/v%{node_version}/node-v%{node_version}.tar.gz
+Source:         https://nodejs.org/dist/v%{node_version}/node-v%{node_version}.tar.gz#/nodejs20-%{node_version}.tar.gz
 # Sources 001-099: reserved for additional sources to be installed
 # - Full ICU database data
 Source001:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-b.zip
@@ -429,7 +428,7 @@ popd  # from ${RPM_BUILD_ROOT}%%{_defaultdocdir}
 # === Full ICU data installation
 # Unzip the data themselves, and make the appropriate documentation available for %%doc
 if test "$(%{python3} -Ic 'import sys; print(sys.byteorder)')" = "little"; then
-readonly icu_source='%{SOURCE2}' icu_data_file='icudt%{icu_version_major}l.dat'
+readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}l.dat'
 else
 readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}b.dat'
 fi

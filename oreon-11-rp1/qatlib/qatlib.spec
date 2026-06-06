@@ -17,7 +17,7 @@ BuildRequires:    systemd gcc make autoconf autoconf-archive automake libtool sy
 Recommends:       qatlib-service
 # https://bugzilla.redhat.com/show_bug.cgi?id=1897661
 ExcludeArch:      %{arm} aarch64 %{power64} s390x i686 riscv64
-Patch0:           force-32-bit-MMIO-CSR-reads.patch
+Patch0:        force-32-bit-MMIO-CSR-reads.patch
 
 %description
 Intel QuickAssist Technology (Intel QAT) provides hardware acceleration

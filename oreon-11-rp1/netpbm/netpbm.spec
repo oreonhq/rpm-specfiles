@@ -13,24 +13,24 @@ URL: http://netpbm.sourceforge.net/
 # svn checkout https://svn.code.sf.net/p/netpbm/code/trunk/test netpbm-%%{version}/test
 # and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
 Source0:         netpbm-%{version}.tar.xz
-Patch1:          netpbm-security-code.patch
-Patch2:          netpbm-ppmfadeusage.patch
-Patch3:          netpbm-CVE-2017-2587.patch
-Patch4:          netpbm-python3.patch
-Patch5:          netpbm-time.patch
-Patch6:          netpbm-gcc4.patch
-Patch7:          netpbm-bmptopnm.patch
-Patch8:          netpbm-CAN-2005-2471.patch
-Patch9:          netpbm-xwdfix.patch
-Patch10:         netpbm-multilib.patch
-Patch11:         netpbm-glibc.patch
-Patch12:         netpbm-docfix.patch
-Patch13:         netpbm-pamtojpeg2k.patch
-Patch14:         netpbm-manfix.patch
-Patch15:         netpbm-jasper.patch
-Patch16:         netpbm-libdir-so.patch
-Patch17:         netpbm-c99.patch
-Patch18:         netpbm-shlib-ldflags.patch
+Patch1:        netpbm-security-code.patch
+Patch2:        netpbm-ppmfadeusage.patch
+Patch3:        netpbm-CVE-2017-2587.patch
+Patch4:        netpbm-python3.patch
+Patch5:        netpbm-time.patch
+Patch6:        netpbm-gcc4.patch
+Patch7:        netpbm-bmptopnm.patch
+Patch8:        netpbm-CAN-2005-2471.patch
+Patch9:        netpbm-xwdfix.patch
+Patch10:        netpbm-multilib.patch
+Patch11:        netpbm-glibc.patch
+Patch12:        netpbm-docfix.patch
+Patch13:        netpbm-pamtojpeg2k.patch
+Patch14:        netpbm-manfix.patch
+Patch15:        netpbm-jasper.patch
+Patch16:        netpbm-libdir-so.patch
+Patch17:        netpbm-c99.patch
+Patch18:        netpbm-shlib-ldflags.patch
 
 BuildRequires:   make
 BuildRequires:   subversion

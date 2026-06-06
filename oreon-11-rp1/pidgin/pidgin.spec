@@ -166,13 +166,13 @@ Source0:        https://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.b
 Source1:        purple-fedora-prefs.xml
 
 ## Patches 0-99: Fedora specific or upstream wont accept
-Patch0:         pidgin-NOT-UPSTREAM-2.5.2-rhel4-sound-migration.patch
-Patch1:         pidgin-2.14.4-valgrind.patch
+Patch0:        pidgin-NOT-UPSTREAM-2.5.2-rhel4-sound-migration.patch
+Patch1:        pidgin-2.14.4-valgrind.patch
 
 # Taken from https://reviews.imfreedom.org/r/4404/ to fix a crash on fedora >= 44:
 # https://issues.imfreedom.org/issue/PIDGIN-18152/Pidgin-Keeps-Crashing-and-I-dont-know-why
 # https://bugzilla.redhat.com/show_bug.cgi?id=2441401
-Patch100:       pidgin-rb4404.patch
+Patch100:        pidgin-rb4404.patch
 
 ## Patches 100+: To be Included in Future Upstream
 

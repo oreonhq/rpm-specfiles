@@ -117,33 +117,33 @@ Source10:        macros.qt6-qtwebengine
 Source20:        pulseaudio-12.2-headers.tar.gz
 
 # workaround FTBFS against kernel-headers-5.2.0+
-Patch1:   qtwebengine-SIOCGSTAMP.patch
-Patch2:   qtwebengine-link-pipewire.patch
+Patch1:        qtwebengine-SIOCGSTAMP.patch
+Patch2:        qtwebengine-link-pipewire.patch
 # Fix/workaround FTBFS on aarch64 with newer glibc
-Patch3:   qtwebengine-aarch64-new-stat.patch
+Patch3:        qtwebengine-aarch64-new-stat.patch
 
 # Enable OpenH264
-Patch4:   qtwebengine-use-openh264.patch
+Patch4:        qtwebengine-use-openh264.patch
 
 # FTBFS - /usr/include/bits/siginfo-consts.h:219:3: error: expected identifier
 # 219 |   SYS_SECCOMP = 1,              /* Seccomp triggered.  */
-Patch5:   qtwebengine-chromium-141-glibc-2.42-SYS_SECCOMP.patch
+Patch5:        qtwebengine-chromium-141-glibc-2.42-SYS_SECCOMP.patch
 
 ## Upstream patches:
 # https://bugreports.qt.io/browse/QTBUG-129985
-Patch80:  qtwebengine-fix-arm-build.patch
+Patch80:        qtwebengine-fix-arm-build.patch
 
 ## Upstreamable patches:
-Patch101: qtwebengine-fix-build-against-gcc16.patch
-Patch102: qtwebengine-fix-delay-signature.patch
+Patch101:        qtwebengine-fix-build-against-gcc16.patch
+Patch102:        qtwebengine-fix-delay-signature.patch
 
 ## ppc64le port
-Patch200: qtwebengine-6.9-ppc64.patch
-Patch201: qtwebengine-chromium-ppc64.patch
+Patch200:        qtwebengine-6.9-ppc64.patch
+Patch201:        qtwebengine-chromium-ppc64.patch
 # https://github.com/google/highway/commit/dcc0ca1cd4245ecff9e5ba50818e47d5e2ccf699
-Patch202: qtwebengine-chromium-ppc64-highway.patch
+Patch202:        qtwebengine-chromium-ppc64-highway.patch
 # disable musttail attribute for GCC build
-Patch203: qtwebengine-chromium-ppc64-skia-musttail.patch
+Patch203:        qtwebengine-chromium-ppc64-skia-musttail.patch
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 ExclusiveArch: %{qt6_qtwebengine_arches}

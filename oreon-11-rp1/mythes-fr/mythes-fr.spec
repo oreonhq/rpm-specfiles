@@ -17,7 +17,8 @@ French thesaurus.
 %prep
 _zip="thesaurus-v%{version}.zip"
 if test ! -f "$_zip"; then
-  curl -sfL -o "$_zip" "https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip"
+  curl -sfL -o "$_zip" "https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip" || \
+    rpm2cpio _src.rpm | cpio -id "$_zip" && rm -f _src.rpm
 fi
 %setup -q -c
 

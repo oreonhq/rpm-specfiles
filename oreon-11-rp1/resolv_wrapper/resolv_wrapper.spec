@@ -14,7 +14,7 @@ Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        resolv_wrapper.keyring
 
-Patch0:         resolv_wrapper-fix-cmocka-1.1.6+-support.patch
+Patch0:        resolv_wrapper-fix-cmocka-1.1.6%2B-support.patch
 
 BuildRequires:  gcc
 BuildRequires:  gnupg2

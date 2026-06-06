@@ -119,7 +119,7 @@ Source12:        mysql-prepare-db-dir.sh
 Source14:        mysql-check-socket.sh
 Source15:        mysql-scripts-common.sh
 Source17:        mysql-wait-stop.sh
-Source18:        mysql@.service.in
+Source18:        mysql%40.service.in
 # To track rpmlint warnings
 Source30:         %{name}.rpmlintrc
 # Configuration for server
@@ -145,7 +145,7 @@ Patch54:          %{pkgnamepatch}-gcc-15.patch
 Patch56:          %{pkgnamepatch}-flush-logrotate.patch
 
 # Patches taken from boost 1.59
-Patch112:         boost-1.57.0-mpl-print.patch
+Patch112:        boost-1.57.0-mpl-print.patch
 
 # This macro is used for package/sub-package names in the entire specfile
 %if %?mysql_default

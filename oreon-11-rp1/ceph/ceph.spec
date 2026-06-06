@@ -199,31 +199,31 @@ Group:		System/Filesystems
 URL:		http://ceph.com/
 Source:        https://download.ceph.com/tarballs/ceph-%{version}.tar.gz
 #Source0:	https://1.chacra.ceph.com/r/ceph/tentacle/
-Patch:		0001-src-common-crc32c_intel_fast.patch
-Patch:		0003-src-common-bitstr.h.patch
-Patch:		0010-CET-Add-CET-marker-to-crc32c_intel_fast_zero_asm.s.patch
-Patch:		0011-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assembly-co.patch
-Patch:		0012-spdk-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assemb.patch
-Patch:		0016-src-tracing.patch
-Patch:		0018-src-rgw-store-dbstore-CMakeLists.txt.patch
-Patch:		0024-gcc-13.patch
-Patch:		0032-cmake-modules-BuildBoost.cmake.patch
-Patch:		0033-boost-asm.patch
-Patch:		0034-src-pybind-rbd-rbd.pyx.patch
-Patch:		0041-src-mgr-PyModule.cc.patch
-Patch:		0043_src_common_crc32c_ppc_asm.S.patch
-Patch:		0047-openssl-no-engine.patch
-Patch:		0049-src-rocksdb-db-blob-blob_file_meta.h.patch
-Patch:		0051-src-googletest-nosharedlibs.patch
-Patch:		0052-src-tracing.patch
-Patch:		0053-src-test-neorados-common_tests.h.patch
-Patch:		0056-libarrow-20.0.0.patch
-Patch:		0057-src-json_spirit-json_spirit_reader_template.h.patch
-Patch:		0058-src-CMakeLists.txt.patch
-Patch:		0059-iso646.patch
-Patch:		0061-gcc-16.patch
-Patch:		0062-src-rgw-driver-dbstore-CMakeLists.txt.patch
-Patch:		0063-src-jaegertracing-opentelemetry-cpp-CMakeLists.txt.patch
+Patch:        0001-src-common-crc32c_intel_fast.patch
+Patch:        0003-src-common-bitstr.h.patch
+Patch:        0010-CET-Add-CET-marker-to-crc32c_intel_fast_zero_asm.s.patch
+Patch:        0011-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assembly-co.patch
+Patch:        0012-spdk-isa-l-CET-Add-CET-marker-to-x86-64-crc32-assemb.patch
+Patch:        0016-src-tracing.patch
+Patch:        0018-src-rgw-store-dbstore-CMakeLists.txt.patch
+Patch:        0024-gcc-13.patch
+Patch:        0032-cmake-modules-BuildBoost.cmake.patch
+Patch:        0033-boost-asm.patch
+Patch:        0034-src-pybind-rbd-rbd.pyx.patch
+Patch:        0041-src-mgr-PyModule.cc.patch
+Patch:        0043_src_common_crc32c_ppc_asm.S.patch
+Patch:        0047-openssl-no-engine.patch
+Patch:        0049-src-rocksdb-db-blob-blob_file_meta.h.patch
+Patch:        0051-src-googletest-nosharedlibs.patch
+Patch:        0052-src-tracing.patch
+Patch:        0053-src-test-neorados-common_tests.h.patch
+Patch:        0056-libarrow-20.0.0.patch
+Patch:        0057-src-json_spirit-json_spirit_reader_template.h.patch
+Patch:        0058-src-CMakeLists.txt.patch
+Patch:        0059-iso646.patch
+Patch:        0061-gcc-16.patch
+Patch:        0062-src-rgw-driver-dbstore-CMakeLists.txt.patch
+Patch:        0063-src-jaegertracing-opentelemetry-cpp-CMakeLists.txt.patch
 
 # ceph 14.0.1 does not support 32-bit architectures, bugs #1727788, #1727787
 ExcludeArch:	i686 armv7hl
@@ -1395,7 +1395,7 @@ This package provides a Ceph hardware monitoring agent.
 #################################################################################
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n ceph-20.2.1
 
 # Create two sysusers.d config files
 cat >ceph.sysusers.conf <<EOF

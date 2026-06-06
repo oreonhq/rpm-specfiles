@@ -120,18 +120,18 @@ Source20:        check-debug-symbols.py
 Source21:        dotnet.sh.in
 
 # https://github.com/dotnet/runtime/pull/95216#issuecomment-1842799314
-Patch0:         runtime-re-enable-implicit-rejection.patch
+Patch0:        runtime-re-enable-implicit-rejection.patch
 # We disable checking the signature of the last certificate in a chain if the certificate is supposedly self-signed.
 # A side effect of not checking the self-signature of such a certificate is that disabled or unsupported message
 # digests used for the signature are not treated as fatal errors.
 # https://issues.redhat.com/browse/RHEL-25254
-Patch1:         runtime-openssl-sha1.patch
+Patch1:        runtime-openssl-sha1.patch
 # fix an error caused by combining Fedora's CFLAGS with how .NET builds some assembly files
-Patch2:         runtime-disable-fortify-on-ilasm-parser.patch
+Patch2:        runtime-disable-fortify-on-ilasm-parser.patch
 # Fix parsing a test project on ppc64le
-Patch3:         roslyn-analyzers-ppc64le-apphost.patch
+Patch3:        roslyn-analyzers-ppc64le-apphost.patch
 # https://github.com/dotnet/runtime/issues/119706
-Patch4:         runtime-119706-clang-21.patch
+Patch4:        runtime-119706-clang-21.patch
 
 
 ExclusiveArch:  aarch64 ppc64le s390x x86_64

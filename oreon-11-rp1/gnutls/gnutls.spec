@@ -9,10 +9,10 @@ Release: %{?autorelease}%{!?autorelease:1%{?dist}}
 # Source/Patch under %%_specdir at parse time, which breaks rpmspec and any prep
 # before SOURCES exist. Use a short hash of version-release instead.
 %global srpmhash %(echo %{version}-%{release} | sha256sum | awk '{print substr($1,1,16)}')
-Patch: gnutls-3.2.7-rpath.patch
+Patch:        gnutls-3.2.7-rpath.patch
 
 # follow https://gitlab.com/gnutls/gnutls/-/issues/1443
-Patch: gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
+Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without bootstrap
 %bcond_without dane
@@ -131,8 +131,8 @@ Source2:        https://gnutls.org/gnutls-release-keyring.gpg
 Provides:	bundled(gmp) = 6.2.1
 Source100:	https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
 # Taken from the main gmp package
-Source101:	gmp-6.2.1-intel-cet.patch
-Source102:	gmp-6.2.1-c23.patch
+Source101:        gmp-6.2.1-intel-cet.patch
+Source102:        gmp-6.2.1-c23.patch
 %endif
 
 %if %{with leancrypto}
@@ -263,7 +263,7 @@ for MinGW.
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -p1 -S git
+%autosetup -p1 -S git -n gnutls-3.8.12
 
 %if %{with bundled_gmp}
 mkdir -p bundled_gmp

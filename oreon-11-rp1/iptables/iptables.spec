@@ -19,18 +19,18 @@ URL: https://www.netfilter.org/projects/iptables
 Version: 1.8.13
 Release: 1%{?dist}
 Source0:        https://www.netfilter.org/projects/iptables/files/iptables-1.8.13.tar.xz
-source1: %{url}/files/%{name}-%{version}.tar.xz.sig
-Source2: coreteam-gpg-key-0xD70D1A666ACF2B21.txt
-Source3: iptables.init
-Source4: iptables-config
-Source5: iptables.service
-Source6: sysconfig_iptables
-Source7: sysconfig_ip6tables
-Source8: arptables-helper
-Source9: arptables.service
-Source10: ebtables.service
-Source11: ebtables-helper
-Source12: ebtables-config
+Source1:        https://www.netfilter.org/projects/iptables/files/iptables-%{version}.tar.xz.sig
+Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
+Source3:        iptables.init
+Source4:        iptables-config
+Source5:        iptables.service
+Source6:        sysconfig_iptables
+Source7:        sysconfig_ip6tables
+Source8:        arptables-helper
+Source9:        arptables.service
+Source10:        ebtables.service
+Source11:        ebtables-helper
+Source12:        ebtables-config
 
 # pf.os: ISC license
 # iptables-apply: Artistic Licence 2.0

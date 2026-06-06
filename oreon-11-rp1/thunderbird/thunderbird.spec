@@ -137,21 +137,21 @@ Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
 
-Source10:       thunderbird-mozconfig
-Source11:       thunderbird-mozconfig-branded
-Source12:       thunderbird-redhat-default-prefs.js
-Source21:       thunderbird.sh.in
-Source25:       thunderbird-symbolic.svg
-Source28:       thunderbird-wayland.sh.in
-Source29:       thunderbird-wayland.desktop
-Source32:       node-stdout-nonblocking-wrapper
-Source33:       net.thunderbird.Thunderbird.desktop
-Source34:       net.thunderbird.Thunderbird.appdata.xml
+Source10:        thunderbird-mozconfig
+Source11:        thunderbird-mozconfig-branded
+Source12:        thunderbird-redhat-default-prefs.js
+Source21:        thunderbird.sh.in
+Source25:        thunderbird-symbolic.svg
+Source28:        thunderbird-wayland.sh.in
+Source29:        thunderbird-wayland.desktop
+Source32:        node-stdout-nonblocking-wrapper
+Source33:        net.thunderbird.Thunderbird.desktop
+Source34:        net.thunderbird.Thunderbird.appdata.xml
 
-Patch418:       mozilla-1512162.patch
+Patch418:        mozilla-1512162.patch
 # gcc 12 build fix patches
-Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
-Patch425:       build-disable-elfhack.patch
+Patch422:        0001-GLIBCXX-fix-for-GCC-12.patch
+Patch425:        build-disable-elfhack.patch
 
 # Build patches
 Patch32:        build-rust-ppc64le.patch
@@ -172,7 +172,7 @@ Patch83:        build-seccomp.patch
 # Fedora specific patches
 
 # Upstream patches
-Patch402:       mozilla-526293.patch
+Patch402:        mozilla-526293.patch
 Patch406:        mozilla-1170092.patch
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1998188
 # this is the Firefox patch, manually rediffed against 146.0.1

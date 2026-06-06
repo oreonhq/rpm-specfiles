@@ -18,7 +18,7 @@ Source0:        https://github.com/DrMichaelPetter/cup/archive/c35ed3ab0cde2310a
 Source2:        %{name}-MANIFEST.MF
 Source4:        %{name}-runtime-MANIFEST.MF
 
-Patch:          0001-Adopt-build-script.patch
+Patch:        0001-Adopt-build-script.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

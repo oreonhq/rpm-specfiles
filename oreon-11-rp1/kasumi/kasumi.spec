@@ -19,7 +19,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: gtk3-devel anthy-unicode-devel
 Requires: %{name}-common = %{version}-%{release}
-Source0:        https://deb.debian.org/debian/pool/main/k/kasumi/kasumi_2.5+debian2.orig.tar.gz
+Source0:        https://downloads.sourceforge.net/project/kasumi/kasumi/%{version}/kasumi-%{version}.tar.gz
 Patch0:        kasumi-853099-manpage.patch
 Patch1:        kasumi-1928410-gtk3.patch
 Patch2:        kasumi-check-anthy-pkg.patch

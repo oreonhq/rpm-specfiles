@@ -59,7 +59,7 @@ Applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n lsb-samples-%{gitversion}
+%setup -q -n lsb-samples-a25a4fcd73c7
 test -d redhat-lsb || ln -s . redhat-lsb
 
 %build

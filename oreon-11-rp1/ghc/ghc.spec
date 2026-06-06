@@ -83,21 +83,21 @@ Source6:        haddock.man
 Source7:        runghc.man
 
 # absolute haddock path (was for html/libraries -> libraries)
-Patch1: ghc-gen_contents_index-haddock-path.patch
-Patch2: ghc-Cabal-install-PATH-warning.patch
-Patch3: ghc-gen_contents_index-nodocs.patch
-Patch4: disable-Cabal-upperbounds-check-warning.patch
+Patch1:        ghc-gen_contents_index-haddock-path.patch
+Patch2:        ghc-Cabal-install-PATH-warning.patch
+Patch3:        ghc-gen_contents_index-nodocs.patch
+Patch4:        disable-Cabal-upperbounds-check-warning.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2430571
 # https://gitlab.haskell.org/ghc/ghc/-/issues/26792 (hadrian speedhack)
 Patch5: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15370.patch
 # https://github.com/haskell/cabal/issues/9734
-Patch6: Cabal-configure-ghc-version-warning.patch
+Patch6:        Cabal-configure-ghc-version-warning.patch
 
 # for unregisterized
-Patch16: ghc-hadrian-s390x-rts--qg.patch
+Patch16:        ghc-hadrian-s390x-rts--qg.patch
 
-Patch26: no-missing-haddock-file-warning.patch
-Patch27: haddock-remove-googleapis-fonts.patch
+Patch26:        no-missing-haddock-file-warning.patch
+Patch27:        haddock-remove-googleapis-fonts.patch
 
 # ppc64le (included in debian and 9.16)
 # https://gitlab.haskell.org/ghc/ghc/-/issues/24145
@@ -105,12 +105,12 @@ Patch27: haddock-remove-googleapis-fonts.patch
 Patch30: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/11578.patch
 
 # riscv64
-Patch40: riscv64-ncg.patch
+Patch40:        riscv64-ncg.patch
 
 # ppc64le
 # https://bugzilla.redhat.com/show_bug.cgi?id=2435862
 # https://gitlab.haskell.org/ghc/ghc/-/issues/26870
-Patch45: ghc-9.10-rts.cabal-ppc64le.patch
+Patch45:        ghc-9.10-rts.cabal-ppc64le.patch
 
 # https://github.com/haskell/directory/pull/184
 Patch50: https://patch-diff.githubusercontent.com/raw/haskell/directory/pull/184.patch

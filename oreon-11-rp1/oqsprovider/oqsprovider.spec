@@ -13,10 +13,10 @@ Source0:        https://github.com/open-quantum-safe/oqs-provider/archive/refs/t
 Source1:        oqsprovider.conf
 
 # https://github.com/open-quantum-safe/oqs-provider/pull/603
-Patch01:    01-remove-prenist.patch
+Patch01:        01-remove-prenist.patch
 # https://github.com/open-quantum-safe/oqs-provider/pull/606
-Patch02:    02-mlkem1024-hybrid.patch
-Patch03:    03-iana-kem-only.patch
+Patch02:        02-mlkem1024-hybrid.patch
+Patch03:        03-iana-kem-only.patch
 
 Requires: liboqs >= %{liboqs_min_version}
 Requires: openssl

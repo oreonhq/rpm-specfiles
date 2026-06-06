@@ -14,7 +14,7 @@ Source:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-
 Source1:        libservicelog.sysusers.conf
 
 # Link with needed libraries
-Patch0: libservicelog-1.1.9-libs.patch
+Patch0:        libservicelog-1.1.9-libs.patch
 
 # sysusers_create_compat macro
 BuildRequires: systemd-rpm-macros

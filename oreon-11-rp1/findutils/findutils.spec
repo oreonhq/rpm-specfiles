@@ -14,25 +14,25 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
 # From https://savannah.gnu.org/project/release-gpgkeys.php?group=findutils&download=1
 # which is linked as project keyring on https://savannah.gnu.org/projects/findutils
-Source2: findutils-keyring.gpg
+Source2:        findutils-keyring.gpg
 
 # do not build locate
-Patch1:  findutils-4.5.15-no-locate.patch
+Patch1:        findutils-4.5.15-no-locate.patch
 
 # add -xautofs option to not descend into directories on autofs file systems
-Patch2:  findutils-4.4.2-xautofs.patch
+Patch2:        findutils-4.4.2-xautofs.patch
 
 # eliminate compile-time warnings
-Patch3:  findutils-4.5.13-warnings.patch
+Patch3:        findutils-4.5.13-warnings.patch
 
 # test-lock: disable the rwlock test
-Patch4:  findutils-4.6.0-test-lock.patch
+Patch4:        findutils-4.6.0-test-lock.patch
 
 # implement the -noleaf option of find (#1252549)
-Patch5:  findutils-4.6.0-leaf-opt.patch
+Patch5:        findutils-4.6.0-leaf-opt.patch
 
 # fix find not obeying -ignore_readdir_race in symlink_loop (#2232278)
-Patch6:  findutils-4.9.0-ignore_readdir_race-symlink_loop.patch
+Patch6:        findutils-4.9.0-ignore_readdir_race-symlink_loop.patch
 
 Conflicts: filesystem < 3
 Provides: /bin/find
@@ -64,7 +64,7 @@ useful for finding things on your system.
 %prep
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -N -S git
+%autosetup -N -S git -n findutils-4.10.0
 
 # drop the source code of locate
 git rm -q -r locate

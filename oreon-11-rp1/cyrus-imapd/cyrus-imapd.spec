@@ -45,44 +45,44 @@ URL: http://www.cyrusimap.org/
 Source0:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}%{?prever:-%prever}/cyrus-imapd-%{version}%{?prever:-%prever}.tar.gz
 Source1:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}%{?prever:-%prever}/cyrus-imapd-%{version}%{?prever:-%prever}.tar.gz.sig
 # Ellie Timoney's public key from https://github.com/elliefm.gpg
-Source2: elliefm-pub.key
-Source10: cyrus-imapd.logrotate
-Source11: cyrus-imapd.pam-config
-Source12: cyrus-imapd.sysconfig
-Source13: cyrus-imapd.magic
+Source2:        elliefm-pub.key
+Source10:        cyrus-imapd.logrotate
+Source11:        cyrus-imapd.pam-config
+Source12:        cyrus-imapd.sysconfig
+Source13:        cyrus-imapd.magic
 # XXX A systemd timer would probably be better
-Source14: cyrus-imapd.cron-daily
+Source14:        cyrus-imapd.cron-daily
 Source15: README.rpm
-Source16: cyrus-imapd.service
-Source17: cyrus-imapd-init.service
-Source18: systemd-tmpfiles.conf
-Source19: systemd-sysusers.conf
+Source16:        cyrus-imapd.service
+Source17:        cyrus-imapd-init.service
+Source18:        systemd-tmpfiles.conf
+Source19:        systemd-sysusers.conf
 
 # A template config file for cassandane; we will substitute in varions values.
-Source81: cassandane.ini
+Source81:        cassandane.ini
 
 # Adapt a timeout to handle our slower builders
-Patch0: cyrus-imapd-testsuite-timeout.patch
+Patch0:        cyrus-imapd-testsuite-timeout.patch
 # Fedora-specific patch for the default configuration file
-Patch1: cyrus-imapd-default-configs.patch
+Patch1:        cyrus-imapd-default-configs.patch
 # We rename quota to cyr_quota to avoid a conflict with /usr/bin/quota; one
 # place in the source must be patched to match.
-Patch2: cyrus-imapd-rename-quota.patch
+Patch2:        cyrus-imapd-rename-quota.patch
 # cyrus-imapd does not support LTO
 # https://github.com/cyrusimap/cyrus-imapd/pull/4679
 # Remove attribute always_inline to fix compilation error and keep LTO enabled:
 # https://bugzilla.redhat.com/show_bug.cgi?id=2223951
-Patch3: cyrus-imapd-remove-always-inline-for-buf-len.patch
-Patch4: cyrus-imapd-rename-imtest.patch
+Patch3:        cyrus-imapd-remove-always-inline-for-buf-len.patch
+Patch4:        cyrus-imapd-rename-imtest.patch
 
 # Cassandane patches:
 # Prevent cassandane from trying to syslog things
-Patch91: cassandane-no-syslog.patch
+Patch91:        cassandane-no-syslog.patch
 # Tell the annotator script to run as the current user/group
 # Upstream ticket https://github.com/cyrusimap/cyrus-imapd/issues/1995
-Patch92: cassandane-fix-annotator.patch
+Patch92:        cassandane-fix-annotator.patch
 # Due to the /usr/sbin->/usr/bin merge, add /usr/bin path to the mix
-Patch93: cassandane-build-info.patch
+Patch93:        cassandane-build-info.patch
 
 BuildRequires: autoconf automake bison flex gcc gcc-c++ git glibc-langpack-en
 BuildRequires: groff libtool make perl-devel perl(ExtUtils::MakeMaker)

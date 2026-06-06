@@ -506,10 +506,10 @@ Summary: TeX formatting system
 License: Apache-2.0 AND Artistic-2.0 AND BSD-3-Clause AND GFDL-1.1-or-later AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND Knuth-CTAN AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND LPPL-1.3a AND LPPL-1.3c AND MIT AND OFL-1.1 AND LicenseRef-Public-Domain
 URL: http://tug.org/texlive/
 Source0:        https://tug.ctan.org/systems/texlive/Source/%{source_name}.tar.xz
-Source1: macros.texlive
+Source1:        macros.texlive
 Source2: https://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
 Source3: texlive-licenses.tar.xz
-Source4: generate-fmtutilcnf
+Source4:        generate-fmtutilcnf
 # These noarch components are packed wrong upstream (do not unpack into texmf-dist)
 Source5: https://tug.ctan.org/systems/texlive/tlnet/archive/cslatex.tar.xz
 Source6: https://tug.ctan.org/systems/texlive/tlnet/archive/cyrillic.tar.xz
@@ -985,49 +985,49 @@ Source465: https://tug.ctan.org/systems/texlive/tlnet/archive/xdvipsk.tar.xz
 Source466: https://tug.ctan.org/systems/texlive/tlnet/archive/xdvipsk.doc.tar.xz
 
 
-Patch1: tl-kpfix.patch
-Patch2: tl-format.patch
-Patch5: texlive-2016-kpathsea-texlive-path.patch
+Patch1:        tl-kpfix.patch
+Patch2:        tl-format.patch
+Patch5:        texlive-2016-kpathsea-texlive-path.patch
 # fixes from arch and upstream texlive
-Patch7: texlive-20210325-new-poppler.patch
+Patch7:        texlive-20210325-new-poppler.patch
 # fix texmf.cnf so that it finds texinfo bits in Fedora
-Patch8: texlive-base-20260301-texinfo-path-fix.patch
+Patch8:        texlive-base-20260301-texinfo-path-fix.patch
 # fix annocheck issue detected by rpmdiff
-Patch17: texlive-20180414-annocheck.patch
-Patch18: texlive-20210325-poppler-0.73.patch
+Patch17:        texlive-20180414-annocheck.patch
+Patch18:        texlive-20210325-poppler-0.73.patch
 # Since we need to include tlmgr.pl for texconfig
 # lets try to keep people from shooting themselves with it
-Patch21: texlive-20190410-tlmgr-ignore-warning.patch
-Patch23: texlive-20210325-poppler-0.84.patch
+Patch21:        texlive-20190410-tlmgr-ignore-warning.patch
+Patch23:        texlive-20210325-poppler-0.84.patch
 # Fixes for poppler 0.90 (f33+)
-Patch29: texlive-20200327-poppler-0.90.patch
+Patch29:        texlive-20200327-poppler-0.90.patch
 # Fix pdflatex run out of memory
-Patch30: texlive-base-20220321-out-of-memory.patch
+Patch30:        texlive-base-20220321-out-of-memory.patch
 # Fix configure to properly detect poppler
-Patch31: texlive-base-20210325-configure-poppler-xpdf-fix.patch
+Patch31:        texlive-base-20210325-configure-poppler-xpdf-fix.patch
 
 # Poppler 22
-Patch34: texlive-base-20210325-poppler-22.01.0.patch
+Patch34:        texlive-base-20210325-poppler-22.01.0.patch
 # Fix crash in handling Group
-Patch35: texlive-base-20210325-pdftoepdf-fix-crash.patch
+Patch35:        texlive-base-20210325-pdftoepdf-fix-crash.patch
 # Poppler 22.08.0
-Patch36: texlive-base-20220321-poppler-22.08.0.patch
+Patch36:        texlive-base-20220321-poppler-22.08.0.patch
 
 # libpaper v2 changes
 # 1. one psutils test needs adjustment, see https://github.com/rrthomas/libpaper/issues/23
-Patch37: texlive-base-libpaperv2.patch
+Patch37:        texlive-base-libpaperv2.patch
 
 # Fix issue where off_t could be set incorrectly on i686 due to order of header load
-Patch44: texlive-base-20220321-pdf-header-order-fix.patch
+Patch44:        texlive-base-20220321-pdf-header-order-fix.patch
 
 # Fix texmfcnf.lua for Fedora layout (thanks to Preining Norbert)
-Patch45: texlive-2026-fedora-texmfcnf.lua.patch
+Patch45:        texlive-2026-fedora-texmfcnf.lua.patch
 
 # Fix interpreter on perl scripts (thanks again to Debian)
-Patch46: texlive-base-20230311-fix-scripts.patch
+Patch46:        texlive-base-20230311-fix-scripts.patch
 
 # fix FTBFS with gcc-16
-Patch51: texlive-base-ftbfs-gcc16.patch
+Patch51:        texlive-base-ftbfs-gcc16.patch
 
 # Can't do this because it causes everything else to be noarch
 # BuildArch: noarch

@@ -18,7 +18,7 @@ Source0:        https://github.com/PyFilesystem/pyfilesystem2/archive/v%{version
 # Replace TestCase method aliases removed in Python 3.12
 # https://github.com/PyFilesystem/pyfilesystem2/pull/570
 # changelog fragment removed to avoid conflict
-Patch:          570.patch
+Patch:        570.patch
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

@@ -27,7 +27,7 @@ Source0:        https://lttng.org/files/lttng-ust/%{name}-%{version}.tar.bz2
 Source1:        https://lttng.org/files/lttng-ust/%{name}-%{version}.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
-Patch0:         lttng-gen-tp-shebang.patch
+Patch0:        lttng-gen-tp-shebang.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake

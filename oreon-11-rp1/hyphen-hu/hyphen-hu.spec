@@ -7,7 +7,7 @@ Version: 0.%{upstreamid}
 Release: 37%{?dist}
 # Source URL is dead now
 # Source: http://download.github.com/nagybence-huhyphn-aa3fc85.tar.gz
-Source:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+Source:        https://github.com/nagybence/huhyphn/archive/aa3fc85.tar.gz#/nagybence-huhyphn-aa3fc85.tar.gz
 URL: http://www.tipogral.hu/
 License: GPL-2.0-only
 BuildArch: noarch

@@ -50,29 +50,29 @@ Url:        https://www.gnu.org/software/%{name}/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz.sig
 # Obtained from a key server
-Source2:    gpgkey-F576AAAC1B0FF849792D8CB129A794FD2272BC86.gpg
+Source2:        gpgkey-F576AAAC1B0FF849792D8CB129A794FD2272BC86.gpg
 # Fix measuring time when a clock experiences a jump, bug #1004416,
 # <http://lists.gnu.org/archive/html/bug-gnu-utils/2013-09/msg00003.html>
-Patch0:     time-1.8-Prefer-clock_gettime-CLOCK_MONOTONIC.patch
+Patch0:        time-1.8-Prefer-clock_gettime-CLOCK_MONOTONIC.patch
 # Fix info directory entry
-Patch1:     time-1.9-Improve-info-directory-index-entry-description.patch
+Patch1:        time-1.9-Improve-info-directory-index-entry-description.patch
 # Clarify RSS size as kibibytes in a documentation, proposed to an upstream,
 # <https://lists.gnu.org/archive/html/bug-time/2020-07/msg00000.html>
-Patch2:     time-1.9-Use-kibibytes-instead-of-kilobytes-in-a-documentatio.patch
+Patch2:        time-1.9-Use-kibibytes-instead-of-kilobytes-in-a-documentatio.patch
 # Do not leak a file descriptor of the --output argument to a command,
 # proposed to an upstream,
 # <https://lists.gnu.org/archive/html/bug-time/2020-11/msg00001.html>
-Patch3:     time-1.9-Close-outfp-before-exec.patch
+Patch3:        time-1.9-Close-outfp-before-exec.patch
 # The time-max-rss.sh test randomly fails( mallocating 5 MB more does not have
 # to increase RSS in 5 MB). In addition there is regression in ppc64le kernel
 # (bug #2212765) which always fails.
-Patch4:     time-1.9-drop-flawed-rss-test.patch
+Patch4:        time-1.9-drop-flawed-rss-test.patch
 # Fix formatting a trailing backslash, proposed to the upstream,
 # <https://lists.gnu.org/archive/html/bug-time/2024-01/msg00000.html>
-Patch5:     time-1.9-Fix-formatting-a-trailing-backslash-and-a-percent-si.patch
+Patch5:        time-1.9-Fix-formatting-a-trailing-backslash-and-a-percent-si.patch
 # Fixes compiler error that occured after the switch to GCC15
 # <https://lists.gnu.org/archive/html/bug-time/2025-01/msg00000.html>
-Patch6:     time-1.9-Fix-compiling-with-GCC15.patch
+Patch6:        time-1.9-Fix-compiling-with-GCC15.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake

@@ -122,142 +122,142 @@ Recommends: kde-style-breeze%{?_isa}
 %endif
 
 # make kdelibs-devel parallel-installable with kdelibs3-devel
-Patch0: kdelibs-4.9.95-parallel_devel.patch
+Patch0:        kdelibs-4.9.95-parallel_devel.patch
 
 # backport: omit fake mimetypes
 # https://git.reviewboard.kde.org/r/117135/
-Patch1: kdelibs-no_fake_mimetypes.patch
+Patch1:        kdelibs-no_fake_mimetypes.patch
 
 # fix http://bugs.kde.org/149705
-Patch2: kdelibs-4.10.0-kde149705.patch
+Patch2:        kdelibs-4.10.0-kde149705.patch
 
 # search for plasma5 drkonqi too
-Patch3: kdelibs-4.14.25-plasma_drkonqi.patch
+Patch3:        kdelibs-4.14.25-plasma_drkonqi.patch
 
 # install all .css files and Doxyfile.global in kdelibs-common to build
 # kdepimlibs-apidocs against
-Patch8: kdelibs-4.3.90-install_all_css.patch
+Patch8:        kdelibs-4.3.90-install_all_css.patch
 
 # add Fedora/V-R to KHTML UA string
-Patch9: kdelibs-4.10.0-branding.patch
+Patch9:        kdelibs-4.10.0-branding.patch
 
 # adds the Administration menu from redhat-menus which equals System + Settings
 # This prevents the stuff getting listed twice, under both System and Settings.
-Patch12: kdelibs-4.10.0-xdg-menu.patch
+Patch12:        kdelibs-4.10.0-xdg-menu.patch
 
 # patch KStandardDirs to use %%{_libexecdir}/kde4 instead of %%{_libdir}/kde4/libexec
-Patch14: kdelibs-4.11.3-libexecdir.patch
+Patch14:        kdelibs-4.11.3-libexecdir.patch
 
 # kstandarddirs changes: search /etc/kde, find %%{_kde4_libexecdir}
-Patch18: kdelibs-4.11.97-kstandarddirs.patch
+Patch18:        kdelibs-4.11.97-kstandarddirs.patch
 
 # set build type
-Patch20: kdelibs-4.10.0-cmake.patch
+Patch20:        kdelibs-4.10.0-cmake.patch
 
 # die rpath die, since we're using standard paths, we can avoid
 # this extra hassle (even though cmake is *supposed* to not add standard
 # paths (like /usr/lib64) already! With this, we can drop
 # -DCMAKE_SKIP_RPATH:BOOL=ON (finally)
-Patch27: kdelibs-4.10.0-no_rpath.patch
+Patch27:        kdelibs-4.10.0-no_rpath.patch
 
 # kbuildsycoca4 VFolderMenu::loadDoc spam, always complains about
 # ~/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
 # unexpected EOF
-Patch48: kdelibs-4.14-14-vfolder_spam.patch
+Patch48:        kdelibs-4.14-14-vfolder_spam.patch
 
 # limit solid qDebug spam
 # http://bugzilla.redhat.com/882731
 # TODO: could make uptreamable and conditional only on Release-type builds
-Patch49: kdelibs-solid_qt_no_debug_output.patch
+Patch49:        kdelibs-solid_qt_no_debug_output.patch
 
 ## upstreamable
 # knewstuff2 variant of:
 # https://git.reviewboard.kde.org/r/102439/
-Patch50: kdelibs-4.7.0-knewstuff2_gpg2.patch
+Patch50:        kdelibs-4.7.0-knewstuff2_gpg2.patch
 
 # fix hunspell/myspell dict paths
-Patch51: kdelibs-4.14.9-myspell_paths.patch
+Patch51:        kdelibs-4.14.9-myspell_paths.patch
 
 # Toggle solid upnp support at runtime via env var SOLID_UPNP=1 (disabled by default)
-Patch52: kdelibs-4.10.0-SOLID_UPNP.patch
+Patch52:        kdelibs-4.10.0-SOLID_UPNP.patch
 
 # add s390/s390x support in kjs
-Patch53: kdelibs-4.7.2-kjs-s390.patch
+Patch53:        kdelibs-4.7.2-kjs-s390.patch
 
 # return valid locale (RFC 1766)
-Patch54: kdelibs-4.8.4-kjs-locale.patch
+Patch54:        kdelibs-4.8.4-kjs-locale.patch
 
 # borrow from  opensuse
 # https://build-test.opensuse.org/package/view_file/home:coolo:test/kdelibs4/0001-Drop-Nepomuk-from-KParts-LINK_INTERFACE_LIBRARIES.patch
-Patch55: Drop-Nepomuk-from-KParts-LINK_INTERFACE_LIBRARIES.patch
+Patch55:        Drop-Nepomuk-from-KParts-LINK_INTERFACE_LIBRARIES.patch
 
 # candidate fix for: kde deamon crash on wakeup
 # https://bugs.kde.org/show_bug.cgi?id=288410
-Patch56: kdelibs-kdebug288410.patch
+Patch56:        kdelibs-kdebug288410.patch
 
 # make filter working, TODO: upstream?  -- rex
-Patch59: kdelibs-4.9.3-kcm_ssl.patch
+Patch59:        kdelibs-4.9.3-kcm_ssl.patch
 
 # disable dot to reduce apidoc size
-Patch61: kdelibs-4.12.90-dot.patch
+Patch61:        kdelibs-4.12.90-dot.patch
 
 # workaround for bz#969524 on arm
-Patch62: kdelibs-4.11.3-arm.patch
+Patch62:        kdelibs-4.11.3-arm.patch
 
 # opening a terminal in Konqueror / Dolphin does not inherit environment variables
-Patch64: kdelibs-4.13.2-invokeTerminal.patch
+Patch64:        kdelibs-4.13.2-invokeTerminal.patch
 
 # gcc6 FTBFS: maybe easier/cleaner to build with: -std=gnu++98 or -Wno-error-narrowing
-Patch67: kdelibs-4.14.17-gcc6_narrowing_hack.patch
+Patch67:        kdelibs-4.14.17-gcc6_narrowing_hack.patch
 
 # build against OpenSSL 1.1 (patch by Wolfgang Bauer from openSUSE)
 # (The patch is a backport of the upstream KF5 patch by Daniel Vrátil.)
 # https://build.opensuse.org/package/view_file/openSUSE:Factory/kdelibs4/0001-Make-kssl-compile-against-OpenSSL-1.1.0.patch?expand=1
-Patch68: kdelibs-4.14.38-openssl-1.1.patch
+Patch68:        kdelibs-4.14.38-openssl-1.1.patch
 
 # fixed build failure with gcc-10, Case values are converted constant expressions, so narrowing conversions
 # are not permitted. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90805
-Patch69: kdelibs-4.14.38-gcc10.patch
+Patch69:        kdelibs-4.14.38-gcc10.patch
 
 # fix KIO only using TLS 1.0
 # (Backport by Kevin Kofler of upstream KF5 patch by Andrius Štikonas.)
 # https://commits.kde.org/kio/8196a735bebc6fd5eaf9d293bd565c00ef98516b
-Patch70: kdelibs-4.14.38-kio-tls1x.patch
+Patch70:        kdelibs-4.14.38-kio-tls1x.patch
 
 # Cast to the largest
 # possible unsigned integer type to avoid it.
-Patch71: kdelibs-4.14.38-narrowing-warning.patch
+Patch71:        kdelibs-4.14.38-narrowing-warning.patch
 
 # fix FTBFS 
-Patch72: kdelibs-4.14.38-qiodevice.patch
+Patch72:        kdelibs-4.14.38-qiodevice.patch
 
 # fix FTBFS with GCC 11
-Patch73: kdelibs-4.14.38-gcc11.patch
+Patch73:        kdelibs-4.14.38-gcc11.patch
 
 # jasper3 changes jas_stream_ops_t struct definition slightly
 # also internal encoder symbol is now hidden, use global encoder entry point
-Patch74: kdelibs-4.14.38-jasper3.patch
+Patch74:        kdelibs-4.14.38-jasper3.patch
 
 # error: 'uintmax_t' does not name a type
-Patch75: kdelibs-4.14.38-stdint.patch
+Patch75:        kdelibs-4.14.38-stdint.patch
 
 # Fix compilation with libxml2 2.12.0
-Patch76: kdelibs-4.14.38-libxml2-2_12_0.patch
+Patch76:        kdelibs-4.14.38-libxml2-2_12_0.patch
 
 ## upstream
 ## security fixes from the 4.14 branch:
 # Security: remove support for $(...) in config keys with [$e] marker.
 # by David Faure, kdelibs 4 backport by Kai Uwe Broulik, fixes CVE-2019-14744
 # https://commits.kde.org/kdelibs/2c3762feddf7e66cf6b64d9058f625a715694a00
-Patch100: kdelibs-4.14.38-CVE-2019-14744.patch
+Patch100:        kdelibs-4.14.38-CVE-2019-14744.patch
 
 ## rhel patches
 
 # disable webkit
-Patch300: kdelibs-4.14.16-webkit.patch
+Patch300:        kdelibs-4.14.16-webkit.patch
 
 # set abrt default
-Patch301: kdelibs-4.x-abrt.patch
+Patch301:        kdelibs-4.x-abrt.patch
 
 # kmailservice/ktelnetservice moved here
 Conflicts: kdelibs3 < 3.5.10-42

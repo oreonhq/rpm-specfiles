@@ -1,6 +1,6 @@
 %global source0_hash none
-%global source1_hash 1c6d2933e67e1a481bf67abb89d989b1e1baade49a77e0755ac6499390d0680f
-%global source2_hash dd3462a0da12b3f0241e78250519e22e99998883d8d4e0061e51249c5e0369ec
+%global source1_hash 5202c52a364afc0b310a2fff71082d37351590f6339f1a42eacb8a974df7a200
+%global source2_hash none
 %global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
 
 %global DATE 20260515
@@ -182,20 +182,9 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0: gcc-%{version}-%{DATE}.tar.xz
-# The source for nvptx-tools package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
-# git --git-dir=nvptx-tools-dir.tmp/.git fetch --depth 1 origin %%{nvptx_tools_gitrev}
-# git --git-dir=nvptx-tools-dir.tmp/.git archive --prefix=nvptx-tools-%%{nvptx_tools_gitrev}/ %%{nvptx_tools_gitrev} | xz -9e > nvptx-tools-%%{nvptx_tools_gitrev}.tar.xz
-# rm -rf nvptx-tools-dir.tmp
-Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
-# The source for nvptx-newlib package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
-# git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
-# rm -rf newlib-cygwin-dir.tmp
-Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
+Source0:        https://gcc.gnu.org/git/gcc.git/snapshot/gcc-%{gitrev}.tar.gz#/gcc-%{version}-%{DATE}.tar.gz
+Source1:        https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_tools_gitrev}#/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
+Source2:        https://sourceware.org/git/newlib-cygwin.git/snapshot/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -245,6 +234,7 @@ Provides: gcc(major) = %{gcc_major}
 # Need binutils which support .loc view >= 2.30
 # Need binutils which support --generate-missing-build-notes=yes >= 2.31
 # Need binutils which support .base64 >= 2.43
+BuildRequires: git
 BuildRequires: binutils >= 2.43
 # While gcc doesn't include statically linked binaries, during testing
 # -static is used several times.
@@ -317,22 +307,22 @@ Requires: cpp = %{version}-%{release}
 # Need binutils which support --generate-missing-build-notes=yes >= 2.31
 # Need binutils that support .base64 >= 2.43
 Requires: binutils >= 2.43
-Patch0: gcc16-hack.patch
-Patch2: gcc16-sparc-config-detection.patch
-Patch3: gcc16-libgomp-omp_h-multilib.patch
-Patch4: gcc16-libtool-no-rpath.patch
-Patch5: gcc16-isl-dl.patch
-Patch6: gcc16-isl-dl2.patch
-Patch7: gcc16-libstdc++-docs.patch
-Patch8: gcc16-no-add-needed.patch
-Patch9: gcc16-Wno-format-security.patch
-Patch10: gcc16-rh1574936.patch
-Patch11: gcc16-d-shared-libphobos.patch
-Patch12: gcc16-pr119006.patch
+Patch0:        gcc16-hack.patch
+Patch2:        gcc16-sparc-config-detection.patch
+Patch3:        gcc16-libgomp-omp_h-multilib.patch
+Patch4:        gcc16-libtool-no-rpath.patch
+Patch5:        gcc16-isl-dl.patch
+Patch6:        gcc16-isl-dl2.patch
+Patch7:        gcc16-libstdc%2B%2B-docs.patch
+Patch8:        gcc16-no-add-needed.patch
+Patch9:        gcc16-Wno-format-security.patch
+Patch10:        gcc16-rh1574936.patch
+Patch11:        gcc16-d-shared-libphobos.patch
+Patch12:        gcc16-pr119006.patch
 
-Patch50: isl-rh2155127.patch
+Patch50:        isl-rh2155127.patch
 
-Patch100: gcc16-fortran-fdec-duplicates.patch
+Patch100:        gcc16-fortran-fdec-duplicates.patch
 
 # On ARM EABI systems, we do want -gnueabi to be part of the
 # target triple.
@@ -971,9 +961,30 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+_git_tarball() {
+  _repo=$1 _rev=$2 _out=$3 _prefix=$4
+  rm -rf _gitfetch && mkdir _gitfetch && cd _gitfetch
+  git init -q
+  git remote add o "$_repo"
+  git fetch --depth 1 o "$_rev"
+  git archive --prefix="$_prefix" --format=tar.gz --output="../$_out" FETCH_HEAD
+  cd .. && rm -rf _gitfetch
+}
+_gcc_src="gcc-%{version}-%{DATE}.tar.gz"
+if test ! -s "$_gcc_src" || ! gzip -t "$_gcc_src" 2>/dev/null; then
+  _git_tarball https://gcc.gnu.org/git/gcc.git %{gitrev} "$_gcc_src" "gcc-%{version}-%{DATE}/"
+fi
+_nvptx="nvptx-tools-%{nvptx_tools_gitrev}.tar.gz"
+if test ! -s "$_nvptx" || ! gzip -t "$_nvptx" 2>/dev/null; then
+  _git_tarball https://github.com/MentorEmbedded/nvptx-tools.git %{nvptx_tools_gitrev} "$_nvptx" "nvptx-tools-%{nvptx_tools_gitrev}/"
+fi
+_newlib="newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz"
+if test ! -s "$_newlib" || ! gzip -t "$_newlib" 2>/dev/null; then
+  _git_tarball https://sourceware.org/git/newlib-cygwin.git %{newlib_cygwin_gitrev} "$_newlib" "newlib-cygwin-%{newlib_cygwin_gitrev}/"
+fi
+test "%{source0_hash}" = "none" || { f="$_gcc_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="$_nvptx"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="$_newlib"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 %setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
 %autopatch -p0 -m 0 -M 4

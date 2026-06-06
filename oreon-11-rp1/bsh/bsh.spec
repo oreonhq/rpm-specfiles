@@ -47,9 +47,9 @@ Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.0.t
 # Remove code marked as SUN PROPRIETARY/CONFIDENTAIL
 # compatibility with Java 11:
 # - set javac / javadoc source and target values to 1.8
-Patch0:         0000-source-target-1.8.patch
+Patch0:        0000-source-target-1.8.patch
 # - remove references to invisible symbols and methods
-Patch1:         0001-java-11-compatibility.patch
+Patch1:        0001-java-11-compatibility.patch
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

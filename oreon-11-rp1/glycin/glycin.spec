@@ -66,9 +66,9 @@ Source0: https://download.gnome.org/sources/glycin/2.0/glycin-%{tarball_version}
 #   tar Jcvf ../glycin-%%{tarball_version}-vendor.tar.xz vendor/
 #   popd
 # fixup for issue that makes "cargo tree" fail to parse tests/Cargo.toml
-Patch:          0001-fix-invalid-crate-manifest-for-tests-workspace-membe.patch
+Patch:        0001-fix-invalid-crate-manifest-for-tests-workspace-membe.patch
 # partial revert of https://gitlab.gnome.org/GNOME/glycin/-/commit/f637a7e
-Patch:          0002-Replace-serde_yaml_ng-with-equivalent-serde_yaml-dep.patch
+Patch:        0002-Replace-serde_yaml_ng-with-equivalent-serde_yaml-dep.patch
 
 %if 0%{?rhel}
 BuildRequires:  rust-toolset

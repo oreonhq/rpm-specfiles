@@ -1,5 +1,6 @@
 %global source0_hash none
 
+%{load:%{_sourcedir}/nodejs.srpm.macros}
 Name:           nodejs24
 Epoch:          1
 Version:        24.15.0
@@ -11,8 +12,6 @@ URL:            https://nodejs.org
 
 # This should be moved to rpm-redhat-config or similar as soon as feasible
 # NOTE: %%SOURCE macros are not yet defined, so explicit path is needed
-%{load:nodejs.srpm.macros}
-
 # === Versions of any software shipped in the main nodejs tarball
 %nodejs_define_version node %{epoch}:%{version}-%{release} -p
 
@@ -433,7 +432,7 @@ popd  # from ${RPM_BUILD_ROOT}%%{_defaultdocdir}
 # === Full ICU data installation
 # Unzip the data themselves, and make the appropriate documentation available for %%doc
 if test "$(%{python3} -Ic 'import sys; print(sys.byteorder)')" = "little"; then
-readonly icu_source='%{SOURCE2}' icu_data_file='icudt%{icu_version_major}l.dat'
+readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}l.dat'
 else
 readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}b.dat'
 fi

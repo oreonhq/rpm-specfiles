@@ -57,13 +57,13 @@ Source1:        s390-tools-%{version}-rust-vendor.tar.xz
 %endif
 Source5:        zfcpconf.sh
 Source7:        zfcp.udev
-Source12:       dasd.udev
-Source13:       dasdconf.sh
-Source14:       device_cio_free
-Source15:       device_cio_free.service
-Source16:       ccw_init
-Source17:       ccw.udev
-Source21:       normalize_dasd_arg
+Source12:        dasd.udev
+Source13:        dasdconf.sh
+Source14:        device_cio_free
+Source15:        device_cio_free.service
+Source16:        ccw_init
+Source17:        ccw.udev
+Source21:        normalize_dasd_arg
 Source23:        20-zipl-kernel.install
 Source24:        52-zipl-rescue.install
 Source25:        91-zipl.install
@@ -73,8 +73,8 @@ Source25:        91-zipl.install
 %endif
 
 # change the defaults to match Fedora environment
-Patch0:         s390-tools-zipl-invert-script-options.patch
-Patch1:         s390-tools-zipl-blscfg-rpm-nvr-sort.patch
+Patch0:        s390-tools-zipl-invert-script-options.patch
+Patch1:        s390-tools-zipl-blscfg-rpm-nvr-sort.patch
 
 # upstream fixes/updates
 #Patch100:       s390utils-%%{version}-fedora.patch

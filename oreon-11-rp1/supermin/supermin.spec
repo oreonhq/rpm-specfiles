@@ -55,7 +55,7 @@ URL:           http://people.redhat.com/~rjones/supermin/
 Source0:        https://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz
 Source1:        https://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
-Source2:       libguestfs.keyring
+Source2:        libguestfs.keyring
 
 # Use stable owner, group and mtime in base.tar.gz
 # Upstream in > 5.3.5
@@ -121,8 +121,8 @@ Requires:      e2fsprogs-libs >= 1.42
 
 # For automatic RPM dependency generation.
 # See: https://rpm-software-management.github.io/rpm/manual/dependency_generators.html
-Source3:       supermin.attr
-Source4:       supermin-find-requires
+Source3:        supermin.attr
+Source4:        supermin-find-requires
 
 
 %description

@@ -12,16 +12,16 @@ URL:		https://github.com/ueno/libkkc
 Source0:        https://github.com/ueno/libkkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
 # remove for next release:
 Source1:        https://raw.githubusercontent.com/ueno/libkkc/HEAD/README.md
-Patch0:		libkkc-HEAD.patch
-Patch1:         libkkc-POT.skip.patch
-Patch2:         libkkc-vala-abstract-create.patch
+Patch0:        libkkc-HEAD.patch
+Patch1:        libkkc-POT.skip.patch
+Patch2:        libkkc-vala-abstract-create.patch
 # https://github.com/ueno/libkkc/pull/40
 # Fix compilation with gcc14 -Werror=int-conversion
-Patch3:         libkkc-pr40-int-conversion-fix.patch
+Patch3:        libkkc-pr40-int-conversion-fix.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2306455
 # Fix invalid escape on default.json
-Patch4:         libkkc-Fix-invalid-escape-on-json-file.patch
-Patch5:         libkkc-use-gettext.patch
+Patch4:        libkkc-Fix-invalid-escape-on-json-file.patch
+Patch5:        libkkc-use-gettext.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:	marisa-devel

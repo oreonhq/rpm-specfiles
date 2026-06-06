@@ -23,28 +23,28 @@ Source2: enscript-php-1.6.4.st
 #http://home.raxnet.net/downloads/viewcvs/php.st
 
 # RH #61294
-Patch3: enscript-1.6.1-locale.patch
+Patch3:        enscript-1.6.1-locale.patch
 
 # RH #224548
-Patch8: enscript-wrap_header.patch
+Patch8:        enscript-wrap_header.patch
 
 Patch10:enscript-1.6.4-rh457720.patch
 Patch12:enscript-rh477382.patch
 Patch13:enscript-build.patch
 Patch14:enscript-manfixes.patch
-Patch15: enscript-bufpos-crash.patch
+Patch15:        enscript-bufpos-crash.patch
 # 1664367 - adding support for 2 other encodings, enscript cannot print f.e. euro symbol
 # without it
 # rhbz: https://bugzilla.redhat.com/show_bug.cgi?id=1664367
 # upstream patch: http://lists.gnu.org/archive/html/bug-enscript/2018-04/msg00008.html
-Patch16: 0001-enscript-newencodings.patch
+Patch16:        0001-enscript-newencodings.patch
 # enscript bundles some gnulib source files, so some issues or CVEs in gnulib can be
 # present in enscript
 # gnulib CVE: https://bugzilla.redhat.com/show_bug.cgi?id=1635896
-Patch17: enscript-CVE-vasnprintf.patch
+Patch17:        enscript-CVE-vasnprintf.patch
 # C23 takes empty brackets in declaration as no arguments, have to define args and their types
 # https://savannah.gnu.org/bugs/index.php?66845
-Patch18: enscript-c23.patch
+Patch18:        enscript-c23.patch
 
 # gcc is no longer in buildroot by default
 BuildRequires: gcc

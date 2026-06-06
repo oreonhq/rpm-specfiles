@@ -39,7 +39,7 @@ phonetics.
 }
 
 # Fonts retrieved 2015-08-07 from http://www.latofonts.com/download/Lato2OFL.zip
-Source0:        https://deb.debian.org/debian/pool/main/f/fonts-lato/fonts-lato_%{version}.orig.tar.xz#/Lato2OFL.zip
+Source0:        https://github.com/latofonts/lato-source/archive/refs/tags/v%{version}.zip#/Lato2OFL.zip
 Source10:        61-lato-fonts.conf
 
 %fontpkg

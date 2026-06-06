@@ -37,34 +37,34 @@ Source10:        IBMz1464VXZ2.tar.bz2
 Source11:        IBMz1564VXZ2.tar.bz2
 # Properly pass -melf_* to the linker with -Wl, fixes FTBFS bug 817552
 # https://sourceforge.net/tracker/?func=detail&atid=379484&aid=3555789&group_id=23725
-Patch1:		atlas-melf.patch
-Patch2:		atlas-throttling.patch
+Patch1:        atlas-melf.patch
+Patch2:        atlas-throttling.patch
 
 #credits Lukas Slebodnik
-Patch3:		atlas-shared_libraries.patch
+Patch3:        atlas-shared_libraries.patch
 
-Patch4:		atlas-genparse.patch
+Patch4:        atlas-genparse.patch
 
 # Unbundle LAPACK (BZ #1181369)
-Patch5:		atlas.3.10.1-unbundle.patch
-Patch6:	atlas-gcc10.patch
+Patch5:        atlas.3.10.1-unbundle.patch
+Patch6:        atlas-gcc10.patch
 
 
 #patches dealing with z{13,14,15}, provided by IBM
-Patch7: 0001-Avoid-c99-standard-compiler.patch
-Patch8: 0002-Fix-rpath-link-command-line-options.patch
-Patch9: 0003-Fix-SIMD-support-on-IBM-z13.patch
-Patch10: 0004-Read-L1-data-cache-size-from-sysconf-if-possible.patch
-Patch11: 0005-Optimizations-for-IBM-z13.patch
-Patch12: 0006-Add-IBM-z14-support.patch
-Patch13: 0007-Enable-cross-compile.patch
-Patch14: 0008-Add-IBM-z15-support.patch
+Patch7:        0001-Avoid-c99-standard-compiler.patch
+Patch8:        0002-Fix-rpath-link-command-line-options.patch
+Patch9:        0003-Fix-SIMD-support-on-IBM-z13.patch
+Patch10:        0004-Read-L1-data-cache-size-from-sysconf-if-possible.patch
+Patch11:        0005-Optimizations-for-IBM-z13.patch
+Patch12:        0006-Add-IBM-z14-support.patch
+Patch13:        0007-Enable-cross-compile.patch
+Patch14:        0008-Add-IBM-z15-support.patch
 
 
 
-Patch15:		atlas-fgrep.patch
+Patch15:        atlas-fgrep.patch
 #Covscan
-Patch101:		atlas-getri.patch
+Patch101:        atlas-getri.patch
 
 BuildRequires: make
 BuildRequires:  gcc-gfortran, lapack-static, gcc

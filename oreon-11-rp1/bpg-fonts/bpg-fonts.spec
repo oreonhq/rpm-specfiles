@@ -1,4 +1,4 @@
-%global source0_hash c411b42fd11367075f5b10acf1117409c9840235d58713fd1f4bf09ba62c9c8f
+%global source0_hash none
 %global source81_hash 20679b9fa26ed7951647fc8f6b5a5520e555ee2a7a52f531a19027bd10c5c13e
 %global source82_hash 63eb9e0344bbd2b72796a2a6ddc5a8d09e3fff7d8834e0b7f796714eb0be80c2
 %global source83_hash 237070dcc1c6a09c0fc8ee51d29d50044999595c0019e0a50c739adacb85857f
@@ -23,7 +23,7 @@ License:	GPL-2.0-or-later WITH Font-exception-2.0
 # http://bpgfonts.wordpress.com/category/gpl-gnu/
 # But the link is annoying:
 # http://www.box.com/s/1f344f181567cb897395
-Source0:        https://deb.debian.org/debian/pool/main/f/fonts-bpg-georgian/fonts-bpg-georgian_2012.orig.tar.xz
+Source0:        https://github.com/web-fonts/bpg-fonts/archive/refs/heads/master.zip#/BPG_GPL_GNU_Fonts_2012.zip
 Source1:	%{name}-algeti-fontconfig.conf
 Source2:	%{name}-chveulebrivi-fontconfig.conf
 Source3:	%{name}-courier-fontconfig.conf
@@ -103,8 +103,8 @@ Source88:       %{fontname}-dejavu-serif.metainfo.xml
 Source89:       %{name}-dejavu-serif-fontconfig.conf
 
 # Docs
-Source100:	README
-Source101:	gpl-3.0.txt
+Source100:        README
+Source101:        gpl-3.0.txt
 
 URL:		http://groups.google.com/group/bpg-fonts
 BuildRequires:	fontpackages-devel

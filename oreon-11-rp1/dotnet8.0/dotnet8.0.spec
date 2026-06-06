@@ -1,4 +1,4 @@
-%global source0_hash ac0797ae1492db0810f6470f1887e8b24ccdebf993d7f0fc38fe1a6b9c8e6295
+%global source0_hash none
 %global source3_hash none
 
 %bcond_with bootstrap
@@ -77,28 +77,28 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %endif
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:        macros.dotnet
+Source10:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/macros.dotnet
 
-Source20:        check-debug-symbols.py
-Source21:        dotnet.sh.in
+Source20:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/check-debug-symbols.py
+Source21:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/dotnet.sh.in
 
 # Disable apphost; there's no net6.0 apphost for ppc64le
-Patch1:         roslyn-analyzers-ppc64le-apphost.patch
+Patch1:        roslyn-analyzers-ppc64le-apphost.patch
 # https://github.com/dotnet/source-build/discussions/3481
-Patch2:         vstest-intent-net8.0.patch
+Patch2:        vstest-intent-net8.0.patch
 # https://github.com/dotnet/runtime/pull/95216#issuecomment-1842799314
-Patch3:         runtime-re-enable-implicit-rejection.patch
+Patch3:        runtime-re-enable-implicit-rejection.patch
 # https://github.com/dotnet/msbuild/pull/9449
-Patch4:         msbuild-9449-exec-stop-setting-a-locale.patch
+Patch4:        msbuild-9449-exec-stop-setting-a-locale.patch
 # We disable checking the signature of the last certificate in a chain if the certificate is supposedly self-signed.
 # A side effect of not checking the self-signature of such a certificate is that disabled or unsupported message
 # digests used for the signature are not treated as fatal errors.
 # https://issues.redhat.com/browse/RHEL-25254
-Patch5:         runtime-openssl-sha1.patch
+Patch5:        runtime-openssl-sha1.patch
 # https://github.com/dotnet/runtime/issues/119706#issuecomment-3292624673
-Patch6:         runtime-119706-clang-21.patch
+Patch6:        runtime-119706-clang-21.patch
 # TODO send upstream
-Patch7:         runtime-clang-20-support.patch
+Patch7:        runtime-clang-20-support.patch
 
 
 ExclusiveArch:  aarch64 ppc64le s390x x86_64

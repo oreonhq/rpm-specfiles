@@ -1,4 +1,4 @@
-%global source0_hash be18ecce5a9fa0b5881ffbd5c0d2d848543d0304137133edbc9799eb2e9ead54
+%global source0_hash none
 
 %bcond_with bootstrap
 
@@ -13,13 +13,13 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/xmlunit/xmlunit/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/xmlunit/xmlunit/releases/download/v%{version}/%{name}-%{version}-src.tar.gz#/%{name}-%{version}.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Patch:          0001-Disable-tests-requiring-network-access.patch
+Patch:        0001-Disable-tests-requiring-network-access.patch
 # This also solves the problem of tests requiring network. The files that would
 # be fetched are identical to the local file
-Patch:          0003-Drop-support-for-JAXB.patch
-Patch:          0004-Port-to-assertj-core-3.patch
+Patch:        0003-Drop-support-for-JAXB.patch
+Patch:        0004-Port-to-assertj-core-3.patch
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -74,7 +74,7 @@ This package provides %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}-src
 
 
 rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\

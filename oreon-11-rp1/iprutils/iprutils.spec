@@ -13,7 +13,7 @@ Source0:        https://github.com/bjking1/iprutils/archive/%{gitver}/%{name}-%{
 # missing man page
 Source1:        iprdbg.8.gz
 
-Patch10: iprutils-2.4.19-covscan.patch
+Patch10:        iprutils-2.4.19-covscan.patch
 
 ExclusiveArch: ppc64le
 

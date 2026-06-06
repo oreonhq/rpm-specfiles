@@ -146,28 +146,28 @@ BuildRequires: libzstd-devel
 BuildRequires: which
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1541035
-Patch0: boost-1.81.0-build-optflags.patch
+Patch0:        boost-1.81.0-build-optflags.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1318383
-Patch1: boost-1.90.0-no-rpath.patch
+Patch1:        boost-1.90.0-no-rpath.patch
 
 # https://lists.boost.org/Archives/boost/2020/04/248812.php
-Patch2: boost-1.73.0-cmakedir.patch
+Patch2:        boost-1.73.0-cmakedir.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1541035
-Patch3: boost-1.78.0-b2-build-flags.patch
+Patch3:        boost-1.78.0-b2-build-flags.patch
 
 # PR https://github.com/boostorg/interval/pull/30
 # Fixes narrowing conversions for ppc -
 #   https://github.com/boostorg/interval/issues/29
-Patch5: boost-1.76.0-fix-narrowing-conversions-for-ppc.patch
+Patch5:        boost-1.76.0-fix-narrowing-conversions-for-ppc.patch
 
 # Install boost_system for the CMake configuration
 # https://github.com/boostorg/system/issues/132
-Patch6: boost-1.90-system.patch
+Patch6:        boost-1.90-system.patch
 
 # https://github.com/boostorg/range/pull/157
-Patch7: boost-1.90.0-range.patch
+Patch7:        boost-1.90.0-range.patch
 
 %bcond_with tests
 %bcond_with docs_generated

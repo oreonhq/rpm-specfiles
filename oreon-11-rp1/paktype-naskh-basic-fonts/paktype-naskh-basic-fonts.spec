@@ -22,7 +22,7 @@ The paktype-naskh-basic-fonts package contains fonts for the display of \
 Arabic, Farsi, Urdu and Sindhi from PakType by Lateef Sagar.
 }
 
-Source0:        https://sourceforge.net/projects/paktype/files/PakType-Release-2026-02-27.tar.gz/download#/paktype-naskh-basic-fonts.zip
+Source0:        https://github.com/paktype/paktype-naskh/archive/refs/heads/master.zip#/paktype-naskh-basic-fonts.zip
 Source10:       55-0-%{fontpkgname}.conf
 
 %fontpkg

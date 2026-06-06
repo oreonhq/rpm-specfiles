@@ -1,21 +1,19 @@
 %global source0_hash none
-%global source1_hash fd80466d8da6f402b992efe1adf99f8cc7dab66b01167dcf788b598a1c465df3
+
+%global kdm 0
+%global kdm_settings 0
+
+%if 0%{?kdm_settings}
+%global source1_hash none
+%else
+%global source1_hash none
+%endif
 
 %if 0%{?fedora} > 17 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global systemd_login1 1
 %endif
 
-# if 0%%{?fedora} < 24
-%global kdm 1
-# endif
-
-%if 0%{?fedora} > 23 && 0%{?oreon} < 11
-%global kdm_settings 1
-%endif
-
-%if 0%{?fedora} < 25 || (0%{?oreon} >= 11)
-%define strigi 1
-%endif
+%define strigi 0
 
 Summary: KDE Workspace
 Name:    kde-workspace
@@ -25,50 +23,50 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://github.com/KDE/kde-workspace/archive/refs/tags/v%{version}.tar.gz#/kde-workspace-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/kde-workspace/4.11.22/src/kde-workspace-4.11.22.tar.xz
 %if 0%{?kdm_settings}
 Source1:        kdm-settings-2.tar.gz
 %endif
 
 # add konsole menuitem
 # FIXME?  only show menu when/if konsole is installed? then we can drop the hard-dep
-Patch2: kde-workspace-4.9.90-plasma_konsole.patch
+Patch2:        kde-workspace-4.9.90-plasma_konsole.patch
 
 # make strigi optional
-Patch3: kde-workspace-strigi.patch
+Patch3:        kde-workspace-strigi.patch
 
 # RH/Fedora-specific: Force kdm and kdm_greet to be hardened
-Patch4: kde-workspace-4.10.4-kdm-harden.patch
+Patch4:        kde-workspace-4.10.4-kdm-harden.patch
 
 # kubuntu kudos! bulletproof-X bits ripped out
 # SUSE kudos! plymouth fixed by Laercio de Sousa and Stefan Brüns
-Patch19: kde-workspace-4.11.1-kdm_plymouth081.patch
-Patch20: kdebase-workspace-4.4.92-xsession_errors_O_APPEND.patch
+Patch19:        kde-workspace-4.11.1-kdm_plymouth081.patch
+Patch20:        kdebase-workspace-4.4.92-xsession_errors_O_APPEND.patch
 
 # add support for automatic multi-seat provided by systemd using existing reserve seats in KDM
-Patch27: kde-workspace-4.11.1-kdm-logind-multiseat.patch
+Patch27:        kde-workspace-4.11.1-kdm-logind-multiseat.patch
 
 # avoid conflict between kcm_colors 4 and plasma-desktop 5
-Patch28: kde-workspace-4.11.16-colorschemes-kde4.patch
+Patch28:        kde-workspace-4.11.16-colorschemes-kde4.patch
 
 # use /etc/login.defs to define a 'system' account instead of hard-coding 500
-Patch52: kde-workspace-4.8.2-bz#732830-login.patch
+Patch52:        kde-workspace-4.8.2-bz%23732830-login.patch
 
 # kdm overwrites ~/.Xauthority with wrong SELinux context on logout
 # http://bugzilla.redhat.com/567914
 # http://bugs.kde.org/242065
-Patch53: kde-workspace-4.7.95-kdm_xauth.patch
+Patch53:        kde-workspace-4.7.95-kdm_xauth.patch
 
 # kdm (local) ipv6
 # https://bugzilla.redhat.com/show_bug.cgi?id=1187957
-Patch56: kde-workspace-kdm_local_ipv6.patch
+Patch56:        kde-workspace-kdm_local_ipv6.patch
 
 # pam/systemd bogosity: kdm restart/shutdown does not work
 # http://bugzilla.redhat.com/796969
-Patch57: kde-workspace-4.8.0-bug796969.patch
+Patch57:        kde-workspace-4.8.0-bug796969.patch
 
-Patch58: kde-workspace-4.9.11-new_rundir.patch
-Patch59: kdm-settings-new_rundir.patch
+Patch58:        kde-workspace-4.9.11-new_rundir.patch
+Patch59:        kdm-settings-new_rundir.patch
 ## upstream patches
 
 ## plasma active patches
@@ -272,8 +270,7 @@ Obsoletes: kde-plasma-translatoid < 1.30-20
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -n kde-workspace-%{version} %{?kdm_settings:-a1}
+%setup -q -n kde-workspace-%{version}
 
 # Well, I looked at doing this using the context menu plugin system and it
 # looked like a lot more work than this simple patch to me. -- Kevin

@@ -43,13 +43,13 @@ Release: 1%{?dist}
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL: http://brltty.app/
 Source0:        https://brltty.app/archive/%{name}-%{version}.tar.xz
-Source1: brltty.service
-Source2: brlapi-config.h
-Source3: brlapi-forbuild.h
-Source4: brltty.sysusers
-Patch1: brltty-6.3-loadLibrary.patch
+Source1:        brltty.service
+Source2:        brlapi-config.h
+Source3:        brlapi-forbuild.h
+Source4:        brltty.sysusers
+Patch1:        brltty-6.3-loadLibrary.patch
 # libspeechd.h moved in latest speech-dispatch (NOT sent upstream)
-Patch2: brltty-6.8-libspeechd.patch
+Patch2:        brltty-6.8-libspeechd.patch
 Summary: Braille display driver for Linux/Unix
 BuildRequires: byacc
 BuildRequires: glibc-kernheaders

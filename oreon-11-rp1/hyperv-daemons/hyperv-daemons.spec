@@ -17,7 +17,7 @@ URL:      http://www.kernel.org
 
 # Source files obtained from kernel upstream 6.10-rc4 (6ba59ff4227927d3a8530fc2973b80e94b54d58f)
 # git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-Source0:        tools-hv-6ba59ff42279.tar.gz
+Source0:        https://github.com/microsoft/hyperv-daemons/archive/refs/heads/master.tar.gz#/tools-hv-6ba59ff42279.tar.gz
 Source1:        COPYING
 
 # HYPERV KVP DAEMON

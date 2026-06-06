@@ -330,13 +330,13 @@ Provides: bundled(vtune) = 2018
 #
 # Maintained in: https://github.com/berrange/linux-sgx/tree/dist-git-%%{linux_sgx_version}-hostsw
 #
-Patch0000: 0000-Add-support-for-building-against-host-openssl-crypto.patch
-Patch0001: 0001-Add-support-for-building-against-host-tinyxml2-lib.patch
-Patch0002: 0002-Add-support-for-building-against-host-CppMicroServic.patch
+Patch0000:        0000-Add-support-for-building-against-host-openssl-crypto.patch
+Patch0001:        0001-Add-support-for-building-against-host-tinyxml2-lib.patch
+Patch0002:        0002-Add-support-for-building-against-host-CppMicroServic.patch
 # https://github.com/intel/linux-sgx/pull/1055
-Patch0003: 0003-Improve-make-debuggability.patch
-Patch0004: 0004-Support-disabling-use-of-git-for-ippcp-code.patch
-Patch0005: 0005-disable-openmp-protobuf-sample_crypto-builds.patch
+Patch0003:        0003-Improve-make-debuggability.patch
+Patch0004:        0004-Support-disabling-use-of-git-for-ippcp-code.patch
+Patch0005:        0005-disable-openmp-protobuf-sample_crypto-builds.patch
 # https://github.com/intel/linux-sgx/pull/1056
 Patch0006: 0006-Fix-escaping-of-regexes-in-sgx-asm-pp.patch
 # https://github.com/intel/linux-sgx/pull/1064
@@ -352,37 +352,37 @@ Patch0015: 0015-sdk-avoid-failure-due-to-attribute-regparam-with-GCC.patch
 Patch0016: 0016-Add-impl-of-__cxa_call_terminate.patch
 Patch0017: 0017-fix-BOM-for-mpa_manage-mpa_registration-files.patch
 # Optional patches
-Patch0050: 0050-Disable-inclusion-of-AESM-in-installer.patch
+Patch0050:        0050-Disable-inclusion-of-AESM-in-installer.patch
 
 
 # 0100-0199 -> against confidential-computing.tee.dcap.git
 #
 # Maintained in https://github.com/berrange/SGXDataCenterAttestationPrimitives/tree/dist-git-%%{dcap_version}-hostsw
 #
-Patch0100: 0100-Drop-use-of-bundled-pre-built-openssl.patch
-Patch0101: 0101-Improve-debuggability-of-build-system.patch
+Patch0100:        0100-Drop-use-of-bundled-pre-built-openssl.patch
+Patch0101:        0101-Improve-debuggability-of-build-system.patch
 # https://github.com/intel/SGXDataCenterAttestationPrimitives/pull/437
-Patch0102: 0102-Support-build-time-setting-of-enclave-load-directory.patch 
+Patch0102:        0102-Support-build-time-setting-of-enclave-load-directory.patch
 # https://github.com/intel/SGXDataCenterAttestationPrimitives/pull/434
-Patch0103: 0103-Look-for-versioned-sgx_urts-library-in-PCKRetrievalT.patch
+Patch0103:        0103-Look-for-versioned-sgx_urts-library-in-PCKRetrievalT.patch
 # https://github.com/intel/SGXDataCenterAttestationPrimitives/pull/429
-Patch0104: 0104-pcsclient-only-import-pypac-module-on-Windows.patch
-Patch0105: 0105-Look-for-PCKRetrievalTool-config-file-in-etc.patch
-Patch0106: 0106-Honour-CFLAGS-CXXFLAGS-LDFLAGS-for-various-tools-and.patch
+Patch0104:        0104-pcsclient-only-import-pypac-module-on-Windows.patch
+Patch0105:        0105-Look-for-PCKRetrievalTool-config-file-in-etc.patch
+Patch0106:        0106-Honour-CFLAGS-CXXFLAGS-LDFLAGS-for-various-tools-and.patch
 # https://github.com/intel/SGXDataCenterAttestationPrimitives/pull/428
-Patch0107: 0107-qgs-add-space-between-program-name-first-arg-in-usag.patch
-Patch0108: 0108-qgs-protect-against-format-strings-in-QL-log-message.patch
-Patch0109: 0109-qgs-add-debug-parameter-to-control-logging.patch
-Patch0110: 0110-pcsclient-remove-leftover-debugging-print-args-state.patch
-Patch0111: 0111-Fix-soname-version-for-libsgx_qe3_logic.so-library.patch
-Patch0112: 0112-Workaround-broken-GCC-15.patch
-Patch0113: 0113-Don-t-disable-cf-protection-for-qgs.patch
-Patch0114: 0114-Delete-broken-checks-for-GCC-version-that-break-fsta.patch
+Patch0107:        0107-qgs-add-space-between-program-name-first-arg-in-usag.patch
+Patch0108:        0108-qgs-protect-against-format-strings-in-QL-log-message.patch
+Patch0109:        0109-qgs-add-debug-parameter-to-control-logging.patch
+Patch0110:        0110-pcsclient-remove-leftover-debugging-print-args-state.patch
+Patch0111:        0111-Fix-soname-version-for-libsgx_qe3_logic.so-library.patch
+Patch0112:        0112-Workaround-broken-GCC-15.patch
+Patch0113:        0113-Don-t-disable-cf-protection-for-qgs.patch
+Patch0114:        0114-Delete-broken-checks-for-GCC-version-that-break-fsta.patch
 #Patch0115: 0115-Use-distro-provided-rapidjson-package.patch
-Patch0116: 0116-Don-t-stomp-on-VERBOSE-variable.patch
-Patch0117: 0117-qgs-add-m-MODE-parameter-for-UNIX-socket-mode.patch
-Patch0118: 0118-pcsclient-make-keyring-module-optional.patch
-Patch0119: 0119-pcsclient-convert-from-asn1-to-pyasn1-python-module.patch
+Patch0116:        0116-Don-t-stomp-on-VERBOSE-variable.patch
+Patch0117:        0117-qgs-add-m-MODE-parameter-for-UNIX-socket-mode.patch
+Patch0118:        0118-pcsclient-make-keyring-module-optional.patch
+Patch0119:        0119-pcsclient-convert-from-asn1-to-pyasn1-python-module.patch
 Patch0120: 0120-pcsclient-fully-switch-to-pycryptography-for-CRL-ver.patch
 Patch0121: 0121-pcsclient-use-more-of-pycryptography-instead-of-pyop.patch
 Patch0122: 0122-pcsclient-prefer-pycryptography-over-pyopenssl.patch
@@ -403,18 +403,18 @@ Patch0131: 0131-pcsclient-fix-name-of-input-file-in-cache-command-he.patch
 #
 # Maintained in https://github.com/berrange/intel-sgx-ssl/tree/dist-git-%%{sgx_ssl_version}
 #
-Patch0200: 0200-Enable-pointing-sgxssl-build-to-alternative-glibc-he.patch
-Patch0201: 0201-Workaround-missing-output-directory.patch
-Patch0202: 0202-Disable-various-EC-crypto-features.patch
-Patch0203: 0203-Disable-sm2-and-sm4-crypto-algorithms.patch
+Patch0200:        0200-Enable-pointing-sgxssl-build-to-alternative-glibc-he.patch
+Patch0201:        0201-Workaround-missing-output-directory.patch
+Patch0202:        0202-Disable-various-EC-crypto-features.patch
+Patch0203:        0203-Disable-sm2-and-sm4-crypto-algorithms.patch
 
 
 # 0300-0399 -> against ipp-crypto.git
 #
 # Maintained in https://github.com/berrange/ipp-crypto/tree/dist-git-%%{ipp_crypto_version}
 #
-Patch0300: 0300-Drop-min-openssl-from-3.0.8-to-3.0.7.patch
-Patch0301: 0301-Drop-Werror-from-build-flags.patch
+Patch0300:        0300-Drop-min-openssl-from-3.0.8-to-3.0.7.patch
+Patch0301:        0301-Drop-Werror-from-build-flags.patch
 
 
 # 0400-0499 -> against confidential-computing.tee.dcap.pccs.git

@@ -53,22 +53,22 @@ AutoReqProv: 0
 %define docdir    %{_defaultdocdir}/%{escname}
 
 Source0:        https://download.rockylinux.org/pub/rocky/9/AppStream/source/tree/Packages/e/esc-1.1.2-16.el9.src.rpm
-Source1: esc
-Source2: esc.desktop
-Patch0: esc-gcc11.patch
-Patch1: esc-1.1.2-fix1.patch
-Patch2: esc-1.1.2-fix2.patch
-Patch3: esc-1.1.2-fix3.patch
-Patch4: esc-1.1.2-fix4.patch
-Patch5: esc-1.1.2-fix5.patch
-Patch6: esc-1.1.2-fix6.patch
-Patch7: esc-1.1.2-fix7.patch
-Patch8: esc-1.1.2-fix8.patch
-Patch9: esc-1.1.2-fix9.patch
-Patch10: esc-1.1.2-fix10.patch
-Patch11: esc-1.1.2-fix11.patch
-Patch12: esc-1.1.2-fix12.patch
-Patch13: esc-1.1.2-fix13.patch
+Source1:        esc
+Source2:        esc.desktop
+Patch0:        esc-gcc11.patch
+Patch1:        esc-1.1.2-fix1.patch
+Patch2:        esc-1.1.2-fix2.patch
+Patch3:        esc-1.1.2-fix3.patch
+Patch4:        esc-1.1.2-fix4.patch
+Patch5:        esc-1.1.2-fix5.patch
+Patch6:        esc-1.1.2-fix6.patch
+Patch7:        esc-1.1.2-fix7.patch
+Patch8:        esc-1.1.2-fix8.patch
+Patch9:        esc-1.1.2-fix9.patch
+Patch10:        esc-1.1.2-fix10.patch
+Patch11:        esc-1.1.2-fix11.patch
+Patch12:        esc-1.1.2-fix12.patch
+Patch13:        esc-1.1.2-fix13.patch
 
 
 %description

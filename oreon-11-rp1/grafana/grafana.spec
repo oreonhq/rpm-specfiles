@@ -37,40 +37,40 @@ URL:              https://grafana.org
 Source0:        https://github.com/grafana/grafana/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-10.2.6.tar.gz
 
 # Source3 contains the systemd-sysusers configuration
-Source3:          grafana.sysusers
+Source3:        grafana.sysusers
 
 # Source4 contains the script to create the vendor and webpack bundles
-Source4:          create_bundles.sh
+Source4:        create_bundles.sh
 
 # Source5 contains the script to build the frontend
-Source5:          build_frontend.sh
+Source5:        build_frontend.sh
 
 # Source6 contains the script to generate the list of bundled nodejs packages
-Source6:          list_bundled_nodejs_packages.py
+Source6:        list_bundled_nodejs_packages.py
 
 # Source7 contains the script to create the vendor and webpack bundles in a container
-Source7:          create_bundles_in_container.sh
+Source7:        create_bundles_in_container.sh
 
 # Source8 - Source10  contain the grafana-selinux policy
-Source8:          grafana.te
-Source9:          grafana.fc
-Source10:         grafana.if
+Source8:        grafana.te
+Source9:        grafana.fc
+Source10:        grafana.if
 
 # Patches affecting the source tarball
-Patch1:           0001-update-grafana-cli-script-with-distro-specific-paths.patch
-Patch2:           0002-add-manpages.patch
-Patch3:           0003-update-default-configuration.patch
-Patch4:           0004-remove-unused-backend-dependencies.patch
-Patch5:           0005-remove-unused-frontend-crypto.patch
-Patch6:           0006-skip-marketplace-plugin-install-test.patch
-Patch7:           0007-redact-weak-ciphers.patch
-Patch8:           0008-replace-faulty-slices-sort.patch
-Patch9:           0009-update-wrappers-and-systemd-with-distro-paths.patch
+Patch1:        0001-update-grafana-cli-script-with-distro-specific-paths.patch
+Patch2:        0002-add-manpages.patch
+Patch3:        0003-update-default-configuration.patch
+Patch4:        0004-remove-unused-backend-dependencies.patch
+Patch5:        0005-remove-unused-frontend-crypto.patch
+Patch6:        0006-skip-marketplace-plugin-install-test.patch
+Patch7:        0007-redact-weak-ciphers.patch
+Patch8:        0008-replace-faulty-slices-sort.patch
+Patch9:        0009-update-wrappers-and-systemd-with-distro-paths.patch
 # https://github.com/grafana/grafana/commit/bae86dbeb0ad68a205454e98e76985dc393183d4
-Patch10:          0010-remove-bcrypt-references.patch
-Patch11:          0011-fix-dompurify-CVE.patch
-Patch12:          0012-fix-jwt-CVE.patch
-Patch13:          0013-fix-CVE-2025-4123.patch
+Patch10:        0010-remove-bcrypt-references.patch
+Patch11:        0011-fix-dompurify-CVE.patch
+Patch12:        0012-fix-jwt-CVE.patch
+Patch13:        0013-fix-CVE-2025-4123.patch
 
 # Patches affecting the vendor tarball
 Patch1001:        1001-vendor-patch-removed-backend-crypto.patch

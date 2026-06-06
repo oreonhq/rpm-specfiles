@@ -182,7 +182,7 @@ Source80:        https://download.kde.org/%{stable}/applications/%{version}/src/
 Source82:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-wa-%{version}.tar.xz
 Source83:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_CN-%{version}.tar.xz
 Source84:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_TW-%{version}.tar.xz
-Source1000: subdirs-kde-l10n
+Source1000:        subdirs-kde-l10n
 
 BuildRequires: cmake
 BuildRequires: findutils

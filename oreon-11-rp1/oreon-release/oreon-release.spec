@@ -19,10 +19,10 @@ Provides:       base-module(platform:or%{version})
 Requires:       oreon-repos(%{version})
 BuildArch:      noarch
 
-Source1:        LICENSE
-Source10:       85-display-manager.preset
-Source11:       90-default.preset
-Source12:       99-default-disable.preset
+Source0:        LICENSE
+Source1:        85-display-manager.preset
+Source2:        90-default.preset
+Source3:        99-default-disable.preset
 
 %description
 Oreon release files including base system configuration and identification.
@@ -87,9 +87,9 @@ install -m 644 issue.net %{buildroot}/etc/issue.net
 
 # Install systemd presets
 install -d -m 755 %{buildroot}%{_prefix}/lib/systemd/system-preset
-install -m 644 %{SOURCE10} %{buildroot}%{_prefix}/lib/systemd/system-preset/
-install -m 644 %{SOURCE11} %{buildroot}%{_prefix}/lib/systemd/system-preset/
-install -m 644 %{SOURCE12} %{buildroot}%{_prefix}/lib/systemd/system-preset/
+install -m 644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/
+install -m 644 %{SOURCE2} %{buildroot}%{_prefix}/lib/systemd/system-preset/
+install -m 644 %{SOURCE3} %{buildroot}%{_prefix}/lib/systemd/system-preset/
 
 %files
 %{_prefix}/lib/os-release

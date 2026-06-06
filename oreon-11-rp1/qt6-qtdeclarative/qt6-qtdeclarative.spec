@@ -34,8 +34,8 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 Source5:        qv4global_p-multilib.h
 
 ## upstream patches
-Patch0:  qtdeclarative-dialogs-use-generic-qtquickcontrols-import-in-base-fallback-dialogs.patch
-Patch1:  qtdeclarative-qmltableinstancemodel-refactor-qmodelindex-calculation-out-of-qquicktableview.patch
+Patch0:        qtdeclarative-dialogs-use-generic-qtquickcontrols-import-in-base-fallback-dialogs.patch
+Patch1:        qtdeclarative-qmltableinstancemodel-refactor-qmodelindex-calculation-out-of-qquicktableview.patch
 
 ## upstreamable patches
 

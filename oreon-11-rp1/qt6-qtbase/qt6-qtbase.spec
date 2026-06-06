@@ -76,27 +76,27 @@ Source6:        10-qt6-check-opengl2.sh
 # macros
 Source10:        macros.qt6-qtbase
 
-Patch1:  qtbase-CMake-Install-objects-files-into-ARCHDATADIR.patch
-Patch2:  qtbase-use-only-major-minor-for-private-api-tag.patch
+Patch1:        qtbase-CMake-Install-objects-files-into-ARCHDATADIR.patch
+Patch2:        qtbase-use-only-major-minor-for-private-api-tag.patch
 
 # upstreamable patches
 # namespace QT_VERSION_CHECK to workaround major/minor being pre-defined (#1396755)
-Patch50: qtbase-version-check.patch
+Patch50:        qtbase-version-check.patch
 
 # 1. Workaround moc/multilib issues
 # https://bugzilla.redhat.com/show_bug.cgi?id=1290020
 # https://bugreports.qt.io/browse/QTBUG-49972
 # 2. Workaround sysmacros.h (pre)defining major/minor a breaking stuff
-Patch51: qtbase-moc-macros.patch
+Patch51:        qtbase-moc-macros.patch
 
 # drop -O3 and make -O2 by default
-Patch54: qtbase-cxxflag.patch
+Patch54:        qtbase-cxxflag.patch
 
 # fix for new mariadb
-Patch56: qtbase-mysql.patch
+Patch56:        qtbase-mysql.patch
 
 # fix FTBFS against libglvnd-1.3.4+
-Patch58: qtbase-libglvnd.patch
+Patch58:        qtbase-libglvnd.patch
 
 # Do not check any files in %%{_qt6_plugindir}/platformthemes/ for requires.
 # Those themes are there for platform integration. If the required libraries are

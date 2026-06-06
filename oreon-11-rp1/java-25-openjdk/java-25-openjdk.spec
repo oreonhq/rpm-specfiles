@@ -1250,28 +1250,28 @@ URL:      http://openjdk.java.net/
 Source8: tapsets-icedtea-%{icedteaver}.tar.xz
 
 # Desktop files. Adapted from IcedTea
-Source9: jconsole.desktop.in
+Source9:        jconsole.desktop.in
 
 # Ensure we aren't using the limited crypto policy
-Source13: TestCryptoLevel.java
+Source13:        TestCryptoLevel.java
 
 # Ensure ECDSA is working
-Source14: TestECDSA.java
+Source14:        TestECDSA.java
 
 # Verify system crypto (policy) can be disabled via a property
-Source15: TestSecurityProperties.java
+Source15:        TestSecurityProperties.java
 
 # Ensure vendor settings are correct
-Source16: CheckVendor.java
+Source16:        CheckVendor.java
 
 # Ensure translations are available for new timezones
-Source18: TestTranslations.java
+Source18:        TestTranslations.java
 
 # FIPS support sources.
 # For libnssadapter.so (RHEL-128413)
 Source31:        https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/%{nssadapter_version}/%{nssadapter_name}.tar.xz
 # Create OpenJDK's crypto-policies hierarchy (RHEL-128409)
-Source32: create-redhat-properties-files.bash
+Source32:        create-redhat-properties-files.bash
 
 
 BuildRequires: %{portable_name}-sources >= %{portable_version}

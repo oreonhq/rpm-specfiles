@@ -34,7 +34,7 @@ Source4:        extract_platdump.8
 Source5:        rtas_errd.8
 
 # fix paths and permissions
-Patch0:         ppc64-diag-2.7.9-fedora.patch
+Patch0:        ppc64-diag-2.7.9-fedora.patch
 # Upstream fixes
 
 %description

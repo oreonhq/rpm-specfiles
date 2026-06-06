@@ -28,6 +28,7 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 %global docs 0
 %global qt_module qtbase
 %global  majmin %(echo %{version} | cut -d. -f1-2)
+Source1:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 # Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
 
 # Shipped in SRPM (avoid src.fedoraproject.org fetch flakiness in mock)

@@ -47,19 +47,19 @@ URL:            https://github.com/confidential-containers/guest-components
 Source:        https://github.com/confidential-containers/%{projectname}/archive/refs/tags/v%{version}.tar.gz#/trustee-guest-components-%{version}.tar.gz
 
 # * Remove workspace members which are not built
-Patch1:         0001-Fedora-Remove-workspace-members-which-are-not-built.patch
+Patch1:        0001-Fedora-Remove-workspace-members-which-are-not-built.patch
 # * deps/crypto defaults to openssl
-Patch2:         0002-Fedora-AA-deps-crypto-default-to-openssl.patch
+Patch2:        0002-Fedora-AA-deps-crypto-default-to-openssl.patch
 # * kbs_protocol defaults to openssl
-Patch3:         0003-Fedora-kbs_protocol-default-to-openssl.patch
+Patch3:        0003-Fedora-kbs_protocol-default-to-openssl.patch
 # * pick attesters to build
-Patch4:         0004-Fedora-attester-pick-attesters-in-all-attesters.patch
+Patch4:        0004-Fedora-attester-pick-attesters-in-all-attesters.patch
 # * remove dependency ttrpc - not in Fedora
-Patch5:         0005-Fedora-remove-ttrpc-dependency.patch
+Patch5:        0005-Fedora-remove-ttrpc-dependency.patch
 # * remove dependency jwt-simple - not in Fedora
-Patch6:         0006-Fedora-remove-jwt-simple-dependency.patch
+Patch6:        0006-Fedora-remove-jwt-simple-dependency.patch
 # * remove dependency testcontainers - not in Fedora
-Patch7:         0007-Fedora-remove-testcontainers-dependency.patch
+Patch7:        0007-Fedora-remove-testcontainers-dependency.patch
 
 ExclusiveArch:  x86_64
 BuildRequires:  cargo-rpm-macros >= 24

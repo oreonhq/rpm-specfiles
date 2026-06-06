@@ -49,7 +49,7 @@ Source2:        template.spec
 # vendor built in %%prep via cmake.deps
 Source4:        neovim-bundled-licenses.txt
 
-Patch1000:      neovim-lua-bit32.patch
+Patch1000:        neovim-lua-bit32.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

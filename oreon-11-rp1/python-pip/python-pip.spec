@@ -86,17 +86,17 @@ BuildRequires:  python3-sphinx
 # when pip install -U is executed.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1550368#c24
 # Could be replaced with https://www.python.org/dev/peps/pep-0668/
-Patch:          remove-existing-dist-only-if-path-conflicts.patch
+Patch:        remove-existing-dist-only-if-path-conflicts.patch
 
 # Use the system level root certificate instead of the one bundled in certifi
 # https://bugzilla.redhat.com/show_bug.cgi?id=1655253
 # The same patch is a part of the RPM-packaged python-certifi
-Patch:          dummy-certifi.patch
+Patch:        dummy-certifi.patch
 
 # pytest-subket has been introduced to intercept network calls
 # https://github.com/pypa/pip/commit/a4b40f62332ccb3228b12cc5ae1493c75177247a
 # We don't need a layer to check that, as we're by default in an offline environment
-Patch:          downstream-remove-pytest-subket.patch
+Patch:        downstream-remove-pytest-subket.patch
 
 # Patch for the bundled urllib3 for CVE-2025-50181
 # Redirects are not disabled when retries are disabled on PoolManager instantiation

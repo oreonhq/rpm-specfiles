@@ -15,60 +15,60 @@ Buildrequires: gcc autoconf automake chrpath
 BuildRequires: tcl-devel
 BuildRequires: make
 # Patch0: fixes change log file permissions
-Patch0: expect-5.43.0-log_file.patch
+Patch0:        expect-5.43.0-log_file.patch
 # Patch1: fixes install location, change pkgIndex
-Patch1: expect-5.43.0-pkgpath.patch
+Patch1:        expect-5.43.0-pkgpath.patch
 # Patch2: fixes minor man page formatting issue
-Patch2: expect-5.45-man-page.patch
+Patch2:        expect-5.45-man-page.patch
 # Patch3: fixes segmentation fault during matching characters
-Patch3: expect-5.45-match-gt-numchars-segfault.patch
+Patch3:        expect-5.45-match-gt-numchars-segfault.patch
 # Patch4: fixes memory leak when using -re, http://sourceforge.net/p/expect/patches/13/
-Patch4: expect-5.45-re-memleak.patch
+Patch4:        expect-5.45-re-memleak.patch
 # Patch5: use vsnprintf instead of vsprintf to avoid buffer overflow
-Patch5: expect-5.45-exp-log-buf-overflow.patch
+Patch5:        expect-5.45-exp-log-buf-overflow.patch
 # Patch6: fixes segfaults if Tcl is built with stubs and Expect is used directly
 #   from C program rhbz#1091060
-Patch6: expect-5.45-segfault-with-stubs.patch
+Patch6:        expect-5.45-segfault-with-stubs.patch
 # Patch7: fixes leaked fd, patch by Matej Mužila, rhbz#1001220
-Patch7: expect-5.45-fd-leak.patch
+Patch7:        expect-5.45-fd-leak.patch
 # Patch8: unificates usage message of expect binary and man page, adds -h flag
-Patch8: expect-5.45.4-unification-of-usage-and-man-page.patch
+Patch8:        expect-5.45.4-unification-of-usage-and-man-page.patch
 # Patch9: fixes issues detected by static analysis
-Patch9: expect-5.45.4-covscan-fixes.patch
+Patch9:        expect-5.45.4-covscan-fixes.patch
 # Patch10: fix error with -Werror=format-security
-Patch10: expect-5.45-format-security.patch
+Patch10:        expect-5.45-format-security.patch
 # Patch11-12 - C99 compatibility
-Patch11: expect-configure-c99.patch
-Patch12: expect-c99.patch
+Patch11:        expect-configure-c99.patch
+Patch12:        expect-c99.patch
 # tcl9 compatibility patches
 # Patch13: replace CONST/CONST84/CONST84_RETURN macros with plain const
-Patch13: expect-5.45.4-tcl9-const.patch
+Patch13:        expect-5.45.4-tcl9-const.patch
 # Patch14: remove _ANSI_ARGS_ macro, use plain function prototypes
-Patch14: expect-5.45.4-tcl9-ansi-args.patch
+Patch14:        expect-5.45.4-tcl9-ansi-args.patch
 # Patch15: replace TCL_VARARGS* macros with standard C varargs
-Patch15: expect-5.45.4-tcl9-varargs.patch
+Patch15:        expect-5.45.4-tcl9-varargs.patch
 # Patch16: replace panic() with Tcl_Panic()
-Patch16: expect-5.45.4-tcl9-panic.patch
+Patch16:        expect-5.45.4-tcl9-panic.patch
 # Patch17: replace Tcl_EvalTokens with Tcl_EvalTokensStandard
-Patch17: expect-5.45.4-tcl9-eval-tokens.patch
+Patch17:        expect-5.45.4-tcl9-eval-tokens.patch
 # Patch18: update deprecated tcl macros for tcl9 compatibility
-Patch18: expect-5.45.4-tcl9-alloc.patch
+Patch18:        expect-5.45.4-tcl9-alloc.patch
 # Patch19: update int to Tcl_Size for tcl9 API changes, fix function signatures
-Patch19: expect-5.45.4-tcl9-size.patch
+Patch19:        expect-5.45.4-tcl9-size.patch
 # examples patches
 # Patch100: changes random function
-Patch100: expect-5.32.2-random.patch
+Patch100:        expect-5.32.2-random.patch
 # Patch101: fixes bz674184 - mkpasswd fails randomly
-Patch101: expect-5.45-mkpasswd-dash.patch
+Patch101:        expect-5.45-mkpasswd-dash.patch
 # Patch102: fixes bz703702 - let user know that telnet is needed for
 # running some examples
-Patch102: expect-5.45-check-telnet.patch
+Patch102:        expect-5.45-check-telnet.patch
 # Patch103: use full path to 'su', it's safer
-Patch103: expect-5.45-passmass-su-full-path.patch
+Patch103:        expect-5.45-passmass-su-full-path.patch
 # Patch104: rhbz 963889, fixes inaccuracy in mkpasswd man page
-Patch104: expect-5.45-mkpasswd-man.patch
+Patch104:        expect-5.45-mkpasswd-man.patch
 # Patch105: fix mkpasswd to read /dev/urandom in binary mode for tcl9
-Patch105: expect-5.45.4-tcl9-mkpasswd.patch
+Patch105:        expect-5.45.4-tcl9-mkpasswd.patch
 
 %description
 Expect is a tcl application for automating and testing

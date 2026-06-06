@@ -11,23 +11,23 @@ Source0: https://gitlab.com/sane-project/frontends/-/archive/%{version}/frontend
 # Fix array subscript out of bounds errors (#133121).
 # Upstream commit 5113e3de39846a8226909088ad5c1aa4969f3030 and commit
 # 7336b064653026171a715dfaf803693b638c67a5 (partial)
-Patch0: sane-frontends-1.0.14-array-out-of-bounds.patch
+Patch0:        sane-frontends-1.0.14-array-out-of-bounds.patch
 # Fix building with sane-backends >= 1.0.20.
 # Upstream commit 5e96223e497538d06e18d8e84b774c4a35f654b4 (partial) and commit
 # c554cfce37e37a33f94a9051afe2062c4759072b
-Patch1: sane-frontends-1.0.14-sane-backends-1.0.20.patch
+Patch1:        sane-frontends-1.0.14-sane-backends-1.0.20.patch
 # Describe correct option names in xcam man page.
 # Upstream commit 7e079e377174826453a1041719fb347d69d3ba5f
-Patch2: sane-frontends-1.0.14-xcam-man.patch
+Patch2:        sane-frontends-1.0.14-xcam-man.patch
 # 1837961 - [abrt] sane-frontends: operator delete(): scanadf killed by SIGSEGV
 # original PR https://gitlab.com/sane-project/frontends/-/merge_requests/1 (bz1837961)
 # updated PR https://gitlab.com/sane-project/frontends/-/merge_requests/7 (bz2133813)
-Patch3: frontends-scanadf-segv.patch
-Patch4: sane-frontends-configure-c99.patch
-Patch5: sane-frontends-c99.patch
+Patch3:        frontends-scanadf-segv.patch
+Patch4:        sane-frontends-configure-c99.patch
+Patch5:        sane-frontends-c99.patch
 # 2225209 - scanadf crashes when showing help for specific device
 # https://gitlab.com/sane-project/frontends/-/merge_requests/12
-Patch6: 0001-src-scanadf.c-Fix-segfault-when-scanadf-h-d-device.patch
+Patch6:        0001-src-scanadf.c-Fix-segfault-when-scanadf-h-d-device.patch
 
 License: GPL-2.0-or-later AND GPL-2.0-or-later WITH SANE-exception
 # for autoconf to update configure

@@ -97,7 +97,7 @@ Source:        https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/2026.1/gi-docg
 # This patch removes all references to WOFF/WOFF2 font files (which we still
 # must remove in %%prep) and ensures the CSS correctly references corresponding
 # or stand-in local system fonts.
-Patch:          0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
+Patch:        0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
 
 
 BuildArch:      noarch

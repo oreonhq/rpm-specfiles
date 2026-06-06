@@ -18,11 +18,11 @@ Source6:        opendnssec.cron
 Source7:        opendnssec-2.1.sqlite_convert.sql
 Source8:        opendnssec-2.1.sqlite_rpmversion.sql
 Source9: %{name}-sysusers.conf
-Patch1: 0001-Pass-right-remaining-buffer-size-in-hsm_hex_unparse-.patch
-Patch2: opendnssec-configure-c99.patch
-Patch3: opendnssec-2.1.14rc1-gcc14.patch
-Patch4: opendnssec-c99-2.patch
-Patch5: opendnssec-implicit-declarations.patch
+Patch1:        0001-Pass-right-remaining-buffer-size-in-hsm_hex_unparse-.patch
+Patch2:        opendnssec-configure-c99.patch
+Patch3:        opendnssec-2.1.14rc1-gcc14.patch
+Patch4:        opendnssec-c99-2.patch
+Patch5:        opendnssec-implicit-declarations.patch
 
 Requires: opencryptoki, softhsm >= 2.5.0 , systemd-units
 Requires: libxml2, libxslt sqlite

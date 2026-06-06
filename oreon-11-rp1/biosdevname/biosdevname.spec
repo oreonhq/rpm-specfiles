@@ -23,8 +23,8 @@ BuildRequires:  pciutils-devel
 BuildRequires:  zlib-devel
 BuildRequires: make
 
-Patch1: 0001-Disable-biosdevname-by-default.patch
-Patch2: 0002-Place-udev-rules-to-usr-lib.patch
+Patch1:        0001-Disable-biosdevname-by-default.patch
+Patch2:        0002-Place-udev-rules-to-usr-lib.patch
 
 %description
 biosdevname in its simplest form takes a kernel device name as an

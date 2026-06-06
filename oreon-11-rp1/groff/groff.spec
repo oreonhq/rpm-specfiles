@@ -55,17 +55,17 @@ Provides: bundled(gnulib)
 Source:        https://ftp.gnu.org/gnu/groff/groff-%{version}.tar.gz
 
 # resolves: #530788
-Patch0: 0001-missing-groff-x11-info-message-when-gxditview-not-fo.patch
-Patch1: 0002-load-site-font-and-site-tmac-from-etc-groff.patch
+Patch0:        0001-missing-groff-x11-info-message-when-gxditview-not-fo.patch
+Patch1:        0002-load-site-font-and-site-tmac-from-etc-groff.patch
 # resolves: #709413, #720058, #720057
-Patch2: 0003-various-security-fixes.patch
+Patch2:        0003-various-security-fixes.patch
 # resolves: #987069
-Patch3: 0004-don-t-use-usr-bin-env-in-shebang.patch
+Patch3:        0004-don-t-use-usr-bin-env-in-shebang.patch
 # allow to specify custom docdir
-Patch4: 0005-do-not-overwrite-docdir.patch
+Patch4:        0005-do-not-overwrite-docdir.patch
 # Revert upstream change of mapping special characters for UTF-8 devices
 # Debian commit: https://salsa.debian.org/debian/groff/-/commit/d5394c68d70e6c5199b01d2522e094c8fd52e64e
-Patch5: 0006-Revert-upstream-change-of-mapping-special-characters.patch
+Patch5:        0006-Revert-upstream-change-of-mapping-special-characters.patch
 
 Requires: coreutils, groff-base = %{version}-%{release}
 

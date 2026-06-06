@@ -118,14 +118,14 @@ Source1:        https://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz.asc
 # https://ffmpeg.org/ffmpeg-devel.asc
 # gpg2 --import --import-options import-export,import-minimal ffmpeg-devel.asc > ./ffmpeg.keyring
 Source2:        ffmpeg.keyring
-Source20:       enable_decoders
-Source21:       enable_encoders
+Source20:        enable_decoders
+Source21:        enable_encoders
 
 # Fixes for reduced codec selection on free build
-Patch1:         ffmpeg-codec-choice.patch
+Patch1:        ffmpeg-codec-choice.patch
 # Allow to build with fdk-aac-free
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1501522#c112
-Patch2:         ffmpeg-allow-fdk-aac-free.patch
+Patch2:        ffmpeg-allow-fdk-aac-free.patch
 # Support building with EVC base profile libraries
 Patch3:         https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20329.patch#/ffmpeg-support-evc-base-libraries.patch
 
@@ -135,7 +135,7 @@ Patch10:        https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7f9c7f9849a215522
 # Add first_dts getter to libavformat for Chromium
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=2240127
 # Reference: https://crbug.com/1306560
-Patch1002:      ffmpeg-chromium.patch
+Patch1002:        ffmpeg-chromium.patch
 
 
 Requires:       libavcodec%{?pkg_suffix}%{_isa} = %{version}-%{release}
@@ -740,7 +740,7 @@ This build includes the full range of codecs offered by ffmpeg.
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -S git_am
+%autosetup -S git_am -n ffmpeg-7.1.2
 install -m 0644 %{SOURCE20} enable_decoders
 install -m 0644 %{SOURCE21} enable_encoders
 # fix -O3 -g in host_cflags

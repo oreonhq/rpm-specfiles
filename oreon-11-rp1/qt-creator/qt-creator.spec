@@ -20,11 +20,11 @@ Source0:        https://download.qt.io/%{?prerelease:development}%{?!prerelease:
 Source1:        qt-creator-Fedora-privlibs
 
 # Fix leading whitespace in desktop file
-Patch1:         qt-creator_desktop.patch
+Patch1:        qt-creator_desktop.patch
 # Limit qmake names to avoid the rpm macro wrapper qmake-qt5.sh getting picked up (#1644989)
-Patch2:         qt-creator_qmake-names.patch
+Patch2:        qt-creator_qmake-names.patch
 # Fix debuginfod detection
-Patch3:         qt-creator-debuginfod.patch
+Patch3:        qt-creator-debuginfod.patch
 
 BuildRequires:  chrpath
 BuildRequires:  cmake

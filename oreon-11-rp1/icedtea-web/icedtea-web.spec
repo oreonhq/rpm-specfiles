@@ -22,9 +22,9 @@ Source0:        https://github.com/AdoptOpenJDK/IcedTea-Web/archive/%{name}-%{ve
 # Upstream changes since IcedTea-Web 1.8.8
 Patch0:            https://github.com/AdoptOpenJDK/IcedTea-Web/compare/icedtea-web-1.8.8...af67182516b22e8caa3ff2c3c81be9ef9233563f.patch#/icedtea-web-1.8.8-upstream-changes.patch
 # Remove dependency to dunce (normalizes Windows paths to the most compatible format)
-Patch1:            icedtea-web-1.8.8-remove-dunce.patch
+Patch1:        icedtea-web-1.8.8-remove-dunce.patch
 # https://access.redhat.com/documentation/en-us/openjdk/11/html/using_alt-java
-Patch2:            icedtea-web-1.8.8-alt-java.patch
+Patch2:        icedtea-web-1.8.8-alt-java.patch
 # Disable sun.applet javadocs and plugin man page for --disable-pluginjar
 Patch3:            https://github.com/AdoptOpenJDK/IcedTea-Web/pull/907.patch#/icedtea-web-1.8.8-disable-pluginjar.patch
 # Use same naming scheme like bash-completion
@@ -34,11 +34,11 @@ Patch5:            https://github.com/AdoptOpenJDK/IcedTea-Web/pull/901.patch#/i
 # Fix javadoc error related to @param in TimedHashMap.java
 Patch6:            https://github.com/AdoptOpenJDK/IcedTea-Web/pull/908.patch#/icedtea-web-1.8.8-javadoc-param.patch
 # Reflect removal of Pack200 Tools and API in Java 17 to IcedTea-Web
-Patch7:            icedtea-web-1.8.8-java18-no-pack200.patch
+Patch7:        icedtea-web-1.8.8-java18-no-pack200.patch
 # Dummy implementation of JarIndex for IcedTea-Web to support Java 21+
-Patch8:            icedtea-web-1.8.8-java21-jarindex.patch
+Patch8:        icedtea-web-1.8.8-java21-jarindex.patch
 # Modify autoconf scripts to support building with Java 21+
-Patch9:            icedtea-web-1.8.8-java21-autoconf.patch
+Patch9:        icedtea-web-1.8.8-java21-autoconf.patch
 # Extend JAVADOC_OPTS for Java 21+
 Patch10:           https://github.com/AdoptOpenJDK/IcedTea-Web/pull/970.patch#/icedtea-web-1.8.8-javadoc-21.patch
 # Prepend -Djava.security.manager as workaround for Java 21

@@ -19,7 +19,7 @@ Source3:        bnd.properties
 # Use system libraries
 # Disable gpg signatures
 # Process contrib and junit pom files
-Patch:          0001-Adapt-build.patch
+Patch:        0001-Adapt-build.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

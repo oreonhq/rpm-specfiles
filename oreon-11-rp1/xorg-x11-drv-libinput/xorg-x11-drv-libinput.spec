@@ -16,9 +16,9 @@ URL:        http://www.x.org
 License:    MIT
 
 %if 0%{?gitdate}
-Source0:        https://xorg.freedesktop.org/releases/individual/driver/xf86-input-libinput-1.5.0.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/driver/xf86-input-libinput-1.5.0.tar.xz#/xorg-x11-drv-libinput-1.5.0.tar.gz
 %else
-Source0:        https://xorg.freedesktop.org/releases/individual/driver/xf86-input-libinput-1.5.0.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/driver/xf86-input-libinput-1.5.0.tar.xz#/xorg-x11-drv-libinput-1.5.0.tar.gz
 %endif
 Source1:        71-libinput-overrides-wacom.conf
 Source30:        xserver-sdk-abi-requires

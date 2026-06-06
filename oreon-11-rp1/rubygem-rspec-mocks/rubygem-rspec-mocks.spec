@@ -28,7 +28,7 @@ Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:        rspec-related-create-full-tarball.sh
 # https://github.com/rspec/rspec/pull/282/commits/939c4799993b7ff7e524fac701ae6490772ca6de
 # Skip mock for ruby4_0 Kernel#inspect
-Patch0:	rspec-mocks-pr282-skip-mock-for-ruby4_0-inspect.patch
+Patch0:        rspec-mocks-pr282-skip-mock-for-ruby4_0-inspect.patch
 
 BuildRequires:	rubygems-devel
 %if %{without bootstrap}

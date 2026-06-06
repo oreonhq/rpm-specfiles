@@ -10,7 +10,7 @@ Summary: Portuguese hunspell dictionaries
 %global upstreamid 20131030
 Version: 0.%{upstreamid}
 Release: 16%{?dist}
-Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+Source0:        https://github.com/ivandrofly/hunspell-pt/archive/refs/heads/main.tar.gz#/hunspell-pt.tar.gz
 URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero
 # pt_BR dicts are under LGPLv3 or MPL, pt_PT under GPLv2 or LGPLv2 or MPLv1.1
 License: ( ( LGPL-3.0-only OR MPL-1.1 ) AND LGPL-2.1-only ) AND ( GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1 )

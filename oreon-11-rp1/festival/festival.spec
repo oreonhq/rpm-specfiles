@@ -26,7 +26,7 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0:        https://deb.debian.org/debian/pool/main/f/festival/festival_2.5.0.orig.tar.gz#/festival-2.5.0-release.tar.gz
+Source0:        https://festvox.org/packed/festival/%{version}/festival-%{version}-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary
@@ -60,14 +60,14 @@ Source225:        https://www.cstr.ed.ac.uk/downloads/festival/2.4/voices/festvo
 ### MBROLA voices left out, because they require MBROLA, which ain't free.
 
 ### Systemd service file.
-Source230: festival.service
+Source230:        festival.service
 
-Patch100: festival-2.5.0-pulseaudio.patch
-Patch101: festival-2.5.0-use-system-speech-tools.patch
-Patch102: festival-2.5.0-use-system-libs.patch
-Patch103: festival-2.5.0-filesystem-standard.patch
-Patch104: festival-2.5.0-siteinit.patch
-Patch105: festival-configure-c99.patch
+Patch100:        festival-2.5.0-pulseaudio.patch
+Patch101:        festival-2.5.0-use-system-speech-tools.patch
+Patch102:        festival-2.5.0-use-system-libs.patch
+Patch103:        festival-2.5.0-filesystem-standard.patch
+Patch104:        festival-2.5.0-siteinit.patch
+Patch105:        festival-configure-c99.patch
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

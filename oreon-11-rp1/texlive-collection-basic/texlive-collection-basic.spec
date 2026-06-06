@@ -102,7 +102,7 @@ Source40:        https://mirror.ctan.org/systems/texlive/tlnet/archive/unicode-d
 Source41:        https://mirror.ctan.org/systems/texlive/tlnet/archive/unicode-data.doc.tar.xz
 
 # Patches
-Patch0:         etex-addlanguage-fix-bz1215257.patch
+Patch0:        etex-addlanguage-fix-bz1215257.patch
 BuildRequires:  texlive-base
 BuildRequires:  python3-rpm-macros
 BuildRequires:  python3-devel

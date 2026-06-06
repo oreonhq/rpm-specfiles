@@ -18,7 +18,7 @@ Source2:        gpgkey-F2B41200C54EFB30380C1756C565D5F9D76D583B.gpg
 
 # Special patch source, conditionally applied
 ## Disable RAID56 modes (RHEL-only)
-Source1001:     1001-balance-mkfs-Disable-raid56-modes.patch
+Source1001:        1001-balance-mkfs-Disable-raid56-modes.patch
 
 BuildRequires:  gnupg2
 BuildRequires:  gcc, autoconf, automake, make

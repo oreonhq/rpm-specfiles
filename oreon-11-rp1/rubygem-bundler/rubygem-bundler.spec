@@ -37,7 +37,7 @@ Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: %{gem_name}-%{version}-specs.tar.gz
 # This revert changes which seems to require some setup prior running specs.
 # https://github.com/rubygems/rubygems/issues/8698
-Patch0: rubygem-bundler-2.6.9-Revert-changes-in-spec-sectup.patch
+Patch0:        rubygem-bundler-2.6.9-Revert-changes-in-spec-sectup.patch
 # ruby package has just soft dependency on rubygem(io-console), while
 # Bundler always requires it.
 Requires: rubygem(io-console)

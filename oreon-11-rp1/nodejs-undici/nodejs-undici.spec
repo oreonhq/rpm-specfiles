@@ -29,7 +29,7 @@ Source1:    %{npm_name}-%{version}-nm-prod.tgz
 Source2:    %{npm_name}-%{version}-nm-dev.tgz
 Source3:    %{npm_name}-%{version}-bundled-licenses.txt
 Source4:    %{npm_name}-sources.sh
-Source5:    test-runner.sh
+Source5:        test-runner.sh
 
 # Binary artifacts in this package are aimed at the wasm32-wasi "architecture".
 %global     _binaries_in_noarch_packages_terminate_build 0

@@ -5,7 +5,7 @@ Summary: Maori hyphenation rules
 %global upstreamid 20080630
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: https://linuxsoft.cern.ch/cern/slc69/SRPMS/hyphen-mi-0.20080630-3.1.el6.src.rpm
+Source: https://deb.debian.org/debian/pool/main/h/hunspell-hyph/hunspell-hyph-mi_0.1~20080630.orig.tar.xz#/hunspell-hyphen-mi-0.1.20080630-beta.tar.gz
 URL: http://papakupu.maori.nz/
 License: GPL-3.0-or-later
 BuildArch: noarch

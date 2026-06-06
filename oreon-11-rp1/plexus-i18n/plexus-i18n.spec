@@ -11,7 +11,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 # svn export http://svn.codehaus.org/plexus/plexus-components/tags/plexus-i18n-1.0-beta-10/
 # tar cjf plexus-i18n-1.0-beta-10-src.tar.bz2 plexus-i18n-1.0-beta-10/
-Source0:        https://deb.debian.org/debian/pool/main/p/plexus-i18n/plexus-i18n_1.0-beta-10.orig.tar.gz#/plexus-i18n-1.0-beta-10-src.tar.bz2
+Source0:        https://github.com/codehaus-plexus/plexus-i18n/archive/refs/tags/plexus-i18n-1.0-beta-10.tar.gz#/plexus-i18n-1.0-beta-10-src.tar.bz2
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
 BuildRequires:  mvn(junit:junit)
@@ -31,7 +31,7 @@ is like a J2EE application server, without all the baggage.
 %{?javadoc_package}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# -n: base directory name
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n plexus-i18n-1.0-beta-10
 # plexus maven plugin is deprecated
 # switched it to plexus-component-metadata

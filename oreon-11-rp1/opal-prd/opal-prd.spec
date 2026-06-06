@@ -29,7 +29,7 @@ Source2:        opal-prd-logrotate
 Source3:        ffspart.man
 
 # Annocheck FAIL: bind-now fortify pie
-Patch0: opal-prd-ffspart-annocheck.patch
+Patch0:        opal-prd-ffspart-annocheck.patch
 
 %description
 This package provides a daemon to load and run the OpenPower firmware's

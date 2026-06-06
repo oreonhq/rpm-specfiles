@@ -77,7 +77,7 @@ MY_SUM=$(sha256sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then
     abort
 fi
-%autosetup -S git
+%autosetup -S git -n anthy-unicode-1.0.0.20260213
 
 %build
 %meson \

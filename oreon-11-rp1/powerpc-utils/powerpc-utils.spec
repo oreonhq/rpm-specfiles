@@ -9,7 +9,7 @@ License:        GPL-2.0-only
 URL:            https://github.com/ibm-power-utilities/powerpc-utils
 Source0:        https://github.com/ibm-power-utilities/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/powerpc-utils-1.3.13.tar.gz
 Source1:        nx-gzip.udev
-Patch0:         powerpc-utils-1.3.11-manpages.patch
+Patch0:        powerpc-utils-1.3.11-manpages.patch
 
 ExclusiveArch:  ppc %{power64}
 

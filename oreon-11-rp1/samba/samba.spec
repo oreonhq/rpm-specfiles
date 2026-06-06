@@ -232,18 +232,18 @@ Source1:        https://download.samba.org/pub/samba/stable/samba-%{version}%{pr
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
 # Red Hat specific replacement-files
-Source10:       samba.logrotate
-Source11:       smb.conf.vendor
-Source12:       smb.conf.example
-Source13:       pam_winbind.conf
-Source14:       samba.pamd
-Source15:       usershares.conf.vendor
-Source16:       samba-systemd-sysusers.conf
-Source17:       samba-usershares-systemd-sysusers.conf
-Source18:       samba-winbind-systemd-sysusers.conf
+Source10:        samba.logrotate
+Source11:        smb.conf.vendor
+Source12:        smb.conf.example
+Source13:        pam_winbind.conf
+Source14:        samba.pamd
+Source15:        usershares.conf.vendor
+Source16:        samba-systemd-sysusers.conf
+Source17:        samba-usershares-systemd-sysusers.conf
+Source18:        samba-winbind-systemd-sysusers.conf
 
-Source201:      README.downgrade
-Source202:      samba.abignore
+Source201:        README.downgrade
+Source202:        samba.abignore
 
 Requires(pre): %{name}-common = %{samba_depver}
 Requires: %{name}-common = %{samba_depver}

@@ -30,7 +30,7 @@ Source4:        libguestfs.keyring
 
 # Adds a link to processcsv to the man page.  This patch is only
 # included in RHEL builds.
-Patch1:         virt-top-1.0.9-processcsv-documentation.patch
+Patch1:        virt-top-1.0.9-processcsv-documentation.patch
 
 BuildRequires:  gcc
 BuildRequires:  make

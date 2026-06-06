@@ -35,14 +35,13 @@ License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            http://www.lysator.liu.se/~nisse/nettle/
 Source0:        https://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
 Source1:        https://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
-# Same keyring blob and SHA512 as Fedora nettle sources (not shipped on ftp.gnu.org).
-Source2:	nettle-release-keyring.gpg
+Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x343C2FF0FBEE5EC2EDBEF399F3599FF828C67298#/nettle-release-keyring.gpg
 %if 0%{?bootstrap}
 Source100:	%{name}-%{version_old}-hobbled.tar.xz
 Source101:	nettle-3.5-remove-ecc-testsuite.patch
 %endif
-Patch:		nettle-3.8-zeroize-stack.patch
-Patch:		nettle-3.10-hobble-to-configure.patch
+Patch:        nettle-3.8-zeroize-stack.patch
+Patch:        nettle-3.10-hobble-to-configure.patch
 
 %if %{with bundle_gmp}
 Source200:	https://gmplib.org/download/gmp/gmp-6.2.1.tar.xz

@@ -20,24 +20,24 @@ URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
 Source0:        https://github.com/java-native-access/jna/archive/refs/tags/5.17.0.tar.gz#/jna-5.17.0.tar.gz
 Source1:        package-list
-Patch0:         0001-Adapt-build.patch
+Patch0:        0001-Adapt-build.patch
 # This patch is Fedora-specific for now until we get the huge
 # JNI library location mess sorted upstream
-Patch1:         0002-Load-system-library.patch
+Patch1:        0002-Load-system-library.patch
 # The X11 tests currently segfault; overall I think the X11 JNA stuff is just a
 # Really Bad Idea, for relying on AWT internals, using the X11 API at all,
 # and using a complex API like X11 through JNA just increases the potential
 # for problems.
-Patch2:         0003-Tests-headless.patch
+Patch2:        0003-Tests-headless.patch
 # Adds --allow-script-in-comments arg to javadoc to avoid error
-Patch3:         0004-Fix-javadoc-build.patch
+Patch3:        0004-Fix-javadoc-build.patch
 # Avoid generating duplicate manifest entry
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1469022
-Patch4:         0005-Fix-duplicate-manifest-entry.patch
+Patch4:        0005-Fix-duplicate-manifest-entry.patch
 # We don't want newly added warnings to break our build
-Patch5:         0006-Remove-Werror.patch
+Patch5:        0006-Remove-Werror.patch
 
-Patch6:         0007-Support-openjdk-17.patch
+Patch6:        0007-Support-openjdk-17.patch
 
 ExclusiveArch:  %{java_arches}
 

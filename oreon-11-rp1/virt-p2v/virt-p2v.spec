@@ -33,7 +33,7 @@ Source1:        https://download.libguestfs.org/%{name}/%{name}-%{version}.tar.g
 
 # Keyring used to verify tarball signature.
 %if 0%{verify_tarball_signature}
-Source2:       libguestfs.keyring
+Source2:        libguestfs.keyring
 %endif
 
 # Basic build requirements.

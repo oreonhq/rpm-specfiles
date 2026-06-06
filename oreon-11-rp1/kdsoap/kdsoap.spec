@@ -14,7 +14,7 @@ Summary:        A Qt-based client-side and server-side SOAP component
 # and are not used in the library code itself.
 License:        MIT
 URL:            https://github.com/KDAB/KDSoap
-Source0:        https://github.com/KDAB/KDSoap/archive/refs/tags/kdsoap-%{version}.tar.gz#/kdsoap-%{version}.tar.gz
+Source0:        https://github.com/KDAB/KDSoap/archive/refs/tags/v%{version}.tar.gz#/kdsoap-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -72,7 +72,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n kdsoap-2.2.0
 
 %build
 %global _vpath_builddir %{_target_platform}-qt5

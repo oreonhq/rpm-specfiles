@@ -20,11 +20,11 @@ License:   MIT
 Source0:    https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source30:        xserver-sdk-abi-requires
 
-Patch0:	    intel-gcc-pr65873.patch
+Patch0:        intel-gcc-pr65873.patch
 # https://bugs.freedesktop.org/show_bug.cgi?id=96255#c11
-Patch1:     0001-sna-Avoid-clobbering-output-physical-size-with-xf86O.patch
+Patch1:        0001-sna-Avoid-clobbering-output-physical-size-with-xf86O.patch
 # https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/issues/180
-Patch2:     xvmc-workaround.patch
+Patch2:        xvmc-workaround.patch
 
 ExclusiveArch: %{ix86} x86_64
 

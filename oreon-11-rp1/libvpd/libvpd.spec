@@ -9,7 +9,7 @@ License:	LGPL-2.0-or-later
 URL:		https://github.com/power-ras/%{name}/releases
 Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/libvpd-2.2.11.tar.gz
 Source1:        99-libvpd.conf
-Patch1:		libvpd-install-rules-in-system-wide-dir.patch
+Patch1:        libvpd-install-rules-in-system-wide-dir.patch
 
 BuildRequires:	autoconf automake libtool
 BuildRequires:	gcc-c++

@@ -12,6 +12,7 @@ BuildRequires: make
 BuildRequires:  gcc
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: xorg-x11-util-macros
 BuildRequires: ncurses-devel libXres-devel libXext-devel libX11-devel
 BuildRequires: libXau-devel
 

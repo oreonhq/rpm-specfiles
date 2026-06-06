@@ -94,9 +94,6 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/nodejs-undici/undici-7.24.0-nm-prod.tgz
 !oreon-11-rp1/nss/nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
 !oreon-11-rp1/open-sans-fonts/open-sans-fonts-1.10.tar.xz
-!oreon-11-rp1/opencv/face_landmark_model.dat.xz
-!oreon-11-rp1/opencv/opencv-clean-4.13.0.tar.gz
-!oreon-11-rp1/opencv/opencv_contrib-clean-4.13.0.tar.gz
 !oreon-11-rp1/pesign/certs.tar.xz
 !oreon-11-rp1/poppler/poppler-test-2021-01-11-03a4b9eb854a06a83c465e82de601796c458bbe9.tar.xz
 !oreon-11-rp1/ppp/ppp-watch.tar.xz

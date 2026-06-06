@@ -61,6 +61,7 @@ tar xvf test.tar.gz
 
 %install
 install -Dpm0644 macros.nodejs %{buildroot}%{macrosdir}/macros.nodejs
+install -Dpm0644 nodejs.srpm.macros %{buildroot}%{macrosdir}/nodejs.srpm.macros
 install -Dpm0644 nodejs.attr %{buildroot}%{_rpmconfigdir}/fileattrs/nodejs.attr
 install -pm0755 nodejs.prov %{buildroot}%{_rpmconfigdir}/nodejs.prov
 install -pm0755 nodejs.req %{buildroot}%{_rpmconfigdir}/nodejs.req
@@ -78,6 +79,7 @@ install -Dpm0755 nodejs-packaging-bundler %{buildroot}%{_bindir}/nodejs-packagin
 %files
 %license LICENSE
 %{macrosdir}/macros.nodejs
+%{macrosdir}/nodejs.srpm.macros
 %{_rpmconfigdir}/fileattrs/nodejs*.attr
 %{_rpmconfigdir}/nodejs*
 %{_datadir}/node/multiver_modules

@@ -19,7 +19,7 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-quh)
 
-Source0:        http://www.runasimipi.org/quh_BO-pack.zip
+Source0:        https://www.runasimipi.org/quh_BO-pack.zip
 
 %description
 Quechua South Bolivia hunspell dictionaries.

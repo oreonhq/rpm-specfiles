@@ -17,8 +17,8 @@ Requires: %{name}-ppds = %{version}-%{release}
 
 Source0:        https://github.com/OpenPrinting/foomatic-db/archive/refs/heads/master.tar.gz#/foomatic-db-%{dbver_rel}-%{dbver_snap}.tar.gz
 
-Patch1: foomatic-db-device-ids.patch
-Patch2: foomatic-db-invalid.patch
+Patch1:        foomatic-db-device-ids.patch
+Patch2:        foomatic-db-invalid.patch
 
 Url: http://www.openprinting.org
 BuildArch: noarch

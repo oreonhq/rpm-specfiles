@@ -40,22 +40,22 @@ Provides: links = 1:0.97-1
 Provides: text-www-browser
 
 # Prevent crash when HOME is unset (bug #90663).
-Patch0: 0000-elinks-0.19.0-ssl-noegd.patch
+Patch0:        0000-elinks-0.19.0-ssl-noegd.patch
 
 # UTF-8 by default
-Patch1: 0001-elinks-0.15.1-utf_8_io-default.patch
+Patch1:        0001-elinks-0.15.1-utf_8_io-default.patch
 
 # Make getaddrinfo call use AI_ADDRCONFIG.
-Patch3: elinks-0.11.0-getaddrinfo.patch
+Patch3:        elinks-0.11.0-getaddrinfo.patch
 
 # Don't put so much information in the user-agent header string (bug #97273).
-Patch4: 0004-elinks-0.15.0-sysname.patch
+Patch4:        0004-elinks-0.15.0-sysname.patch
 
 # Fix xterm terminal: "Linux" driver seems better than "VT100" (#128105)
-Patch5: 0005-elinks-0.15.0-xterm.patch
+Patch5:        0005-elinks-0.15.0-xterm.patch
 
 # let list_is_singleton() return false for an empty list (#1075415)
-Patch6: elinks-0.12pre6-list_is_singleton.patch
+Patch6:        elinks-0.12pre6-list_is_singleton.patch
 
 %description
 Elinks is a text-based Web browser. Elinks does not display any images,
@@ -65,7 +65,7 @@ quickly and swiftly displays Web pages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n elinks-0.19.0
 
 # remove bogus serial numbers
 sed -e 's/^# *serial [AM0-9]*$//' -i config/m4/*.m4

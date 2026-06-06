@@ -62,207 +62,207 @@ Provides: qt4 = %{version}-%{release}
 %{?_isa:Provides: qt4%{?_isa} = %{version}-%{release}}
 
 # default Qt config file
-Source4: Trolltech.conf
+Source4:        Trolltech.conf
 
 # header file to workaround multilib issue
-Source5: qconfig-multilib.h
+Source5:        qconfig-multilib.h
 
 # set default QMAKE_CFLAGS_RELEASE
-Patch2: qt-everywhere-opensource-src-4.8.0-tp-multilib-optflags.patch
+Patch2:        qt-everywhere-opensource-src-4.8.0-tp-multilib-optflags.patch
 
 # get rid of timestamp which causes multilib problem
-Patch4: qt-everywhere-opensource-src-4.8.5-uic_multilib.patch
+Patch4:        qt-everywhere-opensource-src-4.8.5-uic_multilib.patch
 
 # reduce debuginfo in qtwebkit (webcore)
-Patch5: qt-everywhere-opensource-src-4.8.5-webcore_debuginfo.patch
+Patch5:        qt-everywhere-opensource-src-4.8.5-webcore_debuginfo.patch
 
 # cups16 printer discovery
-Patch6: qt-cupsEnumDests.patch
+Patch6:        qt-cupsEnumDests.patch
 
 # prefer adwaita over gtk+ on DE_GNOME
 # https://bugzilla.redhat.com/show_bug.cgi?id=1192453
-Patch10: qt-prefer_adwaita_on_gnome.patch
+Patch10:        qt-prefer_adwaita_on_gnome.patch
 
 # enable ft lcdfilter
-Patch15: qt-x11-opensource-src-4.5.1-enable_ft_lcdfilter.patch
+Patch15:        qt-x11-opensource-src-4.5.1-enable_ft_lcdfilter.patch
 
 # may be upstreamable, not sure yet
 # workaround for gdal/grass crashers wrt glib_eventloop null deref's
-Patch23: qt-everywhere-opensource-src-4.6.3-glib_eventloop_nullcheck.patch
+Patch23:        qt-everywhere-opensource-src-4.6.3-glib_eventloop_nullcheck.patch
 
 # hack out largely useless (to users) warnings about qdbusconnection
 # (often in kde apps), keep an eye on https://git.reviewboard.kde.org/r/103699/
-Patch25: qt-everywhere-opensource-src-4.8.3-qdbusconnection_no_debug.patch
+Patch25:        qt-everywhere-opensource-src-4.8.3-qdbusconnection_no_debug.patch
 
 # lrelease-qt4 tries to run qmake not qmake-qt4 (http://bugzilla.redhat.com/820767)
-Patch26: qt-everywhere-opensource-src-4.8.1-linguist_qmake-qt4.patch
+Patch26:        qt-everywhere-opensource-src-4.8.1-linguist_qmake-qt4.patch
 
 # enable debuginfo in libQt3Support
-Patch27: qt-everywhere-opensource-src-4.8.1-qt3support_debuginfo.patch
+Patch27:        qt-everywhere-opensource-src-4.8.1-qt3support_debuginfo.patch
 
 # kde4/multilib QT_PLUGIN_PATH
-Patch28: qt-everywhere-opensource-src-4.8.5-qt_plugin_path.patch
+Patch28:        qt-everywhere-opensource-src-4.8.5-qt_plugin_path.patch
 
 ## upstreamable bits
 # add support for pkgconfig's Requires.private to qmake
-Patch50: qt-everywhere-opensource-src-4.8.4-qmake_pkgconfig_requires_private.patch
+Patch50:        qt-everywhere-opensource-src-4.8.4-qmake_pkgconfig_requires_private.patch
 
 # FTBFS against newer firebird-4.0.0
-Patch51: qt-everywhere-opensource-src-4.8.7-firebird-4.0.0.patch
+Patch51:        qt-everywhere-opensource-src-4.8.7-firebird-4.0.0.patch
 
 # workaround major/minor macros possibly being defined already
-Patch52: qt-everywhere-opensource-src-4.8.7-QT_VERSION_CHECK.patch
+Patch52:        qt-everywhere-opensource-src-4.8.7-QT_VERSION_CHECK.patch
 
 # fix invalid inline assembly in qatomic_{i386,x86_64}.h (de)ref implementations
-Patch53: qt-x11-opensource-src-4.5.0-fix-qatomic-inline-asm.patch
+Patch53:        qt-x11-opensource-src-4.5.0-fix-qatomic-inline-asm.patch
 
 # fix invalid assumptions about mysql_config --libs
 # http://bugzilla.redhat.com/440673
-Patch54: qt-everywhere-opensource-src-4.8.5-mysql_config.patch
+Patch54:        qt-everywhere-opensource-src-4.8.5-mysql_config.patch
 
 # http://bugs.kde.org/show_bug.cgi?id=180051#c22
-Patch55: qt-everywhere-opensource-src-4.6.2-cups.patch
+Patch55:        qt-everywhere-opensource-src-4.6.2-cups.patch
 
 # backport https://codereview.qt-project.org/#/c/205874/
-Patch56: qt-everywhere-opensource-src-4.8.7-mariadb.patch
+Patch56:        qt-everywhere-opensource-src-4.8.7-mariadb.patch
 
 # use QMAKE_LFLAGS_RELEASE when building qmake
-Patch57: qt-everywhere-opensource-src-4.8.7-qmake_LFLAGS.patch
+Patch57:        qt-everywhere-opensource-src-4.8.7-qmake_LFLAGS.patch
 
 # Fails to create debug build of Qt projects on mingw (rhbz#653674)
-Patch64: qt-everywhere-opensource-src-4.8.5-QTBUG-14467.patch
+Patch64:        qt-everywhere-opensource-src-4.8.5-QTBUG-14467.patch
 
 # fix QTreeView crash triggered by KPackageKit (patch by David Faure)
-Patch65: qt-everywhere-opensource-src-4.8.0-tp-qtreeview-kpackagekit-crash.patch
+Patch65:        qt-everywhere-opensource-src-4.8.0-tp-qtreeview-kpackagekit-crash.patch
 
 # fix the outdated standalone copy of JavaScriptCore
-Patch67: qt-everywhere-opensource-src-4.8.6-s390.patch
+Patch67:        qt-everywhere-opensource-src-4.8.6-s390.patch
 
 # https://bugs.webkit.org/show_bug.cgi?id=63941
 # -Wall + -Werror = fail
-Patch68: qt-everywhere-opensource-src-4.8.3-no_Werror.patch
+Patch68:        qt-everywhere-opensource-src-4.8.3-no_Werror.patch
 
 # revert qlist.h commit that seems to induce crashes in qDeleteAll<QList (QTBUG-22037)
-Patch69: qt-everywhere-opensource-src-4.8.0-QTBUG-22037.patch
+Patch69:        qt-everywhere-opensource-src-4.8.0-QTBUG-22037.patch
 
 # Buttons in Qt applications not clickable when run under gnome-shell (#742658, QTBUG-21900)
-Patch71:  qt-everywhere-opensource-src-4.8.5-QTBUG-21900.patch
+Patch71:        qt-everywhere-opensource-src-4.8.5-QTBUG-21900.patch
 
 # workaround
 # sql/drivers/tds/qsql_tds.cpp:341:49: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
-Patch74: qt-everywhere-opensource-src-4.8.5-tds_no_strict_aliasing.patch
+Patch74:        qt-everywhere-opensource-src-4.8.5-tds_no_strict_aliasing.patch
 
 # add missing method for QBasicAtomicPointer on s390(x)
-Patch76: qt-everywhere-opensource-src-4.8.0-s390-atomic.patch
+Patch76:        qt-everywhere-opensource-src-4.8.0-s390-atomic.patch
 
 # don't spam in release/no_debug mode if libicu is not present at runtime
-Patch77: qt-everywhere-opensource-src-4.8.3-icu_no_debug.patch
+Patch77:        qt-everywhere-opensource-src-4.8.3-icu_no_debug.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=810500
-Patch81: qt-everywhere-opensource-src-4.8.2--assistant-crash.patch
+Patch81:        qt-everywhere-opensource-src-4.8.2--assistant-crash.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=694385
 # https://bugs.kde.org/show_bug.cgi?id=249217
 # https://bugreports.qt-project.org/browse/QTBUG-4862
 # QDir::homePath() should account for an empty HOME environment variable on X11
-Patch82: qt-everywhere-opensource-src-4.8.5-QTBUG-4862.patch
+Patch82:        qt-everywhere-opensource-src-4.8.5-QTBUG-4862.patch
 
 # poll support
-Patch83: qt-4.8-poll.patch
+Patch83:        qt-4.8-poll.patch
 
 # fix QTBUG-35459 (too low entityCharacterLimit=1024 for CVE-2013-4549)
-Patch84: qt-everywhere-opensource-src-4.8.5-QTBUG-35459.patch
+Patch84:        qt-everywhere-opensource-src-4.8.5-QTBUG-35459.patch
 
 # systemtrayicon plugin support (for appindicators)
-Patch86: qt-everywhere-opensource-src-4.8.6-systemtrayicon.patch
+Patch86:        qt-everywhere-opensource-src-4.8.6-systemtrayicon.patch
 
 # fixes for LibreOffice from the upstream Qt bug tracker (#1105422):
-Patch87: qt-everywhere-opensource-src-4.8.6-QTBUG-37380.patch
-Patch88: qt-everywhere-opensource-src-4.8.6-QTBUG-34614.patch
-Patch89: qt-everywhere-opensource-src-4.8.6-QTBUG-38585.patch
+Patch87:        qt-everywhere-opensource-src-4.8.6-QTBUG-37380.patch
+Patch88:        qt-everywhere-opensource-src-4.8.6-QTBUG-34614.patch
+Patch89:        qt-everywhere-opensource-src-4.8.6-QTBUG-38585.patch
 
 # build against the system clucene09-core
-Patch90: qt-everywhere-opensource-src-4.8.6-system-clucene.patch
+Patch90:        qt-everywhere-opensource-src-4.8.6-system-clucene.patch
 
 # fix arch autodetection for 64-bit MIPS
-Patch91: qt-everywhere-opensource-src-4.8.7-mips64.patch
+Patch91:        qt-everywhere-opensource-src-4.8.7-mips64.patch
 
 # fix build issue(s) with gcc6
-Patch92: qt-everywhere-opensource-src-4.8.7-gcc6.patch
+Patch92:        qt-everywhere-opensource-src-4.8.7-gcc6.patch
 
 # support alsa-1.1.x
-Patch93: qt-everywhere-opensource-src-4.8.7-alsa-1.1.patch
+Patch93:        qt-everywhere-opensource-src-4.8.7-alsa-1.1.patch
 
 # support OpenSSL 1.1.x, from Debian (Gert Wollny, Dmitry Eremin-Solenikov)
 # https://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/tree/debian/patches/openssl_1.1.patch?h=experimental
 # fixes for -openssl-linked by Kevin Kofler
-Patch94: qt-everywhere-opensource-src-4.8.7-openssl-1.1.patch
+Patch94:        qt-everywhere-opensource-src-4.8.7-openssl-1.1.patch
 
 # fix build with ICU >= 59, from OpenSUSE (Fabian Vogt)
 # https://build.opensuse.org/package/view_file/KDE:Qt/libqt4/fix-build-icu59.patch?expand=1
-Patch95: qt-everywhere-opensource-src-4.8.7-icu59.patch
+Patch95:        qt-everywhere-opensource-src-4.8.7-icu59.patch
 
 # workaround qtscript failures when building with f28's gcc8
 # https://bugzilla.redhat.com/show_bug.cgi?id=1580047
-Patch96: qt-everywhere-opensource-src-4.8.7-gcc8_qtscript.patch
+Patch96:        qt-everywhere-opensource-src-4.8.7-gcc8_qtscript.patch
 
 # Fix ordered pointer comparison against zero problem reported by gcc-11
-Patch97: qt-everywhere-opensource-src-4.8.7-gcc11.patch
+Patch97:        qt-everywhere-opensource-src-4.8.7-gcc11.patch
 
 # hardcode the compiler version in the build key once and for all
-Patch98: qt-everywhere-opensource-src-4.8.7-hardcode-buildkey.patch
+Patch98:        qt-everywhere-opensource-src-4.8.7-hardcode-buildkey.patch
 
 # FTBFS openssl3
-Patch99: qt-everywhere-opensource-src-4.8.7-openssl3.patch
+Patch99:        qt-everywhere-opensource-src-4.8.7-openssl3.patch
 
 # FTBFS icu76
-Patch100: qt-4.6-ftbfs-icu76.patch
+Patch100:        qt-4.6-ftbfs-icu76.patch
 
 # upstream patches
 # backported from Qt5 (essentially)
 # http://bugzilla.redhat.com/702493
 # https://bugreports.qt-project.org/browse/QTBUG-5545
-Patch102: qt-everywhere-opensource-src-4.8.5-qgtkstyle_disable_gtk_theme_check.patch
+Patch102:        qt-everywhere-opensource-src-4.8.5-qgtkstyle_disable_gtk_theme_check.patch
 # workaround for MOC issues with Boost headers (#756395)
 # https://bugreports.qt-project.org/browse/QTBUG-22829
-Patch113: qt-everywhere-opensource-src-4.8.6-QTBUG-22829.patch
+Patch113:        qt-everywhere-opensource-src-4.8.6-QTBUG-22829.patch
 
 # aarch64 support, https://bugreports.qt-project.org/browse/QTBUG-35442
-Patch180: qt-aarch64.patch
+Patch180:        qt-aarch64.patch
 
 # Fix problem caused by gcc 9 fixing a longstanding bug.
 # https://github.com/qt/qtbase/commit/c35a3f519007af44c3b364b9af86f6a336f6411b.patch
-Patch181: qt-everywhere-opensource-src-4.8.7-qforeach.patch
+Patch181:        qt-everywhere-opensource-src-4.8.7-qforeach.patch
 
 # riscv64 support
-Patch182: qt-everywhere-opensource-src-4.8.7-riscv64.patch
+Patch182:        qt-everywhere-opensource-src-4.8.7-riscv64.patch
 
 ## upstream git
 
 ## security patches
 # CVE-2018-19872 qt: malformed PPM image causing division by zero and crash in qppmhandler.cpp
-Patch500: qt-everywhere-opensource-src-4.8.7-crash-in-qppmhandler.patch
+Patch500:        qt-everywhere-opensource-src-4.8.7-crash-in-qppmhandler.patch
 
 # CVE-2020-17507 qt: buffer over-read in read_xbm_body in gui/image/qxbmhandler.cpp
-Patch501: qt-CVE-2020-17507.patch
+Patch501:        qt-CVE-2020-17507.patch
 
 # no CVE qt: Clamp parsed doubles to float representable values
-Patch502: qt-everywhere-opensource-src-4.8.7-clamp-parsed-doubles-to-float-representtable-values.patch
+Patch502:        qt-everywhere-opensource-src-4.8.7-clamp-parsed-doubles-to-float-representtable-values.patch
 
 # CVE-2020-24741 qt: QLibrary loads libraries relative to CWD which could result in arbitrary code execution
-Patch503: qt-everywhere-opensource-src-4.8.5-CVE-2020-24741.patch
+Patch503:        qt-everywhere-opensource-src-4.8.5-CVE-2020-24741.patch
 
 # CVE-2023-32573 qt: Uninitialized variable usage in m_unitsPerEm
-Patch504: qt-CVE-2023-32573.patch
-Patch505: qt-CVE-2023-34410.patch
+Patch504:        qt-CVE-2023-32573.patch
+Patch505:        qt-CVE-2023-34410.patch
 
 # desktop files
-Source20: assistant.desktop
-Source21: designer.desktop
-Source22: linguist.desktop
-Source23: qdbusviewer.desktop
-Source24: qtdemo.desktop
-Source25: qtconfig.desktop
+Source20:        assistant.desktop
+Source21:        designer.desktop
+Source22:        linguist.desktop
+Source23:        qdbusviewer.desktop
+Source24:        qtdemo.desktop
+Source25:        qtconfig.desktop
 
 # upstream qt4-logo, http://trolltech.com/images/products/qt/qt4-logo
 Source30: hi128-app-qt4-logo.png
@@ -311,7 +311,7 @@ Source31: hi48-app-qt4-logo.png
 %endif
 
 # macros, be mindful to keep sync'd with macros.qt4
-Source1: macros.qt4
+Source1:        macros.qt4
 %define _qt4 %{name}
 %define _qt4_prefix %{_libdir}/qt4
 %define _qt4_bindir %{_qt4_prefix}/bin

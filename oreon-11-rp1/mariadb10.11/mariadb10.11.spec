@@ -188,7 +188,7 @@ Source12:        mariadb-prepare-db-dir.sh
 Source14:        mariadb-check-socket.sh
 Source15:        mariadb-scripts-common.sh
 Source16:        mariadb-check-upgrade.sh
-Source18:        mysql@.service.in
+Source18:        mysql%40.service.in
 Source50:        rh-skipped-tests-base.list
 Source51:        rh-skipped-tests-arm.list
 Source52:        rh-skipped-tests-s390.list
@@ -231,9 +231,9 @@ Patch13:          %{majorname}-libfmt.patch
 #   Patch14: make MTR port calculation reasonably predictable
 Patch14:          %{majorname}-mtr.patch
 #   Patch15: mark RISC-V64 as 64-bit architecture
-Patch15:          mark-RISC-V64-as-64-bit-architecture.patch
+Patch15:        mark-RISC-V64-as-64-bit-architecture.patch
 #   Patch16: fixup for SISGSEGV while using skip-grant-tables
-Patch16:          upstream_87309d3d4bb8f48910d05b0ca5ee989bcdd6b053.patch
+Patch16:        upstream_87309d3d4bb8f48910d05b0ca5ee989bcdd6b053.patch
 
 # This macro is used for package/sub-package names in the entire specfile
 %if %?mariadb_default
