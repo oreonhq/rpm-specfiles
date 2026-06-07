@@ -25,6 +25,9 @@ index dd75623a..5b8432cc 100644
 +            ectx=self._ectx, handle=self._handle, session=self._session
 +        )
 +
++    def __deepcopy__(self, memo) -> "tpm_rsa_private_key":
++        return self.__copy__()
++
  
  class tpm_ecc_private_key(ec.EllipticCurvePrivateKey):
      """Interface to a TPM ECC key for use with the cryptography module.
@@ -38,6 +41,9 @@ index dd75623a..5b8432cc 100644
 +        return tpm_ecc_private_key(
 +            ectx=self._ectx, handle=self._handle, session=self._session
 +        )
++
++    def __deepcopy__(self, memo) -> "tpm_ecc_private_key":
++        return self.__copy__()
 diff --git a/test/test_cryptography.py b/test/test_cryptography.py
 index 3f81f6a6..3e4f30d4 100644
 --- a/test/test_cryptography.py

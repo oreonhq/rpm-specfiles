@@ -45,12 +45,11 @@ This is the development package that provides header files and libraries
 for MeCab.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n mecab-master
-
+cd mecab
 
 find . -name \*.cpp -print0 | xargs -0 %{__chmod} 0644
-autoreconf -fi
 
 # compiler flags fix
 %{__sed} -i.flags \
@@ -65,6 +64,7 @@ autoreconf -fi
 	mecab-config.in mecabrc.in
 
 %build
+cd mecab
 %configure
 # remove rpath from libtool
 %{__sed} -i.rpath \
@@ -75,6 +75,7 @@ autoreconf -fi
 %make_build
 
 %install
+cd mecab
 %make_install
 
 %{__rm} -f $RPM_BUILD_ROOT%{_libdir}/lib*.{a,la}
@@ -85,8 +86,8 @@ autoreconf -fi
 
 %check
 # here enable rpath
-export LD_LIBRARY_PATH=$(pwd)/src/.libs
-cd tests
+export LD_LIBRARY_PATH=$(pwd)/mecab/src/.libs
+cd mecab/tests
 %{__make} check || :
 cd ..
 

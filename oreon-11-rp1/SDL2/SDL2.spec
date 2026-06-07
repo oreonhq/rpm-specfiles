@@ -23,6 +23,7 @@ Source2:        SDL_revision.h
 Patch0:         multilib.patch
 # Prefer Wayland by default
 Patch1:         SDL2-2.0.22-prefer-wayland.patch
+Patch2:         SDL2-pipewire-pw-node-cast.patch
 
 BuildRequires:  git-core
 BuildRequires:  cmake
@@ -101,7 +102,7 @@ Conflicts:      %{name}-devel < 2.0.18-4
 Static libraries for SDL2.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git
 sed -i -e 's/\r//g' TODO.txt README.md WhatsNew.txt BUGS.txt LICENSE.txt CREDITS.txt README-SDL.txt
 
@@ -117,7 +118,8 @@ export LDFLAGS="%{shrink:%{build_ldflags}}"
     -DSDL_NAS=OFF \
     -DSDL_PULSEAUDIO_SHARED=ON \
     -DSDL_JACK_SHARED=ON \
-    -DSDL_PIPEWIRE_SHARED=ON \
+    -DSDL_PIPEWIRE=OFF \
+    -DSDL_PIPEWIRE_SHARED=OFF \
     -DSDL_ALSA=ON \
     -DSDL_VIDEO_WAYLAND=ON \
     -DSDL_LIBDECOR_SHARED=ON \

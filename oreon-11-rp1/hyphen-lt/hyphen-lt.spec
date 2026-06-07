@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash d05ef89e41a4933c07f8c211a51f8569309e31fede7d58d55f1964b6eac256b2
 
 Name: hyphen-lt
 Summary: Lithuanian hyphenation rules
 %global upstreamid 20100531
 Version: 0.%{upstreamid}
 Release: 31%{?dist}
-Source: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-lt.tex
+Source0:        hyph-lt.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch

@@ -48,17 +48,8 @@ package contains the development headers.
 
 
 %prep
-_tar="lockdev-%{version}.%{checkout}.tar.gz"
-if test ! -f "$_tar"; then
-  curl -sfL -o _ld.tar.gz "https://codeload.github.com/definesat/lockdev/tar.gz/master"
-  rm -rf lockdev-scm-%{co_date}
-  mkdir lockdev-scm-%{co_date}
-  tar xzf _ld.tar.gz -C lockdev-scm-%{co_date} --strip-components=1
-  tar czf "$_tar" lockdev-scm-%{co_date}
-  rm -rf _ld.tar.gz lockdev-scm-%{co_date}
-fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n lockdev-scm-%{co_date}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n lockdev-master
 
 %patch -P1 -p1 -b .access
 %patch -P2 -p1

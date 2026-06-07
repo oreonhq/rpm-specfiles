@@ -1,4 +1,4 @@
-%global source0_hash 80d1b61bd4ab650790ae2ab29daa035eba8886d84f1d417f3bd41729198e9bd8
+%global source0_hash 94f5464361ddb282c748edb0bd7f52d6d87de54fe6f1effced8375a7828f3d51
 
 # Version 6.0.0 had __version__ = "6.0.0dev0" in chardet/version.py. A
 # follow-up commit fixed this, updating the version to "6.0.0.post1", and was
@@ -35,6 +35,9 @@ Source1:        get_source
 Source2:        chardetect.1
 
 
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  zstd
+
 BuildArch:      noarch
 
 %global common_description %{expand:
@@ -62,6 +65,10 @@ Summary:        %{summary}
 %{common_description}
 
 
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n chardet-%{commit} -a1
+
 %generate_buildrequires -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
@@ -78,7 +85,7 @@ install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE2}'
 # problematic license status.
 
 
-%files -n python3-chardet -f %{pyproject_files}
+%files -n python3-chardet -f .pyproject_files
 %doc README.rst
 %{_bindir}/chardetect
 %{_mandir}/man1/chardetect.1*

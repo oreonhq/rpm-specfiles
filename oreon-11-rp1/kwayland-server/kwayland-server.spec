@@ -19,6 +19,8 @@ URL:     https://invent.kde.org/plasma/%{name}
 %endif
 Source0:        https://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
 
+Patch0:        kwayland-server-drm-fourcc-u64.patch
+
 BuildRequires:  qt5-qtbase-devel
 
 BuildRequires:  extra-cmake-modules
@@ -42,7 +44,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 

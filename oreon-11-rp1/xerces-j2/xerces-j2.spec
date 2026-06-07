@@ -25,8 +25,6 @@ Source12:       %{name}-constants.1
 
 # Patch the build so that it doesn't try to use bundled xml-commons source
 Patch:          %{name}-manifest.patch
-# Patch the manifest so that it includes OSGi stuff
-Patch:          %{name}-manifest.patch
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -75,8 +73,7 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n xerces-2_12_2
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n xerces-2_12_2
 
 # Copy the custom ant task into place

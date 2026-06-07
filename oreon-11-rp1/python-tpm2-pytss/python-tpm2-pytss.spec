@@ -17,8 +17,8 @@ Patch1:         %{name}-2.3.0-secp192.patch
 Patch2:         %{name}-bsd.patch
 # https://github.com/tpm2-software/tpm2-pytss/pull/615
 Patch3:         %{name}-gcc15.patch
-# cryptograpy: add copy dunder for private keys
-# cryptography >= 45.0.0 requires the copy dunder for private key implementations.
+# cryptograpy: add copy/deepcopy dunders for private keys
+# cryptography >= 45.0.0 requires copy + deepcopy on private key impls (py3.14)
 # https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439
 Patch4:         %{name}-copy-dunder.patch
 
@@ -51,7 +51,7 @@ Summary:        %{summary}
 %description -n python3-%{pypi_name} %{_description}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires

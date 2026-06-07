@@ -25,13 +25,18 @@ Supplements: (hunspell and langpacks-uz)
 Uzbek hunspell dictionaries.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n uzbek-wordlist-master
+ln -sf unsorted.wordlist uzbek.wordlist
+cat > hunspell/uz_UZ.aff <<'EOF'
+SET UTF-8
+TRY esianrtolcdugmphbyfvkwzESIANRTOLCDUGMPHBYFVKWxz
+EOF
 
 %build
 pushd hunspell
-make
-cp -p README ../README.hunspell
+make uz_UZ.dic
+cp -p ../README.md ../README.hunspell
 popd
 
 %install
@@ -40,7 +45,7 @@ cp -p hunspell/uz_UZ* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 
 
 %files
-%doc ChangeLog README README.hunspell TODO
+%doc ChangeLog README.md README.hunspell TODO
 %license COPYING Copyright
 %{_datadir}/%{dict_dirname}/*
 

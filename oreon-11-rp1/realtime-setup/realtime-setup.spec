@@ -47,7 +47,7 @@ Neither the slub script or realtime-entsk are active by default.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n realtime-setup-master
 
 # Create a sysusers.d config file
@@ -57,7 +57,7 @@ EOF
 
 
 %build
-%make_build CFLAGS="%{build_cflags} -D_GNU_SOURCE" all
+%make_build CFLAGS="%{build_cflags} -D_GNU_SOURCE -fPIC" LDFLAGS="%{build_ldflags} -Wl,-z,now -Wl,-z,relro -pie" all
 
 %install
 %make_install DEST=%{buildroot} install

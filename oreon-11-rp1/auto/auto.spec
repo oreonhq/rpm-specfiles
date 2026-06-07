@@ -77,6 +77,10 @@ find -name '*.jar' -print -delete
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent
+%pom_remove_parent common
+%pom_remove_parent service
+%pom_remove_parent value
+%pom_remove_parent value-parent
 
 # Disable factory module due to missing dep:
 # com.google.googlejavaformat:google-java-format

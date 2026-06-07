@@ -1,0 +1,12 @@
+--- a/transfig/mkfile.c
++++ b/transfig/mkfile.c
+@@ -18,7 +18,8 @@
+ #include "transfig.h"
+ 
+ void puttarget();
+-void putfig();
++void putfig(FILE *mk, enum language to, int altfonts,
++	    char *f, char *s, char *m, char *o, char *i, char *suf);
+ void putoptions();
+ void putclean();
+ 

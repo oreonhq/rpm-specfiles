@@ -30,7 +30,7 @@ if test "$_top" != "lorax-templates-rhel-%{version}"; then
   tar czf "$_tar" -C _ltr --transform="s|^|lorax-templates-rhel-%{version}/|" 80-rhel
   rm -rf _ltr _ltr.tar.gz
 fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n lorax-templates-rhel-%{version}
 
 %build

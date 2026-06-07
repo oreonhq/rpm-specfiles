@@ -72,10 +72,12 @@ the programs which uses Anthy Unicode.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }SAVED_SUM=$(cat %SOURCE1 | awk '{print $1}')
-MY_SUM=$(sha256sum %SOURCE0 | awk '{print $1}')
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+SAVED_SUM=$(cat %SOURCE1 | cut -d' ' -f1)
+MY_SUM=$(sha256sum %SOURCE0 | cut -d' ' -f1)
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then
-    abort
+    echo "checksum mismatch for Source0" >&2
+    exit 1
 fi
 %autosetup -S git -n anthy-unicode-1.0.0.20260213
 

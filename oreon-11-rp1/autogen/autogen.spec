@@ -80,7 +80,8 @@ sed -i 's|errors.test||' autoopts/test/Makefile.in
 %build
 # Static libraries are needed to run test-suite.
 export CFLAGS="$RPM_OPT_FLAGS -Wno-implicit-fallthrough -Wno-format-overflow \
-		-Wno-format-truncation"
+		-Wno-format-truncation -Wno-error=discarded-qualifiers \
+		-Wno-error=unused-but-set-variable"
 autoreconf -fiv
 %configure
 

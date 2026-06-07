@@ -1,4 +1,5 @@
 %global source0_hash 356680d63fca885806c49987ebd4720107873ecbcb050fe8711a8131cc68c268
+%global _build_id_links none
 
 %define pkg_version 6.9
 %define api_version 0.8.8
@@ -15,7 +16,7 @@
 %bcond python2 0
 
 %{!?tcl_version: %global tcl_version 8.6}
-%{!?tcl_sitearch: %global tcl_sitearch %{_prefix}/%{_lib}/tcl%{tcl_version}}
+%{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 
 # with speech dispatcher iff on Fedora:
 %bcond speech_dispatcher %{defined fedora}
@@ -251,7 +252,7 @@ installer.
 %define version %{pkg_version}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -qc
 mv %{name}-%{version} python2
 
@@ -320,7 +321,6 @@ configure_opts_minimal=" \
   --disable-java-bindings \
   --disable-ocaml-bindings \
   --disable-python-bindings \
-  --disable-tcl-bindings \
   --disable-speech-support \
   --without-pcm-package \
   --without-midi-package \

@@ -55,7 +55,7 @@ a series of steps that allows for easier configuration of the machine.
 %systemd_postun initial-setup.service
 
 %files -f %{name}.lang
-%doc README.rst ChangeLog
+%doc README.rst
 %license COPYING
 %{python3_sitelib}/initial_setup*
 %exclude %{python3_sitelib}/initial_setup/gui
@@ -135,11 +135,12 @@ RemovePathPostfixes: .guixorg
 # --------------------------------------------------------------------------
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p 1 -n %{name}-r%{version}-1
 
 # remove upstream egg-info
 rm -rf *.egg-info
+touch ChangeLog
 
 %build
 %make_build

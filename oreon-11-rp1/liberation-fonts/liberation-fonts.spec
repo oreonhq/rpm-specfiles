@@ -87,7 +87,7 @@ Source0:        https://github.com/liberationfonts/liberation-fonts/files/726148
 %fontmetapkg
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{archivename}
 
 %build
@@ -106,6 +106,7 @@ mkfontscale %{buildroot}%{fontdir1}
 mkfontdir %{buildroot}%{fontdir1}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname1} %{buildroot}%{catalogue}/%{fontpkgname1}
 install -m 0644 -p %{SOURCE2} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname1}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
 ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname1}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
 
 %fontinstall -z 2
@@ -113,6 +114,7 @@ mkfontscale %{buildroot}%{fontdir2}
 mkfontdir %{buildroot}%{fontdir2}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname2} %{buildroot}%{catalogue}/%{fontpkgname2}
 install -m 0644 -p %{SOURCE3} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname2}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
 ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname2}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
 
 %fontinstall -z 3
@@ -120,6 +122,7 @@ mkfontscale %{buildroot}%{fontdir3}
 mkfontdir %{buildroot}%{fontdir3}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname3} %{buildroot}%{catalogue}/%{fontpkgname3}
 install -m 0644 -p %{SOURCE4} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname3}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
 ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname3}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
 
 

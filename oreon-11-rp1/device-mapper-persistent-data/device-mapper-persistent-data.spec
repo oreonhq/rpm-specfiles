@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source1_hash 6db98637a40c9e675f10b02086f2243436cc99712a5bcf197a19b71975a5f45a
 
 #
 # Copyright (C) 2011-2017 Red Hat, Inc
@@ -19,6 +20,7 @@ License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
 Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz#/device-mapper-persistent-data-1.3.2.tar.gz
+Source1:        thin-provisioning-tools-%{version}-vendor.tar.xz
 %if %{defined rhel} || (0%{?oreon} >= 11)
 BuildRequires: rust-toolset
 %else
@@ -43,8 +45,10 @@ are included and era check, dump, restore and invalidate to manage
 snapshot eras
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix}
+tar xf %{SOURCE1}
 %cargo_prep -v vendor
 
 # NOTE: Following could replace Cargo.toml patching, but some macros are not working well with it

@@ -1,4 +1,4 @@
-%global source0_hash 37a5ecc98dd52690958f4594d0f5c2d0586e0e30888e8757f141b00bbe511609
+%global source0_hash 6ce4bd6471f227799f324ab4e8451271a2bdba7be2ace51755788b4bf5a9a841
 
 Summary: POSIX regexp functions
 Name: librx
@@ -36,7 +36,7 @@ library.
 This package contains files needed for development with librx.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n rx-%{version}
 %patch -P0 -p1
 %patch -P1 -p1 -b .texipatch

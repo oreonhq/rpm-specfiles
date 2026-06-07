@@ -42,7 +42,7 @@ Summary: %{summary}
 %{name} development libraries and headers
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 
@@ -77,6 +77,8 @@ rm -f %{buildroot}/usr/share/zsh/site-functions/_lldpcli
 
 # remove static libtool archive
 find %{buildroot} -type f -name "*.la" -delete
+sed -i 's/^Version:.*/Version: %{version}/' %{buildroot}%{_libdir}/pkgconfig/lldpctl.pc
+%global __provides_exclude_from ^%{_libdir}/pkgconfig/lldpctl\\.pc$
 
 %ldconfig_scriptlets
 

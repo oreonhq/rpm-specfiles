@@ -37,6 +37,7 @@ BuildRequires: pkgconfig(QJson)
 BuildRequires: pkgconfig(QtDBus) pkgconfig(QtGui)
 %endif
 BuildRequires: pkgconfig(Qt5DBus) pkgconfig(Qt5Widgets)
+BuildRequires: pkgconfig(QJson)
 # test-suite
 BuildRequires: xorg-x11-server-Xvfb dbus-x11
 BuildRequires: make
@@ -84,7 +85,7 @@ Requires: dbusmenu-qt5%{?_isa} = %{version}-%{release}
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n libdbusmenu-qt-%{version}+%{ubuntu}.%{snapshot}
 
 
@@ -113,7 +114,7 @@ pushd %{_target_platform}-qt5
 
 popd
 
-%make_build -C %{_target_platform}-qt5
+%ninja_build -C %{_target_platform}-qt5
 
 
 %install

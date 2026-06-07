@@ -16,7 +16,9 @@ BuildRequires:  gcc-c++
 BuildRequires: glib2-devel >= 2.6.0
 BuildRequires: hunspell-devel
 BuildRequires: libvoikko-devel
+BuildRequires: autoconf
 BuildRequires: automake, libtool
+BuildRequires: gettext-devel
 BuildRequires: make
 
 # Drop at or after f44
@@ -43,8 +45,9 @@ Requires: glib2-devel
 Libraries, headers, and support files necessary to compile applications using libenchant.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n enchant-enchant-1-6-0
+%autoreconf -fiv
 
 %build
 %configure --enable-myspell --with-myspell-dir=/usr/share/hunspell --disable-static --disable-ispell --disable-hspell --disable-zemberek --disable-aspell

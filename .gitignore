@@ -114,6 +114,8 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/rubygem-rspec-mocks/rubygem-rspec-mocks-3.13.8-full.tar.gz
 !oreon-11-rp1/rubygem-rspec-support/rubygem-rspec-support-3.13.7-full.tar.gz
 !oreon-11-rp1/s390utils/s390-tools-2.41.0-rust-vendor.tar.xz
+!oreon-11-rp1/device-mapper-persistent-data/thin-provisioning-tools-1.3.2-vendor.tar.xz
+!oreon-11-rp1/virtiofsd/virtiofsd-1.13.3-vendor.tar.xz
 !oreon-11-rp1/sblim-gather/missing-providers.tgz
 !oreon-11-rp1/sgpio/sgpio-1.2-0.10-src.tar.gz
 !oreon-11-rp1/teckit/teckit-2.5.13_repackaged.tar.xz

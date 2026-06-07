@@ -37,14 +37,14 @@ interoperability between Java/J2EE AOP implementations to build a
 larger AOP community.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n %{name}
 
 %build
 mkdir -p build/classes build/javadoc
 javac -source 1.8 -target 1.8 -d build/classes $(find org -name '*.java')
 jar cf build/%{name}.jar -C build/classes .
-javadoc -source 1.8 -d build/javadoc $(find org -name '*.java')
+javadoc -source 1.8 -Xdoclint:none -d build/javadoc $(find org -name '*.java')
 
 # Inject OSGi manifest required by Eclipse.
 %jar umf %{SOURCE2} build/%{name}.jar

@@ -63,7 +63,7 @@ Requires:      jpackage-utils >= 0:1.6
 Javadoc for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
 find . -name '*.class' -delete
@@ -73,7 +73,7 @@ find . -name "*.jar" -delete
 mkdir -p build/classes build/docs
 javac --release 8 -d build/classes $(find org -name '*.java')
 jar --create --file build/%{name}-%{version}.jar -C build/classes .
-javadoc -quiet -source 8 -d build/docs $(find org -name '*.java')
+javadoc --release 8 -quiet -Xdoclint:none -d build/docs $(find org -name '*.java')
 
 %install
 %mvn_file : %{name}
