@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2507f0e3e3ff5c9cc829b0e1c47af8b88324f0030eeccc8244b1f4b1ad40af32
 
 %global _lockdir /run/lock/lockdev
 
@@ -31,8 +31,6 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: systemd
 BuildRequires: make
 BuildRequires: git
-BuildRequires: curl
-
 %description
 Lockdev provides a reliable way to put an exclusive lock to devices
 using both FSSTND and SVr4 methods.

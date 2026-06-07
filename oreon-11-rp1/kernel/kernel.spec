@@ -365,6 +365,8 @@ Summary: The Linux kernel
 %define with_cross_headers 0
 # no stablelist
 %define with_kernel_abi_stablelists 0
+%define with_kabidwchk 0
+%define with_kabidw_base 0
 %define with_arm64_64k 0
 %define with_automotive 0
 %endif
@@ -1160,8 +1162,8 @@ Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
 %if %{with_kabidwchk} || %{with_kabidw_base} || %{with_kernel_abi_stablelists}
-Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
-Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
+Source300:        https://git.centos.org/sources/kernel/kernel-abi-stablelists-%{kabiversion}.tar.xz/kernel-abi-stablelists-%{kabiversion}.tar.xz
+Source301:        https://git.centos.org/sources/kernel/kernel-kabi-dw-%{kabiversion}.tar.xz/kernel-kabi-dw-%{kabiversion}.tar.xz
 %endif
 
 %if 0%{include_rt}
@@ -2099,7 +2101,7 @@ Prebuilt default kernel image with auto DTB selection for ARM64 UEFI devices.
 	set -x
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{log_msg "Start of prep stage"}
 
 %{log_msg "Sanity checks"}

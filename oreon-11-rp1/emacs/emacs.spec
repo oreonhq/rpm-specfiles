@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b3f36f18a6dd2715713370166257de2fae01f9d38cfe878ced9b1e6ded5befd9
 
 # This file is encoded in UTF-8.  -*- coding: utf-8 -*-
 

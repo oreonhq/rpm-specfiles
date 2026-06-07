@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e90724fc79c53d4973421b88b324d0af97e4db17509aa2e555775ea15ec2718c
 %global source1_hash none
 
 # build compat-libmpc for bootstrapping purposes

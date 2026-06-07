@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b
 
 Summary: General dimension convex hull programs
 Name: qhull

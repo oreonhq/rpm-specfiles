@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c7cb9d023f6e5cd01d76568c3590303ea3ecb4ebe9535b31862957846f5e898a
 
 ## include -nepomuk subpkg support
 %if 0%{?fedora} < 24 || (0%{?oreon} >= 11)

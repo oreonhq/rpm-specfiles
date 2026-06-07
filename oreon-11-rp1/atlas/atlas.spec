@@ -1,10 +1,4 @@
-%global source0_hash 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
-%global source1_hash none
-%global source3_hash none
-%global source4_hash none
-%global source6_hash none
-%global source8_hash none
-%global source11_hash none
+%global source0_hash none
 %global source12_hash none
 
 %define enable_native_atlas 0
@@ -21,15 +15,8 @@ Summary:        Automatically Tuned Linear Algebra Software
 License:        BSD-3-Clause
 URL:            http://math-atlas.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/math-atlas/%{name}%{version}.tar.bz2
-# no public mirrors for these fedora-tuned lapack refs anywhere we checked
-Source1:        PPRO32.lapackref
 Source2:        README.dist
-Source3:        POWER332.lapackref
-Source4:        IBMz932.lapackref
-Source6:        ARMv732NEON.lapackref
-Source8:        ARMa732.lapackref
-Source11:        IBMz1564VXZ2.lapackref
-# s390 arch lapack refs from ubuntu/debian atlas packaging
+# arch lapack refs from ubuntu/debian atlas packaging
 Source12:        https://archive.ubuntu.com/ubuntu/pool/universe/a/atlas/atlas_3.10.3-13ubuntu1.debian.tar.xz
 # Properly pass -melf_* to the linker with -Wl, fixes FTBFS bug 817552
 # https://sourceforge.net/tracker/?func=detail&atid=379484&aid=3555789&group_id=23725
@@ -336,14 +323,14 @@ CPUs. The base ATLAS builds for the ppc64 architecture are made for the Power 5 
 %endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
-test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
-test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
-test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
+test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
+test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
+test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
+test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ATLAS
 
 
@@ -369,18 +356,9 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
 %patch -P15 -p1
 %patch -P101 -p1
 
-install -pm 644 %{SOURCE1} CONFIG/ARCHS/PPRO32.tgz
 cp %{SOURCE2} doc
-install -pm 644 %{SOURCE3} CONFIG/ARCHS/POWER332.tar.bz2
-install -pm 644 %{SOURCE4} CONFIG/ARCHS/IBMz932.tar.bz2
-install -pm 644 %{SOURCE6} CONFIG/ARCHS/ARMv732NEON.tar.bz2
-install -pm 644 %{SOURCE8} CONFIG/ARCHS/ARMa732.tar.bz2
-install -pm 644 %{SOURCE11} CONFIG/ARCHS/IBMz1564VXZ2.tar.bz2
-tar -xJf %{SOURCE12} debian/archdefs/s390x/IBMz964.tar.bz2 \
-    debian/archdefs/s390x/IBMz1264.tar.bz2 \
-    debian/archdefs/s390x/IBMz1364VXZ.tar.bz2 \
-    debian/archdefs/s390x/IBMz1464VXZ2.tar.bz2
-cp debian/archdefs/s390x/*.tar.bz2 CONFIG/ARCHS/
+tar -xJf %{SOURCE12} debian/archdefs
+find debian/archdefs -type f \( -name '*.tgz' -o -name '*.tar.bz2' \) -exec cp -t CONFIG/ARCHS/ {} +
 rm -rf debian
 
 %ifarch %{arm}

@@ -12,7 +12,7 @@ Summary:        Administrative utility for AMD SEV
 
 License:        Apache-2.0
 URL:            https://crates.io/crates/sevctl
-Source0:        https://crates.io/api/v1/crates/sevctl/0.6.2/download
+Source0:        https://static.crates.io/crates/%{crate}/%{crate}-%{version}.crate
 # Manually created patch for downstream crate metadata changes
 # * Drop vendored feature from openssl dependency
 # * Relax clap dependency

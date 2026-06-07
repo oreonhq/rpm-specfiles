@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 86b11ad8b512204816241d5dd98ac0561d1f6b06180f658c532c3ffbc16925df
 
 # Keep the *.la file around
 # See 
@@ -13,7 +13,7 @@ Url:		https://github.com/libnxz/power-gzip
 BuildRequires:	zlib-devel
 Source0:        https://github.com/libnxz/power-gzip/archive/refs/tags/v%{version}.tar.gz#/libnxz-%{version}.tar.gz
 # Fixes for GCC 14 and zlib-ng compat usage
-Patch0:         %{url}/pull/209.patch
+Patch0:         https://github.com/libnxz/power-gzip/pull/209.patch
 
 # Be explicit about the soname in order to avoid unintentional changes.
 %global soname libnxz.so.0

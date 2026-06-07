@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5841e503acd5baae310ac4c9c74921f606479442ec6d59ef2f9cbbfb94a8c980
 
 %global libpqos_ver 6.0.1
 %global desc %{expand: \
@@ -14,7 +14,7 @@ Summary:	Intel cache monitoring and allocation technology config tool
 
 License:	BSD-3-Clause
 URL: 		https://github.com/intel/intel-cmt-cat
-Source:        https://github.com/intel/intel-cmt-cat/archive/refs/tags/v%{version}.tar.gz#/intel-cmt-cat-%{version}.tar.gz
+Source0:        https://github.com/intel/intel-cmt-cat/archive/refs/tags/v%{version}.tar.gz#/intel-cmt-cat-%{version}.tar.gz
 
 Patch0:        0001-alter-install-paths.patch
 Patch1:        0002-remove-build-and-install-of-examples.patch
@@ -37,7 +37,7 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 Development files.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}
 
 %build

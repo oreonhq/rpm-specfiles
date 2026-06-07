@@ -29,8 +29,6 @@ Url: https://github.com/doxygen
 Source0:        https://www.doxygen.nl/files/%{name}-%{version}.src.tar.gz
 # this icon is part of kdesdk
 Source1: doxywizard.desktop
-# hicolor PNGs from doxywizard.ico; ship doxywizard-icons.tar.xz next to this spec
-Source2: doxywizard-icons.tar.xz
 Source3: README.rpm-packaging
 Source4: doxygen-unbundler
 
@@ -118,6 +116,9 @@ BuildRequires: flex
 BuildRequires: bison
 BuildRequires: cmake
 BuildRequires: git
+%if "%{build_wizard}" == "ON"
+BuildRequires: ImageMagick
+%endif
 
 %if "%{?xapian_core_support}" == "ON"
 BuildRequires: xapian-core-devel
@@ -265,10 +266,17 @@ Requires: texlive-collection-fontsrecommended
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -a2
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1
 
 cp %{SOURCE3} .
+%if "%{build_wizard}" == "ON"
+ICON=addons/doxywizard/doxywizard.ico
+convert "$ICON" -thumbnail 16x16 doxywizard-6.png
+convert "$ICON" -thumbnail 32x32 doxywizard-5.png
+convert "$ICON" -thumbnail 48x48 doxywizard-4.png
+convert "$ICON" -thumbnail 128x128 doxywizard-3.png
+%endif
 
 %build
 %cmake \

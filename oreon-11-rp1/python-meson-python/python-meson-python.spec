@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9959d198aa69b57fcfd354a34518c6f795b781a73ed0656f4d01660160cc2553
 
 %bcond tests 1
 # The python-pytest-mock and wheel dependencies are unwanted on RHEL;

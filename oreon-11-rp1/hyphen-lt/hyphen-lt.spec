@@ -1,11 +1,11 @@
-%global source0_hash d05ef89e41a4933c07f8c211a51f8569309e31fede7d58d55f1964b6eac256b2
+%global source0_hash 6162b566620367abb827ba1457567e7a79680596919886a7138e48b346e983d1
 
 Name: hyphen-lt
 Summary: Lithuanian hyphenation rules
 %global upstreamid 20100531
 Version: 0.%{upstreamid}
 Release: 31%{?dist}
-Source0:        hyph-lt.tex
+Source0:        https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-lt.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch
@@ -17,7 +17,7 @@ Supplements: (hyphen and langpacks-lt)
 Lithuanian hyphenation rules.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-lt
 cp -p %{SOURCE0} .
 %build

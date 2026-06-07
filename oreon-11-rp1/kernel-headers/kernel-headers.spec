@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e56c8356dda01136a6041c6ef832bd0ec99bd2d35dff97832aa5ec10ed014304
 
 # For a stable, released kernel, released_kernel should be 1. For rawhide
 # and/or a kernel built from an rc or git snapshot, released_kernel should

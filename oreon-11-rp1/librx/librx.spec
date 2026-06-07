@@ -1,4 +1,4 @@
-%global source0_hash 6ce4bd6471f227799f324ab4e8451271a2bdba7be2ace51755788b4bf5a9a841
+%global source0_hash none
 
 Summary: POSIX regexp functions
 Name: librx
@@ -9,7 +9,7 @@ License: GPL-2.0-or-later
 URL: http://www.gnu.org/software/rx/rx.html
 # Originally downloaded from https://ftp.gnu.org/gnu/rx/rx-1.5.tar.bz2
 # The FSF no longer offers this code.
-Source0:        rx-%{version}.tar.gz
+Source0:        https://download.savannah.gnu.org/releases/rx/rx-%{version}.tar.bz2
 Patch0:        rx-1.5-shared.patch
 Patch1:        rx-1.5-texinfo.patch
 Patch2:        librx-1.5-libdir64.patch

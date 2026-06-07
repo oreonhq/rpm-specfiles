@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a0d869dd182b8e31cd67bd4425db48f66ada4f4163e57b9b796304f5a022abcd
 
 %define libmatchbox_devel_ver 1.9-2
 %define alphatag 20070628svn
@@ -11,7 +11,7 @@ Version:       1.2
 Release:       40.%{alphatag}%{?dist}
 Url:           http://matchbox-project.org/
 License:       GPL-2.0-or-later
-Source0:       https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz#/matchbox-window-manager-%{version}-%{alphatag}.tar.gz
+Source0:       https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz
 
 Patch1:        matchbox-window-manager-1.2-keysyms.patch
 
@@ -39,15 +39,8 @@ for which screen space, input mechanisms or system resources are limited.
 This package contains the window manager from Matchbox.
 
 %prep
-_tar="matchbox-window-manager-%{version}-%{alphatag}.tar.gz"
-if test ! -f "$_tar"; then
-  curl -sfL -o _mbw.tar.xz "https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz"
-  rm -rf _mbw && mkdir _mbw && tar xJf _mbw.tar.xz -C _mbw --strip-components=1
-  tar czf "$_tar" -C _mbw .
-  rm -rf _mbw _mbw.tar.xz
-fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n matchbox-window-manager
 %patch -P1 -p1
 
 %build

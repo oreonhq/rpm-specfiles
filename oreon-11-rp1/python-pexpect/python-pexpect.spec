@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 13756b834dba0adf7603be77d943cc427011983ecd7c58b59b9bf122a1063e40
 
 %bcond_without check
 
@@ -84,6 +84,7 @@ rm -rf %{buildroot}%{python3_sitelib}/pexpect/tests
 %if %{with check}
 %check
 export PYTHONIOENCODING=UTF-8
+export NO_COLOR=1
 # workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1914843
 # upstream: https://github.com/pexpect/pexpect/issues/669
 # There's a patch upstream that we can presumable remove this after

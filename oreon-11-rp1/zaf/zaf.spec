@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fdeb5ab1c9ed703ff5cc4d304fb59a3ffd966f8a16f5b263999dcd747b0f30f7
 
 Name: zaf
 Summary: South Africa hyphenation rules
@@ -9,7 +9,6 @@ Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/m
 URL: https://github.com/LibreOffice/dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch
-BuildRequires: curl
 BuildRequires: tar
 
 %description
@@ -30,12 +29,12 @@ Requires: hyphen
 Zulu hyphenation rules.
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 _tar="zaf-0-0.1.%{upstreamid}svn.tar.bz2"
 if test ! -f "$_tar"; then
-  curl -sfL -o _dict.tar.gz "https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz"
   rm -rf zaf dictionaries-*
   mkdir -p zaf/af/hyph zaf/zu/hyph
-  tar xzf _dict.tar.gz
+  tar xzf %{SOURCE0}
   _dict=$(ls -d dictionaries-*)
   cp -p $_dict/af_ZA/hyph_af_ZA.dic zaf/af/hyph/
   cp -p $_dict/zu_ZA/hyph_zu_ZA.dic zaf/zu/hyph/
@@ -46,9 +45,8 @@ if test ! -f "$_tar"; then
   cp -p zaf/af/CREDITS zaf/zu/CREDITS
   cp -p zaf/af/COPYING zaf/zu/COPYING
   tar cjf "$_tar" zaf
-  rm -rf _dict.tar.gz $_dict zaf
+  rm -rf $_dict zaf
 fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n zaf
 
 %build

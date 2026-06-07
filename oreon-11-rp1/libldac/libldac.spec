@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4bd8eece78bb5c1361fab95743e7100506e2408a25c4a592a0f8d349746dc5b4
 
 # Force out of source build
 %undefine __cmake_in_source_build
@@ -18,7 +18,7 @@ Source0:        https://github.com/EHfive/ldacBT/releases/download/v2.0.2.3/ldac
 # Upstream source throws error in a big-endian arch, see #1677491
 ExcludeArch:    s390x
 
-BuildRequires:  cmake3
+BuildRequires:  cmake
 BuildRequires:  gcc
 
 %package        devel
@@ -35,18 +35,18 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{archivename}
 
 %build
-%cmake3 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DLDAC_SOFT_FLOAT=OFF \
     -DINSTALL_LIBDIR=%{_libdir}
 
-%cmake3_build
+%cmake_build
 
 %install
-%cmake3_install
+%cmake_install
 
 %ldconfig_scriptlets
 

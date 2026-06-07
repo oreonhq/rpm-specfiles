@@ -33,7 +33,7 @@ _src="libfonts-%{version}.zip"
 if test ! -f "$_src"; then
   curl -sfL -o "$_src" "https://downloads.sourceforge.net/project/jfreereport/02.%20Libraries/1.1.3-stable/libfonts-%{version}.zip"
 fi
-test "%{source0_hash}" = "none" || { f="$_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print \$1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="$_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 rm -rf patches
 %patch -P0 -p1 -b .build

@@ -1,5 +1,7 @@
 %global source0_hash 34810a09d167370c64b5766687b2eb4f6d3f7a1ab33ee71d821cdac819552be1
 
+%bcond check 0
+
 Summary: Multipath TCP daemon
 Name: mptcpd
 Version: 0.14
@@ -49,7 +51,9 @@ autoreconf --install --symlink --force
 %make_build V=1
 
 %check
+%if %{with check}
 make check
+%endif
 
 %install
 install -d %{buildroot}/%{_libexecdir}

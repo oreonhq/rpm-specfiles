@@ -1,4 +1,4 @@
-%global source0_hash 94f5464361ddb282c748edb0bd7f52d6d87de54fe6f1effced8375a7828f3d51
+%global source0_hash b96973400b1926a6e387fea7d02d165789791ee84844062e6b927ee876db1e9c
 
 # Version 6.0.0 had __version__ = "6.0.0dev0" in chardet/version.py. A
 # follow-up commit fixed this, updating the version to "6.0.0.post1", and was
@@ -29,7 +29,7 @@ URL:            https://github.com/chardet/chardet
 #   problematic licensing of /tests?
 #   https://github.com/chardet/chardet/issues/231
 # Source0:        chardet-%%{version}-filtered.tar.zst
-Source0:        chardet-%{commit}-filtered.tar.zst
+Source0:        https://github.com/chardet/chardet/archive/%{commit}/chardet-%{commit}.tar.gz
 Source1:        get_source
 # Hand-written for Fedora in groff_man(7) format based on --help output
 Source2:        chardetect.1
@@ -68,6 +68,7 @@ Summary:        %{summary}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n chardet-%{commit} -a1
+rm -rf tests
 
 %generate_buildrequires -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'

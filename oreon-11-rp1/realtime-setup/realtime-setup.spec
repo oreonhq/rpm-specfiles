@@ -12,7 +12,6 @@ BuildRequires: gcc
 BuildRequires: make
 BuildRequires: systemd
 BuildRequires: systemd-rpm-macros
-BuildRequires: annobin-plugin-gcc
 Requires: pam
 Requires: tuna
 Requires: tuned

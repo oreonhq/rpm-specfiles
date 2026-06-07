@@ -7,7 +7,7 @@ all: down-crate vendor clean
 
 down-crate:
 	@echo Downloading version $(VERSION)
-	curl -L https://crates.io/api/v1/crates/$(NAME)/$(VERSION)/download  -o $(NAME)-$(VERSION).crate
+	curl -fsSL https://static.crates.io/crates/$(NAME)/$(NAME)-$(VERSION).crate -o $(NAME)-$(VERSION).crate
 
 vendor:
 	# After vendorize we need to remove winapi/windows binaries

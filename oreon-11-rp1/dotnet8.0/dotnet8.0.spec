@@ -73,14 +73,14 @@ Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.as
 # The source is generated on a Fedora box via:
 # ./build-dotnet-tarball --bootstrap %%{upstream_tag}
 # Generated manually, same pattern as the arm64 tarball
-Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
+Source3:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %endif
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:        macros.dotnet
+Source10:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/macros.dotnet
 
-Source20:        check-debug-symbols.py
-Source21:        dotnet.sh.in
+Source20:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/check-debug-symbols.py
+Source21:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/dotnet.sh.in
 
 # Disable apphost; there's no net6.0 apphost for ppc64le
 Patch1:        roslyn-analyzers-ppc64le-apphost.patch

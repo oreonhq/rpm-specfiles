@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4
 
 # For the generated library symbol suffix
 %if 0%{?__isa_bits} == 32

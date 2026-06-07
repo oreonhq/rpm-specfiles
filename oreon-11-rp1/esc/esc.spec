@@ -15,7 +15,7 @@ BuildRequires: nspr-devel nss-devel nss-static
 
 BuildRequires: pcsc-lite-devel
 BuildRequires: desktop-file-utils
-%if ! 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
+%if 0%{?rhel} > 0 && 0%{?rhel} < 9
 BuildRequires: pkgconfig(gconf-2.0)
 %endif
 BuildRequires: dbus-devel

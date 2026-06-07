@@ -1,4 +1,5 @@
 %global source0_hash none
+%global shim_commit_id afc49558b34548644c1cd0ad1b6526a9470182ed
 
 %global pesign_vre 0.106-1
 %global openssl_vre 1.0.2j
@@ -29,8 +30,8 @@
 %global dbxfile %{nil}
 
 Name:		shim-unsigned-%{efiarch}
-Version:	15.8
-Release:	2
+Version:	16.1
+Release:	1
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
@@ -111,7 +112,7 @@ mkdir build-%{efialtarch}
 cp %{SOURCE3} data/
 
 %build
-COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
+COMMIT_ID=%{shim_commit_id}
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "
 MAKEFLAGS+="ENABLE_SHIM_HASH=true "
@@ -139,7 +140,7 @@ setarch linux32 -B make ${MAKEFLAGS} \
 cd ..
 
 %install
-COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
+COMMIT_ID=%{shim_commit_id}
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "
 MAKEFLAGS+="ENABLE_SHIM_HASH=true "

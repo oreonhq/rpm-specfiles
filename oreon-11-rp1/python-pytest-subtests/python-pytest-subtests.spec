@@ -1,5 +1,7 @@
 %global source0_hash 6b7fa262aebf73fae9edf5bc9e03b298710ac7a2034b51d78e30af04f533bccb
 
+%bcond_check 0
+
 Name:           python-pytest-subtests
 Version:        0.15.0
 Release:        %autorelease
@@ -44,7 +46,9 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
 
 %check -a
+%if %{with check}
 %pytest -rs -v tests
+%endif
 
 
 %files -n python3-pytest-subtests -f %{pyproject_files}

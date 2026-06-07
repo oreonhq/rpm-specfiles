@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4f6c3204ac8ddb7115e6fa50ec4c1ec4e537b85a16e1e9104c5d68faac8aba1a
 
 %global commit 4f5c45238ef77e5d6b88bc403432bd59de7efde9
 %global shortcommit %(c=%{commit}; echo ${c:0:7})

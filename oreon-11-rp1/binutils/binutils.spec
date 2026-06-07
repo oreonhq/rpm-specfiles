@@ -221,7 +221,7 @@ URL: https://sourceware.org/binutils
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
 Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
@@ -236,7 +236,7 @@ Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{ver
 Source1:        binutils-2.19.50.0.1-output-format.sed
 
 %if "%{gold_tarball}" != "none"
-Source2: %{gold_tarball}.tar.xz
+Source2:        https://mirrors.kernel.org/gnu/binutils/%{gold_tarball}.tar.xz
 %endif
 
 #----------------------------------------------------------------------------

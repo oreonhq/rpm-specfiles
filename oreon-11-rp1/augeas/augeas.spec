@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source1_hash none
+%global source0_hash b50ab817b7e246e63af3b489e572542986a3aa88dd63b83616a1f67fd347bf74
+%global source1_hash 528538b14c4cc39741a533dee17ef0937fca611f917a9b4866dd0c33c6680f9c
 
 Name:           augeas
 Version:        1.14.2

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3a1e200a04b106ccc98879c2710bb52ad8ae58d7336c1e9db8d67151b111ec01
 
 Name: hyphen-grc
 Summary: Ancient Greek hyphenation rules
@@ -7,7 +7,7 @@ Version: 0.%{upstreamid}
 Release: 31%{?dist}
 #? in a url causes trouble
 #http://tug.org/svn/texhyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex?view=co
-Source: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex
+Source0: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch
@@ -21,7 +21,7 @@ Supplements: (hyphen and langpacks-grc)
 Ancient Greek hyphenation rules.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-grc
 cp -p %{SOURCE0} hyph-grc.tex
 %build

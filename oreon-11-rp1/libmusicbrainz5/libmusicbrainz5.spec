@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6749259e89bbb273f3f5ad7acdffb7c47a2cf8fcaeab4c4695484cef5f4c6b46
 
 # Fedora package review: http://bugzilla.redhat.com/718395
 
