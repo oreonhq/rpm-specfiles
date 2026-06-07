@@ -10,7 +10,7 @@ Release: 26%{?dist}
 License: GPL-3.0-or-later
 URL: http://www.gnu.org/software/acct/
 
-Source:        https://ftp.gnu.org/pub/gnu/acct/acct-%{version}.tar.gz
+Source:        https://mirrors.kernel.org/gnu/acct/acct-%{version}.tar.gz
 Source1: psacct.service
 Source2: psacct-logrotate.in
 Source3: accton-create

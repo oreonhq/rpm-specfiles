@@ -19,7 +19,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-csb)
 
-Source0:        https://ftp.gnu.org/gnu/aspell/dict/csb/aspell6-csb-0.02-0.tar.bz2
+Source0:        https://mirrors.kernel.org/gnu/aspell/dict/csb/aspell6-csb-0.02-0.tar.bz2
 
 %description
 Kashubian hunspell dictionaries.

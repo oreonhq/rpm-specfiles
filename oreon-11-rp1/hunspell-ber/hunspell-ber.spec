@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ber)
 
-Source0:        http://ayaspell.sourceforge.net/data/hunspell-am_test.tar.gz
+Source0:        https://ayaspell.sourceforge.net/data/hunspell-am_test.tar.gz
 
 %description
 Amazigh hunspell dictionaries.

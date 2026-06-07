@@ -33,15 +33,15 @@ Summary:        A lightweight DHCP/caching DNS server
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            http://www.thekelleys.org.uk/dnsmasq/
 VCS:            git:%{forgeurl0}
-Source0:        http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz
+Source0:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz
 Source1:        %{name}.service
 Source2:        dnsmasq-systemd-sysusers.conf
-Source3:        http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
+Source3:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
 # GPG public key
 %if 0%{?testrelease} || 0%{?releasecandidate}
-Source4:        http://www.thekelleys.org.uk/srkgpg.txt
+Source4:        https://www.thekelleys.org.uk/srkgpg.txt
 %else
-Source4:        http://www.thekelleys.org.uk/srkgpg.txt
+Source4:        https://www.thekelleys.org.uk/srkgpg.txt
 %endif
 Source5:        tmpfiles-dnsmasq.conf
 

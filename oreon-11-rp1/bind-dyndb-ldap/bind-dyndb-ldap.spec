@@ -1,4 +1,4 @@
-%global source0_hash bc30e097b36d3b193969c8e2f704db58c1f91ac1e4a25f857274ff599ceef673
+%global source0_hash none
 
 %define VERSION %{version}
 
@@ -26,9 +26,7 @@ Summary:        LDAP back-end plug-in for BIND
 
 License:        GPL-2.0-or-later
 URL:            https://releases.pagure.org/bind-dyndb-ldap
-Source0:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2
-Source1:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2.asc
-
+Source0:        bind-dyndb-ldap-%{VERSION}.tar.bz2
 # https://pagure.io/bind-dyndb-ldap/pull-request/244
 Patch1:         bind-dyndb-ldap-11.10-check-pr244.patch
 
@@ -63,7 +61,7 @@ off of your LDAP server.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{VERSION} -p1
+%autosetup -n bind-dyndb-ldap-%{VERSION} -p1
 
 %build
 autoreconf -fiv

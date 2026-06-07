@@ -1,4 +1,4 @@
-%global source0_hash e7f58712b12175965b3a21522052863a061f3f1a888df3ffbe713b434f80254f
+%global source0_hash none
 
 # Add `--without gtk' option (enable gtk by default):
 # No GTK 2 in RHEL 10
@@ -14,7 +14,7 @@ Version: 1.114
 Release: 16%{?dist}
 License: GPL-2.0-or-later
 URL: https://pagure.io/%{name}/
-Source:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
+Source:        https://deb.debian.org/debian/pool/main/u/usermode/usermode_%{version}.orig.tar.xz#/usermode-%{version}.tar.xz
 Source1: config-util
 Patch1: fix-sast.patch
 Requires: pam, passwd, util-linux

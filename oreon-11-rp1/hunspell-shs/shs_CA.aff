@@ -1,0 +1,27 @@
+# A basic .aff for a raw wordlist, created through wordlist2hunspell
+SET UTF-8
+KEY qwertyuiop|asdfghjkl|zxcvbnm
+TRY tslw̓ncmqpí7úyiugá.raóoh-'TSCWPLE
+LANG shs
+
+#These characters are part of words in Secwepemctsín
+WORDCHARS 7-.
+
+#Future Tense Prefix
+PFX M Y 1
+PFX M   0      m-    .
+
+#Conjugation Suffix
+SFX S Y 1
+SFX S   0      es    .
+
+#Related Characters
+MAP 4
+MAP kqx
+MAP ée
+MAP íi
+MAP áa
+
+PHONE 2
+PHONE K Q
+PHONE Q X

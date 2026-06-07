@@ -16,7 +16,7 @@ This package provides a free OpenType Punjabi (Gurmukhi) Serif font.
 Developed by Bhupinder Singh.
 }
 
-Source0:  http://downloads.sf.net/guca/saab.0.91.zip
+Source0:  https://downloads.sf.net/guca/saab.0.91.zip
 Source10: 67-saab-fonts.conf
 #Font file itself does not add exception text, so add it manually
 #from http://guca.sourceforge.net/typography/fonts/saab/

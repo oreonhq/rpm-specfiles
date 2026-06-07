@@ -1,7 +1,7 @@
-%global source0_hash 9737d7a8de5ee8b445fa3f0d3d21f726d7c44f1a24b6de94413da116288504a6
+%global source0_hash fe155709c751b0313e1b4abe747d4bcf10861d54ea6516c4207d56dbaeff9a55
 
 # SPDX-License-Identifier: MIT
-%global forgeurl https://pagure.io/fonts-rpm-macros
+%global forgeurl https://docs.fedoraproject.org/en-US/packaging-guidelines/FontsPolicy/
 Epoch: 1
 Version: 5.0.0
 %forgemeta
@@ -25,9 +25,9 @@ Summary:   Build-stage rpm automation for fonts packages
 
 License:   GPL-3.0-or-later
 URL:       https://docs.fedoraproject.org/en-US/packaging-guidelines/FontsPolicy/
-Source:    %{forgesource}
+Source:    https://forge.fedoraproject.org/i18n/fonts-rpm-macros/archive/5.0.0.tar.gz#/fonts-rpm-macros-%{version}.tar.gz
 # Avoid assigning to a const lua variable
-Patch0:    https://pagure.io/fonts-rpm-macros/pull-request/31.patch
+Patch0:    0001-avoid-assigning-to-const-lua-variable.patch
 
 Requires:  fonts-srpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:  fonts-filesystem  = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -98,7 +98,7 @@ macros provided by fonts-rpm-macros to create fonts packages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%forgesetup
+%setup -q -n fonts-rpm-macros
 %patch -P0 -p1
 %writevars -f rpm/macros.d/macros.fonts-srpm _fontbasedir _fontconfig_masterdir _fontconfig_confdir _fontconfig_templatedir
 for template in templates/rpm/*\.spec ; do

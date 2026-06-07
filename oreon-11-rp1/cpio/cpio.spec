@@ -8,12 +8,12 @@ Version: 2.15
 Release: 9%{?dist}
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/cpio/
-Source0:        https://ftp.gnu.org/gnu/cpio/cpio-%{version}.tar.bz2
+Source0:        https://mirrors.kernel.org/gnu/cpio/cpio-%{version}.tar.bz2
 
 # help2man generated manual page distributed only in RHEL/Fedora
 Source1: cpio.1
 
-Source2:        https://ftp.gnu.org/gnu/cpio/cpio-%{version}.tar.bz2.sig
+Source2:        https://mirrors.kernel.org/gnu/cpio/cpio-%{version}.tar.bz2.sig
 # https://savannah.gnu.org/projects/cpio/ lists one maintainer, gray
 # and their GPG key is https://savannah.gnu.org/people/viewgpg.php?user_id=311
 Source3: gray-key.gpg

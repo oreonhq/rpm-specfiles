@@ -1,4 +1,4 @@
-%global source0_hash f3315f675d18770f25dea8ed04b20b8fc80efb00f60c37ee5e815f9c3776e7f3
+%global source0_hash none
 
 # -*- rpm-spec -*-
 
@@ -12,7 +12,7 @@ Name: osinfo-db-tools
 Version: 1.12.0
 Release: %autorelease
 License: GPL-2.0-or-later
-Source:        https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
+Source:        https://gitlab.com/libosinfo/osinfo-db-tools/-/archive/v%{version}/osinfo-db-tools-v%{version}.tar.gz#/osinfo-db-tools-%{version}.tar.xz
 URL: https://libosinfo.org
 
 BuildRequires: meson
@@ -86,7 +86,7 @@ information about operating systems for use with virtualization
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git
+%autosetup -S git -n osinfo-db-tools-v%{version}
 
 %build
 %meson

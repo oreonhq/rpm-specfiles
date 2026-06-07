@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        RPM Perl dependencies generators
 License:        GPL-1.0-or-later
 URL:            http://jplesnik.fedorapeople.org/generators
-Source0:        http://jplesnik.fedorapeople.org/generators/generators-1.16.tar.gz
+Source0:        https://jplesnik.fedorapeople.org/generators/generators-1.16.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

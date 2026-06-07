@@ -14,7 +14,7 @@ URL:            http://ant-contrib.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/project/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3-src.tar.bz2
 # ASL 2.0 Licence text
 # Upstream bug at https://sourceforge.net/tracker/?func=detail&aid=3590371&group_id=36177&atid=416920
-Source2:        http://www.apache.org/licenses/LICENSE-2.0.txt
+Source2:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 Patch2:         ant-contrib-antservertest.patch
 Patch3:         ant-contrib-java-8.patch

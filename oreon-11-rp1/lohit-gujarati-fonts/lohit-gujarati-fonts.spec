@@ -1,4 +1,4 @@
-%global source0_hash 5be2f69eec4295e62bfddb1c65cbeeaa4aea15524def904706d41bdd8e8c8644
+%global source0_hash none
 
 %global fontname lohit-gujarati
 
@@ -22,14 +22,14 @@ This package provides a free Gujarati truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-gujarati-fonts/archive/refs/heads/main.tar.gz#/lohit-gujarati-fonts-main.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{fontname}-%{version} 
+%setup -q -n lohit-gujarati-fonts-main 
 %linuxtext OFL.txt AUTHORS README ChangeLog COPYRIGHT test-gujarati.txt
 
 %build

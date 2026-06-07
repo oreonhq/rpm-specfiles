@@ -17,7 +17,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-lb)
 
-Source0:        http://downloads.spellchecker.lu/packages/OOo3/SpellcheckerLu.oxt
+Source0:        https://downloads.spellchecker.lu/packages/OOo3/SpellcheckerLu.oxt
 
 %description
 Luxembourgish hunspell dictionaries.

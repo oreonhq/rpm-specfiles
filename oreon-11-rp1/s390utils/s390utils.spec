@@ -1,5 +1,4 @@
 %global source0_hash 640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb
-%global source1_hash 6ddfcffb26aa34beaa7d57027bf7e26c769cbe3e0723870fa86941512443658b
 
 # secure boot support is for RHEL only
 %if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
@@ -52,9 +51,7 @@ Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v%{version}
 #   tar xf s390-tools-%%{version}.tar.gz ; pushd s390-tools-%%{version}/rust ; \
 #   rm -f Cargo.lock && cargo vendor && \
 #   tar Jvcf ../../s390-tools-%%{version}-rust-vendor.tar.xz vendor/ ; popd
-%if 0%{?rhel} || (0%{?oreon} >= 11)
-Source1:        s390-tools-%{version}-rust-vendor.tar.xz
-%endif
+# vendor tree built in %%prep via cargo vendor when missing
 Source5:        zfcpconf.sh
 Source7:        zfcp.udev
 Source12:        dasd.udev
@@ -124,12 +121,19 @@ be used together with the zSeries (s390) Linux kernel and device drivers.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -n s390-tools-%{version} -p1
 
 %if 0%{?rhel} || (0%{?oreon} >= 11)
+_vendor="s390-tools-%{version}-rust-vendor.tar.xz"
+if test ! -f "$_vendor"; then
+  pushd rust
+  rm -rf vendor
+  cargo vendor vendor
+  tar cJf "../$_vendor" vendor
+  popd
+fi
 pushd rust
-tar xf %{SOURCE1}
+tar xf "../$_vendor"
 %cargo_prep -v vendor
 popd
 %else

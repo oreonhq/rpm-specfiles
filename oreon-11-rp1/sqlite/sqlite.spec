@@ -21,9 +21,9 @@ Release: 1%{?dist}
 License: blessing
 URL: http://www.sqlite.org/
 
-Source0:        http://www.sqlite.org/2026/sqlite-src-3520000.zip
-Source1:        http://www.sqlite.org/2026/sqlite-doc-3520000.zip
-Source2:        http://www.sqlite.org/2026/sqlite-autoconf-3520000.tar.gz
+Source0:        https://www.sqlite.org/2026/sqlite-src-3520000.zip
+Source1:        https://www.sqlite.org/2026/sqlite-doc-3520000.zip
+Source2:        https://www.sqlite.org/2026/sqlite-autoconf-3520000.tar.gz
 # Support a system-wide lemon template
 Patch1: sqlite-3.6.23-lemon-system-template.patch
 Patch2: sqlite-3.49.0-fix-lemon-missing-cflags.patch

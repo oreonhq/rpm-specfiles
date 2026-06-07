@@ -10,7 +10,7 @@ URL:           https://github.com/FasterXML/jackson-parent
 Source0:        https://github.com/FasterXML/jackson-parent/archive/refs/tags/jackson-parent-2.18.1.tar.gz#/jackson-parent-2.18.1.tar.gz
 # jackson-parent package don't include the license file
 # reported @ https://github.com/FasterXML/jackson-parent/issues/1
-Source1:       http://www.apache.org/licenses/LICENSE-2.0.txt
+Source1:       https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local

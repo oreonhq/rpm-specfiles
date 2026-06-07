@@ -6,8 +6,8 @@ Version: 1.08.2
 Release: 4%{?dist}
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/bc/
-Source0:        https://ftp.gnu.org/gnu/bc/bc-%{version}.tar.gz
-Source1:        https://ftp.gnu.org/gnu/bc/bc-%{version}.tar.gz.sig
+Source0:        https://mirrors.kernel.org/gnu/bc/bc-%{version}.tar.gz
+Source1:        https://mirrors.kernel.org/gnu/bc/bc-%{version}.tar.gz.sig
 Source2: kevin_pizzini.asc
 Patch1: bc-1.06-dc_ibase.patch
 Patch2: bc-1.06.95-doc.patch

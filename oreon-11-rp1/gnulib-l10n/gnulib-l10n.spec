@@ -8,8 +8,8 @@ License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/gnulib/
 BuildArch:      noarch
 
-Source0:        https://ftp.gnu.org/gnu/gnulib/%{name}-%{version}.tar.gz
-Source1:        https://ftp.gnu.org/gnu/gnulib/%{name}-%{version}.tar.gz.sig
+Source0:        https://mirrors.kernel.org/gnu/gnulib/%{name}-%{version}.tar.gz
+Source1:        https://mirrors.kernel.org/gnu/gnulib/%{name}-%{version}.tar.gz.sig
 
 Provides:       gnulib-l10n = %{version}-%{release}
 

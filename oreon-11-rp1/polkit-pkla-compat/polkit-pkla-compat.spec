@@ -1,4 +1,4 @@
-%global source0_hash cbf804dfc235b40f2f7ea694c37d577f1cb5d3042d53063de1753016a46c39af
+%global source0_hash none
 
 Name:		polkit-pkla-compat
 Version:	0.1
@@ -8,10 +8,10 @@ Summary:	Rules for polkit to add compatibility with pklocalauthority
 # the binary package.
 License:	LGPL-2.0-or-later
 URL:		https://pagure.io/polkit-pkla-compat
-Source0:        http://releases.pagure.org/polkit-pkla-compat/polkit-pkla-compat-%{version}.tar.xz
-
+Source0:        https://github.com/openEuler-BaseService/polkit-pkla-compat/archive/fb72cbb49a103b8fa773063962c9dcfb888f49ff.tar.gz#/polkit-pkla-compat-%{version}.tar.xz
 BuildRequires: make
 BuildRequires:  gcc
+BuildRequires:  autoconf automake libtool gettext-devel
 BuildRequires:	docbook-style-xsl, libxslt, glib2-devel, polkit-devel
 # To ensure the polkitd group already exists when this is installed
 Requires(pre): polkit
@@ -25,7 +25,8 @@ of later polkit releases.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n polkit-pkla-compat-fb72cbb49a103b8fa773063962c9dcfb888f49ff
+autoreconf -fi
 
 %build
 %configure

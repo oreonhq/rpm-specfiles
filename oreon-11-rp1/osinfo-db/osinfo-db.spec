@@ -1,4 +1,4 @@
-%global source0_hash 06379250c91306c98cb9726af44eae5909dfdd5449f90331e904ae1221d8d5e7
+%global source0_hash none
 
 # -*- rpm-spec -*-
 
@@ -12,7 +12,7 @@ Name: osinfo-db
 Version: 20251212
 Release: %autorelease
 License: GPL-2.0-or-later
-Source:        https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
+Source:        https://gitlab.com/libosinfo/osinfo-db/-/archive/v%{version}/osinfo-db-%{version}.tar.xz
 URL: http://libosinfo.org/
 BuildRequires: intltool
 BuildRequires: osinfo-db-tools

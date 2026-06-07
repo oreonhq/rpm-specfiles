@@ -1,4 +1,4 @@
-%global source0_hash ed840e5e90fa7752761edc5729a5c5bcb66caa3cc31fcd738235d235160ccc88
+%global source0_hash none
 
 Name:         mythes-it
 Summary:      Italian thesaurus
@@ -8,9 +8,11 @@ Release:      %autorelease
 # Here we specify the thesaurus license only as other files are not packaged 
 License:      GPL-3.0-only
 URL:          https://pagure.io/dizionario_italiano
-Source:        https://pagure.io/dizionario_italiano/archive/5.1.1/dizionario_italiano-5.1.1.tar.gz
+Source:        https://download.documentfoundation.org/libreoffice/src/25.2.3/libreoffice-dictionaries-25.2.3.2.tar.xz#/libreoffice-25.2.3.2.tar.xz
 
 BuildArch:    noarch
+BuildRequires: mythes-devel
+BuildRequires: perl-interpreter
 Requires:     mythes
 Supplements:  (mythes and langpacks-it)
 
@@ -20,17 +22,18 @@ Italian thesaurus.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n dizionario_italiano-%{version}
+%setup -q -n libreoffice-25.2.3.2
 
 
 %build
-# Nothing to do
+cd dictionaries/it_IT
+th_gen_idx.pl < th_it_IT_v2.dat > th_it_IT_v2.idx
 
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/mythes
-cp -p th_it_IT_v2.dat $RPM_BUILD_ROOT/%{_datadir}/mythes/th_it_IT_v2.dat
-cp -p th_it_IT_v2.idx $RPM_BUILD_ROOT/%{_datadir}/mythes/th_it_IT_v2.idx
+cp -p dictionaries/it_IT/th_it_IT_v2.dat $RPM_BUILD_ROOT/%{_datadir}/mythes/th_it_IT_v2.dat
+cp -p dictionaries/it_IT/th_it_IT_v2.idx $RPM_BUILD_ROOT/%{_datadir}/mythes/th_it_IT_v2.idx
 
 pushd $RPM_BUILD_ROOT/%{_datadir}/mythes/
 it_IT_aliases="it_CH"
@@ -41,8 +44,7 @@ done
 
 
 %files
-%license LICENSES/gpl-3.0.txt
-%doc CHANGELOG.txt README.md README_th_it_IT.txt
+%doc dictionaries/it_IT/README_th_it_IT.txt dictionaries/it_IT/CHANGELOG.txt
 %{_datadir}/mythes/th_it_IT_v2.*
 %{_datadir}/mythes/th_it_CH_v2.*
 

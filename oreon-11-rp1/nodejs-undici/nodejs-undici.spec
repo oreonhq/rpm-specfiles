@@ -1,6 +1,6 @@
 %global source0_hash ad5d01bb4c91ff274a8333cbad06da2c15fd637db4954bf3c69572245a54f19b
-%global source1_hash e1827250a39a3d45de04d4910b3e7994eb40ab46959828d243c097d65d30c55e
-%global source2_hash d20819dd6422769cb12ef7f2161dfd5a32d734f9422a183f53c04e154cd420ce
+%global source1_hash none
+%global source2_hash none
 
 %global     npm_name undici
 
@@ -25,8 +25,6 @@ License:    MIT
 URL:        https://undici.nodejs.org
 # See Source4 on how these archives were generated
 Source0:        https://github.com/nodejs/undici/archive/v7.24.0/undici-v7.24.0.tar.gz#/nodejs-undici-7.24.0.tar.gz
-Source1:    %{npm_name}-%{version}-nm-prod.tgz
-Source2:    %{npm_name}-%{version}-nm-dev.tgz
 Source3:    %{npm_name}-%{version}-bundled-licenses.txt
 Source4:    %{npm_name}-sources.sh
 Source5:        test-runner.sh
@@ -44,6 +42,7 @@ BuildRequires: nodejs-npm, /usr/bin/npm
 BuildRequires: binaryen
 %endif
 # for autosetup -S git_am
+BuildRequires: nodejs-packaging-bundler
 BuildRequires: git-core
 
 # This package bundles it's own copy of llhttp
@@ -53,9 +52,12 @@ Provides:   bundled(llhttp) = %{llhttp_version_major}.%{llhttp_version_minor}.%{
 An HTTP/1.1 client, written from scratch for Node.js.
 
 %prep
+_nm1="%{npm_name}-%{version}-nm-prod.tgz"
+_nm2="%{npm_name}-%{version}-nm-dev.tgz"
+if test ! -f "$_nm1" || test ! -f "$_nm2"; then
+  nodejs-packaging-bundler %{npm_name} %{version} %{SOURCE0}
+fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{npm_name}-%{version} -S git_am
 cp -p %{S:3} .
 
@@ -69,7 +71,7 @@ fi
 
 # Link node_modules
 mkdir -p node_modules/.bin/
-tar -xzf %{S:1}
+tar -xzf "$_nm1"
 ln -srt node_modules/       node_modules_prod/*
 ln -srt node_modules/.bin/  node_modules_prod/.bin
 
@@ -98,7 +100,7 @@ install -p -Dt %{buildroot}%{nodejs_sitelib}/%{npm_name}/            loader.js
 %check
 %{__nodejs} -e 'require("./")'
 
-tar -xzf %{S:2}
+tar -xzf "$_nm2"
 ln -fsrt node_modules/      node_modules_dev/*
 ln -fsrt node_modules/.bin/ node_modules_dev/.bin/*
 

@@ -1,12 +1,11 @@
-%global source0_hash 62cf871ad8fd09eb3418f00aca7a7d449299b8e1de31c65f28bf6a2ef1fa502a
+%global source0_hash none
 
 Name: libaio
 Version: 0.3.111
 Release: 23%{?dist}
 Summary: Linux-native asynchronous I/O access library
 License: LGPL-2.0-or-later
-Source: http://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
-
+Source: https://snapshot.debian.org/archive/debian/20180318T163348Z/pool/main/liba/libaio/libaio_0.3.111.orig.tar.gz#/libaio-%{version}.tar.gz
 Patch1: libaio-install-to-destdir-slash-usr.patch
 Patch2: libaio-remove-nostartfiles-nostdlib-from-build-flags.patch
 

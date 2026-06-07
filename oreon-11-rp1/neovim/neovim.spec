@@ -12,12 +12,12 @@
   %endif
 %endif
 
-%if 0%{?el10}
+%if 0%{?el10} || (0%{?oreon} >= 11)
 # tree-sitter in EL10 is too old and libtree-sitter-devel is not shipped
 # https://issues.redhat.com/browse/RHEL-56996
-%bcond system_treesitter 0
+%bcond_without system_treesitter
 %else
-%bcond system_treesitter 1
+%bcond_with system_treesitter
 %endif
 
 %global luv_min_ver 1.43.0

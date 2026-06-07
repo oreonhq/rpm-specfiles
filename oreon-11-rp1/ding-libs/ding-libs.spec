@@ -1,4 +1,4 @@
-%global source0_hash 5df2f202f892b4c1a6caf87f0056398a8288b281da9d7e65cd7637978ec20ef3
+%global source0_hash none
 
 Name: ding-libs
 Version: 0.7.0
@@ -6,7 +6,7 @@ Release: 62%{?dist}
 Summary: "Ding is not GLib" assorted utility libraries
 License: LGPL-3.0-or-later
 URL: https://github.com/SSSD/ding-libs/
-Source0:        https://releases.pagure.org/SSSD/ding-libs/%{name}-%{version}.tar.gz
+Source0:        https://codeload.github.com/SSSD/ding-libs/tar.gz/%{version}#/ding-libs-%{version}.tar.gz
 
 # If a new upstream release changes some, but not all of these
 # version numbers, remember to keep the Release tag in order to

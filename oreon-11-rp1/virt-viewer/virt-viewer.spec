@@ -17,7 +17,7 @@ Release: %autorelease
 Summary: Virtual Machine Viewer
 License: GPL-2.0-or-later
 URL: https://gitlab.com/virt-viewer/virt-viewer
-Source0:        https://releases.pagure.org/virt-viewer/%{name}-%{version}.tar.xz
+Source0:        https://gitlab.com/api/v4/projects/virt-viewer%2Fvirt-viewer/repository/archive.tar.gz?sha=v%{version}#/virt-viewer-%{version}.tar.xz
 Patch: 0001-data-remove-bogus-param-for-meson-i18n.merge_file.patch
 Patch: 0001-Read-oVirt-CA-and-pass-it-to-gtk-vnc.patch
 Requires: openssh-clients

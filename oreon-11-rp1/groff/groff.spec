@@ -52,7 +52,7 @@ URL: http://www.gnu.org/software/groff/
 Provides: nroff-i18n = %{version}-%{release}
 Provides: bundled(gnulib)
 
-Source:        https://ftp.gnu.org/gnu/groff/groff-%{version}.tar.gz
+Source:        https://mirrors.kernel.org/gnu/groff/groff-%{version}.tar.gz
 
 # resolves: #530788
 Patch0:        0001-missing-groff-x11-info-message-when-gxditview-not-fo.patch

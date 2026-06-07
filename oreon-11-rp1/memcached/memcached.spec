@@ -20,8 +20,7 @@ License:        BSD-3-clause AND Zlib AND BSD-2-Clause AND LicenseRef-Fedora-Pub
 URL:            https://www.memcached.org/
 Source0:        https://www.memcached.org/files/%{name}-%{version}.tar.gz
 Source1:        memcached.sysconfig
-# SELinux policy sources: https://pagure.io/memcached-selinux/tree/master
-Source2:        https://pagure.io/memcached-selinux/blob/master/f/memcached-selinux-1.0.3.tar.gz
+Source2:        memcached-selinux-%{selinuxmodulever}.tar
 Source3:	memcached.conf
 
 Patch1:         memcached-unit.patch

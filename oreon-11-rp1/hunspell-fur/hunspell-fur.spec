@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-fur)
 
-Source0:        http://digilander.libero.it/paganf/coretors/myspell-fur-12092005.zip
+Source0:        https://digilander.libero.it/paganf/coretors/myspell-fur-12092005.zip
 
 %description
 Friulian hunspell dictionaries.

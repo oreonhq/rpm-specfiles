@@ -10,7 +10,7 @@ URL: https://www.gnu.org/software/libunistring/
 
 Provides: bundled(gnulib)
 
-Source0:        https://ftp.gnu.org/gnu/libunistring/%{name}-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/libunistring/%{name}-%{version}.tar.xz
 BuildRequires: gcc
 BuildRequires: make
 %description

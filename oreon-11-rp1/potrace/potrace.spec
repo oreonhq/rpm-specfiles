@@ -10,8 +10,8 @@ License:	GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:		http://potrace.sourceforge.net
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # Documentation
-Source1:	http://potrace.sourceforge.net/potrace.pdf
-Source2:	http://potrace.sourceforge.net/potracelib.pdf
+Source1:	https://potrace.sourceforge.net/potrace.pdf
+Source2:	https://potrace.sourceforge.net/potracelib.pdf
 
 BuildRequires: make
 BuildRequires:	gcc

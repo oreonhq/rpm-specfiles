@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%{load:%{_sourcedir}/nodejs.srpm.macros}
+%{load:nodejs.srpm.macros}
 # This should be moved to rpm-redhat-config or similar as soon as feasible
 # NOTE: %%SOURCE macros are not yet defined, so explicit path is needed
 # === Versions of any software shipped in the main nodejs tarball

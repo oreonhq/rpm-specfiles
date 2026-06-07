@@ -70,6 +70,7 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/cyrus-imapd/README.rpm
 !oreon-11-rp1/docbook-dtds/docbook-rng-4.5.zip
 !oreon-11-rp1/docbook-dtds/docbook-xsd-4.5.zip
+!oreon-11-rp1/doxygen/doxywizard-icons.tar.xz
 !oreon-11-rp1/enscript/enscript-ruby-1.6.4.tar.gz
 !oreon-11-rp1/google-droid-fonts/google-droid-fonts-20200215.tar.xz
 !oreon-11-rp1/grafana-pcp/grafana-pcp-vendor-5.3.0-1.tar.xz
@@ -83,12 +84,16 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/js-jquery/jquery_3.7.1_node_modules.tar.gz
 !oreon-11-rp1/latex2html/latex2html-manpages.tar.gz
 !oreon-11-rp1/libipt/doc-v2.1.2.tar.xz
+!oreon-11-rp1/librx/rx-1.5.tar.gz
 !oreon-11-rp1/lklug-fonts/lklug-20090803.tar.gz
 !oreon-11-rp1/lsof/lsof-4.98.0-rh.tar.xz
 !oreon-11-rp1/net-tools/net-tools-2.0.20160912git.tar.xz
 !oreon-11-rp1/netpbm/netpbm-11.13.00.tar.xz
 !oreon-11-rp1/nettle/nettle-release-keyring.gpg
 !oreon-11-rp1/nodejs-cjs-module-lexer/cjs-module-lexer-1.4.1-nm-dev.tgz
+!oreon-11-rp1/microcode_ctl/microcode_ctl-2.1-51.tar.xz
+!oreon-11-rp1/mailcap/mailcap-2.1.54.tar.xz
+!oreon-11-rp1/memcached/memcached-selinux-1.0.3.tar
 !oreon-11-rp1/nodejs-packaging/test.tar.gz
 !oreon-11-rp1/nodejs-undici/undici-7.24.0-nm-dev.tgz
 !oreon-11-rp1/nodejs-undici/undici-7.24.0-nm-prod.tgz

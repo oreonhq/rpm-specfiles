@@ -1,4 +1,4 @@
-%global source0_hash 3626613a2b7ff446dcce1e499012516fa61ebdadb4546bdbc7df420b45470858
+%global source0_hash none
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -16,21 +16,25 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-smj)
 
-Source0:        hunspell-smj.tar.gz
+# upstream http://divvun.no/static_files/hunspell-smj.tar.gz is dead
+Source0:        smj.aff
+Source1:        smj.dic
+Source2:        README
+Source3:        Copyright
+Source4:        GPL-3
 
 %description
 Lule Saami hunspell dictionaries.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-1.0beta7.20090316
+%setup -q -c -T -n %{name}-1.0beta7.20090316
 
 %build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p smj.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/smj_NO.aff
-cp -p smj.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/smj_NO.dic
+cp -p %{SOURCE0} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/smj_NO.aff
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/smj_NO.dic
 
 pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 smj_NO_aliases="smj_SE"
@@ -41,7 +45,7 @@ done
 popd
 
 %files
-%doc Copyright README GPL-3
+%doc %{SOURCE2} %{SOURCE3} %{SOURCE4}
 %{_datadir}/%{dict_dirname}/*
 
 %changelog

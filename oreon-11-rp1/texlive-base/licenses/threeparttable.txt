@@ -1,0 +1,14 @@
+threeparttable License
+Full name
+threeparttable License
+
+Short identifier
+threeparttable
+
+Other web pages for this license
+https://fedoraproject.org/wiki/Licensing/Threeparttable
+Notes
+None
+
+Text
+This file may be distributed, modified, and used in other works with just one restriction: modified versions must clearly indicate the modification (a name change, or a displayed message, or ?).

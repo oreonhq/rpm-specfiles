@@ -27,7 +27,7 @@ This package provides the Madan font for Nepali made by the
 Madan Puraskar Pustakalaya project.}
 
 # Found new following working Source URL. Use wget to download this archive
-Source0: http://ltk.org.np/downloads/fonts.zip
+Source0: https://ltk.org.np/downloads/fonts.zip
 Source1: 65-0-%{fontpkgname}.conf
 # Extract from font info
 Source2: license.txt

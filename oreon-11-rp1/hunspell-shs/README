@@ -1,0 +1,17 @@
+This is the intial release of the Secwepemc spellchecking dictionary for
+hunspell.  The Makefile is used to install it while I work on the debian
+packaging.
+
+I still haven't formally cleared the copyright with the wordlist with the
+people who originally created it.  That being the Secwepemc Cultural Education
+Society.
+
+I used the script here to convert the aspell wordlist 
+
+	http://people.redhat.com/caolanm/hunspell/wordlist2hunspell
+
+Into the starting of the .aff and .dic files.
+
+	http://lingucomponent.openoffice.org/affix.readme
+
+Stay tuned for a full release and OpenOffice and Mozilla Extensions.

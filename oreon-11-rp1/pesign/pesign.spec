@@ -1,5 +1,4 @@
 %global source0_hash none
-%global source1_hash none
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -46,7 +45,6 @@ BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
 Source0:        https://github.com/rhboot/pesign/archive/refs/tags/%{version}.tar.gz#/pesign-%{version}.tar.bz2
-Source1:        certs.tar.xz
 Source2:        pesign.py
 
 Patch0001:        0001-cms_common-Fixed-Segmentation-fault.patch
@@ -60,9 +58,8 @@ well as other associated tools.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -T -b 0
-%setup -q -T -D -c -n pesign-%{version}/ -a 1
+%setup -q -n pesign-%{version}
+cp -a etc-pki/etc .
 git init
 git config user.email "pesign-owner@fedoraproject.org"
 git config user.name "Fedora Ninjas"

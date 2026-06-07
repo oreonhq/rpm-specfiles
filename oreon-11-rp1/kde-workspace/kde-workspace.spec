@@ -23,7 +23,7 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://download.kde.org/stable/kde-workspace/4.11.22/src/kde-workspace-4.11.22.tar.xz
+Source0:        https://github.com/KDE/kde-workspace/archive/refs/tags/v%{version}.tar.gz#/kde-workspace-%{version}.tar.xz
 %if 0%{?kdm_settings}
 Source1:        kdm-settings-2.tar.gz
 %endif

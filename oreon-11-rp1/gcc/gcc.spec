@@ -182,9 +182,9 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0:        https://gcc.gnu.org/git/gcc.git/snapshot/gcc-%{gitrev}.tar.gz#/gcc-%{version}-%{DATE}.tar.gz
+Source0:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2#/gcc-%{version}-%{DATE}.tar.gz
 Source1:        https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_tools_gitrev}#/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
-Source2:        https://sourceware.org/git/newlib-cygwin.git/snapshot/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
+Source2:        https://gcc.gnu.org/pub/gcc/infrastructure/gmp-6.1.0.tar.bz2#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org

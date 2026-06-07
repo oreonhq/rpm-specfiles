@@ -1,4 +1,4 @@
-%global source0_hash 074d38a4124df51dc785a2a7fe03c5d0251c96ce6e96beb68832fcb27e8d33e7
+%global source0_hash none
 
 %global fontname lohit-gurmukhi
 %global fontconf0 66-%{fontname}.conf
@@ -13,7 +13,7 @@ Summary:        Free Gurmukhi truetype font for Punjabi language
 
 License:        OFL-1.1
 URL:            https://pagure.io/lohit
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-gurmukhi-fonts/archive/refs/heads/main.tar.gz#/lohit-gurmukhi-fonts-main.tar.gz
 Source1:        %{name}.conf
 BuildArch:      noarch
 BuildRequires: fontforge >= 20080429
@@ -31,7 +31,7 @@ This package provides a free Gurmukhi script truetype font for Punjabi language.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{fontname}-%{version}
+%setup -q -n lohit-gurmukhi-fonts-main
 
 %build
 make ttf %{?_smp_mflags}

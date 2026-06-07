@@ -1,4 +1,4 @@
-%global source0_hash 38e0321f2d1811a4a7cc6f3ab784ff7d17efc9fda89a32ae9212af80f52c722c
+%global source0_hash none
 
 Name:       ibus-sayura
 Version:    1.3.2
@@ -6,8 +6,7 @@ Release:    35%{?dist}
 Summary:    The Sinhala engine for IBus input platform
 License:    GPL-2.0-or-later
 URL:        https://pagure.io/ibus-sayura
-Source0:        https://releases.pagure.org/ibus-sayura/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/pravins/ibus-sayura/archive/1.3.2.tar.gz#/ibus-sayura-%{version}.tar.gz
 # This is a test patch so not submitted to upstream yet
 # This patch is created by Mike Fabian
 Patch0:     fix-for-wayland-rhbz1724759.patch

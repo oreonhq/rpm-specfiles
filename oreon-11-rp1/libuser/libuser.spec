@@ -1,4 +1,4 @@
-%global source0_hash ea6094c72cb9e60a42fb53509dc98d124a340f1c9222783b503208adc16a0a8f
+%global source0_hash none
 
 %bcond ldaptests %{undefined rhel}
 
@@ -7,7 +7,7 @@ Version: 0.64
 Release: 17%{?dist}
 License: LGPL-2.0-or-later
 URL: https://pagure.io/libuser
-Source: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.gz
+Source: https://deb.debian.org/debian/pool/main/libu/libuser/libuser_0.64+git20241106~dfsg.orig.tar.gz#/libuser-%{version}.tar.gz
 # https://pagure.io/libuser/pull-request/71
 Patch: 0001-tests-use-crypt_r-with-Python-3.13.patch
 Patch1:  libuser-0.64-editlocation.patch

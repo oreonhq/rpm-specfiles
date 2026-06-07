@@ -15,7 +15,7 @@ BuildRequires: automake openssl-devel libpcap-devel git-core gcc
 BuildRequires: systemd-rpm-macros
 
 Source0:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz
-Source1:        http://www.tcpdump.org/release/tcpslice-1.8.tar.gz
+Source1:        https://www.tcpdump.org/release/tcpslice-1.8.tar.gz
 Source2:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz.sig
 Source3: tcpdump-sysusers.conf
 

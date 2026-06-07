@@ -23,7 +23,7 @@ License:	GPL-2.0-or-later WITH Font-exception-2.0
 # http://bpgfonts.wordpress.com/category/gpl-gnu/
 # But the link is annoying:
 # http://www.box.com/s/1f344f181567cb897395
-Source0:        https://github.com/web-fonts/bpg-fonts/archive/refs/heads/master.zip#/BPG_GPL_GNU_Fonts_2012.zip
+Source0:        https://deb.debian.org/debian/pool/main/f/fonts-bpg-georgian/fonts-bpg-georgian_2012.orig.tar.xz
 Source1:	%{name}-algeti-fontconfig.conf
 Source2:	%{name}-chveulebrivi-fontconfig.conf
 Source3:	%{name}-courier-fontconfig.conf

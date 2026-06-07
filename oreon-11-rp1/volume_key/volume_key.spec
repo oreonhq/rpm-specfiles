@@ -1,4 +1,4 @@
-%global source0_hash 6ca3748fc1dad22c450bbf6601d4e706cb11c5e662d11bb4aeb473a9cd77309b
+%global source0_hash none
 
 # Define `python3_sitearch' if there is no one:
 %{!?python3_sitearch:%global python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -39,7 +39,7 @@ License: GPL-2.0-only AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL: https://pagure.io/%{name}/
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
-Source0:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://deb.debian.org/debian/pool/main/v/volume-key/volume-key_%{version}.orig.tar.xz#/volume_key-%{version}.tar.xz
 # Support all LUKS devices
 # - backport of 26c09768662d8958debe8c9410dae9fda02292c3
 Patch0: volume_key-0.3.12-support_LUKS2_and_more.patch

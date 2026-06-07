@@ -17,7 +17,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mos)
 
-Source0:        http://www.abcburkina.net/ancien/documents/lingu/DicoMoore.zip
+Source0:        https://www.abcburkina.net/ancien/documents/lingu/DicoMoore.zip
 
 %description
 Mossi hunspell dictionaries.

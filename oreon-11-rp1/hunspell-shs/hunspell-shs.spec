@@ -1,4 +1,4 @@
-%global source0_hash 03ffc3010c95f295945a06d155a0c7a2909a94d918721f78f0846c637ffb5a98
+%global source0_hash none
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -18,23 +18,28 @@ BuildRequires: hunspell-devel
 Requires: hunspell
 Supplements: (hunspell and langpacks-shs)
 
-Source0:        hunspell-shs-ca.tar.gz
+# upstream http://secpewt.sd73.bc.ca/hunspell/hunspell-shs-ca.tar.gz is dead
+Source0:        shs_CA.aff
+Source1:        shs_CA.dic
+Source2:        COPYING
+Source3:        Copyright
+Source4:        README
 
 %description
 Shuswap hunspell dictionaries.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{version}
+%setup -q -c -T -n %{name}-%{version}
 
 %build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
-cp -p hunspell/shs_CA.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p %{SOURCE0} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/shs_CA.aff
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/shs_CA.dic
 
 %files
-%doc hunspell/COPYING hunspell/Copyright hunspell/README
+%doc %{SOURCE2} %{SOURCE3} %{SOURCE4}
 %{_datadir}/%{dict_dirname}/*
 
 %changelog

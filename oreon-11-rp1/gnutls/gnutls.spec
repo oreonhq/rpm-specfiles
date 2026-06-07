@@ -129,7 +129,7 @@ Source2:        https://gnutls.org/gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1
-Source100:	https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
+Source100:	https://mirrors.kernel.org/gnu/gmp/gmp-6.2.1.tar.xz
 # Taken from the main gmp package
 Source101:        gmp-6.2.1-intel-cet.patch
 Source102:        gmp-6.2.1-c23.patch

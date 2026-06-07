@@ -1,4 +1,4 @@
-%global source0_hash c581e7ae72b2c8bd9421d2ec88cce1c8890f86c3d8fac4a1e7b86b7a4848d416
+%global source0_hash none
 
 Name:           livesys-scripts
 Version:        0.8.0
@@ -7,8 +7,7 @@ Summary:        Scripts for auto-configuring live media during boot
 
 License:        GPL-3.0-or-later
 URL:            https://pagure.io/livesys-scripts
-Source0:        https://pagure.io/livesys-scripts/archive/0.8.0/livesys-scripts-0.8.0.tar.gz
-
+Source0:        https://gitlab.com/rhinstaller/livesys-scripts/-/archive/v%{version}/livesys-scripts-%{version}.tar.gz
 # https://pagure.io/livesys-scripts/pull-request/28
 # https://bugzilla.redhat.com/show_bug.cgi?id=2240823
 # Fix installer launch on i3

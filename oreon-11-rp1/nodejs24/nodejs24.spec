@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%{load:%{_sourcedir}/nodejs.srpm.macros}
+%{load:nodejs.srpm.macros}
 Name:           nodejs24
 Epoch:          1
 Version:        24.15.0

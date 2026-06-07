@@ -1,4 +1,4 @@
-%global source0_hash dc1a5b631bc4576e1b53e647cdd71e51c509131cd505b010e8622e8bfa6533cd
+%global source0_hash none
 
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
 %bcond initialsetup_gui_backend 1
@@ -13,7 +13,7 @@ Release: 5%{?dist}
 
 License: MIT
 URL:     https://pagure.io/fedora-kde/kde-settings
-Source0:        https://pagure.io/fedora-kde/kde-settings/archive/43.101/kde-settings-43.101.tar.gz
+Source0:        https://invent.kde.org/plasma/kde-settings/-/archive/v%{version}/kde-settings-%{version}.tar.gz
 Source1: COPYING
 
 BuildArch: noarch

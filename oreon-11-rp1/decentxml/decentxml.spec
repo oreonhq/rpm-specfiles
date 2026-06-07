@@ -25,7 +25,7 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/de/pdark/%{name}/%{version}/%{name}-%{version}-src.zip
 
 # For running w3c conformance test suite.
-Source1:          http://www.w3.org/XML/Test/xmlts20031210.zip
+Source1:          https://www.w3.org/XML/Test/xmlts20031210.zip
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)

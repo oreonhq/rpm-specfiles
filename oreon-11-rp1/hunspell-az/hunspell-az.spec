@@ -19,7 +19,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-az)
 
-Source0:        https://ftp.gnu.org/gnu/aspell/dict/az/aspell6-az-0.02-0.tar.bz2
+Source0:        https://mirrors.kernel.org/gnu/aspell/dict/az/aspell6-az-0.02-0.tar.bz2
 
 %description
 Azerbaijani hunspell dictionaries.

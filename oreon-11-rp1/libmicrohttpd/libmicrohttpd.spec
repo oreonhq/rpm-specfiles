@@ -13,7 +13,7 @@ Summary:        Lightweight library for embedding a webserver in applications
 License:        LGPL-2.1-or-later AND (LGPL-2.1-or-later OR GPL-2.0-or-later WITH eCos-exception-2.0) AND GFDL-1.3-no-invariants-or-later
 
 URL:            http://www.gnu.org/software/libmicrohttpd/
-Source0:        https://ftp.gnu.org/gnu/libmicrohttpd/%{name}-%{version}.tar.gz
+Source0:        https://mirrors.kernel.org/gnu/libmicrohttpd/%{name}-%{version}.tar.gz
 # Patch0:         gnutls-utilize-system-crypto-policy.patch
 
 BuildRequires:  libtool

@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-build-api/archive/refs/tags/plexus-build-api-0.0.7.tar.gz#/plexus-build-api0-0.0.7.tar.gz
-Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
+Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 # Forwarded upstream: https://github.com/sonatype/sisu-build-api/pull/2
 Patch:          %{name}-migration-to-component-metadata.patch

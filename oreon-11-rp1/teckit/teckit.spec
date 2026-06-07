@@ -1,4 +1,4 @@
-%global source0_hash 90e03c0153b925457620ade08ed955f2dbbe794e55544448ed997aba861a4d9e
+%global source0_hash 3f55cd3670f1ff1a439d5a40071870b9e4ca2be8877a0eb80e24783cb532b380
 
 %global source2_key_fpr 15D41BC02EB807D405EFFAF6C9183BEA0288CDEE
 
@@ -82,8 +82,7 @@ SourceLicense:  %{license} AND LGPL-2.0-or-later AND GPL-2.0-or-later AND GPL-2.
 URL:            https://software.sil.org/teckit/
 # Archive repackaged with ./repackage.sh tool because of a bad license
 # <https://github.com/silnrsi/teckit/issues/34>.
-# Original URL is https://github.com/silnrsi/teckit/releases/download/v%%{version}/teckit-%%{version}.tar.xz
-Source0:        teckit-%{version}_repackaged.tar.xz
+Source0:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz
 Source1:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz.asc
 # Exported from ppisar's keyring
 Source2:        gpgkey-15D41BC02EB807D405EFFAF6C9183BEA0288CDEE.gpg
@@ -126,9 +125,11 @@ that use TECkit, a character encoding and mapping, library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
-%dnl verification skipped because of repackaging
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1
+cp %{SOURCE3} .
+bash repackage.sh %{version}
+%setup -q -c -T -n teckit-%{version}_repackaged
+tar xJf teckit-%{version}_repackaged.tar.xz --strip-components=1
 # Remove bundled libraries
 rm -r zlib-*/*.{c,h} SFconv/expat
 # Remove pre-build executables

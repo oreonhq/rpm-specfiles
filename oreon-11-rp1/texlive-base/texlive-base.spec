@@ -1,6 +1,5 @@
 %global source2_hash 37e6e792dcf1e352fc48e057af3b8e72462c8f19b9c27bdaad0e614f395443b5
 %global source0_hash 32ea827edd3fb80a682ffbdf95d7ba6139ff074516e660c8923260fc82f5e0f0
-%global source3_hash 9d64ea6f332782805cc79e8dad0ac8c111d6d3e6e4f566f5b00f47d1605490e0
 %global source5_hash d75786bb3dfe8ed8a190e61bc4f4c1dcc4a08a9c2e8fbbb325f32bf8bce69002
 %global source6_hash c41a4015b43948ab104e397c24f55750e5b11619ba249a86b78e3b91d538a2a9
 %global source7_hash 0c50e231046e33aa3b68e32dc1e82403189805400aee894f71ec31ac958a1812
@@ -508,7 +507,6 @@ URL: http://tug.org/texlive/
 Source0:        https://tug.ctan.org/systems/texlive/Source/%{source_name}.tar.xz
 Source1:        macros.texlive
 Source2: https://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
-Source3: texlive-licenses.tar.xz
 Source4:        generate-fmtutilcnf
 # These noarch components are packed wrong upstream (do not unpack into texmf-dist)
 Source5: https://tug.ctan.org/systems/texlive/tlnet/archive/cslatex.tar.xz
@@ -7483,7 +7481,6 @@ LaTeX file remains on the archive.)
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
 test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; }
@@ -7988,8 +7985,8 @@ tar xf %{SOURCE0}
 %endif
 
 # Setup copies of the licenses
-for l in `unxz -c %{SOURCE3} | tar t`; do
-ln -s %{_texdir}/licenses/$l $l
+for l in licenses/*.txt; do
+ln -s %{_texdir}/licenses/$(basename $l) $(basename $l)
 done
 
 %patch -P44 -p1 -b .pdf-header-order-fix
@@ -8285,9 +8282,7 @@ popd
 
 # install licenses
 mkdir -p %{buildroot}%{_texdir}/licenses
-pushd %{buildroot}%{_texdir}/licenses
-xz -dc %{SOURCE3} | tar x
-popd
+cp -a licenses/*.txt %{buildroot}%{_texdir}/licenses/
 
 # nuke useless tlmgr packaging stuff and doc droppings
 rm -f %{buildroot}/%{_texdir}/install-tl

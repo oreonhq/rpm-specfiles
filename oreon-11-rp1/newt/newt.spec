@@ -10,7 +10,7 @@ Version: 0.52.25
 Release: 6%{?dist}
 License: LGPL-2.0-only
 URL: https://pagure.io/newt
-Source:        https://pagure.io/releases/newt/newt-%{version}.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/n/newt/newt_%{version}.orig.tar.xz#/newt-%{version}.tar.gz
 BuildRequires: make
 BuildRequires: gcc popt-devel python3-devel slang-devel
 %{?with_python2:BuildRequires: python2-devel}

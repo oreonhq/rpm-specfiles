@@ -19,7 +19,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ia)
 
-Source0:        http://download.savannah.gnu.org/releases/interlingua/ia_myspell.zip
+Source0:        https://download.savannah.gnu.org/releases/interlingua/ia_myspell.zip
 
 %description
 Interlingua hunspell dictionaries.

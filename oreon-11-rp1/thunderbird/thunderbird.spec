@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source4_hash c77c5511a19884473d781176326d74d8f9e1e5b433c587d9eb55bc579def2ca1
+%global source4_hash none
 
 # ppc64le started to fail permanently, apparently OOM,
 # first f42 https://koji.fedoraproject.org/koji/taskinfo?taskID=124917502
@@ -132,10 +132,11 @@ Obsoletes:      thunderbird-wayland < 115.11.0-1
 
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
+# xpis pulled in prep via fetch-langpacks.sh from archive.mozilla.org
 %endif
 Source3:        get-calendar-langpacks.sh
-Source4:        cbindgen-vendor.tar.xz
+Source4:        fetch-langpacks.sh
+Source5:        gen_cbindgen-vendor.sh
 
 Source10:        thunderbird-mozconfig
 Source11:        thunderbird-mozconfig-branded
@@ -285,8 +286,13 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 %setup -q
+%if %{build_langpacks}
+bash %{SOURCE4} %{version}%{?pre_version}
+%endif
+%if 0%{?use_bundled_cbindgen}
+bash %{SOURCE5}
+%endif
 
 # Build patches
 
@@ -419,7 +425,7 @@ find third_party -type f  -iname "*.rs"|xargs chmod a-x
 
 mkdir -p my_rust_vendor
 cd my_rust_vendor
-%{__tar} xf %{SOURCE4}
+%{__tar} xf cbindgen-vendor.tar.xz
 cd -
 mkdir -p .cargo
 cat > .cargo/config <<EOL
@@ -623,8 +629,7 @@ touch %{name}.lang
 
 %if %{build_langpacks}
 %{__mkdir_p} %{buildroot}%{langpackdir}
-%{__tar} xf %{SOURCE1}
-for langpack in `ls thunderbird-langpacks/*.xpi`; do
+for langpack in thunderbird-langpacks/*.xpi; do
   language=`basename $langpack .xpi`
   extensionID=langpack-$language@thunderbird.mozilla.org
   %{__mkdir_p} $extensionID

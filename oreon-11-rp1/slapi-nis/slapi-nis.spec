@@ -1,4 +1,4 @@
-%global source0_hash c3b0900bc539f91e9dfa3fd621a219dd7b44884f2c4b212d84fa98b13262e4cf
+%global source0_hash none
 
 %bcond_with nis
 
@@ -19,8 +19,7 @@ Release:	7%{?dist}
 Summary:	Schema Compatibility plugins for Directory Server
 License:	GPL-3.0-or-later
 URL:		http://pagure.io/slapi-nis/
-Source0:        https://releases.pagure.org/slapi-nis/slapi-nis-%{version}.tar.gz
-Source1:        https://releases.pagure.org/slapi-nis/slapi-nis-%{version}.tar.gz.asc
+Source0:        https://codeberg.org/freeipa/slapi-nis/archive/0.70.0.tar.gz#/slapi-nis-%{version}.tar.gz
 Patch0:		slapi-nis-eq_once_rel.patch
 Patch1:         slapi-nis-rhbz2341357-fix.patch
 
@@ -64,7 +63,7 @@ for attributes from multiple entries in the tree.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n slapi-nis
 %patch -p1 -P0
 %patch -p1 -P1
 

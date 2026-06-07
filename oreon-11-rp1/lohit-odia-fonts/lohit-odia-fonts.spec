@@ -1,4 +1,4 @@
-%global source0_hash 016361a2639d7d3925fd0486ef6ef959ce4dc772fa4a53824265051b3d49d8d7
+%global source0_hash none
 
 %global fontname lohit-odia
 
@@ -22,14 +22,14 @@ This package provides a free Odia truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-odia-fonts/archive/refs/heads/main.tar.gz#/lohit-odia-fonts-main.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{fontname}-%{version}
+%setup -q -n lohit-odia-fonts-main
 %linuxtext OFL.txt AUTHORS README ChangeLog COPYRIGHT test-odia.txt
 
 %build

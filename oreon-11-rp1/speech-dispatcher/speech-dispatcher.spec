@@ -18,7 +18,7 @@ Summary:       To provide a high-level device independent layer for speech synth
 License:       GPL-2.0-or-later AND LGPL-2.1-only OR LGPL-2.0-only
 URL:           http://devel.freebsoft.org/speechd
 Source0:        https://github.com/brailcom/speechd/releases/download/%{version}/speech-dispatcher-%{version}.tar.gz
-Source1:       http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
+Source1:       https://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 
 Patch1:        0001-Remove-pyxdg-dependency.patch
 #Patch2:        4ba45da405fe8dba5ed56725d20a388d6d0269a4.patch

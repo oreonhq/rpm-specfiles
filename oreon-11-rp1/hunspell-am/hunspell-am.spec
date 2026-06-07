@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-am)
 
-Source0:        http://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
+Source0:        https://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
 
 %description
 Amharic hunspell dictionaries.

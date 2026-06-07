@@ -39,19 +39,23 @@ phonetics.
 }
 
 # Fonts retrieved 2015-08-07 from http://www.latofonts.com/download/Lato2OFL.zip
-Source0:        https://github.com/latofonts/lato-source/archive/refs/tags/v%{version}.zip#/Lato2OFL.zip
+Source0:        https://archive.ubuntu.com/ubuntu/pool/main/f/fonts-lato/fonts-lato_%{version}-1_all.deb
 Source10:        61-lato-fonts.conf
 
 %fontpkg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n Lato2OFL
-
-# Fix wrong end-of-lines encoding
+%setup -q -c -T -n Lato2OFL
+mkdir Lato2OFL
+ar x %{SOURCE0}
+tar xf data.tar.*
+mv usr/share/fonts/truetype/lato/*.ttf Lato2OFL/
+cp usr/share/doc/fonts-lato/copyright Lato2OFL/OFL.txt
+: > Lato2OFL/README.txt
+rm -rf usr data.tar.* control.tar.*
+cd Lato2OFL
 sed -i 's/\r$//' OFL.txt
-
-# Fix permissions
 chmod 0644 OFL.txt README.txt
 
 %build

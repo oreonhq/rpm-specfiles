@@ -2,13 +2,10 @@
 %global source1_hash none
 %global source3_hash none
 %global source4_hash none
-%global source5_hash none
 %global source6_hash none
-%global source7_hash none
 %global source8_hash none
-%global source9_hash none
-%global source10_hash none
 %global source11_hash none
+%global source12_hash none
 
 %define enable_native_atlas 0
 %global build_type_safety_c 0
@@ -24,17 +21,16 @@ Summary:        Automatically Tuned Linear Algebra Software
 License:        BSD-3-Clause
 URL:            http://math-atlas.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/math-atlas/%{name}%{version}.tar.bz2
-Source1:        PPRO32.tgz
+# no public mirrors for these fedora-tuned lapack refs anywhere we checked
+Source1:        PPRO32.lapackref
 Source2:        README.dist
-Source3:        POWER332.tar.bz2
-Source4:        IBMz932.tar.bz2
-Source5:        IBMz964.tar.bz2
-Source6:        ARMv732NEON.tar.bz2
-Source7:        IBMz1264.tar.bz2
-Source8:        ARMa732.tar.bz2
-Source9:        IBMz1364VXZ.tar.bz2
-Source10:        IBMz1464VXZ2.tar.bz2
-Source11:        IBMz1564VXZ2.tar.bz2
+Source3:        POWER332.lapackref
+Source4:        IBMz932.lapackref
+Source6:        ARMv732NEON.lapackref
+Source8:        ARMa732.lapackref
+Source11:        IBMz1564VXZ2.lapackref
+# s390 arch lapack refs from ubuntu/debian atlas packaging
+Source12:        https://archive.ubuntu.com/ubuntu/pool/universe/a/atlas/atlas_3.10.3-13ubuntu1.debian.tar.xz
 # Properly pass -melf_* to the linker with -Wl, fixes FTBFS bug 817552
 # https://sourceforge.net/tracker/?func=detail&atid=379484&aid=3555789&group_id=23725
 Patch1:        atlas-melf.patch
@@ -344,13 +340,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
-test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; }
 test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
-test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; }
-test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; }
-test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }#cat /proc/cpuinfo
+test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
+test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ATLAS
 
 
@@ -376,17 +369,19 @@ test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "o
 %patch -P15 -p1
 %patch -P101 -p1
 
-cp %{SOURCE1} CONFIG/ARCHS/
+install -pm 644 %{SOURCE1} CONFIG/ARCHS/PPRO32.tgz
 cp %{SOURCE2} doc
-cp %{SOURCE3} CONFIG/ARCHS/
-cp %{SOURCE4} CONFIG/ARCHS/
-cp %{SOURCE5} CONFIG/ARCHS/
-cp %{SOURCE6} CONFIG/ARCHS/
-cp %{SOURCE7} CONFIG/ARCHS/
-cp %{SOURCE8} CONFIG/ARCHS/
-cp %{SOURCE9} CONFIG/ARCHS/
-cp %{SOURCE10} CONFIG/ARCHS/
-cp %{SOURCE11} CONFIG/ARCHS/
+install -pm 644 %{SOURCE3} CONFIG/ARCHS/POWER332.tar.bz2
+install -pm 644 %{SOURCE4} CONFIG/ARCHS/IBMz932.tar.bz2
+install -pm 644 %{SOURCE6} CONFIG/ARCHS/ARMv732NEON.tar.bz2
+install -pm 644 %{SOURCE8} CONFIG/ARCHS/ARMa732.tar.bz2
+install -pm 644 %{SOURCE11} CONFIG/ARCHS/IBMz1564VXZ2.tar.bz2
+tar -xJf %{SOURCE12} debian/archdefs/s390x/IBMz964.tar.bz2 \
+    debian/archdefs/s390x/IBMz1264.tar.bz2 \
+    debian/archdefs/s390x/IBMz1364VXZ.tar.bz2 \
+    debian/archdefs/s390x/IBMz1464VXZ2.tar.bz2
+cp debian/archdefs/s390x/*.tar.bz2 CONFIG/ARCHS/
+rm -rf debian
 
 %ifarch %{arm}
 sed -i -e 's,-mfloat-abi=softfp,-mfloat-abi=hard,' CONFIG/src/atlcomp.txt

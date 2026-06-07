@@ -1,4 +1,4 @@
-%global source0_hash fa26203291bfc97b53976c9e0c5152a3340a6aa42bd1497a2771a997b6f6ee32
+%global source0_hash none
 
 %global modname rpmfluff
 
@@ -9,8 +9,7 @@ Summary:       Lightweight way of building RPMs, and sabotaging them
 
 License:       GPL-2.0-or-later
 URL:           https://pagure.io/rpmfluff
-Source0:        https://pagure.io/releases/%{modname}/%{modname}-%{version}.tar.xz
-
+Source0:        https://files.pythonhosted.org/packages/fb/e6/7892e71218d86c84c434aecc62f2a87f42e802768ca5496bb814e36ba9e5/rpmfluff-0.6.7.tar.gz
 BuildArch:     noarch
 
 %global _description \

@@ -9,7 +9,7 @@ Release: %autorelease
 License: LicenseRef-Fedora-Public-Domain
 # This package is a downstream-only project
 URL: https://src.fedoraproject.org/rpms/filesystem
-Source1:        https://pagure.io/filesystem/raw/master/f/lang-exceptions
+Source1:        lang-exceptions
 Source2: glibc-SUPPORTED.locales
 Source3: iso_639-2.locales
 Source4: sbin-filenames
@@ -66,7 +66,8 @@ This subpackage of filesystem package contains rpm macro definitions
 and an rpm attribute generator.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }rm -f $RPM_BUILD_DIR/filelist
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+rm -f $RPM_BUILD_DIR/filelist
 
 %build
 

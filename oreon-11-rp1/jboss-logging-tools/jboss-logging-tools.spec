@@ -12,7 +12,7 @@ Summary:          JBoss Logging I18n Annotation Processor
 License:          Apache-2.0 and LGPL-2.0-or-later
 URL:              https://github.com/jboss-logging/jboss-logging-tools
 Source0:        https://github.com/jboss-logging/jboss-logging-tools/archive/refs/tags/2.2.1.Final.tar.gz#/jboss-logging-tools-2.2.1.Final.tar.gz
-Source1:          http://www.apache.org/licenses/LICENSE-2.0.txt
+Source1:          https://www.apache.org/licenses/LICENSE-2.0.txt
 Patch1:           0001-Add-getEnclosingMethod-to-DelegatingExecutableElemen.patch
 
 BuildArch:        noarch

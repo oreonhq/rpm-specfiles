@@ -12,7 +12,7 @@ Version: 0.3
 Release: 37%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 URL: http://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html
-Source0: http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz
+Source0: https://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz
 Source1: 66-ucs-miscfixed.conf
 BuildArch: noarch
 Summary: Selected set of bitmap fonts

@@ -1,4 +1,4 @@
-%global source0_hash ea27de56eaa3a24e39c4d4223e516f5c46bd6a2b056e6b4fae9a36797b6a9fec
+%global source0_hash none
 
 Name:           dlm
 Version:        4.3.0
@@ -14,8 +14,7 @@ BuildRequires:  libxml2-devel
 BuildRequires:  systemd-units
 BuildRequires:  systemd-devel
 BuildRequires: make
-Source0:        https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
-
+Source0:        https://deb.debian.org/debian/pool/main/d/dlm/dlm_%{version}.orig.tar.gz#/dlm-%{version}.tar.gz
 %if 0%{?rhel} && 0%{?rhel} <= 7
 ExclusiveArch: i686 x86_64
 %endif

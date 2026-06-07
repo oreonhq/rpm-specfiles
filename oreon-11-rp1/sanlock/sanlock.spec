@@ -1,4 +1,4 @@
-%global source0_hash 2e5e1acd05af897f0027cc271b0b59f5ef527821bb00fd9e8840aecbf41fee3e
+%global source0_hash none
 
 Name:           sanlock
 Version:        5.0.0
@@ -22,8 +22,7 @@ Requires(post): systemd-units
 Requires(post): systemd-sysv
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-Source0:        https://releases.pagure.org/sanlock/%{name}-%{version}.tar.gz
-
+Source0:        https://codeberg.org/sanlock/sanlock/archive/sanlock-5.0.0.tar.gz#/sanlock-%{version}.tar.gz
 # Patch0: 0001-foo.patch
 
 %description
@@ -31,7 +30,7 @@ The sanlock daemon manages leases for applications on hosts using shared storage
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n sanlock
 #%%patch0 -p1
 
 %build

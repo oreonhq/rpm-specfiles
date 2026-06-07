@@ -5,7 +5,7 @@ Summary: Esperanto thesaurus
 %global upstreamid 20180330
 Version: 0.%{upstreamid}
 Release: 18%{?dist}
-Source: http://esperanto.mv.ru/Download/dict-eo.oxt
+Source: https://esperanto.mv.ru/Download/dict-eo.oxt
 URL: http://esperanto.mv.ru/Download/
 License: GPL-3.0-or-later
 BuildArch: noarch

@@ -1,4 +1,4 @@
-%global source0_hash fddaf9e21d198d5faeaf4f0c3bfd4070d28140243fd229af5b581119f4e11d39
+%global source0_hash none
 
 %global fontname lohit-telugu
 
@@ -23,14 +23,14 @@ This package provides a free Telugu truetype/opentype font.
 BuildRequires: make
 BuildRequires: fontforge
 BuildRequires: ttfautohint
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-telugu-fonts/archive/refs/heads/main.tar.gz#/lohit-telugu-fonts-main.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{fontname}-%{version}
+%setup -q -n lohit-telugu-fonts-main
 %linuxtext OFL.txt AUTHORS README ChangeLog COPYRIGHT
 
 %build

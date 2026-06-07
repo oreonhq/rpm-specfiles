@@ -23,10 +23,10 @@ Source1: xml.dcl
 Source2: xml.soc
 Source3: html.dcl
 Source4: html.soc
-Source5:        http://www.w3.org/2009/01/xml.xsd
-Source6: http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd
-Source7: http://www.w3.org/2001/XMLSchema.dtd
-Source8: http://www.w3.org/2001/datatypes.dtd
+Source5:        https://www.w3.org/2009/01/xml.xsd
+Source6: https://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd
+Source7: https://www.w3.org/2001/XMLSchema.dtd
+Source8: https://www.w3.org/2001/datatypes.dtd
 Source9: sgmlwhich.1
 Source10: sgml.conf.5
 

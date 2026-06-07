@@ -18,7 +18,7 @@ Requires:       hunspell
 Supplements: (hunspell and langpacks-or)
 BuildArch: noarch
 
-Source0:        http://anishpatil.fedorapeople.org/or_in.1.0.0.tar.gz
+Source0:        https://anishpatil.fedorapeople.org/or_in.1.0.0.tar.gz
 
 %description
 Odia hunspell dictionaries.

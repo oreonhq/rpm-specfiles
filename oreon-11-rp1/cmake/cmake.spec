@@ -105,7 +105,7 @@ Summary:        Cross-platform make system
 # exception granting redistribution under terms of your choice
 License:        BSD-3-Clause AND MIT-open-group AND Zlib%{?with_bundled_cppdap: AND Apache-2.0}
 URL:            http://www.cmake.org
-Source0:        http://www.cmake.org/files/v4.2/cmake-4.2.3.tar.gz
+Source0:        https://www.cmake.org/files/v4.2/cmake-4.2.3.tar.gz
 Source1:        %{name}-init.el
 Source2:        macros.%{name}.in
 Source3:        macros.aaa-%{name}-srpm

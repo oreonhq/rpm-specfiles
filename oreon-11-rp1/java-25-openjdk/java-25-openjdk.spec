@@ -1,5 +1,4 @@
 %global source0_hash none
-%global source8_hash d8a785cc9cc71745c17ecb9e5f0f919e7776b2f21584634f1eb71e4c7e813d6f
 %global source31_hash dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb
 
 # RPM conditionals so as to be able to dynamically produce
@@ -1246,8 +1245,11 @@ URL:      http://openjdk.java.net/
 
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
-# Systemtap tapsets. Zipped up to keep it small.
-Source8: tapsets-icedtea-%{icedteaver}.tar.xz
+# systemtap tapsets from icedtea, kept as local .in files (no upstream tarball)
+Source19: tapset/hotspot.stp.in
+Source20: tapset/hotspot_gc.stp.in
+Source21: tapset/hotspot_jni.stp.in
+Source22: tapset/jstack.stp.in
 
 # Desktop files. Adapted from IcedTea
 Source9:        jconsole.desktop.in
@@ -1727,7 +1729,6 @@ The %{origin_nice} %{featurever} cryptography adapter library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
 test "%{source31_hash}" = "none" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source31_hash}" || { echo "oreon: Source31 hash mismatch" >&2; exit 1; }; }echo "Preparing %{oj_vendor_version}"
 
 if [ %{include_normal_build} -eq 0 -o  %{include_normal_build} -eq 1 ] ; then
@@ -1820,7 +1821,8 @@ echo "`date`" >> %{repack_file}
 
 # Extract systemtap tapsets
 %if %{with_systemtap}
-tar --strip-components=1 -x -I xz -f %{SOURCE8}
+mkdir -p tapset
+install -pm 644 %{SOURCE19} %{SOURCE20} %{SOURCE21} %{SOURCE22} tapset/
 %if %{include_debug_build}
 cp -r tapset tapset%{debug_suffix}
 %endif

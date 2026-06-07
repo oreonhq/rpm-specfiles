@@ -7,7 +7,7 @@ Summary:          Manage Linux IP sets
 
 License:          GPL-2.0-only
 URL:              http://ipset.netfilter.org/
-Source0:        http://ipset.netfilter.org//ipset-7.24.tar.bz2
+Source0:        https://ipset.netfilter.org//ipset-7.24.tar.bz2
 Source1:          %{name}.service
 Source2:          %{name}.start-stop
 Source3:          %{name}-config

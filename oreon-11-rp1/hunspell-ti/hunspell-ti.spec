@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ti)
 
-Source0:        http://www.cs.ru.nl/~biniam/geez/dict/ti_ER.zip
+Source0:        https://www.cs.ru.nl/~biniam/geez/dict/ti_ER.zip
 
 %description
 Tigrigna hunspell dictionaries.

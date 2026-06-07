@@ -11,7 +11,7 @@ Summary:	Fonts for Arabic from PakType
 
 License:	GPL-2.0-only WITH Font-exception-2.0
 URL:		https://sourceforge.net/projects/paktype/
-Source0:        https://downloads.sourceforge.net/project/paktype/PakType-Naqsh-6.0.tar.gz#/paktype-naqsh-fonts-6.0.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/f/fonts-paktype/fonts-paktype_0.0svn20121225.orig.tar.bz2
 Source1:	%{fontconf}.conf
 BuildArch:	noarch
 BuildRequires:	fontpackages-devel
@@ -25,7 +25,11 @@ Arabic from the PakType by Lateef Sagar.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c
+%setup -q -c -T
+tar xf %{SOURCE0}
+cp fonts-paktype-0.0svn20121225/Deployment/PakType\ Naqsh.ttf PakTypeNaqsh.ttf
+cp -r fonts-paktype-0.0svn20121225/License\ files .
+rm -rf fonts-paktype-0.0svn20121225
 mv License\ files/PakType\ Naqsh\ License.txt PakType_Naqsh_License.txt
 
 %{__sed} -i 's/\r//' PakType_Naqsh_License.txt

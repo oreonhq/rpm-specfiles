@@ -17,7 +17,7 @@ Summary:        Utilities for video4linux and DVB devices
 License:        GPL-2.0-or-later AND GPL-2.0-only AND (GPL-2.0-only OR BSD-3-Clause) AND LicenseRef-Fedora-Public-Domain AND HPND-sell-variant
 URL:            http://www.linuxtv.org/downloads/v4l-utils/
 
-Source0:        http://www.linuxtv.org/downloads/v4l-utils//v4l-utils-1.32.0.tar.xz
+Source0:        https://www.linuxtv.org/downloads/v4l-utils//v4l-utils-1.32.0.tar.xz
 # TODO: submit upstream
 Patch0:         sbin-location.diff
 

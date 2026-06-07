@@ -4,7 +4,7 @@ Name: mythes-en
 Summary: English thesaurus
 Version: 3.0
 Release: 43%{?dist}
-Source: http://www.danielnaber.de/wn2ooo/wn2ooo20050723.tgz
+Source: https://www.danielnaber.de/wn2ooo/wn2ooo20050723.tgz
 URL: http://www.danielnaber.de/wn2ooo/
 BuildRequires: python3-devel
 BuildRequires: perl-interpreter

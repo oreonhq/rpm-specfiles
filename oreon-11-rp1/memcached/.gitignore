@@ -34,6 +34,7 @@
 /memcached-1.6.32.tar.gz
 /memcached-1.6.37.tar.gz
 /memcached-selinux-1.0.3.tar.gz
+!/memcached-selinux-1.0.3.tar
 /memcached-1.6.38.tar.gz
 /memcached-1.6.39.tar.gz
 /memcached-1.6.40.tar.gz

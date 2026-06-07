@@ -20,9 +20,9 @@ Release: 11%{?dist}
 License: BSD-3-Clause-Open-MPI
 URL: http://www.netlib.org/lapack/
 Source0:        https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v%{version}.tar.gz#/lapack-%{mediumver}.0.tar.gz
-Source1: http://www.netlib.org/lapack/manpages.tgz
-Source4: http://www.netlib.org/lapack/lapackqref.ps
-Source5: http://www.netlib.org/blas/blasqr.ps
+Source1: https://www.netlib.org/lapack/manpages.tgz
+Source4: https://www.netlib.org/lapack/lapackqref.ps
+Source5: https://www.netlib.org/blas/blasqr.ps
 # https://github.com/Reference-LAPACK/lapack/pull/959
 Patch0: lapack-3.12.0-fix-dmd-issues.patch
 BuildRequires: gcc-gfortran, gawk

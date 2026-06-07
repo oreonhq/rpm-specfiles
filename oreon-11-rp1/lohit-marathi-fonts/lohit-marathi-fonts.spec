@@ -1,4 +1,4 @@
-%global source0_hash f2a071e796edd188ab19184c748a17f85a2816b96c893a6cdc5f745d9728ace4
+%global source0_hash none
 
 %global fontname lohit-marathi
 
@@ -22,14 +22,14 @@ This package provides a free Marathi truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-marathi-fonts/archive/refs/heads/main.tar.gz#/lohit-marathi-fonts-main.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{fontname}-%{version}
+%setup -q -n lohit-marathi-fonts-main
 %linuxtext OFL.txt AUTHORS README ChangeLog COPYRIGHT test-marathi.txt
 
 %build

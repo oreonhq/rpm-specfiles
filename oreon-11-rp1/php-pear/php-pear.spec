@@ -47,11 +47,11 @@ Source10: pear.sh
 Source11: pecl.sh
 Source12: peardev.sh
 Source13: macros.pear
-Source21:        http://pear.php.net/get/Archive_Tar-1.6.0.tgz
-Source22:        http://pear.php.net/get/Console_Getopt-1.4.3.tgz
-Source23:        http://pear.php.net/get/Structures_Graph-1.2.0.tgz
-Source24:        http://pear.php.net/get/XML_Util-1.4.5.tgz
-Source25:        http://pear.php.net/get/PEAR_Manpages-1.10.0.tgz
+Source21:        https://pear.php.net/get/Archive_Tar-1.6.0.tgz
+Source22:        https://pear.php.net/get/Console_Getopt-1.4.3.tgz
+Source23:        https://pear.php.net/get/Structures_Graph-1.2.0.tgz
+Source24:        https://pear.php.net/get/XML_Util-1.4.5.tgz
+Source25:        https://pear.php.net/get/PEAR_Manpages-1.10.0.tgz
 
 BuildArch: noarch
 BuildRequires: php(language) > 5.4

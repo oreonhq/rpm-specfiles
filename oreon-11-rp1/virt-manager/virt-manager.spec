@@ -1,4 +1,4 @@
-%global source0_hash ccfc44b6c1c0be8398beb687c675d9ea4ca1c721dfb67bd639209a7b0dec11b1
+%global source0_hash none
 
 # -*- rpm-spec -*-
 
@@ -18,7 +18,7 @@ Summary: Desktop tool for managing virtual machines via libvirt
 License: GPL-2.0-or-later
 BuildArch: noarch
 URL: https://virt-manager.org/
-Source0:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://codeload.github.com/virt-manager/virt-manager/tar.gz/refs/tags/v%{version}#/virt-manager-%{version}.tar.xz
 
 Patch1: 0001-virtinst-cloudinit-include-empty-meta-data-file.patch
 

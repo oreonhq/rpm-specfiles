@@ -24,7 +24,7 @@ License:	MIT
 URL:		https://rspec.info
 Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
-Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
+Source1: https://github.com/rspec/rspec/archive/refs/tags/rspec-mocks-v%{fullver}.tar.gz#/rubygem-rspec-mocks-%{version}-full.tar.gz
 Source2:        rspec-related-create-full-tarball.sh
 # https://github.com/rspec/rspec/pull/282/commits/939c4799993b7ff7e524fac701ae6490772ca6de
 # Skip mock for ruby4_0 Kernel#inspect

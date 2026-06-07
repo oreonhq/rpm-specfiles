@@ -16,7 +16,7 @@ BuildRequires:  automake gcc
 # for %%_tmpfilesdir macro
 BuildRequires:  systemd
 
-Source0:        https://ftp.gnu.org/gnu/screen/screen-%{version}.tar.gz
+Source0:        https://mirrors.kernel.org/gnu/screen/screen-%{version}.tar.gz
 Source1:        screen.pam
 
 Patch1:         screen-5.0.0-screenrc.patch

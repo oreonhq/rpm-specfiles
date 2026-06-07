@@ -10,8 +10,8 @@ Release:	%autorelease
 # The libtasn1 library is LGPLv2+, utilities are GPLv3+
 License:	GPL-3.0-or-later AND LGPL-2.1-or-later
 URL:		https://www.gnu.org/software/libtasn1/
-Source0:	https://ftp.gnu.org/gnu/libtasn1/%name-%version.tar.gz
-Source1:	https://ftp.gnu.org/gnu/libtasn1/%name-%version.tar.gz.sig
+Source0:	https://mirrors.kernel.org/gnu/libtasn1/%name-%version.tar.gz
+Source1:	https://mirrors.kernel.org/gnu/libtasn1/%name-%version.tar.gz.sig
 #Source2:	gpgkey-1F42418905D8206AA754CCDC29EE58B996865171.gpg
 #Source2:	gpgkey-99415CE1905D0E55A9F88026860B7FBB32F8119D.gpg
 Source2:        gpgkey-B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE.gpg

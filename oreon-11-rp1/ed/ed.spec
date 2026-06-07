@@ -8,8 +8,8 @@ Summary: The GNU line editor
 # The entire source is GPLv2 except doc/ed.info and doc/ed.texi, which are GFDL
 License: GPL-2.0-only AND GFDL-1.3-no-invariants-or-later
 URL:     https://www.gnu.org/software/ed/
-Source0:        https://ftp.gnu.org/gnu/ed/%{name}-%{version}.tar.lz
-Source1:        https://ftp.gnu.org/gnu/ed/%{name}-%{version}.tar.lz.sig
+Source0:        https://mirrors.kernel.org/gnu/ed/%{name}-%{version}.tar.lz
+Source1:        https://mirrors.kernel.org/gnu/ed/%{name}-%{version}.tar.lz.sig
 Source2: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x25B62C9821501AA0#./antoniodiazdiaz-keyring-2026.asc
 
 BuildRequires: gcc

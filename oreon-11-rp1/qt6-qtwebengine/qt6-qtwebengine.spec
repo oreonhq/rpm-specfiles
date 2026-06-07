@@ -113,8 +113,8 @@ Source4:        get_free_ffmpeg_source_files.py
 # macros
 Source10:        macros.qt6-qtwebengine
 
-# pulseaudio headers
-Source20:        pulseaudio-12.2-headers.tar.gz
+# pulseaudio headers subset from upstream 12.2 release
+Source20:        https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-12.2.tar.xz
 
 # workaround FTBFS against kernel-headers-5.2.0+
 Patch1:        qtwebengine-SIOCGSTAMP.patch
@@ -472,7 +472,11 @@ Requires: qt6-qtsvg%{?_isa}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}} -a20
+%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}}
+mkdir -p pulse
+tar -xJf %{SOURCE20} pulseaudio-12.2/src/pulse
+mv pulseaudio-12.2/src/pulse pulse
+rm -rf pulseaudio-12.2
 
 cp -p %{SOURCE4} get_free_ffmpeg_source_files.py
 bash %{SOURCE3} src/3rdparty/chromium

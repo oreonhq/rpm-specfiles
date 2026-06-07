@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ta)
 
-Source0:        http://anishpatil.fedorapeople.org/ta_in.1.0.0.tar.gz
+Source0:        https://anishpatil.fedorapeople.org/ta_in.1.0.0.tar.gz
 
 %description
 Tamil hunspell dictionaries.

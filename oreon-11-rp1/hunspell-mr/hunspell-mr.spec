@@ -19,7 +19,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mr)
 
-Source0:        http://anishpatil.fedorapeople.org/mr_in.1.0.0.tar.gz
+Source0:        https://anishpatil.fedorapeople.org/mr_in.1.0.0.tar.gz
 
 %description
 Marathi hunspell dictionaries.

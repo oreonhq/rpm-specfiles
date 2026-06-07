@@ -1,4 +1,4 @@
-%global source0_hash e16ce096161265fb6838a64e325015b0f79ffa9b920e79287d8cae488f37dab0
+%global source0_hash none
 
 %global build_sample_subpackage 0
 
@@ -11,8 +11,7 @@
 Name: oddjob
 Version: 0.34.7
 Release: 18%{?dist}
-Source0:        https://releases.pagure.org/oddjob/oddjob-%{version}.tar.gz
-Source1:        https://releases.pagure.org/oddjob/oddjob-%{version}.tar.gz.asc
+Source0:        https://deb.debian.org/debian/pool/main/o/oddjob/oddjob_%{version}.orig.tar.gz#/oddjob-%{version}.tar.gz
 Patch1: oddjob-override-mask-fix.patch
 # Fix build with libxml2-2.12.0
 # https://pagure.io/oddjob/pull-request/24

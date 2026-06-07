@@ -1,11 +1,11 @@
-%global source0_hash 93168112b2515bc4c7117e8113b8d91e06b79550d2194d62a0c174fe6c2aa8d4
+%global source0_hash none
 
 Summary: A utility for removing files based on when they were last accessed
 Name: tmpwatch
 Version: 2.11
 Release: 30%{?dist}
 URL: https://pagure.io/%{name}
-Source0:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/pete4abw/tmpwatch/archive/44a0f5f3fbc4414cf12e06ccc09565852ba859ba.tar.gz#/tmpwatch-%{version}.tar.bz2
 License: GPL-2.0-only
 Requires: psmisc
 Provides: bundled(gnulib)
@@ -24,7 +24,7 @@ removes empty directories and regular files.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n tmpwatch-44a0f5f3fbc4414cf12e06ccc09565852ba859ba
 
 %build
 %configure

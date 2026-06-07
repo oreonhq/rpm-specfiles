@@ -1,4 +1,4 @@
-%global source0_hash d038dd8b20b3d059ae3d14f5114eea42f9445fee9e5542b2b1f409d3b5991c6e
+%global source0_hash none
 
 Name: numad
 Version: 0.5
@@ -8,7 +8,7 @@ Summary: NUMA user daemon
 License: LGPL-2.1-only
 URL: https://pagure.io/numad
 %global numad_commit ff1507f
-Source0:        https://pagure.io/numad/archive/ff1507f/numad-ff1507f.tar.gz#/numad-0.5git.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/n/numad/numad_0.5+20251104.orig.tar.xz#/numad-0.5git.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make
@@ -21,7 +21,7 @@ and memory to minimize memory latency and thus provide optimum performance.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n numad-%{numad_commit}
+%autosetup -n numad-0.5+20251104
 
 %build
 %make_build CFLAGS="$CFLAGS"

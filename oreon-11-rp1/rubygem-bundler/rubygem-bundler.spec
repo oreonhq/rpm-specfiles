@@ -32,9 +32,8 @@ Summary: Library and utilities to manage a Ruby application's gem dependencies
 License: MIT AND (Ruby OR BSD-2-Clause)
 URL: https://bundler.io
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# git clone https://github.com/rubygems/rubygems/ && cd rubygems
-# git archive -v -o bundler-2.6.9-specs.tar.gz bundler-v2.6.9 bundler/spec/ tool/bundler/{rubocop,standard,test}_gems.rb
-Source1: %{gem_name}-%{version}-specs.tar.gz
+# git archive from https://github.com/rubygems/rubygems tag bundler-v2.6.9
+Source1: https://codeload.github.com/rubygems/rubygems/tar.gz/bundler-v%{version}#/rubygems-bundler-v%{version}.tar.gz
 # This revert changes which seems to require some setup prior running specs.
 # https://github.com/rubygems/rubygems/issues/8698
 Patch0:        rubygem-bundler-2.6.9-Revert-changes-in-spec-sectup.patch
@@ -81,11 +80,10 @@ Documentation for %{name}.
 %prep
 _specs="%{gem_name}-%{version}-specs.tar.gz"
 if test ! -f "$_specs"; then
-  curl -sfL -o _b.tar.gz "https://github.com/rubygems/bundler/archive/v%{version}.tar.gz"
   rm -rf _bdir && mkdir _bdir
-  tar xf _b.tar.gz -C _bdir --strip-components=1
+  tar xzf ../rubygems-bundler-v%{version}.tar.gz -C _bdir --strip-components=1
   tar czf "$_specs" -C _bdir bundler/spec tool/bundler/rubocop_gems.rb tool/bundler/standard_gems.rb tool/bundler/test_gems.rb
-  rm -rf _bdir _b.tar.gz
+  rm -rf _bdir
 fi
 
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }

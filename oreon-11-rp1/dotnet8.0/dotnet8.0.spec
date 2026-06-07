@@ -63,7 +63,7 @@ License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APS
 
 URL:            https://github.com/dotnet/
 
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
+Source0:        https://codeload.github.com/dotnet/dotnet/tar.gz/%{upstream_tag}#/dotnet-%{upstream_tag_without_v}.tar.gz
 Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 
@@ -77,10 +77,10 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %endif
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/macros.dotnet
+Source10:        macros.dotnet
 
-Source20:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/check-debug-symbols.py
-Source21:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/dotnet.sh.in
+Source20:        check-debug-symbols.py
+Source21:        dotnet.sh.in
 
 # Disable apphost; there's no net6.0 apphost for ppc64le
 Patch1:        roslyn-analyzers-ppc64le-apphost.patch

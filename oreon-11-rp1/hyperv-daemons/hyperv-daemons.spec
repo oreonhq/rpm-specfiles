@@ -17,7 +17,7 @@ URL:      http://www.kernel.org
 
 # Source files obtained from kernel upstream 6.10-rc4 (6ba59ff4227927d3a8530fc2973b80e94b54d58f)
 # git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-Source0:        https://github.com/microsoft/hyperv-daemons/archive/refs/heads/master.tar.gz#/tools-hv-6ba59ff42279.tar.gz
+Source0:        https://codeload.github.com/torvalds/linux/tar.gz/6ba59ff4227927d3a8530fc2973b80e94b54d58f#/tools-hv-6ba59ff42279.tar.gz
 Source1:        COPYING
 
 # HYPERV KVP DAEMON
@@ -118,13 +118,20 @@ Contains tools and scripts useful for Hyper-V guests.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n tools/hv
-cp -pvL %{SOURCE1} COPYING
+%setup -q -c -T
+tar xf %{SOURCE0}
+_top=$(tar -tf %{SOURCE0} | head -1 | cut -d/ -f1)
+mkdir -p tools
+mv "${_top}/tools/hv" tools/
+rm -rf "${_top}"
+cp -pvL %{SOURCE1} tools/hv/COPYING
 
 %build
+cd tools/hv
 %make_build
 
 %install
+cd tools/hv
 %make_install sbindir=%{_sbindir}
 
 # Systemd unit file

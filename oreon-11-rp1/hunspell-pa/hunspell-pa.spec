@@ -18,7 +18,7 @@ BuildArch: noarch
 Requires: hunspell
 Supplements: (hunspell and langpacks-pa)
 
-Source0:        http://anishpatil.fedorapeople.org/pa_in.1.0.0.tar.gz
+Source0:        https://anishpatil.fedorapeople.org/pa_in.1.0.0.tar.gz
 
 %description
 Punjabi hunspell dictionaries.

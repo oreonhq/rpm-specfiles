@@ -8,7 +8,7 @@ Version: 2.8
 Release: 4%{?dist}
 License: GPL-3.0-or-later
 URL: https://savannah.gnu.org/projects/patch/
-Source:        https://ftp.gnu.org/gnu/patch/patch-%{version}.tar.xz
+Source:        https://mirrors.kernel.org/gnu/patch/patch-%{version}.tar.xz
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: libselinux-devel

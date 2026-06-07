@@ -15,11 +15,11 @@ Release:       %autorelease
 License:       GPL-3.0-or-later AND CC0-1.0
 URL:           https://www.gnu.org/software/emacs/
 %if %{lua: print(select(3, string.find(rpm.expand('%version'), '%d+%.%d+%.(%d+)')) or 0)} >= 90
-Source0:        https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
-Source1:        https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz.sig
+Source0:        https://mirrors.kernel.org/gnu/emacs/emacs-%{version}.tar.xz
+Source1:        https://mirrors.kernel.org/gnu/emacs/emacs-%{version}.tar.xz.sig
 %else
-Source0:        https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz
-Source1:        https://ftp.gnu.org/gnu/emacs/emacs-%{version}.tar.xz.sig
+Source0:        https://mirrors.kernel.org/gnu/emacs/emacs-%{version}.tar.xz
+Source1:        https://mirrors.kernel.org/gnu/emacs/emacs-%{version}.tar.xz.sig
 %endif
 Source100:     https://keys.openpgp.org/vks/v1/by-fingerprint/17E90D521672C04631B1183EE78DAE0F3115E06B
 Source101:     https://keys.openpgp.org/vks/v1/by-fingerprint/CEA1DE21AB108493CC9C65742E82323B8F4353EE

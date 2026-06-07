@@ -1,4 +1,4 @@
-%global source0_hash 3f052a13a2fe76ba19a05956b3c9baca954b5d4526818552c91a8563ba2e05b2
+%global source0_hash none
 %global source3_hash none
 
 %bcond_with bootstrap
@@ -86,7 +86,7 @@ License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APS
 
 URL:            https://github.com/dotnet/
 
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
+Source0:        https://codeload.github.com/dotnet/dotnet/tar.gz/%{upstream_tag}#/dotnet-%{upstream_tag_without_v}.tar.gz
 Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 

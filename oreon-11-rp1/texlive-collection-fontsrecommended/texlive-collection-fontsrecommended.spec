@@ -1,5 +1,4 @@
 %global source0_hash a4de421c3ff528ab4e7dd91437b33418f8298027341cec856ede8d31d9e409de
-%global source1_hash ec054fde139651b0c3be678b5de3ea9e6d2e586df479c962785f947adc486a0c
 %global source2_hash 4200ef68e6a3564eb6dd3bbad9f760e70c10a81d7ad3a81b93988800dbd50141
 %global source3_hash ec4736522d6749513268a83502febc4dcb73346f8e0b70dafaa76a74ae8998ca
 %global source4_hash 34a08f3370093966207b4a3fed029c215882c89658925624362a877f927c9bd0
@@ -71,8 +70,6 @@ BuildArch:      noarch
 # Main collection source
 Source0:        https://mirror.ctan.org/systems/texlive/tlnet/archive/collection-fontsrecommended.tar.xz
 
-# License texts
-Source1:        texlive-licenses.tar.xz
 
 Source2:        https://mirror.ctan.org/systems/texlive/tlnet/archive/avantgar.tar.xz
 Source3:        https://mirror.ctan.org/systems/texlive/tlnet/archive/bookman.tar.xz
@@ -753,7 +750,6 @@ Adobe's Palatino).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
@@ -808,7 +804,7 @@ test "%{source52_hash}" = "none" || { f="%{SOURCE52}"; test -f "$f" || { echo "o
 test "%{source53_hash}" = "none" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_hash}" || { echo "oreon: Source53 hash mismatch" >&2; exit 1; }; }
 test "%{source54_hash}" = "none" || { f="%{SOURCE54}"; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source54_hash}" || { echo "oreon: Source54 hash mismatch" >&2; exit 1; }; }
 test "%{source55_hash}" = "none" || { f="%{SOURCE55}"; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source55_hash}" || { echo "oreon: Source55 hash mismatch" >&2; exit 1; }; }# Extract license files
-tar -xf %{SOURCE1}
+cp licenses/*.txt .
 
 %build
 # Nothing to build

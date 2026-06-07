@@ -17,7 +17,7 @@ BuildArch: noarch
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ml)
 
-Source0:        http://download.savannah.gnu.org/releases/smc/Spellchecker/ooo-hunspell-ml-0.1.tar.bz2
+Source0:        https://download.savannah.gnu.org/releases/smc/Spellchecker/ooo-hunspell-ml-0.1.tar.bz2
 
 %description
 Malayalam hunspell dictionaries

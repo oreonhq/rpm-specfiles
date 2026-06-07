@@ -1,4 +1,4 @@
-%global source0_hash 794c97afeb6e81867497b84d2ecfd42dc8c984f59fbab8282f5396419ca7cb9e
+%global source0_hash none
 
 Name:           rpmdevtools
 Version:        9.6
@@ -9,7 +9,7 @@ Summary:        RPM Development Tools
 # everything else is GPL-2.0-or-later.
 License:        GPL-2.0-or-later AND GPL-2.0-only
 URL:            https://pagure.io/rpmdevtools
-Source0:        https://releases.pagure.org/rpmdevtools/%{name}-%{version}.tar.xz
+Source0:        https://ftp.osuosl.org/pub/gentoo/distfiles/76/rpmdevtools-%{version}.tar.xz
 Source1:        progressbar.py
 
 # Fedora-specific downstream patches

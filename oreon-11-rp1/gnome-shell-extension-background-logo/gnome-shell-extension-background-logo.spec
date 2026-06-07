@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7d677de67fc633416a2705f0b05344eeb6b4e882d613c6e3cbc6b16880c98115
 
 %global tarball_version %(echo %{version} | tr '~' '.')
 %global shell_version %%(cut -d "~" -f 1 <<<%{version})
@@ -9,8 +9,8 @@ Release:        %autorelease
 Summary:        Background logo extension for GNOME Shell
 
 License:        GPL-2.0-or-later
-URL:            https://pagure.io/background-logo-extension
-Source0:        https://pagure.io/background-logo-extension/archive/%{tarball_version}/background-logo-extension-%{tarball_version}.tar.xz
+URL:            https://forge.fedoraproject.org/workstation/background-logo-extension
+Source0:        https://forge.fedoraproject.org/workstation/background-logo-extension/archive/50.beta.tar.gz#/background-logo-extension-%{tarball_version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  meson
@@ -25,7 +25,7 @@ Show your pride! Display the Fedora logo (or any other graphic) in the corner of
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n background-logo-extension-%{tarball_version} -S git
+%setup -q -n background-logo-extension
 
 %build
 %meson

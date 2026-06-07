@@ -1,4 +1,4 @@
-%global source0_hash 2604105ec64abbb17690593a4ab05262b409c0a9128fafaf49f5490c77420e34
+%global source0_hash none
 
 Name: gfs2-utils
 Version: 3.6.1
@@ -24,7 +24,7 @@ BuildRequires: libuuid-devel
 BuildRequires: check-devel
 BuildRequires: bzip2-devel
 BuildRequires: make
-Source:        https://releases.pagure.org/gfs2-utils/gfs2-utils-%{version}.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/g/gfs2-utils/gfs2-utils_%{version}.orig.tar.xz#/gfs2-utils-%{version}.tar.gz
 URL: https://pagure.io/gfs2-utils
 
 %prep

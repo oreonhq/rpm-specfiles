@@ -20,7 +20,7 @@ Version:            0.6.76
 Release:            28%{?dist}
 License:            GPL-2.0-or-later
 URL:                http://www.five-ten-sg.com/%{name}/
-Source:        http://www.five-ten-sg.com/libpst//packages/libpst-0.6.76.tar.gz
+Source:        https://www.five-ten-sg.com/libpst//packages/libpst-0.6.76.tar.gz
 # https://github.com/autoconf-archive/autoconf-archive/pull/235
 Patch0:             m4-python310.patch
 Patch1:             0002-incompatible-pointer-i686.patch

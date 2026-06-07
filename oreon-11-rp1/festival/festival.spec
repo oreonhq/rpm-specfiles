@@ -26,7 +26,7 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0:        https://festvox.org/packed/festival/%{version}/festival-%{version}-release.tar.gz
+Source0:        https://ftp.debian.org/debian/pool/main/f/festival/festival_%{version}.orig.tar.gz#/festival-%{version}-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary
