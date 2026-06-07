@@ -17,3 +17,6 @@ If a chain string drifts from reality (new package added, spec renamed, whatever
 If you would like to contribute to updates or add new packages, feel free to open a pull request with your changes, or an issue with the proposal if you're lazy and want us to do it. We may accept or deny proposals/PRs.
 
 While random contributors are welcome, we highly encourage joining the Oreon team directly, so it makes coordination easier between other team members. To join the team, contact our Project Lead @brandonlester:matrix.org on Matrix or join our Discord community: https://discord.gg/2Yyacu58Ap
+
+## Project Policies & Guidelines
+Read them [here](https://wiki.oreonhq.com/docs/Project%20Policies%20&%20Team%20Information/contributors).
