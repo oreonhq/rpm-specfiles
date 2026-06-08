@@ -13,7 +13,7 @@ Url:		https://github.com/libnxz/power-gzip
 BuildRequires:	zlib-devel
 Source0:        https://github.com/libnxz/power-gzip/archive/refs/tags/v%{version}.tar.gz#/libnxz-%{version}.tar.gz
 # Fixes for GCC 14 and zlib-ng compat usage
-Patch0:         https://github.com/libnxz/power-gzip/pull/209.patch
+Patch0:         209.patch
 
 # Be explicit about the soname in order to avoid unintentional changes.
 %global soname libnxz.so.0

@@ -73,7 +73,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # need “-S git” because test_reproducible uses “meson dist,” which only
 # works in a git or mercurial repo.
 %autosetup -n meson_python-%{version} -N -S git
-%autopatch -M 99 -p1
 %if %{without patchelf}
 %patch 100 -p1
 %endif

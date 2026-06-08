@@ -43,10 +43,10 @@ applications which will use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n libmusicbrainz-%{version}
-%patch -P0 -p1 -b .doxygen
-%patch -P1 -p1 -b .silence-warnings
-%patch -P2 -p1 -b .libxml2
-%patch -P3 -p1 -b .cmake-wildcards
+%patch0 -p1 -b .doxygen
+%patch1 -p1 -b .silence-warnings
+%patch2 -p1 -b .libxml2
+%patch3 -p1 -b .cmake-wildcards
 
 # omit "Generated on ..." timestamps that induce multilib conflicts
 # this is *supposed* to be the doxygen default in fedora these days, but

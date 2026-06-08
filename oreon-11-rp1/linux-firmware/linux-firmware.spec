@@ -13,7 +13,7 @@ License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-R
 URL:		http://www.kernel.org/
 BuildArch:	noarch
 
-Source0:        https://www.kernel.org/pub/linux/kernel/firmware/%{name}-%{version}.tar.xz
+Source0:        https://cdn.kernel.org/pub/linux/kernel/firmware/%{name}-%{version}.tar.xz
 
 BuildRequires:	make
 BuildRequires:	git-core

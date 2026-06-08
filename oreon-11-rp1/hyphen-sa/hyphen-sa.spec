@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7f895b18be9ef598dfbc490ed19a24200712652eb0c5068f5c6fd88c363759c8
 
 %global upstreamid 20110915
 
@@ -8,7 +8,7 @@ Version: 0.%{upstreamid}
 Release: 31%{?dist}
 #? in a url causes trouble
 #http://tug.org/svn/texhyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-sa.tex?view=co
-Source: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-sa.tex
+Source: https://github.com/hyphenation/tex-hyphen/raw/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-sa.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch

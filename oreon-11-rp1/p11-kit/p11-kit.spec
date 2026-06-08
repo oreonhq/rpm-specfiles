@@ -19,7 +19,7 @@ License:        BSD-3-Clause
 URL:            http://p11-glue.freedesktop.org/p11-kit.html
 Source0:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz
 Source1:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz.sig
-Source2:        p11-kit-release-keyring.gpg
+Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x5D46CB0F763405A7053556F47A75A648B3F9220C#/p11-kit-release-keyring.gpg
 Source3:        trust-extract-compat
 Source4:        p11-kit-client.service
 

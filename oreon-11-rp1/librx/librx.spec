@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 37a5ecc98dd52690958f4594d0f5c2d0586e0e30888e8757f141b00bbe511609
 
 Summary: POSIX regexp functions
 Name: librx
@@ -7,9 +7,7 @@ Release: 53%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://www.gnu.org/software/rx/rx.html
-# Originally downloaded from https://ftp.gnu.org/gnu/rx/rx-1.5.tar.bz2
-# The FSF no longer offers this code.
-Source0:        https://download.savannah.gnu.org/releases/rx/rx-%{version}.tar.bz2
+Source0:        http://ftp.arnes.si/pub/software/gnu/rx/rx-%{version}.tar.gz#/rx-%{version}.tar.gz
 Patch0:        rx-1.5-shared.patch
 Patch1:        rx-1.5-texinfo.patch
 Patch2:        librx-1.5-libdir64.patch
@@ -38,12 +36,12 @@ This package contains files needed for development with librx.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n rx-%{version}
-%patch -P0 -p1
-%patch -P1 -p1 -b .texipatch
+%patch 0 -p1
+%patch 1 -p1 -b .texipatch
 %ifarch x86_64 s390x ia64 %{power64} alpha sparc64 aarch64 %{mips64} riscv64
-%patch -P2 -p1 -b .64bit
+%patch 2 -p1 -b .64bit
 %endif
-%patch -P3 -p1 -b .libtoolmode
+%patch 3 -p1 -b .libtoolmode
 
 %build
 # The package has many C99 compatibility issues.  It relies on

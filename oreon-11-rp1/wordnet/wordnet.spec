@@ -76,17 +76,17 @@ and PostScript format.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n WordNet-%{version}
-%patch -P 0 -p1 -b .cve-2008-2149
-%patch -P 1 -p1 -b .cve-2008-3908
-%patch -P 2 -p1 -b .fix_man
-%patch -P 3 -p1 -b .fix_resourcedir_path
-%patch -P 4 -p1 -b .src_stubs_c
-%patch -P 5 -p1 -b .wishwn_manpage
+%patch 0 -p1 -b .cve-2008-2149
+%patch 1 -p1 -b .cve-2008-3908
+%patch 2 -p1 -b .fix_man
+%patch 3 -p1 -b .fix_resourcedir_path
+%patch 4 -p1 -b .src_stubs_c
+%patch 5 -p1 -b .wishwn_manpage
 sed -e '/man_MANS/ s/$/ wishwn.1/' -i doc/man/Makefile.am
-%patch -P 6 -p1 -b .use_system_tk_headers
-%patch -P 7 -p1 -b .libtool
-%patch -P 8 -p1 -b .error_message
-%patch -P 9 -p1 -b .format
+%patch 6 -p1 -b .use_system_tk_headers
+%patch 7 -p1 -b .libtool
+%patch 8 -p1 -b .error_message
+%patch 9 -p1 -b .format
 # delete the include/tk dir, since we do not use the included tk headers
 rm -rf include/tk
 # Update a database

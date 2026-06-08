@@ -1,6 +1,6 @@
 %global source0_hash 6b7fa262aebf73fae9edf5bc9e03b298710ac7a2034b51d78e30af04f533bccb
 
-%bcond_check 0
+%{!?with_check: %global with_check 0}
 
 Name:           python-pytest-subtests
 Version:        0.15.0

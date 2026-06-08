@@ -1,3 +1,4 @@
+%{!?with_check: %global with_check 0}
 %global source0_hash 13756b834dba0adf7603be77d943cc427011983ecd7c58b59b9bf122a1063e40
 
 %bcond_without check

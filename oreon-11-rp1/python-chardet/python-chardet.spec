@@ -29,7 +29,7 @@ URL:            https://github.com/chardet/chardet
 #   problematic licensing of /tests?
 #   https://github.com/chardet/chardet/issues/231
 # Source0:        chardet-%%{version}-filtered.tar.zst
-Source0:        https://github.com/chardet/chardet/archive/%{commit}/chardet-%{commit}.tar.gz
+Source0:        https://github.com/chardet/chardet/archive/%{commit}/chardet-%{commit}.tar.gz#/python-chardet-6.0.0.post1.tar.gz
 Source1:        get_source
 # Hand-written for Fedora in groff_man(7) format based on --help output
 Source2:        chardetect.1

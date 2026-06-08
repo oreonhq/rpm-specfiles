@@ -1034,7 +1034,7 @@ Patch0002:        0002-Revert-templates-Properly-disable-the-os-prober-by-d.patc
 Patch0003:        0003-Revert-templates-Disable-the-os-prober-by-default.patch
 Patch0004:        0004-Rework-linux-command.patch
 Patch0005:        0005-Rework-linux16-command.patch
-Patch0006:        0006-re-write-.gitignore.patch
+# Patch0006 applied via Source4 gitignore
 Patch0007:        0007-IBM-client-architecture-CAS-reboot-support.patch
 Patch0008:        0008-for-ppc-reset-console-display-attr-when-clear-screen.patch
 Patch0009:        0009-Disable-GRUB-video-support-for-IBM-power-machines.patch

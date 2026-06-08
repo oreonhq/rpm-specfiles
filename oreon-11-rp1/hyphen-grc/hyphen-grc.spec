@@ -1,4 +1,4 @@
-%global source0_hash 3a1e200a04b106ccc98879c2710bb52ad8ae58d7336c1e9db8d67151b111ec01
+%global source0_hash 38870c0292b1937517dd1709c5af5b1200f7a15a25469f5389a1783579abaf6a
 
 Name: hyphen-grc
 Summary: Ancient Greek hyphenation rules
@@ -7,7 +7,7 @@ Version: 0.%{upstreamid}
 Release: 31%{?dist}
 #? in a url causes trouble
 #http://tug.org/svn/texhyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex?view=co
-Source0: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex
+Source0: https://github.com/hyphenation/tex-hyphen/raw/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-grc.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch

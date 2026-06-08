@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd
 
 Name:		libzdnn
 Version:	1.0.1

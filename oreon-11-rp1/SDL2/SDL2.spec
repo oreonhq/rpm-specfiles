@@ -23,8 +23,6 @@ Source2:        SDL_revision.h
 Patch0:         multilib.patch
 # Prefer Wayland by default
 Patch1:         SDL2-2.0.22-prefer-wayland.patch
-Patch2:         SDL2-pipewire-pw-node-cast.patch
-
 BuildRequires:  git-core
 BuildRequires:  cmake
 BuildRequires:  make

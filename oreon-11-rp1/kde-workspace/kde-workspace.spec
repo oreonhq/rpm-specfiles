@@ -50,7 +50,7 @@ Patch27:        kde-workspace-4.11.1-kdm-logind-multiseat.patch
 Patch28:        kde-workspace-4.11.16-colorschemes-kde4.patch
 
 # use /etc/login.defs to define a 'system' account instead of hard-coding 500
-Patch52:        kde-workspace-4.8.2-bz%23732830-login.patch
+Patch52:        kde-workspace-4.8.2-bz%23732830-login.patch#/kde-workspace-4.8.2-bz#732830-login.patch
 
 # kdm overwrites ~/.Xauthority with wrong SELinux context on logout
 # http://bugzilla.redhat.com/567914

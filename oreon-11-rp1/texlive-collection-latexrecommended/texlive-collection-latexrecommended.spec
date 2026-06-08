@@ -1,4 +1,5 @@
 %global source0_hash 51c4498ff42534cd4fc3b34e948598a382bb601afb28c85cacba8007d2d50740
+%global source1_hash 2eba7984c37ed2e3ba82b20467316d2572acdca57ca2cc2388a5f3fc70b19f5d
 %global source2_hash 64dba6c2eb17dd92d445d2909cf026fdd3f9b1ce829115288556f5208e80179f
 %global source3_hash 1df2798ac76ea263f85fcf931246a613b4e99ea68011d393fb584a5d64086929
 %global source4_hash 111ba50e6c4f33edc325dd7f744a9809368275b4b843076bd28030fb17e5a6b6
@@ -18,7 +19,7 @@
 %global source18_hash fdb6b5ed86dbfde569099e238a37746de99552fdf549de7aab9e12bca2099209
 %global source19_hash 0a11029ce6b683c815ff9ac1f35d04e42f19bd464c4b4dd35db1fac1446f608c
 %global source20_hash 3a257e260e6f7ee5ec7fbe07cd09a80d559e7fa4073956804498cc60eb670df2
-%global source21_hash dd2a294b918ff018ae6a92c5143568c06fc4bb62ba28b775e42e070ab52c1519
+%global source21_hash 2a19673d84c12845b98b36dd4f9d8e49bf7219533c5a76d4fdf3b73150dd9601
 %global source22_hash a9083d0184dea873338881fbcccb29cd7e9b2bb3ad7befea563a8acf7eae5c66
 %global source23_hash 4fdab26ecbfaee3bc14d8fba1412d09a44e2b80a3d275a8cc248d03019128a4f
 %global source24_hash a71f2492d6c4582ed2f61d4e2f092d7db2befd9a64906825343476ddb7c7b3b9
@@ -56,16 +57,16 @@
 %global source56_hash 31ea5fc9b07272552899b0c753751961bf51327cf2109d1bae2ce53ccc60e638
 %global source57_hash b035942ce2c219ffb2cb045cdf96abfd031e9f90ac8ca2d9bf8f3352f8807274
 %global source58_hash 047ba93b4895f64ea830d3bf7d6557dc5dae7085b3b763486736e277168005fb
-%global source59_hash 99c54a7d1cc578a96d972b2ab8515df756d3ec2f5964ac7e5c441dc0344b695b
-%global source60_hash 882d19863421fd824b5a243b7f87278ae8c063deaf2611da9860beb5d049165c
-%global source61_hash a1bd68209209a1ff9ab0f64ee50f0620ce238a44ad0125ae4eb3f67e1b0b99ee
-%global source62_hash e8406f4e922b84dd70aa96f87daed67ec071c731826771cc3d2c2ee617ab9ed3
+%global source59_hash 59482ec29d9a59c59ae56d2999266a876d5e43d89c699eda1cc794d9c0b725d8
+%global source60_hash 7c53202b44eb86fc4a9b6df429b5b39546c8aced7e37a5de88df55a7e782314c
+%global source61_hash 0c6bdd23e75a0ca5d61684a101f66b976c9746ce916bde722177542fbd8ba94f
+%global source62_hash 6c06b9537590e1830ab1e447ce2fb70168ccdbe2801fb99e819f1d3c223fb1ee
 %global source63_hash 8d97d5308d0edb3c20156ea5164a8ec8a6c7c69cd7d781891c3faa17adba94a5
 %global source64_hash 600bc5a78806323790b9176e1c744010ba6875b13d0ed32d475d6c8e105a71f3
 %global source65_hash ba1a9cdb71d04dfbacf5ce3db3769d84849956595ab092e5cfd23082787b57c2
 %global source66_hash 0307812df3db18ad553e42fdfea6a871a5b2ea80a18fa6c4ccf3d50a783f5e45
-%global source67_hash c16f5cea1ba46e27b6276dd3314a83e10056808090387280b02860e54c541a8b
-%global source68_hash 19f5da8484d547d83b38a234d10c040f639a5a21f1b3d27111db23eed4e98cb4
+%global source67_hash 157b09f1834975adc9ff8ae218c0ba61b10e9d0b35429a9660610a87dc9c7a93
+%global source68_hash 62da10f1ffe3a0fdd4a794b3dc23260577afa09c3ae8a5deeec8ee442be70292
 %global source69_hash f7059401b3312e2b0c56f9dff486632f7db35e5660348109cfb2fdbdf75ffce4
 %global source70_hash 46e12e6903841f24b6a51bdfa1a00f42364379e1bb9438f8f33c4689060aa4a8
 %global source71_hash ef7a80f1b7b55c661ccdde02c6a347d01e4a930b181581ef4a8b03998e13b510
@@ -151,6 +152,7 @@ BuildArch:      noarch
 # Main collection source
 Source0:        https://mirror.ctan.org/systems/texlive/tlnet/archive/collection-latexrecommended.tar.xz
 
+Source1:        texlive-licenses.tar.xz
 
 Source2:        https://mirror.ctan.org/systems/texlive/tlnet/archive/anysize.tar.xz
 Source3:        https://mirror.ctan.org/systems/texlive/tlnet/archive/anysize.doc.tar.xz
@@ -1677,6 +1679,7 @@ character for output. The package also covers glyphs specified by packages
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
@@ -1812,7 +1815,7 @@ test "%{source133_hash}" = "none" || { f="%{SOURCE133}"; test -f "$f" || { echo 
 test "%{source134_hash}" = "none" || { f="%{SOURCE134}"; test -f "$f" || { echo "oreon: missing Source134 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source134_hash}" || { echo "oreon: Source134 hash mismatch" >&2; exit 1; }; }
 test "%{source135_hash}" = "none" || { f="%{SOURCE135}"; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source135_hash}" || { echo "oreon: Source135 hash mismatch" >&2; exit 1; }; }
 test "%{source136_hash}" = "none" || { f="%{SOURCE136}"; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source136_hash}" || { echo "oreon: Source136 hash mismatch" >&2; exit 1; }; }
-# Extract license files
+tar -xf %{SOURCE1}
 cp licenses/*.txt .
 
 %build

@@ -1,6 +1,6 @@
 %global source0_hash e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76
 
-%bcond_check 0
+%{!?with_check: %global with_check 0}
 
 # Building the documentation requires the furo Sphinx theme.  But building furo
 # requires sphinx_theme_builder, which requires this package.  Avoid a

@@ -23,7 +23,7 @@ BuildRequires:  tex(german.ldf)
 BuildRequires:  tex(tex)
 BuildRequires:  texinfo
 BuildRequires:  texinfo-tex
-BuildRequires:  texlive-latex
+BuildRequires:  tex(latex)
 BuildRequires:  texlive-mylatex
 
 Requires:       dvipng
@@ -31,7 +31,7 @@ Requires:       emacs(bin) >= %{?_emacs_version}%{!?_emacs_version:0}
 Requires:       ghostscript
 Requires:       tex-preview = %{version}-%{release}
 Requires:       texlive-dvips
-Requires:       texlive-latex
+Requires:       tex(latex)
 
 Recommends:     texlive-mylatex
 
@@ -90,8 +90,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n auctex-auctex-%{version}
 
 %build
-%make_build TEX=tex
-%make_build preview.pdf TEX=tex
+%make_build
+%make_build preview.pdf
 
 %install
 # The makefile no longer has an install target, so install by hand

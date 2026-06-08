@@ -66,31 +66,31 @@ offered by Mission Critical Linux, or the LKCD kernel patch.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -n %{name}-%{version} -q
-%patch -P 0 -p1 -b lzo_snappy_zstd.patch
-%patch -P 1 -p1
-%patch -P 2 -p1
-%patch -P 3 -p1
-%patch -P 4 -p1
-%patch -P 5 -p1
-%patch -P 6 -p1
-%patch -P 7 -p1
-%patch -P 8 -p1
-%patch -P 9 -p1
-%patch -P 10 -p1
-%patch -P 11 -p1
-%patch -P 12 -p1
-%patch -P 13 -p1
-%patch -P 14 -p1
-%patch -P 15 -p1
-%patch -P 16 -p1
-%patch -P 17 -p1
-%patch -P 18 -p1
-%patch -P 19 -p1
-%patch -P 20 -p1
-%patch -P 21 -p1
-%patch -P 22 -p1
-%patch -P 23 -p1
-%patch -P 24 -p1
+%patch 0 -p1 -b lzo_snappy_zstd.patch
+%patch 1 -p1
+%patch 2 -p1
+%patch 3 -p1
+%patch 4 -p1
+%patch 5 -p1
+%patch 6 -p1
+%patch 7 -p1
+%patch 8 -p1
+%patch 9 -p1
+%patch 10 -p1
+%patch 11 -p1
+%patch 12 -p1
+%patch 13 -p1
+%patch 14 -p1
+%patch 15 -p1
+%patch 16 -p1
+%patch 17 -p1
+%patch 18 -p1
+%patch 19 -p1
+%patch 20 -p1
+%patch 21 -p1
+%patch 22 -p1
+%patch 23 -p1
+%patch 24 -p1
 
 %build
 

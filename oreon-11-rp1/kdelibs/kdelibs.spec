@@ -508,61 +508,61 @@ format for use with the Qt 4 Assistant or KDevelop 4.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n kdelibs-%{version}
 
-%patch -P0 -p1 -b .parallel_devel
+%patch0 -p1 -b .parallel_devel
 %if 0%{?fedora} > 23 || (0%{?oreon} >= 11)
-%patch -P1 -p1 -b .no_fake_mimetypes
+%patch1 -p1 -b .no_fake_mimetypes
 %endif
-%patch -P2 -p1 -b .kde149705
-%patch -P3 -p1 -b .plasma_drkonqi
-%patch -P8 -p1 -b .install_all_css
-%patch -P9 -p1 -b .branding
+%patch2 -p1 -b .kde149705
+%patch3 -p1 -b .plasma_drkonqi
+%patch8 -p1 -b .install_all_css
+%patch9 -p1 -b .branding
 # add release version as part of branding (suggested by cailon)
 sed -i -e "s|@@VERSION_RELEASE@@|%{version}-%{release}|" kio/kio/kprotocolmanager.cpp
-%patch -P12 -p1 -b .Administration-menu
-%patch -P14 -p1 -b .libexecdir
-%patch -P18 -p1 -b .kstandarddirs
-%patch -P20 -p1 -b .xxcmake
-%patch -P27 -p1 -b .no_rpath
+%patch12 -p1 -b .Administration-menu
+%patch14 -p1 -b .libexecdir
+%patch18 -p1 -b .kstandarddirs
+%patch20 -p1 -b .xxcmake
+%patch27 -p1 -b .no_rpath
 
-%patch -P48 -p1 -b .vfolder_spam
+%patch48 -p1 -b .vfolder_spam
 %if "%{?udisks}" == "udisks2"
-%patch -P49 -p1 -b .solid_qt_no_debug_output
+%patch49 -p1 -b .solid_qt_no_debug_output
 %endif
 
 # upstreamable patches
-%patch -P50 -p1 -b .knewstuff2_gpg2
-%patch -P51 -p1 -b .myspell_paths
-%patch -P52 -p1 -b .SOLID_UPNP
-%patch -P53 -p1 -b .kjs-s390
-%patch -P54 -p1 -b .kjs-locale
-%patch -P55 -p1 -b .Drop-Nepomuk-from-KParts-LINK_INTERFACE_LIBRARIES
-%patch -P56 -p1 -b .kdebug288410
-%patch -P59 -p1 -b .filter
-%patch -P61 -p1 -b .dot
-%patch -P62 -p1 -b .arm-plasma
-%patch -P64 -p1 -b .invokeTerminal
-%patch -P67 -p1 -b .gcc6_narrowing_hack
-%patch -P68 -p1 -b .openssl-1.1
-%patch -P69 -p1 -b .gcc10
-%patch -P70 -p1 -b .kio-tls1x
-%patch -P71 -p1 -b .narror-warning
-%patch -P72 -p1 -b .qiodevice
-%patch -P73 -p1 -b .gcc11
+%patch50 -p1 -b .knewstuff2_gpg2
+%patch51 -p1 -b .myspell_paths
+%patch52 -p1 -b .SOLID_UPNP
+%patch53 -p1 -b .kjs-s390
+%patch54 -p1 -b .kjs-locale
+%patch55 -p1 -b .Drop-Nepomuk-from-KParts-LINK_INTERFACE_LIBRARIES
+%patch56 -p1 -b .kdebug288410
+%patch59 -p1 -b .filter
+%patch61 -p1 -b .dot
+%patch62 -p1 -b .arm-plasma
+%patch64 -p1 -b .invokeTerminal
+%patch67 -p1 -b .gcc6_narrowing_hack
+%patch68 -p1 -b .openssl-1.1
+%patch69 -p1 -b .gcc10
+%patch70 -p1 -b .kio-tls1x
+%patch71 -p1 -b .narror-warning
+%patch72 -p1 -b .qiodevice
+%patch73 -p1 -b .gcc11
 %if 0%{?fedora} > 36 || (0%{?oreon} >= 11)
-%patch -P74 -p1 -b .jasper3
+%patch74 -p1 -b .jasper3
 %endif
-%patch -P75 -p1 -b .stdint
-%patch -P76 -p1 -b .xml2
+%patch75 -p1 -b .stdint
+%patch76 -p1 -b .xml2
 
 # upstream patches
-%patch -P100 -p1 -b .CVE-2019-14744
+%patch100 -p1 -b .CVE-2019-14744
 
 # rhel patches
 %if ! 0%{?webkit}
-%patch -P300 -p1 -b .webkit
+%patch300 -p1 -b .webkit
 %endif
 %if 0%{?rhel} || (0%{?oreon} >= 11)
-%patch -P301 -p1 -b .abrt
+%patch301 -p1 -b .abrt
 %endif
 
 # FTBFS Workaround for new cmake

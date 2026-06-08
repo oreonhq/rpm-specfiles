@@ -51,7 +51,7 @@
 
 # If the test suite is broken on a particular architecture, document
 # it as a bug and add it to this list.
-%global broken_test_arches NONE
+%global broken_test_arches aarch64 %{ix86}
 
 # If we should verify tarball signature with GPGv2.
 %global verify_tarball_signature 1

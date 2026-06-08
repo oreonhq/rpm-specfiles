@@ -1,13 +1,11 @@
-%global source0_hash none
+%global source0_hash 22c4d441e790c035bd208c4cccbe9a8254ab81c3da0ca0a8b062f8ed34f3e14c
 
 Name: hyphen-cy
 Summary: Welsh hyphenation rules
 %global upstreamid 20110620
 Version: 0.%{upstreamid}
 Release: 30%{?dist}
-#? in a url causes trouble
-#http://tug.org/svn/texhyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-cy.tex?view=co
-Source: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-cy.tex
+Source0:        https://github.com/hyphenation/tex-hyphen/raw/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-cy.tex
 URL: http://tug.org/tex-hyphen
 License: LPPL-1.3a
 BuildArch: noarch

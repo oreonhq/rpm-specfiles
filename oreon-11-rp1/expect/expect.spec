@@ -109,34 +109,34 @@ of expectk.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n expect%{version}
-%patch -P0 -p1 -b .log_file
-%patch -P1 -p1 -b .pkgpath
-%patch -P2 -p1 -b .man-page
-%patch -P3 -p1 -b .match-gt-numchars-segfault
-%patch -P4 -p1 -b .re-memleak
-%patch -P5 -p1 -b .exp-log-buf-overflow
-%patch -P6 -p1 -b .segfault-with-stubs
-%patch -P7 -p1 -b .fd-leak
-%patch -P8 -p1 -b .unification-of-usage-and-man-page
-%patch -P9 -p1 -b .covscan-fixes
-%patch -P10 -p0 -b .format-security
-%patch -P11 -p1 -b .configure-c99
-%patch -P12 -p1 -b .c99
+%patch0 -p1 -b .log_file
+%patch1 -p1 -b .pkgpath
+%patch2 -p1 -b .man-page
+%patch3 -p1 -b .match-gt-numchars-segfault
+%patch4 -p1 -b .re-memleak
+%patch5 -p1 -b .exp-log-buf-overflow
+%patch6 -p1 -b .segfault-with-stubs
+%patch7 -p1 -b .fd-leak
+%patch8 -p1 -b .unification-of-usage-and-man-page
+%patch9 -p1 -b .covscan-fixes
+%patch10 -p0 -b .format-security
+%patch11 -p1 -b .configure-c99
+%patch12 -p1 -b .c99
 # tcl9 compatibility patches
-%patch -P13 -p1 -b .tcl9-const
-%patch -P14 -p1 -b .tcl9-ansi-args
-%patch -P15 -p1 -b .tcl9-varargs
-%patch -P16 -p1 -b .tcl9-panic
-%patch -P17 -p1 -b .tcl9-eval-tokens
-%patch -P18 -p1 -b .tcl9-alloc
-%patch -P19 -p1 -b .tcl9-size
+%patch13 -p1 -b .tcl9-const
+%patch14 -p1 -b .tcl9-ansi-args
+%patch15 -p1 -b .tcl9-varargs
+%patch16 -p1 -b .tcl9-panic
+%patch17 -p1 -b .tcl9-eval-tokens
+%patch18 -p1 -b .tcl9-alloc
+%patch19 -p1 -b .tcl9-size
 # examples fixes
-%patch -P100 -p1 -b .random
-%patch -P101 -p1 -b .mkpasswd-dash
-%patch -P102 -p1 -b .check-telnet
-%patch -P103 -p1 -b .passmass-su-full-path
-%patch -P104 -p1 -b .mkpasswd-man
-%patch -P105 -p1 -b .tcl9-mkpasswd
+%patch100 -p1 -b .random
+%patch101 -p1 -b .mkpasswd-dash
+%patch102 -p1 -b .check-telnet
+%patch103 -p1 -b .passmass-su-full-path
+%patch104 -p1 -b .mkpasswd-man
+%patch105 -p1 -b .tcl9-mkpasswd
 # -pkgpath.patch touch configure.in
 aclocal
 autoconf

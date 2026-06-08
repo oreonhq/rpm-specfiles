@@ -77,10 +77,10 @@ Source3:        https://github.com/dotnet/dotnet/releases/download/%{upstream_ta
 %endif
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/macros.dotnet
+Source10:        https://github.com/dotnet/dotnet/raw/v%{upstream_tag}/macros.dotnet
 
-Source20:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/check-debug-symbols.py
-Source21:        https://raw.githubusercontent.com/dotnet/dotnet/v%{upstream_tag}/dotnet.sh.in
+Source20:        https://github.com/dotnet/dotnet/raw/v%{upstream_tag}/check-debug-symbols.py
+Source21:        https://github.com/dotnet/dotnet/raw/v%{upstream_tag}/dotnet.sh.in
 
 # Disable apphost; there's no net6.0 apphost for ppc64le
 Patch1:        roslyn-analyzers-ppc64le-apphost.patch

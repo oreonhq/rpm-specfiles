@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 22903e12e25e5348d7c2285f8d3173215540296e1b47f38515936618993988fa
 
 Name: hyphen-mn
 Summary: Mongolian hyphenation rules
 %global upstreamid 20100531
 Version: 0.%{upstreamid}
 Release: 31%{?dist}
-Source: https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-mn-cyrl.tex
+Source: https://github.com/hyphenation/tex-hyphen/raw/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-mn-cyrl.tex
 URL: http://www.ctan.org/tex-archive/help/Catalogue/entries/mnhyphn.html
 License: LPPL-1.3a
 BuildArch: noarch

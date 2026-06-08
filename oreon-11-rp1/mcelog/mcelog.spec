@@ -9,7 +9,7 @@ License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
 Source0:        https://github.com/andikleen/mcelog/archive/refs/tags/v%{version}.tar.gz#/mcelog-%{version}.tar.gz
 # note that this source OVERRIDES the one on the tarball above!
-Source1:        https://raw.githubusercontent.com/andikleen/mcelog/HEAD/mcelog.conf
+Source1:        https://github.com/andikleen/mcelog/raw/master/mcelog.conf
 ExclusiveArch:	i686 x86_64
 Requires(post): systemd
 Requires(preun): systemd

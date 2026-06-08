@@ -159,6 +159,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{name}-%{version}
 # prevent compilation of something that won't get used anyway
 sed -i.orig 's|FENCE_ZVM=1|FENCE_ZVM=0|' configure.ac
+echo %{version} > .tarball-version
 
 %build
 export PYTHON="%{__python3}"

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2a361a3a239afc3f40e6dbac28da4503f5103338d7b17de41ac2c2979d862d1d
 
 Name:		libzpc
 Version:	1.4.1

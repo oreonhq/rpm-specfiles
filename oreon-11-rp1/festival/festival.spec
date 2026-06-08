@@ -1,14 +1,14 @@
-%global source0_hash none
+%global source0_hash 4c9007426b125290599d931df410e2def51e68a8aeebd89b4a61c7c96c09a4b4
 %global source100_hash e7c6e3642dbd5b0d64942bc015a986fdd6244a79e51ec2e8309e63d569e49ea3
 %global source101_hash c19430919bca45d5368cd4c82af6153fbcc96a487ebd30b78b5f3c08718b7c07
-%global source200_hash 809c4ab5ed9e4df4a658b58d5c56fe35055723f00d81a238168f5a1ebdaed08c
-%global source202_hash ecd14b77c528e94dfb076e44050102fe8fba57e5fe813acf78a66629317f52a5
-%global source220_hash b2adbdfeda0cba289bb4da68dd14114d3eb3e7f72049cc8d2cbdfb2df39f6934
-%global source221_hash 1dc6792af9e2c1660a46fe499aa67af4affa665a0bdc08207cc11719baa62f6d
-%global source222_hash 8473e5bb37b2101eb17c1b25577d340710f48c862bebcd61d424f9aff43c0dd7
-%global source223_hash 711db388bc500331cfda86a46a72193ca1e2c9dc7d5ef16dfc86827e499946f2
-%global source224_hash 3167afa3a6ffb5bbc305c94a1e6b671e40783a87a49372fce04c54942872c421
-%global source225_hash 78cb93e361ab016fd23833c56853ddf21e2f1356310f54eed1c09a9755ce9f43
+%global source200_hash 7a357c34086fbba8b813f9750f6b5ba13e2a00478a0a2e78a97981cb76395578
+%global source202_hash a017ef70f6d3e64d51d3772ab438eb47a26b529b456dae3cea18936925ec20e8
+%global source220_hash d8c4c8042571001ed07ada6588fa20f266fedef326a5e824bdf87d4c8306b5c9
+%global source221_hash 5b2cdd41f75ad20cf77ed6ecec497da72d5cc6a095e0f67409f0f536882f8827
+%global source222_hash c61f539444b6edb127ae4352632fcf5decdbce80a6132c88d51c809cabc6e357
+%global source223_hash 49a0060c3252148b8942c7c0c9e2e7c7b7ef22475fa1871772bfdc39c2896f5f
+%global source224_hash d67f0678b2fbbceae73dcf01acb560262bf41171e02e171e81bc16db4d0a347c
+%global source225_hash 9f5377db127fe9ce6e9307e821ee45566cce1f4a6c209b9a3c3393a241cbf8a4
 
 Name: festival
 Version: 2.5.0
@@ -26,7 +26,7 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0:        https://festvox.org/packed/festival/%{version}/festival-%{version}-release.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/f/festival/festival_%{version}.orig.tar.gz#/festival-%{version}-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary
@@ -316,12 +316,12 @@ test "%{source225_hash}" = "none" || { f="%{SOURCE225}"; test -f "$f" || { echo 
 %setup -q -n festival -D -T -b 224
 %setup -q -n festival -D -T -b 225
 
-%patch -P100 -p1 -b .pulseaudio
-%patch -P101 -p1 -b .use-system-speech-tools
-%patch -P102 -p1 -b .use-system-libs
-%patch -P103 -p1 -b .filesystem-standard
-%patch -P104 -p1 -b .siteinit
-%patch -P105 -p1
+%patch100 -p1 -b .pulseaudio
+%patch101 -p1 -b .use-system-speech-tools
+%patch102 -p1 -b .use-system-libs
+%patch103 -p1 -b .filesystem-standard
+%patch104 -p1 -b .siteinit
+%patch105 -p1
 
 # Create a sysusers.d config file
 cat >festival.sysusers.conf <<EOF

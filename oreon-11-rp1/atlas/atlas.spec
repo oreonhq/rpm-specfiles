@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
 %global source12_hash none
 
 %define enable_native_atlas 0
@@ -334,27 +334,27 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
 %setup -q -n ATLAS
 
 
-%patch -P1 -p1
-%patch -P2 -p1
-%patch -P3 -p2
-%patch -P4 -p1
-%patch -P5 -p1
-%patch -P6 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p2
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
-%patch -P7 -p1
-%patch -P8 -p1
-%patch -P10 -p1
+%patch7 -p1
+%patch8 -p1
+%patch10 -p1
 
 %ifarch s390x s390
-%patch -P9 -p1
-%patch -P11 -p1
-%patch -P12 -p1
-%patch -P13 -p1
-%patch -P14 -p1
+%patch9 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 %endif
 
-%patch -P15 -p1
-%patch -P101 -p1
+%patch15 -p1
+%patch101 -p1
 
 cp %{SOURCE2} doc
 tar -xJf %{SOURCE12} debian/archdefs

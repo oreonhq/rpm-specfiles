@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a389850c2d3919f2cc96fb8b5e7711eacfc819259aaffb11615c9fb9756eaeae
 %global source2_hash none
 
 Summary: A GNU collection of binary utilities
@@ -221,7 +221,7 @@ URL: https://sourceware.org/binutils
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
 Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz

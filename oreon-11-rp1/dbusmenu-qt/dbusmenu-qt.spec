@@ -41,6 +41,7 @@ BuildRequires: pkgconfig(QJson)
 # test-suite
 BuildRequires: xorg-x11-server-Xvfb dbus-x11
 BuildRequires: make
+BuildRequires: ninja-build
 
 Provides: libdbusmenu-qt = %{version}-%{release}
 
@@ -121,7 +122,7 @@ popd
 %if 0%{?with_qt4}
 make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
 %endif
-%DESTDIR=%{buildroot} %ninja_install -C %{_target_platform}-qt5
+%ninja_install -C %{_target_platform}-qt5
 
 # unpackaged files
 rm -rfv %{buildroot}%{_docdir}/libdbusmenu-qt*-doc

@@ -34,8 +34,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cd %{builddir}
 tar -xf %{_sourcedir}/fxload-%{version}-noa3load.tar.gz
 cd fxload-%{version}
-%patch -P0 -p1 -b .fxload-noa3load
-%patch -P1 -p1 -b .ldflags
+%patch0 -p1 -b .fxload-noa3load
+%patch1 -p1 -b .ldflags
 
 %build
 %{make_build} CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS -pie"

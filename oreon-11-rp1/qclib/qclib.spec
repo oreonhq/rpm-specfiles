@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4624bc68aa5c550cd311d928cffadbb2359a4479ac1e7514886f409124e2eec1
 
 Name:		qclib
 Version:	2.5.1

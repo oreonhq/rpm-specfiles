@@ -313,7 +313,7 @@ Patch3:        gcc16-libgomp-omp_h-multilib.patch
 Patch4:        gcc16-libtool-no-rpath.patch
 Patch5:        gcc16-isl-dl.patch
 Patch6:        gcc16-isl-dl2.patch
-Patch7:        gcc16-libstdc%2B%2B-docs.patch
+Patch7:        gcc16-libstdc++-docs.patch#/gcc16-libstdc++-docs.patch
 Patch8:        gcc16-no-add-needed.patch
 Patch9:        gcc16-Wno-format-security.patch
 Patch10:        gcc16-rh1574936.patch
