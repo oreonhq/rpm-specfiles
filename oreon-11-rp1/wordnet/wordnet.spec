@@ -24,6 +24,7 @@ Patch7:        wordnet-3.0-libtool.patch
 Patch8:        wordnet-3.0-error_message.patch
 # Bug #1037386
 Patch9:        wordnet-3.0-Pass-compilation-with-Werror-format-security.patch
+Patch10:        wordnet-tcl9-ansi-args.patch
 BuildRequires:  automake >= 1.8
 BuildRequires:  coreutils
 BuildRequires:  gcc
@@ -87,6 +88,7 @@ sed -e '/man_MANS/ s/$/ wishwn.1/' -i doc/man/Makefile.am
 %patch 7 -p1 -b .libtool
 %patch 8 -p1 -b .error_message
 %patch 9 -p1 -b .format
+%patch 10 -p1 -b .tcl9-ansi-args
 # delete the include/tk dir, since we do not use the included tk headers
 rm -rf include/tk
 # Update a database

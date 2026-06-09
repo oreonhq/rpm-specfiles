@@ -59,7 +59,9 @@ EOF
 %make_build CFLAGS="%{build_cflags} -D_GNU_SOURCE -fPIC" LDFLAGS="%{build_ldflags} -Wl,-z,now -Wl,-z,relro -pie" all
 
 %install
-%make_install DEST=%{buildroot} install
+make install DEST='%{buildroot}'
+install -D -m755 kernel-is-rt %{buildroot}%{_sbindir}/kernel-is-rt
+install -D -m755 realtime-entsk %{buildroot}%{_sbindir}/realtime-entsk
 
 install -m0644 -D realtime-setup.sysusers.conf %{buildroot}%{_sysusersdir}/realtime-setup.conf
 

@@ -86,7 +86,7 @@ install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE2}'
 # problematic license status.
 
 
-%files -n python3-chardet -f .pyproject_files
+%files -n python3-chardet -f %{pyproject_files}
 %doc README.rst
 %{_bindir}/chardetect
 %{_mandir}/man1/chardetect.1*

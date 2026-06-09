@@ -1,7 +1,7 @@
 %global source2_hash 70da7140035621330f1b5ab6926197c3c3af467f2207d55a41f6396d9ad96abd
 %global source0_hash none
 %global source3_hash 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
-%global source4_hash 0e403da946b8d6058e3c6043c6ad410ca3d4f2f0e04b7f7a149453ae6844512b
+%global source4_hash 90ec9bcd8a518425513076f10fa14d90f19ca430940e01e497f0ce80fdd0fd03
 
 # FIXME:  Figure out what to do about the gles* manpages, maybe different conflicting packages...
 %global codate 20190306

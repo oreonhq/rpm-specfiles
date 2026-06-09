@@ -1,12 +1,14 @@
 --- a/src/server/drm_fourcc.h
 +++ b/src/server/drm_fourcc.h
-@@ -10,7 +10,9 @@
+@@ -8,9 +8,7 @@
+ #define DRM_FOURCC_H
  
- // These typedefs are copied from drm.h
- typedef uint32_t __u32;
-+#ifndef __u64
- typedef uint64_t __u64;
-+#endif
+ //#include "drm.h"
+-
+-// These typedefs are copied from drm.h
+-typedef uint32_t __u32;
+-typedef uint64_t __u64;
++#include <linux/types.h>
  
  #if defined(__cplusplus)
  extern "C" {

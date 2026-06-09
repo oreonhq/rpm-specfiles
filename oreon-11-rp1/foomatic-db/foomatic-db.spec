@@ -36,6 +36,7 @@ BuildRequires: perl-interpreter
 
 # we needed sed for prep phase - removing perl from ppds
 BuildRequires: sed
+BuildRequires: autoconf automake
 
 %description
 This is the database of printers, printer drivers, and driver options
@@ -137,7 +138,9 @@ popd
 find db/source/PPD -type f -name '*.ppd' -exec sed -i 's,perl -p,sed,g' {} +
 
 %build
-make PREFIX=%{_prefix} %{?_smp_mflags}
+autoreconf -fi
+%configure
+%make_build
 
 
 %install

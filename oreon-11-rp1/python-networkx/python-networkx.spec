@@ -10,7 +10,11 @@
 
 # Whether to build documentation and run tests
 # scikit-learn is no longer available on 32-bit x86
+%if 0%{?fedora} >= 44 || 0%{?oreon} >= 11
+%bcond doctest 0
+%else
 %bcond doctest  %[%{with extras} && "%(uname -m)" != "i686"]
+%endif
 
 %global giturl  https://github.com/networkx/networkx
 

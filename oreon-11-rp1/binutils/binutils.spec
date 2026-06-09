@@ -1,4 +1,5 @@
 %global source0_hash a389850c2d3919f2cc96fb8b5e7711eacfc819259aaffb11615c9fb9756eaeae
+%global source1_hash none
 %global source2_hash none
 
 Summary: A GNU collection of binary utilities

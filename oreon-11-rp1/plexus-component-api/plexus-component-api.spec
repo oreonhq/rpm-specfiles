@@ -17,14 +17,11 @@ Source0:        https://github.com/sonatype/plexus-containers/archive/plexus-con
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
 
-BuildRequires:  java-devel >= 1:1.6.0
-BuildRequires:  maven-local
+BuildRequires:  maven-local-openjdk25
 BuildRequires:  maven-assembly-plugin
 BuildRequires:  maven-resources-plugin
 BuildRequires:  maven-plugin-plugin
 BuildRequires:  plexus-classworlds
-# requires as parent pom
-BuildRequires:  plexus-containers
 
 %description
 Plexus Component API
@@ -39,9 +36,10 @@ API documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n plexus-containers-plexus-containers-1.0-alpha-15/%{name}-%{project_version}
+%pom_remove_parent 2>/dev/null || :
 
 %build
-%mvn_build
+%mvn_build -j -- -Dmaven.compiler.release=8
 
 %install
 %mvn_install

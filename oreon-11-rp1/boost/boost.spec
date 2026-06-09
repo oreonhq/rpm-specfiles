@@ -10,27 +10,12 @@
 %global boost_examplesdir __tmp_examplesdir
 
 %if 0%{?flatpak}
-# For bundling in Flatpak, currently build without mpich and openmpi,
-# which aren't needed and cause prefix=/app errors.
-%bcond_with mpich
-%bcond_with openmpi
-%elif 0%{?oreon} >= 11
 %bcond_with mpich
 %bcond_with openmpi
 %else
-# All arches have mpich
-%bcond_without mpich
-
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
-%ifarch %{ix86}
-    # No OpenMPI support on these arches
-    %bcond_with openmpi
-%else
-    %bcond_without openmpi
-%endif
-%else
-  %bcond_without openmpi
-%endif
+%bcond_with mpich
+%bcond_with openmpi
+%bcond_with check
 %endif
 
 %ifnarch %{ix86} x86_64 %{arm} ppc64 ppc64le aarch64 s390x riscv64

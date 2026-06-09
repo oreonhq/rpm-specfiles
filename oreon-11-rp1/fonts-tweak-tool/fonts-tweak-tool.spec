@@ -30,7 +30,7 @@ find . -name Makefile.am -exec sed -i 's/--warn-all//g' {} +
 autoreconf --install
 
 %build
-%configure --disable-static --disable-introspection PYTHON=%{__python3}
+%configure --disable-static PYTHON=%{__python3}
 %make_build
 
 %install

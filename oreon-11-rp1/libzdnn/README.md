@@ -1,3 +1,0 @@
-# libzdnn
-
-The libzdnn package

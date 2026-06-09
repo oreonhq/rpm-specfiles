@@ -104,7 +104,7 @@ BuildArch:	noarch
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am -n shim-%{version}
+%setup -q -n shim-%{version}
 git config --unset user.email
 git config --unset user.name
 mkdir build-%{efiarch}
@@ -112,6 +112,10 @@ mkdir build-%{efialtarch}
 cp %{SOURCE3} data/
 
 %build
+export CFLAGS="${CFLAGS//-flto=auto /}"
+export CFLAGS="${CFLAGS//-ffat-lto-objects /}"
+export CXXFLAGS="${CXXFLAGS//-flto=auto /}"
+export CXXFLAGS="${CXXFLAGS//-ffat-lto-objects /}"
 COMMIT_ID=%{shim_commit_id}
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "

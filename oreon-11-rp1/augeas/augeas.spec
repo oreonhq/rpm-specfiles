@@ -30,6 +30,7 @@ Source1:        https://github.com/coreutils/gnulib/archive/2f7479a16a.tar.gz#/g
 Provides:       bundled(gnulib)
 
 BuildRequires:  autoconf, automake, libtool
+BuildRequires:  perl-interpreter perl-constant perl(File::Temp) perl(Data::Dumper) perl(Text::ParseWords)
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  flex
@@ -101,9 +102,9 @@ for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%forgeautosetup -p1
+%setup -q -n augeas-%{commit}
 mkdir -p .gnulib
-tar xf %{SOURCE1} --strip-components=1 -C .gnulib
+tar xzf %{SOURCE1} -C .gnulib --strip-components=1
 
 # Copied from upstream ./bootstrap:
 modules='argz fnmatch getline getopt-gnu gitlog-to-changelog
@@ -124,6 +125,7 @@ autoreconf -fiv
 
 
 %build
+export CFLAGS="$CFLAGS -Wno-error=implicit-function-declaration"
 %configure \
 %ifarch riscv64
     --disable-gnulib-tests \

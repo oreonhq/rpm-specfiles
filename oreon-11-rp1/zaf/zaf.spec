@@ -30,49 +30,42 @@ Zulu hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-_tar="zaf-0-0.1.%{upstreamid}svn.tar.bz2"
-if test ! -f "$_tar"; then
-  rm -rf zaf dictionaries-*
-  mkdir -p zaf/af/hyph zaf/zu/hyph
-  tar xzf %{SOURCE0}
-  _dict=$(ls -d dictionaries-*)
-  cp -p $_dict/af_ZA/hyph_af_ZA.dic zaf/af/hyph/
-  cp -p $_dict/zu_ZA/hyph_zu_ZA.dic zaf/zu/hyph/
-  cp -p $_dict/af_ZA/README_af_ZA.txt zaf/af/README
-  printf "LibreOffice dictionaries\n" > zaf/af/CREDITS
-  cp -p zaf/af/README zaf/af/COPYING
-  cp -p zaf/af/README zaf/zu/README
-  cp -p zaf/af/CREDITS zaf/zu/CREDITS
-  cp -p zaf/af/COPYING zaf/zu/COPYING
-  tar cjf "$_tar" zaf
-  rm -rf $_dict zaf
-fi
-rm -rf zaf
-tar xjf "$_tar"
-cd zaf
+rm -rf zaf dictionaries-*
+tar xzf %{SOURCE0}
+_dict=$(ls -d dictionaries-*)
+mkdir -p zaf/af/hyph zaf/zu/hyph
+  cp -p $_dict/af_ZA/hyph_af_ZA.dic zaf/af/hyph/hyph_af_ZA.dic
+  cp -p $_dict/zu_ZA/hyph_zu_ZA.dic zaf/zu/hyph/hyph_zu_ZA.dic
+cp -p $_dict/af_ZA/README_af_ZA.txt zaf/af/README
+printf "LibreOffice dictionaries\n" > zaf/af/CREDITS
+cp -p zaf/af/README zaf/af/COPYING
+cp -p zaf/af/README zaf/zu/README
+cp -p zaf/af/CREDITS zaf/zu/CREDITS
+cp -p zaf/af/COPYING zaf/zu/COPYING
+rm -rf $_dict
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p ./af/hyph/hyph_af_ZA.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen
-cp -p ./zu/hyph/hyph_zu_ZA.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen
+mkdir -p %{buildroot}%{_datadir}/hyphen
+cp -p zaf/af/hyph/hyph_af_ZA.dic %{buildroot}%{_datadir}/hyphen/
+cp -p zaf/zu/hyph/hyph_zu_ZA.dic %{buildroot}%{_datadir}/hyphen/
 
-pushd $RPM_BUILD_ROOT/%{_datadir}/hyphen/
+pushd %{buildroot}%{_datadir}/hyphen/
 af_ZA_aliases="af_NA"
 for lang in $af_ZA_aliases; do
-        ln -s hyph_af_ZA.dic hyph_$lang.dic
+        ln -sf hyph_af_ZA.dic hyph_$lang.dic
 done
 popd
 
 %files -n hyphen-af
-%doc af/CREDITS af/README
-%license af/COPYING
+%doc zaf/af/CREDITS zaf/af/README
+%license zaf/af/COPYING
 %{_datadir}/hyphen/hyph_af*
 
 %files -n hyphen-zu
-%doc zu/CREDITS zu/README
-%license zu/COPYING
+%doc zaf/zu/CREDITS zaf/zu/README
+%license zaf/zu/COPYING
 %{_datadir}/hyphen/hyph_zu*
 
 %changelog

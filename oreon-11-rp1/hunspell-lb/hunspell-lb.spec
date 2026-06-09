@@ -39,6 +39,8 @@ cp -p th_lb_LU_v2.* $RPM_BUILD_ROOT/%{_datadir}/mythes
 %files
 %doc registration/README_lb_LU.txt
 %{_datadir}/%{dict_dirname}/*
+%{_datadir}/mythes/th_lb_LU_v2.dat
+%{_datadir}/mythes/th_lb_LU_v2.idx
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-28

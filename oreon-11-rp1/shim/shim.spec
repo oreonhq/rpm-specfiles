@@ -203,7 +203,7 @@ install -m 0700 fb%{-a*}.efi						\\\
 %{nil}
 
 %ifarch x86_64
-%global is_signed yes
+%global is_signed no
 %global is_alt_signed no
 %global provide_legacy_shim 1
 %endif

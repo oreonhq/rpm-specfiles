@@ -28,10 +28,10 @@ Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 Source2:        gpgme-multilib.h
 Source3:        https://gnupg.org/signature_key.asc
-Source4:        https://www.gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz
+Source4:        https://gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz
 Source5:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz
 Source6:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2
-Source7:        https://www.gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz.sig
+Source7:        https://gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz.sig
 Source8:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz.sig
 Source9:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2.sig
 
@@ -68,6 +68,8 @@ BuildRequires:  libassuan-devel >= 2.4.2
 # to remove RPATH
 BuildRequires:  chrpath
 BuildRequires:  python3-pip
+BuildRequires:  python3-wheel
+BuildRequires:  python3-setuptools
 
 # For AutoReq cmake-filesystem
 BuildRequires:  cmake
@@ -232,7 +234,7 @@ export SETUPTOOLS_USE_DISTUTILS=local
 GPGME_TOPDIR=$(pwd)
 mkdir build
 cd build
-%configure --disable-static --disable-silent-rules --enable-languages=
+%configure --disable-static --disable-silent-rules --enable-languages= --with-libgpg-error-prefix=/usr
 %make_build
 
 

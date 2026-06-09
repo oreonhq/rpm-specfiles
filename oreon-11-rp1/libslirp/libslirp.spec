@@ -1,4 +1,4 @@
-%global source0_hash f7bdeff143899a171449a7f7457240a8f9d75af2ea91a23359366b208a1f91df
+%global source0_hash 4811586e2963442d4a3b3517d9fd14a8247bd878b1dc54e63b49afc472377f43
 
 Name:           libslirp
 Version:        4.9.1
@@ -31,7 +31,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
+%autosetup
 
 %build
 %meson

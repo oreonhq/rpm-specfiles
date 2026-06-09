@@ -47,6 +47,7 @@
 %bcond_with system_metis
 
 %global commit 6ab1e9eb9e67264218ffbdfc25010650da449a39
+%global _smp_build_ncpus 4
 
 Name:           suitesparse
 Version:        7.11.0

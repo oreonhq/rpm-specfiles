@@ -316,12 +316,12 @@ test "%{source225_hash}" = "none" || { f="%{SOURCE225}"; test -f "$f" || { echo 
 %setup -q -n festival -D -T -b 224
 %setup -q -n festival -D -T -b 225
 
-%patch100 -p1 -b .pulseaudio
-%patch101 -p1 -b .use-system-speech-tools
-%patch102 -p1 -b .use-system-libs
-%patch103 -p1 -b .filesystem-standard
-%patch104 -p1 -b .siteinit
-%patch105 -p1
+%patch 100 -p1 -b .pulseaudio
+%patch 101 -p1 -b .use-system-speech-tools
+%patch 102 -p1 -b .use-system-libs
+%patch 103 -p1 -b .filesystem-standard
+%patch 104 -p1 -b .siteinit
+%patch 105 -p1
 
 # Create a sysusers.d config file
 cat >festival.sysusers.conf <<EOF

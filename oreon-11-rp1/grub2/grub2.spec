@@ -469,9 +469,6 @@ rm -f configure							\
 git add .							\
 git add -f .gitignore						\
 git commit -q -m "%{tarversion} baseline."			\
-git am --whitespace=nowarn %%{patches} </dev/null		\
-rm -r build-aux m4						\
-./bootstrap							\
 %{nil}
 
 %define do_efi_configure()					\
@@ -1558,6 +1555,13 @@ This subpackage provides the GRUB user-space emulation modules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %do_common_setup
+for _p in %{_sourcedir}/0*.patch; do
+  patch -p1 -f < "$_p" || exit 1
+done
+grep -q 'state == NULL' grub-core/commands/extcmd.c || \
+  sed -i '/state = grub_arg_list_alloc (ext, argc, args);/a\  if (state == NULL)\n    return grub_errno;' grub-core/commands/extcmd.c
+rm -r build-aux m4
+./bootstrap
 %if 0%{with_efi_arch}
 mkdir grub-%{grubefiarch}-%{tarversion}
 grep -A100000 '# stuff "make" creates' .gitignore > grub-%{grubefiarch}-%{tarversion}/.gitignore

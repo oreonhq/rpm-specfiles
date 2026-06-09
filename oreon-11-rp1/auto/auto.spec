@@ -89,8 +89,7 @@ test -f value-parent/pom.xml && %pom_remove_parent value-parent || :
 %pom_disable_module src/it/functional value/pom.xml
 %pom_disable_module src/it/gwtserializer value/pom.xml
 
-# Fix deps in service module
-%pom_xpath_set "pom:parent/pom:version" 6 service
+# Fix deps in service module (parent already stripped above)
 %pom_change_dep com.google.auto:auto-common com.google.auto:auto-common:0.10 service
 %pom_remove_plugin org.apache.maven.plugins:maven-checkstyle-plugin
 %pom_remove_plugin :maven-shade-plugin

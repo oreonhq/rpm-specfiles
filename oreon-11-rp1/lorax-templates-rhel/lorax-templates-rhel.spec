@@ -22,21 +22,14 @@ RHEL-specific Lorax templates for creating the boot.iso and live isos are
 placed in %{templatedir}
 
 %prep
-_tar="lorax-templates-rhel-%{version}.tar.gz"
-curl -sfL -o _ltr.tar.gz "https://gitlab.com/redhat/centos-stream/rpms/lorax-templates-rhel/-/archive/c11s/lorax-templates-rhel-c11s.tar.gz"
-rm -rf _ltr && mkdir _ltr
-tar xzf _ltr.tar.gz -C _ltr --strip-components=1
-tar czf "$_tar" -C _ltr --transform="s|^|lorax-templates-rhel-%{version}/|" 80-rhel
-rm -rf _ltr _ltr.tar.gz
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n lorax-templates-rhel-%{version}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n lorax-templates-rhel-c11s
 
 %build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/%{templatedir}
-cp -a 80-rhel/* $RPM_BUILD_ROOT/%{templatedir}
+install -d %{buildroot}%{templatedir}
+cp -a 80-rhel/* %{buildroot}%{templatedir}/
 
 %files
 %dir %{templatedir}

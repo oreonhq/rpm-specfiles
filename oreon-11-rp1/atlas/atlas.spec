@@ -334,27 +334,27 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
 %setup -q -n ATLAS
 
 
-%patch1 -p1
-%patch2 -p1
-%patch3 -p2
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch 1 -p1
+%patch 2 -p1
+%patch 3 -p2
+%patch 4 -p1
+%patch 5 -p1
+%patch 6 -p1
 
-%patch7 -p1
-%patch8 -p1
-%patch10 -p1
+%patch 7 -p1
+%patch 8 -p1
+%patch 10 -p1
 
 %ifarch s390x s390
-%patch9 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
+%patch 9 -p1
+%patch 11 -p1
+%patch 12 -p1
+%patch 13 -p1
+%patch 14 -p1
 %endif
 
-%patch15 -p1
-%patch101 -p1
+%patch 15 -p1
+%patch 101 -p1
 
 cp %{SOURCE2} doc
 tar -xJf %{SOURCE12} debian/archdefs

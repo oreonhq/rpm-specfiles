@@ -18,6 +18,7 @@ Provides:       system-release(11) = %{release}
 Provides:       base-module(platform:or%{version})
 Requires:       oreon-repos(%{version})
 BuildArch:      noarch
+BuildRequires:  bash
 
 Source0:        LICENSE
 Source1:        85-display-manager.preset

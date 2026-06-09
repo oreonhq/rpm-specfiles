@@ -89,10 +89,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-timestamp-plugin
 %pom_remove_plugin :maven-enforcer-plugin
 %pom_remove_plugin :maven-shade-plugin
-grep -q 'nexus-staging-maven-plugin' pom.xml 2>/dev/null && %pom_remove_plugin org.sonatype.plugins:nexus-staging-maven-plugin || :
+%pom_remove_plugin org.sonatype.plugins:nexus-staging-maven-plugin 2>/dev/null || :
 %pom_xpath_remove "pom:dependency[pom:scope='test']" tck
 
-%pom_xpath_remove pom:build/pom:extensions
+%pom_xpath_remove pom:build/pom:extensions 2>/dev/null || :
 
 %pom_disable_module module-test
 

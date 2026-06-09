@@ -1,10 +1,6 @@
 %global source0_hash a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04
 
-%if 0%{?rhel} >= 10 || 0%{?rescue} || (0%{?oreon} >= 11)
 %bcond_with gpm
-%else
-%bcond_without gpm
-%endif
 
 Name:      elinks
 Summary:   A text-mode Web browser

@@ -126,11 +126,14 @@ that use TECkit, a character encoding and mapping, library.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+_repack=%{_builddir}/teckit-%{version}_repackaged.tar.xz
 cp -p %{SOURCE0} teckit-%{version}.tar.xz
 cp %{SOURCE3} .
 bash repackage.sh %{version}
-%setup -q -c -T -n teckit-%{version}_repackaged
-tar xJf teckit-%{version}_repackaged.tar.xz --strip-components=1
+mv -f teckit-%{version}_repackaged.tar.xz "$_repack"
+test -f "$_repack" || { echo "teckit repackage failed: $_repack missing" >&2; exit 1; }
+%setup -q -c -T -D -n teckit-%{version}_repackaged
+tar xJf "$_repack" --strip-components=1
 # Remove bundled libraries
 rm -r zlib-*/*.{c,h} SFconv/expat
 # Remove pre-build executables

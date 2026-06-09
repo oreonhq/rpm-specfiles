@@ -1,9 +1,10 @@
-%global source0_hash none
+%global source0_hash 4528011d0c7b55f12cb344ddf2929b7ea1a0cae2ee51e118acbab4b5090cefcc
 %global source1_hash 5202c52a364afc0b310a2fff71082d37351590f6339f1a42eacb8a974df7a200
 %global source2_hash none
 %global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
 
-%global DATE 20260515
+%global DATE 20260606
+%global gcc_tree gcc-16-%{DATE}
 %global gitrev d776f42bb910ebccf652b010b80c22bcca736f7f
 %global gcc_version 16.1.1
 %global gcc_major 16
@@ -182,9 +183,8 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2#/gcc-%{version}-%{DATE}.tar.gz
+Source0:        https://gcc.gnu.org/pub/gcc/snapshots/LATEST-16/gcc-16-%{DATE}.tar.xz
 Source1:        https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_tools_gitrev}#/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
-Source2:        https://gcc.gnu.org/pub/gcc/infrastructure/gmp-6.1.0.tar.bz2#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -970,23 +970,15 @@ _git_tarball() {
   git archive --prefix="$_prefix" --format=tar.gz --output="../$_out" FETCH_HEAD
   cd .. && rm -rf _gitfetch
 }
-_gcc_src="gcc-%{version}-%{DATE}.tar.gz"
-if test ! -s "$_gcc_src" || ! gzip -t "$_gcc_src" 2>/dev/null; then
-  _git_tarball https://gcc.gnu.org/git/gcc.git %{gitrev} "$_gcc_src" "gcc-%{version}-%{DATE}/"
-fi
-_nvptx="nvptx-tools-%{nvptx_tools_gitrev}.tar.gz"
-if test ! -s "$_nvptx" || ! gzip -t "$_nvptx" 2>/dev/null; then
-  _git_tarball https://github.com/MentorEmbedded/nvptx-tools.git %{nvptx_tools_gitrev} "$_nvptx" "nvptx-tools-%{nvptx_tools_gitrev}/"
-fi
-_newlib="newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz"
-if test ! -s "$_newlib" || ! gzip -t "$_newlib" 2>/dev/null; then
-  _git_tarball https://sourceware.org/git/newlib-cygwin.git %{newlib_cygwin_gitrev} "$_newlib" "newlib-cygwin-%{newlib_cygwin_gitrev}/"
-fi
-test "%{source0_hash}" = "none" || { f="$_gcc_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="$_nvptx"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="$_newlib"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-%setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
+_newlib="newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz"
+_git_tarball https://sourceware.org/git/newlib-cygwin.git %{newlib_cygwin_gitrev} "$_newlib" "newlib-cygwin-%{newlib_cygwin_gitrev}/"
+%setup -q -n %{gcc_tree}
+tar -xf %{SOURCE1}
+tar -xf "$_newlib"
+tar -xf %{SOURCE3}
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}
 %autopatch -p0 -m 5 -M 6
@@ -1535,10 +1527,10 @@ tar xf %{_usrsrc}/annobin/latest-annobin.tar.xz
 cd annobin*
 touch aclocal.m4 configure Makefile.in */configure */config.h.in */Makefile.in
 ANNOBIN_FLAGS=../../obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags
-ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{version}-%{DATE}/gcc"
-ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/gcc"
-ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}-%{DATE}/include -I %{_builddir}/gcc-%{version}-%{DATE}/libcpp/include"
-ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
+ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/%{gcc_tree}/gcc"
+ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/%{gcc_tree}/obj-%{gcc_target_platform}/gcc"
+ANNOBIN_CFLAGS2="-I %{_builddir}/%{gcc_tree}/include -I %{_builddir}/%{gcc_tree}/libcpp/include"
+ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/%{gcc_tree}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
 CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
   CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
   CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
@@ -2607,7 +2599,7 @@ ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
 %if %{build_annobin_plugin}
 mkdir -p $FULLPATH/plugin
 rm -f $FULLPATH/plugin/gcc-annobin*
-cp -a %{_builddir}/gcc-%{version}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
+cp -a %{_builddir}/%{gcc_tree}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
   $FULLPATH/plugin/gcc-annobin.so.0.0.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so

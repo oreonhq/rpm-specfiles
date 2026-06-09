@@ -1,13 +1,12 @@
 --- a/transfig/transfig.c
 +++ b/transfig/transfig.c
-@@ -34,8 +34,8 @@
- #include <stdlib.h>
- #include <string.h>
+@@ -35,7 +35,8 @@ extern void makefile(FILE *mk, int altfonts); /* mkfile.c */
  
+ 
+ argument *parse_arg(), *arglist = NULL, *lastarg = NULL;
 -char *strip();
--char *mksuff();
-+char *strip(char *str, char *suf);
++char *strip(char *str, char *suff);
 +char *mksuff(char *name, char *suff);
  
- static char *prog;
- static char *input = NULL;
+ char *mkfile = "Makefile";
+ char *txfile = "transfig.tex";

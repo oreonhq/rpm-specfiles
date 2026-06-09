@@ -324,6 +324,8 @@ sed -i -e 's/add_subdirectory(kdm)/macro_optional_add_subdirectory(kdm)/' \
 
 %if ! 0%{?kdm}
 sed -i '/add_subdirectory(kdm)/s/^/#/' CMakeLists.txt
+sed -i '/add_subdirectory( kdm )/s/^/#/' kcontrol/CMakeLists.txt
+sed -i '/add_subdirectory(kdm)/s/^/#/' kcontrol/CMakeLists.txt
 %endif
 
 # Disable all docs except for KDM and kcontrol
@@ -365,6 +367,7 @@ export CFLAGS="%{optflags} -Dinline=__inline__"
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} .. \
+  -DCMAKE_POLICY_DEFAULT_CMP0112=NEW \
   -DKDE4_ENABLE_FPIE:BOOL=ON \
   -DKDE4_KDM_PAM_SERVICE=kdm \
   -DKDE4_KCHECKPASS_PAM_SERVICE=kcheckpass \

@@ -3,6 +3,8 @@
 
 %global source2_key_fpr 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
 
+%bcond_with docs
+
 
 
 
@@ -21,7 +23,10 @@ Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tag
 
 BuildRequires:  gcc
 BuildRequires:  cmake
+BuildRequires:  libuv-devel
+%if %{with docs}
 BuildRequires:  doxygen
+%endif
 BuildRequires:  glibc-devel
 BuildRequires:  gpgverify
 
@@ -99,6 +104,7 @@ Provides:       libcmocka-devel:%{_libdir}/cmake/cmocka
 cmake support for developing with the cmocka unit testing library.
 
 
+%if %{with docs}
 %package -n cmocka-doc
 Summary:        API documentation for the cmocka unit testing framework
 BuildArch:      noarch
@@ -106,6 +112,7 @@ BuildArch:      noarch
 %description -n cmocka-doc
 This package provides the API documentation for the cmocka unit testing
 framework.
+%endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -126,7 +133,9 @@ test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon:
   -DDOXYGEN_AWESOME_CSS_DIR=%{_sourcedir}/doxygen-awesome-css-2.4.1
 
 %cmake_build
+%if %{with docs}
 %__cmake --build %{__cmake_builddir} --target docs
+%endif
 
 %install
 %cmake_install
@@ -151,8 +160,10 @@ test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon:
 %files -n libcmocka-cmake-devel
 %{_libdir}/cmake/cmocka/cmocka-*.cmake
 
+%if %{with docs}
 %files -n cmocka-doc
 %doc %{__cmake_builddir}/doc/html
+%endif
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.2-1

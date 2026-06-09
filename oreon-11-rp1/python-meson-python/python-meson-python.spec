@@ -1,3 +1,4 @@
+%bcond_without check
 %global source0_hash 9959d198aa69b57fcfd354a34518c6f795b781a73ed0656f4d01660160cc2553
 
 %bcond tests 1
@@ -31,6 +32,7 @@ BuildArch:      noarch
 
 # for %%pyproject_buildrequires -p
 BuildRequires:  pyproject-rpm-macros >= 1.15.1
+BuildRequires:  python3-pyproject-metadata
 BuildRequires:  python3-pytest
 
 %if %{with tests}

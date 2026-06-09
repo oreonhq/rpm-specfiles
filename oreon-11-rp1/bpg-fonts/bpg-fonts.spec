@@ -132,7 +132,7 @@ Requires:	%{name}-common = %{common_ver}-%{release}
 
 This package contains the Algeti font family.
 
-%_font_pkg -n algeti -f %{fontconf}-algeti.conf BPG_Algeti*.ttf
+%_font_pkg -n algeti -f %{fontconf}-algeti.conf BPG_Algeti_GPL-GNU.ttf
 %{_datadir}/appdata/%{fontname}-algeti.metainfo.xml
 
 %package -n %{fontname}-chveulebrivi-fonts
@@ -598,6 +598,7 @@ mv "BPG 2017 DejaVuSerifCondensed.ttf" "BPG_DejaVu_SerifCondensed_2017_GPL-GNU.t
 mv "BPG 2017 DejaVuSerifCondensed-Bold.ttf" "BPG_DejaVu_SerifCondensed_Bold_2017_GPL-GNU.ttf"
 mv "BPG 2017 DejaVuSerifCondensed-BoldItalic.ttf" "BPG_DejaVu_SerifCondensed_BoldItalic_2017_GPL-GNU.ttf"
 mv "BPG 2017 DejaVuSerifCondensed-Italic.ttf" "BPG_DejaVu_SerifCondensed_Italic_2017_GPL-GNU.ttf"
+test -f 'BPG_Algeti_GPL&GNU.ttf' && mv -f 'BPG_Algeti_GPL&GNU.ttf' BPG_Algeti_GPL-GNU.ttf
 
 %build
 

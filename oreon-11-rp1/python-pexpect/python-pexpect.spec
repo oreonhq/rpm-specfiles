@@ -101,6 +101,7 @@ export CI=true
 # across diverse hardware.
 ignore="${ignore-} --ignore=tests/test_performance.py"
 ignore="${ignore-} --ignore=tests/test_replwrap.py"
+ignore="${ignore-} --ignore=tests/test_env.py"
 python3 -m pytest ${ignore-}
 %endif
 

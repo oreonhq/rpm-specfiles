@@ -25,6 +25,7 @@ Source12:       %{name}-constants.1
 
 # Patch the build so that it doesn't try to use bundled xml-commons source
 Patch:          %{name}-manifest.patch
+Patch:          %{name}-build.patch
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -89,8 +90,8 @@ sed -i 's/\r//' LICENSE README NOTICE
 # Disable javadoc linting
 sed -i -e "s|additionalparam='|additionalparam='-Xdoclint:none |" build.xml
 
-mkdir -p tools
-touch tools/xml-commons-external-src.zip
+sed -i '/src\.apis\.zip/d' build.xml
+sed -i '/<unzip src="${src.apis.zip}"/,/<\/unzip>/d' build.xml
 
 # legacy aliases for compatability
 %mvn_alias : xerces:xerces xerces:xmlParserAPIs apache:xerces-j2

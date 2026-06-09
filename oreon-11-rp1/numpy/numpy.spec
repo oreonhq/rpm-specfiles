@@ -72,6 +72,9 @@ BuildRequires:  lapack-devel
 BuildRequires:  libdivide-devel
 %endif
 BuildRequires:  ninja-build
+BuildRequires:  python3-meson-python
+BuildRequires:  python3-packaging
+BuildRequires:  python3-pyproject-rpm-macros
 %if %{with tests}
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-pytest

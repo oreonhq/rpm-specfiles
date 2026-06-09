@@ -36,10 +36,10 @@ fi
 test "%{source0_hash}" = "none" || { f="$_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 rm -rf patches
-%patch0 -p1 -b .build
-%patch1 -p1 -b .java11
-%patch2 -p1 -b .no_antcontrib
-%patch3 -p1 -b .no_commons_logging
+%patch 0 -p1 -b .build
+%patch 1 -p1 -b .java11
+%patch 2 -p1 -b .no_antcontrib
+%patch 3 -p1 -b .no_commons_logging
 find . -name "*.jar" -exec rm -f {} \;
 rm -r source/org/pentaho/reporting/libraries/fonts/itext
 mkdir -p lib

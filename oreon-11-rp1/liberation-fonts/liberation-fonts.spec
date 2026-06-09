@@ -107,7 +107,8 @@ mkfontdir %{buildroot}%{fontdir1}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname1} %{buildroot}%{catalogue}/%{fontpkgname1}
 install -m 0644 -p %{SOURCE3} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname1}.conf
 rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
-ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname1}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
+ln -sfn $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname1}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname1}.conf
 
 %fontinstall -z 2
 mkfontscale %{buildroot}%{fontdir2}
@@ -115,7 +116,8 @@ mkfontdir %{buildroot}%{fontdir2}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname2} %{buildroot}%{catalogue}/%{fontpkgname2}
 install -m 0644 -p %{SOURCE4} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname2}.conf
 rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
-ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname2}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
+ln -sfn $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname2}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname2}.conf
 
 %fontinstall -z 3
 mkfontscale %{buildroot}%{fontdir3}
@@ -123,7 +125,8 @@ mkfontdir %{buildroot}%{fontdir3}
 ln -sf $(realpath --relative-to=%{buildroot}%{catalogue} %{buildroot}%{_fontbasedir})/%{fontpkgname3} %{buildroot}%{catalogue}/%{fontpkgname3}
 install -m 0644 -p %{SOURCE2} %{buildroot}%{_fontconfig_templatedir}/59-%{fontpkgname3}.conf
 rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
-ln -sf $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname3}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
+rm -f %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
+ln -sfn $(realpath --relative-to=%{_fontconfig_confdir} %{_fontconfig_templatedir})/59-%{fontpkgname3}.conf %{buildroot}%{_fontconfig_confdir}/59-%{fontpkgname3}.conf
 
 
 %check

@@ -19,7 +19,11 @@ Source:        https://github.com/FFY00/python-pyproject-metadata/archive/0.11.0
 
 BuildArch:      noarch
 
+BuildRequires:  pyproject-rpm-macros
+
 BuildRequires:  %{py3_dist pytest}
+%generate_buildrequires -p
+
 %if %{with doc}
 BuildRequires:  python3-docs
 %endif
@@ -40,6 +44,8 @@ Summary:        PEP 621 metadata parsing
 %description -n python3-pyproject-metadata
 %_desc
 
+%generate_buildrequires -p
+
 %if %{with doc}
 %package        doc
 Summary:        Documentation for python3-pyproject-metadata
@@ -54,13 +60,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # No need to BuildRequire pytest-cov to run pytest
 sed -i /pytest-cov/d pyproject.toml
 
+%generate_buildrequires -p
+
 %if %{with doc}
 # Use local objects.inv for intersphinx
 sed -e 's|\("https://docs\.python\.org/3/", \)None|\1"%{_docdir}/python3-docs/html/objects.inv"|' \
     -i docs/conf.py
 %endif
 
-%build -a
+%build -p
+
 %if %{with doc}
 # Build the documentation
 export PYTHONPATH=$PWD
@@ -69,6 +78,8 @@ sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}
 %endif
 
+%install -a
+
 %check
 %if %{with check}
 python3 -m pytest -v
@@ -76,6 +87,8 @@ python3 -m pytest -v
 
 %files -n python3-pyproject-metadata -f %{pyproject_files}
 %doc docs/changelog.md README.md
+
+%generate_buildrequires -p
 
 %if %{with doc}
 %files doc

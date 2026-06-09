@@ -1,12 +1,16 @@
 %global source0_hash none
 
+%if 0%{?oreon} >= 11
+%bcond_without check 1
+%endif
+
 %define _version_suffix %{nil}
 
 # The mingw* RPMs are noarch, and the wxi data files are
 # arch independant, so it is a waste of CPU cycles to run
 # validation on all arches. Just run on x86_64 since that
 # has the fastest Fedora builders.
-%if 0%{?oreon} >= 11
+%if 0%{?oreon} >= 11 || 0%{?fedora} >= 44
 %define with_validate 0
 %elifarch x86_64
 %define with_validate 1

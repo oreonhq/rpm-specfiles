@@ -77,19 +77,17 @@ cryptographic smartcards.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-mkdir -p %{builddir}
-cd %{builddir}
-rpm2cpio %{SOURCE0} | cpio -idmv esc-1.1.2.tar.bz2 esc.png
-tar -xjf esc-1.1.2.tar.bz2
-cd %{escname}
+rpm2cpio %{SOURCE0} | cpio -idmu
+test -f esc-1.1.2.tar.bz2 || { echo "esc: missing esc-1.1.2.tar.bz2 in Source0 src.rpm" >&2; exit 1; }
+tar xjf esc-1.1.2.tar.bz2
+cd esc-1.1.2
 %autopatch -p1
 
 
 %build
 echo $RPM_BUILD_DIR
 
-echo "build section" $PWD
-cd esc 
+echo "build section" $PWD 
 
 autoreconf --force --install --verbose
 %configure --bindir %{escdir} --libdir %{escdir}/lib --datadir %{_datadir}
@@ -98,7 +96,6 @@ autoreconf --force --install --verbose
 
 %install
 echo "install section" $PWD
-cd esc
 %make_install
 
 mkdir -p %{buildroot}%{_bindir}

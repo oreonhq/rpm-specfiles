@@ -81,6 +81,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
+export CFLAGS="${CFLAGS} -fno-analyzer"
+export CXXFLAGS="${CXXFLAGS} -fno-analyzer"
 export lt_cv_to_host_file_cmd=func_convert_file_noop
 export lt_cv_to_tool_file_cmd=func_convert_file_noop
 %mingw_configure            \

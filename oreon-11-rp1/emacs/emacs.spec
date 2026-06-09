@@ -6,11 +6,7 @@
 %bcond_without gtkx11
 %bcond_without lucid
 %bcond_without nw
-%if 0%{?oreon} >= 11
 %global emacs_native_comp --without-native-compilation
-%else
-%global emacs_native_comp --with-native-compilation=aot
-%endif
 
 Summary:       GNU Emacs text editor
 Name:          emacs

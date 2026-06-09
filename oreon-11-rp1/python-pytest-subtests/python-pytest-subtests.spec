@@ -37,6 +37,9 @@ Summary:        %{summary}
 %{summary}.
 
 
+%prep
+%autosetup -n pytest-subtests-%{version} -p1
+
 %generate_buildrequires -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 

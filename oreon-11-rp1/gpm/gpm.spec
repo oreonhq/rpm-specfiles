@@ -17,7 +17,7 @@ URL: http://www.nico.schottelius.org/software/gpm/
 # 4.] rm -rf %%{name}-%%{version}/doc/specs
 # 5.] tar cJf %%{name}-%%{version}.tar.xz %%{name}-%%{version}
 
-Source0:        https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz#/gpm-1.20.7.tar.xz
+Source0:        https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz
 Source1:        gpm.service
 Patch0: https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 
@@ -28,7 +28,8 @@ Requires(post): info
 Requires(preun): info
 # this defines the library version that this package builds.
 %define LIBVER 2.1.0
-BuildRequires: sed gawk texinfo bison ncurses-devel autoconf automake libtool libcap-ng-devel
+BuildRequires: sed gawk texinfo bison ncurses-devel autoconf automake libtool libcap-ng-devel perl-Text-Unidecode
+BuildRequires: perl-interpreter perl-constant perl(File::Temp) perl(Data::Dumper) perl(Text::ParseWords)
 BuildRequires: systemd-rpm-macros
 BuildRequires: make
 Requires: linuxconsoletools

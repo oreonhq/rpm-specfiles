@@ -47,10 +47,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n eth-fast-fabric-%{version_no_tilde}
 
 %build
-export CFLAGS="$RPM_OPT_FLAGS -Wno-error=deprecated-openmp"
-export CXXFLAGS="$RPM_OPT_FLAGS -Wno-error=deprecated-openmp"
+export CFLAGS="$RPM_OPT_FLAGS -Wno-error=deprecated-openmp -Wno-deprecated"
+export CXXFLAGS="$RPM_OPT_FLAGS -Wno-error=deprecated-openmp -Wno-deprecated"
 cd OpenIb_Host
-OPA_FEATURE_SET=opa10 CLOCAL='%build_cflags' CCLOCAL='%build_cxxflags' LDLOCAL='%build_ldflags' ./ff_build.sh %{_builddir}
+OPA_FEATURE_SET=opa10 CLOCAL='%build_cflags -Wno-error=deprecated-openmp -Wno-deprecated' CCLOCAL='%build_cxxflags -Wno-error=deprecated-openmp -Wno-deprecated' LDLOCAL='%build_ldflags' ./ff_build.sh %{_builddir}
 
 %install
 cd eth-fast-fabric-%{version_no_tilde}

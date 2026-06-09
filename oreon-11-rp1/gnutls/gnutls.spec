@@ -1,5 +1,6 @@
 %global source0_hash a7b341421bfd459acf7a374ca4af3b9e06608dcd7bd792b2bf470bea012b8e51
 
+%global source2_hash a47ae67e65375cedf0e0af830db4f29b29365283c1c3661a47d3d67601b9eada
 %global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
 Version: 3.8.12
@@ -125,7 +126,7 @@ URL: http://www.gnutls.org/
 %define short_version %(echo %{version} | grep -m1 -o "[0-9]*\.[0-9]*" | head -1)
 Source0:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%{short_version}/%{name}-%{version}.tar.xz
 Source1:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%{short_version}/%{name}-%{version}.tar.xz.sig
-Source2:        gnutls-release-keyring.gpg
+Source2:        https://gnutls.org/gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1

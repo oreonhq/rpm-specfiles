@@ -30,7 +30,6 @@ export LANG=C.UTF-8
 preunzip -d *.cwl
 cat *.wl > manx.wordlist
 wordlist2hunspell manx.wordlist gv_GB
-cp -p gv_affix.dat gv_GB.aff
 
 %build
 

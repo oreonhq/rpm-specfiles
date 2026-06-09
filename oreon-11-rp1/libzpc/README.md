@@ -1,3 +1,0 @@
-# libzpc
-
-The libzpc package

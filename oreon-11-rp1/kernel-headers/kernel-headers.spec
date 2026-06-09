@@ -35,6 +35,7 @@ BuildRequires: tar
 BuildRequires: xz
 BuildRequires: make
 BuildRequires: gcc
+BuildRequires: rsync
 %if "0%{?variant}"
 Obsoletes: kernel-headers < %{specversion}-%{specrelease}
 Provides: kernel-headers = %{specversion}-%{specrelease}

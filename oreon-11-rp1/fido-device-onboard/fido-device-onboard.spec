@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source1_hash da813a7dc35427996fc716d218641cfb505c5507e342fd375752492bdba379c9
+%global source1_hash none
 
 %global dracutlibdir %{_prefix}/lib/dracut
 %bcond_without check
@@ -13,7 +13,6 @@ License:        BSD-3-Clause
 
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
 Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v%{version}.tar.gz#/fido-device-onboard-rs-%{version}.tar.gz
-Source1:        fido-device-onboard-rs-%{version}-vendor.tar.xz
 Patch1:        0001-use-released-aws-nitro-enclaves-cose-version.patch
 
 # Because nobody cares
@@ -45,7 +44,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-rs-%{version} -N
 %autopatch -p1
 rm -f Cargo.lock
-tar xf %{SOURCE1}
+cargo vendor
 find vendor/ -name '*.a' -delete
 %cargo_prep -v vendor
 %endif
