@@ -14,13 +14,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Find changed package directories
         id: find
         run: |
           pkgs=$(git diff --name-only \
               "${{ github.event.pull_request.base.sha }}" \
-              "${{ github.sha }}" \
+              "${{ github.event.pull_request.head.sha }}" \
             | grep '\.spec$' \
             | xargs -r -I{} dirname {} \
             | sort -u \
@@ -43,6 +44,8 @@ jobs:
     name: lint / ${{ matrix.arch.name }} / ${{ matrix.pkg }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Install tools
         run: dnf install -y --quiet rpmlint rpm-build
