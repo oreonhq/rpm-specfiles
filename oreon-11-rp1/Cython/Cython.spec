@@ -6,6 +6,8 @@
 %bcond tests 1
 %endif
 
+# test - ignore this comment
+
 # This bcond allows to ship a non-compiled version
 # Slower, but sometimes necessary with alpha Python versions
 %bcond cython_compile 1
