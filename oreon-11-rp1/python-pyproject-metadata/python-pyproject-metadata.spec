@@ -71,7 +71,7 @@ rm -rf html/{.buildinfo,.doctrees}
 
 %check
 %if %{with check}
-%pytest -v
+python3 -m pytest -v
 %endif
 
 %files -n python3-pyproject-metadata -f %{pyproject_files}

@@ -13,7 +13,7 @@ License: GFDL
 # or run Source1 generate-qt6-doc.sh and host the file yourself.
 %global qt_doc_tarball_sha512 fc6867d4a94e309c1b7ca4d167837833c342a55db6830e440f4a13ce21cc2a0edac9ed1f531959e963ccb10f4514aa27e9e5ffa360873d5f9203f6e5e3eaa8f6
 Url:     http://qt-project.org/
-Source0:        qt-doc-opensource-src-6.9.1.tar.xz
+Source0: https://tarballs.oreonhq.com/qt-doc-opensource-src-6.9.1.tar.xz
 Source1: generate-qt6-doc.sh
 Source2: qtbase-tell-the-truth-about-private-API.patch
 

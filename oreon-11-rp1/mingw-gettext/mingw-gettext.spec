@@ -1,10 +1,14 @@
 %global source0_hash none
 
+%ifarch aarch64
+%global mingw_build_win32 0
+%endif
+
 %{?mingw_package_header}
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   2%{?dist}
+Release:   3%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -77,14 +81,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
+export lt_cv_to_host_file_cmd=func_convert_file_noop
+export lt_cv_to_tool_file_cmd=func_convert_file_noop
 %mingw_configure            \
     --disable-java          \
     --disable-native-java   \
     --disable-csharp        \
+    --disable-shared        \
     --enable-static         \
     --enable-threads=win32  \
     --without-emacs         \
-    --disable-openmp
+    --disable-openmp        \
+    --disable-dependency-tracking
 %mingw_make_build
 
 

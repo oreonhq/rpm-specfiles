@@ -31,6 +31,7 @@ BuildArch:      noarch
 
 # for %%pyproject_buildrequires -p
 BuildRequires:  pyproject-rpm-macros >= 1.15.1
+BuildRequires:  python3-pytest
 
 %if %{with tests}
 BuildRequires:  cmake
@@ -111,7 +112,7 @@ k="${k-}${k+ and }not test_get_requires_for_build_wheel"
 k="${k-}${k+ and }not test_uneeded_rpath"
 %endif
 
-%pytest ${ignore-} -k "${k-}"
+python3 -m pytest ${ignore-} -k "${k-}"
 %endif
 
 

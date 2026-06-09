@@ -15,7 +15,7 @@ Source0: https://mirrors.kernel.org/gnu/aspell/dict/gv/aspell-gv-0.50-0.tar.bz2#
 URL: https://ftp.gnu.org/gnu/aspell/dict/gv
 License: GPL-1.0-or-later
 BuildArch: noarch
-BuildRequires: aspell hunspell-tools
+BuildRequires: aspell hunspell hunspell-devel
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-gv)

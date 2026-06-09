@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%{load:nodejs.srpm.macros}
+%{load:%{_sourcedir}/nodejs.srpm.macros}
 Name:           nodejs24
 Epoch:          1
 Version:        24.15.0
@@ -276,7 +276,7 @@ Conflicts:      alternative-for(nodejs-npm-bin)
 Binary symlinks for Node.js Package Manager.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n node-v%{node_version} -S git_am
 # clean the archive of the de-vendored dependencies, ensuring they are not used
 readonly -a devendored_paths=(

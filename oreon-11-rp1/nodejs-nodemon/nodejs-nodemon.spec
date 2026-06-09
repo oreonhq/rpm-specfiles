@@ -1,4 +1,5 @@
 %global source0_hash 6eb10e336e4e17838eaaabe1f4a02657bc846649d738a2902ac4edc1b2c70556
+%global source1_hash adede9430271d0fc6026e690dd69bd17c7d357cf069c950c7ef275a0e457b738
 
 %{?nodejs_find_provides_and_requires}
 %global npm_name nodemon
@@ -13,6 +14,7 @@ Summary:       Simple monitor script for use during development of a node.js app
 License:       ISC AND MIT
 URL:           https://github.com/remy/nodemon
 Source0:        https://github.com/remy/nodemon/archive/v%{version}.tar.gz#/%{npm_name}-v%{version}.tar.gz
+Source1:        nodemon-v%{version}-bundled.tar.gz
 
 
 BuildRequires: nodejs-devel
@@ -43,18 +45,10 @@ replacement wrapper for node, think of it as replacing the word "node"
 on the command line when you run your script.
 
 %prep
-_bundle="%{npm_name}-v%{version}-bundled.tar.gz"
-if test ! -f "$_bundle"; then
-  rm -rf _nm && mkdir _nm
-  curl -sfL -o _s.tar.gz "https://github.com/remy/nodemon/archive/v%{version}.tar.gz"
-  tar xf _s.tar.gz -C _nm --strip-components=1
-  ( cd _nm && npm install --omit=dev --ignore-scripts )
-  tar czf "$_bundle" -C _nm .
-  rm -rf _nm
-fi
-
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{npm_name}-%{version}
+tar xzf %{SOURCE1}
 %build
 
 # nothing to do

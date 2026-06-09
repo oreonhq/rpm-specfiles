@@ -33,6 +33,8 @@ Provides: glibc-kernheaders = 3.0-46
 BuildRequires: curl
 BuildRequires: tar
 BuildRequires: xz
+BuildRequires: make
+BuildRequires: gcc
 %if "0%{?variant}"
 Obsoletes: kernel-headers < %{specversion}-%{specrelease}
 Provides: kernel-headers = %{specversion}-%{specrelease}
@@ -62,52 +64,54 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 %install
-# List of architectures we support and want to copy their headers
-ARCH_LIST="arm arm64 loongarch powerpc riscv s390 x86"
+KDIR="linux-%{tarfile_release}"
+test -d "$KDIR" || { echo "missing $KDIR" >&2; exit 1; }
 
 ARCH=%_target_cpu
 case $ARCH in
 	armv7hl)
-		ARCH=arm
+		KARCH=arm
 		;;
 	aarch64)
-		ARCH=arm64
+		KARCH=arm64
 		;;
 	loongarch64*)
-		ARCH=loongarch
+		KARCH=loongarch
 		;;
 	ppc64*)
-		ARCH=powerpc
+		KARCH=powerpc
 		;;
 	riscv64)
-		ARCH=riscv
+		KARCH=riscv
 		;;
 	s390x)
-		ARCH=s390
+		KARCH=s390
 		;;
 	x86_64|i*86)
-		ARCH=x86
+		KARCH=x86
+		;;
+	*)
+		KARCH=$ARCH
 		;;
 esac
 
-cd arch-$ARCH/include
-mkdir -p $RPM_BUILD_ROOT%{_includedir}
-cp -a asm-generic $RPM_BUILD_ROOT%{_includedir}
+make -C "$KDIR" ARCH=$KARCH INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+find %{buildroot}/usr/include \
+	\( -name .install -o -name .check -o -name ..install.cmd -o -name ..check.cmd \) -delete
 
-# Copy all the architectures we care about to their respective asm directories
-for arch in $ARCH_LIST; do
-	mkdir -p $RPM_BUILD_ROOT%{_prefix}/${arch}-linux-gnu/include
-	cp -a asm-generic $RPM_BUILD_ROOT%{_prefix}/${arch}-linux-gnu/include/
+HDR_ARCH_LIST="arm arm64 loongarch powerpc riscv s390 x86"
+mkdir -p %{buildroot}/usr/tmp-headers
+for arch in $HDR_ARCH_LIST; do
+	mkdir -p %{buildroot}/usr/tmp-headers/arch-${arch}
+	make -C "$KDIR" ARCH=${arch} INSTALL_HDR_PATH=%{buildroot}/usr/tmp-headers/arch-${arch} headers_install
 done
-
-# Remove what we copied already
-rm -rf asm-generic
-
-# Copy the rest of the headers over
-cp -a * $RPM_BUILD_ROOT%{_includedir}/
-for arch in $ARCH_LIST; do
-cp -a * $RPM_BUILD_ROOT%{_prefix}/${arch}-linux-gnu/include/
+find %{buildroot}/usr/tmp-headers \
+	\( -name .install -o -name .check -o -name ..install.cmd -o -name ..check.cmd \) -delete
+for arch in $HDR_ARCH_LIST; do
+	mkdir -p %{buildroot}%{_prefix}/${arch}-linux-gnu/include
+	cp -a %{buildroot}/usr/tmp-headers/arch-${arch}/include/. %{buildroot}%{_prefix}/${arch}-linux-gnu/include/
 done
+rm -rf %{buildroot}/usr/tmp-headers
 
 %files
 %defattr(-,root,root)

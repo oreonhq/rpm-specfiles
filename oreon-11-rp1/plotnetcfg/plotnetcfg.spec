@@ -30,7 +30,7 @@ make %{?_smp_mflags} CFLAGS="%{optflags}"
 
 %install
 install -D -m 0755 plotnetcfg %{buildroot}%{_sbindir}/plotnetcfg
-install -D -m 0644 plotnetcfg.5 %{buildroot}%{_mandir}/man5/plotnetcfg.5
+install -D -m 0644 plotnetcfg-json.5 %{buildroot}%{_mandir}/man5/plotnetcfg-json.5
 install -D -m 0644 plotnetcfg.8 %{buildroot}%{_mandir}/man8/plotnetcfg.8
 
 %files

@@ -604,7 +604,11 @@ mv "BPG 2017 DejaVuSerifCondensed-Italic.ttf" "BPG_DejaVu_SerifCondensed_Italic_
 %install
 install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0644 -p *.ttf %{buildroot}%{_fontdir}
-install -m 0644 -p BPG_Classic_*.otf BPG_Irubaqidze*.otf BPG_Mikhail_Stephan*.otf BPG_Ucnobi*.otf %{buildroot}%{_fontdir}
+shopt -s nullglob
+otfs=(BPG_Classic_*.otf BPG_Irubaqidze*.otf BPG_Mikhail_Stephan*.otf BPG_Ucnobi*.otf)
+if ((${#otfs[@]})); then
+  install -m 0644 -p "${otfs[@]}" %{buildroot}%{_fontdir}
+fi
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} %{buildroot}%{_fontconfig_confdir}
 install -m 0644 -p %{SOURCE1} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-algeti.conf
 install -m 0644 -p %{SOURCE2} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-chveulebrivi.conf

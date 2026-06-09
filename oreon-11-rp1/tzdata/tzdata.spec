@@ -34,6 +34,7 @@ the world.
 
 %package java
 Summary: Timezone data for Java
+# openjdk hg snapshot repack, vendored next to spec
 Source3: javazic-1.8-37392f2f5d59.tar.xz
 Source4: ZoneTest.java
 Patch100: 8051641.patch

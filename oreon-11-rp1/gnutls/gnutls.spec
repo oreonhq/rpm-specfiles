@@ -3,7 +3,7 @@
 %global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
 Version: 3.8.12
-Release: %{?autorelease}%{!?autorelease:1%{?dist}}
+Release: 2%{?dist}
 
 # FIPS --with-fips140-module-version uses this. The old Lua macro ran cat on every
 # Source/Patch under %%_specdir at parse time, which breaks rpmspec and any prep
@@ -125,7 +125,7 @@ URL: http://www.gnutls.org/
 %define short_version %(echo %{version} | grep -m1 -o "[0-9]*\.[0-9]*" | head -1)
 Source0:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%{short_version}/%{name}-%{version}.tar.xz
 Source1:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%{short_version}/%{name}-%{version}.tar.xz.sig
-Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x5D46CB0F763405A7053556F47A75A648B3F9220C#/gnutls-release-keyring.gpg
+Source2:        gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1

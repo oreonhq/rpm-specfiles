@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 10c9730d32c92912a1123f3dfd378e190b04f5e94e95294ab792033f4825a9a3
 
 %define gettext_package redhat-menus
 
@@ -7,7 +7,7 @@ Name: redhat-menus
 Version: 12.0.2
 Release: %autorelease
 URL: http://www.redhat.com
-#FIXME-> There is no hosting website for this project.
+# no public upstream host, tarball vendored next to spec
 Source0: %{name}-%{version}.tar.gz
 License: GPL-1.0-or-later
 BuildArch: noarch

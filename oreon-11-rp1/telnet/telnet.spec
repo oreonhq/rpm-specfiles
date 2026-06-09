@@ -10,7 +10,7 @@ Release: 96%{?dist}
 Epoch: 1
 License: BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC
 Source0:        https://repository.timesys.com/buildsources/n/netkit-telnet/netkit-telnet-%{version}/netkit-telnet-%{version}.tar.gz
-# telnet-client tarball is snapshot of the OpenBSD client telnet
+# openbsd client telnet snapshot, vendored next to spec
 Source2:        telnet-client.tar.gz
 Source4: telnet.wmconfig
 Source5: telnet@.service

@@ -25,7 +25,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 install -d -m 0755 %{buildroot}%{_docdir}/%{name}
-install -m 0644 LICENSE %{buildroot}%{_docdir}/%{name}/
+if test -f LICENSE; then
+  install -m 0644 LICENSE %{buildroot}%{_docdir}/%{name}/
+elif test -f COPYING; then
+  install -m 0644 COPYING %{buildroot}%{_docdir}/%{name}/LICENSE
+else
+  install -m 0644 README %{buildroot}%{_docdir}/%{name}/LICENSE
+fi
 echo "Oreon compatibility package for gnulib-l10n translations." > README.oreon
 install -m 0644 README.oreon %{buildroot}%{_docdir}/%{name}/
 

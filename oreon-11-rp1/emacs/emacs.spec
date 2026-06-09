@@ -6,6 +6,11 @@
 %bcond_without gtkx11
 %bcond_without lucid
 %bcond_without nw
+%if 0%{?oreon} >= 11
+%global emacs_native_comp --without-native-compilation
+%else
+%global emacs_native_comp --with-native-compilation=aot
+%endif
 
 Summary:       GNU Emacs text editor
 Name:          emacs
@@ -366,7 +371,7 @@ cd build-lucid
            --with-harfbuzz \
            --with-jpeg \
            --with-modules \
-           --with-native-compilation=aot \
+           %{emacs_native_comp} \
            --with-png \
            --with-rsvg \
            --with-sqlite3 \
@@ -390,7 +395,7 @@ cd build-nw
            --disable-gc-mark-trace \
            --program-suffix=-nw \
            --with-modules \
-           --with-native-compilation=aot \
+           %{emacs_native_comp} \
            --with-sqlite3 \
            --with-tree-sitter \
 %if %{without gpm}
@@ -416,7 +421,7 @@ cd build-gtk+x11
            --with-harfbuzz \
            --with-jpeg \
            --with-modules \
-           --with-native-compilation=aot \
+           %{emacs_native_comp} \
            --with-png \
            --with-rsvg \
            --with-sqlite3 \
@@ -443,7 +448,7 @@ cd build-pgtk
            --with-harfbuzz \
            --with-jpeg \
            --with-modules \
-           --with-native-compilation=aot \
+           %{emacs_native_comp} \
            --with-pgtk \
            --with-png \
            --with-rsvg \

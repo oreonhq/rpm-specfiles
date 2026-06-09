@@ -20,7 +20,7 @@
 Name:		grub2
 Epoch:		1
 Version:	2.12
-Release:	57%{?dist}
+Release:	58%{?dist}
 Summary:	Bootloader with support for Linux, Multiboot and more
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
@@ -30,6 +30,7 @@ Source0:        https://mirrors.kernel.org/gnu/grub/grub-%{tarversion}.tar.xz
 Source1:        https://github.com/coreutils/gnulib/archive/9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz#/gnulib-9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz
 Source2:        99-grub-mkconfig.install
 Source3:	https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+Source4:        gitignore
 Source5:        bootstrap
 Source6:        bootstrap.conf
 Source7:        strtoull_test.c
@@ -449,6 +450,7 @@ This subpackage provides support for rebuilding your own grub-%{xen_pvh_grub_tar
 %global do_common_setup()					\
 %setup -q -n grub-%{tarversion}					\
 rm -fv docs/*.info						\
+cp %{SOURCE4} .gitignore					\
 cp %{SOURCE3} unifont.pcf.gz					\
 cp %{SOURCE5} bootstrap						\
 cp %{SOURCE6} bootstrap.conf					\
@@ -465,7 +467,8 @@ git config user.name "Oreon Packaging"				\
 git config gc.auto 0						\
 rm -f configure							\
 git add .							\
-git commit -a -q -m "%{tarversion} baseline."			\
+git add -f .gitignore						\
+git commit -q -m "%{tarversion} baseline."			\
 git am --whitespace=nowarn %%{patches} </dev/null		\
 rm -r build-aux m4						\
 ./bootstrap							\

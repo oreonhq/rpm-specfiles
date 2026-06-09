@@ -1,0 +1,11 @@
+--- a/src/plugins/multimedia/gstreamer/common/qgstpipeline_p.h
++++ b/src/plugins/multimedia/gstreamer/common/qgstpipeline_p.h
+@@ -31,7 +31,7 @@ class QGstPipeline : public QGstBin
+ public:
+     using QGstBin::QGstBin;
+ 
+-    constexpr QGstPipeline() = default;
++    QGstPipeline() = default;
+     ~QGstPipeline() = default;
+ 
+     static QGstPipeline createFromPipeline(GstPipeline *pipeline);

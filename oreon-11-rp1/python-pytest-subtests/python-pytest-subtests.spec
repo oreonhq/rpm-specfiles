@@ -47,7 +47,7 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
 %check -a
 %if %{with check}
-%pytest -rs -v tests
+python3 -m pytest -rs -v tests
 %endif
 
 

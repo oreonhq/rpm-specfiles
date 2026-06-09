@@ -14,12 +14,11 @@ Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
 Tested-by: Oskari Pirhonen <xxc3ncoredxx@gmail.com>
 ---
  grub-core/Makefile.core.def | 1 +
- .gitignore                  | 1 -
  conf/Makefile.common        | 1 +
  gentpl.py                   | 7 +++++++
  grub-core/Makefile.am       | 9 ++++++---
  grub-core/genmoddep.awk     | 2 +-
- 6 files changed, 16 insertions(+), 5 deletions(-)
+ 6 files changed, 15 insertions(+), 4 deletions(-)
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
 index c9dcfa00e85..a5a3ee31800 100644
@@ -33,18 +32,6 @@ index c9dcfa00e85..a5a3ee31800 100644
  };
  
  module = {
-diff --git a/.gitignore b/.gitignore
-index f2e8e1e42d7..c603c15d66c 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -11,7 +11,6 @@
- *.img
- *.log
- *.lst
--!/grub-core/extra_deps.lst
- *.marker
- *.mod
- *.o
 diff --git a/conf/Makefile.common b/conf/Makefile.common
 index c8756d8146f..9feac7434da 100644
 --- a/conf/Makefile.common

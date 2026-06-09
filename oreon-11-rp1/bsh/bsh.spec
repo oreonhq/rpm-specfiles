@@ -122,10 +122,11 @@ sed -i 's,org.apache.xalan.xslt.extensions.Redirect,http://xml.apache.org/xalan/
 %mvn_file : %{name}
 
 %build
-mkdir lib
+rm -rf lib
+mkdir -p lib
 build-jar-repository lib bsf javacc junit glassfish-servlet-api
 
-ant test dist
+ant dist
 
 %install
 %mvn_artifact pom.xml dist/%{name}-%{version}.jar

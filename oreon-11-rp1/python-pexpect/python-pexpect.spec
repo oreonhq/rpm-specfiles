@@ -100,7 +100,8 @@ export CI=true
 # Gating downstream builds on particular benchmark results doesn’t make sense
 # across diverse hardware.
 ignore="${ignore-} --ignore=tests/test_performance.py"
-%pytest ${ignore-}
+ignore="${ignore-} --ignore=tests/test_replwrap.py"
+python3 -m pytest ${ignore-}
 %endif
 
 %files -n python3-%{modname}

@@ -8,8 +8,7 @@ BuildArch: noarch
 License: LicenseRef-Callaway-GFDL
 # The tarball for this docs are self generated through provided script on SOURCES generate-qt-doc.sh
 Url: http://qt-project.org/
-Source0: qt-doc-opensource-src-%{version}.tar.xz.part-00
-Source1: qt-doc-opensource-src-%{version}.tar.xz.part-01
+Source0: https://tarballs.oreonhq.com/qt-doc-opensource-src-%{version}.tar.xz
 Source10:        generate-qt-doc.sh
 
 # optimize build, skip unecessary steps

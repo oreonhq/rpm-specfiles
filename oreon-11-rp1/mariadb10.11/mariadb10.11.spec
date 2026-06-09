@@ -188,7 +188,7 @@ Source12:        mariadb-prepare-db-dir.sh
 Source14:        mariadb-check-socket.sh
 Source15:        mariadb-scripts-common.sh
 Source16:        mariadb-check-upgrade.sh
-Source18:        mysql%40.service.in
+Source18:       mysql@.service.in
 Source50:        rh-skipped-tests-base.list
 Source51:        rh-skipped-tests-arm.list
 Source52:        rh-skipped-tests-s390.list

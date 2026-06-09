@@ -45,7 +45,7 @@ Url:            https://neovim.io
 
 Source0:        https://github.com/neovim/neovim/archive/refs/tags/v%{version}.tar.gz#/neovim-%{version}.tar.gz
 Source1:        sysinit.vim
-Source2:        template.spec
+Source2:        nvim-user-template.in
 # vendor built in %%prep via cmake.deps
 Source4:        neovim-bundled-licenses.txt
 
@@ -114,7 +114,7 @@ excisions, Neovim is Vim. It is built for users who want the good
 parts of Vim, without compromise, and more.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 vdir="%{name}-%{version}-vendor"
 mkdir -p _vbuild && pushd _vbuild

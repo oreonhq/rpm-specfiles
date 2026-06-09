@@ -77,10 +77,10 @@ cryptographic smartcards.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-cd %{_sourcedir}
-rpm2cpio %{SOURCE0} | cpio -id esc-1.1.2.tar.bz2 esc.png
+mkdir -p %{builddir}
 cd %{builddir}
-tar -xjf %{_sourcedir}/esc-1.1.2.tar.bz2
+rpm2cpio %{SOURCE0} | cpio -idmv esc-1.1.2.tar.bz2 esc.png
+tar -xjf esc-1.1.2.tar.bz2
 cd %{escname}
 %autopatch -p1
 

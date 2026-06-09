@@ -119,7 +119,7 @@ Source12:        mysql-prepare-db-dir.sh
 Source14:        mysql-check-socket.sh
 Source15:        mysql-scripts-common.sh
 Source17:        mysql-wait-stop.sh
-Source18:        mysql%40.service.in
+Source18:       mysql@.service.in
 # To track rpmlint warnings
 Source30:         %{name}.rpmlintrc
 # Configuration for server

@@ -1,5 +1,6 @@
 %global source0_hash e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628
 %global source1_hash 4220d4ddeb77fb57ba2f37c1aa105d561d3ef85a6fb89c79c3edd735d0e193c6
+%global source3_hash 0c34d5e11c972eb8565aa03290b0dc249d4b0fed504c154f9bce79fe87c8a9bc
 %global source4_hash 792e854b402e9e18ccfe6edef97fe86d2d95d24d75c405875d419526a6c114d4
 
 # This must remain enabled even for RHEL/ELN until all libdb dependencies
@@ -23,8 +24,7 @@ Source0:        http://download.oracle.com/berkeley-db/db-%{version}.tar.gz
 Source1: https://download.oracle.com/berkeley-db/db.1.85.tar.gz
 # For mt19937db.c
 Source2: https://www.gnu.org/licenses/lgpl-2.1.txt
-# Man pages from Fedora libdb SRPM (not in Oracle db tarball); kept next to spec for CI
-# e.g. libdb-5.3.28-67.fc44.src.rpm on dl.fedoraproject.org
+# manpages not in oracle tarball, vendored next to spec
 Source3: libdb-5.3.28-manpages.tar.gz
 Source4:        https://github.com/fila43/db_converter/archive/refs/tags/v1.0.3.tar.gz#/libdb-5.3.28.tar.gz
 Patch0: libdb-multiarch.patch
@@ -255,6 +255,7 @@ for building programs which use the Berkeley DB in SQL.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 %setup -q -n db-%{version} -a 1
 cp %{SOURCE2} .

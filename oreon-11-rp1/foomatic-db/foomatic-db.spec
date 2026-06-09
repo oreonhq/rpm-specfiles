@@ -137,8 +137,7 @@ popd
 find db/source/PPD -type f -name '*.ppd' -exec sed -i 's,perl -p,sed,g' {} +
 
 %build
-%configure
-make PREFIX=%{_prefix}
+make PREFIX=%{_prefix} %{?_smp_mflags}
 
 
 %install

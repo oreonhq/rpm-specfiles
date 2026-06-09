@@ -1,5 +1,5 @@
 %global source0_hash a58c57d95242a17cfe3adf40c764b15b1b1354ed689b684315c093e5b531538f
-%global source4_hash 1f6d6fdc096c2b2bdd7618b791cb0bbc677184de973426017db02253023ebefc
+%global source5_hash 415dc6290378574135b64c808dc640c1df7531973290c4970c51fdeb849cb0c5
 
 # SPDX-License-Identifier: MIT
 
@@ -28,7 +28,7 @@ BuildRequires:  cairo-devel
 BuildRequires:  make
 
 Version: 20250623
-Release: 4%{?dist}
+Release: 5%{?dist}
 URL:     https://github.com/googlefonts/noto-emoji
 
 %global foundry           Google
@@ -63,15 +63,8 @@ Provides:       google-noto-emoji-color-fonts = %{version}-%{release}
 This package provides the Google “Noto Color Emoji” colored emoji font.
 }
 
-%global fontfamily2       Noto Emoji VF
-%global fontsummary2      Google “Noto Emoji” Black-and-White emoji variable font
-%global fonts2            NotoEmoji-VariableFont_wght.ttf
-%global fontdescription2  %{expand:
-This package provides the Google “Noto Emoji” Black-and-White emoji variable font.
-}
-
 Source0:        https://github.com/googlefonts/noto-emoji/archive/%{commit0}.tar.gz#/noto-emoji-%{shortcommit0}.tar.gz
-Source4:        https://github.com/googlefonts/noto-emoji/archive/refs/heads/main.zip#/Noto_Emoji.zip
+Source5:        https://github.com/googlefonts/noto-emoji/raw/v2020-09-16-unicode13_1/fonts/NotoEmoji-Regular.ttf
 
 
 %fontpkg -a
@@ -79,12 +72,12 @@ Source4:        https://github.com/googlefonts/noto-emoji/archive/refs/heads/mai
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -a 4 -n noto-emoji-%{commit0}
+test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n noto-emoji-%{commit0}
 
 rm -rf third_party/pngquant
 
-cp -p static/NotoEmoji-Regular.ttf .
+cp -p %{SOURCE5} NotoEmoji-Regular.ttf
 
 %build
 

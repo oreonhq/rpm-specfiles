@@ -11,11 +11,11 @@ Summary: Azerbaijani hunspell dictionaries
 # date is derived from upstream az.dic file timestamp
 %global upstreamid 20180807
 Version: 0.%{upstreamid}
-Release: 8%{?dist}
+Release: 9%{?dist}
 URL: https://github.com/mozillaz/spellchecker/
 License: MPL-2.0
 BuildArch: noarch
-BuildRequires: aspell
+BuildRequires: aspell hunspell hunspell-devel
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-az)

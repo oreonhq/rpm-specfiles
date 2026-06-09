@@ -41,6 +41,7 @@ sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum
 
 
 %build
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} ..

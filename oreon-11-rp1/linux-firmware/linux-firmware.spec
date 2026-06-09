@@ -7,7 +7,7 @@
 
 Name:		linux-firmware
 Version:	20260519
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
 URL:		http://www.kernel.org/
@@ -589,6 +589,7 @@ end
 %{_firmwarepath}/mediatek/mt76*
 %{_firmwarepath}/mediatek/mt791*
 %{_firmwarepath}/mediatek/mt7925/
+%{_firmwarepath}/mediatek/mt7927/
 %{_firmwarepath}/mediatek/mt7996/
 %{_firmwarepath}/mediatek/BT*
 %{_firmwarepath}/mediatek/WIFI*

@@ -14,7 +14,6 @@ Summary:        Oreon %{relnum} default desktop background
 
 License:        CC-BY-SA-4.0
 URL:            https://oreonhq.com
-# Modified from Fedora f44-backgrounds 44.0.0; wallpaper assets are Oreon-branded (see README in tarball).
 Source0:        %{name}-%{version}.tar.xz
 
 BuildArch:      noarch

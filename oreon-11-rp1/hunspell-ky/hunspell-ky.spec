@@ -15,7 +15,7 @@ Source0: https://mirrors.kernel.org/gnu/aspell/dict/ky/aspell6-ky-0.01-0.tar.bz2
 URL: https://ftp.gnu.org/gnu/aspell/dict/ky
 License: GPL-2.0-or-later
 BuildArch: noarch
-BuildRequires: aspell hunspell-tools
+BuildRequires: aspell hunspell hunspell-devel
 
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ky)

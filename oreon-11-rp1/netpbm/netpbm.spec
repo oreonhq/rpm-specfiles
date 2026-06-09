@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f1cfcfab1846e63d7d6dab8b60edabdb66b1a5f34cacb98c6b9771a7e34ef153
 
 Summary:         A library for handling different graphics file formats
 Name:            netpbm
@@ -12,7 +12,7 @@ URL: http://netpbm.sourceforge.net/
 # svn checkout https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%%{version}/userguide
 # svn checkout https://svn.code.sf.net/p/netpbm/code/trunk/test netpbm-%%{version}/test
 # and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
-Source0:         https://svn.code.sf.net/p/netpbm/code/advanced#/netpbm-%{version}.tar.xz
+Source0:         netpbm-%{version}.tar.xz
 Patch1:        netpbm-security-code.patch
 Patch2:        netpbm-ppmfadeusage.patch
 Patch3:        netpbm-CVE-2017-2587.patch
@@ -90,16 +90,7 @@ If you need to look into the HTML documentation, you should install
 netpbm-doc.  You'll also need to install the netpbm-progs package.
 
 %prep
-_tar="netpbm-%{version}.tar.xz"
-if test ! -f "$_tar"; then
-  rm -rf netpbm-%{version}
-  svn export --force https://svn.code.sf.net/p/netpbm/code/advanced netpbm-%{version}
-  svn export --force https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%{version}/userguide
-  find netpbm-%{version} -name .svn -type d -prune -exec rm -rf {} +
-  tar cJf "$_tar" netpbm-%{version}
-  rm -rf netpbm-%{version}
-fi
-test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 rm -rf converter/other/jpeg2000/libjasper/
 rm -rf converter/other/jbig/libjbig/

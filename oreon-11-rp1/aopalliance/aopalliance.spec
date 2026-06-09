@@ -41,10 +41,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -c -n %{name}
 
 %build
-mkdir -p build/classes build/javadoc
+mkdir -p build/classes
 javac -source 1.8 -target 1.8 -d build/classes $(find org -name '*.java')
 jar cf build/%{name}.jar -C build/classes .
-javadoc -source 1.8 -Xdoclint:none -d build/javadoc $(find org -name '*.java')
 
 # Inject OSGi manifest required by Eclipse.
 %jar umf %{SOURCE2} build/%{name}.jar
@@ -53,7 +52,7 @@ javadoc -source 1.8 -Xdoclint:none -d build/javadoc $(find org -name '*.java')
 %mvn_file : %{name}
 %mvn_artifact %{SOURCE1} build/%{name}.jar
 
-%mvn_install -J build/javadoc
+%mvn_install
 
 %files -f .mfiles
 

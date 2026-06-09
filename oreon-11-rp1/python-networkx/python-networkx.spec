@@ -38,8 +38,6 @@ Source9:        https://www-personal.umich.edu/~mejn/netdata/football.zip
 # Examples that require packages not available from Fedora:
 # - osmnx requires osmnx
 # - plot_lines requires momepy
-Patch:          %{name}-intersphinx.patch
-
 BuildArch:      noarch
 %if %{with doctest}
 %endif
@@ -123,7 +121,7 @@ Documentation for networkx
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n networkx-networkx-%{version}
+%autosetup -n networkx-networkx-%{version}
 
 # Use local objects.inv for intersphinx
 sed -e 's|\("https://numpy.org/neps/", \)None|\1"%{SOURCE1}"|' \
@@ -149,6 +147,7 @@ sed -i 's/Helvetica/sans-serif/' examples/drawing/plot_chess_masters.py
 
 # Do not run code coverage tools
 sed -i '/pytest-cov/d' pyproject.toml requirements/test.txt
+sed -i '/intersphinx-registry/d' pyproject.toml requirements/doc.txt
 
 %build -a
 %if %{with doctest}

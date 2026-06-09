@@ -10,7 +10,7 @@ Name: hunspell-lb
 Summary: Luxembourgish hunspell dictionaries
 %global upstreamid 20121128
 Version: 0.%{upstreamid}
-Release: 28%{?dist}
+Release: 29%{?dist}
 URL: http://spellchecker.lu
 License: EUPL-1.1
 BuildArch: noarch
@@ -25,8 +25,8 @@ Luxembourgish hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -c -T -D -a 0
-unzip -q SpellcheckerLu.oxt
+%setup -q -c -T -D
+unzip -q %{SOURCE0}
 
 %build
 

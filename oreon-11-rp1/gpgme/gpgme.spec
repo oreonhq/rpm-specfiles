@@ -67,6 +67,7 @@ BuildRequires:  libassuan-devel >= 2.4.2
 
 # to remove RPATH
 BuildRequires:  chrpath
+BuildRequires:  python3-pip
 
 # For AutoReq cmake-filesystem
 BuildRequires:  cmake

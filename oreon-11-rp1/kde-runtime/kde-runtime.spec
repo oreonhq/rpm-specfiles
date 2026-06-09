@@ -72,8 +72,7 @@ Patch9:        kdebase-runtime-4.3.4-man-overrides.patch
 # revert the main part of:
 # http://commits.kde.org/kde-runtime/deee161a42efda74965ca4aab7d79fb7fb375352
 # (Upstream doesn't like this workaround.)
-Patch10:        kde-runtime-4.9.98-kde%23310486.patch
-
+Patch10:        kde-runtime-4.9.98-kde#310486.patch
 # disable making files read only when moving them into trash
 # (Upstream wouldn't accept this)
 Patch11:        kde-runtime-4.10.4-trash-readonly.patch

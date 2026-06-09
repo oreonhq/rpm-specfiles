@@ -80,6 +80,8 @@ Patch59:        kdm-settings-new_rundir.patch
 # kdmtheme's functionality is provided here
 
 BuildRequires: desktop-file-utils
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
 BuildRequires: kdelibs4-devel >= 4.14.4
 BuildRequires: kactivities-devel
 BuildRequires: libjpeg-devel
@@ -102,6 +104,9 @@ BuildRequires: pkgconfig(xcb-keysyms)
 BuildRequires: pkgconfig(xcb-renderutil)
 BuildRequires: pkgconfig(xdmcp)
 BuildRequires: pkgconfig(xres)
+
+BuildRequires: systemd-devel
+BuildRequires: pkgconfig(libsystemd)
 
 # For AutoReq cmake-filesystem
 BuildRequires: cmake
@@ -317,6 +322,10 @@ sed -i -e 's/add_subdirectory(kdm)/macro_optional_add_subdirectory(kdm)/' \
   libs/CMakeLists.txt \
   doc/CMakeLists.txt
 
+%if ! 0%{?kdm}
+sed -i '/add_subdirectory(kdm)/s/^/#/' CMakeLists.txt
+%endif
+
 # Disable all docs except for KDM and kcontrol
 for doc in klipper kfontview kmenuedit ksysguard plasma-desktop systemsettings kinfocenter PolicyKit-kde; do
     sed -i "/add_subdirectory($doc)/s/^/#/" doc/CMakeLists.txt
@@ -335,10 +344,20 @@ for kcm in randr keyboard bell input access screensaver dateandtime autostart la
     sed -i "/add_subdirectory( $kcm )/s/^/#/" kcontrol/CMakeLists.txt
 done
 
+mkdir -p .pyshim/distutils
+cat > .pyshim/distutils/__init__.py <<'EOF'
+EOF
+cat > .pyshim/distutils/sysconfig.py <<'EOF'
+from setuptools._distutils.sysconfig import *
+EOF
+
 
 %build
 # TODO: Please submit an issue to upstream (rhbz#2380675)
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
+
+_topdir=$(pwd)
+export PYTHONPATH="${_topdir}/.pyshim:${PYTHONPATH:-}"
 
 # workaround bug #1316964
 export CFLAGS="%{optflags} -Dinline=__inline__"

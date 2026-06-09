@@ -26,7 +26,7 @@ Summary:        LDAP back-end plug-in for BIND
 
 License:        GPL-2.0-or-later
 URL:            https://releases.pagure.org/bind-dyndb-ldap
-Source0:        bind-dyndb-ldap-%{VERSION}.tar.bz2
+Source0:        https://releases.pagure.org/bind-dyndb-ldap/bind-dyndb-ldap-%{VERSION}.tar.bz2
 # https://pagure.io/bind-dyndb-ldap/pull-request/244
 Patch1:         bind-dyndb-ldap-11.10-check-pr244.patch
 

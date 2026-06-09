@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source2_hash 0007ab31a22059bd1a83aa4a79a68e1d9ba257efbe1d29ea9d720b586c33137a
+%global source2_hash 3f60eb5ad847bb266ec7ee373086d24864f5558803a54a74fdabb64c88da7ba1
 
 Summary:   Fedora AppStream metadata
 Name:      appstream-data
@@ -8,6 +8,7 @@ Release:   %autorelease
 BuildArch: noarch
 License:   CC0-1.0 AND CC-BY-1.0 AND CC-BY-SA-1.0 AND GFDL-1.1-or-later
 URL:       https://github.com/hughsie/appstream-glib
+# appstream-builder output, icons vendored (no public mirror outside koji)
 Source1:        fedora-%{version}.xml.gz
 Source2:        fedora-%{version}-icons.tar.gz
 Source3:   gstreamer-non-free.xml

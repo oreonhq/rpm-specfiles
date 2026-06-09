@@ -99,10 +99,8 @@ rm -rf dict/dbfiles
 libtoolize && aclocal
 autoupdate
 autoreconf -i
-%if 0%{?fedora} >= 21 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 export CFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
 export CXXFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
-%endif
 %configure --enable-static=no --prefix=%{_datadir}/wordnet-%{version}/
 make %{?_smp_mflags}
 

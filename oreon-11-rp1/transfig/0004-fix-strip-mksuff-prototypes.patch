@@ -1,0 +1,13 @@
+--- a/transfig/transfig.c
++++ b/transfig/transfig.c
+@@ -34,8 +34,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-char *strip();
+-char *mksuff();
++char *strip(char *str, char *suf);
++char *mksuff(char *name, char *suff);
+ 
+ static char *prog;
+ static char *input = NULL;

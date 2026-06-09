@@ -85,7 +85,7 @@ Source14:          nginx-upgrade.8
 Source15:        macros.nginxmods.in
 Source16:        nginxmods.attr
 Source17:        nginx-ssl-pass-dialog
-Source18:        nginx%40.service
+Source18:       nginx@.service
 Source19:        nginx.sysusers
 Source20:        nginx.tmpfiles
 Source102:        nginx-logo.png

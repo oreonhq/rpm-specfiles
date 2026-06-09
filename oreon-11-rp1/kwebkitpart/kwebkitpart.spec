@@ -60,16 +60,8 @@ browsing the web in Konqueror.
 
 
 %prep
-_src="kwebkitpart-%{version}-%{snap}.tar.xz"
-if test ! -f "$_src"; then
-  curl -sfL -o _kw.tar.bz2 "https://invent.kde.org/network/kwebkitpart/-/archive/v%{version}/kwebkitpart-v%{version}.tar.bz2"
-  rm -rf _kw && mkdir _kw
-  tar xjf _kw.tar.bz2 -C _kw --strip-components=1
-  tar cJf "$_src" -C _kw .
-  rm -rf _kw _kw.tar.bz2
-fi
-test "%{source0_hash}" = "none" || { f="$_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n kwebkitpart-v%{version}
 
 
 %if 0

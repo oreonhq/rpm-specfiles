@@ -89,6 +89,9 @@ sed -i 's/\r//' LICENSE README NOTICE
 # Disable javadoc linting
 sed -i -e "s|additionalparam='|additionalparam='-Xdoclint:none |" build.xml
 
+mkdir -p tools
+touch tools/xml-commons-external-src.zip
+
 # legacy aliases for compatability
 %mvn_alias : xerces:xerces xerces:xmlParserAPIs apache:xerces-j2
 %mvn_file : %{name} jaxp_parser_impl

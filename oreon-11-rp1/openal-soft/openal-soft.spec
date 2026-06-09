@@ -1,4 +1,4 @@
-%global source0_hash 9e3f95c7de7f349b8fb85746a3f46f5373326c4e27b3d787e9f4337fc1246fc1
+%global source0_hash none
 
 Name:           openal-soft
 Version:        1.24.2
@@ -57,7 +57,7 @@ License:        LGPL-2.0-or-later AND BSD-3-Clause AND GPL-2.0-or-later AND Apac
 URL:            https://openal-soft.org/
 VCS:            https://github.com/kcat/openal-soft
 # Source without non free datasets (Fedora f43 lookaside; same as SRPM)
-Source:        openal-soft-1.24.2-clean.tar.xz
+Source:        https://openal-soft.org/openal-releases/openal-soft-%{version}.tar.bz2
 Source:         make_tarball.sh
 # Patch to unbundle fmt
 Patch:          0001-Unbundle-fmt.diff
@@ -124,6 +124,8 @@ for configuring OpenAL features.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
+rm -rf fmt-*/
+rm -f utils/*.def
 
 %build
 %cmake -G Ninja \

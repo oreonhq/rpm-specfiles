@@ -94,9 +94,9 @@ cd ..
 %ldconfig_scriptlets
 
 %files
-%doc AUTHORS
-%license BSD COPYING GPL LGPL
-%doc doc/ example/
+%doc mecab/AUTHORS
+%license mecab/BSD mecab/COPYING mecab/GPL mecab/LGPL
+%doc mecab/doc/ mecab/example/
 %{_mandir}/man1/%{name}.1*
 
 %config(noreplace) %{_sysconfdir}/mecabrc

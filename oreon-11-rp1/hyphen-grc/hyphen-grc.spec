@@ -24,6 +24,7 @@ Ancient Greek hyphenation rules.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -q -c -n hyphen-grc
 cp -p %{SOURCE0} hyph-grc.tex
+sed -i 's/(o>us\.\/>epij\.)/(o>us.>epij.)/' hyph-grc.tex
 %build
 grep -v "^%" hyph-grc.tex | tr ' ' '\n' > temp.tex
 substrings.pl temp.tex temp.dic UTF-8

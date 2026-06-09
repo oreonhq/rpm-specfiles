@@ -11,7 +11,6 @@
 *.img
 *.log
 *.lst
-!/grub-core/extra_deps.lst
 *.marker
 *.mod
 *.o
@@ -268,6 +267,7 @@ widthspec.bin
 /stamp-h1
 /syslinux_test
 /tar_test
+/test_asn1
 /test_sha512sum
 /test_unset
 /tests/syslinux/ubuntu10.04_grub.cfg

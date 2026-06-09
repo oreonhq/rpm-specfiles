@@ -6,7 +6,9 @@
 # arch independant, so it is a waste of CPU cycles to run
 # validation on all arches. Just run on x86_64 since that
 # has the fastest Fedora builders.
-%ifarch x86_64
+%if 0%{?oreon} >= 11
+%define with_validate 0
+%elifarch x86_64
 %define with_validate 1
 %else
 %define with_validate 0

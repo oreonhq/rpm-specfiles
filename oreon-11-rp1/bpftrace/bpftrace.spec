@@ -1,6 +1,6 @@
 %global source0_hash e0514aa3e1a032b0b2de2cf3c281bfee9b9e80509498e70ed78786bbd64db373
 
-%global llvm_compat 21
+%global llvm_compat 22
 
 Name:           bpftrace
 Version:        0.24.2

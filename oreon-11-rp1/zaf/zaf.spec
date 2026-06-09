@@ -47,7 +47,9 @@ if test ! -f "$_tar"; then
   tar cjf "$_tar" zaf
   rm -rf $_dict zaf
 fi
-%autosetup -n zaf
+rm -rf zaf
+tar xjf "$_tar"
+cd zaf
 
 %build
 

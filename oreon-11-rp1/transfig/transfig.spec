@@ -17,6 +17,7 @@ Source0:        https://downloads.sourceforge.net/project/mcj/fig2dev-%{version}
 
 Patch:        0002-Fix-invalid-value-passed-to-strchr.patch
 Patch:        0003-fix-putfig-prototype.patch
+Patch:        0004-fix-strip-mksuff-prototypes.patch
 
 Requires:       ghostscript
 Requires:       bc

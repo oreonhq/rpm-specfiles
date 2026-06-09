@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 97465bb83946dc3b502525724e3e0465ed0a214cd7553af9767ddacf9ec7a1e2
 
 Name: mythes-mi
 Summary: Maori thesaurus
 %global upstreamid 20080630
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: mythes-mi-0.1.20080630-beta.tar.gz
+Source0:        https://sourceforge.net/projects/mythes/files/mythes-mi/0.1/mythes-mi-0.1.20080630-beta.tar.gz/download#/mythes-mi-0.1.20080630-beta.tar.gz
 URL: http://papakupu.maori.nz/
 License: LicenseRef-Public-Domain
 BuildArch: noarch

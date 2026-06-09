@@ -817,7 +817,7 @@ end
 local function genfcconf(table)
     local extra = "\\\n"
     if table.fcconfexfile then
-        local f = io.open(table.fcconfexfile, "r")
+        local f = io.open(rpm.expand("%{_sourcedir}/") .. table.fcconfexfile, "r")
         if f then
             for line in f:lines() do
                 extra = extra .. line:gsub("\n$", ""):gsub("$", "\\\n")
@@ -843,7 +843,7 @@ local function genfcconf(table)
 </fontconfig>\
 ]]
     if table.fcconffile then
-        local f = io.open(table.fcconffile, "r")
+        local f = io.open(rpm.expand("%{_sourcedir}/") .. table.fcconffile, "r")
         if f then
             xml = ""
             for line in f:lines() do
@@ -1161,7 +1161,7 @@ rpm.define("notobuild_filelist " .. _filelistbuild .. "\n")
 } ## end of lua
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n noto-fonts-%{srcver}
 
 

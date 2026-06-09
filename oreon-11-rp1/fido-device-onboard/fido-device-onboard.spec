@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source1_hash da813a7dc35427996fc716d218641cfb505c5507e342fd375752492bdba379c9
 
 %global dracutlibdir %{_prefix}/lib/dracut
 %bcond_without check
@@ -6,19 +7,14 @@
 
 Name:           fido-device-onboard
 Version:        0.5.5
-Release:        8%{?dist}
+Release:        10%{?dist}
 Summary:        A rust implementation of the FIDO Device Onboard Specification
 License:        BSD-3-Clause
 
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
 Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v%{version}.tar.gz#/fido-device-onboard-rs-%{version}.tar.gz
+Source1:        fido-device-onboard-rs-%{version}-vendor.tar.xz
 Patch1:        0001-use-released-aws-nitro-enclaves-cose-version.patch
-
-# Patches >=1000 are only applied when using system Rust dependencies:
-# - Update nix dependency from 0.26 to 0.31
-#   https://github.com/fdo-rs/fido-device-onboard-rs/pull/803
-Patch1000:        fido-device-onboard-fix-metadata.diff
-Patch1001:        https://github.com/fdo-rs/fido-device-onboard-rs/pull/739.patch#/fido-libcryptsetup-rs-0.11.patch
 
 # Because nobody cares
 ExcludeArch: %{ix86}
@@ -44,15 +40,14 @@ BuildRequires:  libpq-devel
 %prep
 
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 %autosetup -n %{name}-rs-%{version} -N
-%autopatch -p1 -M999
+%autopatch -p1
 rm -f Cargo.lock
-%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
+tar xf %{SOURCE1}
+find vendor/ -name '*.a' -delete
 %cargo_prep -v vendor
-%else
-%cargo_prep -V 1
-%endif
 %endif
 
 %if 0%{?fedora} && !(0%{?oreon} >= 11)

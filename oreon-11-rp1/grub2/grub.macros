@@ -423,7 +423,8 @@ git config user.name "Oreon Packaging"				\
 git config gc.auto 0						\
 rm -f configure							\
 git add .							\
-git commit -a -q -m "%{tarversion} baseline."			\
+git add -f .gitignore						\
+git commit -q -m "%{tarversion} baseline."			\
 git am --whitespace=nowarn %%{patches} </dev/null		\
 rm -r build-aux m4						\
 ./bootstrap							\

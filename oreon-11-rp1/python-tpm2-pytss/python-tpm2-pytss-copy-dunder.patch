@@ -3,9 +3,6 @@ From: Erik Larsson <who+github@cnackers.org>
 Date: Sun, 18 May 2025 14:01:20 +0200
 Subject: [PATCH] cryptograpy: add copy dunder for private keys
 
-cryptography >= 45.0.0 requires the copy dunder for private key implementations.
-
-Signed-off-by: Erik Larsson <who+github@cnackers.org>
 ---
  src/tpm2_pytss/cryptography.py | 12 ++++++++++++
  test/test_cryptography.py      | 19 +++++++++++++++++++
@@ -20,7 +17,6 @@ index dd75623a..5b8432cc 100644
          raise NotImplementedError()
  
 +    def __copy__(self) -> "tpm_rsa_private_key":
-+        """Returns a shallow copy of the private key."""
 +        return tpm_rsa_private_key(
 +            ectx=self._ectx, handle=self._handle, session=self._session
 +        )
@@ -30,14 +26,12 @@ index dd75623a..5b8432cc 100644
 +
  
  class tpm_ecc_private_key(ec.EllipticCurvePrivateKey):
-     """Interface to a TPM ECC key for use with the cryptography module.
 @@ -428,3 +434,9 @@ def private_bytes(
      ) -> None:
          """Always raises a NotImplementedError."""
          raise NotImplementedError()
 +
 +    def __copy__(self) -> "tpm_ecc_private_key":
-+        """Returns a shallow copy of the private key."""
 +        return tpm_ecc_private_key(
 +            ectx=self._ectx, handle=self._handle, session=self._session
 +        )
@@ -67,7 +61,6 @@ index 3f81f6a6..3e4f30d4 100644
 +        )
 +        privkey = tpm_rsa_private_key(self.ectx, handle)
 +        privkey_copy = copy.copy(privkey)
-+
 +        self.assertEqual(privkey.key_size, privkey_copy.key_size)
 +
 +    def test_ecc_copy(self):
@@ -76,5 +69,4 @@ index 3f81f6a6..3e4f30d4 100644
 +        )
 +        privkey = tpm_ecc_private_key(self.ectx, handle)
 +        privkey_copy = copy.copy(privkey)
-+
 +        self.assertEqual(type(privkey.curve), type(privkey_copy.curve))

@@ -24,8 +24,7 @@ URL:        http://www.x.org
 # SPDX
 License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND AND HPND-sell-MIT-disclaimer-xserver AND HPND-sell-variant AND ICU AND ISC AND MIT AND MIT-open-group AND NTP AND SGI-B-2.0 AND SMLNJ AND X11 AND X11-distribute-modifications-variant
 
-Source0:        xorg-server-21.1.22.tar.xz
-
+Source0:        https://xorg.freedesktop.org/archive/individual/xserver/xorg-server-21.1.22.tar.xz
 Source10:        xserver.pamd
 # "useful" xvfb-run script
 Source20:   https://svn.exactcode.de/t2/trunk/package/xorg/xorg-server/xvfb-run.sh

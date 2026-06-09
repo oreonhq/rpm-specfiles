@@ -25,7 +25,7 @@ License: BSD-3-Clause AND GPL-2.0-or-later
 URL: http://www.linux-pam.org/
 Source0:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz
 Source1:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz.asc
-Source2:        pam-redhat-1.3.1.tar.xz
+Source2:        https://releases.pagure.org/pam-redhat/pam-redhat-1.3.1.tar.xz
 Source3: macros.%{name}
 Source5: other.pamd
 Source10: config-util.pamd

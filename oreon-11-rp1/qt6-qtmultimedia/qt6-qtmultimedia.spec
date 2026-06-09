@@ -36,6 +36,7 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 %endif
 
 Patch0:        qtmultimedia-fix-build-on-x86-arch.patch
+Patch1:        qtmultimedia-qgstpipeline-constexpr.patch
 
 # filter plugin/qml provides
 %global __provides_exclude_from ^(%{_qt6_archdatadir}/qml/.*\\.so|%{_qt6_plugindir}/.*\\.so)$

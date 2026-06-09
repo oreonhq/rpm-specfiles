@@ -13,7 +13,7 @@
 Name:    kactivities
 Summary: API for using and interacting with Activities 
 Version: 4.13.3
-Release: 45%{?dist}
+Release: 46%{?dist}
 
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
@@ -101,12 +101,13 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q 
-sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
-sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
+%setup -q
+grep -q '^cmake_minimum_required' CMakeLists.txt || sed -i '1i cmake_minimum_required(VERSION 3.5)' CMakeLists.txt
+sed -i 's/cmake_minimum_required(VERSION [^)]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt
 
 
 %build
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} ..
