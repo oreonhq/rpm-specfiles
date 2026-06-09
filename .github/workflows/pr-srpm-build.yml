@@ -57,7 +57,7 @@ jobs:
         run: |
           spec=$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)
           cp "$spec" ~/rpmbuild/SPECS/
-          find "${{ matrix.pkg }}" -type f ! -name '*.spec' | xargs -r cp -t ~/rpmbuild/SOURCES/
+          find "${{ matrix.pkg }}" -maxdepth 1 -type f ! -name '*.spec' | xargs -r cp -t ~/rpmbuild/SOURCES/
 
       - name: Fetch remote sources
         run: |

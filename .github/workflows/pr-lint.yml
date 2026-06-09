@@ -53,7 +53,7 @@ jobs:
       - name: rpmlint
         run: |
           spec=$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)
-          rpmlint --define "dist .oreon11" "$spec"
+          rpmlint "$spec"
 
       - name: rpmspec parse
         run: |
