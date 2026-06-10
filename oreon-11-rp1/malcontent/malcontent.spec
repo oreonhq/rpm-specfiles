@@ -1,6 +1,6 @@
 %global source0_hash 951c2732106254b2f4d22c06061d1a813d8b6310a045afc638c1e1a0c97e4e69
 %global source1_hash 32673cfe72e0527b086af92a288add310166f7363a118191f64059e22d45dd0a
-%global source2_hash none
+%global source2_hash 14f082f122eb4e495e2ac96f235efb01525ae5d4a1f0fd98148b4f7c7f95ccd2
 %global source3_hash 469de2d445bf54880f652f4b6dc95c7cdf6f5502c35524a45b2122d70d47ebc2
 
 %global tarball_version %(echo %{version} | tr '~' '.')
@@ -13,7 +13,7 @@ License:        LGPL-2.1-only AND CC-BY-3.0
 URL:            https://gitlab.freedesktop.org/pwithnall/malcontent/
 Source0:        https://tecnocode.co.uk/downloads/malcontent/malcontent-%{tarball_version}.tar.xz
 Source1:        https://gitlab.gnome.org/pwithnall/libgsystemservice/-/archive/0.3.0/libgsystemservice-0.3.0.tar.bz2
-Source2:        https://gitlab.gnome.org/GNOME/gvdb/-/archive/c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab/gvdb-c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab.tar.xz
+Source2:        https://github.com/GNOME/gvdb/archive/c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab.tar.gz
 Source3:        http://www.corpit.ru/mjt/tinycdb/tinycdb-0.81.tar.gz
 
 BuildRequires:  gettext
