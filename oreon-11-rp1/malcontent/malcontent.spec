@@ -1,6 +1,6 @@
 %global source0_hash 951c2732106254b2f4d22c06061d1a813d8b6310a045afc638c1e1a0c97e4e69
 %global source1_hash 32673cfe72e0527b086af92a288add310166f7363a118191f64059e22d45dd0a
-%global source2_hash 262a6ba43bef3314a792f4581a4afffd3a7a88a0f25c2f0baaa8e423afd67ad9
+%global source2_hash none
 %global source3_hash 469de2d445bf54880f652f4b6dc95c7cdf6f5502c35524a45b2122d70d47ebc2
 
 %global tarball_version %(echo %{version} | tr '~' '.')
