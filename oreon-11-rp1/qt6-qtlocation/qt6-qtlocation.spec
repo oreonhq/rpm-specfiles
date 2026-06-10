@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Location Libraries
 Name:    qt6-%{qt_module}
-Version: 6.10.3
+Version: 6.11.1
 Release: 2%{?dist}
 
 # Rest of the licenses are for Qt code in src/location and src/plugins

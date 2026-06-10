@@ -11,7 +11,7 @@
 
 Summary: Qt6 - HTTP Server component
 Name:    qt6-%{qt_module}
-Version: 6.10.3
+Version: 6.11.1
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND GFDL-1.3-no-invariants-only AND GPL-3.0-only WITH Qt-GPL-exception-1.0

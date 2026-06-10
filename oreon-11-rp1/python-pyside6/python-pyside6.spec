@@ -13,10 +13,10 @@
 
 %global pypi_name pyside6
 %global camel_name PySide6
-%global qt6ver 6.10.3
+%global qt6ver 6.11.1
 
 Name:           python-%{pypi_name}
-Version:        6.10.3
+Version:        6.11.1
 Release:        17%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 

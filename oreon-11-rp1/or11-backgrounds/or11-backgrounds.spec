@@ -69,6 +69,7 @@ Summary:        Oreon %{relnum} default wallpaper for KDE
 Requires:       %{name}-base = %{version}-%{release}
 Requires:       kde-filesystem
 Provides:       f44-backgrounds-kde = %{version}-%{release}
+Provides:       system-backgrounds-kde = %{version}-%{release}
 
 %description    kde
 This package contains KDE desktop wallpaper for the Oreon %{relnum} default theme.

@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Connectivity components
 Name:    qt6-%{qt_module}
-Version: 6.10.3
+Version: 6.11.1
 Release: 1%{?dist}
 
 # See LICENSE.GPL3, respectively, for exception details
