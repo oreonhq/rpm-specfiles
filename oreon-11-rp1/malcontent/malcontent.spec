@@ -1,6 +1,6 @@
 %global source0_hash 951c2732106254b2f4d22c06061d1a813d8b6310a045afc638c1e1a0c97e4e69
 %global source1_hash 32673cfe72e0527b086af92a288add310166f7363a118191f64059e22d45dd0a
-%global source2_hash 82783521aef4fcfbe31fb0aaea1a01dc7256665d404d7a650d7a9d1be043fdb2
+%global source2_hash 262a6ba43bef3314a792f4581a4afffd3a7a88a0f25c2f0baaa8e423afd67ad9
 %global source3_hash 469de2d445bf54880f652f4b6dc95c7cdf6f5502c35524a45b2122d70d47ebc2
 
 %global tarball_version %(echo %{version} | tr '~' '.')
@@ -13,7 +13,7 @@ License:        LGPL-2.1-only AND CC-BY-3.0
 URL:            https://gitlab.freedesktop.org/pwithnall/malcontent/
 Source0:        https://tecnocode.co.uk/downloads/malcontent/malcontent-%{tarball_version}.tar.xz
 Source1:        https://gitlab.gnome.org/pwithnall/libgsystemservice/-/archive/0.3.0/libgsystemservice-0.3.0.tar.bz2
-Source2:        https://gitlab.gnome.org/GNOME/gvdb/-/archive/main/gvdb-main.tar.xz
+Source2:        https://gitlab.gnome.org/GNOME/gvdb/-/archive/c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab/gvdb-c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab.tar.xz
 Source3:        http://www.corpit.ru/mjt/tinycdb/tinycdb-0.81.tar.gz
 
 BuildRequires:  gettext
@@ -211,5 +211,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.freed
 %{_docdir}/libmalcontent-ui-1
 
 %changelog
-* Mon Jun 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14.0-1
+* Tue Jun 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14.0-1
 - import for oreon 11 iso
