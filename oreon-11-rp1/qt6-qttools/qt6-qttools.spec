@@ -162,6 +162,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 %cmake_install
 
+rm -rf %{buildroot}%{_qt6_libdir}/objects-RelWithDebInfo
+rm -rf %{buildroot}%{_qt6_archdatadir}/objects-RelWithDebInfo
+
 # Add desktop files, --vendor=... helps avoid possible conflicts with qt3/qt4
 desktop-file-install \
   --dir=%{buildroot}%{_datadir}/applications \
