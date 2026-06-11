@@ -191,8 +191,8 @@ mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt6_bindir}
 for i in * ; do
   case "${i}" in
-   assistant|designer|lconvert|linguist|lrelease|lupdate|pixeltool| \
-   qcollectiongenerator|qdbus|qdbusviewer|qhelpconverter|qhelpgenerator| \
+   assistant|designer|lcheck|lconvert|linguist|lrelease|lrelease-pro|ltext2id|lupdate|lupdate-pro|pixeltool| \
+   qdbus|qdbusviewer| \
    qtplugininfo|qdistancefieldgenerator|qdoc|qtdiag)
       ln -v  ${i} %{buildroot}%{_bindir}/${i}-qt6
       ln -sv ${i} ${i}-qt6
@@ -284,15 +284,16 @@ popd
 %{_datadir}/applications/*linguist.desktop
 %{_datadir}/icons/hicolor/*/apps/linguist*.*
 # linguist friends
+%{_bindir}/lcheck*
 %{_bindir}/lconvert*
 %{_bindir}/lrelease*
+%{_bindir}/ltext2id*
 %{_bindir}/lupdate*
+%{_qt6_bindir}/lcheck*
 %{_qt6_bindir}/lconvert*
 %{_qt6_bindir}/lrelease*
+%{_qt6_bindir}/ltext2id*
 %{_qt6_bindir}/lupdate*
-%{_qt6_libexecdir}/lprodump*
-%{_qt6_libexecdir}/lrelease*
-%{_qt6_libexecdir}/lupdate*
 %if 0%{?metainfo}
 %{_metainfodir}/io.qt.Linguist.metainfo.xml
 %endif
@@ -331,7 +332,6 @@ popd
 %dir %{_qt6_libdir}/cmake/Qt6Help/
 %dir %{_qt6_libdir}/cmake/Qt6HelpPrivate
 %dir %{_qt6_libdir}/cmake/Qt6Linguist
-%dir %{_qt6_libdir}/cmake/Qt6LinguistTools
 %dir %{_qt6_libdir}/cmake/Qt6LinguistTools
 %dir %{_qt6_libdir}/cmake/Qt6QDocCatchConversionsPrivate
 %dir %{_qt6_libdir}/cmake/Qt6QDocCatchGeneratorsPrivate
