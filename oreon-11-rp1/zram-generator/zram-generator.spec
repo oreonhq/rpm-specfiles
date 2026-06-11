@@ -76,5 +76,5 @@ export SYSTEMD_UTIL_DIR=%{_systemd_util_dir}
 %{buildroot}%{_systemdgeneratordir}/zram-generator --help | grep -q %{_systemd_util_dir}/systemd-makefs
 
 %changelog
-* Mon Jun 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.1-1
+* Wed Jun 10 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.1-1
 - import for oreon 11 iso

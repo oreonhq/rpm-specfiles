@@ -112,5 +112,5 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/kmscon/mod-gltex.so
 
 %changelog
-* Mon Jun 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.3.5-1
+* Wed Jun 10 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.3.5-1
 - import for oreon 11 iso
