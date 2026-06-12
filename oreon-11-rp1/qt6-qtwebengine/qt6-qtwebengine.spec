@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source20_hash 9edd49145a7e92981a5e1def0b8defe74b8144c88eb2ea4aab59a72b658c327f
+%global source20_hash 809668ffc296043779c984f53461c2b3987a45b7a25eb2f0a1d11d9f23ba4055
 
 %global qt_module qtwebengine
 
