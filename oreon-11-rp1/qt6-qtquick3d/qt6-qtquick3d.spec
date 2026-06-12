@@ -9,27 +9,15 @@
 
 %global examples 1
 
-# Always bundle assimp and OpenXR. Oreon mock often defines %%{?fedora} without
-# %%{?oreon}, which flipped these back to system libs and made qt6-qtquick3d
-# require libassimp.so / libopenxr_loader.so even though we never want that
-# closure on the ISO (see anaconda-dnf-problems.log).
-%global system_assimp 0
-%global system_openxr 0
-%if %{system_assimp}
-%global _qt_feat_system_assimp ON
-%else
-%global _qt_feat_system_assimp OFF
-%endif
-%if %{system_openxr}
-%global _qt_feat_system_openxr ON
-%else
-%global _qt_feat_system_openxr OFF
+%if 0%{?fedora} || (0%{?oreon} >= 11)
+%global system_assimp 1
+%global system_openxr 1
 %endif
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.11.1
-Release: 8%{?dist}
+Release: 9%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -37,14 +25,11 @@ Url:     http://www.qt.io
 %global  qt_version %(echo %{version} | cut -d~ -f1)
 
 %if 0%{?unstable}
+Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
-Patch0:        qtquick3d-fix-build-with-gcc11.patch
-# Shipped in every SRPM so %%{?fedora} >= 43 and Oreon builds always have the file
-# Applied in %%prep only when using system assimp (Fedora 43+ or %%{?oreon})
-# From https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-quick3d
-Patch1:  qtquick3d-fix-build-with-assimp6.patch
+Patch0:  qtquick3d-fix-build-with-gcc11.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -90,18 +75,14 @@ Requires: qt6-qtdeclarative-devel%{?_isa}
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtquick3d-devel (same version as this package)
+# BuildRequires: qt6-qtquick3d-devel >= %{version}
 %description examples
 %{summary}.
 %endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}}
-%patch -P 0 -p1
-%if 0%{?system_assimp}
-%patch -P 1 -p1
-%endif
+%autosetup -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}} -p1
 
 
 %build
@@ -124,8 +105,8 @@ CXXFLAGS="$CXXFLAGS -mno-avx"
   -DCMAKE_SKIP_PRECOMPILE_HEADERS=ON \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF} \
-  -DFEATURE_system_assimp=%{_qt_feat_system_assimp} \
-  -DFEATURE_system_openxr=%{_qt_feat_system_openxr}
+  -DFEATURE_system_assimp=%{?system_assimp:ON}%{!?system_assimp:OFF} \
+  -DFEATURE_system_openxr=%{?system_openxr:ON}%{!?system_openxr:OFF}
 
 %cmake_build
 
@@ -133,12 +114,12 @@ CXXFLAGS="$CXXFLAGS -mno-avx"
 %install
 %cmake_install
 
-# hardlink files to %%{_bindir}, add -qt6 postfix to not conflict
+# hardlink files to %{_bindir}, add -qt6 postfix to not conflict
 mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt6_bindir}
 for i in * ; do
   case "${i}" in
-    balsam|meshdebug|shadergen|balsamui|instancer|materialeditor|shapegen|lightmapviewer)
+    balsam|meshdebug|shadergen|balsamui|instancer|materialeditor|shapegen|lightmapviewer|particleshadergen)
       ln -v  ${i} %{buildroot}%{_bindir}/${i}-qt6
       ;;
     *)
@@ -175,7 +156,7 @@ popd
 %{_qt6_libdir}/libQt6Quick3DAssetUtils.so.6*
 %{_qt6_libdir}/libQt6Quick3DEffects.so.6*
 %{_qt6_libdir}/libQt6Quick3DHelpers.so.6*
-%{_qt6_libdir}/libQt6Quick3DHelpersImpl.so*
+%{_qt6_libdir}/libQt6Quick3DHelpersImpl.so.6{,.*}
 %{_qt6_libdir}/libQt6Quick3DParticleEffects.so.6*
 %{_qt6_libdir}/libQt6Quick3DGlslParser.so.6*
 %{_qt6_libdir}/libQt6Quick3DXr.so.6*
@@ -193,6 +174,7 @@ popd
 %{_bindir}/materialeditor-qt6
 %{_bindir}/shapegen-qt6
 %{_bindir}/lightmapviewer-qt6
+%{_bindir}/particleshadergen-qt6
 %{_qt6_bindir}/balsam
 %{_qt6_bindir}/meshdebug
 %{_qt6_bindir}/shadergen
@@ -201,6 +183,7 @@ popd
 %{_qt6_bindir}/materialeditor
 %{_qt6_bindir}/shapegen
 %{_qt6_bindir}/lightmapviewer
+%{_qt6_bindir}/particleshadergen
 %{_qt6_archdatadir}/mkspecs/modules/*.pri
 %{_qt6_libdir}/qt6/modules/*.json
 %{_qt6_includedir}/QtQuick3D
@@ -216,7 +199,6 @@ popd
 %{_qt6_includedir}/QtQuick3DXr
 %ifarch x86_64 aarch64
 %dir %{_qt6_libdir}/cmake/Qt6BundledEmbree/
-%{_qt6_libdir}/cmake/Qt6/FindWrapBundledEmbreeConfigExtra.cmake
 %{_qt6_libdir}/cmake/Qt6BundledEmbree/*.cmake
 %endif
 %if !0%{?system_openxr}
@@ -248,7 +230,6 @@ popd
 %dir %{_qt6_libdir}/cmake/Qt6Quick3DXr/
 %dir %{_qt6_libdir}/cmake/Qt6Quick3DXrPrivate
 %{_qt6_libdir}/cmake/Qt6/*.cmake
-%{_qt6_libdir}/cmake/Qt6/FindWrapQuick3DAssimp.cmake
 %{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/*.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/*.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
