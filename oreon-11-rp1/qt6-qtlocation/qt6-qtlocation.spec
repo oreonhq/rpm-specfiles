@@ -25,9 +25,6 @@ Url:     http://www.qt.io
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
-# Upstream patches
-Patch0:  qtlocation-search-for-public-quickshapes-target-instead-of-private.patch
-
 # filter plugin/qml provides
 %global __provides_exclude_from ^(%{_qt6_archdatadir}/qml/.*\\.so|%{_qt6_plugindir}/.*\\.so)$
 
