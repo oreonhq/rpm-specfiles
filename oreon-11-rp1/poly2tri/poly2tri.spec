@@ -2,7 +2,7 @@
 
 Name:           poly2tri
 Version:        0.0^20260314gitmaster
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A 2D constrained Delaunay triangulation library
 License:        BSD-3-Clause
 URL:            https://github.com/jhasse/poly2tri
@@ -27,18 +27,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n poly2tri-master
 
 %build
-%cmake -DBUILD_TESTING=OFF
+%cmake -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
 %cmake_build
 
 %install
-%cmake_install
+install -Dpm0755 %{_vpath_builddir}/libpoly2tri.so %{buildroot}%{_libdir}/libpoly2tri.so.1.0
+ln -s libpoly2tri.so.1.0 %{buildroot}%{_libdir}/libpoly2tri.so.1
+ln -s libpoly2tri.so.1.0 %{buildroot}%{_libdir}/libpoly2tri.so
+for H in poly2tri/*/*.h poly2tri/*.h; do
+  install -Dpm0644 "$H" %{buildroot}%{_includedir}/"$H"
+done
 
 %files
+%license LICENSE
+%doc README.md
 %{_libdir}/libpoly2tri.so.1.0
 %{_libdir}/libpoly2tri.so.1
 
 %files devel
 %{_includedir}/poly2tri/
 %{_libdir}/libpoly2tri.so
-%{_libdir}/libpoly2tri.so.1.0
-%{_libdir}/pkgconfig/poly2tri.pc
