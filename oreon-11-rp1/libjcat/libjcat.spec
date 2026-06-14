@@ -1,11 +1,11 @@
-%global source0_hash 066e402168c51bffddcf325190e5901402b266fbda2a4eed772fd06a88b941bf
+%global source0_hash d54ad936ceb654e99f59b0227e4d1974b858970d250d98c6484abcfdc8334722
 
 %global glib2_version 2.45.8
 %global json_glib_version 1.1.1
 
 Summary:   Library for reading Jcat files
 Name:      libjcat
-Version:   0.2.5
+Version:   0.2.6
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}

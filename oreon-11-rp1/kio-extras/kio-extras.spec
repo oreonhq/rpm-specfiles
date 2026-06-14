@@ -5,7 +5,7 @@
 
 Name:    kio-extras
 Version: 26.03.80
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -57,6 +57,7 @@ BuildRequires:  libjpeg-devel
 BuildRequires:  libmtp-devel
 BuildRequires:  libsmbclient-devel
 BuildRequires:  libssh-devel
+BuildRequires:  openexr-devel >= 3.3
 BuildRequires:  cmake(OpenEXR)
 BuildRequires:  perl-generators
 BuildRequires:  phonon-qt6-devel
