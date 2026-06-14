@@ -42,6 +42,8 @@ jobs:
           - { runner: ubuntu-latest, name: amd64 }
           - { runner: ubuntu-24.04-arm, name: aarch64 }
     name: lint / ${{ matrix.arch.name }} / ${{ matrix.pkg }}
+    env:
+      LC_ALL: C.UTF-8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,7 +78,7 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: |
           spec=$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)
-          rpmlint "$spec"
+          rpmlint -c .github/rpmlint-ci.toml "$spec"
 
       - name: rpmspec parse
         if: steps.check.outputs.skip != 'true'
