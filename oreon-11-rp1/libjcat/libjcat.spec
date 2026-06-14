@@ -6,10 +6,12 @@
 Summary:   Library for reading Jcat files
 Name:      libjcat
 Version:   0.2.6
-Release:   %autorelease
+Release:   1%{?dist}
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
 Source0:        https://github.com/hughsie/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+
+Patch0:         skip-pq-test-when-crypto-policy-blocks.patch
 
 BuildRequires: gtk-doc
 BuildRequires: meson
@@ -48,7 +50,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p0
 
 %build
-
 %meson \
     -Dgtkdoc=true \
     -Dtests=true
@@ -90,6 +91,3 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/installed-tests/libjcat/*
 %dir %{_datadir}/installed-tests/libjcat
 
-%changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.5-1
-- Prepare for Oreon 11 (RP1)
