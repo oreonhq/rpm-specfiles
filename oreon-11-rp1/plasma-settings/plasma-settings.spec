@@ -1,15 +1,12 @@
 %global source0_hash 45a8a8d5eb22fa76263c06acea026a21c222ac853ca666c1a34a982d5c7bb47d
 
-%global stable_kf6 stable
-
-
 Name:           plasma-settings
 Version: 26.03.80
 Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application
 Url:            https://invent.kde.org/plasma-mobile/plasma-settings
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/plasma-mobile/plasma-settings/-/archive/v%{version}/plasma-settings-v%{version}.tar.gz#/plasma-settings-%{version}.tar.gz
 
 BuildRequires:  appstream
 BuildRequires:  cmake
