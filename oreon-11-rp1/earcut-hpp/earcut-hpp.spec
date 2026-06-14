@@ -1,131 +1,59 @@
-Name:           earcut-hpp
-Summary:        Fast, header-only polygon triangulation 
-Version:        2.2.4
-Release:        %autorelease
+%global source0_hash fcfa6a47a52d4c94dc960bdb747f17e077609235517b0bb5ce8097d6b747695a
 
-# SPDX
-License:        ISC
-# Additionally, a copy of libtess2 (https://github.com/memononen/libtess2) is
-# bundled with the tests as a reference implementation
-# (test/comparison/libtess2/); its license is SGI-B-2.0. We do not treat it as
-# a bundled system library (no virtual Provides, for example) because it is
-# provably used only in the tests, and does not contribute to anything
-# installed in the binary RPM. All of this is just as well, as libtess2 is
-# unmaintained and we would rather not have to package it separately.
-SourceLicense:  %{license} AND SGI-B-2.0
-URL:            https://github.com/mapbox/earcut.hpp
-
-Source:         %{url}/archive/v%{version}/earcut.hpp-%{version}.tar.gz
-
-# Include <cstdint> for uint32_t/int32_t
-#
-# Fixes failure to compile on GCC 15.
-# https://github.com/mapbox/earcut.hpp/pull/120
-Patch:          %{url}/pull/120.patch
-# Use a range for CMake minimum versions, 3.2...3.12: support CMake 4.0
-# https://github.com/mapbox/earcut.hpp/pull/121
-# Cherry-picked on v2.2.4.
-Patch:          0001-Use-a-range-for-CMake-minimum-versions-3.2.3.12-supp.patch
-
-BuildSystem:    cmake
-# We do want to build the tests, but we have no use for the benchmarks or the
-# visualizer program.
-BuildOption(conf): %{shrink:
-    -DEARCUT_BUILD_TESTS:BOOL=ON
-    -DEARCUT_BUILD_BENCH:BOOL=OFF
-    -DEARCUT_BUILD_VIZ:BOOL=OFF
-    -DEARCUT_WARNING_IS_ERROR:BOOL=OFF
-    }
-
-
-BuildRequires:  gcc-c++
-
-# For tests (and benchmarks, if enabled):
-BuildRequires:  pkgconfig(opengl)
-
-
-# No compiled binaries are installed, so this would be empty.
 %global debug_package %{nil}
 
-%global common_description %{expand:
+Name:           earcut-hpp
+Summary:        Fast, header-only polygon triangulation
+Version:        2.2.4
+Release:        1%{?dist}
+License:        ISC
+SourceLicense:  %{license} AND SGI-B-2.0
+URL:            https://github.com/mapbox/earcut.hpp
+Source0:        https://github.com/mapbox/earcut.hpp/archive/v%{version}/earcut.hpp-%{version}.tar.gz
+
+Patch0:         0001-Include-cstdint-for-uint32_t.patch
+Patch1:         0001-Use-a-range-for-CMake-minimum-versions-3.2.3.12-supp.patch
+
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(opengl)
+
+%description
 A C++ port of earcut.js, a fast, header-only polygon triangulation library.
-
-The library implements a modified ear slicing algorithm, optimized by z-order
-curve hashing and extended to handle holes, twisted polygons, degeneracies and
-self-intersections in a way that doesn’t guarantee correctness of
-triangulation, but attempts to always produce acceptable results for practical
-data like geographical shapes.
-
-It’s based on ideas from FIST: Fast Industrial-Strength Triangulation of
-Polygons by Martin Held and Triangulation by Ear Clipping by David Eberly.}
-
-%description %{common_description}
-
 
 %package devel
 Summary:        %{summary}
-
 BuildArch:      noarch
-
-# Header-only library
 Provides:       %{name}-static = %{version}-%{release}
 
-%description devel %{common_description}
+%description devel
+Header files for earcut-hpp.
 
-
-%prep -a
-# Increase precision of test output so we can understand any failures:
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n earcut.hpp-%{version}
 sed --regexp-extended --in-place \
     's/(setprecision\()6(\))/\116\2/' test/test.cpp
 
-
-%conf -p
-# Disabling floating-point contraction fixes certain failures on aarch64,
-# ppc64le, and s390x. See:
-#
-#   Test “self_touching” fails on aarch64, ppc64le, s390x
-#   https://github.com/mapbox/earcut.hpp/issues/97
-#
-# particularly
-#
-#   https://github.com/mapbox/earcut.hpp/issues/97#issuecomment-1032813710
-#
-# and also
-#
-#   New test “issue142” in 2.2.4 fails on aarch64, ppc64le, s390x
-#   https://github.com/mapbox/earcut.hpp/issues/103
-#
-# Since this library is header-only, dependent packages should be advised to
-# add this flag too if they want the behavior of the library to exactly match
-# upstream’s expectations.
+%build
 export CXXFLAGS="${CXXFLAGS-} -ffp-contract=off"
-
+%cmake \
+  -DEARCUT_BUILD_TESTS:BOOL=ON \
+  -DEARCUT_BUILD_BENCH:BOOL=OFF \
+  -DEARCUT_BUILD_VIZ:BOOL=OFF \
+  -DEARCUT_WARNING_IS_ERROR:BOOL=OFF
+%cmake_build
 
 %install
-# The upstream CMakeLists.txt has no install target; there is only one file to
-# copy, so it is easy to do manually.
 install -D --preserve-timestamps --mode=0644 \
-    --target='%{buildroot}%{_includedir}/mapbox' \
-    'include/mapbox/earcut.hpp'
-
+    --target-directory='%{buildroot}%{_includedir}/mapbox' \
+    include/mapbox/earcut.hpp
 
 %check
-# The upstream CMakeLists.txt is not configured to run tests via ctest; we run
-# the test executable manually.
 %{_vpath_builddir}/tests
-
 
 %files devel
 %license LICENSE
-%doc CHANGELOG.md
-%doc README.md
-
-# All -devel packages for C and C++ libraries from Mapbox should co-own this
-# directory.
+%doc CHANGELOG.md README.md
 %dir %{_includedir}/mapbox
-
 %{_includedir}/mapbox/earcut.hpp
-
-
-%changelog
-%autochangelog
