@@ -87,13 +87,19 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: |
           spec=$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)
-          spectool -g -C ~/rpmbuild/SOURCES/ --define "dist .oreon11" "$spec" || true
+          dist=$(bash .github/scripts/oreon-dist.sh "${{ matrix.pkg }}")
+          args=()
+          [ -n "$dist" ] && args+=(--define "dist $dist")
+          spectool -g -C ~/rpmbuild/SOURCES/ "${args[@]}" "$spec" || true
 
       - name: Build SRPM
         if: steps.check.outputs.skip != 'true'
         run: |
           spec=$(basename "$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)")
-          rpmbuild -bs --define "dist .oreon11" ~/rpmbuild/SPECS/"$spec"
+          dist=$(bash .github/scripts/oreon-dist.sh "${{ matrix.pkg }}")
+          args=()
+          [ -n "$dist" ] && args+=(--define "dist $dist")
+          rpmbuild -bs "${args[@]}" ~/rpmbuild/SPECS/"$spec"
 
       - name: Set artifact name
         id: meta
