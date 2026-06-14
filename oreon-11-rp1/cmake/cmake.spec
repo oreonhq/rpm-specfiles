@@ -12,6 +12,7 @@
 # or architecture
 %bcond_with bootstrap
 
+# bootstrap: bcond_without bootstrap 1
 # Build with Emacs support
 %bcond_without emacs
 
@@ -36,10 +37,7 @@
 
 %bcond_without sphinx
 
-%if 0%{?oreon} >= 11
-%bcond_without bundled_jsoncpp
-%bcond_without bundled_rhash
-%elif !0%{?rhel}
+%if !0%{?rhel}
 %bcond_with bundled_jsoncpp
 %bcond_with bundled_rhash
 %else

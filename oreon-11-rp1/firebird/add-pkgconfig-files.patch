@@ -1,0 +1,26 @@
+diff --git a/builds/install/arch-specific/linux/misc/fbclient.pc.in b/builds/install/arch-specific/linux/misc/fbclient.pc.in
+new file mode 100644
+index 0000000..d49fdc5
+--- /dev/null
++++ b/builds/install/arch-specific/linux/misc/fbclient.pc.in
+@@ -0,0 +1,10 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@FB_LIBDIR@
++includedir=@FB_INCDIR@
++
++Name: fbclient
++Description: Firebird client library
++Version: @FIREBIRD_VERSION@
++Cflags: -I${includedir}/firebird
++Libs: -L${libdir} -lfbclient
+--- Firebird-5.0.3.1683-0-source/configure.ac~	2025-07-14 01:33:58.000000000 -0500
++++ Firebird-5.0.3.1683-0-source/configure.ac	2025-09-26 10:42:45.022624859 -0500
+@@ -1540,6 +1540,7 @@
+         gen/install/misc/firebird.init.d.gentoo:builds/install/arch-specific/linux/firebird.init.d.gentoo.in
+         gen/install/misc/firebird.init.d.slackware:builds/install/arch-specific/linux/firebird.init.d.slackware.in
+         gen/install/misc/rc.config.firebird:builds/install/arch-specific/linux/rc.config.firebird.in
++        gen/install/misc/fbclient.pc:builds/install/arch-specific/linux/misc/fbclient.pc.in
+         gen/install/misc/firebird.service:builds/install/arch-specific/linux/firebird.service.in
+     ],
+ 	[chmod a+x gen/install/*sh 2>/dev/null])

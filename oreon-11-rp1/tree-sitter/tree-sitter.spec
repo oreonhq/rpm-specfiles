@@ -1,4 +1,4 @@
-%global source0_hash ad5040537537012b16ef6e1210a572b927c7cdc2b99d1ee88d44a7dcdc3ff44c
+%global source0_hash e6826b7533ec3a885aba598377a6d20b5a6321ff3db76968e960c2352d3a5077
 
 %global tree_sitter_so_version 0
 
@@ -8,13 +8,13 @@
 
 
 Name:           tree-sitter
-Version:        0.25.10
+Version:        0.26.8
 Release:        %autorelease
 Summary:        An incremental parsing system for programming tools
 
 License:        MIT
 URL:            https://tree-sitter.github.io/
-Source0:        https://github.com/tree-sitter/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/tree-sitter/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

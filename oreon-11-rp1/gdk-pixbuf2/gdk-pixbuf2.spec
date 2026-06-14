@@ -87,6 +87,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -Ddocumentation=true \
        -Dintrospection=enabled \
        -Dglycin=enabled \
+       -Dlegacy_xpm=enabled \
        %{nil}
 %meson_build
 
@@ -120,6 +121,7 @@ gdk-pixbuf-query-loaders-%{__isa_bits} --update-cache
 %dir %{_libdir}/gdk-pixbuf-2.0
 %dir %{_libdir}/gdk-pixbuf-2.0/2.10.0
 %dir %{_libdir}/gdk-pixbuf-2.0/2.10.0/loaders
+%{_libdir}/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-xpm.so
 %ghost %{_libdir}/gdk-pixbuf-2.0/2.10.0/loaders.cache
 %{_bindir}/gdk-pixbuf-query-loaders-%{__isa_bits}
 %{_mandir}/man1/gdk-pixbuf-query-loaders.1*

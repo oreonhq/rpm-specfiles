@@ -16,11 +16,7 @@ Patch:        gnutls-3.2.7-rpath.patch
 Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without bootstrap
-%if 0%{?oreon} >= 11
-%bcond_with dane
-%else
 %bcond_without dane
-%endif
 %bcond_without fips
 %bcond_with tpm12
 %bcond_without tpm2
