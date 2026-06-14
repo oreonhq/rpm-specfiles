@@ -53,7 +53,7 @@ Python trust anchor verification and fetching tool.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n get-trust-anchor-%{gitcommit} -p1
 
-%{gpgverify} --keyring=%{SOURCE6} --data=%{SOURCE4} --signature=%{SOURCE5}
+%{gpgverify} --keyring='%{SOURCE6}' --signature='%{SOURCE5}' --data='%{SOURCE4}'
 openssl smime -verify -CAfile %{SOURCE1} -inform DER -in %{SOURCE3} -content %{SOURCE2} -out /dev/null
 
 
@@ -103,8 +103,6 @@ grep -w DNSKEY %{buildroot}%{_datadir}/%{name}/root.key
 %doc README.md
 %{_bindir}/get_dnssec_trust_anchor
 
-
-%changelog
 
 %changelog
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026260100-1
