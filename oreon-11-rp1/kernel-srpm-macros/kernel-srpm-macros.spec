@@ -3,7 +3,7 @@
 Name:           kernel-srpm-macros
 Version:        1.0
 # when bumping version and resetting release, don't forget to bump version of kernel-rpm-macros as well
-Release:        28%{?dist}
+Release:        29%{?dist}
 Summary:        RPM macros that list arches the full kernel is built on
 # This package only exist in Fedora repositories
 # The license is the standard (MIT) specified in
@@ -62,6 +62,8 @@ Summary: Macros and scripts for building kernel module packages
 License:        MIT AND GPL-2.0-or-later
 Requires: redhat-rpm-config >= 205
 
+# for kmodtool
+Requires: %{_bindir}/envsubst
 # for brp-kmod-compress
 Requires: %{_bindir}/xz
 # for brp-kmod-compress, brp-kmod-set-exec-bit
@@ -82,7 +84,8 @@ Requires: %{_sbindir}/modprobe
 Macros and scripts for building kernel module packages.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# Not strictly necessary but allows working on file names instead
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# Not strictly necessary but allows working on file names instead
 # of source numbers in install section
 %setup -c -T
 cp -p %{sources} .
