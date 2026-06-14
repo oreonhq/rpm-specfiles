@@ -2,7 +2,7 @@
 
 # Do we add appdata-files?
 # consider conditional on whether %%_metainfodir is defined or not instead -- rex
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %bcond_without appdata
 %else
 %bcond_with appdata
@@ -169,7 +169,7 @@ Provides: bundled(jsoncpp)
 %else
 BuildRequires:  jsoncpp-devel
 %endif
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires:  libarchive-devel
 %else
 BuildRequires:  libarchive3-devel
@@ -197,7 +197,7 @@ BuildRequires:  python2-devel
 %endif
 %endif
 %if %{with gui}
-%if 0%{?fedora} || 0%{?rhel} > 9
+%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 BuildRequires: pkgconfig(Qt6Widgets)
 %elif 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5Widgets)
@@ -253,7 +253,7 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       %{name}-filesystem = %{version}-%{release}
 Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 %if %{with emacs}
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 Requires:       emacs-filesystem%{?_emacs_version: >= %{_emacs_version}}
 %endif
 %endif
@@ -572,7 +572,7 @@ popd
 %{_datadir}/aclocal/%{name}.m4
 %{bash_completionsdir}/c*
 %if %{with emacs}
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %{_emacs_sitelispdir}/%{name}
 %{_emacs_sitestartdir}/%{name}-init.el
 %else
