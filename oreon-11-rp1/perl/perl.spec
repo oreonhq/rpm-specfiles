@@ -10,6 +10,10 @@
 %global tapsetdir   %{_datadir}/systemtap/tapset
 
 %global dual_life 0
+%bcond_without perl_bootstrap 1
+%if %{with perl_bootstrap}
+%global perl_bootstrap 1
+%endif
 %global rebuild_from_scratch %{defined perl_bootstrap}
 
 # This overrides filters from build root (/usr/lib/rpm/macros.d/macros.perl)

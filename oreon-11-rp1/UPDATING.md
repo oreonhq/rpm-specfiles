@@ -379,6 +379,23 @@ pkg-a pkg-b : pkg-c
 
 ---
 
+## Perl minor bump (bootstrap)
+
+When dual-life `perl-*` in the repo already want the new `MODULE_COMPAT` but `perl` itself is still the old release, a normal `perl` builddeps install loops on PathTools etc.
+
+`perl.spec` uses `%bcond_without perl_bootstrap 1` during the transition so builds bootstrap properly.
+
+IMPORTANT -- after bootstrapped `perl` is in the repo:
+
+1. Flip back to `%bcond_with perl_bootstrap` in `perl.spec`
+2. Rebuild `perl` normally
+3. Rebuild dual-life modules that jumped ahead (e.g. `perl-PathTools`, `perl-version`, etc.)
+4. Then `perl-generators`, `oreon-rpm-config`, and rest of stack
+
+Update `gendep.macros` for the new `MODULE_COMPAT` before the bootstrap build. Regenerate from build log with `./generatedependencies` after a normal rebuild for the next bump.
+
+---
+
 ## Maintaining this document
 
 When you add a new Plasma or KF6 package directory, insert it into the right chain in this file in the same MR as the spec. When you delete or rename a package, delete or rename it here.
