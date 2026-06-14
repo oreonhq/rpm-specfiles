@@ -1,4 +1,7 @@
 %global source0_hash none
+%global source_date_epoch_from_changelog 0
+%global __oreon_hwcaps_post_install %{nil}
+%global __spec_install_post %{?__debug_package:%{__debug_install_post}}%{nil}
 
 #                        TO WHOM IT MAY CONCERN
 #
@@ -10,7 +13,7 @@ Version: 345
 Release: 2%{?dist}
 # config.guess, config.sub are GPL-3.0-or-later WITH Autoconf-exception-generic
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
-URL: https://github.com/oreonhq/oreon-rpm-config
+URL: https://github.com/oreonhq/rpm-specfiles
 
 Provides: redhat-rpm-config = %{version}-%{release}
 Provides: system-rpm-config = %{version}-%{release}
