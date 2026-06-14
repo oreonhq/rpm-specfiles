@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global commit 904aa67e1e2d1dec92959df63e700b166d5c1022
 %global snapdate 20260313
 
@@ -24,7 +26,7 @@ Name:           stb
 #   https://github.com/nothings/stb/issues/1101
 %global snapinfo ^%{snapdate}git%{sub %{commit} 1 7}
 Version:        0%{snapinfo}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Single-file public domain libraries for C/C++
 
 # See LICENSE.

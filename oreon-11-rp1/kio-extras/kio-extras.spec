@@ -1,18 +1,18 @@
-%global source0_hash none
+%global source0_hash 43325f2151b0bf56324c08472abd726d9bebfea4d188b851a161b05763df01f5
 
 %global stable_kf6 stable
 
 
 Name:    kio-extras
 Version: 26.03.80
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/network/kio-extras
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/network/kio-extras/-/archive/v%{version}/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 ## upstramable patches
 
