@@ -1,6 +1,6 @@
-%global source0_hash 098c7f76e7a28443f6403610c7e339777905360c5225798fd142b8d33b05c6b4
+%global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
 
-%global perl_version    5.42.1
+%global perl_version    5.42.2
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
 %global perl_archname %{_arch}-%{_os}%{perl_arch_stem}
@@ -119,10 +119,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          %{perl_epoch}
 Version:        %{perl_version}
 # release number must be even higher, because dual-lived modules will be broken otherwise
-Release:        523%{?dist}
+Release:        524%{?dist}
 Summary:        Practical Extraction and Report Language
 Url:            https://www.perl.org/
-Source0:        https://www.cpan.org/src/5.0/perl-5.42.1.tar.xz
+Source0:        https://www.cpan.org/src/5.0/perl-%{perl_version}.tar.xz
 Source3:        macros.perl
 #Systemtap tapset and example that make use of systemtap-sdt-devel
 # build requirement. Written by lberk; Not yet upstream.
