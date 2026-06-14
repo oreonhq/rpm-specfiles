@@ -1,14 +1,14 @@
-%global source0_hash 1071e6e8011593c366ffdadc3d3513f57c90202d526e133174945ec1dd53f2a1
+%global source0_hash a789dc4e2409e2901d93793a4e0b80c7b49d0d97cf6ad71c850eb7616acfd786
 
-%global somajor 24
+%global somajor 25
 
 Summary: Library for reading RAW files obtained from digital photo cameras
 Name: LibRaw
-Version: 0.22.0
-Release: 1%{?dist}
+Version: 0.22.1
+Release: 2%{?dist}
 License: BSD-3-Clause and (CDDL-1.0 or LGPL-2.1-only)
 URL: https://www.libraw.org
-Source0:        https://www.libraw.org/data/LibRaw-0.22.0.tar.gz
+Source0:        https://www.libraw.org/data/LibRaw-0.22.1.tar.gz
 Patch0: LibRaw-pkgconfig.patch
 
 BuildRequires: gcc-c++

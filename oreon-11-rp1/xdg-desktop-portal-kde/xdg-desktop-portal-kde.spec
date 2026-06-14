@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    xdg-desktop-portal-kde
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: KDE backend implementation for xdg-desktop-portal
 
 License: GPL-2.0-or-later
@@ -22,6 +22,7 @@ BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtbase-static
 BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtwayland-devel
 BuildRequires:  xdg-desktop-portal-devel
