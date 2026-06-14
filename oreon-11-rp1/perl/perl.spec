@@ -12,6 +12,8 @@
 %global dual_life 0
 %bcond_without perl_bootstrap 1
 %if %{with perl_bootstrap}
+%define gendep_file %(find . -name gendep.macros -print -quit 2>/dev/null)
+%include %{gendep_file}
 %global perl_bootstrap 1
 %endif
 %global rebuild_from_scratch %{defined perl_bootstrap}
@@ -139,9 +141,6 @@ Source6:        Pod-Html-license-clarification
 # If your RPM tool fails on including the source file, then you forgot to
 # define _sourcedir macro to point to the directory with the sources.
 Source7:        gendep.macros
-%if %{defined perl_bootstrap}
-%include %{SOURCE7}
-%endif
 # Use config.over to make build of perl reproducible
 Source8:        config.over
 
