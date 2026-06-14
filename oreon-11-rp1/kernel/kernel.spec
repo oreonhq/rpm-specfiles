@@ -111,11 +111,7 @@
 %endif
 
 Summary: The Linux kernel
-%if 0%{?fedora} || (0%{?oreon} >= 11)
 %define secure_boot_arch x86_64 aarch64
-%else
-%define secure_boot_arch x86_64 aarch64 s390x ppc64le
-%endif
 
 # Signing for secure boot authentication
 %ifarch %{secure_boot_arch}
@@ -124,22 +120,11 @@ Summary: The Linux kernel
 %global signkernel 0
 %endif
 
-# RHEL/CentOS specific .SBAT entries
-%if 0%{?centos}
-%global sbat_suffix centos
-%else
-%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global sbat_suffix fedora
-%else
-%global sbat_suffix rhel
-%endif
-%endif
 
 # Sign modules on all arches
 %global signmodules 1
-
-# Add additional rhel certificates to system trusted keys.
-%global rhelkeys 1
+%global trusted_keys_pem certs/oreon.pem
 
 # Compress modules only for architectures that build modules
 %ifarch noarch
@@ -550,7 +535,6 @@ Summary: The Linux kernel
 %define with_kabidw_base 0
 %define signkernel 0
 %define signmodules 1
-%define rhelkeys 0
 %endif
 
 
@@ -991,8 +975,6 @@ Source10: oreonsecurebootca.cer
 Source13: oreonsecureboot501.cer
 Source14: oreonsecureboot302.cer
 
-%if %{signkernel}
-# Name of the packaged file containing signing key
 %ifarch ppc64le
 %define signing_key_filename kernel-signing-ppc.cer
 %endif
@@ -1010,9 +992,6 @@ Source14: oreonsecureboot302.cer
 %define secureboot_key_uki_0 %{SOURCE14}
 %define pesign_name_0 oreonsecureboot302
 %define pesign_name_uki_0 oreonsecureboot302
-%endif
-
-# signkernel
 %endif
 
 Source20: mod-denylist.sh
@@ -1087,31 +1066,11 @@ Source87: flavors
 Source151: uki_create_addons.py
 Source152: uki_addons.json
 
-Source100: rheldup3.x509
-Source101: rhelkpatch1.x509
-Source102: nvidiagpuoot001.x509
-Source103: rhelimaca1.x509
 Source104: rhelima.x509
-Source105: rhelima_centos.x509
 Source106: fedoraimaca.x509
-Source107: nvidiajetsonsoc.x509
-Source108: nvidiabfdpu.x509
 
-%if 0%{?fedora}%{?eln} || (0%{?oreon} >= 11)
 %define ima_ca_cert %{SOURCE106}
-%endif
-
-%if 0%{?rhel} && !0%{?eln} || (0%{?oreon} >= 11)
-%define ima_ca_cert %{SOURCE103}
-# rhel && !eln
-%endif
-
-%if 0%{?centos}
-%define ima_signing_cert %{SOURCE105}
-%else
 %define ima_signing_cert %{SOURCE104}
-%endif
-
 %define ima_cert_name ima.cer
 
 Source200: check-kabi
@@ -1190,6 +1149,7 @@ Source4002: gating.yaml
 %if !%{nopatches}
 
 Patch1: patch-%{patchversion}-redhat.patch
+Patch2: patch-%{patchversion}-bore.patch
 %endif
 
 # empty final patch to facilitate testing of kernel patches
@@ -2146,6 +2106,7 @@ cp -a %{SOURCE1} .
 %if !%{nopatches}
 
 ApplyOptionalPatch patch-%{patchversion}-redhat.patch
+ApplyOptionalPatch patch-%{patchversion}-bore.patch
 %endif
 
 ApplyOptionalPatch linux-kernel-test.patch
@@ -2259,34 +2220,15 @@ done
 
 %if %{signkernel}%{signmodules}
 
-# Add DUP and kpatch certificates to system trusted keys for RHEL
-truncate -s0 ../certs/rhel.pem
-%if 0%{?rhel} || (0%{?oreon} >= 11)
-%if %{rhelkeys} || (0%{?oreon} >= 11)
-%{log_msg "Add DUP and kpatch certificates to system trusted keys for RHEL"}
-openssl x509 -inform der -in %{SOURCE100} -out rheldup3.pem
-openssl x509 -inform der -in %{SOURCE101} -out rhelkpatch1.pem
-openssl x509 -inform der -in %{SOURCE102} -out nvidiagpuoot001.pem
-openssl x509 -inform der -in %{SOURCE107} -out nvidiajetsonsoc.pem
-openssl x509 -inform der -in %{SOURCE108} -out nvidiabfdpu.pem
-cat rheldup3.pem rhelkpatch1.pem nvidiagpuoot001.pem nvidiajetsonsoc.pem nvidiabfdpu.pem >> ../certs/rhel.pem
-# rhelkeys
-%endif
-%if %{signkernel}
-%ifarch s390x ppc64le
-openssl x509 -inform der -in %{secureboot_ca_0} -out secureboot.pem
-cat secureboot.pem >> ../certs/rhel.pem
-%endif
-%endif
-
-# rhel
-%endif
-
+truncate -s0 ../%{trusted_keys_pem}
+%{log_msg "Add oreon secure boot CA to system trusted keys"}
+openssl x509 -inform der -in %{secureboot_ca_0} -out oreonsbca.pem
+cat oreonsbca.pem >> ../%{trusted_keys_pem}
 openssl x509 -inform der -in %{ima_ca_cert} -out imaca.pem
-cat imaca.pem >> ../certs/rhel.pem
+cat imaca.pem >> ../%{trusted_keys_pem}
 
 for i in *.config; do
-  sed -i 's@CONFIG_SYSTEM_TRUSTED_KEYS=""@CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"@' $i
+  sed -i 's@CONFIG_SYSTEM_TRUSTED_KEYS=""@CONFIG_SYSTEM_TRUSTED_KEYS="%{trusted_keys_pem}"@' $i
   sed -i 's@CONFIG_EFI_SBAT_FILE=""@CONFIG_EFI_SBAT_FILE="kernel.sbat"@' $i
 done
 %endif
@@ -2421,7 +2363,7 @@ InitBuildVars() {
 
     KCFLAGS="%{?kcflags}"
 
-    _kernel_rpm_tmp="${RPM_BUILD_DIR}/rpm-kbuild-tmp${Variant:+-${Variant}}"
+    _kernel_rpm_tmp="$(pwd)/rpm-kbuild-tmp${Variant:+-${Variant}}"
     mkdir -p "${_kernel_rpm_tmp}"
     chmod 700 "${_kernel_rpm_tmp}"
     export TMPDIR="${_kernel_rpm_tmp}"
@@ -2487,8 +2429,7 @@ BuildKernel() {
     # This ensures build-ids are unique to allow parallel debuginfo
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
     if [ $DoModules -eq 1 ]; then
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags} || exit 1
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
     else
 	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     fi
@@ -3216,10 +3157,7 @@ BuildKernel() {
     %endif
 %endif
 
-%if 0%{?rhel} || (0%{?oreon} >= 11)
-    # Red Hat IMA code-signing cert, which is used to authenticate package files
     install -m 0644 %{ima_signing_cert} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{ima_cert_name}
-%endif
 
 %if %{signmodules}
     if [ $DoModules -eq 1 ]; then
