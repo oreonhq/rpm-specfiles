@@ -87,8 +87,6 @@ jobs:
           sourcedir=$(cd "$(dirname "$spec")" && pwd)
           rpmspec --parse \
             --define "_sourcedir $sourcedir" \
-          rpmspec --parse \
-            --define "_sourcedir $(dirname "$spec")" \
             "$spec" > /dev/null
 
   report:
