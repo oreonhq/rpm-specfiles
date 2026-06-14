@@ -1,4 +1,4 @@
-%global source0_hash e56c8356dda01136a6041c6ef832bd0ec99bd2d35dff97832aa5ec10ed014304
+%global source0_hash 57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -189,19 +189,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.11
-%define specversion 7.0.11
+%define specrpmversion 7.0.12
+%define specversion 7.0.12
 %define patchversion 7.0
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.0.11
+%define tarfile_release 7.0.12
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.0.11
+%define kabiversion 7.0.12
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -911,10 +911,6 @@ BuildRequires: kabi-dw
 %if %{signkernel}%{signmodules}
 BuildRequires: openssl
 %if %{signkernel}
-# ELN uses Fedora signing process, so exclude
-%if 0%{?rhel}%{?centos} && !0%{?eln} || (0%{?oreon} >= 11)
-BuildRequires: system-sb-certs
-%endif
 %ifarch x86_64 aarch64 riscv64
 BuildRequires: nss-tools
 BuildRequires: pesign >= 0.10-4
@@ -978,14 +974,6 @@ BuildRequires: stubble
 BuildRequires: systemd-boot-unsigned
 # For UKI kernel cmdline addons
 BuildRequires: systemd-ukify
-# For UKI sb cert
-%if 0%{?rhel}%{?centos} && !0%{?eln} || (0%{?oreon} >= 11)
-%if 0%{?centos}
-BuildRequires: centos-sb-certs >= 9.0-23
-%else
-BuildRequires: redhat-sb-certs >= 9.4-0.1
-%endif
-%endif
 %endif
 
 # Because this is the kernel, it's hard to get a single upstream URL
@@ -999,8 +987,9 @@ Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.t
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
 
-Source10: redhatsecurebootca5.cer
-Source13: redhatsecureboot501.cer
+Source10: oreonsecurebootca.cer
+Source13: oreonsecureboot501.cer
+Source14: oreonsecureboot302.cer
 
 %if %{signkernel}
 # Name of the packaged file containing signing key
@@ -1011,38 +1000,16 @@ Source13: redhatsecureboot501.cer
 %define signing_key_filename kernel-signing-s390.cer
 %endif
 
-# Fedora/ELN pesign macro expects to see these cert file names, see:
-# https://github.com/rhboot/pesign/blob/main/src/pesign-rpmbuild-helper.in#L216
-%if 0%{?fedora}%{?eln} || (0%{?oreon} >= 11)
-%define pesign_name_0 redhatsecureboot501
 %define secureboot_ca_0 %{SOURCE10}
 %define secureboot_key_0 %{SOURCE13}
-%define pesign_name_uki_0 %{pesign_name_0}
+%define pesign_name_0 oreonsecureboot501
+%define pesign_name_uki_0 oreonsecureboot501
 %define secureboot_key_uki_0 %{secureboot_key_0}
-%endif
-
-# RHEL/centos certs come from system-sb-certs
-%if 0%{?rhel} && !0%{?eln} || (0%{?oreon} >= 11)
-%define secureboot_ca_0 %{_datadir}/pki/sb-certs/secureboot-ca-%{_arch}.cer
-%define secureboot_key_0 %{_datadir}/pki/sb-certs/secureboot-kernel-%{_arch}.cer
-%define secureboot_key_uki_0 %{_datadir}/pki/sb-certs/secureboot-uki-virt-%{_arch}.cer
-
-%if 0%{?centos}
-%define pesign_name_0 centossecureboot201
-%define pesign_name_uki_0 centossecureboot204
-%else
-%ifarch x86_64 aarch64
-%define pesign_name_0 redhatsecureboot501
-%define pesign_name_uki_0 redhatsecureboot504
-%endif
 %ifarch s390x
-%define pesign_name_0 redhatsecureboot302
-%endif
-%ifarch ppc64le
-%define pesign_name_0 redhatsecureboot701
-%endif
-%endif
-# rhel && !eln
+%define secureboot_key_0 %{SOURCE14}
+%define secureboot_key_uki_0 %{SOURCE14}
+%define pesign_name_0 oreonsecureboot302
+%define pesign_name_uki_0 oreonsecureboot302
 %endif
 
 # signkernel

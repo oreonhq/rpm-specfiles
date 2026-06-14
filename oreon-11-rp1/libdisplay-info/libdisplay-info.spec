@@ -16,7 +16,7 @@ Summary:        EDID and DisplayID library
 License:        MIT
 URL:            https://gitlab.freedesktop.org/emersion/libdisplay-info
 Source0:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz
-Source1:        libdisplay-info-0.3.0.tar.xz.sig
+Source1:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz.sig
 # 0FDE7BE0E88F5E48: emersion <contact@emersion.fr>
 Source2:        gpgkey-0FDE7BE0E88F5E48.gpg
 
