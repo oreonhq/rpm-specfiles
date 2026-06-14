@@ -5,7 +5,7 @@
 
 Name:       kwayland
 Version:    6.6.3
-Release:    4%{?dist}
+Release:    5%{?dist}
 Summary:    Qt-style API to interact with the wayland-client API
 
 License:    BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT-CMU AND MIT
@@ -35,7 +35,6 @@ Requires:   kf6-filesystem
 # Renamed from kf6-kwayland
 Obsoletes:      kf6-kwayland < 1:%{version}-%{release}
 Provides:       kf6-kwayland = 1:%{version}-%{release}
-# qdoc no longer installs .qch under %%{_qt6_docdir} drop doc subpackage
 Obsoletes:      kwayland-doc < 1:%{version}-%{release}
 
 %description
@@ -71,6 +70,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_datadir}/qlogging-categories6/*categories
 %{_libdir}/libKWaylandClient.so.6
 %{_libdir}/libKWaylandClient.so.%{version}
+%{_datadir}/doc/qt6/KWayland.qch
+%{_datadir}/doc/qt6/KWayland.tags
 
 %files devel
 %doc README.md
