@@ -45,8 +45,8 @@
 # Disabled until the package gets better structuring, see bug #447133
 %global QTAPPS 0
 
-%global GTS    1
-%global LASI   1
+%global GTS    0
+%global LASI   0
 
 # Not in Fedora yet.
 %global MING   0
@@ -108,7 +108,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		14.1.4
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		epl-1.0 AND cpl-1.0 AND bsd-3-clause AND mit AND gpl-3.0-or-later WITH bison-exception-2.2 AND apache-1.1 AND lgpl-2.0-or-later WITH libtool-exception AND smlnj AND hpnd-uc
 URL:			http://www.graphviz.org/
 #Source0:		https://gitlab.com/%%{name}/%%{name}/-/archive/%%{version}/%%{name}-%%{version}.tar.bz2

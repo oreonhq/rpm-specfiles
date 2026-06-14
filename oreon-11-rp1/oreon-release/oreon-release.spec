@@ -6,7 +6,7 @@
 Summary:        Oreon release files
 Name:           oreon-release
 Version:        11
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/oreon
 
@@ -69,7 +69,7 @@ install -d -m 755 %{buildroot}%{_rpmmacrodir}
 # Defines %%oreon for specs (kernel/shim/grub2 secure boot branding). Builders
 # should have oreon-release installed so mock/koji expands %%{?oreon}.
 cat > %{buildroot}%{_rpmmacrodir}/macros.oreon-release << 'EOF'
-%%oreon 1
+%%oreon 11
 %%python_wheel_pkg_prefix python3
 EOF
 

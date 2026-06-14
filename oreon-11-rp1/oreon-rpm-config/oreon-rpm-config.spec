@@ -4,17 +4,17 @@
 #
 # Don't add patches, dist-git is the upstream repository for this package.
 
-Summary: Red Hat-family-specific rpm configuration files
-Name: redhat-rpm-config
-# The version should be 300 + Fedora release number.
-# If the branches haven't diverged yet, keep the Fedora release number from
-# the older branch. When the branch diverges, bump the Version to the Fedora
-# release number.
-Version: 344
-Release: %autorelease
+Summary: Oreon-specific rpm configuration files
+Name: oreon-rpm-config
+Version: 345
+Release: 2%{?dist}
 # config.guess, config.sub are GPL-3.0-or-later WITH Autoconf-exception-generic
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
-URL: https://src.fedoraproject.org/rpms/redhat-rpm-config
+URL: https://github.com/oreonhq/oreon-rpm-config
+
+Provides: redhat-rpm-config = %{version}-%{release}
+Provides: system-rpm-config = %{version}-%{release}
+Obsoletes: redhat-rpm-config < %{version}-%{release}
 
 # Core rpm settings
 Source0: macros
@@ -34,11 +34,6 @@ Source61: redhat-annobin-select-gcc-built-plugin
 Source62: redhat-annobin-select-annobin-built-plugin
 Source63: redhat-annobin-plugin-select.sh
 
-# The macros defined by these files are for things that need to be defined
-# at srpm creation time when it is not feasible to require the base packages
-# that would otherwise be providing the macros. other language/arch specific
-# macros should not be defined here but instead in the base packages that can
-# be pulled in at rpm build time, this is specific for srpm creation.
 Source100: macros.fedora-misc-srpm
 Source102: macros.mono-srpm
 Source103: macros.nodejs-srpm
@@ -47,7 +42,6 @@ Source105: macros.valgrind-srpm
 Source108: macros.dotnet-srpm
 Source109: macros.hare-srpm
 
-# Other misc macros
 Source150: macros.build-constraints
 Source151: macros.dwz
 Source152: macros.fedora-misc
@@ -55,35 +49,26 @@ Source155: macros.ldconfig
 Source156: macros.vpath
 Source157: macros.shell-completions
 Source158: macros.rpmautospec
+Source159: macros.oreon-opt
+Source160: macros.oreon-hwcaps
 
-# Build policy scripts
-# this comes from https://github.com/rpm-software-management/rpm/pull/344
-# added a python -> python2 conversion for fedora with warning
-# and an echo when the mangling happens
 Source201: brp-mangle-shebangs
 
-# Dependency generator scripts (deprecated)
 Source300: find-provides
 Source304: find-requires
 
-# Misc helper scripts
 Source400: dist.sh
 
-# Snapshots from http://git.savannah.gnu.org/gitweb/?p=config.git
 Source500: https://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 Source501: https://git.savannah.gnu.org/cgit/config.git/plain/config.sub
 
-# Dependency generators & their rules
 Source602: libsymlink.attr
 
-# BRPs
 Source700: brp-ldconfig
 Source701: brp-strip-lto
 
-# Convenience lua functions
 Source800: common.lua
 
-# Documentation
 Source900: buildflags.md
 
 BuildArch: noarch
@@ -93,71 +78,47 @@ Requires: coreutils
 Requires: efi-srpm-macros
 Requires: cmake-srpm-macros
 Requires: fonts-srpm-macros
-# ↓ Provides macros.forge and forge.lua originally shipped by us
 Requires: forge-srpm-macros
 Requires: go-srpm-macros
 Requires: java-srpm-macros
-# ↓ Provides kmod.attr originally shipped by us
 Requires: kernel-srpm-macros >= 1.0-12
 Requires: lua-srpm-macros
 Requires: ocaml-srpm-macros
 Requires: openblas-srpm-macros
 Requires: perl-srpm-macros
-# ↓ Has Python BRPs originaly present in redhat-rpm-config
 Requires: python-srpm-macros >= 3.11-7
 Requires: qt6-srpm-macros
 Requires: rust-srpm-macros
 Requires: package-notes-srpm-macros
 Requires: pyproject-srpm-macros
-# ↓ Create compat Provides/Requires when things move around in filesystem
 Requires: filesystem-srpm-macros
-
-%if ! 0%{?rhel} && ! 0%{?oreon}
-Requires: ansible-srpm-macros
-Requires: erlang-srpm-macros
-Requires: fpc-srpm-macros
-Requires: gap-srpm-macros
-Requires: ghc-srpm-macros
-Requires: gnat-srpm-macros
-Requires: tree-sitter-srpm-macros
-Requires: qt5-srpm-macros
-Requires: zig-srpm-macros
-Requires: build-reproducibility-srpm-macros
-Requires: R-srpm-macros
-%endif
 
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
 Requires: zip
 Requires: (annobin-plugin-gcc if gcc)
 Requires: (gcc-plugin-annobin if gcc)
-# ↓ to not break packages that buildrequire GnuPG but use it through GPGverify
 Requires: (gpgverify if gnupg2)
 
-# for brp-mangle-shebangs
 Requires: %{_bindir}/find
 Requires: %{_bindir}/file
 Requires: %{_bindir}/grep
 Requires: %{_bindir}/sed
 Requires: %{_bindir}/xargs
 
-# -fstack-clash-protection and -fcf-protection require GCC 8.
 Conflicts: gcc < 8.0.1-0.22
 
-# Replaced by macros.rpmautospec shipped by us
 Obsoletes: rpmautospec-rpm-macros < 0.6.3-2
-
-Provides: system-rpm-config = %{version}-%{release}
 
 %global rrcdir /usr/lib/rpm/redhat
 
 %description
-Red Hat specific rpm configuration files.
+Oreon rpm configuration. Sets distro-wide -O3, LTO, and x86_64 tuning macros
+while keeping -march=x86-64 so binaries run on all 64-bit cpus. Still provides
+redhat-rpm-config for BuildRequires compatibility.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-# Not strictly necessary but allows working on file names instead
-# of source numbers in install section
 %setup -c -T
 cp -p %{sources} .
 
@@ -182,46 +143,9 @@ install -p -m 644 -t %{buildroot}%{_fileattrsdir} *.attr
 mkdir -p %{buildroot}%{_rpmluadir}/fedora/{rpm,srpm}
 install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 
-# This trigger is used to decide which version of the annobin plugin for gcc
-# should be used.  See comments in the script for full details.
-#
-# Note - whilst "gcc-plugin-annobin" requires "gcc" and hence in theory we
-# do not need to trigger on "gcc", the redhat-annobin-plugin-select.sh
-# script invokes gcc to determine the version of the gcc plugin, and this
-# can be significant.
-#
-# For example, suppose that version N of gcc is installed and that annobin
-# version A (built by gcc version N) is also installed.  Then a new version
-# of gcc is released.  If the rpms are updated in this order:
-#   gcc-plugin-annobin
-#   gcc
-# then when the trigger for gcc-plugin-annobin is run, the script will see
-# (the not yet updated) gcc is currently version N, which matches the current
-# annobin plugin A, so no changes are necessary.  Then gcc is updated and,
-# if the trigger below did not include "gcc", the script would not run again
-# and so now you would have an out of date version of the annobin plugin.
-#
-# Alternatively imagine installing gcc and annobin for the first time.
-# If the installation order is:
-#    gcc
-#    annobin-plugin-gcc
-#    gcc-plugin-annobin
-# then the installation of gcc will not cause the gcc-plugin-annobin to be
-# selected, since it does not exist yet.  Then annobin-plugin-gcc is installed
-# and since it is the only plugin, it will be selected.  Then
-# gcc-plugin-annobin is installed, and if the trigger below was not set to
-# run on gcc-plugin-annobin, it would pass unnoticed.
-#
-# Hence it is necessary to trigger on both gcc and gcc-plugin-annobin.
-
 %triggerin -- annobin-plugin-gcc gcc-plugin-annobin gcc
 %{rrcdir}/redhat-annobin-plugin-select.sh
 %end
-
-# We also trigger when an annobin plugin is uninstalled.  This allows us to
-# switch over to the other version of the plugin.  Note - we do not bother
-# triggering on the uninstallation of "gcc", since if that is removed, the
-# plugins are rendered useless.
 
 %triggerpostun -- annobin-plugin-gcc gcc-plugin-annobin
 %{rrcdir}/redhat-annobin-plugin-select.sh
@@ -245,6 +169,8 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 %{_rpmconfigdir}/macros.d/macros.dwz
 %{_rpmconfigdir}/macros.d/macros.fedora-misc
 %{_rpmconfigdir}/macros.d/macros.ldconfig
+%{_rpmconfigdir}/macros.d/macros.oreon-hwcaps
+%{_rpmconfigdir}/macros.d/macros.oreon-opt
 %{_rpmconfigdir}/macros.d/macros.rpmautospec
 %{_rpmconfigdir}/macros.d/macros.shell-completions
 %{_rpmconfigdir}/macros.d/macros.vpath
@@ -259,7 +185,3 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 %{rrcdir}/redhat-annobin-select-annobin-built-plugin
 
 %doc buildflags.md
-
-%changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 344-1
-- Prepare for Oreon 11 (RP1)

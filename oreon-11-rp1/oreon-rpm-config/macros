@@ -158,10 +158,9 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 
 # Architecture-specific support.  Internal.  Do not use directly.
 
-%__cflags_arch_x86_64_level %[0%{?rhel} == 9 ? "-v2" : ""]%[0%{?rhel} > 9 ? "-v3" : ""]
-%__cflags_arch_x86_64 -march=x86-64%{?__cflags_arch_x86_64_level:%{__cflags_arch_x86_64_level}}
+%__cflags_arch_x86_64 -march=x86-64
 
-%__cflags_arch_x86_64_common -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 %{_frame_pointers_cflags} %{_frame_pointers_cflags_x86_64}
+%__cflags_arch_x86_64_common -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -mprefer-vector-width=256 %{_frame_pointers_cflags} %{_frame_pointers_cflags_x86_64}
 
 # Also used for s390.
 %__cflags_arch_s390x %[0%{?rhel} >= 9 ? "-march=z14 -mtune=z15" : "-march=z13 -mtune=z14"]
@@ -221,7 +220,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
     diff -u $file.backup $file && mv $file.backup $file \
   done
 
-%configure \
+%_oreon_configure_common \
   %{set_build_flags}; \
   [ "%{_lto_cflags}"x != x ] && %{_fix_broken_configure_for_lto}; \
   [ "%_configure_gnuconfig_hack" = 1 ] && for i in $(find $(dirname %{_configure}) -name config.guess -o -name config.sub) ; do \
@@ -230,7 +229,10 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
   [ "%_configure_libtool_hardening_hack" = 1 ] && [ x != "x%{_hardened_ldflags}" ] && \
       for i in $(find . -name ltmain.sh) ; do \
         %{__sed} -i.backup -e 's~compiler_flags=$~compiler_flags="%{_hardened_ldflags}"~' $i \
-      done ; \
+      done
+
+%configure \
+  %{_oreon_configure_common}; \
   %{_configure} --build=%{_build} --host=%{_host} \\\
 	--program-prefix=%{?_program_prefix} \\\
 	--disable-dependency-tracking \\\
@@ -248,7 +250,8 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 	%{?_configure_use_runstatedir:$(grep -q "runstatedir=DIR" %{_configure} && echo '--runstatedir=%{_runstatedir}')} \\\
 	--sharedstatedir=%{_sharedstatedir} \\\
 	--mandir=%{_mandir} \\\
-	--infodir=%{_infodir}
+	--infodir=%{_infodir} \
+  ; if [ "%{_oreon_hwcaps_build}" = "1" ]; then echo 1 > .oreon-hwcaps-stamp; fi
 
 #==============================================================================
 # ---- Build policy macros.
@@ -313,6 +316,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 
 %__spec_install_post\
     %{?__debug_package:%{__debug_install_post}}\
+    %{__oreon_hwcaps_post_install}\
     %{__arch_install_post}\
     %{__os_install_post}\
 %{nil}
@@ -436,7 +440,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 # so we need to specify the right algorithm to use.
 %_build_id_flags	-Wl,--build-id=sha1
 
-%_general_options       -O2 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
+%_general_options       -O3 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
 %_warning_options       -Wall%[%__build_for_lang_any && "%toolchain" == "gcc" ? " -Wno-complain-wrong-lang" : ""]%[%__build_for_lang_c + %__build_for_lang_cxx ? " -Werror=format-security" : ""]%[%__build_for_lang_c && (%build_type_safety_c == 0) ? " -fpermissive" : ""]%[%__build_for_lang_c && (%build_type_safety_c == 1) ? " -Wno-error=int-conversion" : ""]%[%__build_for_lang_c && (%build_type_safety_c > 0 && %build_type_safety_c < 3) ? " -Wno-error=incompatible-pointer-types" : ""]
 %_preprocessor_defines  %{_fortify_level_flags} -Wp,-D_GLIBCXX_ASSERTIONS
 

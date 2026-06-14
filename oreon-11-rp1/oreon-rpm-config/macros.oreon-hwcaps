@@ -1,0 +1,40 @@
+%ifarch x86_64
+%_oreon_hwcaps_build 1
+%else
+%_oreon_hwcaps_build 0
+%endif
+
+%_oreon_hwcaps_subdir x86-64-v3
+%_oreon_hwcaps_march -march=x86-64-v3
+
+%_oreon_hwcaps_export_v3_flags \
+  OREON_CFLAGS_V3="$(echo "$CFLAGS" | sed -E 's/-march=x86-64(-v[0-9]+)?/%{_oreon_hwcaps_march}/g')"; \
+  OREON_CXXFLAGS_V3="$(echo "$CXXFLAGS" | sed -E 's/-march=x86-64(-v[0-9]+)?/%{_oreon_hwcaps_march}/g')"; \
+  OREON_FFLAGS_V3="$(echo "$FFLAGS" | sed -E 's/-march=x86-64(-v[0-9]+)?/%{_oreon_hwcaps_march}/g')"; \
+  export CFLAGS="$OREON_CFLAGS_V3"; \
+  export CXXFLAGS="$OREON_CXXFLAGS_V3"; \
+  export FFLAGS="$OREON_FFLAGS_V3"; \
+  export FCFLAGS="$OREON_FFLAGS_V3"
+
+%_oreon_hwcaps_copy_shared_objects \
+  for lib in $(find . \( -name '*.so' -o -name '*.so.*' \) \( -type f -o -type l \) ! -path './.*' 2>/dev/null); do \
+    base="$(basename "$lib")"; \
+    if [ -L "$lib" ]; then \
+      %{__cp} -a "$lib" "$HWCAPS_ROOT/$base"; \
+    elif file -b "$lib" 2>/dev/null | grep -qE 'ELF .* (shared object|dynamic lib)'; then \
+      %{__install} -D -m 0755 "$lib" "$HWCAPS_ROOT/$base"; \
+    fi; \
+  done
+
+%__oreon_hwcaps_post_install \
+%{?_oreon_hwcaps_build:\
+if [ "%{_oreon_hwcaps_build}" = "1" ] && [ -f .oreon-hwcaps-stamp ] && { [ -f Makefile ] || [ -f GNUmakefile ]; }; then \
+  HWCAPS_ROOT="$RPM_BUILD_ROOT%{_libdir}/glibc-hwcaps/%{_oreon_hwcaps_subdir}"; \
+  mkdir -p "$HWCAPS_ROOT"; \
+  %{set_build_flags}; \
+  %{_oreon_hwcaps_export_v3_flags}; \
+  %{__make} %{?_smp_mflags} clean 1>/dev/null 2>&1 || :; \
+  %{__make} %{?_smp_mflags} || exit 1; \
+  %{_oreon_hwcaps_copy_shared_objects}; \
+fi \
+}
