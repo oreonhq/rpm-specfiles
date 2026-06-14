@@ -2,9 +2,7 @@
 # baseline -march=x86-64 runs on every 64-bit cpu; beats v3-only distros on older hw
 # v2/v3/v4 still available via rpmbuild --target x86_64_v2 etc (see rpmrc)
 
-%ifarch x86_64
-%_distro_extra_cflags -fipa-pta -fpipeline -funroll-loops -falign-functions=32 -falign-loops=32 -falign-jumps=32 -ffunction-sections -fdata-sections -frename-registers -fno-semantic-interposition -fdevirtualize-at-ltrans -fmodulo-sched -fmodulo-sched-allow-regmoves
-%_distro_extra_cxxflags %{_distro_extra_cflags}
-%_distro_extra_fflags %{_distro_extra_cflags}
-%_distro_extra_ldflags -Wl,--gc-sections -Wl,-O1 -Wl,--sort-common -Wl,--icf=all
-%endif
+%_distro_extra_cflags %{?x86_64:-fipa-pta -fpipeline -funroll-loops -falign-functions=32 -falign-loops=32 -falign-jumps=32 -ffunction-sections -fdata-sections -frename-registers -fno-semantic-interposition -fdevirtualize-at-ltrans -fmodulo-sched -fmodulo-sched-allow-regmoves}
+%_distro_extra_cxxflags %{?x86_64:-fipa-pta -fpipeline -funroll-loops -falign-functions=32 -falign-loops=32 -falign-jumps=32 -ffunction-sections -fdata-sections -frename-registers -fno-semantic-interposition -fdevirtualize-at-ltrans -fmodulo-sched -fmodulo-sched-allow-regmoves}
+%_distro_extra_fflags %{?x86_64:-fipa-pta -fpipeline -funroll-loops -falign-functions=32 -falign-loops=32 -falign-jumps=32 -ffunction-sections -fdata-sections -frename-registers -fno-semantic-interposition -fdevirtualize-at-ltrans -fmodulo-sched -fmodulo-sched-allow-regmoves}
+%_distro_extra_ldflags %{?x86_64:-Wl,--gc-sections -Wl,-O1 -Wl,--sort-common -Wl,--icf=all}

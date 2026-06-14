@@ -201,7 +201,7 @@ Requires:      qt6-filesystem
 Requires: %{name}-common = %{version}-%{release}
 
 ## Sql drivers
-%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
+%if 0%{?fedora} || 0%{?epel}
 %global ibase 1
 %endif
 

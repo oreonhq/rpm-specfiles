@@ -1,8 +1,4 @@
-%ifarch x86_64
-%_oreon_hwcaps_build 1
-%else
-%_oreon_hwcaps_build 0
-%endif
+%_oreon_hwcaps_build %{?x86_64:1}%{!?x86_64:0}
 
 %_oreon_hwcaps_subdir x86-64-v3
 %_oreon_hwcaps_march -march=x86-64-v3
