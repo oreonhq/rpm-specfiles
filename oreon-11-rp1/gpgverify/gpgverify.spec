@@ -1,3 +1,5 @@
+%global __oreon_hwcaps_post_install %{nil}
+
 Name:           gpgverify
 Version:        2.2
 Release:        4%{?dist}
@@ -6,7 +8,7 @@ Summary:        Signature verifier for easy and safe scripting
 License:        Boehm-GC
 URL:            https://src.fedoraproject.org/rpms/gpgverify
 Source0:        gpgverify
-Source1:        macros.gpgverify.in
+Source1:        macros.gpgverify
 Source2:        license.txt
 BuildArch:      noarch
 
@@ -20,19 +22,15 @@ OpenPGP signature and one or more keyrings.
 %setup -c -T
 cp --preserve=timestamps %{sources} .
 
-%build
-macrofile=$(<macros.gpgverify.in)
-echo -E "${macrofile/@libexecdir@/'%{_libexecdir}'}" >macros.gpgverify
-
 %install
-mkdir -p %{buildroot}%{rpmmacrodir} %{buildroot}%{_libexecdir}
-install -p -m 0755 gpgverify %{buildroot}%{_libexecdir}/
-install -p -m 0644 macros.gpgverify %{buildroot}%{rpmmacrodir}/
+mkdir --parents %{buildroot}%{rpmmacrodir} %{buildroot}%{_libexecdir}
+cp --preserve=timestamps gpgverify %{buildroot}%{_libexecdir}/
+cp --preserve=timestamps macros.gpgverify %{buildroot}%{rpmmacrodir}/
 
 %files
-%license license.txt
 %attr(0755,-,-) %{_libexecdir}/gpgverify
 %attr(0644,-,-) %{rpmmacrodir}/macros.gpgverify
+%license license.txt
 
 %changelog
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2-4

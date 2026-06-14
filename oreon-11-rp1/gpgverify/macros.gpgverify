@@ -13,7 +13,7 @@
 
 # gpgverify verifies signed sources. There is documentation in the script.
 %gpgverify(k:s:d:) %{lua:
-local script = rpm.expand("@libexecdir@/gpgverify ")
+local script = rpm.expand("/usr/libexec/gpgverify ")
 local keyring = rpm.expand("%{-k*}")
 local signature = rpm.expand("%{-s*}")
 local data = rpm.expand("%{-d*}")
