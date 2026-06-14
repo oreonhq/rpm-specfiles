@@ -2,7 +2,7 @@
 
 Name:           oreon-plasmaconfig
 Version:        11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Oreon Plasma look-and-feel package
 
 License:        GPLv2+
