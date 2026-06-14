@@ -10,7 +10,8 @@
 %global tapsetdir   %{_datadir}/systemtap/tapset
 
 %global dual_life 0
-%bcond_without perl_bootstrap 1
+# bootstrap: bcond_without perl_bootstrap 1
+%bcond_with perl_bootstrap
 %if %{with perl_bootstrap}
 %define gendep_file %(find . -name gendep.macros -print -quit 2>/dev/null)
 %include %{gendep_file}
