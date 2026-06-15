@@ -307,12 +307,14 @@
 %if 0%{?fedora}
 %global lts_designator ""
 %global lts_designator_zip ""
-%elseif 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
+%else
+%if 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
   %global lts_designator "LTS"
   %global lts_designator_zip -%{lts_designator}
 %else
   %global lts_designator ""
   %global lts_designator_zip ""
+%endif
 %endif
 
 # Define vendor information used by OpenJDK
