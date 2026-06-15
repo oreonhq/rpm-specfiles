@@ -1,4 +1,5 @@
 %global source0_hash 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
+%global __oreon_hwcaps_post_install %{nil}
 %global _distro_extra_cflags %{nil}
 %global _distro_extra_cxxflags %{nil}
 %global _distro_extra_ldflags %{nil}
