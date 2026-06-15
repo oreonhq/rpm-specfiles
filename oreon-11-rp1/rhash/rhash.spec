@@ -1,4 +1,8 @@
 %global source0_hash 6db837e7bbaa7c72c5fd43ca5af04b1d370c5ce32367b9f6a1f7b49b2338c09a
+%global __oreon_hwcaps_post_install %{nil}
+%global _distro_extra_cflags %{nil}
+%global _distro_extra_cxxflags %{nil}
+%global _distro_extra_ldflags %{nil}
 
 Name:           rhash
 Version:        1.4.5
