@@ -338,7 +338,7 @@ exit 1
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
 %global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
-%global ourldflags %(echo %{__global_ldflags} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld||g')
+%global ourldflags %{__global_ldflags}
 
 # In some cases, the arch used by the JDK does
 # not match _arch.
@@ -423,17 +423,12 @@ exit 1
 %global buildjdkver 25
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
-%if 0%{?fedora}
-%global lts_designator ""
-%global lts_designator_zip ""
-%else
-%if 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
+%if 0%{?rhel} && !0%{?epel}
   %global lts_designator "LTS"
   %global lts_designator_zip -%{lts_designator}
 %else
   %global lts_designator ""
   %global lts_designator_zip ""
-%endif
 %endif
 
 # Define vendor information used by OpenJDK
@@ -1142,17 +1137,6 @@ export NUM_PROC=${NUM_PROC:-1}
 # Honor %%_smp_ncpus_max
 [ ${NUM_PROC} -gt %{?_smp_ncpus_max} ] && export NUM_PROC=%{?_smp_ncpus_max}
 %endif
-echo "oreon: NUM_PROC=${NUM_PROC} gcc=$(gcc -dumpversion 2>/dev/null) bootjdk=%{bootjdk}"
-echo "=== OREON_BUILD_LIMITS ==="
-ulimit -a 2>/dev/null || true
-if [ -d /sys/fs/cgroup ]; then
-  echo "=== OREON_CGROUP_MEMORY ==="
-  for cg in /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory/memory.limit_in_bytes \
-            /sys/fs/cgroup/memory.current /sys/fs/cgroup/memory/memory.usage_in_bytes; do
-    if [ -r "$cg" ]; then echo "$cg=$(cat "$cg" 2>/dev/null)"; fi
-  done
-fi
-echo "=== OREON_BUILD_LIMITS_END ==="
 export XZ_OPT="-T0"
 
 %ifarch s390x sparc64 alpha %{power64} %{aarch64} riscv64
@@ -1178,8 +1162,8 @@ EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-mstackrealign|-mincoming-stack
 EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-mstackrealign|-mincoming-stack-boundary=2 -mpreferred-stack-boundary=4|')"
 %endif
 %if "%{is_dtstoolchain}" ==  "devkit" || "%{is_dtstoolchain}" ==  "system"
-EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g')"
-EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g')"
+EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g')"
+EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g')"
 %endif
 %if "%{is_dtstoolchain}" ==  "devkit"
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
@@ -1232,45 +1216,6 @@ export EXTRA_CFLAGS EXTRA_CPP_FLAGS
 # so eliminates one source of variability across RPM rebuilds.
 VERSION_FILE="$(pwd)"/"%{top_level_dir_name}"/make/conf/version-numbers.conf
 OPENJDK_UPSTREAM_TAG_EPOCH="$(stat --format=%Y "${VERSION_FILE}")"
-
-function oreon_dump_jdk_fail() {
-    local outputdir=${1}
-    local top_dir_abs_build_path=${2}
-    local top_dir_abs_src_path=${3}
-    local make_log=${4}
-    local make_ec=${5}
-    local failf="${RPM_BUILD_DIR:-.}/OREON_JDK_FAIL.txt"
-    local ec
-    ec=$(cat "$make_ec" 2>/dev/null || echo unknown)
-    {
-      echo "=== OREON_OPENJDK_BUILD_FAILED ==="
-      echo "outputdir=${outputdir} build_path=${top_dir_abs_build_path} make_exit=${ec}"
-      echo "=== OREON_MAKE.log tail ==="
-      if [ -f "$make_log" ]; then tail -200 "$make_log"; else echo "missing $make_log"; fi
-      echo "=== dmesg tail ==="
-      dmesg -T 2>/dev/null | tail -50 || true
-      echo "=== free -h ==="
-      free -h 2>/dev/null || true
-      echo "=== df -h ==="
-      df -h "${top_dir_abs_build_path}" 2>/dev/null || df -h . 2>/dev/null || true
-      flog="${top_dir_abs_build_path}/make-support/failure-logs"
-      if [ -d "$flog" ]; then
-        find "$flog" -type f 2>/dev/null | sort | while read f; do echo "=== failure-log $f ==="; cat "$f"; done
-      else
-        echo "=== no failure-logs at $flog ==="
-      fi
-      find "${top_dir_abs_build_path}" -path '*/libjvm/objs/*.o.log' -size +0 2>/dev/null | \
-        xargs -r grep -l -E 'error:|fatal error:|Killed|out of memory|internal compiler error|cannot allocate' 2>/dev/null | \
-        head -30 | while read f; do echo "=== errors in $f ==="; grep -E 'error:|fatal error:|Killed|out of memory|internal compiler error|cannot allocate' "$f"; done
-      find "${top_dir_abs_build_path}" -name '*.o.log' -size +0 -mmin -120 2>/dev/null | \
-        xargs -r ls -t 2>/dev/null | head -20 | while read f; do
-          echo "=== tail in-progress $f ==="
-          tail -100 "$f"
-        done
-      find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name 'hs_err_pid*.log' 2>/dev/null | while read f; do echo "=== $f ==="; cat "$f"; done
-      echo "=== OREON_OPENJDK_BUILD_FAILED_END ==="
-    } | tee "$failf" >&2
-}
 
 function buildjdk() {
     local outputdir=${1}
@@ -1370,30 +1315,11 @@ function buildjdk() {
     || ( pwd; cat $(find | grep config.log) && false )
 
     cat spec.gmk
-    make_log="${top_dir_abs_build_path}/OREON_MAKE.log"
-    make_ec="${top_dir_abs_build_path}/OREON_MAKE.exit"
-    rm -f "$make_ec" "$make_log"
-    unset JAVA_TOOL_OPTIONS
-    (
-      if [ "$debuglevel" = "fastdebug" ]; then
-        export JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1"
-        echo "oreon: fastdebug make JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS}"
-      fi
-      trap 'echo $? > '"'"'$make_ec'"'"' 2>/dev/null' EXIT
-      set -o pipefail
-      LD_LIBRARY_PATH=${LIBPATH} \
-      %{?dts_command} make LOG=info \
-        WARNINGS_ARE_ERRORS="-Wno-error" \
-        CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets 2>&1 | tee "$make_log"
-    )
-    make_status=$?
-    if [ ! -f "$make_ec" ]; then echo "$make_status" > "$make_ec"; fi
-    make_ec_val=$(cat "$make_ec" 2>/dev/null || echo "$make_status")
-    if [ "$make_status" -ne 0 ] || [ "$make_ec_val" -gt 128 ] 2>/dev/null; then
-      pwd
-      oreon_dump_jdk_fail "${outputdir}" "${top_dir_abs_build_path}" "${top_dir_abs_src_path}" "${make_log}" "${make_ec}"
-      false
-    fi
+    LD_LIBRARY_PATH=${LIBPATH} \
+    %{?dts_command} make LOG=trace \
+      WARNINGS_ARE_ERRORS="-Wno-error" \
+      CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
+        ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
     popd
 }
 
@@ -1705,12 +1631,6 @@ top_dir_abs_staticlibs_build_path=${top_dir_abs_main_build_path}
 
 export JAVA_HOME=${top_dir_abs_main_build_path}/images/%{jdkimage}
 
-unset JAVA_TOOL_OPTIONS
-if echo "x$suffix" | grep -q debug; then
-  export JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1"
-  echo "oreon: %check debug JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS}"
-fi
-
 # Pre-test setup
 
 # System security properties are disabled by default on portable.
@@ -1891,7 +1811,6 @@ grep 'JavaCallWrapper::JavaCallWrapper' gdb.out
 %endif
 
 # build cycles check
-unset JAVA_TOOL_OPTIONS
 done
 
 %install
