@@ -132,10 +132,9 @@ install -p -m 444 -t %{buildroot}%{rrcdir} redhat-hardened-*
 install -p -m 444 -t %{buildroot}%{rrcdir} redhat-annobin-*
 install -p -m 755 -t %{buildroot}%{rrcdir} config.*
 install -p -m 755 -t %{buildroot}%{rrcdir} dist.sh
+install -p -m 755 -t %{buildroot}%{rrcdir} oreon-hwcaps-post-install
 install -p -m 755 -t %{buildroot}%{rrcdir} brp-*
-
 install -p -m 755 -t %{buildroot}%{rrcdir} find-*
-install -p -m 755 -t %{buildroot}%{rrcdir} brp-*
 
 mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d
 install -p -m 644 -t %{buildroot}%{_rpmconfigdir}/macros.d macros.*
@@ -156,6 +155,7 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 
 %files
 %dir %{rrcdir}
+%{rrcdir}/oreon-hwcaps-post-install
 %{rrcdir}/brp-ldconfig
 %{rrcdir}/brp-mangle-shebangs
 %{rrcdir}/brp-strip-lto

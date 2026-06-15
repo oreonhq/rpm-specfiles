@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+
+: "${OREON_HWCAPS_BUILD:=0}"
+: "${OREON_HWCAPS_SUBDIR:=x86-64-v3}"
+: "${OREON_HWCAPS_MARCH:=-march=x86-64-v3}"
+: "${OREON_LIBDIR:=/usr/lib64}"
+
+test "$OREON_HWCAPS_BUILD" = "1" || exit 0
+test -f .oreon-hwcaps-stamp || exit 0
+test -f Makefile || test -f GNUmakefile || exit 0
+
+HWCAPS_ROOT="$RPM_BUILD_ROOT${OREON_LIBDIR}/glibc-hwcaps/${OREON_HWCAPS_SUBDIR}"
+mkdir -p "$HWCAPS_ROOT"
+
+export CFLAGS="$(echo "$CFLAGS" | sed -E "s/-march=x86-64(-v[0-9]+)?/${OREON_HWCAPS_MARCH}/g")"
+export CXXFLAGS="$(echo "$CXXFLAGS" | sed -E "s/-march=x86-64(-v[0-9]+)?/${OREON_HWCAPS_MARCH}/g")"
+export FFLAGS="$(echo "$FFLAGS" | sed -E "s/-march=x86-64(-v[0-9]+)?/${OREON_HWCAPS_MARCH}/g")"
+export FCFLAGS="$FFLAGS"
+
+MAKE="${MAKE:-/usr/bin/make}"
+JOBS="${RPM_BUILD_NCPUS:-${RPM_OPT_FLAGS_JOBS:-1}}"
+$MAKE -j"$JOBS" clean >/dev/null 2>&1 || :
+$MAKE -j"$JOBS" || exit 1
+
+while IFS= read -r -d '' lib; do
+  base="$(basename "$lib")"
+  if [ -L "$lib" ]; then
+    cp -a "$lib" "$HWCAPS_ROOT/$base"
+  elif file -b "$lib" 2>/dev/null | grep -qE 'ELF .* (shared object|dynamic lib)'; then
+    install -D -m 0755 "$lib" "$HWCAPS_ROOT/$base"
+  fi
+done < <(find . \( -name '*.so' -o -name '*.so.*' \) \( -type f -o -type l \) ! -path './.*' -print0 2>/dev/null)
