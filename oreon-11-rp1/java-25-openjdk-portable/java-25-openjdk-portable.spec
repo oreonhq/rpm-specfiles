@@ -1373,11 +1373,12 @@ function buildjdk() {
     make_log="${top_dir_abs_build_path}/OREON_MAKE.log"
     make_ec="${top_dir_abs_build_path}/OREON_MAKE.exit"
     rm -f "$make_ec" "$make_log"
-    if [ "$debuglevel" = "fastdebug" ]; then
-      export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:+$JAVA_TOOL_OPTIONS }-XX:TieredStopAtLevel=1"
-      echo "oreon: fastdebug make JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS}"
-    fi
+    unset JAVA_TOOL_OPTIONS
     (
+      if [ "$debuglevel" = "fastdebug" ]; then
+        export JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1"
+        echo "oreon: fastdebug make JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS}"
+      fi
       trap 'echo $? > '"'"'$make_ec'"'"' 2>/dev/null' EXIT
       set -o pipefail
       LD_LIBRARY_PATH=${LIBPATH} \
