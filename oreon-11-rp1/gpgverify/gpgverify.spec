@@ -1,5 +1,3 @@
-%global __oreon_hwcaps_post_install %{nil}
-
 Name:           gpgverify
 Version:        2.2
 Release:        4%{?dist}

@@ -1,5 +1,4 @@
 %global source0_hash b874af8a67b7c85b9b7a4c3c979bf741c0e7c548df2127005ac8755b4ba7ae46
-%global __oreon_hwcaps_post_install %{nil}
 
 %global forgeurl https://github.com/pemensik/get-trust-anchor
 %global gitcommit e68840988f15155a0be80ae5c36c33a79862ce42
