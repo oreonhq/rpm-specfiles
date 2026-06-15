@@ -54,7 +54,7 @@ Python trust anchor verification and fetching tool.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n get-trust-anchor-%{gitcommit} -p1
 
-%gpgverify -k6 -s5 -d4
+/usr/libexec/gpgverify --keyring='%{SOURCE6}' --signature='%{SOURCE5}' --data='%{SOURCE4}'
 openssl smime -verify -CAfile %{SOURCE1} -inform DER -in %{SOURCE3} -content %{SOURCE2} -out /dev/null
 
 
