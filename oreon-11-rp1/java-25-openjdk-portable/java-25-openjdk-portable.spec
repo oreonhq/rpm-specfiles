@@ -35,8 +35,12 @@
 %bcond_without staticlibs
 # Remove build artifacts by default
 %bcond_with artifacts
-# Build a fresh libjvm.so for use in a copy of the bootstrap JDK
+# f44/or11 bootstrap: use bootjdk libjvm as-is, skip fragile newboot hotspot pass
+%if 0%{?fedora} || (0%{?oreon} >= 11)
+%bcond_with fresh_libjvm
+%else
 %bcond_without fresh_libjvm
+%endif
 # Build with system libraries
 %bcond_with system_libs
 
@@ -1173,6 +1177,9 @@ EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redha
 # Force DWARF 4 for compatibility
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
 EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -gdwarf-4"
+%else
+EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
+EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
 %endif
 
 export EXTRA_CFLAGS EXTRA_CPP_FLAGS
