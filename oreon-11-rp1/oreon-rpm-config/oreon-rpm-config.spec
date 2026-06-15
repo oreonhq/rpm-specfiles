@@ -54,6 +54,7 @@ Source157: macros.shell-completions
 Source158: macros.rpmautospec
 Source159: macros.oreon-opt
 Source160: macros.oreon-hwcaps
+Source161: oreon-hwcaps-post-install
 
 Source201: brp-mangle-shebangs
 
