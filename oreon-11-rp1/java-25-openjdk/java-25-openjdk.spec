@@ -1,6 +1,13 @@
 %global source0_hash none
 %global source31_hash dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb
 
+%if 0%{?oreon} >= 11
+%undefine _distro_extra_cflags
+%undefine _distro_extra_cxxflags
+%undefine _distro_extra_fflags
+%undefine _distro_extra_ldflags
+%endif
+
 # RPM conditionals so as to be able to dynamically produce
 # slowdebug/release builds. See:
 # http://rpm.org/user_doc/conditional_builds.html
@@ -297,7 +304,10 @@
 
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
-%if 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
+%if 0%{?fedora}
+%global lts_designator ""
+%global lts_designator_zip ""
+%elseif 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
   %global lts_designator "LTS"
   %global lts_designator_zip -%{lts_designator}
 %else
