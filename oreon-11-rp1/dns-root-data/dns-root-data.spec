@@ -1,4 +1,5 @@
 %global source0_hash b874af8a67b7c85b9b7a4c3c979bf741c0e7c548df2127005ac8755b4ba7ae46
+%global __oreon_hwcaps_post_install %{nil}
 
 %global forgeurl https://github.com/pemensik/get-trust-anchor
 %global gitcommit e68840988f15155a0be80ae5c36c33a79862ce42
@@ -53,7 +54,7 @@ Python trust anchor verification and fetching tool.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n get-trust-anchor-%{gitcommit} -p1
 
-%{gpgverify} --keyring='%{SOURCE6}' --signature='%{SOURCE5}' --data='%{SOURCE4}'
+%gpgverify -k6 -s5 -d4
 openssl smime -verify -CAfile %{SOURCE1} -inform DER -in %{SOURCE3} -content %{SOURCE2} -out /dev/null
 
 
