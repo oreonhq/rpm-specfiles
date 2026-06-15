@@ -26,7 +26,8 @@ Source6:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf0cb1a32
 BuildRequires:  python3
 BuildRequires:  python3-dns
 BuildRequires:  openssl
-BuildRequires:  gpgverify
+BuildRequires:  gnupg2
+BuildRequires:  gnupg2-verify
 BuildRequires:  bind-dnssec-utils
 BuildRequires:  sed
 BuildArch:      noarch
@@ -54,7 +55,10 @@ Python trust anchor verification and fetching tool.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n get-trust-anchor-%{gitcommit} -p1
 
-/usr/libexec/gpgverify --keyring='%{SOURCE6}' --signature='%{SOURCE5}' --data='%{SOURCE4}'
+_gpgvdir=$(mktemp -d)
+gpg2 --homedir="$_gpgvdir" --yes --output "$_gpgvdir/ring.gpg" --dearmor '%{SOURCE6}'
+gpgv2 --homedir="$_gpgvdir" --keyring="$_gpgvdir/ring.gpg" '%{SOURCE5}' '%{SOURCE4}'
+rm -rf "$_gpgvdir"
 openssl smime -verify -CAfile %{SOURCE1} -inform DER -in %{SOURCE3} -content %{SOURCE2} -out /dev/null
 
 
