@@ -1,4 +1,6 @@
 %global source0_hash 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
+%global _distro_extra_cflags %{nil}
+%global _distro_extra_cxxflags %{nil}
 
 Name:           hiredis
 Version:        1.2.0
@@ -31,8 +33,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%make_build PREFIX="%{_prefix}" LIBRARY_PATH="%{_lib}"     \
-            DEBUG="%{optflags}" LDFLAGS="%{?__global_ldflags}" USE_SSL=1
+%make_build PREFIX="%{_prefix}" LIBRARY_PATH="%{_lib}" \
+            LDFLAGS="%{?__global_ldflags}" USE_SSL=1
 
 %install
 %make_install PREFIX="%{_prefix}" LIBRARY_PATH="%{_lib}" USE_SSL=1
