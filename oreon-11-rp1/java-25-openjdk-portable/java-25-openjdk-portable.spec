@@ -1705,6 +1705,12 @@ top_dir_abs_staticlibs_build_path=${top_dir_abs_main_build_path}
 
 export JAVA_HOME=${top_dir_abs_main_build_path}/images/%{jdkimage}
 
+unset JAVA_TOOL_OPTIONS
+if echo "x$suffix" | grep -q debug; then
+  export JAVA_TOOL_OPTIONS="-XX:TieredStopAtLevel=1"
+  echo "oreon: %check debug JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS}"
+fi
+
 # Pre-test setup
 
 # System security properties are disabled by default on portable.
@@ -1885,6 +1891,7 @@ grep 'JavaCallWrapper::JavaCallWrapper' gdb.out
 %endif
 
 # build cycles check
+unset JAVA_TOOL_OPTIONS
 done
 
 %install
