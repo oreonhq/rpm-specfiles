@@ -1258,10 +1258,10 @@ URL:      http://openjdk.java.net/
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
 # systemtap tapsets from icedtea, kept as local .in files
-Source19: tapset/hotspot.stp.in
-Source20: tapset/hotspot_gc.stp.in
-Source21: tapset/hotspot_jni.stp.in
-Source22: tapset/jstack.stp.in
+Source19: hotspot.stp.in
+Source20: hotspot_gc.stp.in
+Source21: hotspot_jni.stp.in
+Source22: jstack.stp.in
 # Desktop files. Adapted from IcedTea
 Source9:        jconsole.desktop.in
 
