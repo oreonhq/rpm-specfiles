@@ -4,10 +4,13 @@
 %global source0_hash none
 
 %if 0%{?oreon} >= 11
+%global _general_options -O2 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
+%global build_type_safety_c 0
 %undefine _distro_extra_cflags
 %undefine _distro_extra_cxxflags
 %undefine _distro_extra_fflags
 %undefine _distro_extra_ldflags
+%undefine _hardened_build
 %endif
 
 # RPM conditionals so as to be able to dynamically produce
@@ -336,9 +339,13 @@ exit 1
 # We filter out -Wall which will otherwise cause HotSpot to produce hundreds of thousands of warnings (100+mb logs)
 # We replace it with -Wformat (required by -Werror=format-security) and -Wno-cpp to avoid FORTIFY_SOURCE warnings
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
+%if 0%{?oreon} >= 11
+%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|')
+%else
 %global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
+%endif
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
-%global ourldflags %(echo %{__global_ldflags} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld||g')
+%global ourldflags %{__global_ldflags}
 
 # In some cases, the arch used by the JDK does
 # not match _arch.
@@ -1161,9 +1168,10 @@ EXTRA_CFLAGS="$EXTRA_CFLAGS -fno-strict-aliasing"
 EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-mstackrealign|-mincoming-stack-boundary=2 -mpreferred-stack-boundary=4|')"
 EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-mstackrealign|-mincoming-stack-boundary=2 -mpreferred-stack-boundary=4|')"
 %endif
-%if "%{is_dtstoolchain}" ==  "devkit" || "%{is_dtstoolchain}" ==  "system"
-EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g')"
-EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g')"
+%if "%{is_dtstoolchain}" ==  "devkit"
+# Remove annobin plugin reference which isn't available in the devkit
+EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
+EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
 %endif
 %if "%{is_dtstoolchain}" ==  "devkit"
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
@@ -1317,6 +1325,9 @@ function buildjdk() {
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
     %{?dts_command} make LOG=trace \
+%if 0%{?oreon} >= 11
+      JVM_OPTIMIZATION=NORM \
+%endif
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
