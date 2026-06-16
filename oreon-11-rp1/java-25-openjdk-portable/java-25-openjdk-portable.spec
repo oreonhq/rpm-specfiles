@@ -338,7 +338,7 @@ exit 1
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
 %global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
-%global ourldflags %{__global_ldflags}
+%global ourldflags %(echo %{__global_ldflags} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-ld||g')
 
 # In some cases, the arch used by the JDK does
 # not match _arch.
