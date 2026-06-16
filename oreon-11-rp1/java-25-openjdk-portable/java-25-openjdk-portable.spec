@@ -1162,8 +1162,8 @@ EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-mstackrealign|-mincoming-stack
 EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-mstackrealign|-mincoming-stack-boundary=2 -mpreferred-stack-boundary=4|')"
 %endif
 %if "%{is_dtstoolchain}" ==  "devkit" || "%{is_dtstoolchain}" ==  "system"
-EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g')"
-EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g')"
+EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g')"
+EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g')"
 %endif
 %if "%{is_dtstoolchain}" ==  "devkit"
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
