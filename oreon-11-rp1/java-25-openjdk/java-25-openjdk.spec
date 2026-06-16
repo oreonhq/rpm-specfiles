@@ -1778,31 +1778,73 @@ if [ $prioritylength -ne 8 ] ; then
  exit 14
 fi
 
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz
+portable_tar() {
+  local pattern f
+  for pattern in "$@"; do
+    for f in $pattern; do
+      if [ -f "$f" ]; then
+        tar -xf "$f"
+        return 0
+      fi
+    done
+  done
+  echo "missing portable tarball, tried:" >&2
+  printf '  %s\n' "$@" >&2
+  echo "contents of %{portablejvmdir}:" >&2
+  ls -la %{portablejvmdir}/ >&2 || true
+  exit 1
+}
+
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.noarch.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.misc.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.docs.%{_arch}.tar.xz
 
 %if %{include_normal_build}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jdk.%{_arch}.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jmods.%{_arch}.tar.xz
-# Extract debuginfo as well
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.debuginfo.jdk.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jdk.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.jdk.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jmods.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.jmods.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.debuginfo.jdk.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.debuginfo.jdk.%{_arch}.tar.xz
 %if %{include_staticlibs}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.static-libs.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.static-libs.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 %if %{include_fastdebug_build}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jdk.%{_arch}.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jmods.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jdk.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.jdk.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jmods.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.jmods.%{_arch}.tar.xz
 %if %{include_staticlibs}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.static-libs.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.static-libs.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 %if %{include_debug_build}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jdk.%{_arch}.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jmods.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jdk.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.jdk.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jmods.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.jmods.%{_arch}.tar.xz
 %if %{include_staticlibs}
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.static-libs.%{_arch}.tar.xz
+portable_tar \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.static-libs.%{_arch}.tar.xz \
+  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 

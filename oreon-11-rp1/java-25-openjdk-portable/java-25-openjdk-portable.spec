@@ -529,7 +529,7 @@ exit 1
 %define uniquesuffix()        %{expand:%{fullversion}.%{_arch}%{?1}}
 # portable only declarations
 %global jreimage                jre
-%if ((0%{?fedora} > 0) || (0%{?epel} > 0))
+%if ((0%{?fedora} > 0) || (0%{?epel} > 0) || (0%{?oreon} >= 11))
 %define regexBase %{version}-%{release}
 %else
 %define regexBase el%{rhel}\\(_[0-9]\\)*
@@ -566,6 +566,9 @@ exit 1
 # JDK to use for bootstrapping
 %ifarch %{fastdebug_arches}
 %global bootdebugpkg fastdebug
+%endif
+%if 0%{?oreon} >= 11
+%undefine bootdebugpkg
 %endif
 %if %{use_portable_bootjdk}
 %global bootjdkpkg_name java-%{featurever}-%{origin}
@@ -818,7 +821,11 @@ BuildRequires: zip
 BuildRequires: tar
 BuildRequires: unzip
 BuildRequires: javapackages-filesystem
+%if 0%{?oreon} >= 11
+BuildRequires: (java-25-openjdk-devel >= 25 or java-25-openjdk-devel-fastdebug >= 25)
+%else
 BuildRequires: %{bootjdkpkg}
+%endif
 # Zero-assembler build requirement
 %ifarch %{zero_arches}
 BuildRequires: libffi-devel
@@ -1559,12 +1566,24 @@ echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_design
 %if %{build_hotspot_first}
   # Build a fresh libjvm.so first and use it to bootstrap
   echo "Building HotSpot only for the latest libjvm.so"
-  cp -LR --preserve=mode,timestamps %{bootjdk} newboot
+  bootstrap_jdk=%{bootjdk}
+%if 0%{?oreon} >= 11
+  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
+    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+  fi
+%endif
+  cp -LR --preserve=mode,timestamps ${bootstrap_jdk} newboot
   systemjdk=$(pwd)/newboot
   buildjdk build/newboot ${systemjdk} %{hotspot_target} "release" "bundled" "internal" ${DEVKIT_ROOT}
   mv build/newboot/jdk/lib/%{vm_variant}/libjvm.so newboot/lib/%{vm_variant}
 %else
-  systemjdk=%{bootjdk}
+  bootstrap_jdk=%{bootjdk}
+%if 0%{?oreon} >= 11
+  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
+    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+  fi
+%endif
+  systemjdk=${bootstrap_jdk}
 %endif
 
 for suffix in %{build_loop} ; do
