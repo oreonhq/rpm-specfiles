@@ -1585,28 +1585,34 @@ LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt
 
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
-%if %{build_hotspot_first}
-  # Build a fresh libjvm.so first and use it to bootstrap
-  echo "Building HotSpot only for the latest libjvm.so"
-  bootstrap_jdk=%{bootjdk}
+bootstrap_jdk=%{bootjdk}
 %if 0%{?oreon} >= 11
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
-  fi
+if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
+  bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+elif [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk/bin/java ]; then
+  bootstrap_jdk=/usr/lib/jvm/java-25-openjdk
+fi
 %endif
+
+run_hotspot_first=0
+%if %{with fresh_libjvm}
+if [ "%{buildjdkver}" = "%{featurever}" ]; then
+  boot_major=$("${bootstrap_jdk}/bin/java" -version 2>&1 | sed -n 's/.*version "\([0-9][0-9]*\)\..*/\1/p' | head -1)
+  if [ "x${boot_major}" = "x%{featurever}" ]; then
+    run_hotspot_first=1
+  fi
+fi
+%endif
+
+if [ ${run_hotspot_first} -eq 1 ]; then
+  echo "Building HotSpot only for the latest libjvm.so"
   cp -LR --preserve=mode,timestamps ${bootstrap_jdk} newboot
   systemjdk=$(pwd)/newboot
   buildjdk build/newboot ${systemjdk} %{hotspot_target} "release" "bundled" "internal" ${DEVKIT_ROOT}
   mv build/newboot/jdk/lib/%{vm_variant}/libjvm.so newboot/lib/%{vm_variant}
-%else
-  bootstrap_jdk=%{bootjdk}
-%if 0%{?oreon} >= 11
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
-  fi
-%endif
+else
   systemjdk=${bootstrap_jdk}
-%endif
+fi
 
 for suffix in %{build_loop} ; do
   if [ "x$suffix" = "x" ] ; then
