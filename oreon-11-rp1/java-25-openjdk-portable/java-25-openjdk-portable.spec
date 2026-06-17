@@ -3,7 +3,6 @@
 
 %global source0_hash none
 
-%if 0%{?oreon} >= 11
 %global _general_options -O2 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
 %global build_type_safety_c 0
 %undefine _distro_extra_cflags
@@ -11,7 +10,17 @@
 %undefine _distro_extra_fflags
 %undefine _distro_extra_ldflags
 %undefine _hardened_build
-%endif
+%undefine _annotated_build
+%global set_build_flags \
+  CFLAGS="%{optflags} -fno-lifetime-dse" ; export CFLAGS ; \
+  CXXFLAGS="%{build_cxxflags} -fno-lifetime-dse" ; export CXXFLAGS ; \
+  FFLAGS="%{build_fflags}" ; export FFLAGS ; \
+  FCFLAGS="%{build_fflags}" ; export FCFLAGS ; \
+  VALAFLAGS="%{build_valaflags}" ; export VALAFLAGS ; \
+  LDFLAGS="%{build_ldflags}" ; export LDFLAGS ; \
+  LT_SYS_LIBRARY_PATH="%{_libdir}:" ; export LT_SYS_LIBRARY_PATH ; \
+  CC="%{__cc}" ; export CC ; \
+  CXX="%{__cxx}" ; export CXX
 
 # RPM conditionals so as to be able to dynamically produce
 # slowdebug/release builds. See:
@@ -339,11 +348,7 @@ exit 1
 # We filter out -Wall which will otherwise cause HotSpot to produce hundreds of thousands of warnings (100+mb logs)
 # We replace it with -Wformat (required by -Werror=format-security) and -Wno-cpp to avoid FORTIFY_SOURCE warnings
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
-%if 0%{?oreon} >= 11
 %global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|')
-%else
-%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
-%endif
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
 %global ourldflags %{__global_ldflags}
 
@@ -1180,6 +1185,10 @@ EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-mstackrealign|-mincoming
 EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
 EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
 %endif
+EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g' -e 's|-fstack-protector ||g')"
+EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g' -e 's|-fstack-protector ||g')"
+EXTRA_CFLAGS="${EXTRA_CFLAGS} -O2"
+EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -O2"
 %if "%{is_dtstoolchain}" ==  "devkit"
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
 EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -gdwarf-4"
@@ -1278,6 +1287,8 @@ function buildjdk() {
     mkdir -p ${outputdir}
     pushd ${outputdir}
 
+    unset CFLAGS CXXFLAGS CPPFLAGS
+
     # Note: zlib and freetype use %{link_type}
     # rather than ${link_opt} as the system versions
     # are always used in a system_libs build, even
@@ -1332,9 +1343,8 @@ function buildjdk() {
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
     %{?dts_command} make LOG=trace \
-%if 0%{?oreon} >= 11
       JVM_OPTIMIZATION=NORM \
-%endif
+      USE_PRECOMPILED_HEADER=false \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
