@@ -1343,8 +1343,6 @@ function buildjdk() {
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
     %{?dts_command} make LOG=trace \
-      JVM_OPTIMIZATION=NORM \
-      USE_PRECOMPILED_HEADER=false \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
