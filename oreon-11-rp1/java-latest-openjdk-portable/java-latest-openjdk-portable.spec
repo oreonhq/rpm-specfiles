@@ -1,7 +1,7 @@
 # debug_package %%{nil} is portable-jdks specific
 %define debug_package %{nil}
 
-%global source0_hash none
+%global source0_hash f5d5496a2f9a81605681209d93fc99726313e5d9a9a2af059f1adaa3914b862d
 
 %global _general_options -O2 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
 %global build_type_safety_c 0
@@ -480,6 +480,8 @@ exit 1
 %global filever %(svn=%{newjavaver}; for i in 1 2 3 4 5 6 ; do svn=${svn%%.0} ; done; echo ${svn})
 # The tag used to create the OpenJDK tarball
 %global vcstag jdk-%{filever}+%{buildver}%{?tagsuffix:-%{tagsuffix}}
+%global vcstag_url %(echo %{vcstag} | sed 's/+/%2B/g')
+%global github_archive_dir jdk26u-jdk-%{filever}-%{buildver}
 
 # Standard JPackage naming and versioning defines
 %global origin          openjdk
@@ -723,8 +725,8 @@ Group:   Development/Languages
 License:  Apache-1.1 AND Apache-2.0 AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-BSD-with-advertising AND GPL-1.0-or-later AND GPL-2.0-only AND LicenseRef-Callaway-GPLv2-with-exceptions AND IJG AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-MIT AND MPL-2.0 AND LicenseRef-Callaway-Public-Domain AND W3C AND Zlib AND ISC AND FTL AND LicenseRef-RSA
 URL:      http://openjdk.java.net/
 
-# The source tarball, generated using generate_source_tarball.sh
-Source0: https://openjdk-sources.osci.io/openjdk%{featurever}/open%{vcstag}%{ea_designator_zip}.tar.xz
+# osci.io has no jdk26 tarball yet, pull tag archive from upstream git
+Source0: https://github.com/openjdk/jdk26u/archive/refs/tags/%{vcstag_url}.tar.gz#/open%{vcstag}%{ea_designator_zip}.tar.gz
 
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
@@ -1061,6 +1063,9 @@ fi
 
 export XZ_OPT="-T0"
 %setup -q -c -n %{uniquesuffix ""} -T -a 0
+if [ -d %{github_archive_dir} ] && [ ! -d %{top_level_dir_name} ]; then
+  mv %{github_archive_dir} %{top_level_dir_name}
+fi
 # https://bugzilla.redhat.com/show_bug.cgi?id=1189084
 prioritylength=`expr length %{priority}`
 if [ $prioritylength -ne 8 ] ; then
