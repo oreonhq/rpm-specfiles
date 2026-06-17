@@ -328,7 +328,7 @@ exit 1
 %endif
 
 # Check if pandoc is available to generate docs (including man pages)
-%if 0%{?rhel} == 8 || 0%{?epel} > 0 || 0%{?fedora} > 0 || 0%{?oreon} >= 11
+%if 0%{?rhel} == 8 || 0%{?epel} > 0 || 0%{?fedora} > 0
 %global pandoc_available 1
 %else
 %global pandoc_available 0
