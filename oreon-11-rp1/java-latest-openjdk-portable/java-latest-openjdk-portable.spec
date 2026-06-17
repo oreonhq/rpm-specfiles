@@ -48,7 +48,11 @@
 # Remove build artifacts by default
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
+%if 0%{?oreon} >= 11
+%bcond_with fresh_libjvm
+%else
 %bcond_without fresh_libjvm
+%endif
 # Build with system libraries
 %bcond_with system_libs
 
@@ -588,14 +592,22 @@ exit 1
 %global bootjdkzip %{_jvmdir}/%{bootjdkpkg_name}-*.portable%{?bootdebugpkg:.%{bootdebugpkg}}.jdk.%{_arch}.tar.xz
 %global bootjdk %{_builddir}/%{uniquesuffix -- ""}/%{bootjdkpkg_name}.boot
 %else
+%if 0%{?oreon} >= 11
+%global bootjdkpkg_name java-25-openjdk
+%global bootjdkpkg %{bootjdkpkg_name}-devel
+%global bootjdk /usr/lib/jvm/%{bootjdkpkg_name}
+%else
 %global bootjdkpkg_name java-latest-openjdk
 %global bootjdkpkg %{bootjdkpkg_name}-devel%{?bootdebugpkg:-%{bootdebugpkg}}
 %global bootjdk /usr/lib/jvm/%{bootjdkpkg_name}%{?bootdebugpkg:-%{bootdebugpkg}}
 %endif
+%endif
 # Define whether to use the bootstrap JDK directly or with a fresh libjvm.so
 # This will only work where the bootstrap JDK is the same major version
 # as the JDK being built
-%if %{with fresh_libjvm} && %{buildjdkver} == %{featurever}
+%if 0%{?oreon} >= 11
+%global build_hotspot_first 0
+%elif %{with fresh_libjvm} && %{buildjdkver} == %{featurever}
 %global build_hotspot_first 1
 %else
 %global build_hotspot_first 0
@@ -1585,15 +1597,18 @@ LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt
 
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
-bootstrap_jdk=%{bootjdk}
 %if 0%{?oreon} >= 11
-if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
-  bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
-elif [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk/bin/java ]; then
+bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
   bootstrap_jdk=/usr/lib/jvm/java-25-openjdk
 fi
-%endif
-
+if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
+  echo "oreon: need java-25-openjdk or java-25-openjdk-fastdebug to bootstrap jdk %{featurever}" >&2
+  exit 1
+fi
+systemjdk=${bootstrap_jdk}
+%else
+bootstrap_jdk=%{bootjdk}
 run_hotspot_first=0
 %if %{with fresh_libjvm}
 if [ "%{buildjdkver}" = "%{featurever}" ]; then
@@ -1603,7 +1618,6 @@ if [ "%{buildjdkver}" = "%{featurever}" ]; then
   fi
 fi
 %endif
-
 if [ ${run_hotspot_first} -eq 1 ]; then
   echo "Building HotSpot only for the latest libjvm.so"
   cp -LR --preserve=mode,timestamps ${bootstrap_jdk} newboot
@@ -1613,6 +1627,7 @@ if [ ${run_hotspot_first} -eq 1 ]; then
 else
   systemjdk=${bootstrap_jdk}
 fi
+%endif
 
 for suffix in %{build_loop} ; do
   if [ "x$suffix" = "x" ] ; then
