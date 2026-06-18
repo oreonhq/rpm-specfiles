@@ -250,8 +250,11 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 	%{?_configure_use_runstatedir:$(grep -q "runstatedir=DIR" %{_configure} && echo '--runstatedir=%{_runstatedir}')} \\\
 	--sharedstatedir=%{_sharedstatedir} \\\
 	--mandir=%{_mandir} \\\
-	--infodir=%{_infodir} \
-  ; if [ "%{_oreon_hwcaps_build}" = "1" ]; then echo 1 > .oreon-hwcaps-stamp; fi
+	--infodir=%{_infodir}
+
+%make_build \
+  %{?__oreon_hwcaps_make_pre:%{__oreon_hwcaps_make_pre}} \
+  %{__make} %{_make_output_sync} %{?_smp_mflags} %{_make_verbose}
 
 #==============================================================================
 # ---- Build policy macros.

@@ -1,5 +1,7 @@
 %_oreon_hwcaps_build %{?x86_64:1}%{!?x86_64:0}
 
+%__oreon_hwcaps_make_pre [ "%{_oreon_hwcaps_build}" = "1" ] && [ -f config.status ] && echo 1 > .oreon-hwcaps-stamp;
+
 %_oreon_hwcaps_subdir x86-64-v3
 %_oreon_hwcaps_march -march=x86-64-v3
 

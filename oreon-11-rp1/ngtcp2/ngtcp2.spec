@@ -119,10 +119,11 @@ install -p -m 644 %{SOURCE5} doc/source/
 
 %build
 autoreconf -fsi
+%{_oreon_configure_common}
 %if %{with gnutls}
-%configure --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
+./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --libdir=%{_libdir} --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
 %else
-%configure --with-openssl --with-libev --disable-static --enable-werror
+./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --libdir=%{_libdir} --with-openssl --with-libev --disable-static --enable-werror
 %endif
 %make_build
 %if %{with docs}
