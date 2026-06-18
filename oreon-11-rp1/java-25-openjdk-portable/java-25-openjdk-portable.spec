@@ -49,6 +49,8 @@
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
 %bcond_without fresh_libjvm
+# Seed boot JDK from Eclipse Temurin tarball when distro has no java packages yet
+%bcond_without vendor_bootjdk
 # Build with system libraries
 %bcond_with system_libs
 
@@ -432,7 +434,12 @@ exit 1
 # buildjdkver is usually same as %%{featurever},
 # but in time of bootstrap of next jdk, it is featurever-1,
 # and this it is better to change it here, on single place
-%global buildjdkver 25
+%bcond_with jdk_selfhosted
+%if %{with jdk_selfhosted}
+%global buildjdkver %{featurever}
+%else
+%global buildjdkver 21
+%endif
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
 %if 0%{?rhel} && !0%{?epel}
@@ -575,7 +582,10 @@ exit 1
 %if 0%{?oreon} >= 11
 %undefine bootdebugpkg
 %endif
-%if %{use_portable_bootjdk}
+%if %{with vendor_bootjdk}
+%global use_vendor_bootjdk 1
+%global bootjdk %{_builddir}/%{uniquesuffix -- ""}/vendor-bootjdk
+%elif %{use_portable_bootjdk}
 %global bootjdkpkg_name java-%{featurever}-%{origin}
 %global bootjdkpkg %{bootjdkpkg_name}-portable-devel%{?bootdebugpkg:-%{bootdebugpkg}} >= %{buildjdkver}
 %global bootjdkzip %{_jvmdir}/%{bootjdkpkg_name}-*.portable%{?bootdebugpkg:.%{bootdebugpkg}}.jdk.%{_arch}.tar.xz
@@ -718,6 +728,24 @@ URL:      http://openjdk.java.net/
 # The source tarball, generated using generate_source_tarball.sh
 Source0: https://openjdk-sources.osci.io/openjdk%{featurever}/open%{vcstag}%{ea_designator_zip}.tar.xz
 
+%if %{with vendor_bootjdk}
+%ifarch x86_64
+Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_x64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
+%global vendor_bootjdk_dir OpenJDK21U-jdk_x64_linux_hotspot_21.0.11_10
+%global vendor_bootjdk_hash 4b2220e232a97997b436ca6ab15cbf70171ecff52958a46159dfa5a8c44ca4de
+%endif
+%ifarch aarch64
+Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
+%global vendor_bootjdk_dir OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.11_10
+%global vendor_bootjdk_hash 8d498ec88e1c1989fab95c6784240ab92d011e29c54d20a3f9c324b13476f9ad
+%endif
+%ifnarch x86_64 aarch64
+%{error: vendor_bootjdk has no Temurin source for %{_arch}}
+%endif
+%else
+%global vendor_bootjdk_hash none
+%endif
+
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
 # Systemtap tapsets. Zipped up to keep it small.
@@ -826,10 +854,8 @@ BuildRequires: zip
 BuildRequires: tar
 BuildRequires: unzip
 BuildRequires: javapackages-filesystem
-%if 0%{?oreon} >= 11
-BuildRequires: (java-25-openjdk-devel >= 25 or java-25-openjdk-devel-fastdebug >= 25)
-%else
-BuildRequires: %{bootjdkpkg}
+%if !%{with vendor_bootjdk}
+BuildRequires: (java-%{buildjdkver}-openjdk-devel >= %{buildjdkver} or java-%{buildjdkver}-openjdk-devel-fastdebug >= %{buildjdkver})
 %endif
 # Zero-assembler build requirement
 %ifarch %{zero_arches}
@@ -1011,11 +1037,19 @@ The %{origin_nice} %{featurever} full patched sources of portable JDK to build, 
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%if %{with vendor_bootjdk}
+test "%{vendor_bootjdk_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{vendor_bootjdk_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; }
+%endif
 
 # Using the echo macro breaks rpmdev-bumpspec, as it parses the first line of stdout :-(
 echo "Preparing %{oj_vendor_version}"
 echo "System is RHEL=%{?rhel}%{!?rhel:0}, CentOS=%{?centos}%{!?centos:0}, EPEL=%{?epel}%{!?epel:0}, Fedora=%{?fedora}%{!?fedora:0}"
-echo "Build JDK version is %{buildjdkver}, bootstrap JDK package is %{bootjdkpkg}"
+echo "Build JDK version is %{buildjdkver}"
+%if %{with vendor_bootjdk}
+echo "Bootstrap JDK is vendored Temurin %{buildjdkver} at %{bootjdk}"
+%else
+echo "Bootstrap JDK package is %{bootjdkpkg}"
+%endif
 
 %if 0%{?_build_cpu:1}
   echo "CPU: %{_target_cpu}, arch install directory: %{archinstall}, SystemTap install directory: %{_build_cpu}"
@@ -1052,7 +1086,11 @@ fi
 %endif
 
 export XZ_OPT="-T0"
+%if %{with vendor_bootjdk}
+%setup -q -c -n %{uniquesuffix ""} -T -a 0 -a 101
+%else
 %setup -q -c -n %{uniquesuffix ""} -T -a 0
+%endif
 # https://bugzilla.redhat.com/show_bug.cgi?id=1189084
 prioritylength=`expr length %{priority}`
 if [ $prioritylength -ne 8 ] ; then
@@ -1147,6 +1185,27 @@ fi
   echo "Installed boot JDK:"
   cat %{bootjdk}/release
 %endif
+
+%if %{with vendor_bootjdk}
+mkdir -p %{bootjdk}
+tar -xzf temurin-%{buildjdkver}-bootjdk.tar.gz -C $(dirname %{bootjdk})
+mv $(dirname %{bootjdk})/%{vendor_bootjdk_dir} %{bootjdk}
+echo "Installed vendor boot JDK:"
+cat %{bootjdk}/release
+%endif
+
+rev_boot=%{bootjdk}
+if [ ! -x "${rev_boot}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
+  rev_boot=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
+fi
+if [ -x "${rev_boot}/bin/java" ]; then
+  mkdir -p .src-rev-build
+  pushd .src-rev-build
+  sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvm-args="-XX:+UseParallelGC"
+  make store-source-revision
+  popd
+  rm -rf .src-rev-build
+fi
 
 %build
 # How many CPU's do we have?
@@ -1572,25 +1631,24 @@ LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
 %if %{build_hotspot_first}
-  # Build a fresh libjvm.so first and use it to bootstrap
   echo "Building HotSpot only for the latest libjvm.so"
   bootstrap_jdk=%{bootjdk}
-%if 0%{?oreon} >= 11
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
+    bootstrap_jdk=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
   fi
-%endif
   cp -LR --preserve=mode,timestamps ${bootstrap_jdk} newboot
   systemjdk=$(pwd)/newboot
   buildjdk build/newboot ${systemjdk} %{hotspot_target} "release" "bundled" "internal" ${DEVKIT_ROOT}
   mv build/newboot/jdk/lib/%{vm_variant}/libjvm.so newboot/lib/%{vm_variant}
 %else
   bootstrap_jdk=%{bootjdk}
-%if 0%{?oreon} >= 11
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-25-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-25-openjdk-fastdebug
+  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
+    bootstrap_jdk=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
   fi
-%endif
+  if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
+    echo "need java-%{buildjdkver}-openjdk to bootstrap jdk %{featurever}" >&2
+    exit 1
+  fi
   systemjdk=${bootstrap_jdk}
 %endif
 
