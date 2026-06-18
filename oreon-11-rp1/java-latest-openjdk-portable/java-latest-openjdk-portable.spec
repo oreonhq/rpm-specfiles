@@ -1221,7 +1221,7 @@ fi
 if [ -x "${rev_boot}/bin/java" ]; then
   mkdir -p .src-rev-build
   pushd .src-rev-build
-  sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvm-args="-XX:+UseParallelGC"
+  sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvmargs="-XX:+UseParallelGC"
   make store-source-revision
   popd
   rm -rf .src-rev-build
