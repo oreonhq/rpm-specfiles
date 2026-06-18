@@ -38,10 +38,9 @@
 # Only produce a release build on x86_64:
 # $ rpmbuild -ba java-latest-openjdk-portable.spec --without slowdebug --without fastdebug
 
-# Enable fastdebug builds by default on relevant arches.
-%bcond_without fastdebug
-# Enable slowdebug builds by default on relevant arches.
-%bcond_without slowdebug
+# Bootstrap/GUI builds only need release. Enable debug variants explicitly if wanted.
+%bcond_with fastdebug
+%bcond_with slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
 # Enable static library builds by default.
@@ -351,9 +350,9 @@ exit 1
 # We filter out -Wall which will otherwise cause HotSpot to produce hundreds of thousands of warnings (100+mb logs)
 # We replace it with -Wformat (required by -Werror=format-security) and -Wno-cpp to avoid FORTIFY_SOURCE warnings
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
-%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|')
+%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' -e 's|-flto=auto||g' -e 's|-ffat-lto-objects||g' -e 's|-fdevirtualize-at-ltrans||g' -e 's|-fno-semantic-interposition||g' -e 's|-falign-functions=[0-9]*||g' -e 's|-falign-loops=[0-9]*||g' -e 's|-falign-jumps=[0-9]*||g' -e 's|-fmodulo-sched||g' -e 's|-fmodulo-sched-allow-regmoves||g' -e 's|-frename-registers||g' -e 's|-fipa-pta||g' -e 's|-funroll-loops||g' | tr -s ' ')
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
-%global ourldflags %{__global_ldflags}
+%global ourldflags %(echo %{__global_ldflags} | sed -e 's|-flto=auto||g' -e 's|-ffat-lto-objects||g' -e 's|-Wl,--gc-sections||g' -e 's|-Wl,-O1||g' -e 's|-Wl,--sort-common||g' | tr -s ' ')
 
 # In some cases, the arch used by the JDK does
 # not match _arch.
