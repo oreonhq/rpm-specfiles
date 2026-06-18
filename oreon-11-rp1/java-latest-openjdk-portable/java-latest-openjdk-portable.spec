@@ -48,7 +48,7 @@
 # Remove build artifacts by default
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
-%bcond_without fresh_libjvm
+%bcond_with fresh_libjvm
 # Seed boot JDK from Eclipse Temurin tarball when distro has no java packages yet
 %bcond_without vendor_bootjdk
 # Build with system libraries
@@ -239,10 +239,14 @@
 %if 0%{?flatpak}
 %global bootstrap_build false
 %else
+%if %{with vendor_bootjdk}
+%global bootstrap_build false
+%else
 %ifarch %{bootstrap_arches}
 %global bootstrap_build true
 %else
 %global bootstrap_build false
+%endif
 %endif
 %endif
 
@@ -1656,7 +1660,14 @@ LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt
 
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
-%if %{build_hotspot_first}
+%if %{with vendor_bootjdk}
+  bootstrap_jdk=%{bootjdk}
+  if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
+    echo "vendor bootjdk missing at ${bootstrap_jdk}" >&2
+    exit 1
+  fi
+  systemjdk=${bootstrap_jdk}
+%elif %{build_hotspot_first}
   echo "Building HotSpot only for the latest libjvm.so"
   bootstrap_jdk=%{bootjdk}
   if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
