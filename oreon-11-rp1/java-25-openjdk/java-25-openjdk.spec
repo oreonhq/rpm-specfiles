@@ -21,7 +21,7 @@
 # $ rpmbuild -ba java-25-openjdk.spec --without slowdebug --without fastdebug
 #
 # Only produce a release build on x86_64:
-# $ fedpkg mockbuild --without slowdebug --without fastdebug
+# $ rpmbuild -ba java-25-openjdk.spec --without slowdebug --without fastdebug
 
 # Enable fastdebug builds by default on relevant arches.
 %bcond_without fastdebug
@@ -305,15 +305,15 @@
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
 %if 0%{?fedora}
-%global lts_designator ""
-%global lts_designator_zip ""
+%global lts_designator \"\"
+%global lts_designator_zip \"\"
 %else
 %if 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
-  %global lts_designator "LTS"
+  %global lts_designator \"LTS\"
   %global lts_designator_zip -%{lts_designator}
 %else
-  %global lts_designator ""
-  %global lts_designator_zip ""
+  %global lts_designator \"\"
+  %global lts_designator_zip \"\"
 %endif
 %endif
 
@@ -361,7 +361,7 @@
 %global top_level_dir_name   %{vcstag}
 %global top_level_dir_name_backup %{top_level_dir_name}-backup
 %global buildver        9
-%global rpmrelease      1
+%global rpmrelease      2
 # Priority must be 8 digits in total; up to openjdk 1.8, we were using 18..... so when we moved to 11, we had to add another digit
 %if %is_system_jdk
 # Using 10 digits may overflow the int used for priority, so we combine the patch and build versions
@@ -512,12 +512,10 @@ fi
 alternatives --install %{_bindir}/java java %{jrebindir -- %{?1}}/java %{priority_for -- %{?1}} \\
   --slave %{_jvmdir}/jre jre %{_jvmdir}/%{sdkdir -- %{?1}} \\
   --slave %{_bindir}/%{alt_java_name} %{alt_java_name} %{jrebindir -- %{?1}}/%{alt_java_name} \\
-  --slave %{_bindir}/jcmd jcmd %{sdkbindir -- %{?1}}/jcmd \\
   --slave %{_bindir}/keytool keytool %{jrebindir -- %{?1}}/keytool \\
   --slave %{_bindir}/rmiregistry rmiregistry %{jrebindir -- %{?1}}/rmiregistry \\
   --slave %{_mandir}/man1/java.1%{man_comp} java.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/java.1 \\
   --slave %{_mandir}/man1/%{alt_java_name}.1%{man_comp} %{alt_java_name}.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/%{alt_java_name}.1 \\
-  --slave %{_mandir}/man1/jcmd.1%{man_comp} jcmd.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jcmd.1 \\
   --slave %{_mandir}/man1/keytool.1%{man_comp} keytool.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/keytool.1 \\
   --slave %{_mandir}/man1/rmiregistry.1%{man_comp} rmiregistry.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/rmiregistry.1
 alternatives --install %{_jvmdir}/jre-%{origin} jre_%{origin} %{_jvmdir}/%{sdkdir -- %{?1}} %{priority_for -- %{?1}}
@@ -576,7 +574,7 @@ fi
 # https://lists.fedoraproject.org/archives/list/packaging\
 # @lists.fedoraproject.org/thread/HXIIKIHBMT3HELPKWH2BAXRNIF7BPPJD/
 # and:
-# 
+# https://fedoraproject.org/wiki/Archive:PackagingDrafts/Icon_Cache
 %define posttrans_script() %{expand:
 %{update_desktop_icons}
 }
@@ -598,6 +596,7 @@ alternatives --install %{_bindir}/javac javac %{sdkbindir -- %{?1}}/javac %{prio
   --slave %{_bindir}/jarsigner jarsigner %{sdkbindir -- %{?1}}/jarsigner \\
   --slave %{_bindir}/javadoc javadoc %{sdkbindir -- %{?1}}/javadoc \\
   --slave %{_bindir}/javap javap %{sdkbindir -- %{?1}}/javap \\
+  --slave %{_bindir}/jcmd jcmd %{sdkbindir -- %{?1}}/jcmd \\
   --slave %{_bindir}/jconsole jconsole %{sdkbindir -- %{?1}}/jconsole \\
   --slave %{_bindir}/jdb jdb %{sdkbindir -- %{?1}}/jdb \\
   --slave %{_bindir}/jdeps jdeps %{sdkbindir -- %{?1}}/jdeps \\
@@ -621,6 +620,7 @@ alternatives --install %{_bindir}/javac javac %{sdkbindir -- %{?1}}/javac %{prio
   --slave %{_mandir}/man1/javac.1%{man_comp} javac.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/javac.1 \\
   --slave %{_mandir}/man1/javadoc.1%{man_comp} javadoc.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/javadoc.1 \\
   --slave %{_mandir}/man1/javap.1%{man_comp} javap.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/javap.1 \\
+  --slave %{_mandir}/man1/jcmd.1%{man_comp} jcmd.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jcmd.1 \\
   --slave %{_mandir}/man1/jconsole.1%{man_comp} jconsole.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jconsole.1 \\
   --slave %{_mandir}/man1/jdb.1%{man_comp} jdb.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jdb.1 \\
   --slave %{_mandir}/man1/jdeps.1%{man_comp} jdeps.1%{man_comp} %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jdeps.1 \\
@@ -738,7 +738,6 @@ fi
 %dir %{_jvmdir}/%{sdkdir -- %{?1}}/bin
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/java
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/%{alt_java_name}
-%{_jvmdir}/%{sdkdir -- %{?1}}/bin/jcmd
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/keytool
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/rmiregistry
 %dir %{_jvmdir}/%{sdkdir -- %{?1}}/lib
@@ -808,7 +807,6 @@ fi
 %{_jvmdir}/%{sdkdir -- %{?1}}/lib/jfr/profile.jfc
 %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/java.1
 %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/%{alt_java_name}.1
-%{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/jcmd.1
 %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/keytool.1
 %{_jvmdir}/%{sdkdir -- %{?1}}/man/man1/rmiregistry.1
 %dir %{_jvmdir}/%{sdkdir -- %{?1}}/lib/%{vm_variant}
@@ -876,7 +874,6 @@ fi
 %ghost %{_bindir}/java
 %ghost %{_jvmdir}/jre
 %ghost %{_bindir}/%{alt_java_name}
-%ghost %{_bindir}/jcmd
 %ghost %{_bindir}/keytool
 %ghost %{_bindir}/rmiregistry
 %ghost %{_jvmdir}/jre-%{origin}
@@ -897,6 +894,7 @@ fi
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/javac
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/javadoc
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/javap
+%{_jvmdir}/%{sdkdir -- %{?1}}/bin/jcmd
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/jconsole
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/jdb
 %{_jvmdir}/%{sdkdir -- %{?1}}/bin/jdeps
@@ -1080,7 +1078,6 @@ Provides: jre-%{origin}%{?1} = %{epoch}:%{version}-%{release}
 Provides: java%{?1} = %{epoch}:%{version}-%{release}
 Provides: jre%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_headless_rpo() %{expand:
@@ -1123,7 +1120,6 @@ Provides: jre-%{origin}-headless%{?1} = %{epoch}:%{version}-%{release}
 Provides: jre-headless%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-headless%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_devel_rpo() %{expand:
@@ -1146,7 +1142,6 @@ Provides: java-sdk-%{origin}%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-devel%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-sdk%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_static_libs_rpo() %{expand:
@@ -1165,7 +1160,6 @@ Provides: java-%{javaver}-%{origin}-jmods%{?1} = %{epoch}:%{version}-%{release}
 %if %is_system_jdk
 Provides: java-jmods%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_demo_rpo() %{expand:
@@ -1178,7 +1172,6 @@ Provides: java-%{javaver}-%{origin}-demo%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-demo%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-%{origin}-demo%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_javadoc_rpo() %{expand:
@@ -1194,7 +1187,6 @@ Provides: java-%{javaver}-%{origin}-javadoc%{?1}%{?2} = %{epoch}:%{version}-%{re
 %if %is_system_jdk
 Provides: java-javadoc%{?1}%{?2} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 %define java_src_rpo() %{expand:
@@ -1207,7 +1199,6 @@ Provides: java-%{javaver}-%{origin}-src%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-src%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-%{origin}-src%{?1} = %{epoch}:%{version}-%{release}
 %endif
-
 }
 
 # Prevent brp-java-repack-jars from being run
@@ -1262,29 +1253,30 @@ Source19: hotspot.stp.in
 Source20: hotspot_gc.stp.in
 Source21: hotspot_jni.stp.in
 Source22: jstack.stp.in
+
 # Desktop files. Adapted from IcedTea
-Source9:        jconsole.desktop.in
+Source9: jconsole.desktop.in
 
 # Ensure we aren't using the limited crypto policy
-Source13:        TestCryptoLevel.java
+Source13: TestCryptoLevel.java
 
 # Ensure ECDSA is working
-Source14:        TestECDSA.java
+Source14: TestECDSA.java
 
 # Verify system crypto (policy) can be disabled via a property
-Source15:        TestSecurityProperties.java
+Source15: TestSecurityProperties.java
 
 # Ensure vendor settings are correct
-Source16:        CheckVendor.java
+Source16: CheckVendor.java
 
 # Ensure translations are available for new timezones
-Source18:        TestTranslations.java
+Source18: TestTranslations.java
 
 # FIPS support sources.
 # For libnssadapter.so (RHEL-128413)
-Source31:        https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/%{nssadapter_version}/%{nssadapter_name}.tar.xz
+Source31: https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/%{nssadapter_version}/%{nssadapter_name}.tar.xz
 # Create OpenJDK's crypto-policies hierarchy (RHEL-128409)
-Source32:        create-redhat-properties-files.bash
+Source32: create-redhat-properties-files.bash
 
 
 BuildRequires: %{portable_name}-sources >= %{portable_version}
@@ -1778,73 +1770,31 @@ if [ $prioritylength -ne 8 ] ; then
  exit 14
 fi
 
-portable_tar() {
-  local pattern f
-  for pattern in "$@"; do
-    for f in $pattern; do
-      if [ -f "$f" ]; then
-        tar -xf "$f"
-        return 0
-      fi
-    done
-  done
-  echo "missing portable tarball, tried:" >&2
-  printf '  %s\n' "$@" >&2
-  echo "contents of %{portablejvmdir}:" >&2
-  ls -la %{portablejvmdir}/ >&2 || true
-  exit 1
-}
-
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.noarch.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.misc.%{_arch}.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.docs.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz
 
 %if %{include_normal_build}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jdk.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.jdk.%{_arch}.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jmods.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.jmods.%{_arch}.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.debuginfo.jdk.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.debuginfo.jdk.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jdk.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jmods.%{_arch}.tar.xz
+# Extract debuginfo as well
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.debuginfo.jdk.%{_arch}.tar.xz
 %if %{include_staticlibs}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.static-libs.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.static-libs.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 %if %{include_fastdebug_build}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jdk.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.jdk.%{_arch}.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jmods.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.jmods.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jdk.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.jmods.%{_arch}.tar.xz
 %if %{include_staticlibs}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.static-libs.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.fastdebug.static-libs.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.fastdebug.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 %if %{include_debug_build}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jdk.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.jdk.%{_arch}.tar.xz
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jmods.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.jmods.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jdk.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.jmods.%{_arch}.tar.xz
 %if %{include_staticlibs}
-portable_tar \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.static-libs.%{_arch}.tar.xz \
-  %{portablejvmdir}/%{portable_compatiblename}*%{version}*%{release}*.slowdebug.static-libs.%{_arch}.tar.xz
+tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.slowdebug.static-libs.%{_arch}.tar.xz
 %endif
 %endif
 
@@ -1870,7 +1820,6 @@ if [ "x${portableNvr}" == x ] ; then
 fi
 echo "Which repacked ${portableNvr}" >> %{repack_file}
 echo "You can download the repacked portables from:" >> %{repack_file}
-echo "https://koji.fedoraproject.org/koji/search?match=glob&type=build&terms=${portableNvr}" >> %{repack_file}
 echo "`date`" >> %{repack_file}
 
 # Extract systemtap tapsets
@@ -1932,7 +1881,7 @@ pushd build
 popd
 doc_image=`ls -d %{portable_compatiblename}*%{version}*portable.docs.%{_arch}`
 
-# it is used differently on fedora
+# portable layout
 for suffix in %{build_loop} ; do
   mkdir %{installoutputdir -- ${suffix}}
   if [ "x$suffix" = "x" ] ; then
@@ -2334,7 +2283,7 @@ if ! nm $JAVA_HOME/bin/%{alt_java_name} | grep prctl ; then true ; else false; f
 # Check correct vendor values have been set
 $JAVA_HOME/bin/javac -d . %{SOURCE16}
 #TODO skipped vendor check. It now points to PORTABLE version of jdk.
-#$JAVA_HOME/bin/java $(echo $(basename %%{SOURCE16})|sed "s|\.java||") "%%{oj_vendor}" "%%{oj_vendor_url}" "%%{oj_vendor_bug_url}" "%%{oj_vendor_version}"
+#$JAVA_HOME/bin/java $(echo $(basename %{SOURCE16})|sed "s|\.java||") "%{oj_vendor}" "%{oj_vendor_url}" "%{oj_vendor_bug_url}" "%{oj_vendor_version}"
 
 # Check translations are available for new timezones
 $JAVA_HOME/bin/javac -d . %{SOURCE18}
@@ -2627,6 +2576,4 @@ exit 0
 
 %endif
 
-%changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:25.0.3.0.9-1
-- Import
+%autochangelog

@@ -29,31 +29,26 @@
 # Examples:
 #
 # Produce release, fastdebug *and* slowdebug builds on x86_64 (default):
-# $ rpmbuild -ba java-25-openjdk.spec
+# $ rpmbuild -ba java-25-openjdk-portable.spec
 #
 # Produce only release builds (no debug builds) on x86_64:
-# $ rpmbuild -ba java-25-openjdk.spec --without slowdebug --without fastdebug
+# $ rpmbuild -ba java-25-openjdk-portable.spec --without slowdebug --without fastdebug
 #
 # Only produce a release build on x86_64:
-# $ fedpkg mockbuild --without slowdebug --without fastdebug
+# $ rpmbuild -ba java-25-openjdk-portable.spec --without slowdebug --without fastdebug
 
-# Bootstrap/GUI builds only need release. Enable debug variants explicitly if wanted.
-%bcond_with fastdebug
-%bcond_with slowdebug
+# Enable fastdebug builds by default on relevant arches.
+%bcond_without fastdebug
+# Enable slowdebug builds by default on relevant arches.
+%bcond_without slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
-# Seed boot JDK from Eclipse Temurin tarball when distro has no java packages yet
-%bcond_without vendor_bootjdk
-# Enable static library builds by default once self-hosted. Off for vendor bootstrap.
-%if %{with vendor_bootjdk}
-%bcond_with staticlibs
-%else
+# Enable static library builds by default.
 %bcond_without staticlibs
-%endif
 # Remove build artifacts by default
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
-%bcond_with fresh_libjvm
+%bcond_without fresh_libjvm
 # Build with system libraries
 %bcond_with system_libs
 
@@ -180,7 +175,7 @@
 %global svml_arches x86_64
 # Set of architectures where we verify backtraces with gdb
 # s390x fails on RHEL 7 so we exclude it there
-%if (0%{?rhel} > 0 && 0%{?rhel} < 8)
+%if (0%{?rhel} > 0 && 0%{?rhel} < 8) || (0%{?oreon} >= 11)
 %global gdb_arches %{arm} %{aarch64} %{ix86} %{power64} sparcv9 sparc64 x86_64 %{zero_arches}
 %else
 %global gdb_arches %{jit_arches} %{zero_arches}
@@ -242,14 +237,10 @@
 %if 0%{?flatpak}
 %global bootstrap_build false
 %else
-%if %{with vendor_bootjdk}
-%global bootstrap_build false
-%else
 %ifarch %{bootstrap_arches}
 %global bootstrap_build true
 %else
 %global bootstrap_build false
-%endif
 %endif
 %endif
 
@@ -267,15 +258,10 @@
 # build for portables, as we expect in-tree libraries to be used throughout.
 # If system libraries are enabled, the static libraries will also use them
 # which may cause issues.
-%if %{with vendor_bootjdk}
-%global bootstrap_targets images legacy-jre-image
-%global release_targets images legacy-jre-image
-%global debug_targets images legacy-jre-image
-%else
 %global bootstrap_targets images %{static_libs_target} legacy-jre-image
 %global release_targets images docs-zip %{static_libs_target} legacy-jre-image
+# No docs nor bootcycle for debug builds
 %global debug_targets images %{static_libs_target} legacy-jre-image
-%endif
 # Target to use to just build HotSpot
 %global hotspot_target hotspot
 
@@ -362,9 +348,9 @@ exit 1
 # We filter out -Wall which will otherwise cause HotSpot to produce hundreds of thousands of warnings (100+mb logs)
 # We replace it with -Wformat (required by -Werror=format-security) and -Wno-cpp to avoid FORTIFY_SOURCE warnings
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
-%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' -e 's|-flto=auto||g' -e 's|-ffat-lto-objects||g' -e 's|-fdevirtualize-at-ltrans||g' -e 's|-fno-semantic-interposition||g' -e 's|-falign-functions=[0-9]*||g' -e 's|-falign-loops=[0-9]*||g' -e 's|-falign-jumps=[0-9]*||g' -e 's|-fmodulo-sched||g' -e 's|-fmodulo-sched-allow-regmoves||g' -e 's|-frename-registers||g' -e 's|-fipa-pta||g' -e 's|-funroll-loops||g' | tr -s ' ')
+%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
-%global ourldflags %(echo %{__global_ldflags} | sed -e 's|-flto=auto||g' -e 's|-ffat-lto-objects||g' -e 's|-Wl,--gc-sections||g' -e 's|-Wl,-O1||g' -e 's|-Wl,--sort-common||g' | tr -s ' ')
+%global ourldflags %{__global_ldflags}
 
 # In some cases, the arch used by the JDK does
 # not match _arch.
@@ -446,20 +432,20 @@ exit 1
 # buildjdkver is usually same as %%{featurever},
 # but in time of bootstrap of next jdk, it is featurever-1,
 # and this it is better to change it here, on single place
-%bcond_with jdk_selfhosted
-%if %{with jdk_selfhosted}
-%global buildjdkver %{featurever}
-%else
-%global buildjdkver %(expr %{featurever} - 1)
-%endif
+%global buildjdkver 25
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
-%if 0%{?rhel} && !0%{?epel}
-  %global lts_designator "LTS"
+%if 0%{?fedora}
+%global lts_designator \"\"
+%global lts_designator_zip \"\"
+%else
+%if 0%{?rhel} && !0%{?epel} || (0%{?oreon} >= 11)
+  %global lts_designator \"LTS\"
   %global lts_designator_zip -%{lts_designator}
 %else
-  %global lts_designator ""
-  %global lts_designator_zip ""
+  %global lts_designator \"\"
+  %global lts_designator_zip \"\"
+%endif
 %endif
 
 # Define vendor information used by OpenJDK
@@ -470,11 +456,11 @@ exit 1
 %if 0%{?epel}
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora%20EPEL&component=%{component}&version=epel%{epel}
 %else
-%if 0%{?fedora}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # Does not work for rawhide, keeps the version field empty
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=%{component}&version=%{fedora}
 %else
-%if 0%{?rhel}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global oj_vendor_bug_url https://access.redhat.com/support/cases/
 %else
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi
@@ -591,13 +577,7 @@ exit 1
 %ifarch %{fastdebug_arches}
 %global bootdebugpkg fastdebug
 %endif
-%if 0%{?oreon} >= 11
-%undefine bootdebugpkg
-%endif
-%if %{with vendor_bootjdk}
-%global use_vendor_bootjdk 1
-%global bootjdk %{_builddir}/%{uniquesuffix -- ""}/vendor-bootjdk
-%elif %{use_portable_bootjdk}
+%if %{use_portable_bootjdk}
 %global bootjdkpkg_name java-%{featurever}-%{origin}
 %global bootjdkpkg %{bootjdkpkg_name}-portable-devel%{?bootdebugpkg:-%{bootdebugpkg}} >= %{buildjdkver}
 %global bootjdkzip %{_jvmdir}/%{bootjdkpkg_name}-*.portable%{?bootdebugpkg:.%{bootdebugpkg}}.jdk.%{_arch}.tar.xz
@@ -715,7 +695,7 @@ Release: %{?eaprefix}%{rpmrelease}%{?extraver}%{?dist}
 Epoch:   1
 Summary: %{origin_nice} %{featurever} Runtime Environment portable edition
 # Groups are only used up to RHEL 8 and on Fedora versions prior to F30
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Languages
 %endif
 
@@ -739,22 +719,6 @@ URL:      http://openjdk.java.net/
 
 # The source tarball, generated using generate_source_tarball.sh
 Source0: https://openjdk-sources.osci.io/openjdk%{featurever}/open%{vcstag}%{ea_designator_zip}.tar.xz
-
-%if %{with vendor_bootjdk}
-%ifarch x86_64
-Source101: https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.2%2B12/OpenJDK24U-jdk_x64_linux_hotspot_24.0.2_12.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_hash aea1cc55e51cf651c85f2f00ad021603fe269c4bb6493fa97a321ad770c9b096
-%endif
-%ifarch aarch64
-Source101: https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.2%2B12/OpenJDK24U-jdk_aarch64_linux_hotspot_24.0.2_12.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_hash 6f8725d186d05c627176db9c46c732a6ef3ba41d9e9b3775c4727fc8ac642bb2
-%endif
-%ifnarch x86_64 aarch64
-%{error: vendor_bootjdk has no Temurin source for %{_arch}}
-%endif
-%else
-%global vendor_bootjdk_hash none
-%endif
 
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
@@ -864,9 +828,7 @@ BuildRequires: zip
 BuildRequires: tar
 BuildRequires: unzip
 BuildRequires: javapackages-filesystem
-%if !%{with vendor_bootjdk}
-BuildRequires: (java-%{buildjdkver}-openjdk-devel >= %{buildjdkver} or java-%{buildjdkver}-openjdk-devel-fastdebug >= %{buildjdkver})
-%endif
+BuildRequires: %{bootjdkpkg}
 # Zero-assembler build requirement
 %ifarch %{zero_arches}
 BuildRequires: libffi-devel
@@ -920,7 +882,7 @@ The %{origin_nice} %{featurever} runtime environment - portable edition.
 %if %{include_debug_build}
 %package slowdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment portable edition %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Languages
 %endif
 
@@ -933,7 +895,7 @@ The %{origin_nice} %{featurever} runtime environment - portable edition.
 %if %{include_fastdebug_build}
 %package fastdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment portable edition %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Languages
 %endif
 
@@ -946,7 +908,7 @@ The %{origin_nice} %{featurever} runtime environment - portable edition.
 %if %{include_normal_build}
 %package devel
 Summary: %{origin_nice} %{featurever} Development Environment portable edition
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Languages
 %endif
 
@@ -959,7 +921,7 @@ The %{origin_nice} %{featurever} development tools - portable edition.
 %if %{include_debug_build}
 %package devel-slowdebug
 Summary: %{origin_nice} %{featurever} Runtime and Development Environment portable edition %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Languages
 %endif
 
@@ -973,7 +935,7 @@ The %{origin_nice} %{featurever} development tools - portable edition.
 %if %{include_fastdebug_build}
 %package devel-fastdebug
 Summary: %{origin_nice} %{featurever} Runtime and Development Environment portable edition %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || (0%{?oreon} >= 11)
 Group:   Development/Tools
 %endif
 
@@ -1022,7 +984,6 @@ The %{origin_nice} %{featurever} libraries for static linking - portable edition
 %endif
 
 %if %{include_normal_build}
-%if !%{with vendor_bootjdk}
 %package docs
 Summary: %{origin_nice} %{featurever} API documentation
 
@@ -1030,7 +991,6 @@ Summary: %{origin_nice} %{featurever} API documentation
 
 %description docs
 The %{origin_nice} %{featurever} API documentation.
-%endif
 
 %package misc
 Summary: %{origin_nice} %{featurever} miscellany
@@ -1049,19 +1009,11 @@ The %{origin_nice} %{featurever} full patched sources of portable JDK to build, 
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%if %{with vendor_bootjdk}
-test "%{vendor_bootjdk_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{vendor_bootjdk_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; }
-%endif
 
 # Using the echo macro breaks rpmdev-bumpspec, as it parses the first line of stdout :-(
 echo "Preparing %{oj_vendor_version}"
 echo "System is RHEL=%{?rhel}%{!?rhel:0}, CentOS=%{?centos}%{!?centos:0}, EPEL=%{?epel}%{!?epel:0}, Fedora=%{?fedora}%{!?fedora:0}"
-echo "Build JDK version is %{buildjdkver}"
-%if %{with vendor_bootjdk}
-echo "Bootstrap JDK is vendored Temurin %{buildjdkver} at %{bootjdk}"
-%else
-echo "Bootstrap JDK package is %{bootjdkpkg}"
-%endif
+echo "Build JDK version is %{buildjdkver}, bootstrap JDK package is %{bootjdkpkg}"
 
 %if 0%{?_build_cpu:1}
   echo "CPU: %{_target_cpu}, arch install directory: %{archinstall}, SystemTap install directory: %{_build_cpu}"
@@ -1194,45 +1146,6 @@ fi
   cat %{bootjdk}/release
 %endif
 
-%if %{with vendor_bootjdk}
-vendor_root=$(dirname %{bootjdk})
-rm -rf %{bootjdk}
-tar -xzf %{SOURCE101} -C "${vendor_root}"
-vendor_extracted=
-for d in ${vendor_root}/jdk-* ${vendor_root}/OpenJDK*; do
-  if [ -x "${d}/bin/java" ]; then
-    vendor_extracted=${d}
-    break
-  fi
-done
-if [ -z "${vendor_extracted}" ]; then
-  echo "vendor bootjdk not found after extracting Source101" >&2
-  exit 1
-fi
-mv "${vendor_extracted}" %{bootjdk}
-echo "Installed vendor boot JDK:"
-cat %{bootjdk}/release
-%endif
-
-rev_boot=%{bootjdk}
-if [ ! -x "${rev_boot}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
-  rev_boot=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
-fi
-if [ -x "${rev_boot}/bin/java" ]; then
-  if [ -f %{top_level_dir_name}/.src-rev ]; then
-    :
-  elif [ -d %{top_level_dir_name}/.git ]; then
-    mkdir -p .src-rev-build
-    pushd .src-rev-build
-    sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvmargs="-XX:+UseParallelGC"
-    make store-source-revision
-    popd
-    rm -rf .src-rev-build
-  elif [ -n "%{?source_revision}" ]; then
-    printf '.:git:%{source_revision}\n' > %{top_level_dir_name}/.src-rev
-  fi
-fi
-
 %build
 # How many CPU's do we have?
 export NUM_PROC=%(/usr/bin/getconf _NPROCESSORS_ONLN 2> /dev/null || :)
@@ -1269,12 +1182,7 @@ EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-mstackrealign|-mincoming
 # Remove annobin plugin reference which isn't available in the devkit
 EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
 EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||')"
-%endif
-EXTRA_CFLAGS="$(echo ${EXTRA_CFLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g' -e 's|-fstack-protector ||g')"
-EXTRA_CPP_FLAGS="$(echo ${EXTRA_CPP_FLAGS} | sed -e 's|-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' -e 's|-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' -e 's|-fstack-protector-strong||g' -e 's|-fstack-protector ||g')"
-EXTRA_CFLAGS="${EXTRA_CFLAGS} -O2"
-EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -O2"
-%if "%{is_dtstoolchain}" ==  "devkit"
+# Force DWARF 4 for compatibility
 EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
 EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -gdwarf-4"
 %endif
@@ -1372,8 +1280,6 @@ function buildjdk() {
     mkdir -p ${outputdir}
     pushd ${outputdir}
 
-    unset CFLAGS CXXFLAGS CPPFLAGS
-
     # Note: zlib and freetype use %{link_type}
     # rather than ${link_opt} as the system versions
     # are always used in a system_libs build, even
@@ -1399,7 +1305,6 @@ function buildjdk() {
     --with-vendor-bug-url="%{oj_vendor_bug_url}" \
     --with-vendor-vm-bug-url="%{oj_vendor_bug_url}" \
     --with-boot-jdk=${buildjdk} \
-    --with-boot-jdk-jvmargs="-Xmx2g -XX:+UseParallelGC -XX:CICompilerCount=2" \
     --with-debug-level=${debuglevel} \
     --with-native-debug-symbols="${debug_symbols}" \
     --disable-absolute-paths-in-output \
@@ -1428,13 +1333,10 @@ function buildjdk() {
 
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
-    %{?dts_command} make LOG=info \
+    %{?dts_command} make LOG=trace \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
-        ( pwd; echo "=== make failed, last errors ==="; \
-          find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" -print -exec cat {} \; ; \
-          grep -E 'error:|fatal error|FAILED|exit-with-error' ${top_dir_abs_build_path}/make-support/*.log 2>/dev/null | tail -40 ; \
-          false )
+        ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
     popd
 }
 
@@ -1589,13 +1491,11 @@ function packagejdk() {
         createtar ${debugarchive} $(find ${jdkname} -name \*.debuginfo)
         genchecksum ${debugarchive}
 
-%if !%{with vendor_bootjdk}
         mkdir ${docname}
         mv ${docdir} ${docname}
         mv ${bundledir}/${built_doc_archive} ${docname}
         createtar ${docarchive} ${docname}
         genchecksum ${docarchive}
-%endif
 
         mkdir ${miscname}
         for s in 16 24 32 48 ; do
@@ -1662,33 +1562,15 @@ LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt
 
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
-%if %{with vendor_bootjdk}
-  bootstrap_jdk=%{bootjdk}
-  if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
-    echo "vendor bootjdk missing at ${bootstrap_jdk}" >&2
-    exit 1
-  fi
-  systemjdk=${bootstrap_jdk}
-%elif %{build_hotspot_first}
+%if %{build_hotspot_first}
+  # Build a fresh libjvm.so first and use it to bootstrap
   echo "Building HotSpot only for the latest libjvm.so"
-  bootstrap_jdk=%{bootjdk}
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
-  fi
-  cp -LR --preserve=mode,timestamps ${bootstrap_jdk} newboot
+  cp -LR --preserve=mode,timestamps %{bootjdk} newboot
   systemjdk=$(pwd)/newboot
   buildjdk build/newboot ${systemjdk} %{hotspot_target} "release" "bundled" "internal" ${DEVKIT_ROOT}
   mv build/newboot/jdk/lib/%{vm_variant}/libjvm.so newboot/lib/%{vm_variant}
 %else
-  bootstrap_jdk=%{bootjdk}
-  if [ ! -x "${bootstrap_jdk}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug/bin/java ]; then
-    bootstrap_jdk=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
-  fi
-  if [ ! -x "${bootstrap_jdk}/bin/java" ]; then
-    echo "need java-%{buildjdkver}-openjdk to bootstrap jdk %{featurever}" >&2
-    exit 1
-  fi
-  systemjdk=${bootstrap_jdk}
+  systemjdk=%{bootjdk}
 %endif
 
 for suffix in %{build_loop} ; do
@@ -2075,11 +1957,9 @@ done
 %{_jvmdir}/%{jdkportablesourcesarchiveForFiles}.sha256sum
 
 %if %{include_normal_build}
-%if !%{with vendor_bootjdk}
 %files docs
 %{_jvmdir}/%{docportablearchive}
 %{_jvmdir}/%{docportablearchive}.sha256sum
-%endif
 
 %files misc
 %{_jvmdir}/%{miscportablearchive}
