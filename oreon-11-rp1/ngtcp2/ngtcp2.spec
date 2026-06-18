@@ -24,6 +24,7 @@ BuildRequires:  make
 BuildRequires:  libtool
 BuildRequires:  libev-devel
 BuildRequires:  gnupg2
+BuildRequires:  gpgverify
 %if %{with docs}
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx_rtd_theme
