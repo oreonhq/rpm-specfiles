@@ -42,14 +42,18 @@
 %bcond_with slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
-# Enable static library builds by default.
+# Seed boot JDK from Eclipse Temurin tarball when distro has no java packages yet
+%bcond_without vendor_bootjdk
+# Enable static library builds by default once self-hosted. Off for vendor bootstrap.
+%if %{with vendor_bootjdk}
+%bcond_with staticlibs
+%else
 %bcond_without staticlibs
+%endif
 # Remove build artifacts by default
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
 %bcond_with fresh_libjvm
-# Seed boot JDK from Eclipse Temurin tarball when distro has no java packages yet
-%bcond_without vendor_bootjdk
 # Build with system libraries
 %bcond_with system_libs
 
@@ -263,10 +267,15 @@
 # build for portables, as we expect in-tree libraries to be used throughout.
 # If system libraries are enabled, the static libraries will also use them
 # which may cause issues.
+%if %{with vendor_bootjdk}
+%global bootstrap_targets images legacy-jre-image
+%global release_targets images legacy-jre-image
+%global debug_targets images legacy-jre-image
+%else
 %global bootstrap_targets images %{static_libs_target} legacy-jre-image
 %global release_targets images docs-zip %{static_libs_target} legacy-jre-image
-# No docs nor bootcycle for debug builds
 %global debug_targets images %{static_libs_target} legacy-jre-image
+%endif
 # Target to use to just build HotSpot
 %global hotspot_target hotspot
 
@@ -1013,6 +1022,7 @@ The %{origin_nice} %{featurever} libraries for static linking - portable edition
 %endif
 
 %if %{include_normal_build}
+%if !%{with vendor_bootjdk}
 %package docs
 Summary: %{origin_nice} %{featurever} API documentation
 
@@ -1020,6 +1030,7 @@ Summary: %{origin_nice} %{featurever} API documentation
 
 %description docs
 The %{origin_nice} %{featurever} API documentation.
+%endif
 
 %package misc
 Summary: %{origin_nice} %{featurever} miscellany
@@ -1388,6 +1399,7 @@ function buildjdk() {
     --with-vendor-bug-url="%{oj_vendor_bug_url}" \
     --with-vendor-vm-bug-url="%{oj_vendor_bug_url}" \
     --with-boot-jdk=${buildjdk} \
+    --with-boot-jdk-jvmargs="-Xmx2g -XX:+UseParallelGC -XX:CICompilerCount=2" \
     --with-debug-level=${debuglevel} \
     --with-native-debug-symbols="${debug_symbols}" \
     --disable-absolute-paths-in-output \
@@ -1416,10 +1428,13 @@ function buildjdk() {
 
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
-    %{?dts_command} make LOG=trace \
+    %{?dts_command} make LOG=info \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
-        ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
+        ( pwd; echo "=== make failed, last errors ==="; \
+          find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" -print -exec cat {} \; ; \
+          grep -E 'error:|fatal error|FAILED|exit-with-error' ${top_dir_abs_build_path}/make-support/*.log 2>/dev/null | tail -40 ; \
+          false )
     popd
 }
 
@@ -1574,11 +1589,13 @@ function packagejdk() {
         createtar ${debugarchive} $(find ${jdkname} -name \*.debuginfo)
         genchecksum ${debugarchive}
 
+%if !%{with vendor_bootjdk}
         mkdir ${docname}
         mv ${docdir} ${docname}
         mv ${bundledir}/${built_doc_archive} ${docname}
         createtar ${docarchive} ${docname}
         genchecksum ${docarchive}
+%endif
 
         mkdir ${miscname}
         for s in 16 24 32 48 ; do
@@ -2058,9 +2075,11 @@ done
 %{_jvmdir}/%{jdkportablesourcesarchiveForFiles}.sha256sum
 
 %if %{include_normal_build}
+%if !%{with vendor_bootjdk}
 %files docs
 %{_jvmdir}/%{docportablearchive}
 %{_jvmdir}/%{docportablearchive}.sha256sum
+%endif
 
 %files misc
 %{_jvmdir}/%{miscportablearchive}
