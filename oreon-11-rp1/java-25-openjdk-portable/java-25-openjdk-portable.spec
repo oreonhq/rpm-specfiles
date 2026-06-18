@@ -438,7 +438,7 @@ exit 1
 %if %{with jdk_selfhosted}
 %global buildjdkver %{featurever}
 %else
-%global buildjdkver 21
+%global buildjdkver %(expr %{featurever} - 1)
 %endif
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
@@ -730,12 +730,12 @@ Source0: https://openjdk-sources.osci.io/openjdk%{featurever}/open%{vcstag}%{ea_
 
 %if %{with vendor_bootjdk}
 %ifarch x86_64
-Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_x64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_hash 4b2220e232a97997b436ca6ab15cbf70171ecff52958a46159dfa5a8c44ca4de
+Source101: https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.2%2B12/OpenJDK24U-jdk_x64_linux_hotspot_24.0.2_12.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
+%global vendor_bootjdk_hash aea1cc55e51cf651c85f2f00ad021603fe269c4bb6493fa97a321ad770c9b096
 %endif
 %ifarch aarch64
-Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_hash 8d498ec88e1c1989fab95c6784240ab92d011e29c54d20a3f9c324b13476f9ad
+Source101: https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.2%2B12/OpenJDK24U-jdk_aarch64_linux_hotspot_24.0.2_12.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
+%global vendor_bootjdk_hash 6f8725d186d05c627176db9c46c732a6ef3ba41d9e9b3775c4727fc8ac642bb2
 %endif
 %ifnarch x86_64 aarch64
 %{error: vendor_bootjdk has no Temurin source for %{_arch}}
