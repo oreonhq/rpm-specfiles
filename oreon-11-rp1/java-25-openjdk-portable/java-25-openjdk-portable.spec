@@ -1086,11 +1086,7 @@ fi
 %endif
 
 export XZ_OPT="-T0"
-%if %{with vendor_bootjdk}
-%setup -q -c -n %{uniquesuffix ""} -T -a 0 -a 101
-%else
 %setup -q -c -n %{uniquesuffix ""} -T -a 0
-%endif
 # https://bugzilla.redhat.com/show_bug.cgi?id=1189084
 prioritylength=`expr length %{priority}`
 if [ $prioritylength -ne 8 ] ; then
@@ -1188,7 +1184,7 @@ fi
 
 %if %{with vendor_bootjdk}
 mkdir -p %{bootjdk}
-tar -xzf temurin-%{buildjdkver}-bootjdk.tar.gz -C $(dirname %{bootjdk})
+tar -xzf %{SOURCE101} -C $(dirname %{bootjdk})
 mv $(dirname %{bootjdk})/%{vendor_bootjdk_dir} %{bootjdk}
 echo "Installed vendor boot JDK:"
 cat %{bootjdk}/release
