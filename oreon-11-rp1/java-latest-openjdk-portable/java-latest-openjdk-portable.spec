@@ -741,12 +741,10 @@ Source0: https://github.com/openjdk/jdk26u/archive/refs/tags/%{vcstag_url}.tar.g
 %if %{with vendor_bootjdk}
 %ifarch x86_64
 Source101: https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.3%2B9/OpenJDK25U-jdk_x64_linux_hotspot_25.0.3_9.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_dir OpenJDK25U-jdk_x64_linux_hotspot_25.0.3_9
 %global vendor_bootjdk_hash 69264a7a211bf5029830d07bc3370f879769d62ebc5b5488e90c9343a2da0e1f
 %endif
 %ifarch aarch64
 Source101: https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.3%2B9/OpenJDK25U-jdk_aarch64_linux_hotspot_25.0.3_9.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_dir OpenJDK25U-jdk_aarch64_linux_hotspot_25.0.3_9
 %global vendor_bootjdk_hash 3e4287cb98870ba824ed698854bdc27cff984254caf66dd12cc291e7bfdde26b
 %endif
 %ifnarch x86_64 aarch64
@@ -1197,9 +1195,21 @@ fi
 %endif
 
 %if %{with vendor_bootjdk}
-mkdir -p %{bootjdk}
-tar -xzf %{SOURCE101} -C $(dirname %{bootjdk})
-mv $(dirname %{bootjdk})/%{vendor_bootjdk_dir} %{bootjdk}
+vendor_root=$(dirname %{bootjdk})
+rm -rf %{bootjdk}
+tar -xzf %{SOURCE101} -C "${vendor_root}"
+vendor_extracted=
+for d in ${vendor_root}/jdk-* ${vendor_root}/OpenJDK*; do
+  if [ -x "${d}/bin/java" ]; then
+    vendor_extracted=${d}
+    break
+  fi
+done
+if [ -z "${vendor_extracted}" ]; then
+  echo "vendor bootjdk not found after extracting Source101" >&2
+  exit 1
+fi
+mv "${vendor_extracted}" %{bootjdk}
 echo "Installed vendor boot JDK:"
 cat %{bootjdk}/release
 %endif

@@ -731,12 +731,10 @@ Source0: https://openjdk-sources.osci.io/openjdk%{featurever}/open%{vcstag}%{ea_
 %if %{with vendor_bootjdk}
 %ifarch x86_64
 Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_x64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_dir OpenJDK21U-jdk_x64_linux_hotspot_21.0.11_10
 %global vendor_bootjdk_hash 4b2220e232a97997b436ca6ab15cbf70171ecff52958a46159dfa5a8c44ca4de
 %endif
 %ifarch aarch64
 Source101: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.11_10.tar.gz#/temurin-%{buildjdkver}-bootjdk.tar.gz
-%global vendor_bootjdk_dir OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.11_10
 %global vendor_bootjdk_hash 8d498ec88e1c1989fab95c6784240ab92d011e29c54d20a3f9c324b13476f9ad
 %endif
 %ifnarch x86_64 aarch64
@@ -1183,9 +1181,21 @@ fi
 %endif
 
 %if %{with vendor_bootjdk}
-mkdir -p %{bootjdk}
-tar -xzf %{SOURCE101} -C $(dirname %{bootjdk})
-mv $(dirname %{bootjdk})/%{vendor_bootjdk_dir} %{bootjdk}
+vendor_root=$(dirname %{bootjdk})
+rm -rf %{bootjdk}
+tar -xzf %{SOURCE101} -C "${vendor_root}"
+vendor_extracted=
+for d in ${vendor_root}/jdk-* ${vendor_root}/OpenJDK*; do
+  if [ -x "${d}/bin/java" ]; then
+    vendor_extracted=${d}
+    break
+  fi
+done
+if [ -z "${vendor_extracted}" ]; then
+  echo "vendor bootjdk not found after extracting Source101" >&2
+  exit 1
+fi
+mv "${vendor_extracted}" %{bootjdk}
 echo "Installed vendor boot JDK:"
 cat %{bootjdk}/release
 %endif
