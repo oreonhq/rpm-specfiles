@@ -2,6 +2,7 @@
 %define debug_package %{nil}
 
 %global source0_hash f5d5496a2f9a81605681209d93fc99726313e5d9a9a2af059f1adaa3914b862d
+%global source_revision 908067ac8d9f
 
 %global _general_options -O2 %{?_lto_cflags} -fexceptions -g -grecord-gcc-switches -pipe
 %global build_type_safety_c 0
@@ -1219,12 +1220,18 @@ if [ ! -x "${rev_boot}/bin/java" ] && [ -x /usr/lib/jvm/java-%{buildjdkver}-open
   rev_boot=/usr/lib/jvm/java-%{buildjdkver}-openjdk-fastdebug
 fi
 if [ -x "${rev_boot}/bin/java" ]; then
-  mkdir -p .src-rev-build
-  pushd .src-rev-build
-  sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvmargs="-XX:+UseParallelGC"
-  make store-source-revision
-  popd
-  rm -rf .src-rev-build
+  if [ -f %{top_level_dir_name}/.src-rev ]; then
+    :
+  elif [ -d %{top_level_dir_name}/.git ]; then
+    mkdir -p .src-rev-build
+    pushd .src-rev-build
+    sh ../%{top_level_dir_name}/configure --with-boot-jdk="${rev_boot}" --with-boot-jdk-jvmargs="-XX:+UseParallelGC"
+    make store-source-revision
+    popd
+    rm -rf .src-rev-build
+  elif [ -n "%{?source_revision}" ]; then
+    printf '.:git:%{source_revision}\n' > %{top_level_dir_name}/.src-rev
+  fi
 fi
 
 %build
