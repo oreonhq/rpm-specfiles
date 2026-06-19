@@ -1,4 +1,4 @@
-%global source0_hash 43325f2151b0bf56324c08472abd726d9bebfea4d188b851a161b05763df01f5
+%global source0_hash e094431df5f048b157485ed1cbe66674fb02edcbed55814ec75b441ade919f80
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@ Summary: Additional components to increase the functionality of KIO Framework
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/network/kio-extras
 
-Source0:        https://invent.kde.org/network/kio-extras/-/archive/v%{version}/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://invent.kde.org/network/kio-extras/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 ## upstramable patches
 
@@ -88,7 +88,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-v%{version}
 
 
 %build
