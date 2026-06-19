@@ -37,10 +37,9 @@
 # Only produce a release build on x86_64:
 # $ rpmbuild -ba java-25-openjdk-portable.spec --without slowdebug --without fastdebug
 
-# Enable fastdebug builds by default on relevant arches.
-%bcond_without fastdebug
-# Enable slowdebug builds by default on relevant arches.
-%bcond_without slowdebug
+# GUI/chain bootstrap only needs release. Turn debug variants on explicitly if wanted.
+%bcond_with fastdebug
+%bcond_with slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
 # Enable static library builds by default.
@@ -48,7 +47,7 @@
 # Remove build artifacts by default
 %bcond_with artifacts
 # Build a fresh libjvm.so for use in a copy of the bootstrap JDK
-%bcond_without fresh_libjvm
+%bcond_with fresh_libjvm
 # Build with system libraries
 %bcond_with system_libs
 
@@ -1154,7 +1153,14 @@ export NUM_PROC=${NUM_PROC:-1}
 # Honor %%_smp_ncpus_max
 [ ${NUM_PROC} -gt %{?_smp_ncpus_max} ] && export NUM_PROC=%{?_smp_ncpus_max}
 %endif
-export XZ_OPT="-T0"
+mem_mb=$(awk '/MemAvailable:/ {print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 65536)
+job_cap=$((mem_mb / 4096))
+[ ${job_cap} -lt 1 ] && job_cap=1
+[ ${job_cap} -gt 8 ] && job_cap=8
+[ ${NUM_PROC} -gt ${job_cap} ] && export NUM_PROC=${job_cap}
+echo "Using NUM_PROC=${NUM_PROC} (mem_mb=${mem_mb})"
+export MAKEFLAGS="-j${NUM_PROC}"
+export XZ_OPT="-T${NUM_PROC}"
 
 %ifarch s390x sparc64 alpha %{power64} %{aarch64} riscv64
 export ARCH_DATA_MODEL=64
@@ -1305,6 +1311,7 @@ function buildjdk() {
     --with-vendor-bug-url="%{oj_vendor_bug_url}" \
     --with-vendor-vm-bug-url="%{oj_vendor_bug_url}" \
     --with-boot-jdk=${buildjdk} \
+    --with-boot-jdk-jvmargs="-Xmx4g -XX:+UseParallelGC -XX:CICompilerCount=2 -XX:ParallelGCThreads=2" \
     --with-debug-level=${debuglevel} \
     --with-native-debug-symbols="${debug_symbols}" \
     --disable-absolute-paths-in-output \
@@ -1333,7 +1340,7 @@ function buildjdk() {
 
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
-    %{?dts_command} make LOG=trace \
+    %{?dts_command} make LOG=info \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
