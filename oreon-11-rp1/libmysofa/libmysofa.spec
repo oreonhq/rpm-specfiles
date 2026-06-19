@@ -7,7 +7,7 @@ Summary:        C functions for reading HRTFs
 
 License:        BSD-3-Clause
 URL:            https://github.com/hoene/libmysofa
-Source0:        %{url}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/hoene/libmysofa/archive/v%{version}.tar.gz#/libmysofa-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
