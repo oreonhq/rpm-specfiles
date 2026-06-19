@@ -1,7 +1,7 @@
-%global source0_hash d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed
+%global source0_hash 64c661f75ef39edf68bfc3a28403d2b5a0bd251d0b9f5d021ed6f7917867fb37
 
 Name:           libmysofa
-Version:        1.3.3
+Version:        1.3.4
 Release:        %autorelease
 Summary:        C functions for reading HRTFs
 

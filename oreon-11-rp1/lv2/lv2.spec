@@ -12,7 +12,7 @@ Source0:        https://lv2plug.in/spec/lv2-%{version}.tar.xz
 Patch0:         %{name}-no-gtk2.patch
 
 BuildRequires:  asciidoc
-Buildrequires:  cairo-devel >= 1.8.10
+BuildRequires:  cairo-devel >= 1.8.10
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz
@@ -20,9 +20,9 @@ BuildRequires:  libsndfile-devel
 BuildRequires:  meson
 BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  python3-pygments
-Buildrequires:  python3-rdflib
-Buildrequires:  python3-markdown
-Buildrequires:  python3-lxml
+BuildRequires:  python3-rdflib
+BuildRequires:  python3-markdown
+BuildRequires:  python3-lxml
 
 %description
 LV2 is a standard for plugins and matching host applications, mainly

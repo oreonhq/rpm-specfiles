@@ -46,6 +46,7 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/or11-**/*.zip
 !oreon-11-rp1/or11-**/*.zst
 
+!oreon-11-rp1/libunibreak/libunibreak-test-data.tar.gz
 !oreon-11-rp1/hyphen-mi/hunspell-hyphen-mi-0.1.20080630-beta.tar.gz
 !oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-00
 !oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
