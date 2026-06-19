@@ -12,8 +12,8 @@
 %undefine _hardened_build
 %undefine _annotated_build
 %global set_build_flags \
-  CFLAGS="%{optflags} -fno-lifetime-dse" ; export CFLAGS ; \
-  CXXFLAGS="%{build_cxxflags} -fno-lifetime-dse" ; export CXXFLAGS ; \
+  CFLAGS="%{optflags} -fno-lifetime-dse -fno-lto" ; export CFLAGS ; \
+  CXXFLAGS="%{build_cxxflags} -fno-lifetime-dse -fno-lto" ; export CXXFLAGS ; \
   FFLAGS="%{build_fflags}" ; export FFLAGS ; \
   FCFLAGS="%{build_fflags}" ; export FCFLAGS ; \
   VALAFLAGS="%{build_valaflags}" ; export VALAFLAGS ; \
@@ -347,7 +347,7 @@ exit 1
 # We filter out -Wall which will otherwise cause HotSpot to produce hundreds of thousands of warnings (100+mb logs)
 # We replace it with -Wformat (required by -Werror=format-security) and -Wno-cpp to avoid FORTIFY_SOURCE warnings
 # We filter out -fexceptions as the HotSpot build explicitly does -fno-exceptions and it's otherwise the default for C++
-%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||')
+%global ourflags %(echo %optflags | sed -e 's|-Wall|-Wformat -Wno-cpp|' | sed -r -e 's|-O[0-9]*||' | sed -e 's|-flto=auto||' -e 's|-ffat-lto-objects||' -e 's|-flto||')
 %global ourcppflags %(echo %ourflags | sed -e 's|-fexceptions||')
 %global ourldflags %{__global_ldflags}
 
@@ -1193,6 +1193,9 @@ EXTRA_CFLAGS="${EXTRA_CFLAGS} -gdwarf-4"
 EXTRA_CPP_FLAGS="${EXTRA_CPP_FLAGS} -gdwarf-4"
 %endif
 
+EXTRA_CFLAGS="$EXTRA_CFLAGS -fno-lto"
+EXTRA_CPP_FLAGS="$EXTRA_CPP_FLAGS -fno-lto"
+
 export EXTRA_CFLAGS EXTRA_CPP_FLAGS
 
 # Set modification times (mtimes) of files within JAR files generated
@@ -1973,4 +1976,5 @@ done
 %{_jvmdir}/%{miscportablearchive}.sha256sum
 %endif
 
+%changelog
 %autochangelog
