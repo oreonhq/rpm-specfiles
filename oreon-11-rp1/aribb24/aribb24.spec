@@ -40,6 +40,7 @@ autoreconf -vif
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/lib%{name}.la
+rm -fr %{buildroot}%{_docdir}/%{name}
 
 %files
 %license COPYING
