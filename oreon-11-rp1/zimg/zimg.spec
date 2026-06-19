@@ -9,7 +9,6 @@ URL:            https://github.com/sekrit-twc/zimg
 
 Source0:        %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
 Patch0:         zimg-b013c7b.patch
-Patch1:         zimg-0e56801.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
