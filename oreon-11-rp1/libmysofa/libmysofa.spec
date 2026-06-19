@@ -1,13 +1,14 @@
-%global source0_hash 64c661f75ef39edf68bfc3a28403d2b5a0bd251d0b9f5d021ed6f7917867fb37
+%global source0_hash 11dabd3b69d2cd7a0c01b680e9e64b3c4aa4f0b99b55e58f10a17f043d38e4c4
+%global commit 4585a0ae
 
 Name:           libmysofa
-Version:        1.3.4
+Version:        1.3.3
 Release:        %autorelease
 Summary:        C functions for reading HRTFs
 
 License:        BSD-3-Clause
 URL:            https://github.com/hoene/libmysofa
-Source0:        https://github.com/hoene/libmysofa/archive/v%{version}.tar.gz#/libmysofa-%{version}.tar.gz
+Source0:        https://github.com/hoene/libmysofa/archive/%{commit}.tar.gz#/libmysofa-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -41,7 +42,7 @@ Tools for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libmysofa-%{commit}
 
 
 %build
