@@ -1159,7 +1159,7 @@ job_cap=$((mem_mb / 4096))
 [ ${job_cap} -gt 8 ] && job_cap=8
 [ ${NUM_PROC} -gt ${job_cap} ] && export NUM_PROC=${job_cap}
 echo "Using NUM_PROC=${NUM_PROC} (mem_mb=${mem_mb})"
-export MAKEFLAGS="-j${NUM_PROC}"
+unset MAKEFLAGS
 export XZ_OPT="-T${NUM_PROC}"
 
 %ifarch s390x sparc64 alpha %{power64} %{aarch64} riscv64
@@ -1340,7 +1340,7 @@ function buildjdk() {
 
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
-    %{?dts_command} make LOG=info \
+    %{?dts_command} make LOG=info JOBS=${NUM_PROC} \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
