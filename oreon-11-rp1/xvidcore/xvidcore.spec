@@ -49,6 +49,7 @@ cd build/generic
 %ifarch %{ix86}
   --disable-assembly
 %endif
+
 %make_build LDFLAGS+="%{?build_ldflags}"
 
 %install
