@@ -4,7 +4,7 @@
 
 
 Name:           libksysguard
-Version:        6.6.3
+Version: 6.7.0
 Release:        5%{?dist}
 Summary:        KDE system monitoring libraries and plugin runtime for Plasma
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later

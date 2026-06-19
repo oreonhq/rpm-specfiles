@@ -14,7 +14,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-vault
 Summary: Plasma Vault offers strong encryption features in a user-friendly way
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

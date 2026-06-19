@@ -2,10 +2,8 @@
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
-%global min_ver_kf6 6
-%global bug_ver_kf6 5
-
-
+%global min_ver_kf6 7
+%global bug_ver_kf6 0
 # Disable X11 for RHEL
 %bcond x11 %[%{undefined rhel}]
 
@@ -16,7 +14,7 @@
 
 
 Name:           plasma-login-manager
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 License:        BSD-3-Clause and CC0-1.0 and (GPL-2.0-only or GPL-3.0-only) and GPL-2.0-or-later and LGPL-2.0-or-later and LGPL-2.1-or-later
 Summary:        QML based login manager from KDE

@@ -4,7 +4,7 @@
 
 
 Name:           kwrited
-Version:        6.6.3
+Version: 6.7.0
 Release:        3%{?dist}
 Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later

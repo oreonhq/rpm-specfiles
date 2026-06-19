@@ -5,7 +5,7 @@
 
 Name:    plasma-browser-integration
 Summary: %{name} provides components necessary to integrate browsers into the Plasma Desktop
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND MIT

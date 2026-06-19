@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          flatpak-kcm
-Version:       6.6.3
+Version: 6.7.0
 Release:       1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later
 Summary:       Flatpak Permissions Management KCM

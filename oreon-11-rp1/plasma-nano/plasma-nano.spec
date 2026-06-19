@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-nano
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/plasma-nano

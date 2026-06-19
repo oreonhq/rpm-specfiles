@@ -2,12 +2,12 @@
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
-%global min_ver_kf6 6
-%global bug_ver_kf6 5
+%global min_ver_kf6 7
+%global bug_ver_kf6 0
 
 
 Name:    kwin
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 Summary: KDE Window manager
 

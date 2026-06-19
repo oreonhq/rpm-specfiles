@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    sddm-kcm
-Version: 6.6.3
+Version: 6.7.0
 Release: 1%{?dist}
 Summary: SDDM KDE configuration module
 

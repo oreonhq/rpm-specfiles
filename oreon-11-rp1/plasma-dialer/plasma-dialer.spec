@@ -7,7 +7,7 @@
 
 Name:           plasma-dialer
 Epoch:          1
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 License:        BSD and CC0 and GPLv2 and GPLv2+ and GPLv3 and GPLv3+ and LGPLv2+ and LGPLv2.1 and LGPLv2.1+ and LGPLv3 and LGPLv3
 Summary:        Convergent Plasma Mobile dialer application
@@ -75,7 +75,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plasma-dialer-v6.6.5
+%autosetup -p1
 
 %build
 %cmake_kf6

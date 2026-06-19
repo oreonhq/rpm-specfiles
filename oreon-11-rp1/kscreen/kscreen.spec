@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kscreen
 Epoch:   1
-Version: 6.6.3
+Version: 6.7.0
 Release: 1%{?dist}
 Summary: KDE Display Management software
 

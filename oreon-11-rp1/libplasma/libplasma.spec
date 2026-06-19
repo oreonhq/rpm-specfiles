@@ -5,7 +5,7 @@
 
 Name:    libplasma
 Summary: Plasma is the foundation of the KDE user interface (v6)
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 
 # LicenseRef-QtCommercial is optional upstream; omitted here.

@@ -3,7 +3,7 @@
 %undefine __cmake_in_source_build
 
 %global stable_plasma stable
-%global plasma_ver 6.6.3
+%global plasma_ver 6.7.0
 
 Name:           libkscreen
 Version:        %{plasma_ver}

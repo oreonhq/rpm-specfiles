@@ -1,14 +1,12 @@
-%global source0_hash 9aa8ead91d9b692390b152266040ea55c282b3b2731c88c5ea62031515579431
+%global source0_hash 5f0b5c4a40c51da3cac5a5d683ab83abfd8a357e459176268eced158f0314885
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
-%global min_ver_kf6 6
-%global bug_ver_kf6 3
-
-
+%global min_ver_kf6 7
+%global bug_ver_kf6 0
 Name:           spacebar
 Epoch:          1
-Version:        6.6.3
+Version: 6.7.0
 Release:        1%{?dist}
 License:        GPLv2+ and GPLv3 and GPLv2
 Summary:        Messaging app for Plasma Mobile
@@ -66,7 +64,7 @@ Spacebar is a telepathy-qt based SMS application that primarily targets Plasma M
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n spacebar-v6.6.3
+%autosetup -p1
 
 %build
 %cmake_kf6

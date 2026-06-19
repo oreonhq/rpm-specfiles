@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           oxygen-sounds
-Version:        6.6.5
+Version: 6.7.0
 Release:        1%{?dist}
 Summary:        The Oxygen Sound Theme
 

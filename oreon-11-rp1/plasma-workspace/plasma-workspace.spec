@@ -1,17 +1,17 @@
-%global source0_hash 64d753cadcb9cde6ac09eeedf6b02ec5ccdfbd01722c5e9f2533fd0993b0d854
+%global source0_hash 9a7f2a04e8a44bf24da4d294bba270984a090ef17a082cd1eb25cb8182651d3c
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.6
+%global majmin_ver_kf6 6.7
 %global maj_ver_kf6 6
-%global min_ver_kf6 6
-%global bug_ver_kf6 5
+%global min_ver_kf6 7
+%global bug_ver_kf6 0
 
 
 %bcond kf6_pim 1
 
 Name:    plasma-workspace
 Summary: Plasma workspace, applications and applets
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT - review is highly recommended.
@@ -154,7 +154,7 @@ BuildRequires:  cmake(Plasma5Support)
 BuildRequires:  wayland-devel >= 1.3.0
 BuildRequires:  libksysguard-devel
 BuildRequires:  kscreenlocker-devel
-BuildRequires:  kwin-devel
+BuildRequires:  kwin-devel >= %{version}
 BuildRequires:  layer-shell-qt-devel
 BuildRequires:  cmake(Phonon4Qt6)
 BuildRequires:  PackageKit-Qt6-devel

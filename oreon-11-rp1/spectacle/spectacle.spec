@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 Name:    spectacle
 Summary: Screenshot capture utility
 Epoch:   1
-Version: 6.6.3
+Version: 6.7.0
 Release: 2%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

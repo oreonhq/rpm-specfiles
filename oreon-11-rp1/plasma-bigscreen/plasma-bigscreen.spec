@@ -1,18 +1,15 @@
 %global source0_hash none
 
-%global commit a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global gitdate 20260218.085444
+%global stable_kf6 stable
 
 Name:          plasma-bigscreen
-Version: 6.6.5
+Version: 6.7.0
 Release: 1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
 
-# no release tarball on download.kde.org yet
-Source0:        https://invent.kde.org/plasma/%{name}/-/archive/%{commit}/%{name}-%{commit}.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
@@ -35,6 +32,7 @@ BuildRequires: cmake(KF6GlobalAccel)
 BuildRequires: cmake(KF6DBusAddons)
 BuildRequires: cmake(KF6IconThemes)
 BuildRequires: cmake(KF6Screen)
+BuildRequires: cmake(KF6ItemModels)
 
 BuildRequires: cmake(Plasma)
 BuildRequires: cmake(PlasmaActivities)
@@ -82,7 +80,7 @@ Conflicts: %{name}-x11 < %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{commit}
+%autosetup -p1
 
 
 %build
