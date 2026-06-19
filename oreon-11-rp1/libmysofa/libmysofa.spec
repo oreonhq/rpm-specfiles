@@ -1,5 +1,5 @@
 %global source0_hash 11dabd3b69d2cd7a0c01b680e9e64b3c4aa4f0b99b55e58f10a17f043d38e4c4
-%global commit 4585a0ae
+%global commit 4585a0ae5bc98894750baf70e7f7989360e5a376
 
 Name:           libmysofa
 Version:        1.3.3
