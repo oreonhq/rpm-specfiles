@@ -27,7 +27,7 @@ BuildRequires:  cmake(Qt6Gui)
 BuildRequires:  cmake(KF6Archive)
 BuildRequires:  cmake(Qt6PrintSupport)
 BuildRequires:  pkgconfig(cups)
-BuildRequires:  openexr-devel >= 3.3
+BuildRequires:  openexr-devel >= 3.2
 BuildRequires:  cmake(OpenEXR)
 BuildRequires:  cmake(libavif)
 BuildRequires:  pkgconfig(libheif) >= 1.10.0
