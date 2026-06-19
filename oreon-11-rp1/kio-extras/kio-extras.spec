@@ -57,7 +57,7 @@ BuildRequires:  libjpeg-devel
 BuildRequires:  libmtp-devel
 BuildRequires:  libsmbclient-devel
 BuildRequires:  libssh-devel
-BuildRequires:  openexr-devel >= 3.3
+BuildRequires:  openexr-devel >= 3.2
 BuildRequires:  cmake(OpenEXR)
 BuildRequires:  perl-generators
 BuildRequires:  phonon-qt6-devel
