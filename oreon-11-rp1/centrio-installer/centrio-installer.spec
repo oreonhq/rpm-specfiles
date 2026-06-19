@@ -16,6 +16,10 @@ BuildRequires:  python3-devel
 %description
 Centrio is the Oreon installer. It runs in the live session.
 
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n centrio-%{version}
+
 %build
 # No compile step for pure Python
 
@@ -27,17 +31,17 @@ Centrio is the Oreon installer. It runs in the live session.
 %{__mkdir_p} %{buildroot}%{_datadir}/applications
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sudoers.d
 
-# GUI runs as user (Wayland/display); live user needs NOPASSWD for sudo
-install -p -m 0440 %{_sourcedir}/centrio-live-sudoers %{buildroot}%{_sysconfdir}/sudoers.d/99-centrio-live
+install -p -m 0440 %{SOURCE2} %{buildroot}%{_sysconfdir}/sudoers.d/99-centrio-live
 
-# Application and UI (from tarball)
 install -p -m 0644 %{_builddir}/centrio-%{version}/src/*.py %{buildroot}%{_datadir}/centrio/
 install -p -m 0644 %{_builddir}/centrio-%{version}/src/ui/*.py %{buildroot}%{_datadir}/centrio/ui/
 install -p -m 0644 %{_builddir}/centrio-%{version}/icons/*.svg %{buildroot}%{_datadir}/centrio/icons/ 2>/dev/null || true
 cp -a %{_builddir}/centrio-%{version}/locale/* %{buildroot}%{_datadir}/centrio/locale/ 2>/dev/null || true
 
-# Live env (from SOURCES)
-install -p -m 0644 %{_sourcedir}/liveinst.desktop %{buildroot}%{_datadir}/applications/
+install -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/
+
+%check
+test -d centrio-%{version}/src
 
 %files
 %{_sysconfdir}/sudoers.d/99-centrio-live

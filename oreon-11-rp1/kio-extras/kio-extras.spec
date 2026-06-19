@@ -66,7 +66,7 @@ BuildRequires:  pkgconfig(libplist-2.0)
 BuildRequires:  pkgconfig(libtirpc)
 BuildRequires:  pkgconfig(shared-mime-info)
 BuildRequires:  pkgconfig(xcursor)
-BuildRequires:  taglib-devel > 1.11
+BuildRequires:  taglib-devel >= 2.0
 
 # This package provides plugins for KIO
 Supplements:    kf6-kio-core
