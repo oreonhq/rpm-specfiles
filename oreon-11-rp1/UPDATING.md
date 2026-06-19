@@ -101,16 +101,10 @@ If your change also touched LLVM used by Mesa, see the LLVM or toolchain section
 
 Any bump to `qt6-qtbase` or a coordinated Qt release. KF6 and Plasma must not be rebuilt until this finishes.
 
-### Notes
-
-- `qt6` is the macros and filesystem package. It must build before `qt6-qtbase` because the base package requires `qt6-rpm-macros` and `qt6-filesystem`.
-- `qt6-qtwebengine` is last. It is huge and everything that needs Chromium bits waits on it.
-- `qt6-doc` is optional for runtime but if you ship it, build it after the modules it documents.
-
 ### Chain
 
 ```text
-cmake qt6 qt6-qtbase qt6-qtshadertools qt6-qtdeclarative qt6-qtlanguageserver qt6-qtsvg qt6-qttools qt6-qttranslations qt6-qtimageformats qt6-qt5compat qt6-qtserialport qt6-qtpositioning qt6-qtlocation qt6-qtmultimedia qt6-qtconnectivity qt6-qtwebsockets qt6-qtnetworkauth qt6-qthttpserver qt6-qtquick3d qt6-qtcharts qt6-qtdatavis3d qt6-qtgraphs qt6-qtquicktimeline qt6-qtremoteobjects qt6-qtscxml qt6-qtsensors qt6-qtserialbus qt6-qtspeech qt6-qtvirtualkeyboard qt6-qtwayland qt6-qt3d qt6-qtwebchannel qt6-qtlottie qt6-qtwebview qt6-qtwebengine qt6-doc
+cmake qt6 : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
 ```
 
 ---
@@ -121,17 +115,10 @@ cmake qt6 qt6-qtbase qt6-qtshadertools qt6-qtdeclarative qt6-qtlanguageserver qt
 
 Frameworks point release or any rebuild after Qt changed ABI.
 
-### Notes
-
-- You must already have the Qt 6 chain finished in the build target.
-- `extra-cmake-modules` first.
-- `kf6` creates `kf6-filesystem` and `kf6-rpm-macros`. Everything else lists `kf6-rpm-macros` in BuildRequires.
-- Order below follows KDE tier intuition (low-level frameworks before things that pull `KIO`, Baloo, declarative stuff, accel daemon, PIM-shaped libs). If something fails, check which `cmake(KF6*)` line appeared first in the log and move that package earlier.
-
 ### Chain
 
 ```text
-extra-cmake-modules kf6 kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6-kcodecs kf6-kconfig kf6-kcoreaddons kf6-kdbusaddons kf6-kdnssd kf6-kguiaddons kf6-ki18n kf6-kidletime kf6-kitemmodels kf6-kitemviews kf6-kplotting kf6-kwidgetsaddons kf6-kwindowsystem kf6-solid kf6-sonnet kf6-syntax-highlighting kf6-threadweaver kf6-kirigami kf6-bluez-qt kf6-modemmanager-qt kf6-networkmanager-qt kf6-prison kf6-kauth kf6-kcompletion kf6-kcrash kf6-kdoctools kf6-kfilemetadata kf6-kimageformats kf6-kjobwidgets kf6-knotifications kf6-knotifyconfig kf6-kpackage kf6-kservice kf6-ktextwidgets kf6-kxmlgui kf6-kcolorscheme kf6-kconfigwidgets kf6-kiconthemes kf6-kwallet kf6-kbookmarks kf6-kcmutils kf6-syndication kf6-kded kf6-kdesu kf6-kglobalaccel kf6-kdeclarative kf6-kholidays kf6-kio kf6-knewstuff kf6-kparts kf6-kpty kf6-kquickcharts kf6-krunner kf6-kstatusnotifieritem kf6-ksvg kf6-ktexteditor kf6-ktexttemplate kf6-kunitconversion kf6-kuserfeedback kf6-qqc2-desktop-style kf6-frameworkintegration kf6-kcontacts kf6-kcalendarcore kf6-kdav kf6-kpeople kf6-purpose kf6-kirigami-addons kf6-baloo kf6-kglobalacceld
+extra-cmake-modules kf6 : kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6-kcodecs kf6-kconfig kf6-kcoreaddons kf6-kdbusaddons kf6-kdnssd kf6-kguiaddons kf6-ki18n kf6-kidletime kf6-kitemmodels kf6-kitemviews kf6-kplotting kf6-kwidgetsaddons kf6-kwindowsystem kf6-solid kf6-sonnet kf6-syntax-highlighting kf6-threadweaver kf6-kirigami kf6-bluez-qt kf6-modemmanager-qt kf6-networkmanager-qt kf6-prison kf6-kholidays kf6-kpty kf6-ktexttemplate kf6-kunitconversion kf6-kuserfeedback kf6-kcalendarcore kf6-kquickcharts kf6-kstatusnotifieritem : kf6-kauth kf6-kcompletion kf6-kcrash kf6-kdoctools kf6-kfilemetadata kf6-kimageformats kf6-kjobwidgets kf6-knotifications kf6-kcolorscheme kf6-kconfigwidgets kf6-kglobalaccel kf6-kcontacts : kf6-kpackage kf6-kservice kf6-kiconthemes kf6-kwallet kf6-kded kf6-syndication kf6-kdesu : kf6-kio kf6-ktextwidgets kf6-kxmlgui : kf6-kbookmarks kf6-knotifyconfig kf6-knewstuff kf6-kparts kf6-krunner kf6-kdav : kf6-kcmutils kf6-kdeclarative kf6-ksvg kf6-qqc2-desktop-style kf6-purpose : kf6-ktexteditor kf6-frameworkintegration kf6-kirigami-addons kf6-kpeople kf6-baloo kf6-kglobalacceld
 ```
 
 ---
@@ -142,24 +129,11 @@ extra-cmake-modules kf6 kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6
 
 Coordinated Plasma bump, or rebuild after KF6 or Qt changes.
 
-### Notes
-
-- Finish the Qt 6 and KF6 chains first.
-- `polkit-qt-1` is early in this block because lots of desktop code wants Polkit Qt bindings available before you chase mysterious CMake failures later.
-- `plasma-wayland-protocols` is intentionally first among Plasma repos. Several Plasma libraries look for `cmake(PlasmaWaylandProtocols)`.
-- `libplasma` must come after `plasma-activities` because `cmake(PlasmaActivities)` is required.
-- `kscreenlocker` wants `cmake(PlasmaQuick)` and Layer Shell Qt. Keep `libplasma` and `layer-shell-qt` before it.
-- `kwin` pulls in Breeze decoration dev package, `kscreenlocker`, Wayland protocols, and more. Do not move it before those.
-- `plasma-workspace` is an anchor package. Several applets and `plasma-desktop` build against its devel package.
-- Phone, bigscreen, and experimental variants are at the end. Skip that tail on server images.
-
 ### Chain
 
 ```text
-polkit-qt-1 plasma-wayland-protocols layer-shell-qt libdisplay-info kdecoration plasma-activities plasma-activities-stats kwayland libkscreen libplasma plasma-breeze qqc2-breeze-style kscreenlocker knighttime plasma-aurorae kpipewire libksysguard ksystemstats plasma5support powerdevil bluedevil plasma-integration kwin plasma-workspace plasma-workspace-wallpapers plasma-workspace-x11 plasma-milou plasma-desktop plasma-systemsettings kinfocenter plasma-disks plasma-drkonqi plasma-firewall plasma-nm plasma-pa plasma-print-manager plasma-sdk plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-welcome plasma-browser-integration packagekit-qt phonon phonon-backend-gstreamer phonon-backend-vlc plasma-discover plasma-settings plasma-login-manager plasma-setup kde-cli-tools xdg-desktop-portal-kde plasma-applet-translator plasma-pk-updates plasma-pass plasma-wallpapers-dynamic plasma-oxygen plasma-bigscreen plasma-camera plasma-dialer plasma-keyboard plasma-mediacenter plasma-mobile plasma-mobile-sounds plasma-nano plasma-phonebook
+polkit-qt-1 plasma-wayland-protocols plasma-activities kdecoration libdisplay-info knighttime libksysguard kinfocenter plasma-drkonqi plasma-disks plasma-firewall plasma-thunderbolt plasma-workspace-wallpapers packagekit-qt phonon plasma-keyboard plasma-settings : layer-shell-qt kwayland libkscreen plasma-activities-stats plasma-breeze qqc2-breeze-style kpipewire plasma-integration : libplasma : kscreenlocker plasma-aurorae plasma5support ksystemstats bluedevil plasma-milou plasma-nm plasma-pa plasma-vault plasma-welcome plasma-oxygen plasma-bigscreen plasma-login-manager plasma-dialer plasma-systemmonitor plasma-sdk xdg-desktop-portal-kde : kwin kwin-x11 : plasma-workspace plasma-workspace-x11 : plasma-desktop plasma-systemsettings powerdevil plasma-browser-integration kde-cli-tools kdeplasma-addons : phonon-backend-gstreamer phonon-backend-vlc plasma-discover plasma-print-manager : plasma-nano kde-gtk-config kwayland-integration ocean-sound-theme oxygen-sounds : plasma-applet-translator plasma-pk-updates plasma-pass plasma-wallpapers-dynamic plasma-camera plasma-phonebook : plasma-setup plasma-mobile-sounds : plasma-mobile
 ```
-
-That line is long on purpose. You may split it into multiple chain runs as long as you never put a consumer before its devel providers. A practical split is everything through `kwin` first, then the rest.
 
 ---
 
