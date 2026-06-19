@@ -115,6 +115,8 @@
 %global source114_hash 72cfa78872e2759c90be9af586e718408ceb2dd8aaf081b3f2f24b3c997d223a
 %global source115_hash 947284b030f06cfcbc7abb831bb5dff2b19312cf778161ee477348c2dd88fc09
 %global source116_hash 21a9d565c228bc8ae0a3afea4d32cd77b8627fab72f16d7ab2f11e58b3733611
+%global source117_hash 83488ddd93678082ee06d3a42908ac0da9bb67844817a7ffb0fdae7a40735b08
+%global source118_hash 9c7285e2fc544d1f6c57b78e82dc128d94293378fb3ec232d3bbc2e566c4d167
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -250,6 +252,8 @@ Source113:        https://mirror.ctan.org/systems/texlive/tlnet/archive/uniqueco
 Source114:        https://mirror.ctan.org/systems/texlive/tlnet/archive/uniquecounter.doc.tar.xz
 Source115:        https://mirror.ctan.org/systems/texlive/tlnet/archive/url.tar.xz
 Source116:        https://mirror.ctan.org/systems/texlive/tlnet/archive/url.doc.tar.xz
+Source117:        https://mirror.ctan.org/systems/texlive/tlnet/archive/appendix.tar.xz
+Source118:        https://mirror.ctan.org/systems/texlive/tlnet/archive/appendix.doc.tar.xz
 
 # Patches
 Patch0:         tools-2026-02-10.patch
@@ -379,6 +383,25 @@ also loaded. amsmath is part of the LaTeX required distribution; however,
 several contributed packages add still further to its appeal; examples are
 empheq, which provides functions for decorating and highlighting mathematics,
 and ntheorem, for specifying theorem (and similar) definitions.
+
+%package -n texlive-appendix
+Summary:        Extra control of appendices
+Version:        svn78101
+License:        LPPL-1.3c
+Requires:       texlive-base
+Requires:       texlive-kpathsea
+Provides:       texlive-appendix-doc = %{epoch}:%{version}-%{release}
+Obsoletes:      texlive-appendix-doc <= 11:%{version}
+
+%description -n texlive-appendix
+The appendix package provides various ways of formatting the titles of
+appendices. Also (sub)appendices environments are provided that can be used,
+for example, for per chapter/section appendices. The word 'Appendix' or similar
+can be prepended to the appendix number for article class documents. The word
+'Appendices' or similar can be added to the table of contents before the
+appendices are listed. The word 'Appendices' or similar can be typeset as a
+\part-like heading (page) in the body. An appendices environment is provided
+which can be used instead of the \appendix command.
 
 %package -n texlive-atbegshi
 Summary:        Execute stuff at \shipout time
@@ -1439,7 +1462,9 @@ test "%{source112_hash}" = "none" || { f="%{SOURCE112}"; test -f "$f" || { echo 
 test "%{source113_hash}" = "none" || { f="%{SOURCE113}"; test -f "$f" || { echo "oreon: missing Source113 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source113_hash}" || { echo "oreon: Source113 hash mismatch" >&2; exit 1; }; }
 test "%{source114_hash}" = "none" || { f="%{SOURCE114}"; test -f "$f" || { echo "oreon: missing Source114 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source114_hash}" || { echo "oreon: Source114 hash mismatch" >&2; exit 1; }; }
 test "%{source115_hash}" = "none" || { f="%{SOURCE115}"; test -f "$f" || { echo "oreon: missing Source115 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source115_hash}" || { echo "oreon: Source115 hash mismatch" >&2; exit 1; }; }
-test "%{source116_hash}" = "none" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source116_hash}" || { echo "oreon: Source116 hash mismatch" >&2; exit 1; }; }# Extract license files
+test "%{source116_hash}" = "none" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source116_hash}" || { echo "oreon: Source116 hash mismatch" >&2; exit 1; }; }
+test "%{source117_hash}" = "none" || { f="%{SOURCE117}"; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source117_hash}" || { echo "oreon: Source117 hash mismatch" >&2; exit 1; }; }
+test "%{source118_hash}" = "none" || { f="%{SOURCE118}"; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source118_hash}" || { echo "oreon: Source118 hash mismatch" >&2; exit 1; }; }# Extract license files
 tar -xf %{SOURCE1}
 
 %build
@@ -1563,6 +1588,8 @@ tar -xf %{SOURCE113} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE114} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE115} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE116} -C %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE117} -C %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE118} -C %{buildroot}%{_texmf_main}
 
 # Remove tlpobj files
 rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
@@ -1595,6 +1622,11 @@ mv %{buildroot}%{_texmf_main}/fonts/map/dvips/psnfss/psnfss.map %{buildroot}%{_t
 %license lppl1.3c.txt
 %{_texmf_main}/tex/latex/amsmath/
 %doc %{_texmf_main}/doc/latex/amsmath/
+
+%files -n texlive-appendix
+%license lppl1.3c.txt
+%{_texmf_main}/tex/latex/appendix/
+%doc %{_texmf_main}/doc/latex/appendix/
 
 %files -n texlive-atbegshi
 %license lppl1.3c.txt

@@ -284,6 +284,7 @@ Requires: pkgconfig(zlib)
 Summary: IBase driver for Qt6's SQL classes
 BuildRequires: firebird-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: libfbclient2%{?_isa}
 %description ibase
 %{summary}.
 %endif

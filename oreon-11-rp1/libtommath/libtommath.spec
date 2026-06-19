@@ -11,18 +11,16 @@ Source0:        https://github.com/libtom/%{name}/archive/v%{version_no_tilde}.t
 
 BuildRequires:  make
 BuildRequires:  libtool
-
-%if ! 0%{?flatpak}
 BuildRequires:  ghostscript
 BuildRequires:  ghostscript-tools-dvipdf
 BuildRequires:  libtiff-tools
 BuildRequires:  tex(amssymb.sty)
+BuildRequires:  tex(cmr10.tfm)
 BuildRequires:  tex(epstopdf-base.sty)
 BuildRequires:  tex(expl3.sty)
 BuildRequires:  tex(fancyhdr.sty)
 BuildRequires:  tex(hyphen.tex)
 BuildRequires:  tex(l3backend-dvips.def)
-BuildRequires:  texlive-cm
 BuildRequires:  texlive-appendix
 BuildRequires:  texlive-dvips-bin
 BuildRequires:  texlive-kpathsea
@@ -30,7 +28,6 @@ BuildRequires:  texlive-latex-bin-bin
 BuildRequires:  texlive-makeindex-bin
 BuildRequires:  texlive-metafont
 BuildRequires:  texlive-mfware-bin
-%endif
 
 %description
 A free open source portable number theoretic multiple-precision integer library
@@ -46,7 +43,6 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
-%if ! 0%{?flatpak}
 %package        doc
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
@@ -55,14 +51,11 @@ Obsoletes:      %{name}-doc < 0.42-1
 
 %description    doc
 The %{name}-doc package contains PDF documentation for using %{name}.
-%endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version_no_tilde}
-# Fix permissions on installed library
 sed -i -e 's/644 $(LIBNAME)/755 $(LIBNAME)/g' makefile.shared
-# Fix pkgconfig path
 sed -i \
     -e 's|^prefix=.*|prefix=%{_prefix}|g' \
     -e 's|^libdir=.*|libdir=%{_libdir}|g' \
@@ -71,9 +64,7 @@ sed -i \
 %build
 %set_build_flags
 %make_build V=1 CFLAGS="$CFLAGS -I./" -f makefile.shared
-%if ! 0%{?flatpak}
 make V=1 -f makefile manual docs
-%endif
 
 %check
 make test
@@ -96,10 +87,8 @@ find %{buildroot} -name '*.a' -delete
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
-%if ! 0%{?flatpak}
 %files doc
 %doc doc/bn.pdf
-%endif
 
 %changelog
 * Sat May 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1~rc1-1

@@ -1063,8 +1063,9 @@ BuildRequires: texlive-texlive-scripts
 BuildRequires: texlive-amsfonts
 # RPATH DIE DIE DIE
 BuildRequires: chrpath
-# Break an ugly dep loop
+%if %{without bootstrap}
 BuildRequires: tex(expl3.sty)
+%endif
 
 
 # Cleanup Provides/Obsoletes

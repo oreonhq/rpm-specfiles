@@ -95,16 +95,36 @@ If your change also touched LLVM used by Mesa, see the LLVM or toolchain section
 
 ---
 
-## Qt 6 stack (all Qt6 SRPMs in this tree)
+## TeX Live stack
 
 ### When to use
 
-Any bump to `qt6-qtbase` or a coordinated Qt release. KF6 and Plasma must not be rebuilt until this finishes.
+libtommath doc builds, dblatex, latexmk, or anything else in this tree that BuildRequires texlive-* or tex(*). Run this before the Qt chain if firebird/libtommath is blocking qt6-qtbase-ibase.
+
+### Notes
+
+texlive-base defaults to bootstrap on. collection-basic and collection-latex have to land before you rebuild texlive-base with bootstrap off if you want the full format pass. texlive-collection-latex ships texlive-appendix here because latexextra is not in this tree yet and libtommath needs it.
+
+ghostscript and libtiff are separate SRPMs but libtommath wants ghostscript-tools-dvipdf and libtiff-tools for the PDF manual.
 
 ### Chain
 
 ```text
-cmake qt6 : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
+teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird
+```
+
+---
+
+## Qt 6 stack (all Qt6 SRPMs in this tree)
+
+### When to use
+
+Any bump to `qt6-qtbase` or a coordinated Qt release. KF6 and Plasma must not be rebuilt until this finishes. If libtommath or firebird are not in the repo yet, run the TeX Live stack section first.
+
+### Chain
+
+```text
+cmake qt6 : teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
 ```
 
 ---
