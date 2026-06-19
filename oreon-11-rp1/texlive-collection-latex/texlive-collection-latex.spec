@@ -1596,7 +1596,7 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 
 # Apply tools patch
 pushd %{buildroot}%{_texmf_main}
-patch -p0 < %{_sourcedir}/tools-2026-02-10.patch
+patch -p0 < %{PATCH0}
 popd
 
 # Rename .map files to .oldmap to avoid updmap-sys

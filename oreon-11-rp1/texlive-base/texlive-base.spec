@@ -8214,13 +8214,13 @@ sed -i 's|\\sc |\\scshape |g' %{buildroot}%{_texmf_main}/bibtex/bst/base/siam.bs
 pushd %{buildroot}%{_texmf_main}
 
 # neuter tlmgr a bit
-patch -p1 < %{_sourcedir}/texlive-20190410-tlmgr-ignore-warning.patch
+patch -p1 < %{PATCH21}
 
 # Fix texmfcnf.lua
-patch -p1 < %{_sourcedir}/texlive-2026-fedora-texmfcnf.lua.patch
+patch -p1 < %{PATCH45}
 
 # Fix interpreter on perl scripts
-patch -p1 < %{_sourcedir}/texlive-base-20230311-fix-scripts.patch
+patch -p1 < %{PATCH46}
 
 popd
 
