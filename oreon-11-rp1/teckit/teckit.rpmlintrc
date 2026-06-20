@@ -1,2 +1,1 @@
 addFilter('unversioned-explicit-provides bundels\(graphite2\)')
-addFilter('invalid-url Source0: teckit-.*_repackaged.tar.xz')
