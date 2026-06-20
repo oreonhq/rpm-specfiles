@@ -83,3 +83,27 @@ diff -up texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp.m
  	};
  	auto it = find_if(begin(ligatures), end(ligatures), [&nonlig](const Ligature &l) {
  		return l.nonlig == nonlig;
+diff -up texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w.me texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
+--- texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w.me	2026-06-20 00:00:00.000000000 +0000
++++ texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w	2026-06-20 00:00:00.000000000 +0000
+@@ -5883,7 +5883,7 @@
+ 
+ @p
+ #ifdef @!INIT
+-static void primitive(char *@!str, quarterword @!c, halfword @!o)
++static void primitive(const char *@!str, quarterword @!c, halfword @!o)
+ {@+str_number s=s_no(str);
+ int k; /*index into |str_pool|*/
+ int @!j; /*index into |buffer|*/
+diff -up texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w.me texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
+--- texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w.me	2026-06-20 00:00:00.000000000 +0000
++++ texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w	2026-06-20 00:00:00.000000000 +0000
+@@ -5748,7 +5748,7 @@
+ 
+ @p
+ #ifdef @!INIT
+-static void primitive(char *@!str, quarterword @!c, halfword @!o)
++static void primitive(const char *@!str, quarterword @!c, halfword @!o)
+ {@+str_number s=s_no(str);
+ int k; /*index into |str_pool|*/
+ int @!j; /*index into |buffer|*/

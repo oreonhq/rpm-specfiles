@@ -7993,7 +7993,7 @@ ln -sf licenses/$(basename $l) $(basename $l)
 done
 
 %patch -P44 -p1 -b .pdf-header-order-fix
-# %%patch -P51 -p1 -b .ftbfs-gcc16
+%patch -P51 -p1 -b .ftbfs-gcc16
 
 # Disable broken tests
 # updmap-cmdline-test.pl is not useful and it will fail because it finds the system perl bits instead of the local copy
@@ -8021,7 +8021,6 @@ EOF
 %build
 
 %if %{without bootstrap}
-cat /usr/share/texlive/kpathsea.log || :
 # DEBUG
 # Okay. Lets look at things.
 # 1. /usr/share/texlive/texmf-dist/web2c/fmtutil.cnf should exist and be valid.
