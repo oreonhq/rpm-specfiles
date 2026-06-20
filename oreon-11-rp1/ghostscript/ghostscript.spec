@@ -34,7 +34,7 @@
 # conflicting with the previous sup-package layout scheme.
 #
 # Obtain the location of Google Droid fonts directory:
-%global google_droid_fontpath %%(dirname $(fc-list : file | grep "DroidSansFallback"))
+%global google_droid_fontpath %%(fc=$(fc-list : file 2>/dev/null | grep -m1 "DroidSansFallback"); if [ -n "$fc" ]; then dirname "$fc"; else echo %{_datadir}/fonts/google-droid-sans-fonts; fi)
 
 # pdf2dsc is unmaintained in upstream, make its installation optional
 %if 0%{?fedora} || 0%{?rhel} <= 10
