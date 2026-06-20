@@ -87,10 +87,11 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         run: |
           spec=$(find "${{ matrix.pkg }}" -name '*.spec' | head -1)
+          pkgdir=$(cd "$(dirname "$spec")" && pwd)
           dist=$(bash .github/scripts/oreon-dist.sh "${{ matrix.pkg }}")
-          args=()
+          args=(--define "_sourcedir $pkgdir")
           [ -n "$dist" ] && args+=(--define "dist $dist")
-          spectool -g -C ~/rpmbuild/SOURCES/ "${args[@]}" "$spec" || true
+          spectool -g -C ~/rpmbuild/SOURCES/ "${args[@]}" "$spec"
 
       - name: Build SRPM
         if: steps.check.outputs.skip != 'true'
