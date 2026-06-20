@@ -507,6 +507,7 @@ URL: http://tug.org/texlive/
 Source0:        https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
 Source1:        macros.texlive
 Source2: https://ctan.math.illinois.edu/systems/texlive/tlnet/tlpkg/texlive.tlpdb
+Source3:        licenses.tar.xz
 Source4:        generate-fmtutilcnf
 # These noarch components are packed wrong upstream (do not unpack into texmf-dist)
 Source5: https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cslatex.tar.xz
@@ -7985,9 +7986,10 @@ tar xf %{SOURCE0}
 %patch -P37 -p1 -b .libpaper2
 %endif
 
-# Setup copies of the licenses
+tar xJf %{SOURCE3}
+# setup copies of the licenses
 for l in licenses/*.txt; do
-ln -s %{_texdir}/licenses/$(basename $l) $(basename $l)
+ln -sf licenses/$(basename $l) $(basename $l)
 done
 
 %patch -P44 -p1 -b .pdf-header-order-fix
