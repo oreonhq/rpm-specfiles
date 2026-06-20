@@ -111,6 +111,7 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/teckit/teckit-2.5.13_repackaged.tar.xz
 !oreon-11-rp1/texlive-collection-basic/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-fontsrecommended/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-latex/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-latexrecommended/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-xetex/texlive-licenses.tar.xz
 !oreon-11-rp1/thunderbird/cbindgen-vendor.tar.xz
