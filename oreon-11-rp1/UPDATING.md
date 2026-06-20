@@ -107,10 +107,12 @@ texlive-base defaults to bootstrap on. collection-basic and collection-latex hav
 
 ghostscript and libtiff are separate SRPMs but libtommath wants ghostscript-tools-dvipdf and libtiff-tools for the PDF manual.
 
+ghostscript BuildRequires gtk3-devel. mock builddep pulls gdk-pixbuf2-devel, then glycin-devel, and glycin-devel needs pkgconfig(libseccomp) in oreon repos. build libseccomp before ghostscript. libseccomp wants valgrind on aarch64 and x86_64 for its check suite, so queue valgrind first if it is not in the repo yet.
+
 ### Chain
 
 ```text
-teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird
+valgrind libseccomp teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird
 ```
 
 ---
@@ -124,7 +126,7 @@ Any bump to `qt6-qtbase` or a coordinated Qt release. KF6 and Plasma must not be
 ### Chain
 
 ```text
-cmake qt6 : teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
+cmake qt6 : valgrind libseccomp teckit ghostscript : texlive-base : texlive-collection-basic : texlive-collection-latex : libtiff : libtommath libtomcrypt : firebird : qt6-qtbase : qt6-qtshadertools qt6-qtlanguageserver qt6-qtsvg qt6-qtimageformats qt6-qtserialport qt6-qtnetworkauth : qt6-qtdeclarative : qt6-qttools qt6-qt5compat qt6-qtwebsockets qt6-qtconnectivity qt6-qtcharts qt6-qtdatavis3d qt6-qtremoteobjects qt6-qtscxml qt6-qtlottie qt6-qtquicktimeline : qt6-qtpositioning qt6-qtserialbus qt6-qtvirtualkeyboard qt6-qtwayland qt6-qthttpserver qt6-qtwebchannel qt6-qtsensors : qt6-qtlocation qt6-qtquick3d qt6-qt3d : qt6-qtmultimedia qt6-qtgraphs : qt6-qtspeech qt6-qttranslations : qt6-qtwebengine : qt6-qtwebview qt6-doc
 ```
 
 ---

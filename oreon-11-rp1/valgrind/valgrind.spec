@@ -28,6 +28,7 @@ URL: https://www.valgrind.org/
 %if %{is_scl}
   %global build_openmpi 0
 %else
+  %global build_openmpi 0
   %if 0%{?fedora}
     %ifarch %{ix86}
       %global build_openmpi (%{?fedora} < 40)
@@ -35,12 +36,8 @@ URL: https://www.valgrind.org/
       %global build_openmpi 1
     %endif
   %endif
-  %if 0%{?rhel}
-    %if 0%{?rhel} > 7
-      %global build_openmpi 0
-    %else
-      %global build_openmpi 1
-    %endif
+  %if 0%{?rhel} && 0%{?rhel} <= 7
+    %global build_openmpi 1
   %endif
 %endif
 
