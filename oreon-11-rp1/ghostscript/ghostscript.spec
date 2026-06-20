@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 64352648c2c081c8a9fb1a12dc1965e01ead7c57f58b72d1b54f6ef1cef3c561
 
 #
 # Important notes regarding the package:
@@ -29,7 +29,6 @@
 #       tarballs, and their release tags/branches do not use the dot in version
 #       tag. This makes obtaining the current version harder, and might prevent
 #       automatic builds of new releases...
-%global version_short %(echo "%{version}" | tr -d '.')
 
 # Starting version of new sup-package layout scheme for Ghostscript, which is
 # conflicting with the previous sup-package layout scheme.
@@ -50,6 +49,7 @@ Name:             ghostscript
 Summary:          Interpreter for PostScript language & PDF
 Version:          10.06.0
 Release:          2%{?dist}
+%global version_short %(echo %{version} | tr -d '.')
 
 License:          AGPL-3.0-or-later
 
