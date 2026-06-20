@@ -15,22 +15,14 @@ Patch0101:      fix-murmur-hash-strict-aliasing-violation.patch
 # https://github.com/seccomp/libseccomp/pull/452
 Patch0102: remove-fuzzer-test-from-62-sim-arch_transactions.patch
 
-%if 0%{?oreon} >= 11
-%bcond_with check
-%else
-%bcond_without check
-%endif
-
 BuildRequires:  gcc
 BuildRequires:  gperf
 BuildRequires:  make
 
-%if %{with check}
 %ifnarch riscv64 s390
 # Versions prior to 3.13.0-4 do not work on ARM with newer glibc 2.25.0-6
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1466017
 BuildRequires:  valgrind >= 1:3.13.0-4
-%endif
 %endif
 
 %description
@@ -80,9 +72,7 @@ mkdir -p %{buildroot}/%{_mandir}
 rm -f %{buildroot}/%{_libdir}/libseccomp.la
 
 %check
-%if %{with check}
 %make_build check
-%endif
 
 
 %files

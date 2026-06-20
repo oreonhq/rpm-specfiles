@@ -101,14 +101,6 @@ If your change also touched LLVM used by Mesa, see the LLVM or toolchain section
 
 libtommath doc builds, dblatex, latexmk, or anything else in this tree that BuildRequires texlive-* or tex(*). Run this before the Qt chain if firebird/libtommath is blocking qt6-qtbase-ibase.
 
-### Notes
-
-texlive-base defaults to bootstrap on. collection-basic and collection-latex have to land before you rebuild texlive-base with bootstrap off if you want the full format pass. texlive-collection-latex ships texlive-appendix here because latexextra is not in this tree yet and libtommath needs it.
-
-ghostscript and libtiff are separate SRPMs but libtommath wants ghostscript-tools-dvipdf and libtiff-tools for the PDF manual.
-
-ghostscript BuildRequires gtk3-devel. mock builddep pulls gdk-pixbuf2-devel, then glycin-devel, and glycin-devel needs pkgconfig(libseccomp) in oreon-base. build libseccomp before ghostscript. libseccomp skips valgrind checks by default on oreon so it does not need valgrind in the repo first. rebuild libseccomp with --with check after valgrind lands if you want the upstream test suite.
-
 ### Chain
 
 ```text
@@ -389,6 +381,32 @@ IMPORTANT -- after bootstrapped `perl` is in the repo:
 4. Then `perl-generators`, `oreon-rpm-config`, and rest of stack
 
 Update `gendep.macros` for the new `MODULE_COMPAT` before the bootstrap build. Regenerate from build log with `./generatedependencies` after a normal rebuild for the next bump.
+
+---
+
+## oreon-base bootstrap (Fedora mock on build service)
+
+### When to use
+
+or11 mock `dnf builddep` fails because a BuildRequires exists in Fedora but is not published to oreon-base yet. common case: ghostscript needs gtk3-devel, gdk-pixbuf2-devel pulls glycin-devel, glycin-devel needs libseccomp-devel.
+
+do not strip spec BuildRequires or disable subpackages to dodge this.
+
+### How
+
+on Oreon Build Service pick a **Fedora mock env** for the bootstrap package (e.g. `fedora-44-x86_64` / `fedora-44-aarch64` instead of `oreon-11-rp1-*`). fedora mock resolves builddeps from Fedora repos (valgrind for libseccomp, etc.) while the spec still builds oreon-tagged RPMs.
+
+1. queue `libseccomp` on **fedora-44** mock for each arch you need
+2. once those RPMs land in oreon-base, switch back to **oreon-11-rp1** mock for dependents
+3. run `ghostscript` or the full TeX chain
+
+### After bootstrap
+
+rebuild the same package on or11 mock later only if you need it compiled strictly against oreon-base devel headers. for libseccomp that is usually optional once devel is in the repo.
+
+### Other bootstrap candidates
+
+same trick for any package where the builddep error says `nothing provides` and Fedora already ships that provider. grep the error, build the missing leaf on fedora mock, publish to oreon-base, then continue on or11 mock.
 
 ---
 
