@@ -10,3 +10,13 @@ gpgcheck=1
 gpgkey=https://mirrors.oreonhq.com/RPM-GPG-KEY-oreon-11-primary
 skip_if_unavailable=False
 fastestmirror=1
+
+[mozilla]
+name=Mozilla Packages
+baseurl=https://packages.mozilla.org/rpm/firefox
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://packages.mozilla.org/rpm/firefox/signing-key.gpg
+priority=10
+skip_if_unavailable=True

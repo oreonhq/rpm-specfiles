@@ -1,7 +1,6 @@
-diff -up texlive-base-20230311-build/texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp.me texlive-base-20230311-build/texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp.me	2026-01-22 16:05:28.236115941 +0100
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp	2026-01-22 16:10:11.204612649 +0100
-@@ -1970,7 +1970,7 @@ void Clipper::DeleteFromSEL(TEdge *e)
+--- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
++++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
+@@ -1970,7 +1970,7 @@
  #ifdef use_xyz
  void Clipper::SetZ(IntPoint& pt, TEdge& e1, TEdge& e2)
  {
@@ -10,23 +9,9 @@ diff -up texlive-base-20230311-build/texlive-base-20230311/source/texk/dvisvgm/d
    else if (pt == e1.Bot) pt.Z = e1.Bot.Z;
    else if (pt == e1.Top) pt.Z = e1.Top.Z;
    else if (pt == e2.Bot) pt.Z = e2.Bot.Z;
-diff -up texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp.me texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp.me	2026-01-22 19:44:39.628015473 +0100
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp	2026-01-22 19:45:03.071537295 +0100
-@@ -24,7 +24,8 @@
- #include <string>
- 
- struct MemoryFontData {
--	MemoryFontData () =delete;
-+   constexpr MemoryFontData(const char *d, size_t s) noexcept
-+      : data(d), size(s) {}
- 	const char *data;
- 	size_t size;
- };
-diff -up texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp.me texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp.me	2026-01-22 20:01:03.302973419 +0100
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp	2026-01-22 20:02:21.564551895 +0100
-@@ -185,31 +185,31 @@ uint32_t Unicode::toLigature (const stri
+--- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
++++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
+@@ -188,31 +188,31 @@
  		const char *nonlig;
  		uint32_t lig;
  	} ligatures[39] = {
@@ -81,11 +66,10 @@ diff -up texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp.m
 +		{"VV",  0x0057}, {"tz",  0x0077},
 +		{"VY",  0xA760}, {"tz",  0xA761},
  	};
- 	auto it = find_if(begin(ligatures), end(ligatures), [&nonlig](const Ligature &l) {
+ 	auto it = algo::find_if(ligatures, [&nonlig](const Ligature &l) {
  		return l.nonlig == nonlig;
-diff -up texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w.me texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
---- texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w.me	2026-06-20 00:00:00.000000000 +0000
-+++ texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w	2026-06-20 00:00:00.000000000 +0000
+--- texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
++++ texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
 @@ -5883,7 +5883,7 @@
  
  @p
@@ -95,9 +79,8 @@ diff -up texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w.me texlive
  {@+str_number s=s_no(str);
  int k; /*index into |str_pool|*/
  int @!j; /*index into |buffer|*/
-diff -up texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w.me texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
---- texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w.me	2026-06-20 00:00:00.000000000 +0000
-+++ texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w	2026-06-20 00:00:00.000000000 +0000
+--- texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
++++ texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
 @@ -5748,7 +5748,7 @@
  
  @p
@@ -107,3 +90,15 @@ diff -up texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w.me texlive-bas
  {@+str_number s=s_no(str);
  int k; /*index into |str_pool|*/
  int @!j; /*index into |buffer|*/
+--- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
++++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
+@@ -24,7 +24,8 @@
+ #include <string>
+ 
+ struct MemoryFontData {
+-	MemoryFontData () =delete;
++   constexpr MemoryFontData(const char *d, size_t s) noexcept
++      : data(d), size(s) {}
+ 	const char *data;
+ 	size_t size;
+ };
