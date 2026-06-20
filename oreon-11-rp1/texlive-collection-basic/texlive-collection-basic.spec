@@ -620,7 +620,7 @@ rm -rf %{buildroot}%{_texmf_main}/doc/generic/enctex/INSTALL*
 
 # Apply etex patch
 pushd %{buildroot}%{_texmf_main}/tex/plain/etex/
-patch -p0 < %{_sourcedir}/etex-addlanguage-fix-bz1215257.patch
+patch -p0 < %{PATCH0}
 popd
 
 # Fix Python shebangs
