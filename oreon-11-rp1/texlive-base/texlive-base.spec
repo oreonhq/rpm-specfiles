@@ -507,7 +507,7 @@ URL: http://tug.org/texlive/
 Source0:        https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
 Source1:        macros.texlive
 Source2: https://ctan.math.illinois.edu/systems/texlive/tlnet/tlpkg/texlive.tlpdb
-Source3:        licenses.tar.xz
+Source3:        texlive-licenses.tar.xz
 Source4:        generate-fmtutilcnf
 # These noarch components are packed wrong upstream (do not unpack into texmf-dist)
 Source5: https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cslatex.tar.xz

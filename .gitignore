@@ -109,6 +109,7 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/sblim-gather/missing-providers.tgz
 !oreon-11-rp1/sgpio/sgpio-1.2-0.10-src.tar.gz
 !oreon-11-rp1/teckit/teckit-2.5.13_repackaged.tar.xz
+!oreon-11-rp1/texlive-base/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-basic/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-fontsrecommended/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-latex/texlive-licenses.tar.xz
