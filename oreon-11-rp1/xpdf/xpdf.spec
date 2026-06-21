@@ -15,10 +15,10 @@ Source0: https://dl.xpdfreader.com/%{name}-%{version}.tar.gz
 Source1: https://dl.xpdfreader.com/%{name}-%{version}.tar.gz.sig
 Source2: gpg-key.txt
 %if 0%{?fedora} || 0%{?oreon} >= 11
-Source3: xpdf-chinese-simplified-2023-dec-05-NOCMAP.tar.gz
-Source4: xpdf-chinese-traditional-2020-dec-22-NOCMAP.tar.gz
-Source5: xpdf-japanese-2020-dec-22-NOCMAP.tar.gz
-Source6: xpdf-korean-2023-dec-05-NOCMAP.tar.gz
+Source3: https://dl.xpdfreader.com/xpdf-chinese-simplified.tar.gz
+Source4: https://dl.xpdfreader.com/xpdf-chinese-traditional.tar.gz
+Source5: https://dl.xpdfreader.com/xpdf-japanese.tar.gz
+Source6: https://dl.xpdfreader.com/xpdf-korean.tar.gz
 Source7: https://dl.xpdfreader.com/xpdf-cyrillic.tar.gz
 Source8: https://dl.xpdfreader.com/xpdf-thai.tar.gz
 Source10: xpdf.desktop
@@ -123,6 +123,22 @@ test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon:
 %else
 %setup -q
 %endif
+rm -f xpdf-chinese-simplified/CMap/Adobe-GB1-UCS2 \
+      xpdf-chinese-simplified/CMap/GBK-EUC-UCS2 \
+      xpdf-chinese-simplified/CMap/GBpc-EUC-UCS2 \
+      xpdf-chinese-simplified/CMap/GBpc-EUC-UCS2C \
+      xpdf-chinese-traditional/CMap/Adobe-CNS1-UCS2 \
+      xpdf-chinese-traditional/CMap/B5pc-UCS2 \
+      xpdf-chinese-traditional/CMap/B5pc-UCS2C \
+      xpdf-chinese-traditional/CMap/ETen-B5-UCS2 \
+      xpdf-japanese/CMap/90ms-RKSJ-UCS2 \
+      xpdf-japanese/CMap/90pv-RKSJ-UCS2 \
+      xpdf-japanese/CMap/90pv-RKSJ-UCS2C \
+      xpdf-japanese/CMap/Adobe-Japan1-UCS2 \
+      xpdf-korean/CMap/Adobe-Korea1-UCS2 \
+      xpdf-korean/CMap/KSCms-UHC-UCS2 \
+      xpdf-korean/CMap/KSCpc-EUC-UCS2 \
+      xpdf-korean/CMap/KSCpc-EUC-UCS2C
 %patch -P3 -p1 -b .ext
 %patch -P9 -p1 -b .papersize
 %patch -P11 -p1 -b .crash
