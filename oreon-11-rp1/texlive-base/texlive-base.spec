@@ -483,7 +483,10 @@
 %global __brp_mangle_shebangs_exclude ^$
 
 # We have a circular dep on latex due to xindy
-%bcond_with bootstrap
+%bcond_without bootstrap
+
+# luajittex/luatex LTO link eats RAM and gets OOM-killed in mock
+%define _lto_cflags %{nil}
 
 # Upstream no longer supports poppler. We've been hacking it in, but... maybe we should stop?
 %bcond_with poppler
@@ -7647,7 +7650,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build world STRIPPROG=/bin/true STRIP=/bin/true ||:
+%make_build world STRIPPROG=/bin/true STRIP=/bin/true
 
 %install
 # make directories
