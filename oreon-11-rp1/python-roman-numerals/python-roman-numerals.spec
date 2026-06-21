@@ -48,3 +48,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -n python3-roman-numerals-py -f %{pyproject_files}
 %license LICENCE.rst
 %doc README.rst
+
+%changelog
+%autochangelog

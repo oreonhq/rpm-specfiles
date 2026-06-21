@@ -437,5 +437,4 @@ make -k check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.9-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

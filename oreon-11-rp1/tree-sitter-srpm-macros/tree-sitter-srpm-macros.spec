@@ -36,5 +36,4 @@ install -Dp -m u=rw,go=r \
 %{_fileattrsdir}/%{basename:%{SOURCE3}}
 
 %changelog
-* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.2-1
-- Import from Fedora 44 dist-git, debrand docs and changelog
+%autochangelog

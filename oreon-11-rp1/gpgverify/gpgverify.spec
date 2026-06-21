@@ -29,5 +29,4 @@ cp --preserve=timestamps gpgverify %{buildroot}%{_libexecdir}/
 %license license.txt
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2-4
-- Import for Oreon 11
+%autochangelog

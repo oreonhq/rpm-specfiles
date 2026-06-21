@@ -20,13 +20,7 @@
 %bcond_without git_test
 
 # Set to bcond_with or use --without gui to disable qt gui build
-%if 0%{?oreon} >= 11
-%bcond_with gui
-%bcond_with sphinx
-%else
 %bcond_without gui
-%bcond_without sphinx
-%endif
 
 # Use ncurses for colorful output
 %bcond_without ncurses
@@ -40,6 +34,8 @@
 
 # Enable RPM dependency generators for cmake files written in Python
 %bcond_without rpm
+
+%bcond_without sphinx
 
 %if !0%{?rhel}
 %bcond_with bundled_jsoncpp
@@ -199,9 +195,7 @@ BuildRequires:  python2-devel
 %endif
 %endif
 %if %{with gui}
-%if 0%{?oreon} >= 11
-BuildRequires: pkgconfig(Qt5Widgets)
-%elif 0%{?fedora} || 0%{?rhel} > 9
+%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 BuildRequires: pkgconfig(Qt6Widgets)
 %elif 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5Widgets)
@@ -630,5 +624,4 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{pkg_version}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

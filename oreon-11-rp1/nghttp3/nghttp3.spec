@@ -1,21 +1,23 @@
-%global source0_hash none
+%global source0_hash 6da0cd06b428d32a54c58137838505d9dc0371a900bb8070a46b29e1ceaf2e0f
 
 %global abi_ver 9
 
 Name:           nghttp3
 Version:        1.15.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        HTTP/3 library written in C
 
 License:        MIT
 URL:            https://github.com/ngtcp2/nghttp3
-Source:        tatsuhiro-t.asc
-Source:        tatsuhiro-t.asc
-Source:        tatsuhiro-t.asc
+Source0:        https://github.com/ngtcp2/nghttp3/releases/download/v%{version}/nghttp3-%{version}.tar.xz
+Source1:        https://github.com/ngtcp2/nghttp3/releases/download/v%{version}/nghttp3-%{version}.tar.xz.asc
+Source2:        tatsuhiro-t.pgp
 
 BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
 BuildRequires:  gpgverify
 BuildRequires:  libtool
 BuildRequires:  make
@@ -53,18 +55,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 autoreconf -fiv
 %configure --disable-static
-%make_build
+%{__make} %{?_smp_mflags}
 
 
 %install
-%make_install
+%{__make} install DESTDIR=%{buildroot} INSTALL='install -p'
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-# will be installed via %%doc
 rm -f %{buildroot}%{_docdir}/nghttp3/README.rst
 
 
 %check
-%make_build check
+%{__make} check
 
 
 %files -n libnghttp3
@@ -77,7 +78,5 @@ rm -f %{buildroot}%{_docdir}/nghttp3/README.rst
 %{_libdir}/libnghttp3.so
 %{_libdir}/pkgconfig/libnghttp3.pc
 
-
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.0-1
-- Import
+%autochangelog

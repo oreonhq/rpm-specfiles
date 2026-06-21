@@ -189,3 +189,6 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 %{rrcdir}/redhat-annobin-select-annobin-built-plugin
 
 %doc buildflags.md
+
+%changelog
+%autochangelog

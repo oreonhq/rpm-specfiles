@@ -254,3 +254,4 @@ rm -r glycin-loaders/glycin-jpeg2000
 
 
 %changelog
+%autochangelog

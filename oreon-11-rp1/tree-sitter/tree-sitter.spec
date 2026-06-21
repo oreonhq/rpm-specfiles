@@ -1,6 +1,6 @@
 %global source0_hash e6826b7533ec3a885aba598377a6d20b5a6321ff3db76968e960c2352d3a5077
 
-%global tree_sitter_so_version 0
+%global tree_sitter_so_version 0.26
 
 # Keep these up-to-date with the values in lib/include/tree_sitter/api.h:
 %global tree_sitter_language_version 15
@@ -9,7 +9,7 @@
 
 Name:           tree-sitter
 Version:        0.26.8
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        An incremental parsing system for programming tools
 
 License:        MIT
@@ -88,7 +88,8 @@ grep -q '^#define TREE_SITTER_MIN_COMPATIBLE_LANGUAGE_VERSION %tree_sitter_min_c
 %doc README.md
 %dir %{_datadir}/tree-sitter
 %dir %{_datadir}/tree-sitter/queries
-%{_libdir}/libtree-sitter.so.%{tree_sitter_so_version}*
+%{_libdir}/libtree-sitter.so.%{tree_sitter_so_version}
+%{_libdir}/libtree-sitter.so.0
 
 %files -n lib%{name}-devel
 %{_includedir}/tree_sitter
@@ -97,5 +98,4 @@ grep -q '^#define TREE_SITTER_MIN_COMPATIBLE_LANGUAGE_VERSION %tree_sitter_min_c
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.25.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

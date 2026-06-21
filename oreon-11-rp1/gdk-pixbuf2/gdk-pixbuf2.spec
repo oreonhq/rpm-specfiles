@@ -143,5 +143,4 @@ gdk-pixbuf-query-loaders-%{__isa_bits} --update-cache
 %{_datadir}/installed-tests
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.44.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
