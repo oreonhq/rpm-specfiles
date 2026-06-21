@@ -64,12 +64,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %set_build_flags
 export PREFIX='%{_prefix}' LIBDIR='%{_libdir}'
-%make_build
+%{__make} %{?_smp_mflags} -j${RPM_BUILD_NCPUS} %{?_make_verbose}
 
 
 %install
 export PREFIX='%{_prefix}' LIBDIR='%{_libdir}' INCLUDEDIR='%{_includedir}'
-%make_install
+%{__make} install DESTDIR=%{buildroot} %{?_make_verbose}
 
 find %{buildroot}%{_libdir} -type f \( -name "*.la" -o -name "*.a" \) -delete -print
 
