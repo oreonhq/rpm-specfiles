@@ -1060,10 +1060,12 @@ BuildRequires: python3-setuptools
 BuildRequires: clisp-devel
 BuildRequires: texlive-cyrillic, texlive-latex, texlive-metafont, texlive-cm-super, texlive-ec
 %endif
+%if %{without bootstrap}
 # This is temporary to fix build while missing kpathsea dep is active
 BuildRequires: texlive-texlive-scripts
 # This is needed for a test
 BuildRequires: texlive-amsfonts
+%endif
 # RPATH DIE DIE DIE
 BuildRequires: chrpath
 %if %{without bootstrap}
