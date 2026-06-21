@@ -36,17 +36,22 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 mkdir -p %{buildroot}%{_texdir}
 tar -xf %{SOURCE0} -C %{buildroot}%{_texdir}
 tar -xf %{SOURCE1} -C %{buildroot}%{_texdir}
-rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
+rm -rf %{buildroot}%{_texdir}/tlpkg
+rm -f %{buildroot}%{_texdir}/doc.html
+rm -f %{buildroot}%{_texdir}/install-tl
 
 %files
 %{_texmf_main}/scripts/texlive/
 %{_texmf_main}/dvips/tetex/
 %{_texmf_main}/fonts/enc/dvips/tetex/
 %{_texmf_main}/fonts/map/dvips/tetex/
+%{_texmf_main}/web2c/updmap.cfg
 %doc %{_texmf_main}/doc/man/man1/fmtutil*
 %doc %{_texmf_main}/doc/man/man1/install-tl*
 %doc %{_texmf_main}/doc/man/man1/mktex*
+%doc %{_texmf_main}/doc/man/man1/texhash*
 %doc %{_texmf_main}/doc/man/man1/updmap*
+%doc %{_texmf_main}/doc/man/man5/fmtutil.cnf*
 %doc %{_texmf_main}/doc/man/man5/updmap*
 
 %changelog
