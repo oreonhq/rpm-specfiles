@@ -1,5 +1,7 @@
 %global source0_hash bb0d4c54bac2990e1bdf8132f2c9477ae752859d523e141e72b3b11a12c26e7b
 
+%define _lto_cflags %{nil}
+
 Name:           chrpath
 Version:        0.16
 Release:        28%{?dist}
@@ -23,8 +25,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%configure
-%make_build
+%set_build_flags
+./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-dependency-tracking
+%{__make} %{?_smp_mflags} -j${RPM_BUILD_NCPUS} %{?_make_verbose}
 
 %check
 make check

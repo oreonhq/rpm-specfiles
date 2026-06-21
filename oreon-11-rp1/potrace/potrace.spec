@@ -62,7 +62,7 @@ cp -a %{SOURCE2} .
 %build
 %set_build_flags
 ./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --runstatedir=%{_runstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-dependency-tracking --enable-shared --disable-static --enable-metric --with-libpotrace=yes --with-pic
-%make_build
+%{__make} %{?_smp_mflags} -j${RPM_BUILD_NCPUS} %{?_make_verbose}
 
 %install
 rm -rf %{buildroot}
