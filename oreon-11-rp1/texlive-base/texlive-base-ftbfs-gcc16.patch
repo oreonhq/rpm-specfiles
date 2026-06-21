@@ -1,6 +1,6 @@
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
-@@ -1970,7 +1970,7 @@
+--- texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
++++ texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/libs/clipper/clipper.cpp
+@@ -1970,7 +1970,7 @@ void Clipper::DeleteFromSEL(TEdge *e)
  #ifdef use_xyz
  void Clipper::SetZ(IntPoint& pt, TEdge& e1, TEdge& e2)
  {
@@ -9,9 +9,23 @@
    else if (pt == e1.Bot) pt.Z = e1.Bot.Z;
    else if (pt == e1.Top) pt.Z = e1.Top.Z;
    else if (pt == e2.Bot) pt.Z = e2.Bot.Z;
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
-@@ -188,31 +188,31 @@
+
+--- texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
++++ texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
+@@ -24,7 +24,8 @@
+ #include <string>
+ 
+ struct MemoryFontData {
+-	MemoryFontData () =delete;
++   constexpr MemoryFontData(const char *d, size_t s) noexcept
++      : data(d), size(s) {}
+ 	const char *data;
+ 	size_t size;
+ };
+
+--- texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
++++ texlive-base-20260301/source/texk/dvisvgm/dvisvgm-src/src/Unicode.cpp
+@@ -188,33 +188,33 @@ uint32_t Unicode::toLigature (const stri
  		const char *nonlig;
  		uint32_t lig;
  	} ligatures[39] = {
@@ -66,11 +80,15 @@
 +		{"VV",  0x0057}, {"tz",  0x0077},
 +		{"VY",  0xA760}, {"tz",  0xA761},
  	};
- 	auto it = algo::find_if(ligatures, [&nonlig](const Ligature &l) {
+-	auto it = algo::find_if(ligatures, [&nonlig](const Ligature &l) {
++	auto it = find_if(begin(ligatures), end(ligatures), [&nonlig](const Ligature &l) {
  		return l.nonlig == nonlig;
---- texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
-+++ texlive-base-20230311/source/texk/web2c/texprofdir/texprof.w
-@@ -5883,7 +5883,7 @@
+ 	});
+ 	return it != end(ligatures) ? it->lig : 0;
+
+--- texlive-base-20260301/source/texk/web2c/texprofdir/texprof.w
++++ texlive-base-20260301/source/texk/web2c/texprofdir/texprof.w
+@@ -5883,7 +5883,7 @@ contains the new |eqtb| pointer after |p
  
  @p
  #ifdef @!INIT
@@ -79,9 +97,10 @@
  {@+str_number s=s_no(str);
  int k; /*index into |str_pool|*/
  int @!j; /*index into |buffer|*/
---- texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
-+++ texlive-base-20230311/source/texk/web2c/hitexdir/hitex.w
-@@ -5748,7 +5748,7 @@
+
+--- texlive-base-20260301/source/texk/web2c/hitexdir/hitex.w
++++ texlive-base-20260301/source/texk/web2c/hitexdir/hitex.w
+@@ -5748,7 +5748,7 @@ contains the new |eqtb| pointer after |p
  
  @p
  #ifdef @!INIT
@@ -90,15 +109,3 @@
  {@+str_number s=s_no(str);
  int k; /*index into |str_pool|*/
  int @!j; /*index into |buffer|*/
---- texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
-+++ texlive-base-20230311/source/texk/dvisvgm/dvisvgm-src/src/fonts/Base14Fonts.hpp
-@@ -24,7 +24,8 @@
- #include <string>
- 
- struct MemoryFontData {
--	MemoryFontData () =delete;
-+   constexpr MemoryFontData(const char *d, size_t s) noexcept
-+      : data(d), size(s) {}
- 	const char *data;
- 	size_t size;
- };
