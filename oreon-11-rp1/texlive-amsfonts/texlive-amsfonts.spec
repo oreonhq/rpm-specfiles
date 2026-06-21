@@ -29,10 +29,10 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %build
 
 %install
-mkdir -p %{buildroot}%{_texdir}
-tar -xf %{SOURCE0} -C %{buildroot}%{_texdir}
-tar -xf %{SOURCE1} -C %{buildroot}%{_texdir}
-rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
+mkdir -p %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE0} -C %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE1} -C %{buildroot}%{_texmf_main}
+rm -rf %{buildroot}%{_texmf_main}/tlpkg
 
 %files
 %license %{_texmf_main}/doc/fonts/amsfonts/OFL.txt
@@ -44,6 +44,7 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %{_texmf_main}/tex/latex/amsfonts/
 %{_texmf_main}/tex/plain/amsfonts/
 %doc %{_texmf_main}/doc/fonts/amsfonts/
+%exclude %{_texmf_main}/doc/fonts/amsfonts/OFL.txt
 
 %changelog
 %autochangelog
