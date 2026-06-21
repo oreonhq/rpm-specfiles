@@ -20,13 +20,12 @@ in various programming languages.}
 
 %description %_description
 
-%package -n     python3-roman-numerals
+%package -n     python3-roman-numerals-py
 Summary:        %{summary}
 
 %py_provides    python3-roman-numerals-py
-Obsoletes:      python3-roman-numerals-py < 4~~
 
-%description -n python3-roman-numerals %_description
+%description -n python3-roman-numerals-py %_description
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -46,6 +45,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pyproject_check_import
 %pytest
 
-%files -n python3-roman-numerals -f %{pyproject_files}
+%files -n python3-roman-numerals-py -f %{pyproject_files}
 %license LICENCE.rst
 %doc README.rst
