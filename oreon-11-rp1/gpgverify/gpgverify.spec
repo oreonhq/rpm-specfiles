@@ -21,13 +21,11 @@ OpenPGP signature and one or more keyrings.
 cp --preserve=timestamps %{sources} .
 
 %install
-mkdir --parents %{buildroot}%{rpmmacrodir} %{buildroot}%{_libexecdir}
+mkdir --parents %{buildroot}%{_libexecdir}
 cp --preserve=timestamps gpgverify %{buildroot}%{_libexecdir}/
-cp --preserve=timestamps macros.gpgverify %{buildroot}%{rpmmacrodir}/
 
 %files
 %attr(0755,-,-) %{_libexecdir}/gpgverify
-%attr(0644,-,-) %{rpmmacrodir}/macros.gpgverify
 %license license.txt
 
 %changelog
