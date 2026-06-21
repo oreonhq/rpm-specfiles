@@ -1,5 +1,7 @@
 %global source0_hash be8248a17dedd6ccbaab2fcc45835bb0502d062e40fbded3bc56028ce5eb7acc
 
+%define _lto_cflags %{nil}
+
 Name:		potrace
 Version:	1.16
 Release:	16%{?dist}
