@@ -37,9 +37,8 @@
 # Only produce a release build on x86_64:
 # $ rpmbuild -ba java-25-openjdk-portable.spec --without slowdebug --without fastdebug
 
-# GUI/chain bootstrap only needs release. Turn debug variants on explicitly if wanted.
-%bcond_with fastdebug
-%bcond_with slowdebug
+%bcond_without fastdebug
+%bcond_without slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
 # Enable static library builds by default.

@@ -1770,9 +1770,30 @@ if [ $prioritylength -ne 8 ] ; then
  exit 14
 fi
 
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz
-tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz
+src_tar=`ls %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.sources.noarch.tar.xz 2>/dev/null`
+if test -z "$src_tar" || test ! -f "$src_tar"; then
+ echo "missing portable sources tarball under %{portablejvmdir}" >&2
+ ls -la %{portablejvmdir}/ >&2 || true
+ rpm -qa '*portable*' >&2 || true
+ exit 1
+fi
+tar -xf "$src_tar"
+misc_tar=`ls %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.misc.%{_arch}.tar.xz 2>/dev/null`
+if test -z "$misc_tar" || test ! -f "$misc_tar"; then
+ echo "missing portable misc tarball for %{_arch} under %{portablejvmdir}" >&2
+ ls -la %{portablejvmdir}/ >&2 || true
+ rpm -qa '*portable*' >&2 || true
+ exit 1
+fi
+tar -xf "$misc_tar"
+doc_tar=`ls %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable*.docs.%{_arch}.tar.xz 2>/dev/null`
+if test -z "$doc_tar" || test ! -f "$doc_tar"; then
+ echo "missing portable docs tarball for %{_arch} under %{portablejvmdir}" >&2
+ ls -la %{portablejvmdir}/ >&2 || true
+ rpm -qa '*portable*' >&2 || true
+ exit 1
+fi
+tar -xf "$doc_tar"
 
 %if %{include_normal_build}
 tar -xf %{portablejvmdir}/%{portable_compatiblename}*%{version}*portable.jdk.%{_arch}.tar.xz
@@ -2576,4 +2597,5 @@ exit 0
 
 %endif
 
+%changelog
 %autochangelog
