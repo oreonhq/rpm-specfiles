@@ -7,7 +7,7 @@ Summary:        Canonical source for classifiers on PyPI (pypi.org)
 
 License:        Apache-2.0
 URL:            https://github.com/pypa/trove-classifiers
-Source:        https://files.pythonhosted.org/packages/source/t/trove-classifiers/trove-classifiers-2026.1.14.14.tar.gz
+Source:        https://files.pythonhosted.org/packages/d8/43/7935f8ea93fcb6680bc10a6fdbf534075c198eeead59150dd5ed68449642/trove_classifiers-%{version}.tar.gz
 # Drop dependency on calver which is not packaged in Fedora.
 # This patch is rebased version of upstream PR:
 # https://github.com/pypa/trove-classifiers/pull/126/commits/809156bb35852bcaa1c753e0165f1814f2bcedf6
