@@ -1,0 +1,5 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: oreon 7.1.1 redhat delta placeholder
+
+7.1.1 stable already has the f44 7.0 redhat backports we cared about.
+no extra delta for this release.

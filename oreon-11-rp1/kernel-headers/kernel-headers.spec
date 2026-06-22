@@ -1,4 +1,4 @@
-%global source0_hash 57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da
+%global source0_hash 5215fa3541dc7e7f5bcd51bf7e57f169cec6fce508ca54e3dc85fdee14371d7d
 
 # For a stable, released kernel, released_kernel should be 1. For rawhide
 # and/or a kernel built from an rc or git snapshot, released_kernel should
@@ -6,8 +6,8 @@
 %global released_kernel 1
 
 # define buildid .local
-%define specversion 7.0.12
-%define tarfile_release 7.0.12
+%define specversion 7.1.1
+%define tarfile_release 7.1.1
 # This is needed to do merge window version magic
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
@@ -123,5 +123,7 @@ rm -rf %{buildroot}/usr/tmp-headers
 %{_prefix}/*-linux-gnu/*
 
 %changelog
+* Sat Jun 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.1-200
+- Linux v7.1.1
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.6-200
 - Import

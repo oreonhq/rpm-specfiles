@@ -1,4 +1,4 @@
-%global source0_hash 57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da
+%global source0_hash 5215fa3541dc7e7f5bcd51bf7e57f169cec6fce508ca54e3dc85fdee14371d7d
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -174,19 +174,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.12
-%define specversion 7.0.12
-%define patchversion 7.0
+%define specrpmversion 7.1.1
+%define specversion 7.1.1
+%define patchversion 7.1
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.0.12
+%define tarfile_release 7.1.1
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.0.12
+%define kabiversion 7.1.1
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -4752,5 +4752,8 @@ fi\
 #
 #
 %changelog
+* Sat Jun 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.1-200
+- Linux v7.1.1
+- bore patch for 7.1
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.10-1
 - Import exact from f44
