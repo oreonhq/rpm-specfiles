@@ -40,7 +40,7 @@ Requires:      nss-util
 Requires:      popt
 Requires:      rpm
 ExclusiveArch: %{ix86} x86_64 ia64 aarch64 %{arm} riscv64
-%if 0%{?rhel} == 7 || (0%{?oreon} >= 11)
+%if 0%{?rhel} == 7
 BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
