@@ -1,4 +1,4 @@
-%global source0_hash d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed
+%global source0_hash 99d4fabddab7ee4a05fa458deb1a6f0d009966e4631c50d1b875767a1cd3896d
 
 Name:           python-mdurl
 Version:        0.1.2
