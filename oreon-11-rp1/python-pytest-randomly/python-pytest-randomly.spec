@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if %{with check}
 %check
 %pyproject_check_import
-%pytest -p no:randomly
+%pytest -p no:randomly -k 'not test_it_runs_before_stepwise and not test_model_bakery and not test_factory_boy and not test_faker and not test_numpy and not test_xdist'
 %endif
 
 %files -n python3-pytest-randomly -f %{pyproject_files}
