@@ -12,6 +12,11 @@ Source0:        https://github.com/ESSS/pytest-regressions/archive/v%{version}/p
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros
+%if %{with check}
+BuildRequires:  python3-numpy
+BuildRequires:  python3-pandas
+BuildRequires:  python3-pillow
+%endif
 
 %global _description %{expand:
 This pytest plugin makes it simple to test general data, images, files, and
@@ -25,6 +30,8 @@ data.}
 Summary:        %{summary}
 
 %description -n python3-pytest-regressions %_description
+
+%pyproject_extras_subpkg -n python3-pytest-regressions num,image,dataframe
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
