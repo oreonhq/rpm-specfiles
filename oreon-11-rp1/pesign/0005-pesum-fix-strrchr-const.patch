@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000005 Mon Sep 17 00:00:00 2001
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Date: Mon, 22 Jun 2026 00:00:00 +0000
+Subject: [PATCH] pesum: fix strrchr const qualifier with poptGetArg
+
+---
+ src/pesum.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/pesum.c b/src/pesum.c
+index 1111111..2222222 100644
+--- a/src/pesum.c
++++ b/src/pesum.c
+@@ -141,7 +141,7 @@ main(int argc, char *argv[])
+ 	while ((infile = poptGetArg(optCon)) != NULL) {
+ 		pesign_context *ctxp = NULL;
+ 
+-		char *ext = strrchr(infile, '.');
++		const char *ext = strrchr(infile, '.');
+ 		if (ext && strcmp(ext, ".ko") == 0)
+ 			fmt = FORMAT_KERNEL_MODULE;
+ 
