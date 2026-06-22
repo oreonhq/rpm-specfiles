@@ -93,6 +93,7 @@ Summary:        Development files for %{lib}
 Requires:       %{lib}%{?_isa} = %{version}-%{release}
 Obsoletes:     libimagequant-devel < 4.0.0
 Provides:      libimagequant-devel%{_isa} = %{version}-%{release}
+Provides:      libimagequant-devel = %{version}-%{release}
 
 %description -n %{lib}-devel %{_description}
 

@@ -1,0 +1,31 @@
+diff -rupN --no-dereference Python-3.11.15/Misc/NEWS.d/next/Security/2026-04-10-16-28-21.gh-issue-148395.kfzm0G.rst Python-3.11.15-new/Misc/NEWS.d/next/Security/2026-04-10-16-28-21.gh-issue-148395.kfzm0G.rst
+--- Python-3.11.15/Misc/NEWS.d/next/Security/2026-04-10-16-28-21.gh-issue-148395.kfzm0G.rst	1970-01-01 01:00:00.000000000 +0100
++++ Python-3.11.15-new/Misc/NEWS.d/next/Security/2026-04-10-16-28-21.gh-issue-148395.kfzm0G.rst	2026-04-14 11:29:17.908170200 +0200
+@@ -0,0 +1,5 @@
++Fix a dangling input pointer in :class:`lzma.LZMADecompressor`,
++and :class:`bz2.BZ2Decompressor`
++when memory allocation fails with :exc:`MemoryError`, which could let a
++subsequent :meth:`!decompress` call read or write through a stale pointer to
++the already-released caller buffer.
+diff -rupN --no-dereference Python-3.11.15/Modules/_bz2module.c Python-3.11.15-new/Modules/_bz2module.c
+--- Python-3.11.15/Modules/_bz2module.c	2026-03-03 01:52:57.000000000 +0100
++++ Python-3.11.15-new/Modules/_bz2module.c	2026-04-14 11:29:17.908335500 +0200
+@@ -595,6 +595,7 @@ decompress(BZ2Decompressor *d, char *dat
+     return result;
+ 
+ error:
++    bzs->next_in = NULL;
+     Py_XDECREF(result);
+     return NULL;
+ }
+diff -rupN --no-dereference Python-3.11.15/Modules/_lzmamodule.c Python-3.11.15-new/Modules/_lzmamodule.c
+--- Python-3.11.15/Modules/_lzmamodule.c	2026-03-03 01:52:57.000000000 +0100
++++ Python-3.11.15-new/Modules/_lzmamodule.c	2026-04-14 11:29:17.908579142 +0200
+@@ -1105,6 +1105,7 @@ decompress(Decompressor *d, uint8_t *dat
+     return result;
+ 
+ error:
++    lzs->next_in = NULL;
+     Py_XDECREF(result);
+     return NULL;
+ }

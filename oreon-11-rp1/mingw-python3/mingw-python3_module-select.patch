@@ -1,0 +1,24 @@
+diff -rupN --no-dereference Python-3.11.15/Modules/selectmodule.c Python-3.11.15-new/Modules/selectmodule.c
+--- Python-3.11.15/Modules/selectmodule.c	2026-03-03 01:52:57.000000000 +0100
++++ Python-3.11.15-new/Modules/selectmodule.c	2026-03-27 18:42:07.328909881 +0100
+@@ -146,9 +146,9 @@ seq2set(PyObject *seq, fd_set *set, pyli
+         v = PyObject_AsFileDescriptor( o );
+         if (v == -1) goto finally;
+ 
+-#if defined(_MSC_VER)
++#if defined(MS_WINDOWS)
+         max = 0;                             /* not used for Win32 */
+-#else  /* !_MSC_VER */
++#else  /* MS_WINDOWS */
+         if (!_PyIsSelectable_fd(v)) {
+             PyErr_SetString(PyExc_ValueError,
+                         "filedescriptor out of range in select()");
+@@ -156,7 +156,7 @@ seq2set(PyObject *seq, fd_set *set, pyli
+         }
+         if (v > max)
+             max = v;
+-#endif /* _MSC_VER */
++#endif /* MS_WINDOWS */
+         FD_SET(v, set);
+ 
+         /* add object and its file descriptor to the list */

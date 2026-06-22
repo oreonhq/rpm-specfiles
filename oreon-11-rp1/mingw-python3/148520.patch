@@ -1,0 +1,46 @@
+diff -rupN --no-dereference Python-3.11.15/Lib/test/test_webbrowser.py Python-3.11.15-new/Lib/test/test_webbrowser.py
+--- Python-3.11.15/Lib/test/test_webbrowser.py	2026-04-18 09:00:31.862458746 +0200
++++ Python-3.11.15-new/Lib/test/test_webbrowser.py	2026-04-18 09:00:33.033479817 +0200
+@@ -99,6 +99,14 @@ class ChromeCommandTest(CommandTestMixin
+                    options=[],
+                    arguments=[URL])
+ 
++    def test_reject_action_dash_prefixes(self):
++        browser = self.browser_class(name=CMD_NAME)
++        with self.assertRaises(ValueError):
++            browser.open('%action--incognito')
++        # new=1: action is "--new-window", so "%action" itself expands to
++        # a dash-prefixed flag even with no dash in the original URL.
++        with self.assertRaises(ValueError):
++            browser.open('%action', new=1)
+ 
+ class MozillaCommandTest(CommandTestMixin, unittest.TestCase):
+ 
+diff -rupN --no-dereference Python-3.11.15/Lib/webbrowser.py Python-3.11.15-new/Lib/webbrowser.py
+--- Python-3.11.15/Lib/webbrowser.py	2026-04-18 09:00:31.862748897 +0200
++++ Python-3.11.15-new/Lib/webbrowser.py	2026-04-18 09:00:33.033705528 +0200
+@@ -265,7 +265,6 @@ class UnixBrowser(BaseBrowser):
+ 
+     def open(self, url, new=0, autoraise=True):
+         sys.audit("webbrowser.open", url)
+-        self._check_url(url)
+         if new == 0:
+             action = self.remote_action
+         elif new == 1:
+@@ -279,7 +278,9 @@ class UnixBrowser(BaseBrowser):
+             raise Error("Bad 'new' parameter to open(); " +
+                         "expected 0, 1, or 2, got %s" % new)
+ 
+-        args = [arg.replace("%s", url).replace("%action", action)
++        self._check_url(url.replace("%action", action))
++
++        args = [arg.replace("%action", action).replace("%s", url)
+                 for arg in self.remote_args]
+         args = [arg for arg in args if arg]
+         success = self._invoke(args, True, autoraise, url)
+diff -rupN --no-dereference Python-3.11.15/Misc/NEWS.d/next/Security/2026-03-31-09-15-51.gh-issue-148169.EZJzz2.rst Python-3.11.15-new/Misc/NEWS.d/next/Security/2026-03-31-09-15-51.gh-issue-148169.EZJzz2.rst
+--- Python-3.11.15/Misc/NEWS.d/next/Security/2026-03-31-09-15-51.gh-issue-148169.EZJzz2.rst	1970-01-01 01:00:00.000000000 +0100
++++ Python-3.11.15-new/Misc/NEWS.d/next/Security/2026-03-31-09-15-51.gh-issue-148169.EZJzz2.rst	2026-04-18 09:00:33.033904098 +0200
+@@ -0,0 +1,2 @@
++A bypass in :mod:`webbrowser` allowed URLs prefixed with ``%action`` to pass
++the dash-prefix safety check.

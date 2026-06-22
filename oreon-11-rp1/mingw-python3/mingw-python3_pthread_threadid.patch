@@ -1,0 +1,13 @@
+diff -rupN --no-dereference Python-3.11.15/Python/thread_pthread.h Python-3.11.15-new/Python/thread_pthread.h
+--- Python-3.11.15/Python/thread_pthread.h	2026-03-03 01:52:57.000000000 +0100
++++ Python-3.11.15-new/Python/thread_pthread.h	2026-03-27 18:42:05.355309981 +0100
+@@ -352,6 +352,9 @@ PyThread_get_thread_native_id(void)
+ #elif defined(__NetBSD__)
+     lwpid_t native_id;
+     native_id = _lwp_self();
++#elif defined(__MINGW32__)
++    pthread_t native_id;
++    native_id = pthread_self();
+ #endif
+     return (unsigned long) native_id;
+ }

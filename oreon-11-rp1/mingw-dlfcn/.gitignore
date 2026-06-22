@@ -1,0 +1,9 @@
+*.rpm
+results_mingw-dlfcn
+noarch
+
+dlfcn-win32-*
+dlfcn-win32-r11.tar.bz2
+/v1.1.1.tar.gz
+/v1.1.2.tar.gz
+/v1.2.0.tar.gz
