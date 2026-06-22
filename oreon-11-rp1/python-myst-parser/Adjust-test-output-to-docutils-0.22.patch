@@ -1,0 +1,1717 @@
+From e1d238946e366d473362adf02cf87c36703808c6 Mon Sep 17 00:00:00 2001
+From: Karolina Surma <ksurma@redhat.com>
+Date: Wed, 19 Nov 2025 13:39:46 +0100
+Subject: [PATCH] Adjust test output to docutils 0.22+
+
+---
+ tests/test_renderers/fixtures/amsmath.md      |  8 +-
+ tests/test_renderers/fixtures/attributes.md   |  2 +-
+ tests/test_renderers/fixtures/containers.md   |  4 +-
+ .../fixtures/docutil_link_resolution.md       | 33 +++----
+ .../fixtures/docutil_syntax_extensions.txt    | 12 +--
+ tests/test_renderers/fixtures/dollarmath.md   |  8 +-
+ tests/test_renderers/fixtures/myst-config.txt | 34 ++++---
+ .../fixtures/reporter_warnings.md             |  2 +-
+ .../fixtures/sphinx_directives.md             |  4 +-
+ .../fixtures/sphinx_link_resolution.md        | 42 ++++----
+ tests/test_renderers/fixtures/sphinx_roles.md | 96 +++++++++----------
+ .../fixtures/sphinx_syntax_elements.md        |  6 +-
+ tests/test_renderers/test_myst_refs/doc.xml   |  2 +-
+ .../test_myst_refs/doc_nested.xml             |  2 +-
+ .../test_myst_refs/doc_with_extension.xml     |  2 +-
+ .../test_myst_refs/duplicate.xml              |  2 +-
+ tests/test_renderers/test_myst_refs/ref.xml   |  2 +-
+ .../test_myst_refs/ref_colon.xml              |  2 +-
+ .../test_myst_refs/ref_nested.xml             |  2 +-
+ .../test_basic.resolved.xml                   | 14 +--
+ .../test_sphinx_builds/test_basic.xml         | 12 +--
+ .../test_extended_syntaxes.xml                | 16 ++--
+ .../test_fieldlist_extension.xml              |  8 +-
+ .../test_gettext_html.resolved.xml            |  8 +-
+ .../test_sphinx_builds/test_includes.xml      |  4 +-
+ .../test_references.resolved.xml              | 46 ++++-----
+ .../test_sphinx_builds/test_references.xml    | 46 ++++-----
+ .../test_references_singlehtml.resolved.xml   |  8 +-
+ .../test_references_singlehtml.xml            |  8 +-
+ .../test_sphinx_builds/test_substitutions.xml |  2 +-
+ 30 files changed, 220 insertions(+), 217 deletions(-)
+
+diff --git a/tests/test_renderers/fixtures/amsmath.md b/tests/test_renderers/fixtures/amsmath.md
+index 34d7f06..fe2c6d8 100644
+--- a/tests/test_renderers/fixtures/amsmath.md
++++ b/tests/test_renderers/fixtures/amsmath.md
+@@ -4,7 +4,7 @@ Single Line:
+ .
+ <document source="<src>/index.md">
+     <target ids="equation-mock-uuid">
+-    <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="True" number="1" xml:space="preserve">
++    <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="1" number="1" xml:space="preserve">
+         \begin{equation} a \end{equation}
+ .
+ 
+@@ -16,7 +16,7 @@ a
+ .
+ <document source="<src>/index.md">
+     <target ids="equation-mock-uuid">
+-    <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="True" number="1" xml:space="preserve">
++    <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="1" number="1" xml:space="preserve">
+         \begin{equation}
+         a
+         \end{equation}
+@@ -29,7 +29,7 @@ a
+ \end{equation*}
+ .
+ <document source="<src>/index.md">
+-    <math_block classes="amsmath" nowrap="True" number="True" xml:space="preserve">
++    <math_block classes="amsmath" nowrap="1" number="True" xml:space="preserve">
+         \begin{equation*}
+         a
+         \end{equation*}
+@@ -45,7 +45,7 @@ In list:
+     <bullet_list bullet="-">
+         <list_item>
+             <target ids="equation-mock-uuid">
+-            <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="True" number="1" xml:space="preserve">
++            <math_block classes="amsmath" docname="index" label="mock-uuid" nowrap="1" number="1" xml:space="preserve">
+                 \begin{equation}
+                 a = 1
+                 \end{equation}
+diff --git a/tests/test_renderers/fixtures/attributes.md b/tests/test_renderers/fixtures/attributes.md
+index 59b780a..85841a6 100644
+--- a/tests/test_renderers/fixtures/attributes.md
++++ b/tests/test_renderers/fixtures/attributes.md
+@@ -8,7 +8,7 @@ c = 3
+ ```
+ .
+ <document source="<src>/index.md">
+-    <literal_block highlight_args="{'hl_lines': [2, 3]}" language="python" linenos="True" xml:space="preserve">
++    <literal_block highlight_args="{'hl_lines': [2, 3]}" language="python" linenos="1" xml:space="preserve">
+         a = 1
+         b = 2
+         c = 3
+diff --git a/tests/test_renderers/fixtures/containers.md b/tests/test_renderers/fixtures/containers.md
+index 2cff307..257d741 100644
+--- a/tests/test_renderers/fixtures/containers.md
++++ b/tests/test_renderers/fixtures/containers.md
+@@ -37,7 +37,7 @@ This is **content**
+ :::
+ .
+ <document source="<src>/index.md">
+-    <container is_div="True">
++    <container is_div="1">
+         <paragraph>
+             This is
+             <strong>
+@@ -51,7 +51,7 @@ This is **content**
+ :::
+ .
+ <document source="<src>/index.md">
+-    <container classes="name" is_div="True">
++    <container classes="name" is_div="1">
+         <paragraph>
+             This is
+             <strong>
+diff --git a/tests/test_renderers/fixtures/docutil_link_resolution.md b/tests/test_renderers/fixtures/docutil_link_resolution.md
+index e686e17..4b1aa8c 100644
+--- a/tests/test_renderers/fixtures/docutil_link_resolution.md
++++ b/tests/test_renderers/fixtures/docutil_link_resolution.md
+@@ -24,23 +24,23 @@
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <reference id_link="True" refid="test">
++        <reference id_link="1" refid="test">
+             <system_message level="2" line="1" source="<src>/index.md" type="WARNING">
+                 <paragraph>
+                     'myst' reference target not found: 'test' [myst.xref_missing]
+ 
+-        <reference id_link="True" refid="test">
++        <reference id_link="1" refid="test">
+             <system_message level="2" line="1" source="<src>/index.md" type="WARNING">
+                 <paragraph>
+                     'myst' reference target not found: 'test' [myst.xref_missing]
+ 
+-        <reference id_link="True" refid="test">
++        <reference id_link="1" refid="test">
+             explicit
+             <system_message level="2" line="1" source="<src>/index.md" type="WARNING">
+                 <paragraph>
+                     'myst' reference target not found: 'test' [myst.xref_missing]
+ 
+-        <reference id_link="True" refid="name%20with%20spaces">
++        <reference id_link="1" refid="name%20with%20spaces">
+             <system_message level="2" line="1" source="<src>/index.md" type="WARNING">
+                 <paragraph>
+                     'myst' reference target not found: 'name with spaces' [myst.xref_missing]
+@@ -76,15 +76,15 @@
+             <title>
+                 Non-anchor heading
+             <paragraph>
+-                <reference id_link="True" refid="title">
++                <reference id_link="1" refid="title">
+                     <inline classes="std std-ref">
+                         Title
+ 
+-                <reference id_link="True" refid="longer-title-with-nested-syntax">
++                <reference id_link="1" refid="longer-title-with-nested-syntax">
+                     <inline classes="std std-ref">
+                         Longer title with nested (syntax)
+ 
+-                <reference id_link="True" refid="title">
++                <reference id_link="1" refid="title">
+                     explicit
+ .
+ 
+@@ -102,15 +102,15 @@
+         Test
+     <target refid="target">
+     <paragraph>
+-        <reference id_link="True" refid="target">
++        <reference id_link="1" refid="target">
+             <inline classes="std std-ref">
+                 Test
+ 
+-        <reference id_link="True" refid="target">
++        <reference id_link="1" refid="target">
+             <inline classes="std std-ref">
+                 Test
+ 
+-        <reference id_link="True" refid="target">
++        <reference id_link="1" refid="target">
+             explicit
+ .
+ 
+@@ -128,12 +128,9 @@
+         Test
+     <subtitle ids="other test-1" names="other test">
+         Other
+-    <system_message backrefs="test-1" level="1" line="3" source="<src>/index.md" type="INFO">
+-        <paragraph>
+-            Duplicate implicit target name: "test".
+     <target refid="test-1">
+     <paragraph>
+-        <reference id_link="True" refid="test-1">
++        <reference id_link="1" refid="test-1">
+             <inline classes="std std-ref">
+                 Other
+ .
+@@ -150,7 +147,7 @@ Paragraph
+     <paragraph ids="name-with-spaces" names="name\ with\ spaces">
+         Paragraph
+     <paragraph>
+-        <reference id_link="True" refid="name-with-spaces">
++        <reference id_link="1" refid="name-with-spaces">
+             <inline classes="std std-ref">
+                 #name with spaces
+ .
+@@ -192,14 +189,14 @@ c  | d
+                         <paragraph>
+                             d
+     <paragraph>
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             <inline classes="std std-ref">
+                 caption
+ 
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             <inline classes="std std-ref">
+                 caption
+ 
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             explicit
+ .
+diff --git a/tests/test_renderers/fixtures/docutil_syntax_extensions.txt b/tests/test_renderers/fixtures/docutil_syntax_extensions.txt
+index a42c300..5f7b978 100644
+--- a/tests/test_renderers/fixtures/docutil_syntax_extensions.txt
++++ b/tests/test_renderers/fixtures/docutil_syntax_extensions.txt
+@@ -25,12 +25,12 @@ $$ (label)
+             foo
+             bar
+          b
+-    <math_block nowrap="False" number="True" xml:space="preserve">
++    <math_block nowrap="0" number="True" xml:space="preserve">
+         foo
+-    <math_block nowrap="False" number="True" xml:space="preserve">
++    <math_block nowrap="0" number="True" xml:space="preserve">
+ 
+         a = 1
+-    <math_block ids="label" names="label" nowrap="False" number="True" xml:space="preserve">
++    <math_block ids="label" names="label" nowrap="0" number="True" xml:space="preserve">
+ 
+         b = 2
+ .
+@@ -48,13 +48,13 @@ a
+ \end{equation*}
+ .
+ <document source="<string>">
+-    <math_block classes="amsmath" nowrap="True" numbered="True" xml:space="preserve">
++    <math_block classes="amsmath" nowrap="1" numbered="1" xml:space="preserve">
+         \begin{equation} a \end{equation}
+-    <math_block classes="amsmath" nowrap="True" numbered="True" xml:space="preserve">
++    <math_block classes="amsmath" nowrap="1" numbered="1" xml:space="preserve">
+         \begin{equation}
+         a
+         \end{equation}
+-    <math_block classes="amsmath" nowrap="True" xml:space="preserve">
++    <math_block classes="amsmath" nowrap="1" xml:space="preserve">
+         \begin{equation*}
+         a
+         \end{equation*}
+diff --git a/tests/test_renderers/fixtures/dollarmath.md b/tests/test_renderers/fixtures/dollarmath.md
+index e3e5fd2..29e0fb2 100644
+--- a/tests/test_renderers/fixtures/dollarmath.md
++++ b/tests/test_renderers/fixtures/dollarmath.md
+@@ -40,7 +40,7 @@ Math Block:
+ $$foo$$
+ .
+ <document source="<src>/index.md">
+-    <math_block nowrap="False" number="True" xml:space="preserve">
++    <math_block nowrap="0" number="True" xml:space="preserve">
+         foo
+ .
+ 
+@@ -50,7 +50,7 @@ $$foo$$ (abc)
+ .
+ <document source="<src>/index.md">
+     <target ids="equation-abc">
+-    <math_block docname="index" label="abc" nowrap="False" number="1" xml:space="preserve">
++    <math_block docname="index" label="abc" nowrap="0" number="1" xml:space="preserve">
+         foo
+ .
+ 
+@@ -65,11 +65,11 @@ b = 2
+ $$ (a)
+ .
+ <document source="<src>/index.md">
+-    <math_block nowrap="False" number="True" xml:space="preserve">
++    <math_block nowrap="0" number="True" xml:space="preserve">
+ 
+         a = 1
+     <target ids="equation-a">
+-    <math_block docname="index" label="a" nowrap="False" number="1" xml:space="preserve">
++    <math_block docname="index" label="a" nowrap="0" number="1" xml:space="preserve">
+ 
+         b = 2
+ .
+diff --git a/tests/test_renderers/fixtures/myst-config.txt b/tests/test_renderers/fixtures/myst-config.txt
+index 765b010..b0c52e4 100644
+--- a/tests/test_renderers/fixtures/myst-config.txt
++++ b/tests/test_renderers/fixtures/myst-config.txt
+@@ -219,7 +219,7 @@ www.commonmark.org/he<lp
+     <title>
+         My title
+     <paragraph>
+-        <reference id_link="True" refid="my-title">
++        <reference id_link="1" refid="my-title">
+             <inline classes="std std-ref">
+                 My title
+ .
+@@ -263,6 +263,12 @@ a
+ <document source="<string>">
+     <paragraph>
+         a
++    <section classes="system-messages">
++        <title>
++            Docutils System Messages
++        <system_message level="2" source="<string>" type="WARNING">
++            <paragraph>
++                The `attrs_image` extension is deprecated, please use `attrs_inline` instead. [myst.deprecated]
+ 
+ <string>:: (WARNING/2) The `attrs_image` extension is deprecated, please use `attrs_inline` instead. [myst.deprecated]
+ .
+@@ -397,38 +403,38 @@ My paragraph
+ .
+ <document source="<string>">
+     <paragraph>
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             <emphasis>
+                 explicit
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:label:search" reftitle="Python" refuri="https://example.com/search.html">
++        <reference internal="0" inv_match="key:std:label:search" reftitle="Python" refuri="https://example.com/search.html">
+             Search Page
+ 
+-        <reference internal="False" inv_match="key:std:label:search" reftitle="Python" refuri="https://example.com/search.html">
++        <reference internal="0" inv_match="key:std:label:search" reftitle="Python" refuri="https://example.com/search.html">
+             Search Page
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ 
+-        <reference internal="False" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
++        <reference internal="0" inv_match="key:std:doc:index" reftitle="Python" refuri="https://example.com/index.html">
+             Title
+ .
+ 
+@@ -447,7 +453,7 @@ My paragraph
+         <system_message level="2" line="3" source="<string>" type="WARNING">
+             <paragraph>
+                 Multiple matches for '*:*:*:*index': key:std:label:genindex, key:std:label:modindex, key:std:label:py-modindex, ... [myst.iref_ambiguous]
+-        <reference internal="False" inv_match="key:std:label:genindex" reftitle="Python" refuri="https://example.com/genindex.html">
++        <reference internal="0" inv_match="key:std:label:genindex" reftitle="Python" refuri="https://example.com/genindex.html">
+             Index
+ 
+ <string>:1: (WARNING/2) No matches for '*:*:*:other' [myst.iref_missing]
+@@ -486,7 +492,7 @@ My paragraph
+             <title>
+                 other
+             <paragraph>
+-                <reference id_link="True" refid="title">
++                <reference id_link="1" refid="title">
+                     reversed
+ .
+ 
+diff --git a/tests/test_renderers/fixtures/reporter_warnings.md b/tests/test_renderers/fixtures/reporter_warnings.md
+index 27b0ea8..fc0236f 100644
+--- a/tests/test_renderers/fixtures/reporter_warnings.md
++++ b/tests/test_renderers/fixtures/reporter_warnings.md
+@@ -116,7 +116,7 @@ footnote reference with no definition
+ 
+ [^a]
+ .
+-<string>:3: (ERROR/3) Too many autonumbered footnote references: only 0 corresponding footnotes available.
++<string>:3: (ERROR/3) Too many autonumbered footnote references: only 0 corresponding footnote available.
+ <string>:1: (ERROR/3) Unknown target name: "1".
+ <string>:3: (ERROR/3) Unknown target name: "a".
+ .
+diff --git a/tests/test_renderers/fixtures/sphinx_directives.md b/tests/test_renderers/fixtures/sphinx_directives.md
+index bb2ba2d..735d780 100644
+--- a/tests/test_renderers/fixtures/sphinx_directives.md
++++ b/tests/test_renderers/fixtures/sphinx_directives.md
+@@ -77,7 +77,7 @@ toctree (`sphinx.directives.other.TocTree`):
+ .
+ <document source="<src>/index.md">
+     <compound classes="toctree-wrapper">
+-        <toctree caption="True" entries="" glob="False" hidden="False" includefiles="" includehidden="False" maxdepth="-1" numbered="0" parent="index" titlesonly="False">
++        <toctree caption="True" entries="" glob="0" hidden="0" includefiles="" includehidden="0" maxdepth="-1" numbered="0" parent="index" titlesonly="0">
+ .
+ 
+ sectionauthor (`sphinx.directives.other.Author`):
+@@ -323,7 +323,7 @@ math (`sphinx.directives.patches.MathDirective`):
+ ```
+ .
+ <document source="<src>/index.md">
+-    <math_block docname="index" label="True" nowrap="False" number="True" xml:space="preserve">
++    <math_block docname="index" label="True" nowrap="0" number="True" xml:space="preserve">
+ .
+ 
+ deprecated (`sphinx.domains.changeset.VersionChange`):
+diff --git a/tests/test_renderers/fixtures/sphinx_link_resolution.md b/tests/test_renderers/fixtures/sphinx_link_resolution.md
+index e624b97..5fdff1b 100644
+--- a/tests/test_renderers/fixtures/sphinx_link_resolution.md
++++ b/tests/test_renderers/fixtures/sphinx_link_resolution.md
+@@ -23,13 +23,13 @@
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="test" reftype="myst">
++        <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="test" reftype="myst">
+             <inline classes="xref myst">
+ 
+-        <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="test" reftype="myst">
++        <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="test" reftype="myst">
+             <inline classes="xref myst">
+ 
+-        <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="test" reftype="myst">
++        <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="test" reftype="myst">
+             <inline classes="xref myst">
+                 explicit
+ .
+@@ -58,15 +58,15 @@
+             <title>
+                 Non-anchor heading
+             <paragraph>
+-                <reference id_link="True" refid="title">
++                <reference id_link="1" refid="title">
+                     <inline classes="std std-ref">
+                         Title
+ 
+-                <reference id_link="True" refid="longer-title-with-nested-syntax">
++                <reference id_link="1" refid="longer-title-with-nested-syntax">
+                     <inline classes="std std-ref">
+                         Longer title with nested (syntax)
+ 
+-                <reference id_link="True" refid="title">
++                <reference id_link="1" refid="title">
+                     explicit
+ .
+ 
+@@ -86,18 +86,18 @@
+         <title>
+             Test
+         <paragraph>
+-            <reference id_link="True" refid="target">
++            <reference id_link="1" refid="target">
+                 <inline classes="std std-ref">
+                     Test
+ 
+-            <reference id_link="True" refid="target">
++            <reference id_link="1" refid="target">
+                 <inline classes="std std-ref">
+                     Test
+ 
+-            <reference id_link="True" refid="target">
++            <reference id_link="1" refid="target">
+                 explicit
+ 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="name with spaces" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="name with spaces" reftype="myst">
+                 <inline classes="xref myst">
+ .
+ 
+@@ -119,7 +119,7 @@
+             <title>
+                 Other
+             <paragraph>
+-                <reference id_link="True" refid="id1">
++                <reference id_link="1" refid="id1">
+                     <inline classes="std std-ref">
+                         Other
+ .
+@@ -136,7 +136,7 @@ Paragraph
+     <paragraph ids="name-with-spaces" names="name\ with\ spaces">
+         Paragraph
+     <paragraph>
+-        <reference id_link="True" refid="name-with-spaces">
++        <reference id_link="1" refid="name-with-spaces">
+             <inline classes="std std-ref">
+                 #name with spaces
+ .
+@@ -178,15 +178,15 @@ c  | d
+                         <paragraph>
+                             d
+     <paragraph>
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             <inline classes="std std-ref">
+                 caption
+ 
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             <inline classes="std std-ref">
+                 caption
+ 
+-        <reference id_link="True" refid="table">
++        <reference id_link="1" refid="table">
+             explicit
+ .
+ 
+@@ -198,15 +198,15 @@ c  | d
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="False" reftarget="test.txt" reftype="myst">
++        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="0" reftarget="test.txt" reftype="myst">
+             <literal classes="xref download myst">
+                 test.txt
+ 
+-        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="False" reftarget="./test.txt" reftype="myst">
++        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="0" reftarget="./test.txt" reftype="myst">
+             <literal classes="xref download myst">
+                 ./test.txt
+ 
+-        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="True" reftarget="/test.txt" reftype="myst">
++        <download_reference filename="dd18bf3a8e0a2a3e53e2661c7fb53534/test.txt" refdoc="index" refdomain="True" refexplicit="1" reftarget="/test.txt" reftype="myst">
+             <inline classes="xref download myst">
+                 relative to source dir
+ .
+@@ -219,13 +219,13 @@ c  | d
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="other" reftargetid="True" reftype="myst">
++        <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="other" reftargetid="True" reftype="myst">
+             <inline classes="xref myst">
+ 
+-        <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="other" reftargetid="True" reftype="myst">
++        <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="other" reftargetid="True" reftype="myst">
+             <inline classes="xref myst">
+ 
+-        <pending_xref refdoc="index" refdomain="doc" refexplicit="True" reftarget="other" reftargetid="True" reftype="myst">
++        <pending_xref refdoc="index" refdomain="doc" refexplicit="1" reftarget="other" reftargetid="True" reftype="myst">
+             <inline classes="xref myst">
+                 relative to source dir
+ .
+diff --git a/tests/test_renderers/fixtures/sphinx_roles.md b/tests/test_renderers/fixtures/sphinx_roles.md
+index 37683db..46cd81b 100644
+--- a/tests/test_renderers/fixtures/sphinx_roles.md
++++ b/tests/test_renderers/fixtures/sphinx_roles.md
+@@ -4,7 +4,7 @@ c:func (`sphinx.domains.c.CXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="c" refexplicit="False" reftarget="a" reftype="func" refwarn="False">
++        <pending_xref refdoc="index" refdomain="c" refexplicit="0" reftarget="a" reftype="func" refwarn="0">
+             <literal classes="xref c c-func">
+                 a()
+ .
+@@ -15,7 +15,7 @@ c:member (`sphinx.domains.c.CObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="c" refexplicit="False" reftarget="a" reftype="member" refwarn="False">
++        <pending_xref refdoc="index" refdomain="c" refexplicit="0" reftarget="a" reftype="member" refwarn="0">
+             <literal classes="xref c c-member">
+                 a
+ .
+@@ -26,7 +26,7 @@ c:macro (`sphinx.domains.c.CObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="c" refexplicit="False" reftarget="a" reftype="macro" refwarn="False">
++        <pending_xref refdoc="index" refdomain="c" refexplicit="0" reftarget="a" reftype="macro" refwarn="0">
+             <literal classes="xref c c-macro">
+                 a
+ .
+@@ -37,7 +37,7 @@ c:data (`sphinx.domains.c.CXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="c" refexplicit="False" reftarget="a" reftype="data" refwarn="False">
++        <pending_xref refdoc="index" refdomain="c" refexplicit="0" reftarget="a" reftype="data" refwarn="0">
+             <literal classes="xref c c-data">
+                 a
+ .
+@@ -48,7 +48,7 @@ c:type (`sphinx.domains.c.CObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="c" refexplicit="False" reftarget="a" reftype="type" refwarn="False">
++        <pending_xref refdoc="index" refdomain="c" refexplicit="0" reftarget="a" reftype="type" refwarn="0">
+             <literal classes="xref c c-type">
+                 a
+ .
+@@ -59,7 +59,7 @@ cpp:any (`sphinx.domains.cpp.CPPXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="any" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="any" refwarn="0">
+             <literal classes="xref cpp cpp-any">
+                 a
+ .
+@@ -70,7 +70,7 @@ cpp:class (`sphinx.domains.cpp.CPPClassObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="class" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="class" refwarn="0">
+             <literal classes="xref cpp cpp-class">
+                 a
+ .
+@@ -81,7 +81,7 @@ cpp:struct (`sphinx.domains.cpp.CPPClassObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="struct" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="struct" refwarn="0">
+             <literal classes="xref cpp cpp-struct">
+                 a
+ .
+@@ -92,7 +92,7 @@ cpp:union (`sphinx.domains.cpp.CPPUnionObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="union" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="union" refwarn="0">
+             <literal classes="xref cpp cpp-union">
+                 a
+ .
+@@ -103,7 +103,7 @@ cpp:func (`sphinx.domains.cpp.CPPXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="func" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="func" refwarn="0">
+             <literal classes="xref cpp cpp-func">
+                 a()
+ .
+@@ -114,7 +114,7 @@ cpp:member (`sphinx.domains.cpp.CPPMemberObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="member" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="member" refwarn="0">
+             <literal classes="xref cpp cpp-member">
+                 a
+ .
+@@ -125,7 +125,7 @@ cpp:var (`sphinx.domains.cpp.CPPMemberObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="var" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="var" refwarn="0">
+             <literal classes="xref cpp cpp-var">
+                 a
+ .
+@@ -136,7 +136,7 @@ cpp:type (`sphinx.domains.cpp.CPPTypeObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="type" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="type" refwarn="0">
+             <literal classes="xref cpp cpp-type">
+                 a
+ .
+@@ -147,7 +147,7 @@ cpp:concept (`sphinx.domains.cpp.CPPConceptObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="concept" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="concept" refwarn="0">
+             <literal classes="xref cpp cpp-concept">
+                 a
+ .
+@@ -158,7 +158,7 @@ cpp:enum (`sphinx.domains.cpp.CPPEnumObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="enum" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="enum" refwarn="0">
+             <literal classes="xref cpp cpp-enum">
+                 a
+ .
+@@ -169,7 +169,7 @@ cpp:enumerator (`sphinx.domains.cpp.CPPEnumeratorObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="cpp" refexplicit="False" reftarget="a" reftype="enumerator" refwarn="False">
++        <pending_xref refdoc="index" refdomain="cpp" refexplicit="0" reftarget="a" reftype="enumerator" refwarn="0">
+             <literal classes="xref cpp cpp-enumerator">
+                 a
+ .
+@@ -204,7 +204,7 @@ js:func (`sphinx.domains.javascript.JSXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="func" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="func" refwarn="0">
+             <literal classes="xref js js-func">
+                 a()
+ .
+@@ -215,7 +215,7 @@ js:meth (`sphinx.domains.javascript.JSXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="meth" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="meth" refwarn="0">
+             <literal classes="xref js js-meth">
+                 a()
+ .
+@@ -226,7 +226,7 @@ js:class (`sphinx.domains.javascript.JSConstructor`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="class" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="class" refwarn="0">
+             <literal classes="xref js js-class">
+                 a()
+ .
+@@ -237,7 +237,7 @@ js:data (`sphinx.domains.javascript.JSObject`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="data" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="data" refwarn="0">
+             <literal classes="xref js js-data">
+                 a
+ .
+@@ -248,7 +248,7 @@ js:attr (`sphinx.domains.javascript.JSXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="attr" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="attr" refwarn="0">
+             <literal classes="xref js js-attr">
+                 a
+ .
+@@ -259,7 +259,7 @@ js:mod (`sphinx.domains.javascript.JSXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="False" reftarget="a" reftype="mod" refwarn="False">
++        <pending_xref js:module="True" js:object="True" refdoc="index" refdomain="js" refexplicit="0" reftarget="a" reftype="mod" refwarn="0">
+             <literal classes="xref js js-mod">
+                 a
+ .
+@@ -270,7 +270,7 @@ eq (`sphinx.domains.math.MathReferenceRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="math" refexplicit="False" reftarget="a" reftype="eq" refwarn="True">
++        <pending_xref refdoc="index" refdomain="math" refexplicit="0" reftarget="a" reftype="eq" refwarn="1">
+             <literal classes="xref eq">
+                 a
+ .
+@@ -281,7 +281,7 @@ math:numref (`sphinx.domains.math.MathReferenceRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="math" refexplicit="False" reftarget="a" reftype="numref" refwarn="False">
++        <pending_xref refdoc="index" refdomain="math" refexplicit="0" reftarget="a" reftype="numref" refwarn="0">
+             <literal classes="xref math math-numref">
+                 a
+ .
+@@ -292,7 +292,7 @@ py:data (`sphinx.domains.python.PyVariable`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="data" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="data" refwarn="0">
+             <literal classes="xref py py-data">
+                 a
+ .
+@@ -303,7 +303,7 @@ py:exc (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="exc" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="exc" refwarn="0">
+             <literal classes="xref py py-exc">
+                 a
+ .
+@@ -314,7 +314,7 @@ py:func (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="func" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="func" refwarn="0">
+             <literal classes="xref py py-func">
+                 a()
+ .
+@@ -325,7 +325,7 @@ py:class (`sphinx.domains.python.PyClasslike`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="class" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="class" refwarn="0">
+             <literal classes="xref py py-class">
+                 a
+ .
+@@ -336,7 +336,7 @@ py:const (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="const" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="const" refwarn="0">
+             <literal classes="xref py py-const">
+                 a
+ .
+@@ -347,7 +347,7 @@ py:attr (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="attr" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="attr" refwarn="0">
+             <literal classes="xref py py-attr">
+                 a
+ .
+@@ -358,7 +358,7 @@ py:meth (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="meth" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="meth" refwarn="0">
+             <literal classes="xref py py-meth">
+                 a()
+ .
+@@ -369,7 +369,7 @@ py:mod (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="mod" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="mod" refwarn="0">
+             <literal classes="xref py py-mod">
+                 a
+ .
+@@ -380,7 +380,7 @@ py:obj (`sphinx.domains.python.PyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="False" reftarget="a" reftype="obj" refwarn="False">
++        <pending_xref py:class="True" py:module="True" refdoc="index" refdomain="py" refexplicit="0" reftarget="a" reftype="obj" refwarn="0">
+             <literal classes="xref py py-obj">
+                 a
+ .
+@@ -391,7 +391,7 @@ rst:role (`sphinx.domains.rst.ReSTRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="rst" refexplicit="False" reftarget="a" reftype="role" refwarn="False">
++        <pending_xref refdoc="index" refdomain="rst" refexplicit="0" reftarget="a" reftype="role" refwarn="0">
+             <literal classes="xref rst rst-role">
+                 a
+ .
+@@ -412,7 +412,7 @@ option (`sphinx.domains.std.Cmdoption`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="option" refwarn="True" std:program="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="option" refwarn="1" std:program="True">
+             <literal classes="xref std std-option">
+                 a
+ .
+@@ -425,7 +425,7 @@ envvar (`sphinx.domains.std.EnvVarXRefRole`):
+     <paragraph>
+         <index entries="('single',\ 'a',\ 'index-0',\ '',\ None) ('single',\ 'environment\ variable;\ a',\ 'index-0',\ '',\ None)">
+         <target ids="index-0">
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="envvar" refwarn="False">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="envvar" refwarn="0">
+             <literal classes="xref std std-envvar">
+                 a
+ .
+@@ -447,7 +447,7 @@ download (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <download_reference refdoc="index" refdomain="" refexplicit="False" reftarget="a" reftype="download" refwarn="False">
++        <download_reference refdoc="index" refdomain="" refexplicit="0" reftarget="a" reftype="download" refwarn="0">
+             <literal classes="xref download">
+                 a
+ .
+@@ -458,7 +458,7 @@ any (`sphinx.roles.AnyXRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="" refexplicit="True" reftarget="alt text" reftype="any" refwarn="True">
++        <pending_xref refdoc="index" refdomain="" refexplicit="1" reftarget="alt text" reftype="any" refwarn="1">
+             <literal classes="xref any">
+                 a
+ .
+@@ -471,7 +471,7 @@ pep (`sphinx.roles.PEP`):
+     <paragraph>
+         <index entries="('single',\ 'Python\ Enhancement\ Proposals;\ PEP\ 1',\ 'index-0',\ '',\ None)">
+         <target ids="index-0">
+-        <reference classes="pep" internal="False" refuri="https://peps.python.org/pep-0001/">
++        <reference classes="pep" internal="0" refuri="https://peps.python.org/pep-0001/">
+             <strong>
+                 PEP 1
+ .
+@@ -484,7 +484,7 @@ rfc (`sphinx.roles.RFC`):
+     <paragraph>
+         <index entries="('single',\ 'RFC;\ RFC\ 1',\ 'index-0',\ '',\ None)">
+         <target ids="index-0">
+-        <reference classes="rfc" internal="False" refuri="https://datatracker.ietf.org/doc/html/rfc1.html">
++        <reference classes="rfc" internal="0" refuri="https://datatracker.ietf.org/doc/html/rfc1.html">
+             <strong>
+                 RFC 1
+ .
+@@ -545,7 +545,7 @@ rst:dir (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="rst" refexplicit="False" reftarget="a" reftype="dir" refwarn="False">
++        <pending_xref refdoc="index" refdomain="rst" refexplicit="0" reftarget="a" reftype="dir" refwarn="0">
+             <literal classes="xref rst rst-dir">
+                 a
+ .
+@@ -556,7 +556,7 @@ token (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="token" refwarn="False">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="token" refwarn="0">
+             <literal classes="xref std std-token">
+                 a
+ .
+@@ -567,7 +567,7 @@ term (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="term" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="term" refwarn="1">
+             <inline classes="xref std std-term">
+                 a
+ .
+@@ -578,7 +578,7 @@ ref (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="ref" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="ref" refwarn="1">
+             <inline classes="xref std std-ref">
+                 a
+ .
+@@ -593,7 +593,7 @@ custom reference>`
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="True" reftarget="and a custom reference" reftype="ref" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="1" reftarget="and a custom reference" reftype="ref" refwarn="1">
+             <inline classes="xref std std-ref">
+                 some text
+ .
+@@ -604,7 +604,7 @@ numref (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="numref" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="numref" refwarn="1">
+             <literal classes="xref std std-numref">
+                 a
+ .
+@@ -615,7 +615,7 @@ keyword (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="a" reftype="keyword" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="a" reftype="keyword" refwarn="1">
+             <literal classes="xref std std-keyword">
+                 a
+ .
+@@ -626,7 +626,7 @@ doc (`sphinx.roles.XRefRole`):
+ .
+ <document source="<src>/index.md">
+     <paragraph>
+-        <pending_xref refdoc="index" refdomain="std" refexplicit="True" reftarget="heavy_tails" reftype="doc" refwarn="True">
++        <pending_xref refdoc="index" refdomain="std" refexplicit="1" reftarget="heavy_tails" reftype="doc" refwarn="1">
+             <inline classes="xref std std-doc">
+                 this lecture
+ .
+diff --git a/tests/test_renderers/fixtures/sphinx_syntax_elements.md b/tests/test_renderers/fixtures/sphinx_syntax_elements.md
+index 1f6e1fc..a5256a6 100644
+--- a/tests/test_renderers/fixtures/sphinx_syntax_elements.md
++++ b/tests/test_renderers/fixtures/sphinx_syntax_elements.md
+@@ -400,7 +400,7 @@ Link Definition in directive:
+ <document source="<src>/index.md">
+     <note>
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="link" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="link" reftype="myst">
+                 <inline classes="xref myst">
+                     a
+ .
+@@ -424,7 +424,7 @@ Link Definition in nested directives:
+     <note>
+     <note>
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="link" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="link" reftype="myst">
+                 <inline classes="xref myst">
+                     ref1
+ 
+@@ -775,6 +775,6 @@ a = 1
+         <literal_block language="::python" xml:space="preserve">
+             a = 1
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="target" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="target" reftype="myst">
+                 <inline classes="xref myst">
+ .
+diff --git a/tests/test_renderers/test_myst_refs/doc.xml b/tests/test_renderers/test_myst_refs/doc.xml
+index 55cb74c..4df0590 100644
+--- a/tests/test_renderers/test_myst_refs/doc.xml
++++ b/tests/test_renderers/test_myst_refs/doc.xml
+@@ -1,5 +1,5 @@
+ <document source="root/index.md">
+     <paragraph>
+-        <reference internal="True" refuri="">
++        <reference internal="1" refuri="">
+             <inline classes="doc std std-doc">
+                 <no title>
+diff --git a/tests/test_renderers/test_myst_refs/doc_nested.xml b/tests/test_renderers/test_myst_refs/doc_nested.xml
+index 35679d9..39dd4e4 100644
+--- a/tests/test_renderers/test_myst_refs/doc_nested.xml
++++ b/tests/test_renderers/test_myst_refs/doc_nested.xml
+@@ -1,6 +1,6 @@
+ <document source="root/index.md">
+     <paragraph>
+-        <reference internal="True" refuri="">
++        <reference internal="1" refuri="">
+             <inline classes="doc std std-doc">
+                 <emphasis>
+                     text
+diff --git a/tests/test_renderers/test_myst_refs/doc_with_extension.xml b/tests/test_renderers/test_myst_refs/doc_with_extension.xml
+index 0e8f467..45b76ba 100644
+--- a/tests/test_renderers/test_myst_refs/doc_with_extension.xml
++++ b/tests/test_renderers/test_myst_refs/doc_with_extension.xml
+@@ -1,5 +1,5 @@
+ <document source="root/index.md">
+     <paragraph>
+-        <reference internal="True" refuri="">
++        <reference internal="1" refuri="">
+             <inline classes="std std-doc">
+                 <no title>
+diff --git a/tests/test_renderers/test_myst_refs/duplicate.xml b/tests/test_renderers/test_myst_refs/duplicate.xml
+index 323f14c..bcf07c3 100644
+--- a/tests/test_renderers/test_myst_refs/duplicate.xml
++++ b/tests/test_renderers/test_myst_refs/duplicate.xml
+@@ -4,7 +4,7 @@
+         <title>
+             Title
+         <paragraph>
+-            <reference internal="True" refid="index">
++            <reference internal="1" refid="index">
+                 <inline classes="std std-ref">
+                     Title
+ 
+diff --git a/tests/test_renderers/test_myst_refs/ref.xml b/tests/test_renderers/test_myst_refs/ref.xml
+index e4ae200..a643724 100644
+--- a/tests/test_renderers/test_myst_refs/ref.xml
++++ b/tests/test_renderers/test_myst_refs/ref.xml
+@@ -4,6 +4,6 @@
+         <title>
+             Title
+         <paragraph>
+-            <reference internal="True" refid="ref">
++            <reference internal="1" refid="ref">
+                 <inline classes="std std-ref">
+                     Title
+diff --git a/tests/test_renderers/test_myst_refs/ref_colon.xml b/tests/test_renderers/test_myst_refs/ref_colon.xml
+index f1e9923..58c9fa7 100644
+--- a/tests/test_renderers/test_myst_refs/ref_colon.xml
++++ b/tests/test_renderers/test_myst_refs/ref_colon.xml
+@@ -4,6 +4,6 @@
+         <title>
+             Title
+         <paragraph>
+-            <reference internal="True" refid="ref-colon">
++            <reference internal="1" refid="ref-colon">
+                 <inline classes="std std-ref">
+                     Title
+diff --git a/tests/test_renderers/test_myst_refs/ref_nested.xml b/tests/test_renderers/test_myst_refs/ref_nested.xml
+index be69ef2..ef9bee7 100644
+--- a/tests/test_renderers/test_myst_refs/ref_nested.xml
++++ b/tests/test_renderers/test_myst_refs/ref_nested.xml
+@@ -4,7 +4,7 @@
+         <title>
+             Title
+         <paragraph>
+-            <reference internal="True" refid="ref">
++            <reference internal="1" refid="ref">
+                 <inline classes="std std-ref">
+                     <emphasis>
+                         text
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_basic.resolved.xml b/tests/test_sphinx/test_sphinx_builds/test_basic.resolved.xml
+index 18605dc..8bdf5ac 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_basic.resolved.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_basic.resolved.xml
+@@ -35,7 +35,7 @@
+         <admonition classes="admonition-title-with-link-target2">
+             <title>
+                 Title with 
+-                <reference internal="True" refid="target2">
++                <reference internal="1" refid="target2">
+                     <inline classes="std std-ref">
+                         link
+             <paragraph>
+@@ -62,13 +62,13 @@
+             <strong>
+                 <math>
+                     a=1
+-        <math_block nowrap="False" number="True" xml:space="preserve">
++        <math_block nowrap="0" number="True" xml:space="preserve">
+             b=2
+         <target refid="equation-eq-label">
+-        <math_block docname="content" ids="equation-eq-label" label="eq:label" nowrap="False" number="1" xml:space="preserve">
++        <math_block docname="content" ids="equation-eq-label" label="eq:label" nowrap="0" number="1" xml:space="preserve">
+             c=2
+         <paragraph>
+-            <reference internal="True" refid="equation-eq-label">
++            <reference internal="1" refid="equation-eq-label">
+                 (1)
+         <paragraph>
+             <literal>
+@@ -130,11 +130,11 @@
+                 <paragraph>
+                     new list?
+         <paragraph>
+-            <reference internal="True" refid="target">
++            <reference internal="1" refid="target">
+                 <inline classes="std std-ref">
+                     Header
+               
+-            <reference internal="True" refid="target2">
++            <reference internal="1" refid="target2">
+                 <inline classes="std std-ref">
+                     Caption
+         <comment classes="block_break" xml:space="preserve">
+@@ -142,7 +142,7 @@
+         <paragraph>
+             <reference reftitle="a title" refuri="https://www.google.com">
+                 name
+-        <literal_block language="default" linenos="False" xml:space="preserve">
++        <literal_block language="default" linenos="0" xml:space="preserve">
+             def func(a, b=1):
+                 print(a)
+         <paragraph>
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_basic.xml b/tests/test_sphinx/test_sphinx_builds/test_basic.xml
+index 7239748..6c983aa 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_basic.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_basic.xml
+@@ -35,7 +35,7 @@
+         <admonition classes="admonition-title-with-link-target2">
+             <title>
+                 Title with 
+-                <pending_xref refdoc="content" refdomain="True" refexplicit="True" reftarget="target2" reftype="myst">
++                <pending_xref refdoc="content" refdomain="True" refexplicit="1" reftarget="target2" reftype="myst">
+                     <inline classes="xref myst">
+                         link
+             <paragraph>
+@@ -62,13 +62,13 @@
+             <strong>
+                 <math>
+                     a=1
+-        <math_block nowrap="False" number="True" xml:space="preserve">
++        <math_block nowrap="0" number="True" xml:space="preserve">
+             b=2
+         <target refid="equation-eq-label">
+-        <math_block docname="content" ids="equation-eq-label" label="eq:label" nowrap="False" number="1" xml:space="preserve">
++        <math_block docname="content" ids="equation-eq-label" label="eq:label" nowrap="0" number="1" xml:space="preserve">
+             c=2
+         <paragraph>
+-            <pending_xref refdoc="content" refdomain="math" refexplicit="False" reftarget="eq:label" reftype="eq" refwarn="True">
++            <pending_xref refdoc="content" refdomain="math" refexplicit="0" reftarget="eq:label" reftype="eq" refwarn="1">
+                 <literal classes="xref eq">
+                     eq:label
+         <paragraph>
+@@ -131,11 +131,11 @@
+                 <paragraph>
+                     new list?
+         <paragraph>
+-            <pending_xref refdoc="content" refdomain="std" refexplicit="False" reftarget="target" reftype="ref" refwarn="True">
++            <pending_xref refdoc="content" refdomain="std" refexplicit="0" reftarget="target" reftype="ref" refwarn="1">
+                 <inline classes="xref std std-ref">
+                     target
+               
+-            <pending_xref refdoc="content" refdomain="std" refexplicit="False" reftarget="target2" reftype="ref" refwarn="True">
++            <pending_xref refdoc="content" refdomain="std" refexplicit="0" reftarget="target2" reftype="ref" refwarn="1">
+                 <inline classes="xref std std-ref">
+                     target2
+         <comment classes="block_break" xml:space="preserve">
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_extended_syntaxes.xml b/tests/test_sphinx/test_sphinx_builds/test_extended_syntaxes.xml
+index f2a0381..a77f976 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_extended_syntaxes.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_extended_syntaxes.xml
+@@ -9,24 +9,24 @@
+         <paragraph>
+             <math>
+                 a=1
+-        <math_block nowrap="False" number="True" xml:space="preserve">
++        <math_block nowrap="0" number="True" xml:space="preserve">
+             x=5
+         <target refid="equation-2">
+-        <math_block docname="index" ids="equation-2" label="2" nowrap="False" number="1" xml:space="preserve">
++        <math_block docname="index" ids="equation-2" label="2" nowrap="0" number="1" xml:space="preserve">
+             x=5
+         <paragraph>
+             $ a=1 $
+         <paragraph>
+             a 
+-            <math_block nowrap="False" number="True" xml:space="preserve">
++            <math_block nowrap="0" number="True" xml:space="preserve">
+                 c=3
+              b
+         <target refid="equation-mock-uuid">
+-        <math_block classes="amsmath" docname="index" ids="equation-mock-uuid" label="mock-uuid" nowrap="True" number="2" xml:space="preserve">
++        <math_block classes="amsmath" docname="index" ids="equation-mock-uuid" label="mock-uuid" nowrap="1" number="2" xml:space="preserve">
+             \begin{equation}
+             b=2
+             \end{equation}
+-        <math_block docname="index" label="True" nowrap="False" number="True" xml:space="preserve">
++        <math_block docname="index" label="True" nowrap="0" number="True" xml:space="preserve">
+             c=3
+             
+             d=4
+@@ -77,7 +77,7 @@
+                     <paragraph>
+                         other definition
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="other term" reftype="term" refwarn="True">
++            <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="other term" reftype="term" refwarn="1">
+                 <inline classes="xref std std-term">
+                     other term
+         <figure classes="other" ids="target" names="target">
+@@ -88,7 +88,7 @@
+             <image alt="fishy" candidates="{'*': 'fun-fish.png'}" classes="bg-primary mb-1" uri="fun-fish.png" width="200px">
+             <caption>
+                 This is a caption in **Markdown**
+-        <container classes="other" is_div="True">
++        <container classes="other" is_div="1">
+             <paragraph>
+                 Hallo *there*
+         <paragraph>
+@@ -108,5 +108,5 @@
+                      there
+         <paragraph>
+             Numbered code block:
+-        <literal_block language="typescript" linenos="True" xml:space="preserve">
++        <literal_block language="typescript" linenos="1" xml:space="preserve">
+             type Result = "pass" | "fail"
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_fieldlist_extension.xml b/tests/test_sphinx/test_sphinx_builds/test_fieldlist_extension.xml
+index 31648fa..76913ca 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_fieldlist_extension.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_fieldlist_extension.xml
+@@ -40,7 +40,7 @@
+                                         <literal_strong>
+                                             sender
+                                          (
+-                                        <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="False" refspecific="True" reftarget="str" reftype="class">
++                                        <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="0" refspecific="True" reftarget="str" reftype="class">
+                                             <literal_emphasis>
+                                                 str
+                                         )
+@@ -51,7 +51,7 @@
+                                         <literal_strong>
+                                             priority
+                                          (
+-                                        <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="False" refspecific="True" reftarget="int" reftype="class">
++                                        <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="0" refspecific="True" reftarget="int" reftype="class">
+                                             <literal_emphasis>
+                                                 int
+                                         )
+@@ -68,14 +68,14 @@
+                             Return type
+                         <field_body>
+                             <paragraph>
+-                                <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="False" refspecific="True" reftarget="int" reftype="class">
++                                <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="0" refspecific="True" reftarget="int" reftype="class">
+                                     int
+                     <field>
+                         <field_name>
+                             Raises
+                         <field_body>
+                             <paragraph>
+-                                <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="False" refspecific="True" reftarget="ValueError" reftype="exc">
++                                <pending_xref py:class="True" py:module="True" refdomain="py" refexplicit="0" refspecific="True" reftarget="ValueError" reftype="exc">
+                                     <literal_strong>
+                                         ValueError
+                                  – 
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_gettext_html.resolved.xml b/tests/test_sphinx/test_sphinx_builds/test_gettext_html.resolved.xml
+index dfe28f1..85fec14 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_gettext_html.resolved.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_gettext_html.resolved.xml
+@@ -71,17 +71,17 @@
+              » supplémentaire
+         <raw format="html" xml:space="preserve">
+             </div>
+-        <literal_block language="none" linenos="False" xml:space="preserve">
++        <literal_block language="none" linenos="0" xml:space="preserve">
+             **additional** text 12
+-        <literal_block language="default" linenos="False" xml:space="preserve">
++        <literal_block language="default" linenos="0" xml:space="preserve">
+             **additional** text 13
+-        <literal_block language="json" linenos="False" xml:space="preserve">
++        <literal_block language="json" linenos="0" xml:space="preserve">
+             {
+                 "additional": "text 14"
+             }
+         <raw format="html" xml:space="preserve">
+             <h3>**additional** text 15</h3>
+-        <literal_block language="python" linenos="False" xml:space="preserve">
++        <literal_block language="python" linenos="0" xml:space="preserve">
+             >>> print('doctest block')
+             doctest block
+         <raw format="html" xml:space="preserve">
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_includes.xml b/tests/test_sphinx/test_sphinx_builds/test_includes.xml
+index 9af883d..230a60f 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_includes.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_includes.xml
+@@ -43,11 +43,11 @@
+             <paragraph>
+                 <image alt="alt" candidates="{'?': 'https://example.com'}" uri="https://example.com">
+             <paragraph>
+-                <pending_xref refdoc="index" refdomain="doc" refexplicit="True" reftarget="index" reftargetid="True" reftype="myst">
++                <pending_xref refdoc="index" refdomain="doc" refexplicit="1" reftarget="index" reftargetid="True" reftype="myst">
+                     <inline classes="xref myst">
+                         text
+             <paragraph>
+-                <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="inc_header" reftype="ref" refwarn="True">
++                <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="inc_header" reftype="ref" refwarn="1">
+                     <inline classes="xref std std-ref">
+                         inc_header
+             <literal_block classes="code python" source="include_code.py" xml:space="preserve">
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_references.resolved.xml b/tests/test_sphinx/test_sphinx_builds/test_references.resolved.xml
+index f832d04..7521943 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_references.resolved.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_references.resolved.xml
+@@ -19,41 +19,41 @@
+                 <emphasis>
+                     syntax
+         <paragraph>
+-            <reference internal="True" refid="title">
++            <reference internal="1" refid="title">
+                 <inline classes="std std-ref">
+                     Title with nested a=1
+         <paragraph>
+-            <reference internal="True" refid="title">
++            <reference internal="1" refid="title">
+                 <inline classes="std std-ref">
+                     plain text
+         <paragraph>
+-            <reference internal="True" refid="title">
++            <reference internal="1" refid="title">
+                 <inline classes="std std-ref">
+                     nested 
+                     <emphasis>
+                         syntax
+         <paragraph>
+-            <reference internal="True" refuri="">
++            <reference internal="1" refuri="">
+                 <inline classes="std std-doc">
+                     Title with nested a=1
+         <paragraph>
+-            <reference internal="True" refuri="">
++            <reference internal="1" refuri="">
+                 <inline classes="std std-doc">
+                     plain text
+         <paragraph>
+-            <reference internal="True" refuri="">
++            <reference internal="1" refuri="">
+                 <inline classes="std std-doc">
+                     nested 
+                     <emphasis>
+                         syntax
+         <paragraph>
+-            <download_reference filename="ab0d698fdd2b6a81c34b5ed380fe6f61/file_link.txt" refdoc="index" refdomain="True" refexplicit="True" reftarget="file_link.txt" reftype="myst">
++            <download_reference filename="ab0d698fdd2b6a81c34b5ed380fe6f61/file_link.txt" refdoc="index" refdomain="True" refexplicit="1" reftarget="file_link.txt" reftype="myst">
+                 <inline classes="xref download myst">
+                     download 
+                     <strong>
+                         link
+         <paragraph>
+-            <download_reference filename="1952147a8403903cb78cecf56f049085/file_link2.txt" refdoc="index" refdomain="True" refexplicit="False" reftarget="subfolder/file_link2.txt" reftype="myst">
++            <download_reference filename="1952147a8403903cb78cecf56f049085/file_link2.txt" refdoc="index" refdomain="True" refexplicit="0" reftarget="subfolder/file_link2.txt" reftype="myst">
+                 <literal classes="xref download myst">
+                     subfolder/file_link2.txt
+         <target refid="insidecodeblock">
+@@ -61,7 +61,7 @@
+             I am inside the eval-rst fence
+         <paragraph>
+             Referencing the 
+-            <reference internal="True" refid="title">
++            <reference internal="1" refid="title">
+                 <inline classes="std std-ref">
+                     Title with nested a=1
+         <paragraph>
+@@ -70,7 +70,7 @@
+                 insidecodeblock
+         <paragraph>
+             I am outside the 
+-            <reference internal="True" refid="insidecodeblock">
++            <reference internal="1" refid="insidecodeblock">
+                 <inline classes="std std-ref">
+                     fence
+         <section ids="title-anchors" names="title\ anchors" slug="title-anchors">
+@@ -79,38 +79,38 @@
+                 <emphasis>
+                     anchors
+             <compound classes="toctree-wrapper">
+-                <compact_paragraph toctree="True">
++                <compact_paragraph toctree="1">
+                     <bullet_list>
+                         <list_item classes="toctree-l1">
+                             <compact_paragraph classes="toctree-l1">
+-                                <reference anchorname="" internal="True" refuri="other.html">
++                                <reference anchorname="" internal="1" refuri="other.html">
+                                     Title 
+                                     <emphasis>
+                                         anchors
+                         <list_item classes="toctree-l1">
+                             <compact_paragraph classes="toctree-l1">
+-                                <reference anchorname="" internal="True" refuri="subfolder/other2.html">
++                                <reference anchorname="" internal="1" refuri="subfolder/other2.html">
+                                     Title 
+                                     <emphasis>
+                                         anchors
+             <paragraph>
+-                <reference id_link="True" refid="title-anchors">
++                <reference id_link="1" refid="title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <reference id_link="True" refid="title-anchors">
++                <reference id_link="1" refid="title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <reference internal="True" refuri="other.html#title-anchors">
++                <reference internal="1" refuri="other.html#title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <reference internal="True" refuri="other.html#title-anchors">
++                <reference internal="1" refuri="other.html#title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <reference internal="True" refuri="subfolder/other2.html#title-anchors">
++                <reference internal="1" refuri="subfolder/other2.html#title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+     <section classes="tex2jax_ignore mathjax_ignore" ids="intersphinx-via" names="intersphinx\ via\ #" slug="intersphinx-via-">
+@@ -131,23 +131,23 @@
+                         hallo
+         <paragraph>
+             Known no title 
+-            <reference internal="False" reftitle="Example 0.0.1" refuri="https://example.com/index.html#paragraph-target">
++            <reference internal="0" reftitle="Example 0.0.1" refuri="https://example.com/index.html#paragraph-target">
+                 <literal classes="iref myst">
+                     paragraph-target
+         <paragraph>
+             Known explicit 
+-            <reference internal="False" reftitle="Example 0.0.1" refuri="https://example.com/index.html#paragraph-target">
++            <reference internal="0" reftitle="Example 0.0.1" refuri="https://example.com/index.html#paragraph-target">
+                 <inline classes="xref myst">
+                     <strong>
+                         hallo
+         <paragraph>
+             Known with title 
+-            <reference internal="False" reftitle="Example 0.0.1" refuri="https://example.com/index.html#title-target">
++            <reference internal="0" reftitle="Example 0.0.1" refuri="https://example.com/index.html#title-target">
+                 <inline classes="iref myst">
+                     Title
+         <paragraph>
+             Ambiguous 
+-            <reference internal="False" reftitle="Example 0.0.1" refuri="https://example.com/index.html#module-duplicate">
++            <reference internal="0" reftitle="Example 0.0.1" refuri="https://example.com/index.html#module-duplicate">
+                 <literal classes="iref myst">
+                     duplicate
+     <section classes="tex2jax_ignore mathjax_ignore" ids="image-in-title" names="image\ in\ title" slug="image-in-title-">
+@@ -155,5 +155,5 @@
+             Image in title 
+             <image alt="badge" candidates="{'?': 'https://shields.io/or/something.svg'}" uri="https://shields.io/or/something.svg">
+         <paragraph>
+-            <reference id_link="True" refid="image-in-title">
++            <reference id_link="1" refid="image-in-title">
+                 link up
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_references.xml b/tests/test_sphinx/test_sphinx_builds/test_references.xml
+index 4968ca2..5dd6722 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_references.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_references.xml
+@@ -19,39 +19,39 @@
+                 <emphasis>
+                     syntax
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="title" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="title" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="title" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="title" reftype="myst">
+                 <inline classes="xref myst">
+                     plain text
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="title" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="title" reftype="myst">
+                 <inline classes="xref myst">
+                     nested 
+                     <emphasis>
+                         syntax
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="index" reftargetid="True" reftype="myst">
++            <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="index" reftargetid="True" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="doc" refexplicit="True" reftarget="index" reftargetid="True" reftype="myst">
++            <pending_xref refdoc="index" refdomain="doc" refexplicit="1" reftarget="index" reftargetid="True" reftype="myst">
+                 <inline classes="xref myst">
+                     plain text
+         <paragraph>
+-            <pending_xref refdoc="index" refdomain="doc" refexplicit="True" reftarget="index" reftargetid="True" reftype="myst">
++            <pending_xref refdoc="index" refdomain="doc" refexplicit="1" reftarget="index" reftargetid="True" reftype="myst">
+                 <inline classes="xref myst">
+                     nested 
+                     <emphasis>
+                         syntax
+         <paragraph>
+-            <download_reference filename="ab0d698fdd2b6a81c34b5ed380fe6f61/file_link.txt" refdoc="index" refdomain="True" refexplicit="True" reftarget="file_link.txt" reftype="myst">
++            <download_reference filename="ab0d698fdd2b6a81c34b5ed380fe6f61/file_link.txt" refdoc="index" refdomain="True" refexplicit="1" reftarget="file_link.txt" reftype="myst">
+                 <inline classes="xref download myst">
+                     download 
+                     <strong>
+                         link
+         <paragraph>
+-            <download_reference filename="1952147a8403903cb78cecf56f049085/file_link2.txt" refdoc="index" refdomain="True" refexplicit="False" reftarget="subfolder/file_link2.txt" reftype="myst">
++            <download_reference filename="1952147a8403903cb78cecf56f049085/file_link2.txt" refdoc="index" refdomain="True" refexplicit="0" reftarget="subfolder/file_link2.txt" reftype="myst">
+                 <literal classes="xref download myst">
+                     subfolder/file_link2.txt
+         <target refid="insidecodeblock">
+@@ -59,7 +59,7 @@
+             I am inside the eval-rst fence
+         <paragraph>
+             Referencing the 
+-            <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="title" reftype="ref" refwarn="True">
++            <pending_xref refdoc="index" refdomain="std" refexplicit="0" reftarget="title" reftype="ref" refwarn="1">
+                 <inline classes="xref std std-ref">
+                     title
+         <paragraph>
+@@ -68,7 +68,7 @@
+                 insidecodeblock
+         <paragraph>
+             I am outside the 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="insidecodeblock" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="insidecodeblock" reftype="myst">
+                 <inline classes="xref myst">
+                     fence
+         <section ids="title-anchors" names="title\ anchors" slug="title-anchors">
+@@ -77,23 +77,23 @@
+                 <emphasis>
+                     anchors
+             <compound classes="toctree-wrapper">
+-                <toctree caption="True" entries="(None,\ 'other') (None,\ 'subfolder/other2')" glob="False" hidden="False" includefiles="other subfolder/other2" includehidden="False" maxdepth="-1" numbered="0" parent="index" rawentries="" titlesonly="False">
++                <toctree caption="True" entries="(None,\ 'other') (None,\ 'subfolder/other2')" glob="0" hidden="0" includefiles="other subfolder/other2" includehidden="0" maxdepth="-1" numbered="0" parent="index" rawentries="" titlesonly="0">
+             <paragraph>
+-                <reference id_link="True" refid="title-anchors">
++                <reference id_link="1" refid="title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <reference id_link="True" refid="title-anchors">
++                <reference id_link="1" refid="title-anchors">
+                     <inline classes="std std-ref">
+                         Title anchors
+             <paragraph>
+-                <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="other" reftargetid="title-anchors" reftype="myst">
++                <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="other" reftargetid="title-anchors" reftype="myst">
+                     <inline classes="xref myst">
+             <paragraph>
+-                <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="other" reftargetid="title-anchors" reftype="myst">
++                <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="other" reftargetid="title-anchors" reftype="myst">
+                     <inline classes="xref myst">
+             <paragraph>
+-                <pending_xref refdoc="index" refdomain="doc" refexplicit="False" reftarget="subfolder/other2" reftargetid="title-anchors" reftype="myst">
++                <pending_xref refdoc="index" refdomain="doc" refexplicit="0" reftarget="subfolder/other2" reftargetid="title-anchors" reftype="myst">
+                     <inline classes="xref myst">
+     <section classes="tex2jax_ignore mathjax_ignore" ids="intersphinx-via" names="intersphinx\ via\ #" slug="intersphinx-via-">
+         <title>
+@@ -102,36 +102,36 @@
+                 #
+         <paragraph>
+             Unknown 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="unknown" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="unknown" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+             Unknown explicit 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="unknown" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="unknown" reftype="myst">
+                 <inline classes="xref myst">
+                     <strong>
+                         hallo
+         <paragraph>
+             Known no title 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="paragraph-target" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="paragraph-target" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+             Known explicit 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="True" reftarget="paragraph-target" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="1" reftarget="paragraph-target" reftype="myst">
+                 <inline classes="xref myst">
+                     <strong>
+                         hallo
+         <paragraph>
+             Known with title 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="title-target" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="title-target" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+             Ambiguous 
+-            <pending_xref refdoc="index" refdomain="True" refexplicit="False" reftarget="duplicate" reftype="myst">
++            <pending_xref refdoc="index" refdomain="True" refexplicit="0" reftarget="duplicate" reftype="myst">
+                 <inline classes="xref myst">
+     <section classes="tex2jax_ignore mathjax_ignore" ids="image-in-title" names="image\ in\ title" slug="image-in-title-">
+         <title>
+             Image in title 
+             <image alt="badge" candidates="{'?': 'https://shields.io/or/something.svg'}" uri="https://shields.io/or/something.svg">
+         <paragraph>
+-            <reference id_link="True" refid="image-in-title">
++            <reference id_link="1" refid="image-in-title">
+                 link up
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.resolved.xml b/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.resolved.xml
+index 249957f..e1410a7 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.resolved.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.resolved.xml
+@@ -3,18 +3,18 @@
+         <title>
+             Other Title
+         <paragraph>
+-            <reference internal="True" refuri="index.html#document-other/other2">
++            <reference internal="1" refuri="index.html#document-other/other2">
+                 <inline classes="doc">
+                     Other 2 Title
+         <paragraph>
+-            <reference internal="True" refuri="index.html#document-other/other2">
++            <reference internal="1" refuri="index.html#document-other/other2">
+                 <inline classes="doc doc doc">
+                     Other 2 Title
+         <paragraph>
+-            <reference internal="True" refuri="index.html#document-other/other2">
++            <reference internal="1" refuri="index.html#document-other/other2">
+                 <inline classes="std std-doc">
+                     Other 2 Title
+         <paragraph>
+-            <reference internal="True" refuri="index.html#document-index#title">
++            <reference internal="1" refuri="index.html#document-index#title">
+                 <inline classes="std std-ref">
+                     Title
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.xml b/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.xml
+index b2f0cd6..1d74a5b 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_references_singlehtml.xml
+@@ -3,16 +3,16 @@
+         <title>
+             Other Title
+         <paragraph>
+-            <pending_xref refdoc="other/other" refdomain="std" refexplicit="False" reftarget="other2" reftype="doc" refwarn="True">
++            <pending_xref refdoc="other/other" refdomain="std" refexplicit="0" reftarget="other2" reftype="doc" refwarn="1">
+                 <inline classes="xref std std-doc">
+                     other2
+         <paragraph>
+-            <pending_xref refdoc="other/other" refdomain="" refexplicit="False" reftarget="other2" reftype="any" refwarn="True">
++            <pending_xref refdoc="other/other" refdomain="" refexplicit="0" reftarget="other2" reftype="any" refwarn="1">
+                 <literal classes="xref any">
+                     other2
+         <paragraph>
+-            <pending_xref refdoc="other/other" refdomain="doc" refexplicit="False" reftarget="other/other2" reftargetid="True" reftype="myst">
++            <pending_xref refdoc="other/other" refdomain="doc" refexplicit="0" reftarget="other/other2" reftargetid="True" reftype="myst">
+                 <inline classes="xref myst">
+         <paragraph>
+-            <pending_xref refdoc="other/other" refdomain="doc" refexplicit="False" reftarget="index" reftargetid="title" reftype="myst">
++            <pending_xref refdoc="other/other" refdomain="doc" refexplicit="0" reftarget="index" reftargetid="title" reftype="myst">
+                 <inline classes="xref myst">
+diff --git a/tests/test_sphinx/test_sphinx_builds/test_substitutions.xml b/tests/test_sphinx/test_sphinx_builds/test_substitutions.xml
+index 37bd766..58f4c4f 100644
+--- a/tests/test_sphinx/test_sphinx_builds/test_substitutions.xml
++++ b/tests/test_sphinx/test_sphinx_builds/test_substitutions.xml
+@@ -52,7 +52,7 @@
+     <paragraph>
+         INDEX
+     <compound classes="toctree-wrapper">
+-        <toctree caption="True" entries="(None,\ 'other')" glob="False" hidden="False" includefiles="other" includehidden="False" maxdepth="-1" numbered="0" parent="index" rawentries="" titlesonly="False">
++        <toctree caption="True" entries="(None,\ 'other')" glob="0" hidden="0" includefiles="other" includehidden="0" maxdepth="-1" numbered="0" parent="index" rawentries="" titlesonly="0">
+     <paragraph>
+         Jan 01, 2020
+     <paragraph>
+-- 
+2.51.1
+
