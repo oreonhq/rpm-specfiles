@@ -1,0 +1,103 @@
+diff -rupN --no-dereference tcl9.0.3/win/Makefile.in tcl9.0.3-new/win/Makefile.in
+--- tcl9.0.3/win/Makefile.in	2025-11-11 17:22:58.000000000 +0100
++++ tcl9.0.3-new/win/Makefile.in	2026-05-15 20:06:54.962000463 +0200
+@@ -522,7 +522,7 @@ tcltest.cmd: Makefile
+ 	  echo 'set BDP=%~dp0'; \
+ 	  echo 'set OWD=%CD%'; \
+ 	  echo 'cd /d %TEMP%'; \
+-	  echo 'rem "%BDP%\$(TCLSH)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" %TESTFLAGS% -load "$(TEST_LOAD_FACILITIES)" %*'; \
++	  echo 'rem "%BDP%\tclsh$(DOTVER)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" %TESTFLAGS% -load "$(TEST_LOAD_FACILITIES)" %*'; \
+ 	  echo '"%BDP%\$(TEST_EXE_FILE)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" %TESTFLAGS% -load "$(TEST_LOAD_PRMS)" %*'; \
+ 	  echo 'cd /d %OWD%'; \
+ 	) > tcltest.cmd;
+@@ -531,7 +531,7 @@ tcltest.cmd: Makefile
+ 	  echo '#LANG=en_US'; \
+ 	  echo 'BDP=$$(dirname $$(readlink -f %0))'; \
+ 	  echo 'cd /tmp'; \
+-	  echo '#"$$BDP/$(TCLSH)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" $$TESTFLAGS -load "$(TEST_LOAD_FACILITIES)" "$$@"'; \
++	  echo '#"$$BDP/tclsh$(DOTVER)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" $$TESTFLAGS -load "$(TEST_LOAD_FACILITIES)" "$$@"'; \
+ 	  echo '"$$BDP/$(TEST_EXE_FILE)" "$(ROOT_DIR_WIN_NATIVE)/tests/all.tcl" $$TESTFLAGS -load "$(TEST_LOAD_PRMS)" "$$@"'; \
+ 	) > tcltest.sh;
+ 
+@@ -539,7 +539,7 @@ tcltest.sh: tcltest.cmd
+ 
+ tcltest: binaries $(TEST_EXE_FILE) $(TEST_DLL_FILE) $(CAT32) tcltest.cmd
+ 
+-binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions ${TCL_ZIP_FILE} $(TCLSH)
++binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions ${TCL_ZIP_FILE} tclsh$(DOTVER)
+ 
+ winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE} ${DDE_DLL_FILE8} ${REG_DLL_FILE8}
+ 
+@@ -566,10 +566,10 @@ ${TCL_ZIP_FILE}:  ${ZIP_INSTALL_OBJS} ${
+ 	  echo "${TCL_ZIP_FILE} successful created with $$zip" && \
+ 	  cd ..)
+ 
+-$(TCLSH): $(TCLSH_OBJS) @LIBRARIES@ $(TCL_STUB_LIB_FILE) tclsh.$(RES) ${TCL_ZIP_FILE}
++tclsh$(DOTVER): $(TCLSH_OBJS) @LIBRARIES@ $(TCL_STUB_LIB_FILE) tclsh.$(RES) ${TCL_ZIP_FILE}
+ 	$(CC) $(CFLAGS) $(TCLSH_OBJS) $(TCL_LIB_FILE) $(TCL_STUB_LIB_FILE) $(LIBS) \
+ 	tclsh.$(RES) $(CC_EXENAME) $(LDFLAGS_CONSOLE)
+-	$(COPY) tclsh.exe.manifest $(TCLSH).manifest
++	$(COPY) tclsh.exe.manifest tclsh$(DOTVER).manifest
+ 	@VC_MANIFEST_EMBED_EXE@
+ 	@if test "${ZIPFS_BUILD}" = "2" ; then \
+ 		cat ${TCL_ZIP_FILE} >> ${TCLSH}; \
+@@ -865,7 +865,7 @@ install-binaries: binaries
+ 		else true; \
+ 		fi; \
+ 	    done;
+-	@for i in $(TCL_DLL_FILE) $(ZLIB_DLL_FILE) $(TOMMATH_DLL_FILE) $(TCLSH); \
++	@for i in $(TCL_DLL_FILE) $(ZLIB_DLL_FILE) $(TOMMATH_DLL_FILE) tclsh$(DOTVER); \
+ 	    do \
+ 	    if [ -f $$i ]; then \
+ 		echo "Installing $$i to $(BIN_INSTALL_DIR)/"; \
+@@ -1045,24 +1045,24 @@ test: test-tcl test-packages
+ 
+ test-tcl: tcltest
+ 	TCL_LIBRARY="$(LIBRARY_DIR)"; export TCL_LIBRARY; \
+-	$(WINE) ./$(TCLSH) "$(ROOT_DIR_NATIVE)/tests/all.tcl" $(TESTFLAGS) \
++	$(WINE) ./tclsh$(DOTVER) "$(ROOT_DIR_NATIVE)/tests/all.tcl" $(TESTFLAGS) \
+ 	-load "$(TEST_LOAD_FACILITIES)"
+ 
+ # Useful target to launch a built tclsh with the proper path,...
+ runtest: tcltest
+ 	@TCL_LIBRARY="$(LIBRARY_DIR)"; export TCL_LIBRARY; \
+-	$(WINE) ./$(TCLSH) $(TESTFLAGS) -load "$(TEST_LOAD_FACILITIES)" $(SCRIPT)
++	$(WINE) ./tclsh$(DOTVER) $(TESTFLAGS) -load "$(TEST_LOAD_FACILITIES)" $(SCRIPT)
+ 
+ # This target can be used to run tclsh from the build directory via
+ # `make shell SCRIPT=foo.tcl`
+ shell: binaries
+ 	@TCL_LIBRARY="$(LIBRARY_DIR)"; export TCL_LIBRARY; \
+-	$(WINE) ./$(TCLSH) $(SCRIPT)
++	$(WINE) ./tclsh$(DOTVER) $(SCRIPT)
+ 
+ # This target can be used to run tclsh inside either gdb or insight
+ gdb: binaries
+ 	@echo "set env TCL_LIBRARY=$(LIBRARY_DIR)" > gdb.run
+-	$(GDB) ./$(TCLSH) --command=gdb.run
++	$(GDB) ./tclsh$(DOTVER) --command=gdb.run
+ 	rm gdb.run
+ 
+ shquotequote = $(subst ',\",$(subst ",\",$(1)))
+@@ -1084,7 +1084,7 @@ cleanhelp:
+ 
+ clean: cleanhelp clean-packages
+ 	$(RM) *.lib *.a *.exp *.dll *.$(RES) *.${OBJEXT} *~ \#* TAGS a.out
+-	$(RM) $(TCLSH) $(CAT32) $(TEST_EXE_FILE) $(TEST_DLL_FILE) tcltest.cmd tcltest.sh
++	$(RM) tclsh$(DOTVER) $(CAT32) $(TEST_EXE_FILE) $(TEST_DLL_FILE) tcltest.cmd tcltest.sh
+ 	# remaining binaries (inclusive manifests) by version/branch switch, but retain tclsh.exe.manifest (that created on configure phase)
+ 	find . -maxdepth 1 -type f -regex '\./tcl\(sh[^.]+\|test\|[^.]+.dll\)\.[^.]*\(\.manifest\)?' \
+ 		-a -not -name 'tclsh.exe.manifest' -exec rm {} \;
+@@ -1205,10 +1205,10 @@ HTML_INSTALL_DIR=$(ROOT_DIR)/html
+ html:
+ 	$(MAKE) shell SCRIPT="$(TOOL_DIR)/tcltk-man2html.tcl --htmldir=$(HTML_INSTALL_DIR) --srcdir=$(ROOT_DIR)/.. $(BUILD_HTML_FLAGS)"
+ 
+-html-tcl: $(TCLSH)
++html-tcl: tclsh$(DOTVER)
+ 	$(MAKE) shell SCRIPT="$(TOOL_DIR)/tcltk-man2html.tcl --htmldir=$(HTML_INSTALL_DIR) --srcdir=$(ROOT_DIR)/.. $(BUILD_HTML_FLAGS) --tcl"
+ 
+-html-tk: $(TCLSH)
++html-tk: tclsh$(DOTVER)
+ 	$(MAKE) shell SCRIPT="$(TOOL_DIR)/tcltk-man2html.tcl --htmldir=$(HTML_INSTALL_DIR) --srcdir=$(ROOT_DIR)/.. $(BUILD_HTML_FLAGS) --tk"
+ 
+ #

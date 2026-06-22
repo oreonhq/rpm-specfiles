@@ -1,0 +1,33 @@
+diff -rupN --no-dereference tcl9.0.3/win/configure.ac tcl9.0.3-new/win/configure.ac
+--- tcl9.0.3/win/configure.ac	2026-05-15 20:06:54.957898296 +0200
++++ tcl9.0.3-new/win/configure.ac	2026-05-15 20:06:55.069505459 +0200
+@@ -123,7 +123,7 @@ AS_IF([test "${enable_shared+set}" = "se
+ ])
+ zlib_lib_name=zdll.lib
+ tommath_lib_name=tommath.lib
+-AS_IF([test "$tcl_ok" = "yes"], [
++AS_IF([test "$tcl_ok" = "xyes"], [
+   AC_SUBST(ZLIB_DLL_FILE,[\${ZLIB_DLL_FILE}])
+   AC_SUBST(TOMMATH_DLL_FILE,[\${TOMMATH_DLL_FILE}])
+   AC_DEFINE(TCL_WITH_EXTERNAL_TOMMATH, 1, [Tcl with external libtommath])
+@@ -158,6 +158,8 @@ AS_IF([test "$tcl_ok" = "yes"], [
+   AC_DEFINE(TCL_WITH_INTERNAL_ZLIB, 1, [Tcl with internal zlib])
+   AC_SUBST(ZLIB_OBJS,[\${ZLIB_OBJS}])
+   AC_SUBST(TOMMATH_OBJS,[\${TOMMATH_OBJS}])
++  zlib_lib_name=
++  tommath_lib_name=
+ ])
+ AC_SUBST(TCL_ZLIB_LIB_NAME, $zlib_lib_name)
+ AC_SUBST(TCL_TOMMATH_LIB_NAME, $tommath_lib_name)
+@@ -383,9 +385,9 @@ fi
+ #--------------------------------------------------------------------
+ 
+ if test "$prefix/lib" != "$libdir"; then
+-    TCL_PACKAGE_PATH="${libdir};${prefix}\\lib"
++    TCL_PACKAGE_PATH="${libdir};${prefix}/lib"
+ else
+-    TCL_PACKAGE_PATH="${prefix}\\lib"
++    TCL_PACKAGE_PATH="${prefix}/lib"
+ fi
+ 
+ # The tclsh.exe.manifest requires these
