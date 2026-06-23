@@ -34,8 +34,8 @@
 %global source34_hash 7fb50b0fe6f5fb9e63e5147804fa27853dc1d9f2319921404730447b201cde9f
 %global source35_hash d42eae30f6636140f32330c773f89cc16a6fd28607fe747be629ce71706b99f5
 %global source36_hash 7dd9f8d9e53ecd1dac44ac5de0cf9fea5e390688f790206dddc3bc9676a74b69
-%global source37_hash 78660fa5e1e41386361a973e3a78cefa23393e844266424f56e88f3315f3816c
-%global source38_hash 593f4702625bf32467814f182ebec8b37ab27a8b233d19523eff84e7667153bc
+%global source37_hash fbd384854be6d648b81856f10029834c5aed59dd3b610d699ae3fbeebd38b883
+%global source38_hash 916af1b44d0cbcd536910362194a657938c641d18a0fec667f1491de69fb0bbd
 %global source39_hash 80bdf4104f2e126051b88d02fc5a69aa110313cbdc1d6640715565d018a1eeb4
 %global source40_hash 5d1d3516a96246cfbace7457628e285a24df3b3ad77ea9d619bf8c46451ae6d6
 %global source41_hash ada105278f37f41d904807856028ab4bc4b3961a75e06496a280a2ff57975d3d
@@ -47,7 +47,7 @@
 Name:           texlive-collection-basic
 Epoch:          12
 Version:        svn72890
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Essential programs and files
 
 License:        LPPL-1.3c
