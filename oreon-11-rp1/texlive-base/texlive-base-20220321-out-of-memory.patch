@@ -62,7 +62,7 @@ diff -up texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-u.log texl
 - 7585 words of memory out of 5000000
 + 7585 words of memory out of 6000000
   10XX multiletter control sequences out of 15000+600000
-  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  3297 words of font info for 2 fonts, out of 8000000 for 9000
   0 hyphenation exceptions out of 8191
 diff -up texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log
 --- texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log
@@ -116,5 +116,5 @@ diff -up texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-u.log texli
 - 7579 words of memory out of 5000000
 + 7579 words of memory out of 6000000
   97X multiletter control sequences out of 15000+600000
-  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  3297 words of font info for 2 fonts, out of 8000000 for 9000
   0 hyphenation exceptions out of 8191
