@@ -499,7 +499,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 111%{?dist}
+Release: 112%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7652,7 +7652,11 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build world STRIPPROG=/bin/true STRIP=/bin/true
+%make_build -s world STRIPPROG=/bin/true STRIP=/bin/true > ../texlive-world.log 2>&1 || {
+  echo "make world failed, last 300 lines:"
+  tail -n 300 ../texlive-world.log
+  exit 1
+}
 
 %install
 # make directories
