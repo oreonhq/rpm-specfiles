@@ -499,7 +499,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 112%{?dist}
+Release: 113%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7728,10 +7728,14 @@ popd
 
 # install noarch bits
 pushd %{buildroot}%{_texdir}
-echo %{mysources}
+set +x
+n=0
 for noarchsrc in %{mysources}; do
-  xz -dc $noarchsrc | tar x
+  xz -dc "$noarchsrc" | tar x || { echo "install unpack failed: $noarchsrc" >&2; exit 1; }
+  n=$((n+1))
 done
+echo "unpacked $n noarch component sources"
+set -x
 popd
 # Do the weird noarch bits
 pushd  %{buildroot}%{_texmf_main}
