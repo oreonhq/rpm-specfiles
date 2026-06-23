@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 115%{?dist}
+Release: 116%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -9186,7 +9186,7 @@ yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %license apache2.txt
 %{_bindir}/latex-papersize
 %{_texmf_main}/scripts/latex-papersize
-%doc %{_texmf_main}/doc/support/latex-papersize/
+%doc %{_texmf_main}/doc/latex/latex-papersize/
 
 %files -n %{shortname}-latex2man
 %license lppl1.3c.txt
