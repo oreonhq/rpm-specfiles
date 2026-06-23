@@ -10,3 +10,111 @@ diff -up texlive-base-20220321/source/texk/kpathsea/texmf.cnf.out_of_memory texl
  extra_mem_top = 0     % extra high memory for chars, tokens, etc.
  extra_mem_bot = 0     % extra low memory for boxes, glue, breakpoints, etc.
  
+diff -up texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-s.log texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-s.log
+--- texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-s.log
++++ texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-s.log
+@@ -215,12 +215,12 @@
+ 
+ ifx:FALSE
+ [37726]
+-Memory usage before: 1798&5531; after: 130&5094; still untouched: 4992415
++Memory usage before: 1798&5531; after: 130&5094; still untouched: 5992415
+  ) 
+ Here is how much of TeX's memory you used:
+  26 strings out of 497XXX
+  150 string characters out of 6215XXX
+- 7585 words of memory out of 5000000
++ 7585 words of memory out of 6000000
+  10XX multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
+diff -up texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-e.log texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-e.log
+--- texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-e.log
++++ texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-e.log
+@@ -215,12 +215,12 @@
+ 
+ ifx:FALSE
+ [50623]
+-Memory usage before: 1790&5528; after: 130&5093; still untouched: 4992418
++Memory usage before: 1790&5528; after: 130&5093; still untouched: 5992418
+  ) 
+ Here is how much of TeX's memory you used:
+  27 strings out of 497XXX
+  152 string characters out of 6215XXX
+- 7582 words of memory out of 5000000
++ 7582 words of memory out of 6000000
+  10XX multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
+diff -up texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-u.log texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-u.log
+--- texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-u.log
++++ texlive-base-20220321/source/texk/web2c/euptexdir/tests/pknj-u.log
+@@ -215,12 +215,12 @@
+ 
+ ifx:TRUE
+ [39003]
+-Memory usage before: 1798&5530; after: 130&5093; still untouched: 4992415
++Memory usage before: 1798&5530; after: 130&5093; still untouched: 5992415
+  ) 
+ Here is how much of TeX's memory you used:
+  26 strings out of 497XXX
+  155 string characters out of 6215XXX
+- 7585 words of memory out of 5000000
++ 7585 words of memory out of 6000000
+  10XX multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
+diff -up texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log
+--- texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log
++++ texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-s.log
+@@ -214,12 +214,12 @@
+ 
+ ifx:FALSE
+ [37726]
+-Memory usage before: 1274&5529; after: 118&5092; still untouched: 4992421
++Memory usage before: 1274&5529; after: 118&5092; still untouched: 5992421
+  ) 
+ Here is how much of TeX's memory you used:
+  26 strings out of 49XXXX
+  147 string characters out of 6219XXX
+- 7579 words of memory out of 5000000
++ 7579 words of memory out of 6000000
+  97X multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
+diff -up texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-e.log texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-e.log
+--- texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-e.log
++++ texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-e.log
+@@ -214,12 +214,12 @@
+ 
+ ifx:FALSE
+ [50623]
+-Memory usage before: 1270&5526; after: 118&5091; still untouched: 4992424
++Memory usage before: 1270&5526; after: 118&5091; still untouched: 5992424
+  ) 
+ Here is how much of TeX's memory you used:
+  27 strings out of 49XXXX
+  149 string characters out of 6219XXX
+- 7576 words of memory out of 5000000
++ 7576 words of memory out of 6000000
+  97X multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
+diff -up texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-u.log texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-u.log
+--- texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-u.log
++++ texlive-base-20220321/source/texk/web2c/uptexdir/tests/pknj-u.log
+@@ -214,12 +214,12 @@
+ 
+ ifx:TRUE
+ [39003]
+-Memory usage before: 1274&5528; after: 118&5091; still untouched: 4992421
++Memory usage before: 1274&5528; after: 118&5091; still untouched: 5992421
+  ) 
+ Here is how much of TeX's memory you used:
+  26 strings out of 49XXXX
+  152 string characters out of 6219XXX
+- 7579 words of memory out of 5000000
++ 7579 words of memory out of 6000000
+  97X multiletter control sequences out of 15000+600000
+  3271 words of font info for 2 fonts, out of 8000000 for 9000
+  0 hyphenation exceptions out of 8191
