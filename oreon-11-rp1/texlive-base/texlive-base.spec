@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 114%{?dist}
+Release: 115%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -8519,7 +8519,6 @@ yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %{_mandir}/man1/context.1*
 # %%{_mandir}/man1/luatools.1*
 %{_mandir}/man1/mtxrun-babel.1*
-%{_mandir}/man1/mtxrun-base.1*
 %{_mandir}/man1/mtxrun-bibtex.1*
 %{_mandir}/man1/mtxrun-cache.1*
 %{_mandir}/man1/mtxrun-chars.1*
