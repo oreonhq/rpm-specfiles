@@ -125,7 +125,7 @@
 Name:           texlive-collection-latex
 Epoch:          12
 Version:        svn78733
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        LaTeX fundamental packages
 
 License:        LPPL-1.3c
@@ -255,8 +255,6 @@ Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/u
 Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/appendix.tar.xz
 Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/appendix.doc.tar.xz
 
-# Patches
-Patch0:         tools-2026-02-10.patch
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-ae
@@ -1594,12 +1592,6 @@ tar -xf %{SOURCE118} -C %{buildroot}%{_texmf_main}
 # Remove tlpobj files
 rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 
-# Apply tools patch
-pushd %{buildroot}%{_texmf_main}
-patch -p0 < %{PATCH0}
-popd
-
-# Rename .map files to .oldmap to avoid updmap-sys
 mv %{buildroot}%{_texmf_main}/fonts/map/dvips/psnfss/psnfss.map %{buildroot}%{_texmf_main}/fonts/map/dvips/psnfss/psnfss.oldmap
 
 # Main collection metapackage (empty)
