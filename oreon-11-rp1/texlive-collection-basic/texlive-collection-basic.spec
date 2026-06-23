@@ -48,7 +48,7 @@
 Name:           texlive-collection-basic
 Epoch:          12
 Version:        svn72890
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Essential programs and files
 
 License:        LPPL-1.3c
@@ -562,7 +562,6 @@ test "%{source40_hash}" = "none" || { f="%{SOURCE40}"; test -f "$f" || { echo "o
 test "%{source41_hash}" = "none" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source41_hash}" || { echo "oreon: Source41 hash mismatch" >&2; exit 1; }; }
 
 tar -xf %{SOURCE1}
-cp licenses/*.txt .
 
 %build
 # Nothing to build
