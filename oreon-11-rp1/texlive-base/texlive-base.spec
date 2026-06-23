@@ -470,6 +470,7 @@
 # %%global source_name texlive-source-build-%%{source_svn}
 %{!?_texdir: %global _texdir %{_datadir}/%{shortname}}
 %{!?_texmf_var: %global _texmf_var %{_var}/lib/texmf}
+%{!?_texmf_main: %global _texmf_main %{_texdir}/texmf-dist}
 
 %global etc_fmtutil_cnf %{_sysconfdir}/texlive/web2c/fmtutil.cnf
 %global usr_fmtutil_cnf %{_texmf_main}/web2c/fmtutil.cnf
@@ -499,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 113%{?dist}
+Release: 114%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
