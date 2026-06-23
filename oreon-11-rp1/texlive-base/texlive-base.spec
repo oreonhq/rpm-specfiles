@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 117%{?dist}
+Release: 118%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -8757,6 +8757,7 @@ yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %license gpl2.txt
 %doc %{_texmf_main}/doc/support/dtxgen/
 %{_bindir}/dtxgen
+%{_mandir}/man1/dtxgen.1*
 %{_texmf_main}/scripts/dtxgen/
 
 %files -n %{shortname}-dvi2tty
@@ -9186,6 +9187,7 @@ yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %license apache2.txt
 %{_bindir}/latex-papersize
 %{_texmf_main}/scripts/latex-papersize
+%{_texmf_main}/tex/latex/latex-papersize/
 %doc %{_texmf_main}/doc/latex/latex-papersize/
 
 %files -n %{shortname}-latex2man
@@ -9564,6 +9566,7 @@ yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %license gpl2.txt
 %doc %{_texmf_main}/doc/support/mkpic/
 %{_bindir}/mkpic
+%{_mandir}/man1/mkpic.1*
 %{_texmf_main}/scripts/mkpic/
 
 %files -n %{shortname}-mltex
