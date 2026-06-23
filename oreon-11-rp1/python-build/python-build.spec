@@ -36,8 +36,7 @@ A simple, correct PEP517 package builder.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n build-%{version}
-%pyproject_patch_dependency pytest-cov:ignore
-%pyproject_patch_dependency covdefaults:ignore
+sed -i '/pytest-cov/d; /covdefaults/d' pyproject.toml
 
 
 %generate_buildrequires
