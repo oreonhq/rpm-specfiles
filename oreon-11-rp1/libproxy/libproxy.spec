@@ -6,7 +6,7 @@
 
 Name:           libproxy
 Version:        0.5.12
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A library handling all the details of proxy configuration
 
 License:        LGPL-2.1-or-later
@@ -74,6 +74,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %meson_install
+ln -sf libproxy/proxy.h %{buildroot}%{_includedir}/proxy.h
 
 
 %check
@@ -97,6 +98,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %files devel
 %{_docdir}/libproxy-1.0/
+%{_includedir}/proxy.h
 %{_includedir}/libproxy/
 %{_libdir}/libproxy.so
 %{_libdir}/pkgconfig/libproxy-1.0.pc

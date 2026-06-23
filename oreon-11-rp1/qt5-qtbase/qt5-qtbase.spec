@@ -59,7 +59,7 @@
 Name:    qt5-qtbase
 Summary: Qt5 - QtBase components
 Version: 5.15.18
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 # See LGPL_EXCEPTIONS.txt, for exception details
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -561,8 +561,8 @@ RPM_OPT_FLAGS="$RPM_OPT_FLAGS %{?qt5_arm_flag} %{?qt5_deprecated_flag} %{?qt5_nu
 RPM_OPT_FLAGS=`echo $RPM_OPT_FLAGS | sed 's|-fno-delete-null-pointer-checks||g'`
 %endif
 
-export CFLAGS="$CFLAGS $RPM_OPT_FLAGS -I%{_includedir}/libproxy"
-export CXXFLAGS="$CXXFLAGS $RPM_OPT_FLAGS -I%{_includedir}/libproxy"
+export CFLAGS="$CFLAGS $RPM_OPT_FLAGS"
+export CXXFLAGS="$CXXFLAGS $RPM_OPT_FLAGS"
 export LDFLAGS="$LDFLAGS $RPM_LD_FLAGS"
 export MAKEFLAGS="%{?_smp_mflags}"
 
