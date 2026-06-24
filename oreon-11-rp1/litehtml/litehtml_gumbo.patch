@@ -1,0 +1,7 @@
+diff -rupN --no-dereference litehtml-0.10/cmake/litehtmlConfig.cmake litehtml-0.10-new/cmake/litehtmlConfig.cmake
+--- litehtml-0.10/cmake/litehtmlConfig.cmake	2026-06-13 23:11:11.000000000 +0200
++++ litehtml-0.10-new/cmake/litehtmlConfig.cmake	2026-06-15 11:21:15.712876483 +0200
+@@ -1,3 +1 @@
+-include(CMakeFindDependencyMacro)
+-find_dependency(gumbo)
+ include(${CMAKE_CURRENT_LIST_DIR}/litehtmlTargets.cmake)

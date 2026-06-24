@@ -1,0 +1,88 @@
+%global source0_hash none
+
+%global         srcname  asyncssh
+%global         desc     Python 3 library for asynchronous client and\
+server-side SSH communication. It uses the Python asyncio module and\
+implements many SSH protocol features such as the various channels,\
+SFTP, SCP, forwarding, session multiplexing over a connection and more.
+
+Name:           python-%{srcname}
+Version:        2.22.0
+Release:        %autorelease
+Summary:        Asynchronous SSH for Python
+
+# Automatically converted from old format: EPL-2.0 or GPLv2+ - review is highly recommended.
+License:        EPL-2.0 OR GPL-2.0-or-later
+URL:            https://github.com/ronf/asyncssh
+Source0:        %pypi_source
+
+# XXX remove with next release
+# cf. https://github.com/ronf/asyncssh/pull/788
+Patch0:         libnacl-dep-cleanup.patch
+Patch1:         aiofiles-context-manager.patch
+
+
+BuildArch:      noarch
+
+
+# required by unittests
+BuildRequires:  nmap-ncat
+BuildRequires:  openssh-clients
+BuildRequires:  openssl
+BuildRequires:  python3-gssapi
+
+
+# for OpenSSH private key encryption
+Suggests:       python3-bcrypt
+# for GSSAPI key exchange/authentication
+Suggests:       python3-gssapi
+# for X.509 certificate authentication
+Suggests:       python3-pyOpenSSL
+# for U2F etc. support
+Suggests:       python3-fido2
+
+
+%description
+%{desc}
+
+%package -n python3-%{srcname}
+Summary:        %{summary}
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname}
+%{desc}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{srcname}-%{version}
+
+# remove superfluous build dependencies
+sed '/pytest-cov/d' tox.ini -i  # coverage not desired
+sed -E '/(uvloop|python-pkcs11)/d' tox.ini -i  # not available, tests skipped when missing
+
+
+%generate_buildrequires
+%pyproject_buildrequires -t
+
+
+%build
+sed -i '1,1s@^#!.*$@#!%{__python3}@' examples/*.py
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+%pyproject_save_files -l %{srcname}
+
+%check
+%{__python3} -m unittest discover -s tests -t . -v
+
+%files -n python3-%{srcname} -f %{pyproject_files}
+%license LICENSE COPYRIGHT
+%doc README.rst examples
+
+
+%changelog
+%autochangelog
+

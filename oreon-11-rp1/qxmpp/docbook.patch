@@ -1,0 +1,83 @@
+diff -ruN qxmpp-v1.14.2/CMakeLists.txt qxmpp-v1.14.2-mod/CMakeLists.txt
+--- qxmpp-v1.14.2/CMakeLists.txt	2026-02-21 16:56:25.000000000 +0300
++++ qxmpp-v1.14.2-mod/CMakeLists.txt	2026-02-22 09:58:55.283490506 +0300
+@@ -43,7 +43,8 @@
+ option(BUILD_WITH_QT6 "Force build with Qt 6")
+ option(BUILD_SHARED "Build shared library" ON)
+ option(BUILD_TESTS "Build tests." ON)
+-option(BUILD_DOCUMENTATION "Build API documentation." OFF)
++option(BUILD_DOCUMENTATION "Build HTML API documentation." OFF)
++option(BUILD_DOCBOOK_DOCUMENTATION "Build DOCBOOK documentation." OFF)
+ option(BUILD_EXAMPLES "Build examples." ON)
+ option(BUILD_OMEMO "Build the OMEMO module" OFF)
+ option(WITH_GSTREAMER "Build with GStreamer support for Jingle" OFF)
+@@ -96,7 +97,7 @@
+     add_subdirectory(tests)
+ endif()
+ 
+-if(BUILD_DOCUMENTATION)
++if(BUILD_DOCUMENTATION OR BUILD_DOCBOOK_DOCUMENTATION)
+     add_subdirectory(doc)
+ endif()
+ 
+diff -ruN qxmpp-v1.14.2/doc/CMakeLists.txt qxmpp-v1.14.2-mod/doc/CMakeLists.txt
+--- qxmpp-v1.14.2/doc/CMakeLists.txt	2026-02-21 16:56:25.000000000 +0300
++++ qxmpp-v1.14.2-mod/doc/CMakeLists.txt	2026-02-22 14:25:31.016279459 +0300
+@@ -8,19 +8,37 @@
+     message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+ endif()
+ 
++if(BUILD_DOCUMENTATION)
++    set(HTML "YES")
++else()
++    set(HTML "NO")
++endif()
++if(BUILD_DOCBOOK_DOCUMENTATION)
++    set(DOCBOOK "YES")
++else()
++    set(DOCBOOK "NO")
++endif()
++
+ configure_file(
+     ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+     ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+     @ONLY
+ )
+ 
+-add_custom_target(
+-    doc ALL
+-    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+-    COMMENT "Generate API documentation with Doxygen"
+-    VERBATIM
+-)
++if(BUILD_DOCUMENTATION OR BUILD_DOCBOOK_DOCUMENTATION)
++    add_custom_target(
++        doc ALL
++        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
++        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
++        COMMENT "Generate API documentation with Doxygen"
++        VERBATIM
++    )
++endif()
+ 
+-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
++if(BUILD_DOCUMENTATION)
++    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
++endif()
+ 
++if(BUILD_DOCBOOK_DOCUMENTATION)
++   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docbook DESTINATION ${CMAKE_INSTALL_DATADIR}/help/en/qxmpp)
++endif()
+diff -ruN qxmpp-v1.14.2/doc/Doxyfile.in qxmpp-v1.14.2-mod/doc/Doxyfile.in
+--- qxmpp-v1.14.2/doc/Doxyfile.in	2026-02-21 16:56:25.000000000 +0300
++++ qxmpp-v1.14.2-mod/doc/Doxyfile.in	2026-02-22 14:03:08.438465055 +0300
+@@ -19,6 +19,8 @@
+ FULL_PATH_NAMES        = NO
+ HIDE_UNDOC_CLASSES     = YES
+ GENERATE_LATEX         = NO
++GENERATE_HTML          = @HTML@
++GENERATE_DOCBOOK       = @DOCBOOK@
+ QUIET                  = YES
+ RECURSIVE              = YES
+ ENABLE_PREPROCESSING   = YES

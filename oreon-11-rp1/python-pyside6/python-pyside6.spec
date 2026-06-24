@@ -17,7 +17,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.11.1
-Release:        18%{?dist}
+Release:        19%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -379,7 +379,7 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %files -n python%{python3_pkgversion}-%{pypi_name}
 %license LICENSES/*
 %doc README.md
-%{_libdir}/libpyside6*.so.6.10*
+%{_libdir}/libpyside6*.so.6.11*
 %{python3_sitelib}/%{camel_name}/
 %{python3_sitearch}/%{camel_name}-%{version}-py%{python3_version}.egg-info/
 
@@ -405,7 +405,7 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %files -n python%{python3_pkgversion}-shiboken6
 %doc README.shiboken6.md
 %license LICENSES/*
-%{_libdir}/libshiboken6*.so.6.10*
+%{_libdir}/libshiboken6*.so.6.11*
 %{python3_sitelib}/shiboken6/
 %{python3_sitearch}/shiboken6-%{version}-py%{python3_version}.egg-info/
 

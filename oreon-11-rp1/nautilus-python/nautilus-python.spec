@@ -1,0 +1,71 @@
+%global source0_hash none
+
+%global nautilus_version 43~beta
+
+%global tarball_version %%(echo %{version} | tr '~' '.')
+
+Name:           nautilus-python
+Version:        4.1.0
+Release:        %autorelease
+Summary:        Python bindings for Nautilus
+
+License:        GPL-2.0-or-later
+URL:            https://wiki.gnome.org/Projects/NautilusPython
+Source0:        https://download.gnome.org/sources/%{name}/4.1/%{name}-%{tarball_version}.tar.xz
+
+BuildRequires:  gcc
+BuildRequires:  gtk-doc
+BuildRequires:  meson
+BuildRequires:  pkgconfig(libnautilus-extension-4) >= %{nautilus_version}
+BuildRequires:  pkgconfig(pygobject-3.0)
+BuildRequires:  python3-devel
+
+Requires:       nautilus-extensions%{?_isa} >= %{nautilus_version}
+Requires:       python3-gobject-base%{?_isa}
+
+%description
+Python bindings for Nautilus
+
+
+%package devel
+Summary:        Python bindings for Nautilus
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Python bindings for Nautilus
+
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{name}-%{tarball_version}
+
+
+%build
+%meson
+%meson_build
+
+
+%install
+%meson_install
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/nautilus-python/extensions
+rm -rfv $RPM_BUILD_ROOT%{_docdir}
+
+
+%files
+%license COPYING
+%doc AUTHORS NEWS.md README.md
+%{_libdir}/nautilus/extensions-4/libnautilus-python.so
+%dir %{_datadir}/nautilus-python/extensions
+
+%files devel
+%doc examples/
+%{_datadir}/pkgconfig/nautilus-python.pc
+%dir %{_datadir}/gtk-doc
+%dir %{_datadir}/gtk-doc/html
+%{_datadir}/gtk-doc/html/nautilus-python/
+
+
+%changelog
+%autochangelog
+
