@@ -2,7 +2,7 @@
 
 Name:           cjson
 Version:        1.7.18
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Ultralightweight JSON parser in ANSI C
 
 # several files in tests/ are Apache-2.0 but are not packaged
@@ -33,7 +33,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n cJSON-%{version}
 
 %build
-%cmake -DENABLE_CJSON_TEST=ON -DENABLE_TARGET_EXPORT=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_CJSON_TEST=ON -DENABLE_TARGET_EXPORT=ON
 %cmake_build
 
 %install
