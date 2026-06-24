@@ -2,6 +2,10 @@
 
 ExcludeArch: %{ix86}
 
+%ifarch aarch64
+%global _smp_build_ncpus 2
+%endif
+
 # Name of the package without any prefixes
 %global majorname mysql
 %global package_version 8.4.9
@@ -101,7 +105,7 @@ ExcludeArch: %{ix86}
 
 Name:             %{majorname}%{majorversion}
 Version:          %{package_version}
-Release:          2%{?with_debug:.debug}%{?dist}
+Release:          3%{?with_debug:.debug}%{?dist}
 Summary:          MySQL client programs and shared libraries
 URL:              http://www.mysql.com
 
@@ -595,27 +599,34 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
          -DREPRODUCIBLE_BUILD=OFF \
          -DCMAKE_C_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
          -DCMAKE_CXX_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
-         -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags}" \
 %ifarch aarch64
+         -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags} -Wl,--no-keep-memory" \
          -DWITH_LTO=OFF \
 %else
+         -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags}" \
          -DWITH_LTO=ON \
 %endif
 %{?with_debug: -DWITH_DEBUG=1} \
 %{?with_debug: -DMYSQL_MAINTAINER_MODE=0} \
          -DTMPDIR=/var/tmp \
+%ifarch aarch64
+         -DCMAKE_C_LINK_FLAGS="%{build_ldflags} -Wl,--no-keep-memory" \
+         -DCMAKE_CXX_LINK_FLAGS="%{build_ldflags} -Wl,--no-keep-memory" \
+%else
          -DCMAKE_C_LINK_FLAGS="%{build_ldflags}" \
          -DCMAKE_CXX_LINK_FLAGS="%{build_ldflags}" \
+%endif
          -DCMAKE_SKIP_INSTALL_RPATH=YES \
          -DWITH_UNIT_TESTS=0
 
 
 # Note: disabling building of unittests to workaround #1989847
 
-# Print all Cmake options values; "-LAH" means "List Advanced Help"
+%if %{with debug}
 cmake -B %{_vpath_builddir} -LAH
+%endif
 
-%cmake_build
+%__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
 
 %install
 %cmake_install
