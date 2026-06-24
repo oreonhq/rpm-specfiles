@@ -2,10 +2,6 @@
 
 ExcludeArch: %{ix86}
 
-%ifarch aarch64
-%global _smp_build_ncpus 2
-%endif
-
 # Name of the package without any prefixes
 %global majorname mysql
 %global package_version 8.4.9
@@ -23,7 +19,7 @@ ExcludeArch: %{ix86}
 # Regression tests may take a long time (many cores recommended), skip them by
 # passing --nocheck to rpmbuild or by setting runselftest to 0 if defining
 # --nocheck is not possible (e.g. in koji build)
-%{!?runselftest:%global runselftest 1}
+%{!?runselftest:%global runselftest 0}
 
 # Set this to 1 to see which tests fail, but 0 on production ready build
 %global ignore_testsuite_result 0
@@ -105,7 +101,7 @@ ExcludeArch: %{ix86}
 
 Name:             %{majorname}%{majorversion}
 Version:          %{package_version}
-Release:          3%{?with_debug:.debug}%{?dist}
+Release:          5%{?with_debug:.debug}%{?dist}
 Summary:          MySQL client programs and shared libraries
 URL:              http://www.mysql.com
 
@@ -534,10 +530,8 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
    %{SOURCE14} %{SOURCE15} %{SOURCE17} %{SOURCE18} %{SOURCE31} scripts
 
 %build
+echo "mysql8.4-%{version}-%{release} on %{_arch}"
 # fail quickly and obviously if user tries to build as root
-%ifarch aarch64
-%define _lto_cflags %{nil}
-%endif
 %if %runselftest
     if [ x"$(id -u)" = "x0" ]; then
         echo "mysql's regression tests fail if run as root."
@@ -597,25 +591,16 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
          -DWITH_AUTHENTICATION_LDAP=%{?with_ldap:ON}%{!?with_ldap:OFF} \
          -DWITH_BOOST=boost \
          -DREPRODUCIBLE_BUILD=OFF \
+         -DCMAKE_VERBOSE_MAKEFILE=OFF \
          -DCMAKE_C_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
          -DCMAKE_CXX_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
-%ifarch aarch64
-         -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags} -Wl,--no-keep-memory" \
-         -DWITH_LTO=OFF \
-%else
          -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags}" \
          -DWITH_LTO=ON \
-%endif
 %{?with_debug: -DWITH_DEBUG=1} \
 %{?with_debug: -DMYSQL_MAINTAINER_MODE=0} \
          -DTMPDIR=/var/tmp \
-%ifarch aarch64
-         -DCMAKE_C_LINK_FLAGS="%{build_ldflags} -Wl,--no-keep-memory" \
-         -DCMAKE_CXX_LINK_FLAGS="%{build_ldflags} -Wl,--no-keep-memory" \
-%else
          -DCMAKE_C_LINK_FLAGS="%{build_ldflags}" \
          -DCMAKE_CXX_LINK_FLAGS="%{build_ldflags}" \
-%endif
          -DCMAKE_SKIP_INSTALL_RPATH=YES \
          -DWITH_UNIT_TESTS=0
 
@@ -626,7 +611,13 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
 cmake -B %{_vpath_builddir} -LAH
 %endif
 
-%__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
+MYSQL_BUILD_LOG=%{_builddir}/mysql-cmake-build.log
+%__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} > "$MYSQL_BUILD_LOG" 2>&1 || {
+  echo "cmake build failed, last 300 lines of $MYSQL_BUILD_LOG:"
+  tail -n 300 "$MYSQL_BUILD_LOG"
+  exit 1
+}
+echo "cmake build finished ok"
 
 %install
 %cmake_install
