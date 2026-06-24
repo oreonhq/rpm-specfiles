@@ -101,7 +101,7 @@ ExcludeArch: %{ix86}
 
 Name:             %{majorname}%{majorversion}
 Version:          %{package_version}
-Release:          1%{?with_debug:.debug}%{?dist}
+Release:          2%{?with_debug:.debug}%{?dist}
 Summary:          MySQL client programs and shared libraries
 URL:              http://www.mysql.com
 
@@ -531,6 +531,9 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
 
 %build
 # fail quickly and obviously if user tries to build as root
+%ifarch aarch64
+%define _lto_cflags %{nil}
+%endif
 %if %runselftest
     if [ x"$(id -u)" = "x0" ]; then
         echo "mysql's regression tests fail if run as root."
@@ -593,7 +596,11 @@ cp %{SOURCE3} %{SOURCE10} %{SOURCE11} %{SOURCE12} \
          -DCMAKE_C_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
          -DCMAKE_CXX_FLAGS="%{optflags}%{?with_debug: -fno-strict-overflow -Wno-unused-result -Wno-unused-function -Wno-unused-but-set-variable}" \
          -DCMAKE_EXE_LINKER_FLAGS="-pie %{build_ldflags}" \
+%ifarch aarch64
+         -DWITH_LTO=OFF \
+%else
          -DWITH_LTO=ON \
+%endif
 %{?with_debug: -DWITH_DEBUG=1} \
 %{?with_debug: -DMYSQL_MAINTAINER_MODE=0} \
          -DTMPDIR=/var/tmp \

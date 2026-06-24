@@ -1,0 +1,8 @@
+# Fails since MySQL 8.4.4
+perfschema.relaylog                          : BUG#0
+
+# Fails since MySQL 8.4.4 only on RHEL 10
+perfschema.system_events_plugin              : BUG#0
+rpl.rpl_channel_creation_under_replica_load  : BUG#0
+sys_vars.myisam_data_pointer_size_func       : BUG#0
+rpl.rpl_parallel_ddl_innodb                  : BUG#0
