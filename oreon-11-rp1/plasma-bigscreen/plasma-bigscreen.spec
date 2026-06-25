@@ -115,6 +115,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 %{_kf6_datadir}/applications/kcm_mediacenter_*.desktop
 %{_kf6_datadir}/applications/plasma-bigscreen-swap-session.desktop
 %{_kf6_datadir}/applications/org.kde.plasma.bigscreen.uvcviewer.desktop
+%{_udevrulesdir}/40-uinput.rules
 
 %files wayland
 %{_kf6_bindir}/plasma-bigscreen-wayland
