@@ -7,8 +7,8 @@
 ExcludeArch: %{ix86}
 
 Name:    xdg-desktop-portal-kde
-Version: 6.7.0
-Release: 2%{?dist}
+Version: 6.7.1
+Release: 1%{?dist}
 Summary: KDE backend implementation for xdg-desktop-portal
 
 License: GPL-2.0-or-later

@@ -3,12 +3,12 @@
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 0
+%global bug_ver_kf6 1
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
@@ -37,6 +37,7 @@ BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  kf6-kcmutils-devel
+BuildRequires:  cmake(PlasmaQuick)
 
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)
@@ -59,8 +60,6 @@ keyboard layouts, styles and KCM configuration integration.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version} -p1
-# Tag still asks for ECM/KF6 6.22 while this branch is Plasma 6.6.x on distro KF 6.6
-sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt
 
 
 %build

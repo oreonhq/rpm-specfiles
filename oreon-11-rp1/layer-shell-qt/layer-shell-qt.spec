@@ -4,7 +4,7 @@
 
 
 Name:    layer-shell-qt
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 Summary: Library to easily use clients based on wlr-layer-shell
 

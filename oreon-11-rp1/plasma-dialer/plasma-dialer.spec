@@ -1,4 +1,4 @@
-%global source0_hash ae403c3812dc2383ef5c693cf7089d17cd5c65748c97443f649c86da0a9e9cb0
+%global source0_hash d41a629f2759fcdbe25ee2d0db5ad4d58df1657b80efdd5a57c2b93670aadf28
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 
 Name:           plasma-dialer
 Epoch:          1
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 License:        BSD and CC0 and GPLv2 and GPLv2+ and GPLv3 and GPLv3+ and LGPLv2+ and LGPLv2.1 and LGPLv2.1+ and LGPLv3 and LGPLv3
 Summary:        Convergent Plasma Mobile dialer application

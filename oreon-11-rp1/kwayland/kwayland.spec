@@ -4,8 +4,8 @@
 
 
 Name:       kwayland
-Version: 6.7.0
-Release:    5%{?dist}
+Version: 6.7.1
+Release: 1%{?dist}
 Summary:    Qt-style API to interact with the wayland-client API
 
 License:    BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT-CMU AND MIT

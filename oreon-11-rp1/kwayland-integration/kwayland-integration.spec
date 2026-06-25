@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kwayland-integration
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 Summary: Provides integration plugins for various KDE Frameworks for Wayland
 

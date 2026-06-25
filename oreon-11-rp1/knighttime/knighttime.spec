@@ -1,11 +1,11 @@
-%global source0_hash 97f612eb6cae0ee39ad3579bb9124d701751c83fd02cd3f5ed120896b1313a21
+%global source0_hash d4c60d9ebeb13b9f4d0ccabf0545a482d9b899333ab4a86cb78b165acf59ed43
 
 %global stable_kf6 stable
 
 
 Name:           knighttime
-Version: 6.7.0
-Release:        5%{?dist}
+Version: 6.7.1
+Release: 1%{?dist}
 Summary:        Plasma day and night cycle scheduling daemon
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/knighttime

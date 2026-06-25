@@ -7,8 +7,8 @@
 ExcludeArch: %{ix86}
 
 Name:           oxygen-sounds
-Version: 6.7.0
-Release:        1%{?dist}
+Version: 6.7.1
+Release: 1%{?dist}
 Summary:        The Oxygen Sound Theme
 
 License:        LGPL-3.0-or-later AND CC0-1.0 AND CC-BY-3.0 AND BSD-2-Clause

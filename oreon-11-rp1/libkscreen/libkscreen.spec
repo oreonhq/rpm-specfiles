@@ -3,11 +3,11 @@
 %undefine __cmake_in_source_build
 
 %global stable_plasma stable
-%global plasma_ver 6.7.0
+%global plasma_ver 6.7.1
 
 Name:           libkscreen
 Version:        %{plasma_ver}
-Release:        4%{?dist}
+Release: 1%{?dist}
 Summary:        KDE screen management library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND CC0-1.0

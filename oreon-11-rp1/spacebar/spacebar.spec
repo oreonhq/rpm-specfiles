@@ -1,13 +1,13 @@
-%global source0_hash 5f0b5c4a40c51da3cac5a5d683ab83abfd8a357e459176268eced158f0314885
+%global source0_hash 03e5131e049b4bc3ca3314c0437f1eb23b1c0d66411ed8dd36d33e43e0e5deea
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 0
+%global bug_ver_kf6 1
 Name:           spacebar
 Epoch:          1
-Version: 6.7.0
-Release:        1%{?dist}
+Version: 6.7.1
+Release: 1%{?dist}
 License:        GPLv2+ and GPLv3 and GPLv2
 Summary:        Messaging app for Plasma Mobile
 Url:            https://invent.kde.org/plasma-mobile/spacebar

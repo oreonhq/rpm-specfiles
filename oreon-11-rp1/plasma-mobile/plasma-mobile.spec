@@ -1,4 +1,4 @@
-%global source0_hash 3426aa0b629b945b076eace130c4abbc6fff6f6c5dd1c2bff7ff0d7b2d477e42
+%global source0_hash 3e29de1f06423b3364cb7550de37adf76621497df13a6abaf89a6647cb8f4bfe
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           plasma-mobile
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 License:        CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-only AND MIT
 Summary:        General UI components for Plasma Phone including shell, containment and applets

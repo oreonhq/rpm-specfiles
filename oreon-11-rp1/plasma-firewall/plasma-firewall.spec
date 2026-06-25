@@ -13,7 +13,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-firewall
-Version: 6.7.0
+Version: 6.7.1
 Release: 1%{?dist}
 Summary: Control Panel for your system firewall
 
