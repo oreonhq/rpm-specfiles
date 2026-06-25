@@ -1,4 +1,4 @@
-%global source0_hash ba9e50206aec8a18c720a3916aa6627287c651dda7b3aa88391d828c70be18bd
+%global source0_hash 59b4a0656ade61029a185c7348544fb515b2d654c1f268a0f739bd157df5a3db
 
 %global stable_kf6 stable
 %global maj_ver_kf6 26
@@ -11,11 +11,11 @@
 Name:           dolphin
 Summary:        KDE File Manager
 Version:        26.03.80
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/system/dolphin
-Source0:        https://invent.kde.org/system/dolphin/-/archive/v%{version}/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://invent.kde.org/system/dolphin/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Upstream
 
@@ -100,7 +100,7 @@ Requires:       kf6-kio-devel%{?_isa}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-v%{version} -p1
 
 
 %build
