@@ -3,11 +3,11 @@ From: Oreon Packaging Team <packaging@oreonhq.com>
 Date: Fri, 17 Apr 2026 00:00:00 +0000
 Subject: [PATCH] Fix installation paths for non-wheel RPM builds
 
-Regenerated with diff -u against pyside-setup-everywhere-src-6.10.3.
+Refreshed for pyside-setup-everywhere-src-6.11.1 (shiboken6_generator path).
 ---
- sources/pyside6/CMakeLists.txt              | 2 +-
- sources/shiboken6/libshiboken/CMakeLists.txt | 2 +-
- sources/shiboken6/generator/CMakeLists.txt  | 4 ++--
+ sources/pyside6/CMakeLists.txt                         | 2 +-
+ sources/shiboken6/libshiboken/CMakeLists.txt            | 2 +-
+ sources/shiboken6_generator/generator/CMakeLists.txt    | 4 ++--
  3 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/sources/pyside6/CMakeLists.txt b/sources/pyside6/CMakeLists.txt
@@ -25,7 +25,7 @@ diff --git a/sources/pyside6/CMakeLists.txt b/sources/pyside6/CMakeLists.txt
 diff --git a/sources/shiboken6/libshiboken/CMakeLists.txt b/sources/shiboken6/libshiboken/CMakeLists.txt
 --- a/sources/shiboken6/libshiboken/CMakeLists.txt
 +++ b/sources/shiboken6/libshiboken/CMakeLists.txt
-@@ -218,6 +218,6 @@
+@@ -224,6 +224,6 @@
 
      install(EXPORT Shiboken6WheelTargets
              NAMESPACE Shiboken6::
@@ -34,10 +34,10 @@ diff --git a/sources/shiboken6/libshiboken/CMakeLists.txt b/sources/shiboken6/li
              FILE Shiboken6Targets.cmake)
  endif()
 
-diff --git a/sources/shiboken6/generator/CMakeLists.txt b/sources/shiboken6/generator/CMakeLists.txt
---- a/sources/shiboken6/generator/CMakeLists.txt
-+++ b/sources/shiboken6/generator/CMakeLists.txt
-@@ -73,11 +73,11 @@
+diff --git a/sources/shiboken6_generator/generator/CMakeLists.txt b/sources/shiboken6_generator/generator/CMakeLists.txt
+--- a/sources/shiboken6_generator/generator/CMakeLists.txt
++++ b/sources/shiboken6_generator/generator/CMakeLists.txt
+@@ -72,11 +72,11 @@
  if(NOT is_pyside6_superproject_build)
      install(TARGETS shiboken6
              EXPORT "${package_name}WheelTargets"
@@ -50,4 +50,3 @@ diff --git a/sources/shiboken6/generator/CMakeLists.txt b/sources/shiboken6/gene
 +            DESTINATION "${LIB_INSTALL_DIR}/cmake/${package_name}"
              FILE "${package_name}Targets.cmake")
  endif()
-

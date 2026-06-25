@@ -17,7 +17,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.11.1
-Release:        19%{?dist}
+Release:        20%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -35,9 +35,7 @@ Source1:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}
 Patch0:        0001-Revert-Modify-headers-installation-for-CMake-builds.patch
 Patch1:        0001-Always-link-to-python-libraries.patch
 Patch2:        0001-Fix-installation.patch
-Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
-Patch4:         0004-shiboken6-define-LLVM_VERSION-for-apiextractor.patch
-Patch5:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
+Patch3:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
@@ -353,7 +351,7 @@ mkdir -p %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 mv %{buildroot}%{_bindir}/shiboken_tool.py %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 
 # Install shiboken6
-mv redhat-linux-build/sources/shiboken6/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
+mv redhat-linux-build/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
 
 # Fix CMake config files to use correct absolute paths (OpenSUSE solution)
 # The upstream build is designed for wheel installation with relative paths,
@@ -424,26 +422,4 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-9
-- Vendor Rawhide patches in SRPM, BR qt6-qtgraphs-devel + qt6-qthttpserver-devel + xwayland-run
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
-- Strip -flto from compile and link flags, pin GCC include dir on flags and CPLUS_INCLUDE_PATH, pass CMAKE_LANG_FLAGS and linker flags so Ninja gets cstddef working past Qt -isystem
-
-* Thu Apr 16 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-6
-- Append -idirafter GCC internal include so cstddef include_next finds stddef.h with Qt -isystem-heavy compile lines
-
-* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
-- BuildRequires gcc-c++, export %%{build_cflags}/%%{build_cxxflags}, force CMAKE_C_CXX_COMPILER paths so cstddef finds gcc stddef.h in mock
-
-* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
-- %%_lto_cflags nil, %%_smp_mflags -j1, NINJAFLAGS and CMAKE_BUILD_PARALLEL_LEVEL, TMPDIR under build for mock ninja reliability
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
-- Build generated bindings with GCC (export CC/CXX) to avoid clang cast-function-type spam
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- Reword commented Source1 note so rpmspec does not expand macros inside a comment
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Import Fedora rawhide python-pyside6 6.10.3-1, HTTPS Source0, Fedora patch URLs
+%autochangelog
