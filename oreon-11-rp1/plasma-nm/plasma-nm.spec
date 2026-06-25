@@ -35,6 +35,7 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(QCoro6)
 BuildRequires:  cmake(Qca-qt6)
+BuildRequires:  cmake(Qt6Keychain)
 
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
