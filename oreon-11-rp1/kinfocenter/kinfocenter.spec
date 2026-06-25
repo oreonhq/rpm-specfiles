@@ -3,7 +3,6 @@
 %global stable_kf6 stable
 
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    kinfocenter
@@ -91,17 +90,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+chmod a-x %{buildroot}%{_datadir}/applications/org.kde.kinfocenter.desktop 2>/dev/null || :
+chmod a-x %{buildroot}%{_datadir}/applications/kcm_about-distro.desktop 2>/dev/null || :
 %find_lang %{name} --all-name --with-html
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kinfocenter.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_about-distro.desktop
-desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_energyinfo.desktop
 # commented out until upstream fixes a duplicate entries problem
 #appstream-util validate-relax --nonet %%{buildroot}%%{_metainfodir}/*.appdata.xml
 
 %files -f %{name}.lang
-%{_datadir}/applications/kcm_energyinfo.desktop
 %{_bindir}/kinfocenter
 %{_kf6_libdir}/libKInfoCenterInternal.so
 %{_kf6_qtplugindir}/plasma/kcms/*.so
