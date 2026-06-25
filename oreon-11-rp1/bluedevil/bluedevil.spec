@@ -19,6 +19,8 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6Service)
 BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  cmake(KF6BluezQt)

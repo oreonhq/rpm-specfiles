@@ -114,6 +114,15 @@ BuildRequires:  pkgconfig(libudev)
 BuildRequires:  systemd
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6Parts)
+BuildRequires:  cmake(PlasmaQuick)
+BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  cmake(KF6Baloo)
 BuildRequires:  cmake(KF6Archive)
 BuildRequires:  cmake(KF6KCMUtils)

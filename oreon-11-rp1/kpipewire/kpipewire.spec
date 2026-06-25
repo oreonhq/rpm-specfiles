@@ -30,6 +30,7 @@ Requires:       pipewire-libs%{?_isa}
 
 # KDE Frameworks
 BuildRequires:  extra-cmake-modules
+BuildRequires:  mesa-libEGL-devel
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6I18n)
 
@@ -45,6 +46,7 @@ BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libva)
+BuildRequires:  pkgconfig(libva-drm)
 
 # Plasma
 BuildRequires:  plasma-wayland-protocols-devel

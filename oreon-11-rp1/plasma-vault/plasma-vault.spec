@@ -26,6 +26,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 # Upstream changes
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Service)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Config)

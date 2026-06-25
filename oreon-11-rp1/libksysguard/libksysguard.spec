@@ -14,6 +14,8 @@ Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{vers
 Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6Solid)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Config)

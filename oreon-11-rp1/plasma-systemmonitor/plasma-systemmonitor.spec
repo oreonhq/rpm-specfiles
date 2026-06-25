@@ -51,6 +51,8 @@ Requires: libksysguard%{?_isa}
 
 Obsoletes: ksysguard < 5.23
 
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6WindowSystem)
 %description
 An interface for monitoring system sensors, process information and other system
 resources.

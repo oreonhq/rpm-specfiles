@@ -20,6 +20,8 @@ BuildRequires:  qt6-qtbase-devel
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  cmake(KF6Auth)
 
 BuildRequires:  cmake(KF6Completion)
 BuildRequires:  cmake(KF6Config)

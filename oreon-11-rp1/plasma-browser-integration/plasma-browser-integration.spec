@@ -21,6 +21,9 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 ## upstreamable patches
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6Service)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6Gui)
 BuildRequires:  cmake(Qt6DBus)

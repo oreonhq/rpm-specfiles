@@ -27,6 +27,7 @@ Patch1002:      plasma-mobile-select-fedora-lookandfeel.patch
 %global plasma_version %(echo %{version} | cut -d. -f1-3)
 
 BuildRequires: extra-cmake-modules
+BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires: gcc-c++
 BuildRequires: kf6-kdbusaddons-devel
 BuildRequires: kwin-devel
@@ -106,6 +107,8 @@ Requires: system-backgrounds-kde
 Obsoletes: plasma-nm-mobile < 5.27.81
 
 
+BuildRequires:  cmake(PlasmaQuick)
+BuildRequires:  libxcb-devel
 %description
 %{summary}.
 

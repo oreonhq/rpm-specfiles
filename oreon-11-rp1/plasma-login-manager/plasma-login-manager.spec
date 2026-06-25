@@ -51,6 +51,7 @@ Provides:       service(graphical-login) = plasmalogin
 BuildRequires:  desktop-file-utils
 BuildRequires:  cmake >= 3.22
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  gcc-c++
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(libsystemd)

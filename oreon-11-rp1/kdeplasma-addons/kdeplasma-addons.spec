@@ -25,6 +25,10 @@ BuildRequires:  cmake(Qt6WebEngineQuick)
 Obsoletes: kdeplasma-addons-libs < 5.0.0
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  rust-corrosion-devel
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(PlasmaQuick)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6ConfigWidgets)

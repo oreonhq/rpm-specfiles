@@ -17,6 +17,7 @@ URL:     https://invent.kde.org/plasma/%{name}
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6NetworkManagerQt)
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build

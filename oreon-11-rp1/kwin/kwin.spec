@@ -27,6 +27,11 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{m
 
 # Base
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  vulkan-devel
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  systemd-rpm-macros
 
@@ -116,6 +121,8 @@ BuildRequires:  cmake(PlasmaActivities)
 # Unknowns
 BuildRequires:  libeis-devel
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  libevdev-devel
+BuildRequires:  systemd-devel
 
 ## Runtime deps
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}

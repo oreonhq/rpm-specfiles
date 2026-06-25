@@ -20,6 +20,7 @@ BuildRequires:  plasma-workspace-devel
 # KDE Frameworks 6
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Screen)
 BuildRequires:  cmake(KF6Auth)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6Crash)

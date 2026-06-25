@@ -28,6 +28,8 @@ BuildRequires:  cmake(Qt6Quick)
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  libxcb-devel
 
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6GlobalAccel)

@@ -19,6 +19,8 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(PlasmaQuick)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel

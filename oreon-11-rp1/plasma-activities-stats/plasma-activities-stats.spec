@@ -16,6 +16,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 
 BuildRequires:  boost-devel
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  cmake(KF6Config)

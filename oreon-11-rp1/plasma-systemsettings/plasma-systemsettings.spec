@@ -19,6 +19,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_
 BuildRequires: desktop-file-utils
 
 BuildRequires: extra-cmake-modules
+BuildRequires:  cmake(KF6Auth)
 BuildRequires: kf6-rpm-macros
 BuildRequires: cmake(KF6Crash)
 BuildRequires: cmake(KF6ItemViews)

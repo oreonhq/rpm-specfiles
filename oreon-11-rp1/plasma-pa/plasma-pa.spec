@@ -18,6 +18,9 @@ Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(libpulse-mainloop-glib)
 BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  cmake(KF6KCMUtils)

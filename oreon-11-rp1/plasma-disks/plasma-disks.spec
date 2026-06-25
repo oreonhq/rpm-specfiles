@@ -18,6 +18,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  make
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Auth)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf6-kauth-devel
 BuildRequires:  cmake(KF6CoreAddons)

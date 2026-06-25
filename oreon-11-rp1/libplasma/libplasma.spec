@@ -27,6 +27,7 @@ BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  cmake(Qt6QuickControls2)
 BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6GuiPrivate)
+BuildRequires:  cmake(Qt6Core5Compat)
 
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6CoreAddons)
@@ -49,6 +50,7 @@ BuildRequires:  cmake(PlasmaActivities)
 BuildRequires:  cmake(PlasmaWaylandProtocols)
 BuildRequires:  cmake(Qt6WaylandClient)
 BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel
 
 BuildRequires:  cmake(KF6Archive)
@@ -56,6 +58,10 @@ BuildRequires:  cmake(KF6Parts)
 BuildRequires:  cmake(KF6WidgetsAddons)
 
 Requires:       kf6-filesystem
+Requires:       qt6-qt5compat%{?_isa}
+Requires:       qt6qml(org.kde.config)
+Requires:       qt6qml(org.kde.kirigami)
+Requires:       qt6qml(org.kde.ksvg)
 
 Obsoletes:      kf6-plasma < 1:%{version}-%{release}
 Provides:       kf6-plasma = 1:%{version}-%{release}

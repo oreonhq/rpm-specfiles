@@ -23,6 +23,8 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_
 Patch:        drkonqi-installdbgsymbols.patch
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  systemd-rpm-macros

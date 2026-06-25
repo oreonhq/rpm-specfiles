@@ -63,6 +63,8 @@ BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(KF6KirigamiPlatform)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6WidgetsAddons)
 
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)

@@ -13,6 +13,9 @@ Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6Solid)
+BuildRequires:  libX11-devel
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  libksysguard-devel

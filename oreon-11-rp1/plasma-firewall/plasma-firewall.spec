@@ -45,6 +45,8 @@ Requires: kf6-kcmutils%{?_isa}
 Requires: %{name}-backend = %{version}-%{release}
 Suggests: %{name}-firewalld
 
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6Config)
 %description
 %{summary}.
 

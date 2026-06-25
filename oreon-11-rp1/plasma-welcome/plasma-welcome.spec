@@ -22,6 +22,7 @@ BuildRequires:  qt6-qtbase-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Config)
 BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  cmake(Qt6Core)

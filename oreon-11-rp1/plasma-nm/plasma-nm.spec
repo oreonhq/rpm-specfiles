@@ -31,6 +31,7 @@ BuildRequires:  gettext
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules
+BuildRequires:  openssl-devel
 
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(QCoro6)

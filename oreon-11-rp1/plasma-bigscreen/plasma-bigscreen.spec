@@ -55,6 +55,8 @@ BuildRequires: cmake(Qt6DBus)
 BuildRequires: cmake(Qt6Network)
 BuildRequires: cmake(Qt6Multimedia)
 BuildRequires: cmake(Qt6WebEngineCore)
+BuildRequires: cmake(KF6Config)
+BuildRequires: wayland-devel
 
 Requires:   %{name}-wayland = %{version}-%{release}
 Requires:   qt6qml(org.kde.plasma.private.nanoshell)

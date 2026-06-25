@@ -19,6 +19,7 @@ URL:     https://invent.kde.org/plasma/%{name}
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  libxkbcommon-devel
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build

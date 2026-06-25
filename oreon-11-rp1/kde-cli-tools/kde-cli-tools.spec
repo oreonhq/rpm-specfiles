@@ -25,6 +25,9 @@ BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Service)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  cmake(KF6IconThemes)

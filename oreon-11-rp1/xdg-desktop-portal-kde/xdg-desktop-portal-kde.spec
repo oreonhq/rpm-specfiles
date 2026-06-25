@@ -21,6 +21,8 @@ BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  wayland-devel
+BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qtbase-static
 BuildRequires:  qt6-qtdeclarative-devel

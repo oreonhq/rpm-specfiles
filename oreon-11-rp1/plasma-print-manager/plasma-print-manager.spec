@@ -37,6 +37,9 @@ BuildRequires: cmake(KF6KCMUtils)
 BuildRequires: cmake(KF6KIO)
 BuildRequires: cmake(KF6Kirigami2)
 BuildRequires: cmake(KF6KirigamiAddons)
+BuildRequires: cmake(KF6ItemModels)
+BuildRequires: kf6-kitemmodels
+BuildRequires: kf6-kirigami-addons
 BuildRequires: cmake(KF6Notifications)
 BuildRequires: cmake(KF6WidgetsAddons)
 BuildRequires: cmake(KF6WindowSystem)
@@ -60,6 +63,7 @@ Obsoletes:      kde-print-manager < 1:%{version}-%{release}
 Provides:       kde-print-manager = 1:%{version}-%{release}
 
 Requires: plasma-workspace
+Requires: kf6-kitemmodels%{?_isa}
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 # currently requires local cups for majority of proper function

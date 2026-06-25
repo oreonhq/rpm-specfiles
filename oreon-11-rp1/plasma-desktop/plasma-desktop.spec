@@ -64,6 +64,15 @@ BuildRequires:  scim-devel
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(PlasmaQuick)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)

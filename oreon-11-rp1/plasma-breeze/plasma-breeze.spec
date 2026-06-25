@@ -23,6 +23,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_
 
 # Misc
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(KF6IconThemes)
 BuildRequires:  gettext
 
 %if %{with kf5}
