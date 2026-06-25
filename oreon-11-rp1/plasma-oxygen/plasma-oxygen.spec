@@ -151,10 +151,16 @@ popd
 %{_kf6_datadir}/applications/kcm_oxygendecoration.desktop
 %{_kf6_datadir}/color-schemes/Oxygen.colors
 %{_kf6_datadir}/color-schemes/OxygenCold.colors
+%{_kf6_datadir}/color-schemes/OxygenDark.colors
 %{_kf6_datadir}/icons/hicolor/*/apps/oxygen-settings.*
 %{_kf6_datadir}/kstyle/themes/oxygen.themerc
 %{_kf6_datadir}/plasma/look-and-feel/org.kde.oxygen/
+%{_kf6_datadir}/plasma/look-and-feel/org.kde.air/
+%{_kf6_datadir}/plasma/look-and-feel/org.kde.oxygenlight/
 %{_kf6_datadir}/plasma/desktoptheme/oxygen/
+%{_kf6_datadir}/plasma/desktoptheme/air/
+%{_datadir}/wallpapers/Air/
+%{_datadir}/wallpapers/Horos/
 %{_kf6_qtplugindir}/kstyle_config/kstyle_oxygen_config.so
 %{_kf6_qtplugindir}/org.kde.kdecoration3.kcm/kcm_oxygendecoration.so
 %{_kf6_qtplugindir}/org.kde.kdecoration3/org.kde.oxygen.so
