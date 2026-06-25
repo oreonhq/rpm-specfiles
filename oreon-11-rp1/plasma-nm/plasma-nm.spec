@@ -246,6 +246,7 @@ rm -f %{buildroot}/usr/share/locale/*/LC_MESSAGES/plasmanetworkmanagement_openco
 %files -f plasma_applet_org.kde.plasma.networkmanagement.lang -f plasmanetworkmanagement-kded.lang -f plasmanetworkmanagement-libs.lang -f plasmanetworkmanagement-kcm.lang -f kcm_cellular_network.lang -f kcm_mobile_wifi.lang -f kcm_mobile_hotspot.lang -f kcm_mobile_wired.lang
 %{_libdir}/libplasmanm_internal.so
 %{_libdir}/libplasmanm_editor.so
+%{_libdir}/libplasmanm_cellular.so
 # plasma-nm applet
 %{_qt6_qmldir}/org/kde/plasma/networkmanagement/
 %{_kf6_qtplugindir}/plasma/applets/org.kde.plasma.networkmanagement.so
