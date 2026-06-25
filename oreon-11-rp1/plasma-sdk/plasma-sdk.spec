@@ -101,7 +101,6 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.plasma.lookan
 %{_bindir}/kqml
 %{_kf6_plugindir}/ktexteditor/iconexplorerplugin.so
 %{_kf6_datadir}/applications/org.kde.plasma.lookandfeelexplorer.desktop
-%{_kf6_datadir}/kpackage/genericqml/org.kde.plasma.themeexplorer
 %{_kf6_datadir}/plasma/shells/org.kde.plasma.plasmoidviewershell
 %{_kf6_datadir}/applications/org.kde.iconexplorer.desktop
 %{_kf6_datadir}/applications/org.kde.plasma.themeexplorer.desktop
