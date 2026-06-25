@@ -59,6 +59,8 @@ BuildRequires:  cmake(Plasma)
 # Runtime check
 BuildRequires:  cmake(KF6Prison)
 BuildRequires:  cmake(KF6Kirigami2)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  kf6-kirigami-addons
 
 BuildRequires:  pkgconfig(ModemManager) >= 1.0.0
 BuildRequires:  pkgconfig(libnm) >= 1.0.0
@@ -74,6 +76,8 @@ Obsoletes:      %{name}-openconnect < %{version}-%{release}
 Requires:       NetworkManager >= 1.0.0
 Requires:       kf6-prison
 Requires:       kf6-kirigami2
+Requires:       qt6qml(org.kde.kirigamiaddons.formcard)
+Requires:       kf6-kquickcharts
 
 Obsoletes:      kde-plasma-networkmanagement < 1:0.9.1.0
 Obsoletes:      kde-plasma-networkmanagement-libs < 1:0.9.1.0
