@@ -98,7 +98,7 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/plasma-bigscreen-
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.bigscreen.{inputhandler,uvcviewer}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
-%files -f plasma-bigscreen.lang
+%files -f all.lang
 %license LICENSES/*
 %{_kf6_bindir}/plasma-bigscreen-{common-env,envmanager,settings,swap-session,uvcviewer,webapp,inputhandler}
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_mediacenter_*.so
