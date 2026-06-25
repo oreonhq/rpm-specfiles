@@ -56,7 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 %install
@@ -77,8 +77,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/cmake/PlasmaActivities/
 %{_kf6_libdir}/libPlasmaActivities.so
 %{_kf6_libdir}/pkgconfig/PlasmaActivities.pc
-%{_datadir}/doc/qt6/PlasmaActivities.qch
-%{_datadir}/doc/qt6/PlasmaActivities.tags
 
 %changelog
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1

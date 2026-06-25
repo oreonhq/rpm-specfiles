@@ -81,7 +81,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 %install
@@ -107,8 +107,6 @@ mkdir -p %{buildroot}%{_kf6_qmldir}/org/kde/private
 %{_kf6_plugindir}/packagestructure
 %{_kf6_qmldir}/org/kde/plasma/
 %{_kf6_qmldir}/org/kde/kirigami/styles/Plasma/AbstractApplicationHeader.qml
-%{_datadir}/doc/qt6/Plasma.qch
-%{_datadir}/doc/qt6/Plasma.tags
 
 %files devel
 %dir %{_kf6_datadir}/kdevappwizard/

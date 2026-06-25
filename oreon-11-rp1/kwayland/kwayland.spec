@@ -57,7 +57,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 
@@ -70,8 +70,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_datadir}/qlogging-categories6/*categories
 %{_libdir}/libKWaylandClient.so.6
 %{_libdir}/libKWaylandClient.so.%{version}
-%{_datadir}/doc/qt6/KWayland.qch
-%{_datadir}/doc/qt6/KWayland.tags
 
 %files devel
 %doc README.md

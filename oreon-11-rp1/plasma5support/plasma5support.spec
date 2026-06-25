@@ -73,7 +73,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 
@@ -105,8 +105,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libPlasma5Support.so
 %{_libdir}/libplasma-geolocation-interface.so
 %{_libdir}/libweather_ion.so
-%{_datadir}/doc/qt6/Plasma5Support.qch
-%{_datadir}/doc/qt6/Plasma5Support.tags
 
 
 %changelog
