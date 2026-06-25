@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-workspace-wallpapers
 Version: 6.7.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Additional wallpapers for Plasma workspace
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License: LGPL-3.0-only
@@ -83,6 +83,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/wallpapers/SafeLanding/
 %{_datadir}/wallpapers/ScarletTree/
 %{_datadir}/wallpapers/Shell/
+%{_datadir}/wallpapers/Sub-Arctic/
 %{_datadir}/wallpapers/summer_1am/
 %{_datadir}/wallpapers/Volna/
 %{_datadir}/wallpapers/Coast/
