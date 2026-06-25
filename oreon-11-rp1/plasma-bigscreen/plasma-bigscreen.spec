@@ -90,19 +90,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
-%find_lang plasma-bigscreen --with-man --with-qt --all-name
+%find_lang all --with-man --with-qt --all-name
 
 %check
-desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/kcm_mediacenter_{audiodevice,bigscreen_settings,kdeconnect,wifi}.desktop
+desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/kcm_mediacenter_*.desktop
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/plasma-bigscreen-swap-session.desktop
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.bigscreen.{inputhandler,uvcviewer}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 %files -f plasma-bigscreen.lang
 %license LICENSES/*
-%{_kf6_bindir}/plasma-bigscreen-{common-env,envmanager,settings,swap-session,uvcviewer,wayland,webapp,inputhandler}
+%{_kf6_bindir}/plasma-bigscreen-{common-env,envmanager,settings,swap-session,uvcviewer,webapp,inputhandler}
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_mediacenter_*.so
-%{_kf6_qmldir}/org/kde//bigscreen/
+%{_kf6_qmldir}/org/kde/bigscreen/
 %{_kf6_metainfodir}/org.kde.plasma.bigscreen.metainfo.xml
 %{_kf6_datadir}/plasma/look-and-feel/org.kde.plasma.bigscreen/
 %{_kf6_datadir}/plasma/plasmoids/org.kde.bigscreen.homescreen/
