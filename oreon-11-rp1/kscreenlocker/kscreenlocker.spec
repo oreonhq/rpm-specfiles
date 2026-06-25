@@ -44,6 +44,7 @@ BuildRequires:  cmake(KF6GuiAddons)
 BuildRequires:  cmake(KF6KirigamiPlatform)
 
 BuildRequires:  libX11-devel
+BuildRequires:  xcb-util-devel
 BuildRequires:  xcb-util-keysyms-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(xi)
