@@ -1,100 +1,55 @@
 %global source0_hash e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76
 
-%{!?with_check: %global with_check 0}
-
-# Building the documentation requires the furo Sphinx theme.  But building furo
-# requires sphinx_theme_builder, which requires this package.  Avoid a
-# dependency loop with this conditional.
 %bcond doc 0
 
 Name:           python-pyproject-metadata
 Version:        0.11.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        PEP 621 metadata parsing
-
 License:        MIT
 URL:            https://github.com/FFY00/python-pyproject-metadata
-VCS:            git:%{url}.git
-Source:        https://github.com/FFY00/python-pyproject-metadata/archive/0.11.0/pyproject-metadata-0.11.0.tar.gz#/python-pyproject-metadata-0.11.0.tar.gz
-
+Source0:        https://github.com/FFY00/python-pyproject-metadata/archive/%{version}/pyproject-metadata-%{version}.tar.gz
 BuildArch:      noarch
-
+BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 BuildRequires:  pyproject-rpm-macros
 
-BuildRequires:  %{py3_dist pytest}
-%generate_buildrequires -p
-
-%if %{with doc}
-BuildRequires:  python3-docs
-%endif
-
-%global _desc %{expand:Dataclass for PEP 621 metadata with support for core metadata generation.
+%global _description %{expand:
+Dataclass for PEP 621 metadata with support for core metadata generation.
 
 This project does not implement the parsing of pyproject.toml containing PEP
-621 metadata.  Instead, given a Python data structure representing PEP 621
+621 metadata. Instead, given a Python data structure representing PEP 621
 metadata (already parsed), it will validate this input and generate a PEP
 643-compliant metadata file (e.g. PKG-INFO).}
 
-%description
-%_desc
+%description %_description
 
-%package     -n python3-pyproject-metadata
-Summary:        PEP 621 metadata parsing
+%package -n     python3-pyproject-metadata
+Summary:        %{summary}
 
-%description -n python3-pyproject-metadata
-%_desc
-
-%generate_buildrequires -p
-
-%if %{with doc}
-%package        doc
-Summary:        Documentation for python3-pyproject-metadata
-
-%description    doc
-Documentation for python3-pyproject-metadata.
-%endif
+%description -n python3-pyproject-metadata %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pyproject-metadata-%{version}
-# No need to BuildRequire pytest-cov to run pytest
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyproject-metadata-%{version}
 sed -i /pytest-cov/d pyproject.toml
 
-%generate_buildrequires -p
+%generate_buildrequires
+%pyproject_buildrequires
 
-%if %{with doc}
-# Use local objects.inv for intersphinx
-sed -e 's|\("https://docs\.python\.org/3/", \)None|\1"%{_docdir}/python3-docs/html/objects.inv"|' \
-    -i docs/conf.py
-%endif
+%build
+%pyproject_wheel
 
-%build -p
-
-%if %{with doc}
-# Build the documentation
-export PYTHONPATH=$PWD
-mkdir html
-sphinx-build -b html docs html
-rm -rf html/{.buildinfo,.doctrees}
-%endif
-
-%install -a
+%install
+%pyproject_install
+%pyproject_save_files pyproject_metadata
 
 %check
-%if %{with check}
-python3 -m pytest -v
-%endif
+%pyproject_check_import
+%pytest -v
 
 %files -n python3-pyproject-metadata -f %{pyproject_files}
 %doc docs/changelog.md README.md
 
-%generate_buildrequires -p
-
-%if %{with doc}
-%files doc
-%doc html
-%endif
-
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-1
-- Import
+%autochangelog
