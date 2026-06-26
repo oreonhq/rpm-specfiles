@@ -2,7 +2,7 @@
 
 Name:           libmd
 Version:        1.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library that provides message digest functions from BSD systems
 License:        BSD-2-Clause AND BSD-3-Clause AND ISC AND Beerware AND LicenseRef-Fedora-Public-Domain
 URL:            https://www.hadrons.org/software/libmd/
@@ -82,16 +82,11 @@ make check
 %{_mandir}/man3/md2.3*
 %{_mandir}/man3/md4.3*
 %{_mandir}/man3/md5.3*
-%{_mandir}/man3/ripemd.3*
 %{_mandir}/man3/rmd160.3*
 %{_mandir}/man3/sha1.3*
-%{_mandir}/man3/sha224.3*
-%{_mandir}/man3/sha256.3*
-%{_mandir}/man3/sha384.3*
-%{_mandir}/man3/sha512.3*
-%{_mandir}/man3/sha3_*.3*
-%{_mandir}/man3/shake128.3*
-%{_mandir}/man3/shake256.3*
+%{_mandir}/man3/sha2.3*
+%{_mandir}/man3/sha3.3*
+%{_mandir}/man3/shake.3*
 
 %changelog
 %autochangelog
