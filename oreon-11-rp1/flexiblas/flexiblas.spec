@@ -1,8 +1,13 @@
 %global source0_hash none
 
 %bcond system_lapack 0
-%bcond atlas %[%{undefined rhel} && %{undefined flatpak} && "%{_arch}" != "riscv64" ]
-%bcond blis %[%{undefined rhel} && %{undefined flatpak}]
+%if 0%{?rhel} || 0%{?flatpak} || (0%{?oreon} >= 11)
+%bcond_with atlas
+%bcond_with blis
+%else
+%bcond_without atlas
+%bcond_without blis
+%endif
 %bcond openblas 1
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2058840
@@ -21,7 +26,7 @@
 
 Name:           flexiblas
 Version:        %{major_version}.%{minor_version}.%{patch_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A BLAS/LAPACK wrapper library with runtime exchangeable backends
 
 # LGPL-3.0-or-later

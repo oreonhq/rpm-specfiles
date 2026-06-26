@@ -7,12 +7,12 @@
 # Dependencies are missing to build the documentation
 %bcond_with doc
 
-%if 0%{?rhel} || 0%{?flatpak}
+%if 0%{?rhel} || 0%{?flatpak} || (0%{?oreon} >= 11)
 %bcond_with mingw
 %else
 %bcond_without mingw
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with qt
 %else
 %bcond_without qt
@@ -20,7 +20,7 @@
 
 Name:           python-%{srcname}
 Version:        12.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
