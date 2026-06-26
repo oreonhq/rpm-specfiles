@@ -1,13 +1,13 @@
-%global source0_hash c5e44b56739cbc67e1b6955edc9534f58288ca09d02f85eaae56db8347395eaf
+%global source0_hash 29b043480c45d3e51c57cac74fd83589cc7729c907a6585b72880cbf07feaf82
 
 %global 	framework kguiaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtGui
 
 License:	BSD-2-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only

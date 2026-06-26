@@ -1,14 +1,14 @@
-%global source0_hash c7f38b01772782e7893e73115a3564083ce9fa9155e679b5be0647e6482182fa
+%global source0_hash 7a286f147144714aa9e8f567dd5a0638a8fb81df97a34a0112f725b72aa36979
 
 %global		framework kitemviews
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with item views
 License:	CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later
 URL:		https://invent.kde.org/frameworks/%{framework}

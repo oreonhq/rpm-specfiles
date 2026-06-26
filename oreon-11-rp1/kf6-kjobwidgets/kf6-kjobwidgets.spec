@@ -1,13 +1,13 @@
-%global source0_hash b3c5f449bf29b98394157656600e87b91f769afc5f547cef526faddb454f9b61
+%global source0_hash 3149cd07d82204c6bfa8d86c590bf0c92905e1b5b075c7b543540916a61d7a03
 
 %global framework kjobwidgets
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	6%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon for KJobs
 # The following are in the LICENSES folder, but go unused: LGPL-3.0-only, LicenseRef-KDE-Accepted-LGPL
 License:        CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later

@@ -1,13 +1,13 @@
-%global source0_hash 27aff14f8211a8873008fd528998727523d98bb5d5018f48a0509ef5792b8319
+%global source0_hash ad06bfda8df019bb2b33567ce3df539bcc107e0dfe004281e5ff9ae4617c6ecc
 
 %global framework kpty
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	6%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 module providing Pty abstraction
 
 License:        BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later

@@ -1,14 +1,14 @@
-%global source0_hash 7b3247dfe349867d44244335beb8d549ad4a8f6b3179d1736d231512dea5b0ce
+%global source0_hash d7daa74e9fe81b674e54e6e979feb85d3d2f4216bf6d9c02bfaa2c021fe1ac2d
 
 %global framework kirigami
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	9%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        QtQuick plugins to build user interfaces based on the KDE UX guidelines
 License:        BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:            https://invent.kde.org/frameworks/%{framework}

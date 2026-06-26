@@ -1,14 +1,14 @@
-%global source0_hash 57102463c93a4c7d9033fcc99f65583256461d9a1745cbeb65afb6e2a4fc245a
+%global source0_hash 4228869722c5bb5325b7c5b10555e6b747bde0e36cbd43519d8681fe3b383173
 
 %global		framework kcalendarcore
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 KCalendarCore Library
 License:	BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-3.0-or-later
 URL:		https://invent.kde.org/frameworks/%{framework}

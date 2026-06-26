@@ -1,13 +1,13 @@
-%global source0_hash ba8f7d21014aabcdfa13e0cc1ff5a1db6c04761e080670caa76b7e4163086d15
+%global source0_hash 03c35d8899559efc17b4f74e86eefd8358dafd7aa9311c89b9c09f7b35700756
 
 %global framework ktextwidgets
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with advanced text editing widgets
 
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

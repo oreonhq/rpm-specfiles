@@ -1,13 +1,13 @@
-%global source0_hash aa7608961397e7cdbdc8362ae9d1eaba6c5ba9dae3a84c11830fce155e5ed46f
+%global source0_hash 6be89d43b4d7cfd4ce519ed24b8bcf8400c93bcfc6f42d9931cd0f852269bdcb
 
 %global framework threadweaver
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon for advanced thread management
 License:	CC0-1.0 AND LGPL-2.0-or-later
 URL:		https://invent.kde.org/frameworks/%{framework}

@@ -1,14 +1,14 @@
-%global source0_hash 9dc5d1f495e951b5402713cc61b01617f586fdc39dbda3ef7e12e661a9b5af0a
+%global source0_hash e7ba1601a159ea79f424a4d53647415393f90dbeda1e3216d023eeb5420837d3
 
 %global framework kglobalaccel
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module for global shortcuts
 
 # The following are in the LICENSES folder but go unused: LGPL-2.1-only, LGPL-3.0-only, LicenseRef-KDE-Accepted-LGPL

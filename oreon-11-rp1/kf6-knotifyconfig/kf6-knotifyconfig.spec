@@ -1,14 +1,14 @@
-%global source0_hash 46ea907ebc6a538888fb32434ba8cde3e8ab4423df11ded693bcbe0b6e1d83b6
+%global source0_hash 81861316d615e7e5ff07143c1d58d9b52cadc5e02ab38c8f2677c01f71e51f26
 
 %global framework knotifyconfig
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for KNotify configuration
 
 License: CC0-1.0 AND LGPL-2.0-only

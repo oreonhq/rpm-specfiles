@@ -1,14 +1,14 @@
-%global source0_hash b68faa1c9012e40bbed516d8bb6be21e743af5aafb0249a84c29a7d9ff150d0d
+%global source0_hash 434edf78df8f4c9f25000d107ad1520d7ac14db580a202047bf19cbf77376522
 
 %global framework karchive
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	6%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with archive functions
 License:        LGPL-2.0-or-later AND BSD-2-Clause
 URL:            https://invent.kde.org/frameworks/%{framework}

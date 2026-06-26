@@ -1,9 +1,9 @@
-%global source0_hash c4d61f6bb4c61452e83de0427f444cdec296d87333f6c7676fb7dae09480f4d2
+%global source0_hash 68d43f014639ae6097012cdd67bdbbefd5425b17d2322d94f55be2b138613e0a
 
 %global framework ksvg
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 %ifarch aarch64
 # Smaller aarch64 VMs OOM (cc1plus Killed, bogus assembler errors) with flto + high -j
@@ -13,8 +13,8 @@
 
 Name:    kf6-ksvg
 Summary: Components for handling SVGs
-Version: 6.24.0
-Release:	7%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}

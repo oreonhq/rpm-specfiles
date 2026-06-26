@@ -1,14 +1,14 @@
-%global source0_hash none
+%global source0_hash 6a9f40936ba946279063cbdaea473b9eb735b53047b0124c88aca7db17ccabac
 
 %undefine __cmake_in_source_build
 %global framework kimageformats
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	11%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+

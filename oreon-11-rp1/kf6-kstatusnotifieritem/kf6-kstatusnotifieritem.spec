@@ -1,13 +1,13 @@
-%global source0_hash f76c77dcc27a60007330329a6d6c60298c11ddddba82f710a90715ec81f886ff
+%global source0_hash a2eec2a981ed9da6cffc955cc21a50dcbc77141cbb840d915f92d1897442d239
 
 %global framework kstatusnotifieritem
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	6%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        Implementation of Status Notifier Items
 
 License:        CC0-1.0 AND LGPL-2.0-or-later

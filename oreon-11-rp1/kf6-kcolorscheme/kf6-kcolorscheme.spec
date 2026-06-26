@@ -1,14 +1,14 @@
-%global source0_hash e9c9e0155e9b8049ad8588049645c998494b91145648467ddcbef178e31e84c5
+%global source0_hash 574e12350ea1adf248c5263cf18d145476d368664a302514d1065aa2563e1efd
 
 %global framework kcolorscheme
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: Classes to read and interact with KColorScheme
 License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LGPL-3.0-only and (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}

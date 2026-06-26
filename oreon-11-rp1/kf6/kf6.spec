@@ -4,8 +4,8 @@
 
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
-Version: 6.24.0
-Release: 17%{?dist}
+Version: 6.27.0
+Release: 1%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -106,6 +106,9 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %changelog
+* Wed Jun 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.27.0-1
+- 6.27.0
+
 * Sun Apr 05 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-16
 - %%cmake_install_kf6: require files under .doc before install_html_docs (avoid empty-dir false positive)
 

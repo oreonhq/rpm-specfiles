@@ -1,14 +1,14 @@
-%global source0_hash f87f887323675d8b36ae9d157ce29848ac0eb1731ffd0c0aec9d79405e793616
+%global source0_hash 36d5c9cf8a851a63c1064d6a9987e961c0860ebd1396cda99119e570847df721
 
 %global framework kxmlgui
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for user-configurable main windows
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

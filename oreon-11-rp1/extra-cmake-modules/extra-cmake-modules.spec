@@ -1,7 +1,7 @@
 %global source0_hash none
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 %global framework extra-cmake-modules
@@ -15,7 +15,7 @@
 
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
-Version: 6.24.0
+Version: 6.27.0
 Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
@@ -92,6 +92,9 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_vpath_builddir} ||:
 
 
 %changelog
+* Wed Jun 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.27.0-1
+- 6.27.0
+
 * Tue Mar 10 2026 Steve Cossette <farchord@gmail.com> - 6.24.0-1
 - 6.24.0
 

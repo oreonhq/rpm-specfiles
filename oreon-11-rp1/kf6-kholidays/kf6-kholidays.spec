@@ -1,14 +1,14 @@
-%global source0_hash 94a3c4ea003b82e0307ff81a665f957bb5ab9a6043e60faf1a2aee727519b7be
+%global source0_hash 84ce2acd5565a9510d74945ea2311f8c099cb031393255d1c8d399665d57b914
 
 %global		framework kholidays
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	The KHolidays Library
 
 License:	BSD-2-Clause AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.0-or-later WITH Bison-exception-2.2

@@ -1,13 +1,13 @@
-%global source0_hash 7424b61c152764c84d4dbba51ad960a9d7894e6909ecfaaa13e7b129585c0b57
+%global source0_hash cd812ae95b0e95b40e46a50b9dea6d188eec001be96b1e1a5d962730e5f9bc58
 
 %global		framework ki18n
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon for localization
 License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND ODbl-1.0
 URL:		https://invent.kde.org/frameworks/%{framework}

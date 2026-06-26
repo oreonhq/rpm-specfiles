@@ -1,14 +1,14 @@
-%global source0_hash 45cfbdd8419bd1ade54a6f54050f2465de76a4f91b7a702b806930e6fbb3651f
+%global source0_hash e19728b80e6cc017502fcb50fe6d7e9b5ba9727871ac3a4e9811875e01cb5fe9
 
 %global		framework kconfig
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with advanced configuration system
 License:	BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}

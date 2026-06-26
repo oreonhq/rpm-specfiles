@@ -1,13 +1,13 @@
-%global source0_hash f60981d4000961425cbeabe90f0f77e9792cbd5421e55b4c224fdb14aa96b2a5
+%global source0_hash 4f24067915b05a1d0cc87e2c37f37eb0e8c441e8fccdf06ca27ee7b923058243
 
 %global framework kded
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	4%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with extensible daemon for system-level services
 
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later

@@ -1,14 +1,14 @@
-%global source0_hash f596667e272524b336f86dd81b9be487e3d75cbedcb2078293f51bb2ee6f384c
+%global source0_hash 741934765f0c9f1c535598203fbad3f1b97231cc683a218a7f39fab948c13eab
 
 %global framework kauth
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 module to perform actions as privileged user
 # LGPL-2.0-or-later is also in the project's LICENSES, but is unused according to reuse.
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later

@@ -1,14 +1,14 @@
-%global source0_hash f7b3e5fab52949d16c0fce96afc5aaeb1cc94b47536e024d580750ffb1739723
+%global source0_hash 3736c6d6cd389efc89adbcb64fe7ba25ffc9d62eb8eaf6393f42bb85f655a8c7
 
 %global framework kservice
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 
 # The following licenses are in the LICENSES folder but go unused: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, LicenseRef-KDE-Accepted-GPL
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

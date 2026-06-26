@@ -1,14 +1,14 @@
-%global source0_hash d00d697aa8ce7a5a16864e92bc74f52adb2b3008881d6e12b66155a80b136915
+%global source0_hash b14e81143aed25ee62413f9c2b3742c558f5b6a1da6c5b92ca9a95bb6341e964
 
 %global framework kdeclarative
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for Qt declarative
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND MIT

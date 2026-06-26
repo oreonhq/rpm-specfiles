@@ -1,14 +1,14 @@
-%global source0_hash 2f506908ff32ffcdd9918879070b666c9384b079493c25f80735553e332a53fd
+%global source0_hash 70a9ee69b4357ebf83cc87aa61db6fdff8c96a59e24f9572e51716f1d3c579fe
 
 %global framework solid
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:           kf6-%{framework}
-Version:        6.24.0
-Release:	7%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 integration module that provides hardware information
 License:        LGPL-2.1-or-later AND LGPL-2.1-only AND CCO-1.0 AND BSD-3-Clause AND LGPL-3.0-only
 URL:            https://solid.kde.org/

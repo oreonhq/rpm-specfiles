@@ -1,14 +1,14 @@
-%global source0_hash 12bb0b34ac9ae39b96d189cc0b29f526ae12a9014d0aad3721cacc9148e42940
+%global source0_hash eeb067fab001dd24735ad56e8ec4808fca76e5ecdf003cf614246c9abe1c3e19
 
 %global framework knotifications
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 solution with abstraction for system notifications
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

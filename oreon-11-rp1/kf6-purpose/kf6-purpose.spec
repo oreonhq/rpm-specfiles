@@ -1,15 +1,15 @@
-%global source0_hash e95dba236f79bf1655a0581e9f1c3ce64d342750135fde700d463dd205bebc47
+%global source0_hash c4e348fa5ac990a77b3926105c62bc4f2dddaf8d7554c43ee4f18de3d16a3699
 
 %global framework purpose
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}

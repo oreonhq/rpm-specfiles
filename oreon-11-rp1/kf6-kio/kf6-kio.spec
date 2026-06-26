@@ -1,14 +1,14 @@
-%global source0_hash 9fbe26ae37924f92f558ccdc09b573db38d8f07828894042ea3f8ddd4568f3c4
+%global source0_hash fc201b02c277a35ce81414b1de7e6f851e46b0b5d43beb784936a4a6dc6167d0
 
 %global framework kio
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	8%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for filesystem abstraction
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT

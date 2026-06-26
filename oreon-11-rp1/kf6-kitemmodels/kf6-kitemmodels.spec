@@ -1,13 +1,13 @@
-%global source0_hash 6636bf47de0df2464a94691a1092340efba2abc91fb305253bbb9058af959727
+%global source0_hash f5aec7198b161562616c139ed037e562e7ae6822b839f67c8c2e2f97678fc58e
 
 %global		framework kitemmodels
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with item models
 
 License:	CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only

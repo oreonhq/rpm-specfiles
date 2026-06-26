@@ -1,13 +1,13 @@
-%global source0_hash 85021f69f61d09fe5b1b01075dff4fc90b4d3598f7e83bdd4fee31d4a01488e0
+%global source0_hash 18a92b802b1c3130ff22087f9e048807bdf39c4147835e9aaa1be18408b9361b
 
 %global		framework ktexttemplate
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	Separates the structure of documents from their data
 License:	CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:		https://invent.kde.org/frameworks/%{framework}

@@ -1,15 +1,15 @@
-%global source0_hash 1f72676817b9636b80c971934fb7f2c5d396da4758c33998abc4b9ae82195ce4
+%global source0_hash 6b226118bde28e81217f8cd6129f6e24c5d422bd7a322fe682e592b028b72db7
 
 %global framework baloo
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
 Summary: A Tier 3 KDE Frameworks 6 module that provides indexing and search functionality
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND bzip2-1.0.6
 URL:     https://invent.kde.org/frameworks/%{framework}

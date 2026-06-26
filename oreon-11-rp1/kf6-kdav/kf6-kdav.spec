@@ -1,14 +1,14 @@
-%global source0_hash acc5698655403a0d2fbeadf2405218662a42d2201c41edb33651083615642913
+%global source0_hash e0af4190960d65f5c8475f01213ea4e68a07763ffeaa6766de4b7f50529e0498
 
 %global framework kdav
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: A DAV protocol implementation with KJobs
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later

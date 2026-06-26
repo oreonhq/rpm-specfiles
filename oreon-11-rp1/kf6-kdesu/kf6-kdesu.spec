@@ -1,13 +1,13 @@
-%global source0_hash be5add002c4f3d96c2632ecebbf5633d9792f9d13d61a91a6a2c349540a807d3
+%global source0_hash a8a0c5103cb43dc62952aab76bb7e576e8643dbb31672e2ac2988279ab571700
 
 %global framework kdesu
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration with su
 
 License: CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

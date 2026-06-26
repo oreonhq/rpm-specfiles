@@ -1,9 +1,9 @@
-%global source0_hash fd703c777712ad0e20a849f837c3ad7880eb82c1beb50196608cb326373f78e3
+%global source0_hash 2b737a61737e73650cd0b40d9e246a182dcccc6c8ae8121cfcb9415433ee41ae
 
 %global framework ktexteditor
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 %ifarch aarch64
 %global _lto_cflags %{nil}
@@ -11,8 +11,8 @@
 %endif
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	7%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 with advanced embeddable text editor
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND MIT

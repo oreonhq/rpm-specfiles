@@ -1,13 +1,13 @@
-%global source0_hash 5775d7292a31c0ca339b385c18f3716fda5486317423c53809a10d8008ff8e4d
+%global source0_hash 46d06321bbccadb8f3fbb948ffaac5eff18dad9552fde677761ddddb9470202f
 
 %global framework krunner
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution with parallelized query system
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

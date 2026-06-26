@@ -1,14 +1,14 @@
-%global source0_hash aaf473e80021c63e06df6ee200a61e71296665c770a5046ef297d2082fa77d65
+%global source0_hash 55eefe8ebc67a040e64c75482276c29a69d0c5877b7b3674f4c7a40238c6d44c
 
 %global framework frameworkintegration
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 4 workspace and cross-framework integration plugins
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}

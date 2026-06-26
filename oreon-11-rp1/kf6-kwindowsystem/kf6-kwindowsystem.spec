@@ -1,14 +1,14 @@
-%global source0_hash 2291d95836e8b81263ceea0c1ffa7cfd92773130d6edd130b439874169f13e58
+%global source0_hash 401e5700ab36530a605410464268bf726c898da42c6f7d7bf05a9db00ccfe172
 
 %global		framework kwindowsystem
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	7%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module with classes for windows management
 License:	CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}

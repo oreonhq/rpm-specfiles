@@ -1,15 +1,15 @@
-%global source0_hash 3004be541acf03b6e2203b5eafede7f9d9a8fe41d77cdd2aee35e03f13929a30
+%global source0_hash 5ad0228aa4872f6238b93827e99d263aebcc7e0bfc4f28ba3cf39c0fd2add7a9
 
 %global framework kuserfeedback
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 
 License: MIT AND CC0-1.0 AND BSD-3-Clause
 URL:     https://invent.kde.org/frameworks/%{framework}

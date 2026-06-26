@@ -1,14 +1,14 @@
-%global source0_hash 4544428c3c96587e46342daf5b1f083dd7950c7bc940d7bc7921300600ef8074
+%global source0_hash f8e1083863dac2c07068b10614ca7d4b52c6920df0228854cfc37e0d6578d902
 
 %global framework kcrash
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for handling application crashes
 
 License: CC0-1.0 AND LGPL-2.0-or-later

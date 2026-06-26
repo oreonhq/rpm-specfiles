@@ -1,14 +1,14 @@
-%global source0_hash 39ea2b51fd0e405b964c1f22d64ad0111c79895894590d68b29712d7dde4cd34
+%global source0_hash 760903e9ae401f8bcdb9efc9ad6548982642e7411a223c8ceb41e5491a6b1135
 
 %define framework prison
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
 Summary:	KDE Frameworks 6 Tier 1 barcode library
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 License:	BSD-3-Clause AND CC0-1.0 AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz

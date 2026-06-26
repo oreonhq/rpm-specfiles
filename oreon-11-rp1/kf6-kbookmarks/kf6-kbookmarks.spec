@@ -1,14 +1,14 @@
-%global source0_hash e2ada057c77f5939e7172d0c3acd8c85273b0823b28697c89cbc2cce23d68d5d
+%global source0_hash 75a43775ef03cb0c577c70d9605203789b3c75b786efa17a2e8c286d0c55fb93
 
 %global framework kbookmarks
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for bookmarks manipulation
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND LicenseRef-KDE-Accepted-LGPL
 URL:     https://invent.kde.org/frameworks/%{framework}

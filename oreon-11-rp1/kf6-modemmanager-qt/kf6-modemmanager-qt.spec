@@ -1,13 +1,13 @@
-%global source0_hash c658ff8e19e27c9d7980552d4094233fbe0ad286f5a6927fa687255e84e80ed2
+%global source0_hash a893a169dd40c430c51d39326b1af0aab2a9d6c20adc34f2b8e6332c152f6234
 
 %global framework modemmanager-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	7%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: A Tier 1 KDE Frameworks module wrapping ModemManager DBus API
 License: GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}

@@ -1,14 +1,14 @@
-%global source0_hash b4a0b72167e0f77974aafe93305c18dcc99c0e66c1f2fd56a3e44d78e72f54e7
+%global source0_hash 0c2ce39f110e12ff0882c725bee7455b9085489c12d31eb4b3164b150fb8de24
 
 %global framework kparts
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for KParts
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

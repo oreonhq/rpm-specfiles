@@ -1,13 +1,13 @@
-%global source0_hash 99e282bf23a0398dd9a22ce94168a8228bbf1b72aaaf9c52154b70b8a768a05c
+%global source0_hash e28036eba9bf94f62466eaff66f49305fff9dd576a317df2474d6bfe5bfbc759
 
 %global framework syndication
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: The Syndication Library
 
 # Qt-Commercial-exception-1.0 is also found in the LICENSES folder, but is unused except for tests which we don't use anyway

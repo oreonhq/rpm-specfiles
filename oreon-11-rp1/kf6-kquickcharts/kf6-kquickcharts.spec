@@ -1,14 +1,14 @@
-%global source0_hash 3b4a14a8197e2c225dc4717971cc626c9f9b0606c612bcb740f80ef9b6bd1aab
+%global source0_hash d2a533bbf3d7f257e9306009bc32bdea41346cbd8e82d06c188879d5f0460380
 
 %global		framework kquickcharts
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:		kf6-%{framework}
 Summary:	A QtQuick module providing high-performance charts
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 
 License:	BSD-2-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}

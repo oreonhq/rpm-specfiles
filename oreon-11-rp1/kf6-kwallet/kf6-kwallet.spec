@@ -1,13 +1,13 @@
-%global source0_hash 094a26ec24a2fc9ae73096c47da2d963799668ef9e0e4004162a0082e54f9520
+%global source0_hash daa03acc40eec873bb450fd8116ae7c788b86a7ceebc9fa555b4a166feeb7983
 
 %global framework kwallet
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	10%{?dist}
+Version: 6.27.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for password management
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later

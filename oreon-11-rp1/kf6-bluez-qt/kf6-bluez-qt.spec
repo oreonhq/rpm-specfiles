@@ -1,15 +1,15 @@
-%global source0_hash 907cf77ca2bf0417dad49ac3ebfe51300102029b93520dce5cfa5c35e25e5ab3
+%global source0_hash 3e22c1f71f3d93f572c2a1126edc2aa16151f8bad10f9f1ddb7e41dd372aee70
 
 %global framework bluez-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
  
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez
-Version:        6.24.0
-Release:	5%{?dist}
+Version:        6.27.0
+Release:        1%{?dist}
  
 License:        CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only
 URL:            https://invent.kde.org/frameworks/%{framework}

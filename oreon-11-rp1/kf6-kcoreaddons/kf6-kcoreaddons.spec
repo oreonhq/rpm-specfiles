@@ -1,14 +1,14 @@
-%global source0_hash bc2fb0d94de859f6e6bc7413620584f072ace1487e302c65b3398d7c6b0eff7c
+%global source0_hash ad0d0147968dabdcf011425cf7764e71a0d0cfdc30e9e34b561ea5ba9a768001
 
 %global		framework kcoreaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.24
+%global majmin_ver_kf6 6.27
 
 
 Name:		kf6-%{framework}
-Version:	6.24.0
-Release:	6%{?dist}
+Version:	6.27.0
+Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtCore
 License:	BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND MPL-1.1 AND LGPL-2.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-2.1-only WITH Qt-LGPL-exception-1.1
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -26,6 +26,7 @@ BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(Qt6QmlTools)
 BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  systemd-devel
+BuildRequires:  pkgconfig(mount)
 
 # required for pyside6 python bindings
 BuildRequires:  python3-devel
