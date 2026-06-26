@@ -91,7 +91,7 @@ sed -i \
 %{_prefix}/%{_lib}/qt6/qml/org/kde/
 %{_prefix}/lib/qt6/qml/org/kde/
 %{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10)
+%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon})
 %{_datadir}/config.kcfg/
 %{_datadir}/kconf_update/
 %{_datadir}/knsrcfiles/
