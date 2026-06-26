@@ -276,6 +276,8 @@ ln -sr %{buildroot}%{_kf6_bindir}/kwin_wayland %{buildroot}%{_bindir}/kwin
 %{_libexecdir}/kwin_killer_helper
 %{_libexecdir}/kwin-applywindowdecoration
 %{_libexecdir}/kwin-tabbox-preview
+%{_libexecdir}/kwin_dialog_helper
+%{_libexecdir}/kwin_eis_prompter
 %{_datadir}/kconf_update/kwin.upd
 %{_kf6_datadir}/knotifications6/kwin.notifyrc
 %{_kf6_datadir}/config.kcfg/kwin.kcfg
