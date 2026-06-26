@@ -1,17 +1,17 @@
-%global source0_hash 1b220e3eec1714f0451b0e3652979bd280edf10893f617837b88e6359a804ded
+%global source0_hash b5b7eba62453eb8c6f6a5fbf7155b71cde693bafe9cd5f03b79ed8c714816afe
 
-%global commit 04f10f650d514df88b76d25e83db360142c7b174
+%global commit ad9184e76a66b1001c29db9b0a3e87f646c64de0
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 
 Name:           spirv-headers
 Version:        1.5.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Header files from the SPIR-V registry
 
 License:        MIT
 URL:            https://github.com/KhronosGroup/SPIRV-Headers/
-Source0:        https://github.com/KhronosGroup/SPIRV-Headers//archive/refs/tags/04f10f650d514df88b76d25e83db360142c7b174/spirv-headers-04f10f6.tar.gz#/spirv-headers-04f10f6.tar.gz
+Source0:        %{url}archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 
