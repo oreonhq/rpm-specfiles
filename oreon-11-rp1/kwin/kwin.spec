@@ -238,7 +238,7 @@ export LDFLAGS="$LDFLAGS -fuse-ld=mold"
 %ifarch x86_64 aarch64
     -DCMAKE_LINKER=%{_bindir}/ld.mold \
 %endif
-%ninja_build
+%cmake_build
 
 %install
 %cmake_install
