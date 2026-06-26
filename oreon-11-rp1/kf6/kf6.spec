@@ -70,8 +70,8 @@ mkdir -p %{buildroot}%{_sysconfdir}/xdg/plasma-workspace/{env,shutdown}
 %endif
 
 # macros.zz-kf6 sorts after macros.qt6 so %%cmake_build_kf6 is not overwritten by qt6-rpm-macros.
-install -Dpm644 %{_sourcedir}/macros.kf6 %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
-install -Dpm644 %{_sourcedir}/LICENSE %{buildroot}%{_datadir}/kf6/LICENSE
+install -Dpm644 %{SOURCE0} %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
+install -Dpm644 %{SOURCE1} %{buildroot}%{_datadir}/kf6/LICENSE
 sed -i \
   -e "s|@@kf6_VERSION@@|%{version}|g" \
   %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
