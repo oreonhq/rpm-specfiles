@@ -127,6 +127,10 @@ BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  libevdev-devel
 BuildRequires:  systemd-devel
 
+%ifarch x86_64 aarch64
+BuildRequires:  mold
+%endif
+
 ## Runtime deps
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       %{name}-common%{?_isa} = %{version}-%{release}
@@ -227,7 +231,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%cmake_kf6
+%ifarch x86_64 aarch64
+export LDFLAGS="%{build_ldflags} -fuse-ld=mold"
+%endif
+%cmake_kf6 \
+    -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+%ifarch x86_64 aarch64
+    -DCMAKE_LINKER=%{_bindir}/ld.mold \
+%endif
 %cmake_build
 
 %install
