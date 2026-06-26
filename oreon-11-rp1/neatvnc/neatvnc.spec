@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 54144651ec4e902be8c852ebf619b10207e9dbbef5336f8afe371f4bbd3d7617
 
 # -*-Mode: rpm-spec -*-
 
 Name:     neatvnc
 Version:  0.9.0
-Release:  6%{?dist}
+Release:  7%{?dist}
 Summary:  Liberally licensed VNC server library
 # main source is ISC
 # include/sys/queue.h is BSD
