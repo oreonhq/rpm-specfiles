@@ -12,6 +12,7 @@ URL:            https://github.com/executablebooks/markdown-it-py
 Source0:        https://github.com/executablebooks/markdown-it-py/archive/v%{version}/markdown-it-py-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 BuildRequires:  pyproject-rpm-macros
 
 %global _description %{expand:

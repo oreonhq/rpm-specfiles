@@ -11,6 +11,7 @@ URL:            https://github.com/gabrielcnr/pytest-datadir
 Source0:        https://github.com/gabrielcnr/pytest-datadir/archive/v%{version}/pytest-datadir-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 BuildRequires:  pyproject-rpm-macros
 
 %global _description %{expand:

@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-%pyproject_buildrequires -x num,image,dataframe
+%pyproject_buildrequires
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
