@@ -5,6 +5,7 @@
 %global min_ver_kf6 7
 %global bug_ver_kf6 1
 
+%global _lto_cflags %{nil}
 
 Name:    kwin
 Version: 6.7.1
@@ -20,7 +21,9 @@ Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{m
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
-
+# https://bugs.kde.org/521687
+# https://bugs.kde.org/521960
+Patch: https://invent.kde.org/plasma/kwin/-/commit/83e413ab71aac79c14de7e90e941fb2a0b314477.patch
 
 ## proposed patches
 
