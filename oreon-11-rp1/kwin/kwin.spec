@@ -6,6 +6,7 @@
 %global bug_ver_kf6 1
 
 %global _lto_cflags %{nil}
+%undefine _include_minidebuginfo
 
 Name:    kwin
 Version: 6.7.1
@@ -36,6 +37,7 @@ BuildRequires:  cmake(KF6Package)
 BuildRequires:  cmake(KF6XmlGui)
 BuildRequires:  vulkan-devel
 BuildRequires:  kf6-rpm-macros
+BuildRequires:  ninja-build
 BuildRequires:  systemd-rpm-macros
 
 # Qt
@@ -98,7 +100,6 @@ BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Service)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6NewStuff)
 BuildRequires:  cmake(KF6Declarative)
@@ -217,13 +218,6 @@ Conflicts:      kde-workspace-devel < 5.0.0-1
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        User manual for %{name}
-Requires:       %{name} = %{version}-%{release}
-BuildArch:      noarch
-%description    doc
-%{summary}.
-
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -231,22 +225,26 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
+_annobin_strip='s/[[:space:]]*-specs=\/usr\/lib\/rpm\/redhat\/redhat-annobin-[^[:space:]]*//g'
+export CFLAGS="$(echo '%{build_cflags}' | sed -E "$_annobin_strip")"
+export CXXFLAGS="$(echo '%{build_cxxflags}' | sed -E "$_annobin_strip")"
+export LDFLAGS="$(echo '%{build_ldflags}' | sed -E "$_annobin_strip")"
 %ifarch x86_64 aarch64
-export LDFLAGS="%{build_ldflags} -fuse-ld=mold"
+export LDFLAGS="$LDFLAGS -fuse-ld=mold"
 %endif
 %cmake_kf6 \
+    -GNinja \
     -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
 %ifarch x86_64 aarch64
     -DCMAKE_LINKER=%{_bindir}/ld.mold \
 %endif
-%cmake_build
+%ninja_build
 
 %install
 %cmake_install
 
-%find_lang %{name} --with-html --all-name
-grep "%{_kf6_docdir}" %{name}.lang > %{name}-doc.lang
-cat %{name}.lang %{name}-doc.lang | sort | uniq -u > kwin6.lang
+%find_lang %{name} --all-name
+mv %{name}.lang kwin6.lang
 
 # co-own Xwayland-session.d folder
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/Xwayland-session.d
@@ -301,10 +299,6 @@ ln -sr %{buildroot}%{_kf6_bindir}/kwin_wayland %{buildroot}%{_bindir}/kwin
 %{_includedir}/kwin
 %{_libdir}/cmake/KWin
 %{_libdir}/libkwin.so
-
-%files doc -f %{name}-doc.lang
-%license LICENSES/*.txt
-
 
 %changelog
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
