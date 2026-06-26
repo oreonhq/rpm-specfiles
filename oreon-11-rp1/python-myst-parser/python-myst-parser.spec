@@ -12,6 +12,7 @@ Source0:        https://github.com/executablebooks/MyST-Parser/archive/v%{versio
 Patch:          Adjust-test-output-to-docutils-0.22.patch
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 BuildRequires:  pyproject-rpm-macros
 
 %global _description %{expand:
@@ -30,7 +31,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/docutils>=0\.19,<0\.22/docutils>=0.19/' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+%pyproject_buildrequires -x testing,code_style,linkify,rtd,testing-docutils
 
 %build
 %pyproject_wheel

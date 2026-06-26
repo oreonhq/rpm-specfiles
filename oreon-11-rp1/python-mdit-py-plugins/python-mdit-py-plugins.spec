@@ -11,6 +11,7 @@ URL:            https://github.com/executablebooks/mdit-py-plugins
 Source0:        https://github.com/executablebooks/mdit-py-plugins/archive/v%{version}/mdit-py-plugins-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 BuildRequires:  pyproject-rpm-macros
 
 %global _description %{expand:
@@ -28,7 +29,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n mdit-py-plugins-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+%pyproject_buildrequires -x testing,code_style
 
 %build
 %pyproject_wheel
