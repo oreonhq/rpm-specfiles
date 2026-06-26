@@ -4,7 +4,7 @@
 
 Name:           python-pytest-regressions
 Version:        2.11.0
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Pytest fixtures for writing regression tests
 License:        MIT
 URL:            https://pytest-regressions.readthedocs.io/
@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-%pyproject_buildrequires
+%pyproject_buildrequires -x num,image,dataframe
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
