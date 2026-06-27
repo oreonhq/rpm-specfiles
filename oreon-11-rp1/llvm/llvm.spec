@@ -10,7 +10,7 @@
 
 %bcond_with snapshot_build
 %if %{with snapshot_build}
-%include %{_sourcedir}/version.spec.inc
+%include %{SOURCE1000}
 %endif
 #endregion version
 
@@ -2003,8 +2003,9 @@ cd ..
 
 # MIPS and Arm targets were disabled in LLVM 20, but we still need them
 # enabled for the compat libraries.
+%global compat_cmake_prefix ../llvm-compat-prefix
 %cmake -S ../llvm-project-%{compat_ver}.src/llvm -B ../llvm-compat-libs -G Ninja \
-    -DCMAKE_INSTALL_PREFIX=%{buildroot}%{_libdir}/llvm%{compat_maj_ver}/ \
+    -DCMAKE_INSTALL_PREFIX=%{compat_cmake_prefix} \
     -DCMAKE_SKIP_RPATH=ON \
     -DLLVM_ENABLE_PROJECTS="clang;lldb" \
     -DLLVM_INCLUDE_BENCHMARKS=OFF \
