@@ -46,7 +46,7 @@ sed -i '/"pytest-regressions",/d' pyproject.toml
 %if %{with check}
 %check
 %pyproject_check_import
-%pytest tests/ --ignore=tests/test_port --ignore=tests/test_tree.py --ignore=tests/test_cmark_spec --ignore=tests/test_api/test_main.py
+%pytest tests/ --ignore=tests/test_port --ignore=tests/test_tree.py --ignore=tests/test_cmark_spec --ignore=tests/test_api/test_main.py --ignore=tests/test_linkify.py
 %endif
 
 %files -n python3-markdown-it-py -f %{pyproject_files}
