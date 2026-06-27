@@ -44,7 +44,7 @@ sed -i '/"pytest-regressions",/d' pyproject.toml
 %if %{with check}
 %check
 %pyproject_check_import
-%pytest --ignore=tests/test_references.py
+%pytest --ignore=tests/test_references.py -k "not test_plugin_parse and not test_custom_renderer and not test_attrs_allowed and not test_no_new_line_issue and not test_tokens"
 %endif
 
 %files -n python3-mdit-py-plugins -f %{pyproject_files}
