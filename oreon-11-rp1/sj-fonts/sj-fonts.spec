@@ -94,6 +94,3 @@ install -Dm 0644 -p %{SOURCE4} \
 %doc README
 
 %dir %{_fontdir}
-
-%changelog
-%autochangelog
