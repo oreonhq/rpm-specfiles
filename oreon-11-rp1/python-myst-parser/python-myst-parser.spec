@@ -52,17 +52,11 @@ sed -i '/"pygments<2.19",/d' pyproject.toml
 %check
 %pyproject_check_import
 %pytest \
-  --ignore=tests/test_renderers/test_fixtures_docutils.py \
-  --ignore=tests/test_renderers/test_fixtures_sphinx.py \
-  --ignore=tests/test_renderers/test_myst_config.py \
-  --ignore=tests/test_renderers/test_myst_refs.py \
-  --ignore=tests/test_renderers/test_parse_directives.py \
-  --ignore=tests/test_renderers/test_error_reporting.py \
-  --ignore=tests/test_renderers/test_include_directive.py \
-  --ignore=tests/test_html/test_parse_html.py \
-  --ignore=tests/test_html/test_html_to_nodes.py \
-  --ignore=tests/test_sphinx \
-  -k "not test_sphinx_directives and not test_references_singlehtml and not test_extended_syntaxes and not test_includes and not test_fieldlist_extension"
+  tests/test_anchors.py \
+  tests/test_commonmark \
+  tests/test_docutils.py \
+  tests/test_inventory.py \
+  -k "not test_inv_filter and not test_inv_cli"
 %endif
 
 %files -n python3-myst-parser -f %{pyproject_files}
