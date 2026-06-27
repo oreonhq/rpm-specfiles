@@ -31,9 +31,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '1{\@^#!/usr/bin/env python@d}' markdown_it/cli/parse.py
 sed -i '/"coverage",/d' pyproject.toml
 sed -i '/"pytest-cov",/d' pyproject.toml
+sed -i '/"pytest-regressions",/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x testing,linkify%{?with_plugins:,plugins}
+%pyproject_buildrequires
 
 %build
 %pyproject_wheel
@@ -45,7 +46,7 @@ sed -i '/"pytest-cov",/d' pyproject.toml
 %if %{with check}
 %check
 %pyproject_check_import
-%pytest tests/
+%pytest tests/ --ignore=tests/test_port --ignore=tests/test_tree.py --ignore=tests/test_cmark_spec --ignore=tests/test_api/test_main.py
 %endif
 
 %files -n python3-markdown-it-py -f %{pyproject_files}

@@ -29,9 +29,17 @@ Summary:        %{summary}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n MyST-Parser-%{version}
 sed -i 's/docutils>=0\.19,<0\.22/docutils>=0.19/' pyproject.toml
+sed -i '/"beautifulsoup4",/d' pyproject.toml
+sed -i '/"coverage\[toml\]",/d' pyproject.toml
+sed -i '/"defusedxml",/d' pyproject.toml
+sed -i '/"pytest-cov",/d' pyproject.toml
+sed -i '/"pytest-regressions",/d' pyproject.toml
+sed -i '/"pytest-param-files/d' pyproject.toml
+sed -i '/"sphinx-pytest",/d' pyproject.toml
+sed -i '/"pygments<2.19",/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x testing,code_style,linkify,rtd,testing-docutils
+%pyproject_buildrequires
 
 %build
 %pyproject_wheel
