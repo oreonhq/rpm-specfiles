@@ -2,7 +2,7 @@
 
 Name:           python-roman-numerals
 Version:        4.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Manipulate well-formed Roman numerals
 
 License:        0BSD
@@ -22,8 +22,8 @@ in various programming languages.}
 
 %package -n     python3-roman-numerals-py
 Summary:        %{summary}
-
-%py_provides    python3-roman-numerals-py
+Provides:       python%{python3_pkgversion}dist(roman-numerals-py) = %{version}
+Provides:       python3dist(roman-numerals-py) = %{version}
 
 %description -n python3-roman-numerals-py %_description
 
