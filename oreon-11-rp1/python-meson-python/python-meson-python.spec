@@ -16,7 +16,7 @@
 Name:           python-meson-python
 Summary:        Meson Python build backend (PEP 517)
 Version:        0.19.0
-Release:        %autorelease
+Release:        2%{?dist}
 
 # SPDX
 License:        MIT
@@ -30,16 +30,16 @@ Patch100:        meson-python-0.18.0-remove-patchelf.patch
 
 BuildArch:      noarch
 
-# for %%pyproject_buildrequires -p
+BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros >= 1.15.1
-BuildRequires:  python3-pyproject-metadata
-BuildRequires:  python3-pytest
 
 %if %{with tests}
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  git-core
+BuildRequires:  meson
+BuildRequires:  ninja-build
 %endif
 
 %global common_description %{expand:
@@ -90,6 +90,19 @@ sed -r -i "s/^  '(wheel)/#&/" pyproject.toml
 %endif
 
 
+%generate_buildrequires
+%pyproject_buildrequires -w %{?with_tests:-x test}
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+%pyproject_save_files mesonpy
+
+
 %check -a
 %if %{with tests}
 # Note: tests are *not* safe for parallel execution with pytest-xdist.
@@ -115,6 +128,8 @@ k="${k-}${k+ and }not test_uneeded_rpath"
 %endif
 
 python3 -m pytest ${ignore-} -k "${k-}"
+%else
+%pyproject_check_import
 %endif
 
 
@@ -124,5 +139,4 @@ python3 -m pytest ${ignore-} -k "${k-}"
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-1
-- Import
+%autochangelog
