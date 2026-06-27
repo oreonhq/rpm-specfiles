@@ -1,7 +1,7 @@
 %global source0_hash 2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d
 
 %bcond CHECK 1
-%bcond_with gnutls
+%bcond_without gnutls
 %bcond_with docs
 
 Name:           ngtcp2
@@ -119,12 +119,7 @@ install -p -m 644 %{SOURCE5} doc/source/
 
 %build
 autoreconf -fsi
-%{_oreon_configure_common}
-%if %{with gnutls}
-./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --libdir=%{_libdir} --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
-%else
-./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --libdir=%{_libdir} --with-openssl --with-libev --disable-static --enable-werror
-%endif
+%configure --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
 %make_build
 %if %{with docs}
 %make_build html
