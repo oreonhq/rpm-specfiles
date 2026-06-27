@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source3000_hash 6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
+%global source0_hash 9c6f37f6f5f68d38f435d25f770fc48c62d92b2412205767a16dac2c942f0c95
+%global source3000_hash none
 
 #region globals
 #region version
@@ -50,6 +50,7 @@
 %if %{with bundle_compat_lib}
 %global compat_maj_ver 20
 %global compat_ver %{compat_maj_ver}.1.8
+%global source3000_hash 6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
 %endif
 
 # Compat builds do not include python-lit
