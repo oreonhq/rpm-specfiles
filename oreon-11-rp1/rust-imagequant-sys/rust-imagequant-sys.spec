@@ -1,4 +1,4 @@
-%global source0_hash 3b0a41e0d8118bc6d9bb3416973734863211c14b11a2d3ba69d866a360fcdfc6
+%global source0_hash 399d307ead010ceffc6f45346b325f9de672da0fe05cfdfa5dec0e5551925e52
 
 %bcond_without check
 
@@ -7,12 +7,12 @@
 
 Name:           rust-imagequant-sys
 Version:        4.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Convert 24/32-bit images to 8-bit palette with alpha channel
 
 License:        GPL-3.0-or-later
 URL:            https://crates.io/crates/imagequant-sys
-Source0:        https://crates.io/api/v1/crates/imagequant-sys/%{version}/download
+Source0:        https://static.crates.io/crates/%{crate}/%{crate}-%{version}.crate
 Patch:          0001-explicitly-set-version_suffix_components-for-recent-.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
