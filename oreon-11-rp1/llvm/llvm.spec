@@ -1869,8 +1869,9 @@ fi
 %ifarch aarch64
 # llvm#160968: IR PGO value profiling + parallel lld can deadlock on aarch64
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DCMAKE_EXE_LINKER_FLAGS=-Wl,--threads=1 \\\
-  -DCMAKE_SHARED_LINKER_FLAGS=-Wl,--threads=1
+  "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
 %endif
 
 %if %{defined host_clang_maj_ver}
