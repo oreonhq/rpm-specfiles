@@ -1848,7 +1848,7 @@ fi
    \\\
   -DLLVM_BUILD_INSTRUMENTED=IR \\\
   -DLLVM_BUILD_RUNTIME=No \\\
-  -DLLVM_ENABLE_LTO:BOOL=Thin \\\
+  -DLLVM_ENABLE_LTO:BOOL=OFF \\\
   -DLLVM_USE_LINKER=lld
 
 # CLANG_INCLUDE_TESTS=ON is needed to make the target "generate-profdata" available
@@ -1865,6 +1865,13 @@ fi
 # counters at compile time.
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_VP_COUNTERS_PER_SITE=8
+
+%ifarch aarch64
+# llvm#160968: IR PGO value profiling + parallel lld can deadlock on aarch64
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DCMAKE_EXE_LINKER_FLAGS=-Wl,--threads=1 \\\
+  -DCMAKE_SHARED_LINKER_FLAGS=-Wl,--threads=1
+%endif
 
 %if %{defined host_clang_maj_ver}
 %global profdata %{_bindir}/llvm-profdata-%{host_clang_maj_ver}
