@@ -101,39 +101,6 @@
 %bcond_without flang
 %endif
 %endif
-
-%if %{with pgo} || %{with flang}
-%{lua:
-function print_max_procs(per_proc_mem)
-    local f = io.open("/proc/meminfo", "r")
-    local mem = 0
-    local nproc_str = nil
-    for line in f:lines() do
-        _, _, mem = string.find(line, "MemTotal:%s+(%d+)%s+kB")
-        if mem then
-           break
-        end
-    end
-    f:close()
-    local proc_handle = io.popen("nproc")
-    _, _, nproc_str = string.find(proc_handle:read("*a"), "(%d+)")
-    proc_handle:close()
-    local nproc = tonumber(nproc_str)
-    if nproc < 1 then
-        nproc = 1
-    end
-    local mem_mb = mem / 1024
-    local cpu = math.floor(mem_mb / per_proc_mem)
-    if cpu < 1 then
-        cpu = 1
-    end
-    if cpu > nproc then
-        cpu = nproc
-    end
-    print(cpu)
-end
-}
-%endif
 %if %{with flang}
 # flang depends on mlir, clang, flang, openmp.
 # Make sure those are being built.
@@ -192,6 +159,37 @@ end
 %endif
 #----------------------------------------
 #endregion pgo
+
+%{lua:
+function print_max_procs(per_proc_mem)
+    local f = io.open("/proc/meminfo", "r")
+    local mem = 0
+    local nproc_str = nil
+    for line in f:lines() do
+        _, _, mem = string.find(line, "MemTotal:%s+(%d+)%s+kB")
+        if mem then
+           break
+        end
+    end
+    f:close()
+    local proc_handle = io.popen("nproc")
+    _, _, nproc_str = string.find(proc_handle:read("*a"), "(%d+)")
+    proc_handle:close()
+    local nproc = tonumber(nproc_str)
+    if nproc < 1 then
+        nproc = 1
+    end
+    local mem_mb = mem / 1024
+    local cpu = math.floor(mem_mb / per_proc_mem)
+    if cpu < 1 then
+        cpu = 1
+    end
+    if cpu > nproc then
+        cpu = nproc
+    end
+    print(cpu)
+end
+}
 
 # Disable LTO on x86 and riscv in order to reduce memory consumption.
 %ifarch %ix86 riscv64
