@@ -102,22 +102,8 @@
 %endif
 %endif
 
-%if %{with flang}
-
-# Sanity check for flang
-# flang depends on mlir, clang, flang, openmp.
-# Make sure those are being built.
-%if %{without mlir}
-%{error:flang must be built --with=mlir}
-%endif
-
-# Set Fortran build flags to nil because they contain flags that don't apply to flang.
-%global build_fflags %{nil}
-
+%if %{with pgo} || %{with flang}
 %{lua:
-
--- Return the maximum number of parallel jobs a build can run based on the
--- amount of maximum memory used per process (per_proc_mem).
 function print_max_procs(per_proc_mem)
     local f = io.open("/proc/meminfo", "r")
     local mem = 0
@@ -129,7 +115,6 @@ function print_max_procs(per_proc_mem)
         end
     end
     f:close()
-
     local proc_handle = io.popen("nproc")
     _, _, nproc_str = string.find(proc_handle:read("*a"), "(%d+)")
     proc_handle:close()
@@ -142,13 +127,22 @@ function print_max_procs(per_proc_mem)
     if cpu < 1 then
         cpu = 1
     end
-
     if cpu > nproc then
         cpu = nproc
     end
     print(cpu)
 end
 }
+%endif
+%if %{with flang}
+# flang depends on mlir, clang, flang, openmp.
+# Make sure those are being built.
+%if %{without mlir}
+%{error:flang must be built --with=mlir}
+%endif
+
+# Set Fortran build flags to nil because they contain flags that don't apply to flang.
+%global build_fflags %{nil}
 %endif
 #endregion flang
 
@@ -1830,26 +1824,32 @@ fi
 # For -Wno-backend-plugin see https://llvm.org/docs/HowToBuildWithPGO.html
 #%%global optflags_for_instrumented %%(echo %%{optflags} -Wno-backend-plugin)
 
-%global cmake_config_args_instrumented %{cmake_config_args} \\\
+%global cmake_config_args_instrumented %{cmake_common_args} \\\
   -DLLVM_ENABLE_PROJECTS:STRING="clang;lld" \\\
   -DLLVM_ENABLE_RUNTIMES="compiler-rt" \\\
   -DLLVM_TARGETS_TO_BUILD=Native \\\
   -DCMAKE_BUILD_TYPE:STRING=Release \\\
   -DCMAKE_INSTALL_PREFIX=%{builddir_instrumented} \\\
-  -DCLANG_INCLUDE_DOCS:BOOL=OFF  \\\
-  -DLLVM_BUILD_DOCS:BOOL=OFF  \\\
-  -DLLVM_BUILD_UTILS:BOOL=OFF  \\\
-  -DLLVM_ENABLE_DOXYGEN:BOOL=OFF  \\\
-  -DLLVM_ENABLE_SPHINX:BOOL=OFF  \\\
-  -DLLVM_INCLUDE_DOCS:BOOL=OFF  \\\
-  -DLLVM_INCLUDE_TESTS:BOOL=OFF  \\\
-  -DLLVM_INSTALL_UTILS:BOOL=OFF  \\\
+  -DLLVM_BUILD_LLVM_DYLIB=OFF \\\
+  -DLLVM_LINK_LLVM_DYLIB=OFF \\\
+  -DCLANG_LINK_CLANG_DYLIB=OFF \\\
+  -DBUILD_SHARED_LIBS=OFF \\\
+  -DCLANG_INCLUDE_DOCS:BOOL=OFF \\\
+  -DLLVM_BUILD_DOCS:BOOL=OFF \\\
+  -DLLVM_BUILD_UTILS:BOOL=OFF \\\
+  -DLLVM_ENABLE_DOXYGEN:BOOL=OFF \\\
+  -DLLVM_ENABLE_SPHINX:BOOL=OFF \\\
+  -DLLVM_INCLUDE_DOCS:BOOL=OFF \\\
+  -DLLVM_INCLUDE_TESTS:BOOL=OFF \\\
+  -DLLVM_INSTALL_UTILS:BOOL=OFF \\\
   -DCLANG_BUILD_EXAMPLES:BOOL=OFF \\\
-   \\\
+  -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=OFF \\\
   -DLLVM_BUILD_INSTRUMENTED=IR \\\
   -DLLVM_BUILD_RUNTIME=No \\\
   -DLLVM_ENABLE_LTO:BOOL=OFF \\\
-  -DLLVM_USE_LINKER=lld
+  -DLLVM_USE_LINKER=lld \\\
+  -DLLVM_PARALLEL_COMPILE_JOBS=%{lua: print_max_procs(1536)} \\\
+  -DLLVM_PARALLEL_LINK_JOBS=%{lua: print_max_procs(4096)}
 
 # CLANG_INCLUDE_TESTS=ON is needed to make the target "generate-profdata" available
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
@@ -1860,18 +1860,10 @@ fi
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_INCLUDE_UTILS:BOOL=ON
 
+%ifnarch aarch64
 # LLVM Profile Warning: Unable to track new values: Running out of static counters.
-# Consider using option -mllvm -vp-counters-per-site=<n> to allocate more value profile
-# counters at compile time.
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_VP_COUNTERS_PER_SITE=8
-
-%ifarch aarch64
-# llvm#160968: IR PGO value profiling + parallel lld can deadlock on aarch64
-%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
-  "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
-  "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
 %endif
 
 %if %{defined host_clang_maj_ver}
@@ -1889,8 +1881,7 @@ fi
 # then read https://issues.chromium.org/issues/40633598 again.
 %cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
 
-# Build all the tools we need in order to build generate-profdata and llvm-profdata
-%cmake_build --target libclang-cpp.so
+# Build tools needed for generate-profdata (skip libclang-cpp.so, serial dylib link)
 %cmake_build --target clang
 %cmake_build --target lld
 %cmake_build --target llvm-ar
