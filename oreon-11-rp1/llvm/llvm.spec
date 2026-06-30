@@ -110,6 +110,40 @@
 
 # Set Fortran build flags to nil because they contain flags that don't apply to flang.
 %global build_fflags %{nil}
+
+%{lua:
+
+function print_max_procs(per_proc_mem)
+    local f = io.open("/proc/meminfo", "r")
+    local mem = 0
+    local nproc_str = nil
+    for line in f:lines() do
+        _, _, mem = string.find(line, "MemTotal:%s+(%d+)%s+kB")
+        if mem then
+           break
+        end
+    end
+    f:close()
+
+    local proc_handle = io.popen("nproc")
+    _, _, nproc_str = string.find(proc_handle:read("*a"), "(%d+)")
+    proc_handle:close()
+    local nproc = tonumber(nproc_str)
+    if nproc < 1 then
+        nproc = 1
+    end
+    local mem_mb = mem / 1024
+    local cpu = math.floor(mem_mb / per_proc_mem)
+    if cpu < 1 then
+        cpu = 1
+    end
+
+    if cpu > nproc then
+        cpu = nproc
+    end
+    print(cpu)
+end
+}
 %endif
 #endregion flang
 
@@ -159,37 +193,6 @@
 %endif
 #----------------------------------------
 #endregion pgo
-
-%{lua:
-function print_max_procs(per_proc_mem)
-    local f = io.open("/proc/meminfo", "r")
-    local mem = 0
-    local nproc_str = nil
-    for line in f:lines() do
-        _, _, mem = string.find(line, "MemTotal:%s+(%d+)%s+kB")
-        if mem then
-           break
-        end
-    end
-    f:close()
-    local proc_handle = io.popen("nproc")
-    _, _, nproc_str = string.find(proc_handle:read("*a"), "(%d+)")
-    proc_handle:close()
-    local nproc = tonumber(nproc_str)
-    if nproc < 1 then
-        nproc = 1
-    end
-    local mem_mb = mem / 1024
-    local cpu = math.floor(mem_mb / per_proc_mem)
-    if cpu < 1 then
-        cpu = 1
-    end
-    if cpu > nproc then
-        cpu = nproc
-    end
-    print(cpu)
-end
-}
 
 # Disable LTO on x86 and riscv in order to reduce memory consumption.
 %ifarch %ix86 riscv64
@@ -1667,9 +1670,9 @@ CLANG_LDFLAGS=$(strip_specs "$LDFLAGS $CLANG_LDFLAGS_EXTRA")
 	-DLLVM_INCLUDE_UTILS:BOOL=ON \\\
 	-DLLVM_INSTALL_TOOLCHAIN_ONLY:BOOL=OFF \\\
 	-DLLVM_INSTALL_UTILS:BOOL=ON \\\
-	-DLLVM_PARALLEL_LINK_JOBS=1 \\\
 	-DLLVM_TOOLS_INSTALL_DIR:PATH=bin \\\
 	-DLLVM_UNREACHABLE_OPTIMIZE:BOOL=OFF \\\
+	-DLLVM_PARALLEL_LINK_JOBS=1 \\\
 	-DLLVM_UTILS_INSTALL_DIR:PATH=bin
 #endregion llvm options
 
@@ -1819,50 +1822,34 @@ fi
 #region Instrument LLVM
 %global __cmake_builddir %{builddir_instrumented}
 
-# For -Wno-backend-plugin see https://llvm.org/docs/HowToBuildWithPGO.html
-#%%global optflags_for_instrumented %%(echo %%{optflags} -Wno-backend-plugin)
-
-%global cmake_config_args_instrumented %{cmake_common_args} \\\
+%global cmake_config_args_instrumented %{cmake_config_args} \\\
   -DLLVM_ENABLE_PROJECTS:STRING="clang;lld" \\\
   -DLLVM_ENABLE_RUNTIMES="compiler-rt" \\\
   -DLLVM_TARGETS_TO_BUILD=Native \\\
   -DCMAKE_BUILD_TYPE:STRING=Release \\\
   -DCMAKE_INSTALL_PREFIX=%{builddir_instrumented} \\\
-  -DLLVM_BUILD_LLVM_DYLIB=OFF \\\
-  -DLLVM_LINK_LLVM_DYLIB=OFF \\\
-  -DCLANG_LINK_CLANG_DYLIB=OFF \\\
-  -DBUILD_SHARED_LIBS=OFF \\\
-  -DCLANG_INCLUDE_DOCS:BOOL=OFF \\\
-  -DLLVM_BUILD_DOCS:BOOL=OFF \\\
-  -DLLVM_BUILD_UTILS:BOOL=OFF \\\
-  -DLLVM_ENABLE_DOXYGEN:BOOL=OFF \\\
-  -DLLVM_ENABLE_SPHINX:BOOL=OFF \\\
-  -DLLVM_INCLUDE_DOCS:BOOL=OFF \\\
-  -DLLVM_INCLUDE_TESTS:BOOL=OFF \\\
-  -DLLVM_INSTALL_UTILS:BOOL=OFF \\\
+  -DCLANG_INCLUDE_DOCS:BOOL=OFF  \\\
+  -DLLVM_BUILD_DOCS:BOOL=OFF  \\\
+  -DLLVM_BUILD_UTILS:BOOL=OFF  \\\
+  -DLLVM_ENABLE_DOXYGEN:BOOL=OFF  \\\
+  -DLLVM_ENABLE_SPHINX:BOOL=OFF  \\\
+  -DLLVM_INCLUDE_DOCS:BOOL=OFF  \\\
+  -DLLVM_INCLUDE_TESTS:BOOL=OFF  \\\
+  -DLLVM_INSTALL_UTILS:BOOL=OFF  \\\
   -DCLANG_BUILD_EXAMPLES:BOOL=OFF \\\
-  -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=OFF \\\
   -DLLVM_BUILD_INSTRUMENTED=IR \\\
   -DLLVM_BUILD_RUNTIME=No \\\
   -DLLVM_ENABLE_LTO:BOOL=OFF \\\
-  -DLLVM_USE_LINKER=lld \\\
-  -DLLVM_PARALLEL_COMPILE_JOBS=%{lua: print_max_procs(1536)} \\\
-  -DLLVM_PARALLEL_LINK_JOBS=%{lua: print_max_procs(4096)}
+  -DLLVM_USE_LINKER=lld
 
-# CLANG_INCLUDE_TESTS=ON is needed to make the target "generate-profdata" available
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DCLANG_INCLUDE_TESTS:BOOL=ON
 
-# LLVM_INCLUDE_UTILS=ON is needed because the tests enabled by CLANG_INCLUDE_TESTS=ON
-# require "FileCheck", "not", "count", etc.
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_INCLUDE_UTILS:BOOL=ON
 
-%ifnarch aarch64
-# LLVM Profile Warning: Unable to track new values: Running out of static counters.
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_VP_COUNTERS_PER_SITE=8
-%endif
 
 %if %{defined host_clang_maj_ver}
 %global profdata %{_bindir}/llvm-profdata-%{host_clang_maj_ver}
@@ -1874,12 +1861,20 @@ fi
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_PROFDATA=%{profdata}
 
-# TODO(kkleine): Should we see warnings like:
-# "function control flow change detected (hash mismatch)"
-# then read https://issues.chromium.org/issues/40633598 again.
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DLLVM_PARALLEL_COMPILE_JOBS=0 \\\
+  -DLLVM_PARALLEL_LINK_JOBS=0
+
+%ifarch aarch64
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
+%endif
+
 %cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
 
-# Build tools needed for generate-profdata (skip libclang-cpp.so, serial dylib link)
+%cmake_build --target libclang-cpp.so
 %cmake_build --target clang
 %cmake_build --target lld
 %cmake_build --target llvm-ar
@@ -1889,16 +1884,14 @@ fi
 #region Perf training
 %cmake_build --target generate-profdata
 
-# Show top 10 functions in the profile
 %{profdata} show --topn=10 %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata | %{cxxfilt}
 
 cp %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata $RPM_BUILD_DIR/result.profdata
 
-# The instrumented files are not needed anymore.
-# Remove them in order to free disk space (~10GiB).
 rm -rf %{builddir_instrumented}
 
 #endregion Perf training
+%global __cmake_builddir %{_vpath_builddir}
 %endif
 
 #region Final stage
