@@ -1822,15 +1822,29 @@ fi
 #region Instrument LLVM
 %global __cmake_builddir %{builddir_instrumented}
 
+%ifarch aarch64
+%global inst_runtimes ""
+%global inst_vp_counters 0
+%else
+%global inst_runtimes "compiler-rt"
+%global inst_vp_counters 8
+%endif
+
+instrumented_cflags=$(echo "$RPM_OPT_FLAGS" | sed -e 's/-grecord-gcc-switches//g' -e 's/ -g / /g' -e 's/-g$//')
+export CFLAGS="$instrumented_cflags"
+export CXXFLAGS="$instrumented_cflags"
+export CPPFLAGS="$instrumented_cflags"
+
 %global cmake_config_args_instrumented %{cmake_config_args} \\\
   -DLLVM_ENABLE_PROJECTS:STRING="clang;lld" \\\
-  -DLLVM_ENABLE_RUNTIMES="compiler-rt" \\\
+  -DLLVM_ENABLE_RUNTIMES="%{inst_runtimes}" \\\
   -DLLVM_TARGETS_TO_BUILD=Native \\\
   -DCMAKE_BUILD_TYPE:STRING=Release \\\
   -DCMAKE_INSTALL_PREFIX=%{builddir_instrumented} \\\
   -DCLANG_INCLUDE_DOCS:BOOL=OFF  \\\
   -DLLVM_BUILD_DOCS:BOOL=OFF  \\\
   -DLLVM_BUILD_UTILS:BOOL=OFF  \\\
+  -DLLVM_BUILD_TESTS:BOOL=OFF  \\\
   -DLLVM_ENABLE_DOXYGEN:BOOL=OFF  \\\
   -DLLVM_ENABLE_SPHINX:BOOL=OFF  \\\
   -DLLVM_INCLUDE_DOCS:BOOL=OFF  \\\
@@ -1849,7 +1863,7 @@ fi
   -DLLVM_INCLUDE_UTILS:BOOL=ON
 
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DLLVM_VP_COUNTERS_PER_SITE=8
+  -DLLVM_VP_COUNTERS_PER_SITE=%{inst_vp_counters}
 
 %if %{defined host_clang_maj_ver}
 %global profdata %{_bindir}/llvm-profdata-%{host_clang_maj_ver}
@@ -1862,14 +1876,17 @@ fi
   -DLLVM_PROFDATA=%{profdata}
 
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DLLVM_PARALLEL_COMPILE_JOBS=0 \\\
-  -DLLVM_PARALLEL_LINK_JOBS=0
+  -DLLVM_PARALLEL_COMPILE_JOBS=0
 
 %ifarch aarch64
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DLLVM_PARALLEL_LINK_JOBS=1 \\\
   "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
   "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
   "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
+%else
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DLLVM_PARALLEL_LINK_JOBS=0
 %endif
 
 %cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
@@ -1889,6 +1906,7 @@ fi
 cp %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata $RPM_BUILD_DIR/result.profdata
 
 rm -rf %{builddir_instrumented}
+unset CFLAGS CXXFLAGS CPPFLAGS
 
 #endregion Perf training
 %global __cmake_builddir %{_vpath_builddir}
@@ -1927,7 +1945,11 @@ cd $OLD_CWD
   # The solution was to modify vp-counters-per-site option through
   # LLVM_VP_COUNTERS_PER_SITE instead of adding it, hence the
   # -DLLVM_VP_COUNTERS_PER_SITE=8.
+%ifarch aarch64
+  %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_VP_COUNTERS_PER_SITE=0
+%else
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_VP_COUNTERS_PER_SITE=8
+%endif
 %endif
 
 %if 0%{with lto_build}
