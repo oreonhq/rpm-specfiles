@@ -1479,41 +1479,42 @@ export ASMFLAGS="%{build_cflags}"
 
 cd llvm
 
-OREON_NINJA_LOG="$RPM_BUILD_DIR/oreon-ninja.log"
-: > "$OREON_NINJA_LOG"
+OREON_NINJA_FILTER="$RPM_BUILD_DIR/oreon-ninja-filter.awk"
+cat > "$OREON_NINJA_FILTER" <<'OREON_AWK'
+/^\[[0-9]+\/[0-9]+\]/ {
+  if (match($0, /^\[([0-9]+)\/([0-9]+)\]/, m)) {
+    if (m[1] % 50 == 0 || $0 ~ /FAILED:|fatal error:|^error: /) {
+      printf "[ninja %s/%s]\n", m[1], m[2]
+      fflush()
+    }
+    next
+  }
+}
+/^-- Performing Test / { next }
+/^-- Check for working / { next }
+/^-- Looking for / { next }
+/^-- Detecting / { next }
+/FAILED:|fatal error:|^error: |ninja: build stopped|subcommand failed|^RPM build errors:|^ERROR:|Cannot stat|cpio: |CMake Error|Killed|No space left|Cannot allocate memory/ {
+  print
+  fflush()
+  next
+}
+/^\+ \/usr\/bin\/cmake --build/ || /^Run Build Command/ || /^-- .+ project is/ || /^-- Build files have been written/ {
+  print
+  fflush()
+  next
+}
+{ next }
+OREON_AWK
 
 oreon_ninja_filter() {
-  gawk '
-    /^\[[0-9]+\/[0-9]+\]/ {
-      if (match($0, /^\[([0-9]+)\/([0-9]+)\]/, m)) {
-        if (m[1] % 100 == 0 || $0 ~ /FAILED:|fatal error:|error:/) {
-          printf "[ninja %s/%s]\n", m[1], m[2]
-          fflush()
-        }
-        next
-      }
-    }
-    /FAILED:|fatal error:|error:|ninja: build stopped|subcommand failed|RPM build errors|Killed|No space left|Cannot allocate memory|CMake Error/ {
-      print
-      fflush()
-      next
-    }
-    /^\+ \/usr\/bin\/cmake --build/ || /^Run Build Command/ || /^-- .+ project is/ || /^-- Build files have been written/ {
-      print
-      fflush()
-      next
-    }
-    { next }
-  '
+  gawk -f "$OREON_NINJA_FILTER"
 }
 
 oreon_build_fail_summary() {
   echo "========== OREON BUILD FAILED exit $1 =========="
-  echo "full ninja log: $OREON_NINJA_LOG"
-  grep -E 'FAILED:|fatal error:|error:|ninja: build stopped|subcommand failed|RPM build errors|Killed|No space left|Cannot allocate memory|CMake Error' "$OREON_NINJA_LOG" | tail -80 || true
-  echo "========== last ninja steps =========="
-  grep -oE '^\[[0-9]+/[0-9]+\]' "$OREON_NINJA_LOG" | tail -5 || true
-  tail -5 "$OREON_NINJA_LOG" || true
+  df -h "$RPM_BUILD_DIR" /builddir 2>/dev/null || df -h || true
+  echo "check filtered output above for FAILED/error lines"
 }
 
 oreon_done() {
@@ -1863,6 +1864,11 @@ fi
 #endregion cmake options
 
 %if %{with pgo}
+%ifarch aarch64
+%global llvm_vp_counters_per_site 0
+%else
+%global llvm_vp_counters_per_site 8
+%endif
 #region Instrument LLVM
 %global __cmake_builddir %{builddir_instrumented}
 
@@ -1893,7 +1899,15 @@ fi
   -DLLVM_INCLUDE_UTILS:BOOL=ON
 
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DLLVM_VP_COUNTERS_PER_SITE=8
+  -DLLVM_VP_COUNTERS_PER_SITE=%{llvm_vp_counters_per_site}
+
+%ifarch aarch64
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DLLVM_PARALLEL_LINK_JOBS=1 \\\
+  "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
+  "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
+%endif
 
 %if %{defined host_clang_maj_ver}
 %global profdata %{_bindir}/llvm-profdata-%{host_clang_maj_ver}
@@ -1909,34 +1923,34 @@ fi
 
 (
 %cmake_build --target libclang-cpp.so
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target clang
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target lld
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target llvm-ar
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target llvm-ranlib
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 #endregion Instrument LLVM
 
 #region Perf training
 (
 %cmake_build --target generate-profdata
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 %{profdata} show --topn=10 %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata | %{cxxfilt}
@@ -1982,7 +1996,7 @@ cd $OLD_CWD
   # The solution was to modify vp-counters-per-site option through
   # LLVM_VP_COUNTERS_PER_SITE instead of adding it, hence the
   # -DLLVM_VP_COUNTERS_PER_SITE=8.
-  %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_VP_COUNTERS_PER_SITE=8
+  %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_VP_COUNTERS_PER_SITE=%{llvm_vp_counters_per_site}
 %endif
 
 %if 0%{with lto_build}
@@ -1994,6 +2008,17 @@ cd $OLD_CWD
 %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_USE_LINKER=lld
 %endif
 
+%if %{with pgo}
+%ifarch aarch64
+if [ "$(uname -m)" = aarch64 ]; then
+  extra_cmake_args="$extra_cmake_args -DLLVM_PARALLEL_LINK_JOBS=1"
+  extra_cmake_args="$extra_cmake_args -DCMAKE_EXE_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
+  extra_cmake_args="$extra_cmake_args -DCMAKE_SHARED_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
+  extra_cmake_args="$extra_cmake_args -DCMAKE_MODULE_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
+fi
+%endif
+%endif
+
 %cmake -G Ninja %{cmake_config_args} %{extra_cmake_opts} $extra_cmake_args
 
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
@@ -2001,37 +2026,37 @@ cd $OLD_CWD
 # builders without having to artificially limit the number of concurrent jobs.
 (
 %cmake_build --target LLVM
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 # Also build libclang-cpp.so separately to avoid OOM errors.
 # This is to fix occasional OOM errors on the ppc64le COPR builders.
 (
 %cmake_build --target libclang-cpp.so
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 # Same for the three large MLIR dylibs.
 %if %{with mlir}
 (
 %cmake_build --target libMLIR.so
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target libMLIR-C.so
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 (
 %cmake_build --target libMLIRPythonCAPI.so
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 %endif
 
 (
 %cmake_build
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
 # If we don't build the runtimes target here, we'll have to wait for the %%check
@@ -2042,7 +2067,7 @@ oreon_done ${PIPESTATUS[0]}
 #   /usr/lib64/libomptarget-nvptx-*.bc
 (
 %cmake_build --target runtimes
-) 2>&1 | tee -a "$OREON_NINJA_LOG" | oreon_ninja_filter
+) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 #endregion Final stage
 
