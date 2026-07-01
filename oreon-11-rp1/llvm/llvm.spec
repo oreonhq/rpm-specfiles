@@ -1866,7 +1866,6 @@ fi
 %if %{with pgo}
 %ifarch aarch64
 %global llvm_vp_counters_per_site 0
-export LDFLAGS="$LDFLAGS -Wl,--threads=1"
 %else
 %global llvm_vp_counters_per_site 8
 %endif
@@ -1999,6 +1998,12 @@ cd $OLD_CWD
 
 %if 0%{with use_lld}
 %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_USE_LINKER=lld
+%endif
+
+%if %{with pgo}
+%ifarch aarch64
+export LDFLAGS="$LDFLAGS -fuse-ld=lld -Wl,--threads=1"
+%endif
 %endif
 
 %cmake -G Ninja %{cmake_config_args} %{extra_cmake_opts} $extra_cmake_args
