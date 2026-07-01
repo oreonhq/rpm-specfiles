@@ -1866,6 +1866,7 @@ fi
 %if %{with pgo}
 %ifarch aarch64
 %global llvm_vp_counters_per_site 0
+export LDFLAGS="$LDFLAGS -Wl,--threads=1"
 %else
 %global llvm_vp_counters_per_site 8
 %endif
@@ -1900,14 +1901,6 @@ fi
 
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_VP_COUNTERS_PER_SITE=%{llvm_vp_counters_per_site}
-
-%ifarch aarch64
-%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DLLVM_PARALLEL_LINK_JOBS=1 \\\
-  "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
-  "-DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1" \\\
-  "-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld -Wl,--threads=1"
-%endif
 
 %if %{defined host_clang_maj_ver}
 %global profdata %{_bindir}/llvm-profdata-%{host_clang_maj_ver}
@@ -2006,17 +1999,6 @@ cd $OLD_CWD
 
 %if 0%{with use_lld}
 %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_USE_LINKER=lld
-%endif
-
-%if %{with pgo}
-%ifarch aarch64
-if [ "$(uname -m)" = aarch64 ]; then
-  extra_cmake_args="$extra_cmake_args -DLLVM_PARALLEL_LINK_JOBS=1"
-  extra_cmake_args="$extra_cmake_args -DCMAKE_EXE_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
-  extra_cmake_args="$extra_cmake_args -DCMAKE_SHARED_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
-  extra_cmake_args="$extra_cmake_args -DCMAKE_MODULE_LINKER_FLAGS=\"${LDFLAGS} -fuse-ld=lld -Wl,--threads=1\""
-fi
-%endif
 %endif
 
 %cmake -G Ninja %{cmake_config_args} %{extra_cmake_opts} $extra_cmake_args
