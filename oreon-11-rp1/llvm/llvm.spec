@@ -1790,7 +1790,7 @@ CLANG_LDFLAGS=$(strip_specs "$LDFLAGS $CLANG_LDFLAGS_EXTRA")
 	-DLLVM_BUILD_TESTS:BOOL=ON \\\
 	-DLLVM_INCLUDE_TESTS:BOOL=ON \\\
 	-DLLVM_INSTALL_GTEST:BOOL=ON \\\
-	-DLLVM_LIT_ARGS="-vv"
+	-DLLVM_LIT_ARGS="--timeout=600"
 
 %if %{with lto_build}
 	%global cmake_config_args %{cmake_config_args} -DLLVM_UNITTEST_LINK_FLAGS="-fno-lto"
@@ -1864,6 +1864,9 @@ fi
 #endregion cmake options
 
 %if %{with pgo}
+# On aarch64 the instrumented lld is reused as the final-stage linker (see the
+# Final stage block). It must have no value-profiling runtime so it can run
+# parallel ThinLTO without the llvm#160968 deadlock, so disable VP there.
 %ifarch aarch64
 %global llvm_vp_counters_per_site 0
 %else
@@ -1911,6 +1914,15 @@ fi
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DLLVM_PROFDATA=%{profdata}
 
+%ifarch aarch64
+# Serialize the host lld links while building the instrumented lld we reuse
+# below. Same lld PGO value-profiling deadlock as the final stage; -fuse-ld=lld
+# keeps the cmake compiler probe on lld so it accepts --threads=1. Save LDFLAGS
+# first so the final stage can link in parallel again with the bootstrap lld.
+_pgo_ldflags_save="$LDFLAGS"
+export LDFLAGS="$LDFLAGS -fuse-ld=lld -Wl,--threads=1"
+%endif
+
 %cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
 
 (
@@ -1948,6 +1960,15 @@ oreon_done ${PIPESTATUS[0]}
 %{profdata} show --topn=10 %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata | %{cxxfilt}
 
 cp %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata $RPM_BUILD_DIR/result.profdata
+
+%ifarch aarch64
+# Keep the VP=0 instrumented lld to drive the final-stage links in parallel.
+mkdir -p $RPM_BUILD_DIR/bootstrap-lld/bin $RPM_BUILD_DIR/bootstrap-lld/lib64
+cp -a %{builddir_instrumented}/bin/ld.lld %{builddir_instrumented}/bin/lld \
+      $RPM_BUILD_DIR/bootstrap-lld/bin/
+cp -a %{builddir_instrumented}/lib64/libLLVM.so* \
+      $RPM_BUILD_DIR/bootstrap-lld/lib64/
+%endif
 
 rm -rf %{builddir_instrumented}
 
@@ -2002,7 +2023,18 @@ cd $OLD_CWD
 
 %if %{with pgo}
 %ifarch aarch64
-export LDFLAGS="$LDFLAGS -fuse-ld=lld -Wl,--threads=1"
+# llvm/llvm-project#160968: the host lld's PGO value-profiling runtime deadlocks
+# in parallel writeSections on aarch64. Instead of serializing with --threads=1
+# (which made the final stage ~2x slower), reuse the VP=0 instrumented lld we
+# saved above. It has no value-profiling runtime, so it runs parallel ThinLTO
+# without the deadlock, matching x86 link speed. -DLLVM_USE_LINKER=lld resolves
+# ld.lld from PATH at configure time, so put the bootstrap lld first. The
+# instrumented lld would otherwise dump profraw for every link; point it at
+# /dev/null since we only need it as a linker.
+export LDFLAGS="$_pgo_ldflags_save"
+export PATH="$RPM_BUILD_DIR/bootstrap-lld/bin:$PATH"
+export LD_LIBRARY_PATH="$RPM_BUILD_DIR/bootstrap-lld/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export LLVM_PROFILE_FILE=/dev/null
 %endif
 %endif
 
