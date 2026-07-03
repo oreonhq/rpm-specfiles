@@ -1892,6 +1892,13 @@ fi
   -DLLVM_ENABLE_LTO:BOOL=Thin \\\
   -DLLVM_USE_LINKER=lld
 
+%ifarch aarch64
+%global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
+  -DLLVM_LINK_LLVM_DYLIB=OFF \\\
+  -DLLVM_BUILD_LLVM_DYLIB=OFF \\\
+  -DCLANG_LINK_CLANG_DYLIB=OFF
+%endif
+
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
   -DCLANG_INCLUDE_TESTS:BOOL=ON
 
@@ -2015,8 +2022,6 @@ cd $OLD_CWD
 %ifarch aarch64
 export LDFLAGS="$_pgo_ldflags_save"
 export PATH="$RPM_BUILD_DIR/bootstrap-lld/bin:$PATH"
-_host_libllvm_dir="$(ldd /usr/bin/clang 2>/dev/null | awk '/libLLVM\.so/ && $3 ~ /^\// {n=$3; sub(/\/libLLVM\.so.*/,"",n); print n; exit}')"
-[ -n "$_host_libllvm_dir" ] && export LD_LIBRARY_PATH="$_host_libllvm_dir${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export LLVM_PROFILE_FILE=/dev/null
 %endif
 %endif
