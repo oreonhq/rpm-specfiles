@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 707959742ecdfadaa4cc52a13bd234ffefe0bea2e6106743274ae3d9cbc4cf98
 
 %bcond_without check
 
