@@ -1,0 +1,207 @@
+--- winnow-1.0.3/Cargo.toml	2006-07-24T01:21:28+00:00
++++ winnow-1.0.3/Cargo.toml	2026-05-15T21:01:14.817941+00:00
+@@ -95,7 +95,6 @@
+     "std",
+     "dep:anstream",
+     "dep:anstyle",
+-    "dep:is_terminal_polyfill",
+     "dep:terminal_size",
+ ]
+ default = [
+@@ -123,150 +122,6 @@
+ name = "winnow"
+ path = "src/lib.rs"
+ 
+-[[example]]
+-name = "arithmetic"
+-path = "examples/arithmetic/main.rs"
+-test = true
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "c_expression"
+-path = "examples/c_expression/main.rs"
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "css"
+-path = "examples/css/main.rs"
+-test = true
+-required-features = [
+-    "alloc",
+-    "parser",
+-]
+-
+-[[example]]
+-name = "custom_error"
+-path = "examples/custom_error.rs"
+-test = true
+-required-features = [
+-    "alloc",
+-    "parser",
+-]
+-
+-[[example]]
+-name = "http"
+-path = "examples/http/main.rs"
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "ini"
+-path = "examples/ini/main.rs"
+-test = true
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "iterator"
+-path = "examples/iterator.rs"
+-required-features = ["ascii"]
+-
+-[[example]]
+-name = "json"
+-path = "examples/json/main.rs"
+-test = true
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "json_iterator"
+-path = "examples/json_iterator.rs"
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "ndjson"
+-path = "examples/ndjson/main.rs"
+-test = true
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "s_expression"
+-path = "examples/s_expression/main.rs"
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[example]]
+-name = "string"
+-path = "examples/string/main.rs"
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[bench]]
+-name = "arithmetic"
+-path = "examples/arithmetic/bench.rs"
+-harness = false
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[bench]]
+-name = "c_expression"
+-path = "examples/c_expression/bench.rs"
+-harness = false
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[bench]]
+-name = "http"
+-path = "examples/http/bench.rs"
+-harness = false
+-required-features = [
+-    "alloc",
+-    "ascii",
+-]
+-
+-[[bench]]
+-name = "ini"
+-path = "examples/ini/bench.rs"
+-harness = false
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+-[[bench]]
+-name = "json"
+-path = "examples/json/bench.rs"
+-harness = false
+-required-features = [
+-    "std",
+-    "ascii",
+-]
+-
+ [dependencies.anstream]
+ version = "0.6.15"
+ optional = true
+@@ -275,10 +130,6 @@
+ version = "1.0.8"
+ optional = true
+ 
+-[dependencies.is_terminal_polyfill]
+-version = "1.48.1"
+-optional = true
+-
+ [dependencies.memchr]
+ version = "2.7"
+ optional = true
+@@ -296,12 +147,6 @@
+ 
+ [dev-dependencies.automod]
+ version = "1.0.15"
+-
+-[dev-dependencies.circular]
+-version = "0.3.0"
+-
+-[dev-dependencies.criterion]
+-version = "0.5.1"
+ 
+ [dev-dependencies.lexopt]
+ version = "0.3.1"
+@@ -315,9 +160,6 @@
+ [dev-dependencies.snapbox]
+ version = "0.6.21"
+ features = ["examples"]
+-
+-[dev-dependencies.term-transcript]
+-version = "0.2.0"
+ 
+ [lints.clippy]
+ bool_assert_comparison = "allow"
+@@ -389,11 +231,6 @@
+ level = "warn"
+ priority = -1
+ 
+-[profile.bench]
+-lto = true
+-codegen-units = 1
+-debug = 2
+-
+ [profile.dev]
+ panic = "abort"
+ 

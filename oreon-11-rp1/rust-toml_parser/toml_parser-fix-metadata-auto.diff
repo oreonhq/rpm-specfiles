@@ -1,0 +1,16 @@
+--- toml_parser-1.1.2+spec-1.1.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ toml_parser-1.1.2+spec-1.1.0/Cargo.toml	2026-05-27T23:20:21.586734+00:00
+@@ -13,7 +13,7 @@
+ edition = "2024"
+ rust-version = "1.85"
+ name = "toml_parser"
+-version = "1.1.2+spec-1.1.0"
++version = "1.1.2"
+ build = false
+ include = [
+     "build.rs",
+@@ -193,3 +193,4 @@
+ [lints.rust.rust_2018_idioms]
+ level = "warn"
+ priority = -1
++
