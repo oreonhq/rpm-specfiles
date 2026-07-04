@@ -41,7 +41,7 @@ cp -a %{_builddir}/centrio-%{version}/locale/* %{buildroot}%{_datadir}/centrio/l
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/
 
 %check
-test -d centrio-%{version}/src
+test -f %{_builddir}/centrio-%{version}/src/main.py
 
 %files
 %{_sysconfdir}/sudoers.d/99-centrio-live

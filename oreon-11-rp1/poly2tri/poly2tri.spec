@@ -38,6 +38,8 @@ for H in poly2tri/*/*.h poly2tri/*.h; do
   install -Dpm0644 "$H" %{buildroot}%{_includedir}/"$H"
 done
 
+%ldconfig_scriptlets
+
 %files
 %license LICENSE
 %doc README.md
