@@ -1,0 +1,62 @@
+--- futures-0.3.32/Cargo.toml	2006-07-24T01:21:28+00:00
++++ futures-0.3.32/Cargo.toml	2026-03-25T16:39:08.651048+00:00
+@@ -46,8 +46,6 @@
+ features = [
+     "std",
+     "async-await",
+-    "compat",
+-    "io-compat",
+     "executor",
+     "thread-pool",
+ ]
+@@ -66,10 +64,6 @@
+ ]
+ bilock = ["futures-util/bilock"]
+ cfg-target-has-atomic = []
+-compat = [
+-    "std",
+-    "futures-util/compat",
+-]
+ default = [
+     "std",
+     "async-await",
+@@ -78,10 +72,6 @@
+ executor = [
+     "std",
+     "futures-executor/std",
+-]
+-io-compat = [
+-    "compat",
+-    "futures-util/io-compat",
+ ]
+ spin = ["futures-util/spin"]
+ std = [
+@@ -128,10 +118,6 @@
+ path = "tests/bilock.rs"
+ 
+ [[test]]
+-name = "compat"
+-path = "tests/compat.rs"
+-
+-[[test]]
+ name = "eager_drop"
+ path = "tests/eager_drop.rs"
+ 
+@@ -373,14 +359,14 @@
+ [dev-dependencies.assert_matches]
+ version = "1.3.0"
+ 
++[dev-dependencies.futures-test]
++version = "=0.3.32"
++
+ [dev-dependencies.pin-project]
+ version = "1.0.11"
+ 
+ [dev-dependencies.static_assertions]
+ version = "1"
+-
+-[dev-dependencies.tokio]
+-version = "0.1.11"
+ 
+ [lints.rust]
+ missing_debug_implementations = "warn"
