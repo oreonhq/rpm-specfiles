@@ -64,11 +64,7 @@ sed --in-place \
 
 %check
 %if %{with ctest}
-%ifarch s390x
 %ctest --exclude-regex '^perf_counters_g?test$'
-%else
-%ctest
-%endif
 %endif
 
 %files
