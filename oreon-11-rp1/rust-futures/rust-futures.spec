@@ -22,6 +22,11 @@ Patch10:        0001-Fix-compiling-tests-with-compat-and-io-compat-featur.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 
+%if %{with check}
+BuildRequires:  rust-futures-test+default-devel
+BuildRequires:  rust-futures-util+unstable-devel
+%endif
+
 %global _description %{expand:
 An implementation of futures and streams featuring zero allocations,
 composability, and iterator-like interfaces.}
@@ -206,12 +211,9 @@ rm tests/compat.rs
 
 %if %{with check}
 %check
-# * always skip a test that is officially "flaky" (stream_select)
-# * skip a possibly flaky test (many_threads):
-#   https://github.com/rust-lang/futures-rs/issues/2539
-# * skip a test which fails depending on Rust version (join_size): sizes of some
-#   structs and enums changed between Rust 1.62 and 1.63
-%{cargo_test -a -- -- %{shrink:
+# default features only; -a pulls unstable tests that need futures-util/unstable
+# linked in-tree and futures-test published first
+%{cargo_test -- -- %{shrink:
     --skip stream_select
     --skip many_threads
     --skip join_size
