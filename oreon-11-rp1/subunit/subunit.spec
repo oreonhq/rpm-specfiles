@@ -32,6 +32,22 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description devel
 Header files and pkg-config data for libsubunit.
 
+%package cppunit
+Summary:        Subunit integration into cppunit
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description cppunit
+Subunit integration into cppunit.
+
+%package cppunit-devel
+Summary:        Header files for cppunit and subunit
+Requires:       %{name}-cppunit%{?_isa} = %{version}-%{release}
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+Requires:       cppunit-devel%{?_isa}
+
+%description cppunit-devel
+Header files and libraries for cppunit and subunit.
+
 %package static
 Summary:        Static C library for subunit
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
@@ -60,7 +76,11 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
 %make_build
 
 %install
-%make_install INSTALL="%{_bindir}/install -p"
+%make_install INSTALL="%{_bindir}/install -p" pkgpython_PYTHON=''
+find %{buildroot} -name '*.la' -delete
+rm -rf %{buildroot}%{python3_sitelib}/subunit
+rm -rf %{buildroot}%{python3_sitearch}/subunit
+rm -f %{buildroot}%{_sysconfdir}/profile.d/subunit.sh
 
 %check
 %if %{without bootstrap}
@@ -74,9 +94,19 @@ make check-TESTS
 
 %files devel
 %doc c/README
+%dir %{_includedir}/subunit/
 %{_includedir}/subunit/child.h
 %{_libdir}/libsubunit.so
 %{_libdir}/pkgconfig/libsubunit.pc
 
+%files cppunit
+%{_libdir}/libcppunit_subunit.so.0{,.*}
+
+%files cppunit-devel
+%doc c++/README
+%{_includedir}/subunit/SubunitTestProgressListener.h
+%{_libdir}/libcppunit_subunit.so
+%{_libdir}/pkgconfig/libcppunit_subunit.pc
+
 %files static
-%{_libdir}/libsubunit.a
+%{_libdir}/*.a
