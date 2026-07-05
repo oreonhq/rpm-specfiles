@@ -184,22 +184,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm --recursive --verbose android/ kotlin/
 
 %py3_shebang_fix samples
-# Fix paths in the Python test script to match how our build is organized:
-#   - Use flatc from the buildroot, not the root of the extracted sources
-#   - Use the proper python3 interpreter path from the RPM macro
-#   - Don’t attempt to run tests with interpreters other than python3
-#   - Add the buildroot python3_sitelib to PYTHONPATH so the flatbuffers
-#     package can be found; the appropriate PYTHONPATH is supplied by could be
-#     handled by %%{py3_test_envvars}, but the test script overrides it
-#   - Make sure we don’t do coverage analysis even if python3-coverage is
-#     somehow installed as an indirect dependency
-sed --regexp-extended --in-place=.upstream \
-    --expression='s|[^[:blank:]]*(/flatc)|%{buildroot}%{_bindir}\1|' \
-    --expression='s| python3 | %{python3} |' \
-    --expression='s|run_tests [^/]|# &|' \
-    --expression='s|PYTHONPATH=|&%{buildroot}%{python3_sitelib}:|' \
-    --expression='s|which coverage|/bin/false|' \
-    tests/PythonTest.sh
 
 
 %generate_buildrequires
@@ -278,6 +262,14 @@ popd
 %ctest
 %endif
 %if %{with py_tests}
+# buildroot paths belong in %%check, not %%prep (rpmlint rpm-buildroot-usage)
+sed --regexp-extended --in-place \
+    --expression='s|[^[:blank:]]*(/flatc)|%{buildroot}%{_bindir}\1|' \
+    --expression='s| python3 | %{python3} |' \
+    --expression='s|run_tests [^/]|# &|' \
+    --expression='s|PYTHONPATH=|&%{buildroot}%{python3_sitelib}:|' \
+    --expression='s|which coverage|/bin/false|' \
+    tests/PythonTest.sh
 # The test script overrides PYTHONPATH and PYTHONDONTWRITEBYTECODE, but we’d
 # like to pass through any other environment variables that are set by
 # %%{py3_test_envvars}.
