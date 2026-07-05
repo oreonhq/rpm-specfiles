@@ -1,4 +1,5 @@
 %global source0_hash f81c3162b1046fe8b84b9a0dbdd383e24fdbcf88583b9cb6028f90d04d90696a
+%global source1_hash b915835831b4612565154b3cfdaca0968c98c29cfff62ec9d6d82f0ed481f0b7
 
 %bcond cpp_tests 1
 # Disabled for now because protobuf-devel does not provide CMake files
@@ -178,6 +179,7 @@ BuildArch:      noarch
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 # Remove unused directories that contain pre-compiled .jar files:
