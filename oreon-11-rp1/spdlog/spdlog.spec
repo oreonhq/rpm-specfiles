@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash d8862955c6d74e5846b3f580b1605d2428b11d97a410d86e2fb13e857cd3a744
 
 Name:           spdlog
 Version:        1.17.0
-Release:        %autorelease
+Release:        1%{?dist}
 
 License:        MIT
 Summary:        Super fast C++ logging library
@@ -70,7 +70,4 @@ sed -e "s,\r,," -i README.md
 %{_libdir}/lib%{name}.so
 %{_libdir}/cmake/%{name}
 %{_libdir}/pkgconfig/%{name}.pc
-
-%changelog
-%autochangelog
 

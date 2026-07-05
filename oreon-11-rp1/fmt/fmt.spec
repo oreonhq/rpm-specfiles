@@ -1,13 +1,13 @@
-%global source0_hash bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
+%global source0_hash ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
 
 Name:           fmt
-Version:        11.2.0
-Release:        %autorelease
+Version:        12.1.0
+Release:        1%{?dist}
 
 License:        MIT
 Summary:        Small, safe and fast formatting library for C++
 URL:            https://github.com/fmtlib/%{name}
-Source0:        https://github.com/fmtlib/fmt/archive/refs/tags/11.2.0.tar.gz#/fmt-11.2.0.tar.gz
+Source0:        https://github.com/fmtlib/fmt/archive/refs/tags/%{version}.tar.gz#/fmt-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -56,14 +56,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE
 %doc ChangeLog.md README.md
-%{_libdir}/lib%{name}.so.11*
+%{_libdir}/lib%{name}.so.12*
 
 %files devel
 %{_includedir}/%{name}
 %{_libdir}/lib%{name}.so
 %{_libdir}/cmake/%{name}
 %{_libdir}/pkgconfig/%{name}.pc
-
-%changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.2.0-1
-- Prepare for Oreon 11 (RP1)
