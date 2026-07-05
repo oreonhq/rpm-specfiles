@@ -767,7 +767,7 @@ main systemd package and is meant for use in exitrds.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if %{with obs}
 # Recipe files in the OBS build are in a distro-specific dir, as they conflict (e.g. with SUSE ones)
-mv %{_sourcedir}/%{name}.fedora/* %{_sourcedir}
+mv "$RPM_SOURCE_DIR/%{name}.fedora"/* "$RPM_SOURCE_DIR/"
 %endif
 
 # Automatically figure out the name of the top-level directory.
@@ -979,7 +979,7 @@ touch %{buildroot}/etc/crypttab
 chmod 600 %{buildroot}/etc/crypttab
 
 # Config files that were moved under /usr.
-# We need to %ghost them so that they are not removed on upgrades.
+# ghost them so they are not removed on upgrades.
 touch %{buildroot}/etc/systemd/coredump.conf \
       %{buildroot}/etc/systemd/homed.conf \
       %{buildroot}/etc/systemd/journald.conf \
@@ -1616,18 +1616,6 @@ fi
 %files standalone-sysusers -f .file-list-standalone-sysusers
 
 %files standalone-shutdown -f .file-list-standalone-shutdown
-
-%clean
-rm -rf \
-    $RPM_BUILD_ROOT \
-    10-timeout-abort.conf.user \
-    .file-list-* \
-    %{name}.lang \
-    debugfiles.list \
-    debuglinks.list \
-    debugsourcefiles.list \
-    debugsources.list \
-    elfbins.list
 
 %changelog
 %autochangelog
