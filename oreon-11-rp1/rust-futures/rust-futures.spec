@@ -15,7 +15,6 @@ License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/futures
 Source:         %{crates_source}
 # Manually created patch for downstream crate metadata changes
-# * add missing futures-test dev-dependency
 # * drop unused compat support for futures 0.1
 # * drop unused compat support for tokio 0.1
 Patch:          futures-fix-metadata.diff
