@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 973f535221be211c6363842b4cce9ef8e9b3e1d5ea86c5450ca86060163c7346
 
 %ifnarch s390x
 %global with_hardware 1
@@ -7,20 +7,20 @@
 %global with_spirv_tools 1
 %global with_vmware 1
 %global with_vulkan_hw 1
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %global with_r300 1
 %global with_r600 1
 %global with_opencl 1
 %global with_va 1
 %endif
-%if !0%{?rhel} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?oreon} >= 11 || (0%{?rhel} > 0 && 0%{?rhel} >= 9)
 %global with_nvk %{with_vulkan_hw}
 %endif
 %global base_vulkan %{?with_vulkan_hw:,amd}%{!?with_vulkan_hw:%{nil}}
 %endif
 
 %ifarch aarch64 x86_64
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %global with_teflon 1
 %endif
 %endif
@@ -29,7 +29,7 @@
 %global with_crocus 1
 %global with_iris   1
 %global intel_platform_vulkan %{?with_vulkan_hw:,intel,intel_hasvk}%{!?with_vulkan_hw:%{nil}}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %global with_i915   1
 %endif
 %endif
@@ -40,7 +40,7 @@
 %endif
 
 %ifarch aarch64 x86_64 %{ix86}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %global with_asahi     1
 %global with_d3d12     1
 %global with_etnaviv   1
@@ -57,7 +57,7 @@
 %global extra_platform_vulkan %{?with_vulkan_hw:,broadcom,freedreno,panfrost,imagination}%{!?with_vulkan_hw:%{nil}}
 %endif
 
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %global with_libunwind 1
 %global with_lmsensors 1
 %global with_virtio    1
@@ -83,7 +83,7 @@
 Name:           mesa
 Summary:        Mesa graphics libraries
 Version:        26.0.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
