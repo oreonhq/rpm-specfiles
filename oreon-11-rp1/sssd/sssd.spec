@@ -90,9 +90,9 @@ BuildRequires: libjose-devel
 BuildRequires: keyutils-libs-devel
 BuildRequires: krb5-devel
 BuildRequires: libcmocka-devel >= 1.0.0
-BuildRequires: libdhash-devel >= 0.5.0
+BuildRequires: libdhash-devel >= 0.4.2
 BuildRequires: libfido2-devel
-BuildRequires: libini_config-devel >= 2.0.0
+BuildRequires: libini_config-devel >= 1.3
 BuildRequires: libldb-devel
 BuildRequires: libnfsidmap-devel
 BuildRequires: libnl3-devel
