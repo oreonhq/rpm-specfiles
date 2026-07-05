@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Oreon Defense
+GenericName=Security Center
+Comment=ClamAV, firewall, and security settings
+Exec=oreon-defense
+Icon=oreon-defense
+Categories=Settings;Security;
+StartupNotify=true
