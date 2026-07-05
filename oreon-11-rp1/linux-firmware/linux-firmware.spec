@@ -1,4 +1,4 @@
-%global source0_hash b14e7197a290a7e5569f5ef790cde289bddc47e32126f2eb262a8e677fc39727
+%global source0_hash 2b9d8a358e76eb766588609135e53fa548b902c551daae33ee32f26f25e60dbb
 
 %global debug_package %{nil}
 
@@ -6,8 +6,8 @@
 %define _binaries_in_noarch_packages_terminate_build 0
 
 Name:		linux-firmware
-Version:	20260519
-Release:	3%{?dist}
+Version:	20260622
+Release:	4%{?dist}
 Summary:	Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
 URL:		http://www.kernel.org/
@@ -729,5 +729,7 @@ end
 %{_firmwarepath}/v4l-cx2*
 
 %changelog
+* Sat Jul  5 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260622-4
+- 20260622
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260309-1
 - Prepare for Oreon 11 (RP1)
