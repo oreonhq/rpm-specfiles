@@ -2,7 +2,7 @@
 
 %global apiver 2.91
 
-%global fmt_version 11.0.0
+%global fmt_version 12.1.0
 %global fribidi_version 1.0.0
 %global glib2_version 2.72.0
 %global gnutls_version 3.2.7
