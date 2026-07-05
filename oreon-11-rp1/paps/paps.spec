@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cd4c88c9b7311cb6785db71c0ed64f5430c9d5b3454e0158314b2ef25ace3e61
 %global source3_hash db214c4ea7ecde2f7986b869f6249864d3ff364e6f210c15aa2824bcbd850a20
 
 Name:           paps

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0414e31583836aeb7878da25f67c515f7e8879917ecc37c92e26b83e8d8fc3e3
 
 %global apiver 2.91
 
