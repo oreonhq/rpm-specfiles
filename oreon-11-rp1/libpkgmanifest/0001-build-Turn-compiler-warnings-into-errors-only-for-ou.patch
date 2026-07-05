@@ -1,0 +1,80 @@
+From d21bfef59dc6276afb922fbad4d988a3dc07e231 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 30 Jan 2026 10:10:18 +0100
+Subject: [PATCH] build: Turn compiler warnings into errors only for our code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Building with GCC 16 failed on i686 architecture:
+
+    /builddir/build/BUILD/libpkgmanifest-0.5.9-build/libpkgmanifest-0.5.9/redhat-linux-build/bindings/python/libpkgmanifest/CMakeFiles/python3_common.dir/commonPYTHON_wrap.cxx: In function ‘void SWIG_TypeClientData(swig_type_info*, void*)’:
+    /builddir/build/BUILD/libpkgmanifest-0.5.9-build/libpkgmanifest-0.5.9/redhat-linux-build/bindings/python/libpkgmanifest/CMakeFiles/python3_common.dir/commonPYTHON_wrap.cxx:692:37: error: comparison of integer expressions of different signedness: ‘int’ and ‘unsigned int’ [-Werror=sign-compare]
+      692 |     for (cast = head; (cast - head) <= head->value; cast++) {
+	  |                       ~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+
+The cause is a bug in Swig-4.4.1 <https://github.com/swig/swig/issues/3323>.
+The bug is triggered by adding -Wextra -Werror to all compiler invocation,
+stricter GCC, and building on 32-bit platforms where a ptrdiff_t type
+has the same rank as the int type.
+
+This patch works around the compiler warning by only applying the
+-Werror option to code we maintain. Particullary, not applying to
+Swig-generated code. In my opinion, this is more sustainable approach
+than adding -Wno-warn-... exceptions to bindings/CMakeLists.txt
+whenever the C++ compiler or Swig changes.
+
+Resolve: https://bugzilla.redhat.com/show_bug.cgi?id=2434767
+---
+ CMakeLists.txt      | 2 +-
+ src/CMakeLists.txt  | 1 +
+ test/CMakeLists.txt | 3 ++-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 05c4080..d7d961e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,7 +24,7 @@ include(GNUInstallDirs)
+ find_package(PkgConfig REQUIRED)
+ pkg_check_modules(YAMLCPP REQUIRED yaml-cpp)
+ 
+-add_compile_options(-Wall -Wextra -Werror)
++add_compile_options(-Wall -Wextra)
+ 
+ include_directories("${PROJECT_SOURCE_DIR}/include")
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8ac7689..250f16b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -3,6 +3,7 @@ file(GLOB_RECURSE libpkgmanifest_SOURCES *.cpp)
+ list(APPEND libpkgmanifest_PC_REQUIRES)
+ list(APPEND libpkgmanifest_PC_REQUIRES_PRIVATE)
+ 
++add_compile_options(-Werror)
+ include_directories(.)
+ 
+ add_library(libpkgmanifest SHARED ${libpkgmanifest_SOURCES})
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 2eac730..a4e87d3 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -7,6 +7,7 @@ pkg_check_modules(GMOCK REQUIRED gmock)
+ 
+ file(GLOB_RECURSE TEST_libpkgmanifest_SOURCES *.cpp)
+ 
++add_compile_options(-Werror)
+ include_directories(.)
+ include_directories(${PROJECT_SOURCE_DIR}/include)
+ include_directories(${PROJECT_SOURCE_DIR}/src)
+@@ -22,4 +23,4 @@ set_property(TEST tests_libpkgmanifest PROPERTY ENVIRONMENT
+     "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
+ )
+ 
+-add_subdirectory("python")
+\ No newline at end of file
++add_subdirectory("python")
+-- 
+2.52.0
+
