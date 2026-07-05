@@ -308,7 +308,7 @@ Conflicts:      initscripts < 9.56.1
 %if 0%{?fedora}
 Conflicts:      fedora-release < 23-0.12
 %endif
-%if 0%{?fedora} >= 41
+%if 0%{?fedora} >= 41 || 0%{?oreon} >= 11
 BuildRequires:  setup >= 2.15.0-3
 BuildRequires:  python3
 Conflicts:      setup < 2.15.0-3
@@ -1628,11 +1628,4 @@ rm -rf \
     elfbins.list
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-3
-- Inline transfiletrigger block instead of %%include %%SOURCE1 so rpmspec works without SOURCES at parse time
-
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-2
-- Add triggers.systemd next to spec so %%include and spectoolless SRPM prep work
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

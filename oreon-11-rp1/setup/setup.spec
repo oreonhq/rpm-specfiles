@@ -3,7 +3,7 @@
 Summary: A set of system configuration and setup files
 Name: setup
 Version: 2.15.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 # This package is a downstream-only project
 URL: https://src.fedoraproject.org/rpms/setup
@@ -48,7 +48,8 @@ The setup package contains a set of important system configuration and
 setup files, such as passwd, group, and profile.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }mkdir -p etc/profile.d
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+mkdir -p etc/profile.d
 cp %{lua: for i=1,15 do print(sources[i]..' ') end} etc/
 cp %SOURCE21 %SOURCE22 etc/profile.d/
 touch etc/{exports,motd,subgid,subuid,environment,fstab}
@@ -184,5 +185,4 @@ end
 /usr/share/dnf5/libdnf.conf.d/protect-setup.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
