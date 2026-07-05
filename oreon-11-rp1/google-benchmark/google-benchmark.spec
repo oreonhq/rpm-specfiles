@@ -71,9 +71,11 @@ sed --in-place \
 %license AUTHORS CONTRIBUTORS LICENSE
 %doc README.md
 %{_libdir}/libbenchmark.so.1{,.*}
+%{_libdir}/libbenchmark_main.so.1{,.*}
 
 %files devel
 %{_libdir}/libbenchmark.so
+%{_libdir}/libbenchmark_main.so
 %{_includedir}/benchmark/
 %{_libdir}/cmake/benchmark/
 %{_libdir}/pkgconfig/benchmark*.pc
