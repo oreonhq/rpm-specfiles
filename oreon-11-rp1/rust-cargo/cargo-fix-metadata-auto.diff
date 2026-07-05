@@ -1,0 +1,34 @@
+--- cargo-0.95.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ cargo-0.95.0/Cargo.toml	2026-06-05T15:32:13.115526+00:00
+@@ -380,26 +380,8 @@
+ [target.'cfg(target_os = "linux")'.dev-dependencies.memfd]
+ version = "0.6.5"
+ 
+-[target.'cfg(target_os = "macos")'.dependencies.cargo-credential-macos-keychain]
+-version = "0.4.20"
+-
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2.178"
+-
+-[target."cfg(windows)".dependencies.cargo-credential-wincred]
+-version = "0.4.20"
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.61"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Security",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_IO",
+-    "Win32_System_Console",
+-    "Win32_System_JobObjects",
+-    "Win32_System_Threading",
+-]
+ 
+ [lints.clippy]
+ dbg_macro = "warn"
+@@ -421,3 +403,4 @@
+ 
+ [lints.rustdoc]
+ private_intra_doc_links = "allow"
++
