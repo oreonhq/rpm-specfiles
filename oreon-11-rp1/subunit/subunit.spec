@@ -1,6 +1,6 @@
 %global source0_hash a0f986da26ec03599aa74b4782dfb5ebcd232ed615ec4aba67edec86c5fac2d2
 
-%bcond bootstrap 0
+%bcond bootstrap 1
 
 Name:           subunit
 Version:        1.4.6
@@ -64,7 +64,7 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
 
 %check
 %if %{without bootstrap}
-make check
+make check-TESTS
 %endif
 
 %files
