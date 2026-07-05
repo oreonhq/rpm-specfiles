@@ -1252,7 +1252,8 @@ make -C %{_vpath_builddir} runruby TESTRUN_SCRIPT=" \
 
 %{_rpmmacrodir}/macros.ruby
 
-%{_includedir}/*
+%dir %{_includedir}
+%{_includedir}/ruby/
 %{_libdir}/libruby.so
 %{_libdir}/pkgconfig/%{name}.pc
 
@@ -1962,5 +1963,5 @@ make -C %{_vpath_builddir} runruby TESTRUN_SCRIPT=" \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{ruby_version}%{?development_release}-32
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.1-33
 - Prepare for Oreon 11 (RP1)
