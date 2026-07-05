@@ -24,10 +24,16 @@ toml11 is a header-only TOML parser/encoder for C++11 and later.
 
 %package devel
 Summary:        Development files for %{name}
-Provides:       %{name}-static = %{version}-%{release}
 
 %description devel
 Headers and cmake files for %{name}.
+
+%package static
+Summary:        Header-only development files for %{name}
+Requires:       %{name}-devel = %{version}-%{release}
+
+%description static
+Meta package for %{name} header-only library build dependencies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -50,3 +56,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/*.hpp
 %{_includedir}/%{name}/
 %{_libdir}/cmake/%{name}/
+
+%files static
+%license LICENSE
