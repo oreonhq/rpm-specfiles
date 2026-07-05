@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a42da890bf4e523fea1eb8b3bea45f03482e9453bf1134af70c599df63bfe1dc
 
 # We ship a .pc file but don't want to have a dep on pkg-config. We
 # strip the automatically generated dep here and instead co-own the
@@ -84,6 +84,8 @@ Version:        %{?version_override}%{!?version_override:%(cat meson.version)}
 %endif
 Release:        %autorelease
 
+%global version_no_tilde %(echo '%{version}' | sed 's/~.*//')
+
 %global stable %(c="%version"; [ "$c" = "${c#*.*}" ]; echo $?)
 
 # For a breakdown of the licensing, see README
@@ -94,13 +96,13 @@ Summary:        System and Service Manager
 # packit will always rewrite the first Source0 it finds, ignoring any conditionals so list
 # the fallback source that's used if neither %%branch, %%commit or %%obs are defined first.
 %if %{undefined branch} && %{undefined commit} && %{without obs}
-Source0:        https://github.com/systemd/systemd/archive/refs/tags/v%{version_no_tilde}.tar.xz#/%{name}-%{version}.tar.xz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
 %elif %{defined branch}
-Source0:        https://github.com/systemd/systemd/archive/refs/tags/v%{version_no_tilde}.tar.xz#/%{name}-%{version}.tar.xz
+Source0:        https://github.com/systemd/systemd/archive/refs/heads/%{branch}.tar.gz
 %elif %{defined commit}
-Source0:        https://github.com/systemd/systemd/archive/refs/tags/v%{version_no_tilde}.tar.xz#/%{name}-%{version}.tar.xz
+Source0:        https://github.com/systemd/systemd/archive/%{commit}/%{name}-%{commit}.tar.gz
 %elif %{with obs}
-Source0:        https://github.com/systemd/systemd/archive/refs/tags/v%{version_no_tilde}.tar.xz#/%{name}-%{version}.tar.xz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %endif
 # Vendored snapshot (refresh from build/src/rpm/triggers.systemd.sh or a Fedora SRPM when updating).
 # %%include reads this at spec parse time, so it must live in SOURCES with the spec.
