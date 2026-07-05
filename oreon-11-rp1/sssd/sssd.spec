@@ -22,7 +22,7 @@
 
 Name: sssd
 Version: 2.12.0
-Release: %autorelease
+Release: 2%{?dist}
 Summary: System Security Services Daemon
 License: GPL-3.0-or-later
 URL: https://github.com/SSSD/sssd/
@@ -90,9 +90,9 @@ BuildRequires: libjose-devel
 BuildRequires: keyutils-libs-devel
 BuildRequires: krb5-devel
 BuildRequires: libcmocka-devel >= 1.0.0
-BuildRequires: libdhash-devel >= 0.4.2
+BuildRequires: libdhash-devel >= 0.5.0
 BuildRequires: libfido2-devel
-BuildRequires: libini_config-devel >= 1.3
+BuildRequires: libini_config-devel >= 2.0.0
 BuildRequires: libldb-devel
 BuildRequires: libnfsidmap-devel
 BuildRequires: libnl3-devel
