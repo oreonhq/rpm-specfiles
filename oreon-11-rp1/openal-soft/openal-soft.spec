@@ -2,7 +2,7 @@
 
 Name:           openal-soft
 Version:        1.24.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Software implementation of the OpenAL 3D audio API
 
 # LGPL-2.0-or-later: Main library
@@ -68,7 +68,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(alsa)
-BuildRequires:  pkgconfig(fmt)
+BuildRequires:  pkgconfig(fmt) >= 12.1.0
 BuildRequires:  pkgconfig(jack)
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libpulse)
@@ -79,10 +79,10 @@ BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libmysofa)
 BuildRequires:  pkgconfig(portaudio-2.0)
 %endif
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?oreon} >= 11 || (0%{?rhel} > 0 && 0%{?rhel} >= 9)
 BuildRequires:  pkgconfig(libpipewire-0.3)
 %endif
-%if 0%{?fedora} || 0%{?rhel} <= 9
+%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
 BuildRequires:  pkgconfig(Qt5Widgets)
 %endif
 
@@ -111,7 +111,7 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 %description	examples
 Sample applications for OpenAl Soft.
 
-%if 0%{?fedora} || 0%{?rhel} <= 9
+%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
 %package        qt
 Summary:        Qt frontend for configuring OpenAL Soft
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -180,7 +180,7 @@ sed -i 's/#allow-moves = false/allow-moves = true/' \
 %{_bindir}/alstream
 %{_bindir}/altonegen
 
-%if 0%{?fedora} || 0%{?rhel} <= 9
+%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
 %files qt
 %{_bindir}/alsoft-config
 %endif

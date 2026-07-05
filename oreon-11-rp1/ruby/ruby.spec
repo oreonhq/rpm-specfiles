@@ -192,7 +192,7 @@
 Summary: An interpreter of object-oriented scripting language
 Name: ruby
 Version: %{ruby_version}%{?development_release}
-Release: 32%{?dist}
+Release: 33%{?dist}
 # Licenses, which are likely not included in binary RPMs:
 # Apache-2.0:
 #   benchmark/gc/redblack.rb
@@ -302,7 +302,7 @@ Patch8: ruby-4.0.1-Support-customizable-rustc_flags-for-rustc-builds.patch
 Patch9: rdoc-pr1531-fix-mutilple-document-installation.patch
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-%{?with_rubypick:Suggests: rubypick}
+%{?with_rubypick:Requires: rubypick}
 Recommends: ruby(rubygems) >= %{rubygems_version}
 Recommends: ruby-default-gems >= %{version}-%{release}
 Recommends: ruby-bundled-gems >= %{version}-%{release}
