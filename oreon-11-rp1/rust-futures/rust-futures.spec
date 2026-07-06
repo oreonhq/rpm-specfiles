@@ -198,7 +198,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
-rm tests/compat.rs tests/auto_traits.rs
+rm tests/compat.rs
 
 %generate_buildrequires
 %cargo_generate_buildrequires -a
