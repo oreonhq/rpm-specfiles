@@ -247,7 +247,7 @@ popd
 %install
 %cmake_install
 %pyproject_install
-%pyproject_save_files --no-assert-license flatbuffers
+%pyproject_save_files -L flatbuffers
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
 
 %if %{with mingw}
