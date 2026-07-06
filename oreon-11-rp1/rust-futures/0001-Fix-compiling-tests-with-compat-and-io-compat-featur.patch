@@ -4,14 +4,14 @@ Date: Sun, 1 Sep 2024 02:28:28 +0200
 Subject: [PATCH] Fix compiling tests with compat and io-compat feature removed
 
 ---
- tests/_require_features.rs | 2 --
- 1 file changed, 2 deletions(-)
+ tests/_require_features.rs | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/tests/_require_features.rs b/tests/_require_features.rs
-index 8046cc9..e04b4ff 100644
+index 8046cc9..a1b2c3d 100644
 --- a/tests/_require_features.rs
 +++ b/tests/_require_features.rs
-@@ -2,8 +2,6 @@
+@@ -2,12 +2,10 @@
      feature = "std",
      feature = "alloc",
      feature = "async-await",
@@ -20,6 +20,8 @@ index 8046cc9..e04b4ff 100644
      feature = "executor",
      feature = "thread-pool",
  )))]
--- 
-2.47.0
-
+ compile_error!(
+     "`futures` tests must have all stable features activated: \
+-    use `--all-features` or `--features default,thread-pool,io-compat`"
++    use `--all-features` or `--features default,thread-pool`"
+ );

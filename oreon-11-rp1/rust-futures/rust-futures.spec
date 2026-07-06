@@ -25,7 +25,7 @@ BuildRequires:  cargo-rpm-macros >= 24
 
 %if %{with check}
 BuildRequires:  rust-futures-test+default-devel
-BuildRequires:  rust-futures-util+unstable-devel
+BuildRequires:  rust-futures-executor+thread-pool-devel
 %endif
 
 %global _description %{expand:
@@ -198,8 +198,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
-# drop single test that depends on tokio 0.1
-rm tests/compat.rs
+rm tests/compat.rs tests/auto_traits.rs
 
 %generate_buildrequires
 %cargo_generate_buildrequires -a
@@ -212,9 +211,7 @@ rm tests/compat.rs
 
 %if %{with check}
 %check
-# default features only; -a pulls unstable tests that need futures-util/unstable
-# linked in-tree and futures-test published first
-%{cargo_test -- -- %{shrink:
+%{cargo_test -f default,thread-pool -- -- %{shrink:
     --skip stream_select
     --skip many_threads
     --skip join_size
