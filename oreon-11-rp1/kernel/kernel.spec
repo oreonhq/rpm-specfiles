@@ -1136,6 +1136,7 @@ Source2002: kvm_stat.logrotate
 # source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
 Source3001: kernel-local
+Source3003: kernel-71-config-snippet
 %if %{patchlist_changelog}
 Source3002: Patchlist.changelog
 %endif
@@ -2165,6 +2166,8 @@ cp %{SOURCE3000} .
 # kernel-local - rename and copy for partial snippet config process
 cp %{SOURCE3001} partial-kernel-local-snip.config
 cp %{SOURCE3001} partial-kernel-local-debug-snip.config
+cp %{SOURCE3003} partial-kernel-71-config-snip.config
+cp %{SOURCE3003} partial-kernel-71-config-debug-snip.config
 FLAVOR=%{primary_target} SPECPACKAGE_NAME=%{name} SPECVERSION=%{specversion} SPECRPMVERSION=%{specrpmversion} ./generate_all_configs.sh %{debugbuildsenabled}
 
 # Collect custom defined config options
@@ -2179,7 +2182,7 @@ PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE72} %{SOURCE73}"
 %if %{with clang_lto}
 PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE74} %{SOURCE75} %{SOURCE76} %{SOURCE77}"
 %endif
-PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config"
+PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config partial-kernel-71-config-snip.config partial-kernel-71-config-debug-snip.config"
 
 GetArch()
 {
@@ -4752,10 +4755,4 @@ fi\
 #
 #
 %changelog
-* Sat Jul  5 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.3-200
-- Linux v7.1.3
-* Sat Jun 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.1-200
-- Linux v7.1.1
-- bore patch for 7.1
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.10-1
-- Import exact from f44
+%autochangelog
