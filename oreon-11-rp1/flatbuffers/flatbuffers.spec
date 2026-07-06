@@ -189,7 +189,9 @@ rm --recursive --verbose android/ kotlin/
 
 
 %generate_buildrequires
-%pyproject_buildrequires --directory python
+pushd python
+%pyproject_buildrequires
+popd
 
 
 %conf
@@ -226,7 +228,9 @@ export VERSION='%{version}'
 %build
 %cmake_build
 
-%pyproject_wheel --directory python
+pushd python
+%pyproject_wheel
+popd
 
 %if %{with mingw}
 (
