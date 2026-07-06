@@ -68,7 +68,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(alsa)
-BuildRequires:  pkgconfig(fmt) >= 12.1.0
+BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(jack)
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libpulse)

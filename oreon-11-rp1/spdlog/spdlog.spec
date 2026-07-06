@@ -11,7 +11,7 @@ Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         %{name}-fmt_external.patch
 
 BuildRequires:  catch-devel >= 3.0.0
-BuildRequires:  fmt-devel >= 12.1.0
+BuildRequires:  fmt-devel
 BuildRequires:  google-benchmark-devel
 BuildRequires:  systemd-devel
 

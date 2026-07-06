@@ -1,7 +1,7 @@
-%global source0_hash ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
+%global source0_hash bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
 
 Name:           fmt
-Version:        12.1.0
+Version:        11.2.0
 Release:        1%{?dist}
 
 License:        MIT
@@ -56,7 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE
 %doc ChangeLog.md README.md
-%{_libdir}/lib%{name}.so.12*
+%{_libdir}/lib%{name}.so.11*
 
 %files devel
 %{_includedir}/%{name}

@@ -154,7 +154,7 @@ BuildRequires:  cmake >= 3.21
 BuildRequires:  doxygen
 BuildRequires:  gettext
 BuildRequires:  pkgconfig(check)
-BuildRequires:  pkgconfig(fmt) >= 12.1.0
+BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(json-c)
 BuildRequires:  pkgconfig(libcrypto)
 BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
