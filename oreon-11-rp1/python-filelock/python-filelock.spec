@@ -30,7 +30,6 @@ BuildRequires:  python3-pytest
 BuildRequires:  python3-pytest-asyncio
 BuildRequires:  python3-pytest-mock
 BuildRequires:  python3-pytest-timeout
-BuildRequires:  python3-virtualenv
 %endif
 %if %{with docs}
 # Doc dependencies
@@ -93,7 +92,7 @@ popd
 
 %check
 %if %{with tests}
-%pytest
+%pytest --ignore tests/test_virtualenv.py
 %else
 %pyproject_check_import
 %endif

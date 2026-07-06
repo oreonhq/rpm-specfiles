@@ -10,10 +10,7 @@ License:        MIT
 URL:            https://github.com/platformdirs/platformdirs
 Source:         %{pypi_source platformdirs}
 BuildArch:      noarch
-
-%if %{with tests}
-BuildRequires:  tomcli
-%endif
+BuildRequires:  python3-devel
 
 %global common_description %{expand:
 When writing desktop application, finding the right location to store user data
@@ -39,10 +36,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %if %{with tests}
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-for dep in covdefaults diff-cover pytest-cov
-do
-    tomcli set pyproject.toml lists delitem dependency-groups.test "${dep}\b.*"
-done
+sed -i '/covdefaults/d; /diff-cover/d; /pytest-cov/d' pyproject.toml
 %endif
 
 
