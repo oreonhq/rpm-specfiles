@@ -300,13 +300,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cargo_prep
 
 %generate_buildrequires
-%cargo_generate_buildrequires
+%cargo_generate_buildrequires -a
 
 %build
-%cargo_build
+%cargo_build -a
 
 %install
-%cargo_install
+%cargo_install -a
 
 %if %{with check}
 %check
