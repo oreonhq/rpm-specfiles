@@ -17,6 +17,7 @@ Source:         %{crates_source}
 # Manually created patch for downstream crate metadata changes
 # * drop unused compat support for futures 0.1
 # * drop unused compat support for tokio 0.1
+# * drop portable-atomic feature (no rust-portable-atomic package available)
 Patch:          futures-util-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
@@ -207,18 +208,6 @@ This package contains library source intended for building other packages which
 use the "memchr" feature of the "%{crate}" crate.
 
 %files       -n %{name}+memchr-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+portable-atomic-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+portable-atomic-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "portable-atomic" feature of the "%{crate}" crate.
-
-%files       -n %{name}+portable-atomic-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+sink-devel
