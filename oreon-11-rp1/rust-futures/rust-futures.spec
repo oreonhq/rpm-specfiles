@@ -17,6 +17,7 @@ Source:         %{crates_source}
 # Manually created patch for downstream crate metadata changes
 # * drop unused compat support for futures 0.1
 # * drop unused compat support for tokio 0.1
+# * add futures-test dev-dependency (stripped from published crate as path dep)
 Patch:          futures-fix-metadata.diff
 Patch10:        0001-Fix-compiling-tests-with-compat-and-io-compat-featur.patch
 

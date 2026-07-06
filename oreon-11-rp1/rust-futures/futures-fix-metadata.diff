@@ -42,13 +42,16 @@
  name = "eager_drop"
  path = "tests/eager_drop.rs"
  
-@@ -379,9 +365,6 @@
+@@ -379,9 +365,9 @@
  [dev-dependencies.static_assertions]
  version = "1"
  
 -[dev-dependencies.tokio]
 -version = "0.1.11"
 -
++[dev-dependencies.futures-test]
++version = "0.3.32"
++
  [lints.rust]
  missing_debug_implementations = "warn"
  rust_2018_idioms = "warn"
