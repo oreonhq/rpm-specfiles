@@ -11,7 +11,6 @@ License:        Apache-2.0
 URL:            https://github.com/pytest-dev/pytest-asyncio
 Source:         %{pypi_source pytest_asyncio}
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
 
 %global _description %{expand:
 pytest-asyncio is a pytest plugin.  It facilitates testing of code that uses the
@@ -34,7 +33,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n pytest_asyncio-%{version}
 
 # disable code quality checks in "testing" extras
-tomcli set pyproject.toml lists delitem project.optional-dependencies.testing 'coverage>=.*'
+sed -i '/"coverage>=6.2",/d' pyproject.toml
 
 
 %generate_buildrequires

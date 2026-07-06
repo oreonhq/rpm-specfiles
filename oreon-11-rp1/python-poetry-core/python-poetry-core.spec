@@ -1,3 +1,5 @@
+%global source0_hash da83444c058008e87b6505883e4f40569ebe833b8cd9d9ef6541e3942ea1c8ba
+
 # RHEL does not include the test dependencies
 %bcond tests %{undefined rhel}
 
@@ -53,6 +55,7 @@ Conflicts:      python%{python3_version}dist(poetry) < 1.1
 
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n poetry-core-%{version}
 
 # Assert the tomli dependency from the devendor patch is conditional
