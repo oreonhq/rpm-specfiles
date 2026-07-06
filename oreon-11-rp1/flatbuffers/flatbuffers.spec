@@ -6,7 +6,7 @@
 %bcond cpp_grpc_test 0
 %bcond py_tests 1
 
-%bcond mingw 1
+%bcond_with mingw
 
 Name:           flatbuffers
 Version:        25.12.19
