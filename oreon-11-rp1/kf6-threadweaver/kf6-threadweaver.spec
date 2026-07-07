@@ -48,6 +48,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %license LICENSES/*.txt
 %{_kf6_libdir}/libKF6ThreadWeaver.so.*
 
+%{_qt6_metatypesdir}/qt6kf6threadweaver_metatypes.json
 %files devel
 %doc README.md
 %license LICENSES/*.txt

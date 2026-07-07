@@ -72,6 +72,7 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/parts/
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*
 %dir %{_kf6_plugindir}/parts/
 
+%{_qt6_metatypesdir}/qt6kf6parts_metatypes.json
 %files devel
 %{_kf6_includedir}/KParts/
 %{_kf6_libdir}/libKF6Parts.so

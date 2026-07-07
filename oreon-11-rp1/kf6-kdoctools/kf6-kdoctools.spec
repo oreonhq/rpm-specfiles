@@ -68,6 +68,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_mandir}/man7/*.7*
 %{_kf6_datadir}/kf6/kdoctools/
 
+%{_qt6_metatypesdir}/qt6kf6doctools_metatypes.json
 %files devel
 %{_kf6_includedir}/KDocTools/
 %{_kf6_libdir}/libKF6DocTools.so

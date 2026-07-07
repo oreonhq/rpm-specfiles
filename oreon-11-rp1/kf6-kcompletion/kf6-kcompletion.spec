@@ -57,6 +57,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6Completion.so.*
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*
 
+%{_qt6_metatypesdir}/qt6kf6completion_metatypes.json
 %files devel
 %{_kf6_includedir}/KCompletion/
 %{_kf6_libdir}/libKF6Completion.so

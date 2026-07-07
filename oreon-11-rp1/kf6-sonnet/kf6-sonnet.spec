@@ -123,6 +123,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/sonnet/sonnet_voikko.so
 
 
+%{_qt6_metatypesdir}/qt6kf6sonnet*_metatypes.json
 %files devel
 %doc README.md
 %license LICENSES/*.txt

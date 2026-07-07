@@ -64,6 +64,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
 %{_kf6_libdir}/libKF6Runner.so.*
 
+%{_qt6_metatypesdir}/qt6kf6runner_metatypes.json
 %files devel
 %{_kf6_includedir}/KRunner/
 %{_kf6_libdir}/libKF6Runner.so

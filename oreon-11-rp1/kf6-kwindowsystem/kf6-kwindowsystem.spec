@@ -79,6 +79,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_qmldir}/org/kde/kwindowsystem
 %{_qt6_plugindir}/kf6/kwindowsystem/KF6WindowSystemKWaylandPlugin.so
 
+%{_qt6_metatypesdir}/qt6kf6windowsystem_metatypes.json
 %files devel
 %{_kf6_includedir}/KWindowSystem/
 %{_kf6_libdir}/libKF6WindowSystem.so

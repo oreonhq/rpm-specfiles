@@ -102,6 +102,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 %{_datadir}/applications/org.kde.kuserfeedback-console.desktop
 %{_kf6_metainfodir}/org.kde.kuserfeedback-console.appdata.xml
 
+%{_qt6_metatypesdir}/qt6kf6userfeedback*_metatypes.json
 %files devel
 %{_kf6_includedir}/KUserFeedback/
 %{_kf6_includedir}/KUserFeedbackCore/

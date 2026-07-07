@@ -90,6 +90,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKirigamiControls.so.6
 %{_kf6_libdir}/libKirigamiControls.so.%{version}
 
+%{_qt6_metatypesdir}/qt6kf6kirigami*_metatypes.json
 %files devel
 %dir %{_kf6_datadir}/kdevappwizard/
 %dir %{_kf6_datadir}/kdevappwizard/templates/

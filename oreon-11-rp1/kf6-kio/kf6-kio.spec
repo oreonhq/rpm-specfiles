@@ -191,6 +191,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files core-libs
 %{_kf6_libdir}/libKF6KIOCore.so.*
+%{_qt6_metatypesdir}/qt6kf6kio*_metatypes.json
 
 %files doc -f %{name}.lang
 

@@ -91,6 +91,7 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kxmlgui5/
 %files -n python3-%{name}
 %{python3_sitearch}/KXmlGui.cpython-%{python3_version_nodots}*.so
 
+%{_qt6_metatypesdir}/qt6kf6xmlgui_metatypes.json
 %files devel
 %{_kf6_qtplugindir}/designer/*6widgets.so
 %{_kf6_includedir}/KXmlGui/

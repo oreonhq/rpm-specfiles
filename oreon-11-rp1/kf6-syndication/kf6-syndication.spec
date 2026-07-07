@@ -52,6 +52,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*
 %{_kf6_libdir}/libKF6Syndication.so.*
 
+%{_qt6_metatypesdir}/qt6kf6syndication_metatypes.json
 %files devel
 %{_kf6_includedir}/Syndication/
 %{_kf6_libdir}/cmake/KF6Syndication/

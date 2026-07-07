@@ -86,6 +86,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/org.kde.kidletime.platforms/KF6IdleTimeXcbPlugin1.so
 %endif
 
+%{_qt6_metatypesdir}/qt6kf6idletime_metatypes.json
 %files devel
 %{_kf6_includedir}/KIdleTime/
 %{_kf6_libdir}/libKF6IdleTime.so

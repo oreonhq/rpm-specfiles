@@ -69,6 +69,7 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_target_platform} ||:
 %{_kf6_libdir}/libKF6SyntaxHighlighting.so.%{version}
 %{_kf6_qmldir}/org/kde/syntaxhighlighting
 
+%{_qt6_metatypesdir}/qt6kf6syntaxhighlighting_metatypes.json
 %files devel
 %{_kf6_includedir}/KSyntaxHighlighting/
 %{_kf6_libdir}/libKF6SyntaxHighlighting.so

@@ -68,6 +68,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_qt6_qmldir}/org/kde/config/KF6ConfigQml.qmltypes
 %{_qt6_qmldir}/org/kde/config/libKF6ConfigQmlplugin.so
 
+%{_qt6_metatypesdir}/qt6kf6config*_metatypes.json
 %files devel
 %{_kf6_includedir}/KConfig/
 %{_kf6_includedir}/KConfigCore/

@@ -54,6 +54,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6ItemModels.so.*
 %{_kf6_qmldir}/org/kde/kitemmodels/
 
+%{_qt6_metatypesdir}/qt6kf6itemmodels_metatypes.json
 %files devel
 %doc README.md
 %license LICENSES/*.txt

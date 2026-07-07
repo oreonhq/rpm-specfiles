@@ -92,6 +92,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_qmldir}/org/kde/purpose/
 %{_datadir}/icons/hicolor/*/apps/*-purpose6.*
 
+%{_qt6_metatypesdir}/qt6kf6purpose*_metatypes.json
 %files devel
 %{_kf6_libdir}/libKF6Purpose.so
 %{_kf6_libdir}/libKF6PurposeWidgets.so

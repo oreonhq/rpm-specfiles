@@ -72,6 +72,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files -n python3-%{name}
 %{python3_sitearch}/KStatusNotifierItem.cpython-%{python3_version_nodots}*.so
 
+%{_qt6_metatypesdir}/qt6kf6statusnotifieritem_metatypes.json
 %files devel
 %{_kf6_includedir}/KStatusNotifierItem
 %{_kf6_libdir}/cmake/KF6StatusNotifierItem
