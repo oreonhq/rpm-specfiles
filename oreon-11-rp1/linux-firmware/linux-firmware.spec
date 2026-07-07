@@ -367,7 +367,6 @@ sed \
 	-i -e '/^nvidia\/a/d' \
 	-i -e '/^nvidia\/g/d' \
 	-i -e '/^nvidia\/tu/d' \
-	-i -e '/^lgs8g75/d' \
 	-i -e '/^libertas/d' \
 	-i -e '/^liquidio/d' \
 	-i -e '/^mellanox/d' \
@@ -723,7 +722,6 @@ end
 %{_firmwarepath}/cmmb*
 %{_firmwarepath}/dvb*
 %{_firmwarepath}/isdbt*
-%{_firmwarepath}/lgs8g75*
 %{_firmwarepath}/sms1xxx*
 %{_firmwarepath}/tdmb*
 %{_firmwarepath}/v4l-cx2*
