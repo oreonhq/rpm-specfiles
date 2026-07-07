@@ -85,7 +85,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KStyle/
 %{_kf6_libdir}/libKF6Style.so
 %{_kf6_libdir}/cmake/KF6FrameworkIntegration/
-%{_kf6_libdir}/pkgconfig/KF6FrameworkIntegration.pc
 
 
 %changelog

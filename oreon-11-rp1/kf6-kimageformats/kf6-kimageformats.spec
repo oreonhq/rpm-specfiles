@@ -80,7 +80,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files devel
 %{_kf6_libdir}/cmake/KF6ImageFormats/
-%{_kf6_libdir}/pkgconfig/KF6ImageFormats.pc
 
 %changelog
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10

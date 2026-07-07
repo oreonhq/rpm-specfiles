@@ -58,7 +58,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KDNSSD/
 %{_kf6_libdir}/libKF6DNSSD.so
 %{_kf6_libdir}/cmake/KF6DNSSD/
-%{_kf6_libdir}/pkgconfig/KF6DNSSD.pc
 
 
 %changelog

@@ -54,7 +54,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files devel
 %{_kf6_libdir}/libKF6ModemManagerQt.so
 %{_kf6_libdir}/cmake/KF6ModemManagerQt/
-%{_kf6_libdir}/pkgconfig/KF6ModemManagerQt.pc
 %{_kf6_includedir}/ModemManagerQt/
 
 

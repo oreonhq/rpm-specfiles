@@ -212,7 +212,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/*
 %{_kf6_libdir}/*.so
 %{_kf6_libdir}/cmake/KF6KIO/
-%{_kf6_libdir}/pkgconfig/KF6KIO.pc
 %{_kf6_datadir}/kdevappwizard/templates/kioworker6.tar.bz2
 %{_kf6_qtplugindir}/designer/kio6widgets.so
 

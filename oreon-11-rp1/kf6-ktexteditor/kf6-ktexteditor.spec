@@ -98,7 +98,6 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 %{_kf6_datadir}/kdevappwizard/templates/ktexteditor6-plugin.tar.bz2
 %{_kf6_includedir}/KTextEditor/
 %{_kf6_libdir}/cmake/KF6TextEditor/
-%{_kf6_libdir}/pkgconfig/KF6TextEditor.pc
 %{_kf6_libdir}/libKF6TextEditor.so
 
 

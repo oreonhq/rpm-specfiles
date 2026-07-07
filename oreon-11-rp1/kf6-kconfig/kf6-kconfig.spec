@@ -74,7 +74,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KConfigGui/
 %{_kf6_includedir}/KConfigQml/
 %{_kf6_libdir}/cmake/KF6Config/
-%{_kf6_libdir}/pkgconfig/KF6Config.pc
 %{_kf6_libdir}/libKF6ConfigCore.so
 %{_kf6_libdir}/libKF6ConfigGui.so
 %{_kf6_libdir}/libKF6ConfigQml.so

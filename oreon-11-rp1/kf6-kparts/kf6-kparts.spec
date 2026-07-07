@@ -76,7 +76,6 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/parts/
 %{_kf6_includedir}/KParts/
 %{_kf6_libdir}/libKF6Parts.so
 %{_kf6_libdir}/cmake/KF6Parts/
-%{_kf6_libdir}/pkgconfig/KF6Parts.pc
 %dir %{_kf6_datadir}/kdevappwizard/
 %dir %{_kf6_datadir}/kdevappwizard/templates/
 %{_kf6_datadir}/kdevappwizard/templates/kparts6-app.tar.bz2

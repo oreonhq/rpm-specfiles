@@ -77,7 +77,6 @@ rm -fv %{buildroot}%{_prefix}/lib/systemd/user/plasma-kglobalaccel.service
 %{_kf6_includedir}/KGlobalAccel/
 %{_kf6_libdir}/libKF6GlobalAccel.so
 %{_kf6_libdir}/cmake/KF6GlobalAccel/
-%{_kf6_libdir}/pkgconfig/KF6GlobalAccel.pc
 %{_kf6_datadir}/dbus-1/interfaces/*
 
 

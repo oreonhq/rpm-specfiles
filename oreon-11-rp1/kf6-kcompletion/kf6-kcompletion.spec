@@ -61,7 +61,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KCompletion/
 %{_kf6_libdir}/libKF6Completion.so
 %{_kf6_libdir}/cmake/KF6Completion/
-%{_kf6_libdir}/pkgconfig/KF6Completion.pc
 %{_kf6_qtplugindir}/designer/kcompletion6widgets.so
 
 

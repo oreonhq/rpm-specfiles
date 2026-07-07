@@ -59,7 +59,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KCodecs/
 %{_kf6_libdir}/libKF6Codecs.so
 %{_kf6_libdir}/cmake/KF6Codecs/
-%{_kf6_libdir}/pkgconfig/KF6Codecs.pc
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>

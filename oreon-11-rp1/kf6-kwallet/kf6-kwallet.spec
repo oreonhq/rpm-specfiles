@@ -106,7 +106,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/dbus-1/interfaces/kf6_org.kde.KWallet.xml
 %{_kf6_includedir}/KWallet/
 %{_kf6_libdir}/cmake/KF6Wallet/
-%{_kf6_libdir}/pkgconfig/KF6Wallet.pc
 %{_kf6_libdir}/libKF6Wallet.so
 
 

@@ -89,7 +89,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6I18nQml.so
 %{_kf6_libdir}/libKF6I18nLocaleData.so
 %{_kf6_libdir}/cmake/KF6I18n/
-%{_kf6_libdir}/pkgconfig/KF6I18n.pc
 
 
 %changelog

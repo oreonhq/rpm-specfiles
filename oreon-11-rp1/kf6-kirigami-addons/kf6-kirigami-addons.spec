@@ -109,7 +109,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKirigamiApp.so
 %{_includedir}/KirigamiAddons/
 %{_kf6_libdir}/cmake/KF6KirigamiAddons
-%{_kf6_libdir}/pkgconfig/KF6KirigamiAddons.pc
 %{_kf6_libdir}/libKirigamiAddonsStatefulApp.so
 %{_includedir}/KirigamiAddonsStatefulApp/
 %{_kf6_datadir}/kdevappwizard/templates/kirigamiaddons6.tar.bz2

@@ -79,7 +79,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_includedir}/KContacts/
 %{_kf6_libdir}/libKF6Contacts.so
 %{_kf6_libdir}/cmake/KF6Contacts/
-%{_kf6_libdir}/pkgconfig/KF6Contacts.pc
 %{_kf6_qmldir}/org/kde/contacts/libkcontactsqml.so
 %{_qt6_docdir}/*/*.tags
 %{_qt6_docdir}/*/*.index

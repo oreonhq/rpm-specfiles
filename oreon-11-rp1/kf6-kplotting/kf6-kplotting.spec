@@ -65,7 +65,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KPlotting/
 %{_kf6_libdir}/libKF6Plotting.so
 %{_kf6_libdir}/cmake/KF6Plotting/
-%{_kf6_libdir}/pkgconfig/KF6Plotting.pc
 %{_kf6_qtplugindir}/designer/kplotting6widgets.so
 
 

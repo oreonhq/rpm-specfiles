@@ -80,7 +80,6 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kded
 
 %files devel
 %{_kf6_libdir}/cmake/KF6KDED/
-%{_kf6_libdir}/pkgconfig/KF6KDED.pc
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
 
 %changelog

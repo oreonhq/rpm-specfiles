@@ -72,7 +72,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KBookmarks/
 %{_kf6_libdir}/libKF6Bookmarks.so
 %{_kf6_libdir}/cmake/KF6Bookmarks/
-%{_kf6_libdir}/pkgconfig/KF6Bookmarks.pc
 %{_kf6_includedir}/KBookmarksWidgets/
 %{_kf6_libdir}/libKF6BookmarksWidgets.so
 

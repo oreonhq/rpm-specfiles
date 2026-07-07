@@ -77,7 +77,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KConfigWidgets/
 %{_kf6_libdir}/libKF6ConfigWidgets.so
 %{_kf6_libdir}/cmake/KF6ConfigWidgets/
-%{_kf6_libdir}/pkgconfig/KF6ConfigWidgets.pc
 %{_kf6_libdir}/qt6/plugins/designer/kconfigwidgets6widgets.so
 
 

@@ -73,7 +73,6 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_target_platform} ||:
 %{_kf6_includedir}/KSyntaxHighlighting/
 %{_kf6_libdir}/libKF6SyntaxHighlighting.so
 %{_kf6_libdir}/cmake/KF6SyntaxHighlighting/
-%{_kf6_libdir}/pkgconfig/KF6SyntaxHighlighting.pc
 
 
 %changelog

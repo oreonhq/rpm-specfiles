@@ -60,7 +60,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KItemModels/
 %{_kf6_libdir}/libKF6ItemModels.so
 %{_kf6_libdir}/cmake/KF6ItemModels/
-%{_kf6_libdir}/pkgconfig/KF6ItemModels.pc
 
 
 %changelog

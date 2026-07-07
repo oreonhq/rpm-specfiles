@@ -69,7 +69,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kpackage/
 %{_kf6_includedir}/KPackage/
 %{_kf6_libdir}/libKF6Package.so
 %{_kf6_libdir}/cmake/KF6Package/
-%{_kf6_libdir}/pkgconfig/KF6Package.pc
 
 
 %changelog

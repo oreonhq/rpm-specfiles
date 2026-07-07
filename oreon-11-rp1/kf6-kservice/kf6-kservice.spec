@@ -76,7 +76,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 %{_kf6_includedir}/KService/
 %{_kf6_libdir}/libKF6Service.so
 %{_kf6_libdir}/cmake/KF6Service/
-%{_kf6_libdir}/pkgconfig/KF6Service.pc
 
 
 %changelog

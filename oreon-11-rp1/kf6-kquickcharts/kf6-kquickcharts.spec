@@ -62,7 +62,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files devel
 %{_kf6_libdir}/cmake/KF6QuickCharts/
-%{_kf6_libdir}/pkgconfig/KF6QuickCharts.pc
 %{_libdir}/libQuickCharts.so
 %{_libdir}/libQuickChartsControls.so
 

@@ -84,9 +84,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KNewStuffCore
 %{_kf6_includedir}/KNewStuffWidgets
 %{_kf6_libdir}/cmake/KF6NewStuff/
-%{_kf6_libdir}/pkgconfig/KF6NewStuff.pc
 %{_kf6_libdir}/cmake/KF6NewStuffCore/
-%{_kf6_libdir}/pkgconfig/KF6NewStuffCore.pc
 %{_kf6_libdir}/libKF6NewStuffCore.so
 %{_kf6_libdir}/libKF6NewStuffWidgets.so
 %{_kf6_libdir}/qt6/plugins/designer/knewstuff6widgets.so
