@@ -1137,6 +1137,7 @@ Source2002: kvm_stat.logrotate
 Source3000: merge.py
 Source3001: kernel-local
 Source3003: kernel-71-config-snippet
+Source3004: kernel-71-config-aarch64-snippet
 %if %{patchlist_changelog}
 Source3002: Patchlist.changelog
 %endif
@@ -2168,6 +2169,8 @@ cp %{SOURCE3001} partial-kernel-local-snip.config
 cp %{SOURCE3001} partial-kernel-local-debug-snip.config
 cp %{SOURCE3003} partial-kernel-71-config-snip.config
 cp %{SOURCE3003} partial-kernel-71-config-debug-snip.config
+cp %{SOURCE3004} partial-kernel-71-config-aarch64-snip.config
+cp %{SOURCE3004} partial-kernel-71-config-aarch64-debug-snip.config
 FLAVOR=%{primary_target} SPECPACKAGE_NAME=%{name} SPECVERSION=%{specversion} SPECRPMVERSION=%{specrpmversion} ./generate_all_configs.sh %{debugbuildsenabled}
 
 # Collect custom defined config options
@@ -2182,7 +2185,7 @@ PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE72} %{SOURCE73}"
 %if %{with clang_lto}
 PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE74} %{SOURCE75} %{SOURCE76} %{SOURCE77}"
 %endif
-PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config partial-kernel-71-config-snip.config partial-kernel-71-config-debug-snip.config"
+PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config partial-kernel-71-config-snip.config partial-kernel-71-config-debug-snip.config partial-kernel-71-config-aarch64-snip.config partial-kernel-71-config-aarch64-debug-snip.config"
 
 GetArch()
 {
