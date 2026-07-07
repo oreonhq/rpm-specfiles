@@ -129,10 +129,19 @@ cmake qt6 : libseccomp teckit ghostscript : texlive-base : texlive-collection-ba
 
 Frameworks point release or any rebuild after Qt changed ABI.
 
+### Notes
+
+`extra-cmake-modules` unconditionally BuildRequires `pkgconfig(Qt5Core)` for
+its test suite, so `qt5-qtbase` has to be buildable before `extra-cmake-modules`
+even resolves builddeps, this is a real leaf dep of the KF6 chain, not
+optional. `qt5-qtbase` in turn BuildRequires `freetds-devel`, which has its
+own spec dir (`freetds/`) for exactly this reason. Both are one-time builds,
+not something that needs rebuilding on every KF6 bump once they're published.
+
 ### Chain
 
 ```text
-extra-cmake-modules kf6 : kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6-kcodecs kf6-kconfig kf6-kcoreaddons kf6-kdbusaddons kf6-kdnssd kf6-kguiaddons kf6-ki18n kf6-kidletime kf6-kitemmodels kf6-kitemviews kf6-kplotting kf6-kwidgetsaddons kf6-kwindowsystem kf6-solid kf6-sonnet kf6-syntax-highlighting kf6-threadweaver kf6-kirigami kf6-bluez-qt kf6-modemmanager-qt kf6-networkmanager-qt kf6-prison kf6-kholidays kf6-kpty kf6-ktexttemplate kf6-kunitconversion kf6-kuserfeedback kf6-kcalendarcore kf6-kquickcharts kf6-kstatusnotifieritem : kf6-kauth kf6-kcompletion kf6-kcrash kf6-kdoctools kf6-kfilemetadata kf6-kimageformats kf6-kjobwidgets kf6-knotifications kf6-kcolorscheme kf6-kconfigwidgets kf6-kglobalaccel kf6-kcontacts : kf6-kpackage kf6-kservice kf6-kiconthemes kf6-kwallet kf6-kded kf6-syndication kf6-kdesu : kf6-kio kf6-ktextwidgets kf6-kxmlgui : kf6-kbookmarks kf6-knotifyconfig kf6-knewstuff kf6-kparts kf6-krunner kf6-kdav : kf6-kcmutils kf6-kdeclarative kf6-ksvg kf6-qqc2-desktop-style kf6-purpose : kf6-ktexteditor kf6-frameworkintegration kf6-kirigami-addons kf6-kpeople kf6-baloo kf6-kglobalacceld
+freetds : qt5-qtbase : extra-cmake-modules kf6 : kf6-breeze-icons kf6-kapidox kf6-attica kf6-karchive kf6-kcodecs kf6-kconfig kf6-kcoreaddons kf6-kdbusaddons kf6-kdnssd kf6-kguiaddons kf6-ki18n kf6-kidletime kf6-kitemmodels kf6-kitemviews kf6-kplotting kf6-kwidgetsaddons kf6-kwindowsystem kf6-solid kf6-sonnet kf6-syntax-highlighting kf6-threadweaver kf6-kirigami kf6-bluez-qt kf6-modemmanager-qt kf6-networkmanager-qt kf6-prison kf6-kholidays kf6-kpty kf6-ktexttemplate kf6-kunitconversion kf6-kuserfeedback kf6-kcalendarcore kf6-kquickcharts kf6-kstatusnotifieritem : kf6-kauth kf6-kcompletion kf6-kcrash kf6-kdoctools kf6-kfilemetadata kf6-kimageformats kf6-kjobwidgets kf6-knotifications kf6-kcolorscheme kf6-kconfigwidgets kf6-kglobalaccel kf6-kcontacts : kf6-kpackage kf6-kservice kf6-kiconthemes kf6-kwallet kf6-kded kf6-syndication kf6-kdesu : kf6-kio kf6-ktextwidgets kf6-kxmlgui : kf6-kbookmarks kf6-knotifyconfig kf6-knewstuff kf6-kparts kf6-krunner kf6-kdav : kf6-kcmutils kf6-kdeclarative kf6-ksvg kf6-qqc2-desktop-style kf6-purpose : kf6-ktexteditor kf6-frameworkintegration kf6-kirigami-addons kf6-kpeople kf6-baloo kf6-kglobalacceld
 ```
 
 ---
