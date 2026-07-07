@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    ksystemstats
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: Plugin based system monitoring daemon for Plasma
 

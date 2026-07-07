@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kinfocenter
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: KDE Info Center
 

@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-sdk
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: Development tools for Plasma 6
 

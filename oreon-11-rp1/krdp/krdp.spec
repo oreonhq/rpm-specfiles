@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 Name:           krdp
 Summary:        Desktop sharing using RDP
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 
 License:        LGPL-2.1-only OR LGPL-3.0-only

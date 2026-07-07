@@ -1,4 +1,4 @@
-%global source0_hash 0f2712ff1f5a4c443e2e1df703fb074e2d75da55f1fe039a0eec38a58708e7a7
+%global source0_hash 40cd6b417678faba69847e1fa4d9efc8f500cdf95db17e317d6d868d18c95339
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 %global plasmaver %{version}
 
 Name:           kf6-kglobalacceld
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later

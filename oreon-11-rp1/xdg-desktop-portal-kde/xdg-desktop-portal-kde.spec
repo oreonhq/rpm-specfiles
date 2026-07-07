@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    xdg-desktop-portal-kde
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: KDE backend implementation for xdg-desktop-portal
 

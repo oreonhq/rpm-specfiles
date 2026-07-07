@@ -4,7 +4,7 @@
 
 
 Name:       kwayland
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary:    Qt-style API to interact with the wayland-client API
 

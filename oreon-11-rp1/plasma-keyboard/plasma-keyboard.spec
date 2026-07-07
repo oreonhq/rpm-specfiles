@@ -3,12 +3,12 @@
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 1
+%global bug_ver_kf6 2
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 

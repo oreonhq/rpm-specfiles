@@ -1,10 +1,10 @@
-%global source0_hash 0670bf42990273fbe6049d136dbd60fd6536509d52955c3804899244b82638e3
+%global source0_hash 029173f7bdc6c4b6b88eebf5ceb417f42ffd405f8a31115c29df1af1ee728bad
 
 %global stable_kf6 stable
 
 
 Name:           plasma5support
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary:        Compatibility and migration support between KDE Frameworks 5 and 6
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later

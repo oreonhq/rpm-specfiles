@@ -151,6 +151,30 @@ polkit-qt-1 plasma-wayland-protocols plasma-activities kdecoration libdisplay-in
 
 ---
 
+## Plasma optional-subpackage leaf deps
+
+### When to use
+
+You're building one of the optional Plasma leaf subpackages below for the first time, or bumping their non-Plasma backend dependency.
+
+### Notes
+
+- `plasma-pass` needs `liboath` (built standalone from the `oath-toolkit` release tarball, only the `liboath/` subtree, see `liboath.spec`).
+- `plasma-vault` needs `gocryptfs` for its gocryptfs-backed vault type (the ecryptfs/cryfs backends it also supports are already covered elsewhere).
+- `plasma-bigscreen`'s HDMI-CEC remote support needs `libcec`, which itself needs `p8-platform`. Build `p8-platform` first.
+- `plasma-discover`'s snap backend (`plasma-discover-snap`) needs `snapd` (the daemon) and `snapd-glib` (ships `libsnapd-qt`, the Qt wrapper Discover actually links against). `snapd`'s spec here only builds the Go daemon/CLI so far, not the `cmd/snap-confine` C sandboxing helpers (see the note in `snapd.spec`). Needs a follow-up before strict snap confinement actually works.
+- `plasma-applet-translator` needs `translate-shell` (the `trans` CLI) and `xsel` (clipboard access).
+- `plasma-dialer` (mobile-only, not needed for the desktop ISO) needs `libcallaudio`. `libphonenumber-devel` already has a spec in this tree.
+- Akonadi's optional MySQL storage backend (`akonadi-server-mysql`) needs `mariadb-server`. Not required for the default SQLite backend.
+
+### Chain
+
+```text
+liboath gocryptfs p8-platform snapd snapd-glib translate-shell xsel libcallaudio mariadb-server : libcec : plasma-pass plasma-vault plasma-bigscreen plasma-discover plasma-applet-translator plasma-dialer
+```
+
+---
+
 ## PipeWire and Plasma multimedia stuff
 
 ### When to use
@@ -223,7 +247,7 @@ rust
 
 ### When to use
 
-Kernel command line defaults, theme files, or template churn that touches how installers build media.
+Kernel command line defaults, theme files, or templates that touches how installers build media.
 
 ### Chain
 
@@ -306,6 +330,28 @@ nss NetworkManager
 ```
 
 If your failure mentions `libnm` from an older split package, open the NetworkManager spec and add whatever subpackage name the build service uses for that SRPM. Here `NetworkManager` is the directory name under `oreon-11-rp1`.
+
+---
+
+## NetworkManager VPN plugins (plasma-nm backends)
+
+### When to use
+
+You bumped NetworkManager and need to rebuild the VPN plugin family that `plasma-nm` pulls in as optional subpackages, or you're bringing one of these packages into the tree for the first time.
+
+### Notes
+
+Every plugin here follows the same two-layer shape: a real protocol/tunnel implementation package (the actual client binary and its libs) and a `NetworkManager-<protocol>` plugin package that wraps it for the NetworkManager D-Bus API. Build the protocol implementation before its NetworkManager plugin, always. The plugin package itself also splits into a base subpackage (vpn service only) and a `-gnome` subpackage (auth dialog + editor UI), matching how `NetworkManager-openvpn` and `NetworkManager-libreswan` are already split in this tree. plasma-nm only needs the base subpackage, the `-gnome` one is just extra.
+
+`strongswan` doubles as the IPsec layer for `NetworkManager-l2tp` (L2TP/IPsec) and as its own native IKEv2 VPN plugin via its `charon-nm` NetworkManager backend, so it only needs to be built once for both cases.
+
+### Chain
+
+```text
+openconnect vpnc sstp-client iodine strongswan xl2tpd NetworkManager-pptp NetworkManager-fortisslvpn NetworkManager-ssh : NetworkManager-openconnect NetworkManager-vpnc NetworkManager-sstp NetworkManager-iodine NetworkManager-l2tp
+```
+
+`pptp` (the PPP plugin binary `NetworkManager-pptp` links against) and `ppp` itself already exist in this tree, no new leaf needed there. `NetworkManager-ssh` only needs `openssh-clients` and `sshpass` at runtime, both already packaged.
 
 ---
 

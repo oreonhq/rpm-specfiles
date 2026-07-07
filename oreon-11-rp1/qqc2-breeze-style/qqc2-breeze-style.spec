@@ -4,7 +4,7 @@
 
 
 Name:    qqc2-breeze-style
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 Summary: QtQuickControls2 breeze style
 

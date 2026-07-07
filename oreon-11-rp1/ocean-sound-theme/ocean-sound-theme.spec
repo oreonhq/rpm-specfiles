@@ -5,7 +5,7 @@
 
 Name:           ocean-sound-theme
 Summary:        Ocean Sound Theme for Plasma
-Version: 6.7.1
+Version:        6.7.2
 Release: 1%{?dist}
 BuildArch:      noarch
 
