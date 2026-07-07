@@ -81,6 +81,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KDeclarative/
 %{_kf6_libdir}/libKF6CalendarEvents.so
 %{_kf6_libdir}/cmake/KF6Declarative/
+%{_kf6_libdir}/pkgconfig/KF6Declarative.pc
 
 
 %changelog

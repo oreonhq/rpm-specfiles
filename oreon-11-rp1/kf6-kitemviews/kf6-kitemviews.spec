@@ -60,6 +60,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KItemViews/
 %{_kf6_libdir}/libKF6ItemViews.so
 %{_kf6_libdir}/cmake/KF6ItemViews/
+%{_kf6_libdir}/pkgconfig/KF6ItemViews.pc
 %{_kf6_qtplugindir}/designer/kitemviews6widgets.so
 
 

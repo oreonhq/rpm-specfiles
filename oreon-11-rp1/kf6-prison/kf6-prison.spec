@@ -66,6 +66,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6Prison.so
 %{_kf6_libdir}/libKF6PrisonScanner.so
 %{_kf6_libdir}/cmake/KF6Prison/
+%{_kf6_libdir}/pkgconfig/KF6Prison.pc
 
 
 %changelog

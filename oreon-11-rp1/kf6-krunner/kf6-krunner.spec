@@ -68,6 +68,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KRunner/
 %{_kf6_libdir}/libKF6Runner.so
 %{_kf6_libdir}/cmake/KF6Runner/
+%{_kf6_libdir}/pkgconfig/KF6Runner.pc
 %{_kf6_datadir}/dbus-1/interfaces/*
 %{_kf6_datadir}/kdevappwizard/templates/runner6.tar.bz2
 %{_kf6_datadir}/kdevappwizard/templates/runner6python.tar.bz2

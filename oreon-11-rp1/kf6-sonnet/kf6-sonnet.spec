@@ -130,6 +130,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/SonnetCore/
 %{_kf6_includedir}/SonnetUi/
 %{_kf6_libdir}/cmake/KF6Sonnet/
+%{_kf6_libdir}/pkgconfig/KF6Sonnet.pc
 %{_kf6_libdir}/libKF6SonnetCore.so
 %{_kf6_libdir}/libKF6SonnetUi.so
 %{_kf6_qtplugindir}/designer/sonnet6widgets.so

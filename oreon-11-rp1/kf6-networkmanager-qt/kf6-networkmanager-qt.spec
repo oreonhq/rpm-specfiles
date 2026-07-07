@@ -77,6 +77,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/NetworkManagerQt/
 %{_kf6_libdir}/libKF6NetworkManagerQt.so
 %{_kf6_libdir}/cmake/KF6NetworkManagerQt/
+%{_kf6_libdir}/pkgconfig/KF6NetworkManagerQt.pc
 
 
 %changelog

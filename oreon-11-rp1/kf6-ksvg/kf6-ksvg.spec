@@ -70,6 +70,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files devel
 %{_kf6_includedir}/KSvg
 %{_kf6_libdir}/cmake/KF6Svg
+%{_kf6_libdir}/pkgconfig/KF6Svg.pc
 %{_kf6_libdir}/libKF6Svg.so
 
 

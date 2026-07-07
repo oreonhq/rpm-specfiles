@@ -55,6 +55,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files devel
 %{_kf6_includedir}/Syndication/
 %{_kf6_libdir}/cmake/KF6Syndication/
+%{_kf6_libdir}/pkgconfig/KF6Syndication.pc
 %{_kf6_libdir}/libKF6Syndication.so
 
 

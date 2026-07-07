@@ -81,6 +81,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KJobWidgets/
 %{_kf6_libdir}/libKF6JobWidgets.so
 %{_kf6_libdir}/cmake/KF6JobWidgets/
+%{_kf6_libdir}/pkgconfig/KF6JobWidgets.pc
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
 
 

@@ -72,6 +72,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KTextWidgets/
 %{_kf6_libdir}/libKF6TextWidgets.so
 %{_kf6_libdir}/cmake/KF6TextWidgets/
+%{_kf6_libdir}/pkgconfig/KF6TextWidgets.pc
 %{_kf6_qtplugindir}/designer/ktextwidgets6widgets.so
 
 

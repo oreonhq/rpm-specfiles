@@ -8,7 +8,12 @@ License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://www.freetds.org/
 Source0:        https://www.freetds.org/files/stable/%{name}-%{version}.tar.bz2
 
-BuildRequires:  gcc, make, pkgconfig(openssl), krb5-devel, unixODBC-devel >= 2.0.0
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  krb5-devel
+BuildRequires:  unixODBC >= 2.0.0
+BuildRequires:  unixODBC-devel >= 2.0.0
 
 %description
 FreeTDS is a set of libraries that allows Unix and Linux programs to
@@ -23,7 +28,15 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Headers and shared-object symlinks for building software against FreeTDS
-(libsybdb, libct, libtdsodbc).
+(libsybdb, libct).
+
+%package unixodbc
+Summary:        FreeTDS ODBC driver for unixODBC
+Requires:       unixODBC%{?_isa} >= 2.0.0
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description unixodbc
+ODBC driver module for unixODBC (libtdsodbc).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -35,7 +48,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         --with-tdsver=auto \
         --enable-krb5 \
         --with-openssl \
-        --with-unixodbc=%{_prefix}
+        --with-unixodbc
 %make_build
 
 %install
@@ -46,6 +59,20 @@ rm -rf %{buildroot}%{_defaultdocdir}/freetds
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
+%post unixodbc
+echo "[FreeTDS]
+Description = FreeTDS unixODBC Driver
+Driver = %{_libdir}/libtdsodbc.so
+Setup = %{_libdir}/libtdsodbc.so" | odbcinst -i -d -r > /dev/null 2>&1 || :
+echo "[SQL Server]
+Description = FreeTDS unixODBC Driver
+Driver = %{_libdir}/libtdsodbc.so
+Setup = %{_libdir}/libtdsodbc.so" | odbcinst -i -d -r > /dev/null 2>&1 || :
+
+%preun unixodbc
+odbcinst -u -d -n 'FreeTDS' > /dev/null 2>&1 || :
+odbcinst -u -d -n 'SQL Server' > /dev/null 2>&1 || :
+
 %files
 %license COPYING.txt COPYING_LIB.txt
 %doc AUTHORS.md NEWS.md README.md
@@ -53,7 +80,6 @@ rm -rf %{buildroot}%{_defaultdocdir}/freetds
 %{_mandir}/man?/*
 %{_libdir}/libct.so.*
 %{_libdir}/libsybdb.so.*
-%{_libdir}/libtdsodbc.so.*
 %config(noreplace) %{_sysconfdir}/freetds.conf
 %config(noreplace) %{_sysconfdir}/locales.conf
 %config(noreplace) %{_sysconfdir}/pool.conf
@@ -61,8 +87,10 @@ rm -rf %{buildroot}%{_defaultdocdir}/freetds
 %files devel
 %{_libdir}/libct.so
 %{_libdir}/libsybdb.so
-%{_libdir}/libtdsodbc.so
 %{_includedir}/*.h
+
+%files unixodbc
+%{_libdir}/libtdsodbc.so
 
 %changelog
 %autochangelog

@@ -86,6 +86,7 @@ mkdir -p %{buildroot}%{_kf6_qtplugindir}/kcms
 %{_libdir}/libKF6KCMUtilsQuick.so
 %{_kf6_libdir}/libKF6KCMUtilsCore.so
 %{_kf6_libdir}/cmake/KF6KCMUtils/
+%{_kf6_libdir}/pkgconfig/KF6KCMUtils.pc
 %{_kf6_libexecdir}/kcmdesktopfilegenerator
 %{_kf6_includedir}/KCMUtilsQuick
 

@@ -96,6 +96,7 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kxmlgui5/
 %{_kf6_includedir}/KXmlGui/
 %{_kf6_libdir}/libKF6XmlGui.so
 %{_kf6_libdir}/cmake/KF6XmlGui/
+%{_kf6_libdir}/pkgconfig/KF6XmlGui.pc
 
 
 %changelog

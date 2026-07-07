@@ -96,7 +96,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/kdevappwizard/templates/kirigami6.tar.bz2
 %{_kf6_includedir}/Kirigami/
 %{_kf6_libdir}/cmake/KF6Kirigami{,2}/
+%{_kf6_libdir}/pkgconfig/KF6Kirigami.pc
+%{_kf6_libdir}/pkgconfig/KF6Kirigami2.pc
 %{_kf6_libdir}/cmake/KF6KirigamiPlatform/
+%{_kf6_libdir}/pkgconfig/KF6KirigamiPlatform.pc
 %{_kf6_libdir}/libKirigami.so
 %{_kf6_libdir}/libKirigamiDelegates.so
 %{_kf6_libdir}/libKirigamiDialogs.so

@@ -77,6 +77,7 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
 %files devel
 %{_kf6_libdir}/libKF6FileMetaData.so
 %{_kf6_libdir}/cmake/KF6FileMetaData
+%{_kf6_libdir}/pkgconfig/KF6FileMetaData.pc
 %{_kf6_includedir}/KFileMetaData/
 
 

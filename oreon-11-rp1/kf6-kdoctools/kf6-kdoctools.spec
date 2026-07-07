@@ -72,6 +72,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KDocTools/
 %{_kf6_libdir}/libKF6DocTools.so
 %{_kf6_libdir}/cmake/KF6DocTools/
+%{_kf6_libdir}/pkgconfig/KF6DocTools.pc
 
 
 %changelog

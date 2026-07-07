@@ -109,6 +109,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 %{_libdir}/libKF6UserFeedbackCore.so
 %{_libdir}/libKF6UserFeedbackWidgets.so
 %{_kf6_libdir}/cmake/KF6UserFeedback/
+%{_kf6_libdir}/pkgconfig/KF6UserFeedback.pc
 %{_kf6_archdatadir}/mkspecs/modules/qt_KF6UserFeedback*.pri
 
 

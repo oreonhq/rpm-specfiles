@@ -67,6 +67,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KAuth/
 %{_kf6_includedir}/KAuthCore/
 %{_kf6_libdir}/cmake/KF6Auth/
+%{_kf6_libdir}/pkgconfig/KF6Auth.pc
 %{_kf6_libdir}/libKF6AuthCore.so
 %{_kf6_libexecdir}/kauth/
 

@@ -59,6 +59,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files devel
 %{_kf6_includedir}/KColorScheme
 %{_kf6_libdir}/cmake/KF6ColorScheme
+%{_kf6_libdir}/pkgconfig/KF6ColorScheme.pc
 %{_kf6_libdir}/libKF6ColorScheme.so
 
 

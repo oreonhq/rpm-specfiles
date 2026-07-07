@@ -78,6 +78,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6IconThemes.so
 %{_kf6_libdir}/libKF6IconWidgets.so
 %{_kf6_libdir}/cmake/KF6IconThemes/
+%{_kf6_libdir}/pkgconfig/KF6IconThemes.pc
 %{_kf6_qtplugindir}/designer/kiconthemes6widgets.so
 
 

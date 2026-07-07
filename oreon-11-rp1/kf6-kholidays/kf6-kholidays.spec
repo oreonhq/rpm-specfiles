@@ -61,6 +61,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files devel
 %{_kf6_includedir}/KHolidays/
 %{_kf6_libdir}/cmake/KF6Holidays/
+%{_kf6_libdir}/pkgconfig/KF6Holidays.pc
 %{_kf6_libdir}/libKF6Holidays.so
 
 

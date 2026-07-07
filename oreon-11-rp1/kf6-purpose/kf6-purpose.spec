@@ -98,6 +98,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/Purpose/
 %{_kf6_includedir}/PurposeWidgets/
 %{_kf6_libdir}/cmake/KF6Purpose/
+%{_kf6_libdir}/pkgconfig/KF6Purpose.pc
 
 
 %changelog

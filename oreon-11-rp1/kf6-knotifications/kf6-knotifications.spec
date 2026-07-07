@@ -85,6 +85,7 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 %{_kf6_includedir}/KNotifications/
 %{_kf6_libdir}/libKF6Notifications.so
 %{_kf6_libdir}/cmake/KF6Notifications/
+%{_kf6_libdir}/pkgconfig/KF6Notifications.pc
 
 
 %changelog

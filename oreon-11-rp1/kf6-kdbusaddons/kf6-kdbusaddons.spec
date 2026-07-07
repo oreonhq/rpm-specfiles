@@ -60,6 +60,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_includedir}/KDBusAddons/
 %{_kf6_libdir}/libKF6DBusAddons.so
 %{_kf6_libdir}/cmake/KF6DBusAddons/
+%{_kf6_libdir}/pkgconfig/KF6DBusAddons.pc
 
 
 %changelog

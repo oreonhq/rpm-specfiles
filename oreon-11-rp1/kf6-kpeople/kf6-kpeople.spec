@@ -71,6 +71,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6PeopleWidgets.so
 %{_kf6_libdir}/libKF6PeopleBackend.so
 %{_kf6_libdir}/cmake/KF6People/
+%{_kf6_libdir}/pkgconfig/KF6People.pc
 
 
 %changelog
