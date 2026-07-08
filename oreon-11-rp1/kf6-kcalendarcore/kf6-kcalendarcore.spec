@@ -26,14 +26,30 @@ BuildRequires:	qt6-qtbase-devel
 BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:  cmake(Qt6Qml)
 
+BuildRequires:  python3-devel
+BuildRequires:  python3-build
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-wheel
+BuildRequires:  clang-devel
+BuildRequires:  cmake(Shiboken6)
+BuildRequires:  cmake(PySide6)
+
+Requires:       kf6-filesystem
+
 %description
 %{summary}.
 
-%package	devel
-Summary:	Development files for %{name}
-Requires:	%{name} = :%{version}-%{release}
-Requires:	libical-devel
-%description	devel
+%package -n python3-%{name}
+Summary:        Qt for Python bindings for %{name}
+%description -n python3-%{name}
+The package contains the pyside6 bindings library for %{name}
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libical-devel
+Requires:       qt6-qtbase-devel
+%description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
@@ -53,8 +69,15 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6CalendarCore.so.*
 %{_kf6_qmldir}/org/kde/calendarcore/
 
+%files -n python3-%{name}
+%{python3_sitearch}/KCalendarCore.cpython-%{python3_version_nodots}*.so
+
 %files devel
 %{_kf6_includedir}/KCalendarCore/
+%dir %{_includedir}/PySide6/KCalendarCore/
+%{_includedir}/PySide6/KCalendarCore/kcalendarcore_python.h
+%dir %{_kf6_datadir}/PySide6/typesystems/
+%{_kf6_datadir}/PySide6/typesystems/typesystem_kcalendarcore.xml
 %{_kf6_libdir}/libKF6CalendarCore.so
 %{_kf6_libdir}/cmake/KF6CalendarCore/
 %{_kf6_libdir}/pkgconfig/KF6CalendarCore.pc
