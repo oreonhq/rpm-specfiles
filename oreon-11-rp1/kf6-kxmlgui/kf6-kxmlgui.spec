@@ -94,10 +94,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kxmlgui5/
 %files devel
 %{_kf6_qtplugindir}/designer/*6widgets.so
 %{_kf6_includedir}/KXmlGui/
-%dir %{_includedir}/PySide6/KXmlGui/
-%{_includedir}/PySide6/KXmlGui/kxmlgui_python.h
-%dir %{_kf6_datadir}/PySide6/typesystems/
-%{_kf6_datadir}/PySide6/typesystems/typesystem_kxmlgui.xml
 %{_kf6_libdir}/libKF6XmlGui.so
 %{_kf6_libdir}/cmake/KF6XmlGui/
 

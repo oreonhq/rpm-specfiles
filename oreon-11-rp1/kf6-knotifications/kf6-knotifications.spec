@@ -83,10 +83,6 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
 %files devel
 %{_kf6_includedir}/KNotifications/
-%dir %{_includedir}/PySide6/KNotifications/
-%{_includedir}/PySide6/KNotifications/knotifications_python.h
-%dir %{_kf6_datadir}/PySide6/typesystems/
-%{_kf6_datadir}/PySide6/typesystems/typesystem_knotifications.xml
 %{_kf6_libdir}/libKF6Notifications.so
 %{_kf6_libdir}/cmake/KF6Notifications/
 

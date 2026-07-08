@@ -74,10 +74,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files devel
 %{_kf6_includedir}/KStatusNotifierItem
-%dir %{_includedir}/PySide6/KStatusNotifierItem/
-%{_includedir}/PySide6/KStatusNotifierItem/kstatusnotifieritem_python.h
-%dir %{_kf6_datadir}/PySide6/typesystems/
-%{_kf6_datadir}/PySide6/typesystems/typesystem_kstatusnotifieritem.xml
 %{_kf6_libdir}/cmake/KF6StatusNotifierItem
 %{_kf6_libdir}/libKF6StatusNotifierItem.so
 

@@ -82,11 +82,11 @@ cat *.lang > all.lang
 %{_datadir}/kf6/jsonschema/kpluginmetadata.schema.json
 %{_libdir}/qt6/qml/org/kde/coreaddons/kcoreaddonsplugin.qmltypes
 %{_libdir}/qt6/qml/org/kde/coreaddons/kde-qmlmodule.version
+%{_qt6_metatypesdir}/qt6kf6coreaddons_metatypes.json
 
 %files -n python3-%{name}
 %{python3_sitearch}/KCoreAddons.cpython-%{python3_version_nodots}*.so
 
-%{_qt6_metatypesdir}/qt6kf6coreaddons_metatypes.json
 %files devel
 %{_kf6_includedir}/KCoreAddons/
 %dir %{_includedir}/PySide6/KCoreAddons/

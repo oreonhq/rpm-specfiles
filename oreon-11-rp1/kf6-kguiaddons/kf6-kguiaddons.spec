@@ -78,17 +78,13 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6GuiAddons.so.*
 %{_kf6_datadir}/applications/*-handler.desktop
 %{_kf6_qmldir}/org/kde/guiaddons/
+%{_qt6_metatypesdir}/qt6kf6guiaddons_metatypes.json
 
 %files -n python3-%{name}
 %{python3_sitearch}/KGuiAddons.cpython-%{python3_version_nodots}*.so
 
-%{_qt6_metatypesdir}/qt6kf6guiaddons_metatypes.json
 %files devel
 %{_kf6_includedir}/KGuiAddons/
-%dir %{_includedir}/PySide6/KGuiAddons/
-%{_includedir}/PySide6/KGuiAddons/kguiaddons_python.h
-%dir %{_kf6_datadir}/PySide6/typesystems/
-%{_kf6_datadir}/PySide6/typesystems/typesystem_kguiaddons.xml
 %{_kf6_libdir}/libKF6GuiAddons.so
 %{_kf6_libdir}/cmake/KF6GuiAddons/
 %{_kf6_libdir}/pkgconfig/KF6GuiAddons.pc
