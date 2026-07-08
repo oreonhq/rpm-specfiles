@@ -17,6 +17,7 @@ Source0:        https://github.com/streambinder/vpnc/archive/%{commit}.tar.gz#/%
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  perl-interpreter
+BuildRequires:  perl(autodie)
 BuildRequires:  pkgconfig(gnutls)
 BuildRequires:  pkgconfig(libgcrypt)
 
@@ -50,6 +51,7 @@ install -m 0644 vpnc.conf %{buildroot}%{_sysconfdir}/vpnc/default.conf
 %config(noreplace) %{_sysconfdir}/vpnc/default.conf
 %{_mandir}/man1/cisco-decrypt.1*
 %{_mandir}/man1/pcf2vpnc.1*
+%{_mandir}/man8/vpnc.8*
 
 %changelog
 %autochangelog
