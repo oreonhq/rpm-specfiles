@@ -67,7 +67,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/qt6/qml/org/kde/ksvg
 %{_kf6_datadir}/qlogging-categories6/ksvg.categories
 
-%{_qt6_metatypesdir}/qt6kf6svg_metatypes.json
 %files devel
 %{_kf6_includedir}/KSvg
 %{_kf6_libdir}/cmake/KF6Svg

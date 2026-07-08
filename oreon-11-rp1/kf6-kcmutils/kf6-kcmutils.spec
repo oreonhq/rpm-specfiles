@@ -79,8 +79,6 @@ mkdir -p %{buildroot}%{_kf6_qtplugindir}/kcms
 %{_libdir}/libKF6KCMUtilsQuick.so.6
 %{_libdir}/libKF6KCMUtilsQuick.so.%{version}
 
-%{_qt6_metatypesdir}/qt6kf6kcmutils*_metatypes.json
-%{_qt6_metatypesdir}/qt6kcmutils_proxy_model_metatypes.json
 %files devel
 %{_kf6_includedir}/KCMUtils/
 %{_kf6_includedir}/KCMUtilsCore/

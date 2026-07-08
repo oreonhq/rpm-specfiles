@@ -81,7 +81,6 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 %files -n python3-%{name}
 %{python3_sitearch}/KNotifications.cpython-%{python3_version_nodots}*.so
 
-%{_qt6_metatypesdir}/qt6kf6notifications_metatypes.json
 %files devel
 %{_kf6_includedir}/KNotifications/
 %{_kf6_libdir}/libKF6Notifications.so

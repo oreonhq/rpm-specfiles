@@ -53,7 +53,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6CalendarCore.so.*
 %{_kf6_qmldir}/org/kde/calendarcore/
 
-%{_qt6_metatypesdir}/qt6kf6calendarcore_metatypes.json
 %files devel
 %{_kf6_includedir}/KCalendarCore/
 %{_kf6_libdir}/libKF6CalendarCore.so

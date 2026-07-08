@@ -75,7 +75,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/libKF6Contacts.so.*
 %{_kf6_qmldir}/org/kde/contacts/
 
-%{_qt6_metatypesdir}/qt6kf6contacts_metatypes.json
 %files devel
 %{_kf6_includedir}/KContacts/
 %{_kf6_libdir}/libKF6Contacts.so

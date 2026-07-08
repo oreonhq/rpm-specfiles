@@ -77,7 +77,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libkquickcontrolsprivate.so.0
 %{_kf6_libdir}/libkquickcontrolsprivate.so.%{version}
 
-%{_qt6_metatypesdir}/qt6kquickcontrolsprivate_metatypes.json
 %files devel
 %{_kf6_includedir}/KDeclarative/
 %{_kf6_libdir}/libKF6CalendarEvents.so

@@ -60,7 +60,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_libdir}/libKF6BluezQt.so.*
 %{_kf6_qmldir}/org/kde/bluezqt/
  
-%{_qt6_metatypesdir}/qt6kf6bluezqt_metatypes.json
 %files devel
 %{_kf6_includedir}/BluezQt/ 
 %{_kf6_libdir}/libKF6BluezQt.so

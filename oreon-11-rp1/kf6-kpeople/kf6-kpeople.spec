@@ -65,7 +65,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_qmldir}/org/kde/people/
 %{_kf6_qtplugindir}/kpeople/datasource/KPeopleVCard.so
 
-%{_qt6_metatypesdir}/qt6kf6people_metatypes.json
 %files devel
 %{_kf6_includedir}/KPeople/
 %{_kf6_libdir}/libKF6People.so

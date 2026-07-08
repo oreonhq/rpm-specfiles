@@ -104,7 +104,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKirigamiAddonsComponents.so.%{version}
 %{_kf6_libdir}/libKirigamiAddonsComponents.so.6
 
-%{_qt6_metatypesdir}/qt6kf6kirigamidateandtime_metatypes.json
 %files devel
 %{_kf6_libdir}/libKirigamiAddonsComponents.so
 %{_kf6_libdir}/libKirigamiApp.so

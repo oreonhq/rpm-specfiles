@@ -73,7 +73,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/qt6/qml/org/kde/networkmanager/networkmanagerqtqml.qmltypes
 %{_kf6_libdir}/qt6/qml/org/kde/networkmanager/qmldir
 
-%{_qt6_metatypesdir}/qt6kf6networkmanagerqt_metatypes.json
 %files devel
 %{_kf6_includedir}/NetworkManagerQt/
 %{_kf6_libdir}/libKF6NetworkManagerQt.so

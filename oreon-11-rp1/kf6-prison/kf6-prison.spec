@@ -60,7 +60,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6PrisonScanner.so.%{version}
 %{_qt6_qmldir}/org/kde/prison/
 
-%{_qt6_metatypesdir}/qt6kf6prison*_metatypes.json
 %files devel
 %{_kf6_includedir}/Prison/
 %{_kf6_includedir}/PrisonScanner/

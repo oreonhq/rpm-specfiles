@@ -126,7 +126,6 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 %{_kf6_plugindir}/kded/baloosearchmodule.so
 %{_kf6_qmldir}/org/kde/baloo
 
-%{_qt6_metatypesdir}/qt6kf6balooengine_metatypes.json
 %files devel
 %{_kf6_libdir}/libKF6Baloo.so
 %{_kf6_libdir}/cmake/KF6Baloo/
