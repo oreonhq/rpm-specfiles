@@ -17,6 +17,7 @@ Source0:        https://github.com/streambinder/vpnc/archive/%{commit}.tar.gz#/%
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig(gnutls)
 BuildRequires:  pkgconfig(libgcrypt)
 
 Requires:       iproute
@@ -31,7 +32,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{name}-%{commit}
 
 %build
-make %{?_smp_mflags} PREFIX=%{_prefix} CRYPTO=gcrypt
+make %{?_smp_mflags} PREFIX=%{_prefix}
 
 %install
 %make_install PREFIX=%{_prefix} ETCDIR=%{_sysconfdir}/vpnc MANDIR=%{_mandir}
