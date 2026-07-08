@@ -50,7 +50,6 @@ rm -rf %{buildroot}%{_datadir}/licenses/vpnc
 
 %files
 %license LICENSE LICENSE.BSD2
-%doc README.md ChangeLog
 %{_docdir}/vpnc/about.md
 %{_docdir}/vpnc/faq.md
 %{_docdir}/vpnc/installation.md
@@ -63,7 +62,7 @@ rm -rf %{buildroot}%{_datadir}/licenses/vpnc
 %{_mandir}/man1/cisco-decrypt.1*
 %{_mandir}/man1/pcf2vpnc.1*
 %{_mandir}/man8/vpnc.8*
-%{_unitdir}/vpnc@.service
+/usr/lib/systemd/system/vpnc@.service
 
 %changelog
 %autochangelog
