@@ -73,7 +73,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_datadir}/locale/*/kf6_entry.desktop
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
 
-%{_qt6_metatypesdir}/qt6kf6configwidgets_metatypes.json
 %files devel
 %{_kf6_includedir}/KConfigWidgets/
 %{_kf6_libdir}/libKF6ConfigWidgets.so

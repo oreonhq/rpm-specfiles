@@ -60,7 +60,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_libdir}/libQuickCharts.so.*
 %{_libdir}/libQuickChartsControls.so*
 
-%{_qt6_metatypesdir}/qt6kf6quickcharts*_metatypes.json
 %files devel
 %{_kf6_libdir}/cmake/KF6QuickCharts/
 %{_libdir}/libQuickCharts.so

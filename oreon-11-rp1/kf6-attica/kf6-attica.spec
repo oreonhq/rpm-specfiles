@@ -51,7 +51,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*
 %{_kf6_libdir}/libKF6Attica.so.*
 
-%{_qt6_metatypesdir}/qt6kf6attica_metatypes.json
 %files devel
 %{_kf6_libdir}/cmake/KF6Attica/
 %{_kf6_includedir}/Attica/

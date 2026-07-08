@@ -73,7 +73,6 @@ rm -fv %{buildroot}%{_prefix}/lib/systemd/user/plasma-kglobalaccel.service
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
 %{_kf6_libdir}/libKF6GlobalAccel.so.*
 
-%{_qt6_metatypesdir}/qt6kf6globalaccel_metatypes.json
 %files devel
 %{_kf6_includedir}/KGlobalAccel/
 %{_kf6_libdir}/libKF6GlobalAccel.so

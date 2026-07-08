@@ -56,7 +56,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/*categories
 %{_kf6_libdir}/libKF6ItemViews.so.*
 
-%{_qt6_metatypesdir}/qt6kf6itemviews_metatypes.json
 %files devel
 %{_kf6_includedir}/KItemViews/
 %{_kf6_libdir}/libKF6ItemViews.so

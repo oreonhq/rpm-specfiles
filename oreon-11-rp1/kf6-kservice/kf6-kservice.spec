@@ -72,7 +72,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 %{_kf6_datadir}/kservices6/
 %{_kf6_mandir}/man8/kbuildsycoca6.8.gz
 
-%{_qt6_metatypesdir}/qt6kf6service_metatypes.json
 %files devel
 %{_kf6_includedir}/KService/
 %{_kf6_libdir}/libKF6Service.so

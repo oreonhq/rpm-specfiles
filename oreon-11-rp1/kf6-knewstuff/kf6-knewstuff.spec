@@ -79,7 +79,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6NewStuffWidgets.so.*
 %{_kf6_qmldir}/org/kde/newstuff/
 
-%{_qt6_metatypesdir}/qt6kf6newstuff*_metatypes.json
 %files devel
 %{_kf6_includedir}/KNewStuff
 %{_kf6_includedir}/KNewStuffCore

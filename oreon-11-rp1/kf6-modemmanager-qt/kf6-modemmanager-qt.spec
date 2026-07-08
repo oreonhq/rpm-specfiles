@@ -51,7 +51,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/*.renamecategories
 %{_kf6_libdir}/libKF6ModemManagerQt.so.*
 
-%{_qt6_metatypesdir}/qt6kf6modemmanagerqt_metatypes.json
 %files devel
 %{_kf6_libdir}/libKF6ModemManagerQt.so
 %{_kf6_libdir}/cmake/KF6ModemManagerQt/

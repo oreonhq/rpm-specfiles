@@ -74,7 +74,6 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
 %dir %{_kf6_plugindir}/kfilemetadata/writers/
 %{_kf6_plugindir}/kfilemetadata/writers/kfilemetadata_taglibwriter.so
 
-%{_qt6_metatypesdir}/qt6kf6filemetadata_metatypes.json
 %files devel
 %{_kf6_libdir}/libKF6FileMetaData.so
 %{_kf6_libdir}/cmake/KF6FileMetaData

@@ -61,7 +61,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %license LICENSES/*.txt
 %{_kf6_libdir}/libKF6Plotting.so.*
 
-%{_qt6_metatypesdir}/qt6kf6plotting_metatypes.json
 %files devel
 %{_kf6_includedir}/KPlotting/
 %{_kf6_libdir}/libKF6Plotting.so

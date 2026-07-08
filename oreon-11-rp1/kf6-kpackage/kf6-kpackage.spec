@@ -65,7 +65,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kpackage/
 %{_kf6_bindir}/kpackagetool6
 %{_mandir}/man1/kpackagetool6.1*
 
-%{_qt6_metatypesdir}/qt6kf6package_metatypes.json
 %files devel
 %{_kf6_includedir}/KPackage/
 %{_kf6_libdir}/libKF6Package.so

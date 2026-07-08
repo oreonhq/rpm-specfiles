@@ -66,7 +66,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libexecdir}/kdesu_stub
 %{_kf6_libexecdir}/kdesud
 
-%{_qt6_metatypesdir}/qt6kf6su_metatypes.json
 %files devel
 %{_kf6_includedir}/KDESu/
 %{_kf6_libdir}/libKF6Su.so

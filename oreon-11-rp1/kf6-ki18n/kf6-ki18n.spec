@@ -82,7 +82,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %lang(sr@latin) %{_datadir}/locale/sr@latin/LC_SCRIPTS/ki18n6/
 %lang(sr) %{_datadir}/locale/uk/LC_SCRIPTS/ki18n6/
 
-%{_qt6_metatypesdir}/qt6kf6i18n*_metatypes.json
 %files devel
 %{_kf6_includedir}/KI18n/
 %{_kf6_includedir}/KI18nLocaleData/

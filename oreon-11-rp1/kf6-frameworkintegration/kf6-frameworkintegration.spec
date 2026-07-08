@@ -80,7 +80,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/FrameworkIntegrationPlugin.so
 %{_kf6_libexecdir}/kpackagehandlers/appstreamhandler
 
-%{_qt6_metatypesdir}/qt6kf6style_metatypes.json
 %files devel
 %{_kf6_includedir}/FrameworkIntegration/
 %{_kf6_includedir}/KStyle/

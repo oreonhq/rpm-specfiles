@@ -165,7 +165,6 @@ gtk-update-icon-cache --force %{_datadir}/icons/breeze-dark &>/dev/null || :
 %{_kf6_libdir}/libKF6BreezeIcons.so.6
 %{_kf6_libdir}/libKF6BreezeIcons.so.%{version}
 
-%{_qt6_metatypesdir}/qt6kf6breezeicons_metatypes.json
 %files devel
 %{_kf6_includedir}/BreezeIcons/
 %{_kf6_libdir}/cmake/KF6BreezeIcons/

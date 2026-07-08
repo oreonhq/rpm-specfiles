@@ -106,6 +106,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_qmldir}/org/kde/sonnet/
 %{_kf6_libdir}/libKF6SonnetUi.so.*
 
+%{_qt6_metatypesdir}/qt6kf6sonnetcore_metatypes.json
 %files aspell
 %dir %{_kf6_plugindir}/sonnet
 %{_kf6_plugindir}/sonnet/sonnet_aspell.so
@@ -123,7 +124,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/sonnet/sonnet_voikko.so
 
 
-%{_qt6_metatypesdir}/qt6kf6sonnet*_metatypes.json
 %files devel
 %doc README.md
 %license LICENSES/*.txt

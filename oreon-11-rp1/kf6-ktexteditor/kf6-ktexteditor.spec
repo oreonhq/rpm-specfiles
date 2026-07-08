@@ -94,7 +94,6 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 %{_kf6_libexecdir}/kauth/kauth_ktexteditor_helper
 %{_kf6_bindir}/ktexteditor-script-tester6
 
-%{_qt6_metatypesdir}/qt6kf6texteditor_metatypes.json
 %files devel
 %{_kf6_datadir}/kdevappwizard/templates/ktexteditor6-plugin.tar.bz2
 %{_kf6_includedir}/KTextEditor/

@@ -68,7 +68,6 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %license LICENSES/*.txt
 %{_kf6_libdir}/libKF6TextWidgets.so.*
 
-%{_qt6_metatypesdir}/qt6kf6textwidgets_metatypes.json
 %files devel
 %{_kf6_includedir}/KTextWidgets/
 %{_kf6_libdir}/libKF6TextWidgets.so
