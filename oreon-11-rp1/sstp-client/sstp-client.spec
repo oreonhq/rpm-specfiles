@@ -41,11 +41,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %make_install
 find %{buildroot} -name '*.la' -delete
 
+%ldconfig_scriptlets
+
 %files
 %license COPYING
 %doc AUTHORS README
 %{_sbindir}/sstpc
+%{_libdir}/libsstp_api*.so*
 %{_libdir}/pppd/*/sstp-pppd-plugin.so
+%{_docdir}/sstp-client/sstp-test*
 %{_mandir}/man8/sstpc.8*
 
 %files devel
