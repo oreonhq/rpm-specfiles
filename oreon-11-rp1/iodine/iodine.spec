@@ -11,7 +11,6 @@ Source0:        https://github.com/yarrick/iodine/archive/refs/tags/v%{version}.
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  pkgconfig(zlib)
-BuildRequires:  pkgconfig(libcheck)
 BuildRequires:  pkgconfig(systemd)
 
 %description
