@@ -89,6 +89,14 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKirigamiTemplates.so.%{version}
 %{_kf6_libdir}/libKirigamiControls.so.6
 %{_kf6_libdir}/libKirigamiControls.so.%{version}
+%{_kf6_libdir}/libKirigamiForms.so.6
+%{_kf6_libdir}/libKirigamiForms.so.%{version}
+%{_kf6_libdir}/libKirigamiFormsPrivateTemplates.so.6
+%{_kf6_libdir}/libKirigamiFormsPrivateTemplates.so.%{version}
+%{_kf6_libdir}/libKirigamiFormsPrivateFlat.so.6
+%{_kf6_libdir}/libKirigamiFormsPrivateFlat.so.%{version}
+%{_kf6_libdir}/libKirigamiFormsPrivateCards.so.6
+%{_kf6_libdir}/libKirigamiFormsPrivateCards.so.%{version}
 
 %{_qt6_metatypesdir}/qt6kirigamiplatform_metatypes.json
 %files devel
@@ -109,6 +117,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKirigamiPolyfill.so
 %{_kf6_libdir}/libKirigamiTemplates.so
 %{_kf6_libdir}/libKirigamiControls.so
+%{_kf6_libdir}/libKirigamiForms.so
+%{_kf6_libdir}/libKirigamiFormsPrivateTemplates.so
+%{_kf6_libdir}/libKirigamiFormsPrivateFlat.so
+%{_kf6_libdir}/libKirigamiFormsPrivateCards.so
 
 
 %changelog
