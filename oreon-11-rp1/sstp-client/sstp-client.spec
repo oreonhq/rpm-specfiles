@@ -10,6 +10,7 @@ Source0:        https://gitlab.com/sstp-project/sstp-client/-/releases/%{version
 
 BuildRequires:  gcc
 BuildRequires:  make
+BuildRequires:  pkgconfig(libevent)
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  ppp-devel
 
@@ -33,7 +34,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%configure --disable-static --with-ssl=openssl
+%configure --disable-static
 %make_build
 
 %install
