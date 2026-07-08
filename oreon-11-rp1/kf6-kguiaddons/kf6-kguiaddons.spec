@@ -85,6 +85,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_qt6_metatypesdir}/qt6kf6guiaddons_metatypes.json
 %files devel
 %{_kf6_includedir}/KGuiAddons/
+%dir %{_includedir}/PySide6/KGuiAddons/
+%{_includedir}/PySide6/KGuiAddons/kguiaddons_python.h
+%dir %{_kf6_datadir}/PySide6/typesystems/
+%{_kf6_datadir}/PySide6/typesystems/typesystem_kguiaddons.xml
 %{_kf6_libdir}/libKF6GuiAddons.so
 %{_kf6_libdir}/cmake/KF6GuiAddons/
 %{_kf6_libdir}/pkgconfig/KF6GuiAddons.pc

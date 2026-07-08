@@ -74,6 +74,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files devel
 %{_kf6_includedir}/KUnitConversion/
+%dir %{_includedir}/PySide6/KUnitConversion/
+%{_includedir}/PySide6/KUnitConversion/kunitconversion_python.h
+%dir %{_kf6_datadir}/PySide6/typesystems/
+%{_kf6_datadir}/PySide6/typesystems/typesystem_kunitconversion.xml
 %{_kf6_libdir}/libKF6UnitConversion.so
 %{_kf6_libdir}/cmake/KF6UnitConversion/
 

@@ -76,6 +76,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 %files devel
 %{_kf6_includedir}/KWidgetsAddons/
+%dir %{_includedir}/PySide6/KWidgetsAddons/
+%{_includedir}/PySide6/KWidgetsAddons/kwidgetsaddons_python.h
+%dir %{_kf6_datadir}/PySide6/typesystems/
+%{_kf6_datadir}/PySide6/typesystems/typesystem_kwidgetsaddons.xml
 %{_kf6_libdir}/libKF6WidgetsAddons.so
 %{_kf6_libdir}/cmake/KF6WidgetsAddons/
 %{_kf6_qtplugindir}/designer/kwidgetsaddons6widgets.so
