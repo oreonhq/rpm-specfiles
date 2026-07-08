@@ -18,6 +18,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(autodie)
+BuildRequires:  perl(filetest)
 BuildRequires:  pkgconfig(gnutls)
 BuildRequires:  pkgconfig(libgcrypt)
 
@@ -36,13 +37,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 make %{?_smp_mflags} PREFIX=%{_prefix}
 
 %install
-%make_install PREFIX=%{_prefix} ETCDIR=%{_sysconfdir}/vpnc MANDIR=%{_mandir}
-mkdir -p %{buildroot}%{_sysconfdir}/vpnc
-install -m 0644 vpnc.conf %{buildroot}%{_sysconfdir}/vpnc/default.conf
+%make_install \
+        PREFIX=%{_prefix} \
+        BINDIR=%{_bindir} \
+        SBINDIR=%{_sbindir} \
+        ETCDIR=%{_sysconfdir}/vpnc \
+        MANDIR=%{_mandir} \
+        DOCDIR=%{_docdir}/vpnc \
+        LICENSEDIR=%{_datadir}/licenses/vpnc \
+        SYSTEMDDIR=%{_unitdir}
+rm -rf %{buildroot}%{_datadir}/licenses/vpnc
 
 %files
 %license LICENSE LICENSE.BSD2
 %doc README.md ChangeLog
+%{_docdir}/vpnc/about.md
+%{_docdir}/vpnc/faq.md
+%{_docdir}/vpnc/installation.md
 %{_sbindir}/vpnc
 %{_sbindir}/vpnc-disconnect
 %{_bindir}/cisco-decrypt
@@ -52,6 +63,7 @@ install -m 0644 vpnc.conf %{buildroot}%{_sysconfdir}/vpnc/default.conf
 %{_mandir}/man1/cisco-decrypt.1*
 %{_mandir}/man1/pcf2vpnc.1*
 %{_mandir}/man8/vpnc.8*
+%{_unitdir}/vpnc@.service
 
 %changelog
 %autochangelog

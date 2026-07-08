@@ -23,7 +23,7 @@ BuildRequires:  pkgconfig(p11-kit-1)
 BuildRequires:  pkgconfig(liblz4)
 BuildRequires:  krb5-devel
 
-Requires:       vpnc-script
+Provides:       vpnc-script
 
 %description
 OpenConnect is an SSL VPN client initially created to support Cisco's

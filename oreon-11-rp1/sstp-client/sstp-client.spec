@@ -15,6 +15,7 @@ BuildRequires:  pkgconfig(openssl)
 BuildRequires:  ppp-devel
 
 Requires:       ppp
+Requires:       libevent
 
 %description
 sstp-client is a client implementation of the Microsoft Secure Socket
@@ -34,7 +35,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%configure --disable-static
+%configure --disable-static --with-libevent=2
 %make_build
 
 %install
