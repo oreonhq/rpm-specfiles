@@ -4,7 +4,7 @@ Summary:   NetworkManager VPN plugin for iodine
 Name:      NetworkManager-iodine
 Epoch:     1
 Version:   1.2.0
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN
 
@@ -49,6 +49,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %configure \
         --disable-static \
+        --without-libnm-glib \
         --with-dist-version=%{version}-%{release}
 %make_build
 
