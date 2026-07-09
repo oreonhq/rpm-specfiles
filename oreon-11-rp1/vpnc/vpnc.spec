@@ -2,6 +2,7 @@
 
 %global commit 7f1274662e26775f47b0bbf296210c2845415e54
 %global shortcommit 7f12746
+%global unitdir /usr/lib/systemd/system
 
 Summary:        Client for Cisco3000 VPN concentrators
 Name:           vpnc
@@ -37,15 +38,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 make %{?_smp_mflags} PREFIX=%{_prefix}
 
 %install
-%make_install \
-        PREFIX=%{_prefix} \
-        BINDIR=%{_bindir} \
-        SBINDIR=%{_sbindir} \
-        ETCDIR=%{_sysconfdir}/vpnc \
-        MANDIR=%{_mandir} \
-        DOCDIR=%{_docdir}/vpnc \
-        LICENSEDIR=%{_datadir}/licenses/vpnc \
-        SYSTEMDDIR=%{_unitdir}
+make install DESTDIR=%{buildroot} \
+    PREFIX=%{_prefix} \
+    BINDIR=%{_bindir} \
+    SBINDIR=%{_sbindir} \
+    ETCDIR=%{_sysconfdir}/vpnc \
+    MANDIR=%{_mandir} \
+    DOCDIR=%{_docdir}/vpnc \
+    LICENSEDIR=%{_datadir}/licenses/vpnc \
+    SYSTEMDDIR=%{unitdir}
 rm -rf %{buildroot}%{_datadir}/licenses/vpnc
 
 %files
