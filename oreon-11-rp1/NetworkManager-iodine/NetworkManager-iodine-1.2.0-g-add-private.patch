@@ -1,17 +1,3 @@
-From: Guido Gunther <agx@sigxcpu.org>
-Date: Thu, 23 Dec 2021 23:00:00 +0100
-Subject: [PATCH] Migrate to G_ADD_PRIVATE / get_instance_private
-
-Backport of upstream post-1.2.0 commits (adapted to apply on 1.2.0):
-  b7a8dd06 Use G_DEFINE_TYPE_WITH_PRIVATE instead of g_type_class_add_private
-  bbe47ea8 Use nm_iodine_plugin_get_instance_private
-  c2fe15d3 properties: Use iodine_editor_get_instance_private()
-
-Fixes FTBFS with modern glib where G_TYPE_INSTANCE_GET_PRIVATE and
-g_type_class_add_private are deprecated and -Werror is the default.
-
-Upstream: https://gitlab.gnome.org/GNOME/network-manager-iodine
----
 --- a/src/nm-iodine-service.c
 +++ b/src/nm-iodine-service.c
 @@ -50,15 +50,13 @@
@@ -93,8 +79,11 @@ Upstream: https://gitlab.gnome.org/GNOME/network-manager-iodine
  
  	g_variant_builder_init (&priv->ip4config, G_VARIANT_TYPE_VARDICT);
  	priv->failure = -1;
-@@ -615,8 +614,6 @@
- 	GObjectClass *object_class = G_OBJECT_CLASS (iodine_class);
+@@ -612,11 +611,8 @@
+ static void
+ nm_iodine_plugin_class_init (NMIodinePluginClass *iodine_class)
+ {
+-	GObjectClass *object_class = G_OBJECT_CLASS (iodine_class);
  	NMVpnServicePluginClass *parent_class = NM_VPN_SERVICE_PLUGIN_CLASS (iodine_class);
  
 -	g_type_class_add_private (object_class, sizeof (NMIodinePluginPrivate));
@@ -102,7 +91,6 @@ Upstream: https://gitlab.gnome.org/GNOME/network-manager-iodine
  	/* virtual methods */
  	parent_class->connect    = real_connect;
  	parent_class->need_secrets = real_need_secrets;
-
 --- a/properties/nm-iodine.c
 +++ b/properties/nm-iodine.c
 @@ -84,12 +84,6 @@
