@@ -45,7 +45,7 @@ Headers for building software against libstrongswan.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
-sed -i '/WARN_CFLAGS="$WARN_CFLAGS -Wno-format"/d' configure configure.ac
+sed -i '/WARN_CFLAGS="$WARN_CFLAGS -Wno-format"/d' configure
 
 %build
 %configure \
