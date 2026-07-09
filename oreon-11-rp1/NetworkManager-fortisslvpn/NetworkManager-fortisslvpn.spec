@@ -5,11 +5,14 @@ Summary:   NetworkManager VPN plugin for Fortinet SSL VPN
 Name:      NetworkManager-fortisslvpn
 Epoch:     1
 Version:   1.4.0
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN
 
 Source0:        https://download.gnome.org/sources/NetworkManager-fortisslvpn/1.4/%{name}-%{version}.tar.xz
+Patch0:         networkmanager-fortisslvpn-1.4.0-ppp-2.5.0-1.patch
+Patch1:         networkmanager-fortisslvpn-1.4.0-ppp-2.5.0-2.patch
+Patch2:         networkmanager-fortisslvpn-1.4.0-ppp-2.5.0-3.patch
 
 BuildRequires: make
 BuildRequires: gcc
@@ -17,6 +20,8 @@ BuildRequires: gtk3-devel
 BuildRequires: NetworkManager-libnm-devel >= 1.2.0
 BuildRequires: glib2-devel
 BuildRequires: libtool
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: gettext
 BuildRequires: libnma-devel >= 1.8.33
 BuildRequires: libsecret-devel
@@ -51,6 +56,8 @@ files).
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
+[ -f src/nm-ppp-status.h ] && [ ! -f src/nm-fortisslvpn-pppd-status.h ] && mv src/nm-ppp-status.h src/nm-fortisslvpn-pppd-status.h
+autoreconf -fvi
 
 %build
 %configure \
