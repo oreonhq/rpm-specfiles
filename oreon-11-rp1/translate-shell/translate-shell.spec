@@ -1,9 +1,10 @@
 %global source0_hash f949f379779b9e746bccb20fcd180d041fb90da95816615575b49886032bcefa
+%global debug_package %{nil}
 
 Summary:        Command-line translator using Google Translate, Bing, Yandex etc
 Name:           translate-shell
 Version:        0.9.7.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        Unlicense
 URL:            https://www.soimort.org/translate-shell/
 Source0:        https://github.com/soimort/translate-shell/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
