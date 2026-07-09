@@ -4,6 +4,8 @@
 
 %global pkgname dirsrv
 
+# TEST COMMENT
+
 # Exclude i686 bit arches
 ExcludeArch: i686
 
