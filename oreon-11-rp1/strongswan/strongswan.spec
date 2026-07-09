@@ -1,4 +1,5 @@
 %global source0_hash e518e34e159514f4c6ba80d1f926cb151e0dd4e3a1d94213171234b8b9ae6f55
+%global unitdir /usr/lib/systemd/system
 
 Summary:        Open source IPsec-based VPN solution
 Name:           strongswan
@@ -7,6 +8,7 @@ Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.strongswan.org/
 Source0:        https://download.strongswan.org/strongswan-%{version}.tar.bz2
+Patch1:         strongswan-5.9.7-error-no-format.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -54,13 +56,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         --enable-systemd \
         --enable-swanctl \
         --enable-pki \
-        --with-systemdsystemunitdir=%{_unitdir}
+        --with-systemdsystemunitdir=%{unitdir}
 %make_build
 
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete
 rm -rf %{buildroot}%{_localstatedir}/run
+
+%ldconfig_scriptlets
 
 %post
 %systemd_post strongswan.service
@@ -86,7 +90,7 @@ rm -rf %{buildroot}%{_localstatedir}/run
 %{_sysconfdir}/strongswan.d/
 %{_sysconfdir}/swanctl/
 %{_datadir}/strongswan/
-%{_unitdir}/strongswan.service
+%{unitdir}/strongswan.service
 %{_mandir}/man5/*
 %{_mandir}/man8/*
 
