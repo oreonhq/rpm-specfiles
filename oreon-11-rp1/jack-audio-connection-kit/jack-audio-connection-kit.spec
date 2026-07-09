@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1e42b9fc4ad7db7befd414d45ab2f8a159c0b30fcd6eee452be662298766a849
 
 # set bootstrap to 1 in order to break the initial libffado loop
 #
@@ -21,7 +21,7 @@ Release:       11%{?dist}
 # Automatically converted from old format: GPLv2 and GPLv2+ and LGPLv2+ - review is highly recommended.
 License:       GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:           https://www.jackaudio.org
-Source0:       https://github.com/jackaudio/jack2/archive/v%{version}/v%{version}.tar.gz#/jack2-%{version}.tar.gz
+Source0:       https://github.com/jackaudio/jack2/archive/refs/tags/v%{version}.tar.gz#/jack2-%{version}.tar.gz
 Source1:       %{name}-README.Fedora
 Source2:       %{name}-script.pa
 Source3:       %{name}-limits.conf
