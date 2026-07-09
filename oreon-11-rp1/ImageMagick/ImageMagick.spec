@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 005b177dd25f46c2458b543164f296d66ce97e6a7be1084529d25df527984813
 
 %bcond_without tests
 
@@ -15,7 +15,7 @@
 
 Name:           ImageMagick
 Epoch:          1
-Version:        7.1.2.23
+Version:        7.1.2.27
 Release:        1%{?dist}
 Summary:        An X application for displaying and manipulating images
 
@@ -26,8 +26,8 @@ Summary:        An X application for displaying and manipulating images
 %global libcxxsover 5
 License:        ImageMagick
 URL:            https://imagemagick.org/
-Source0:        https://imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz
-Source1:        https://imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz.asc
+Source0:        https://download.imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz
+Source1:        https://download.imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz.asc
 Source2:        ImageMagick.keyring
 
 BuildRequires:  pkgconfig(bzip2)
