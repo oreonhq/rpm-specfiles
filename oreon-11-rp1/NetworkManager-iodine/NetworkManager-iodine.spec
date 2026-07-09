@@ -4,12 +4,14 @@ Summary:   NetworkManager VPN plugin for iodine
 Name:      NetworkManager-iodine
 Epoch:     1
 Version:   1.2.0
-Release:   3%{?dist}
+Release:   4%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN
 
 Source0:        https://download.gnome.org/sources/NetworkManager-iodine/1.2/%{name}-%{version}.tar.xz
 Patch0:         NetworkManager-iodine-1.2.0-g-add-private.patch
+Patch1:         NetworkManager-iodine-1.2.0-vpnservicedir.patch
+Patch2:         NetworkManager-iodine-1.2.0-name-properties.patch
 
 BuildRequires: make
 BuildRequires: gcc
@@ -56,7 +58,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %make_install
+mkdir -p %{buildroot}%{_prefix}/lib/NetworkManager/VPN
+%{__cp} -p ./nm-iodine-service.name %{buildroot}%{_prefix}/lib/NetworkManager/VPN/
 find %{buildroot} -name '*.la' -delete
+if test -d %{buildroot}%{_sysconfdir}/dbus-1; then
+    mv %{buildroot}%{_sysconfdir}/dbus-1 %{buildroot}%{_datadir}/
+fi
 
 %find_lang %{name}
 
@@ -65,12 +72,14 @@ find %{buildroot} -name '*.la' -delete
 %{_prefix}/lib/NetworkManager/VPN/nm-iodine-service.name
 %{_libexecdir}/nm-iodine-service
 %{_datadir}/dbus-1/system.d/nm-iodine-service.conf
-%doc AUTHORS README
+%doc AUTHORS
 %license COPYING
 
 %files -n NetworkManager-iodine-gnome
 %{_libexecdir}/nm-iodine-auth-dialog
-%{_libdir}/NetworkManager/libnm-vpn-plugin-iodine-editor.so
+%dir %{_datadir}/gnome-vpn-properties/iodine
+%{_datadir}/gnome-vpn-properties/iodine/nm-iodine-dialog.ui
+%{_datadir}/appdata/network-manager-iodine.appdata.xml
 
 %changelog
 %autochangelog

@@ -1,0 +1,11 @@
+--- a/nm-iodine-service.name.in
++++ b/nm-iodine-service.name.in
+@@ -7,6 +7,6 @@ program=@LIBEXECDIR@/nm-iodine-service
+ plugin=@PLUGINDIR@/libnm-vpn-plugin-iodine.so
+ 
+ [GNOME]
+-auth-dialog=nm-iodine-auth-dialog
+-properties=libnm-iodine-properties
++auth-dialog=@LIBEXECDIR@/nm-iodine-auth-dialog
++properties=libnm-vpn-plugin-iodine
+ supports-external-ui-mode=true

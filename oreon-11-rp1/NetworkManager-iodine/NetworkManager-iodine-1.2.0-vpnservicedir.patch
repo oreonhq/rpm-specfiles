@@ -1,0 +1,22 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -80,7 +80,7 @@
+ LIBNM_CFLAGS="$LIBNM_CFLAGS -DNM_VERSION_MIN_REQUIRED=NM_VERSION_1_2"
+ LIBNM_CFLAGS="$LIBNM_CFLAGS -DNM_VERSION_MAX_ALLOWED=NM_VERSION_1_2"
+ 
+-NM_VPN_SERVICE_DIR=`$PKG_CONFIG pkg-config --define-variable prefix='\${prefix}' --variable vpnservicedir libnm`
++NM_VPN_SERVICE_DIR=`$PKG_CONFIG --define-variable prefix='\${prefix}' --variable vpnservicedir libnm`
+ AC_SUBST(NM_VPN_SERVICE_DIR)
+ 
+ test x"$enable_absolute_paths" = x"yes" && NM_PLUGIN_DIR='$(libdir)/NetworkManager/'
+--- a/configure
++++ b/configure
+@@ -14624,7 +14624,7 @@
+ LIBNM_CFLAGS="$LIBNM_CFLAGS -DNM_VERSION_MIN_REQUIRED=NM_VERSION_1_2"
+ LIBNM_CFLAGS="$LIBNM_CFLAGS -DNM_VERSION_MAX_ALLOWED=NM_VERSION_1_2"
+ 
+-NM_VPN_SERVICE_DIR=`$PKG_CONFIG pkg-config --define-variable prefix='\${prefix}' --variable vpnservicedir libnm`
++NM_VPN_SERVICE_DIR=`$PKG_CONFIG --define-variable prefix='\${prefix}' --variable vpnservicedir libnm`
+ 
+ 
+ test x"$enable_absolute_paths" = x"yes" && NM_PLUGIN_DIR='$(libdir)/NetworkManager/'
