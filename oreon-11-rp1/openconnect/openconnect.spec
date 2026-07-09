@@ -44,9 +44,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-# passing an explicit --with-vpnc-script path (as opposed to leaving it on
-# "auto") skips openconnect's build-time existence/executable check, per
-# its own configure.ac; the real script is installed below in %%install.
 %configure \
         --disable-static \
         --with-vpnc-script=%{_sysconfdir}/vpnc/vpnc-script \
@@ -59,11 +56,15 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 install -D -p -m 0755 %{SOURCE1} %{buildroot}%{_sysconfdir}/vpnc/vpnc-script
 find %{buildroot} -name '*.la' -delete
 
+%ldconfig_scriptlets
+
 %files
-%license COPYING.LGPL COPYING.OpenSSL
-%doc README NEWS
+%license COPYING.LGPL
+%doc README.md ChangeLog AUTHORS
 %{_bindir}/openconnect
 %{_libdir}/libopenconnect.so.*
+%{_libexecdir}/openconnect/
+%{_datadir}/bash-completion/completions/openconnect
 %{_mandir}/man8/openconnect.8*
 %dir %{_sysconfdir}/vpnc
 %config(noreplace) %{_sysconfdir}/vpnc/vpnc-script
