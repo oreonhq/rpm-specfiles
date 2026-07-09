@@ -5,7 +5,7 @@
 Summary:        Encrypted overlay filesystem written in Go
 Name:           gocryptfs
 Version:        2.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        MIT
 URL:            https://nuetzlich.net/gocryptfs/
 Source0:        https://github.com/rfjakob/gocryptfs/releases/download/v%{version}/gocryptfs_v%{version}_src-deps.tar.gz
@@ -31,11 +31,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 export GOFLAGS="-mod=vendor"
 export GO111MODULE=on
 go build -buildmode=pie -ldflags "-X main.GitVersion=%{version} -X main.BuildDate=$(date -u +%%Y-%%m-%%d)" -o gocryptfs .
-go build -buildmode=pie -o gocryptfs-xray ./gocryptfs-xray
+go build -buildmode=pie -o gocryptfs-xray/gocryptfs-xray ./gocryptfs-xray
 
 %install
 install -D -p -m 0755 gocryptfs %{buildroot}%{_bindir}/gocryptfs
-install -D -p -m 0755 gocryptfs-xray %{buildroot}%{_bindir}/gocryptfs-xray
+install -D -p -m 0755 gocryptfs-xray/gocryptfs-xray %{buildroot}%{_bindir}/gocryptfs-xray
 
 %files
 %license LICENSE
