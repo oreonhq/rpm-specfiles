@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash 682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd
 
 Name:           DevIL
 Version:        1.7.8
-Release:        53%{?dist}
+Release:        54%{?dist}
 Summary:        A cross-platform image library
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2
 URL:            http://openil.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/openil/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/openil/%{name}-%{version}.tar.gz
 Patch0:         DevIL-1.7.5-allegropicfix.patch
 Patch1:         DevIL-1.7.5-il_endian_h.patch
 Patch2:         DevIL-1.7.8-CVE-2009-3994.patch
