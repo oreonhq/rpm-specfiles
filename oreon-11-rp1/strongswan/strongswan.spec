@@ -8,7 +8,6 @@ Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.strongswan.org/
 Source0:        https://download.strongswan.org/strongswan-%{version}.tar.bz2
-Patch1:         strongswan-5.9.7-error-no-format.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -46,6 +45,7 @@ Headers for building software against libstrongswan.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
+sed -i '/WARN_CFLAGS="$WARN_CFLAGS -Wno-format"/d' configure configure.ac
 
 %build
 %configure \
