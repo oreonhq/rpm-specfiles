@@ -1,0 +1,7 @@
+# Some of our sub-packages do not contain docs
+addFilter("W: no-documentation")
+# Some of our tools do not have a manpage
+addFilter("W: no-manual-page-for-binary .*")
+# Ignore warnings about some manpages being shared between functions
+addFilter("W: files-duplicate /usr/share/man/man3/.*")
+addFilter("W: package-with-huge-docs.*")
