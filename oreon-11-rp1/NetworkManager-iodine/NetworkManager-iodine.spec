@@ -20,6 +20,7 @@ BuildRequires: gettext
 BuildRequires: libnma-devel >= 1.1.0
 BuildRequires: libsecret-devel
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.1.0
@@ -61,6 +62,7 @@ find %{buildroot} -name '*.la' -delete
 %{_libdir}/NetworkManager/libnm-vpn-plugin-iodine.so
 %{_prefix}/lib/NetworkManager/VPN/nm-iodine-service.name
 %{_libexecdir}/nm-iodine-service
+%{_datadir}/dbus-1/system.d/nm-iodine-service.conf
 %doc AUTHORS README
 %license COPYING
 

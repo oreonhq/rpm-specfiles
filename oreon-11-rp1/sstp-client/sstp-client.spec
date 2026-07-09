@@ -48,13 +48,14 @@ find %{buildroot} -name '*.la' -delete
 %license COPYING
 %doc AUTHORS README
 %{_sbindir}/sstpc
-%{_libdir}/libsstp_api*.so*
+%{_libdir}/libsstp_api-0.so
 %{_libdir}/pppd/*/sstp-pppd-plugin.so
 %{_docdir}/sstp-client/sstp-test*
 %{_mandir}/man8/sstpc.8*
 
 %files devel
 %{_includedir}/sstp-client/
+%{_libdir}/libsstp_api.so
 %{_libdir}/pkgconfig/sstp-client-1.0.pc
 
 %changelog

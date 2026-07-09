@@ -21,7 +21,10 @@ BuildRequires: libnma-devel >= 1.2.0
 BuildRequires: libsecret-devel
 BuildRequires: gcr-devel
 BuildRequires: openconnect-devel >= 3.02
+BuildRequires: pkgconfig(libxml-2.0)
+BuildRequires: webkit2gtk4.1-devel
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.2.0
@@ -64,6 +67,8 @@ find %{buildroot} -name '*.la' -delete
 %{_libdir}/NetworkManager/libnm-vpn-plugin-openconnect.so
 %{_prefix}/lib/NetworkManager/VPN/nm-openconnect-service.name
 %{_libexecdir}/nm-openconnect-service
+%{_libexecdir}/nm-openconnect-service-openconnect-helper
+%{_datadir}/dbus-1/system.d/nm-openconnect-service.conf
 %doc AUTHORS NEWS README
 %license COPYING
 

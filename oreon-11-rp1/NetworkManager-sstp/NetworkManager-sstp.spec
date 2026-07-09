@@ -1,4 +1,5 @@
 %global source0_hash cddfa0f3a7192f289b2e160b6a5e97cd46fdc05bbb90744ea742b344cf794278
+%global ppp_version %(pkg-config --modversion pppd 2>/dev/null || echo 2.5.1)
 
 Summary:   NetworkManager VPN plugin for SSTP
 Name:      NetworkManager-sstp
@@ -21,12 +22,15 @@ BuildRequires: libnma-devel >= 1.8.0
 BuildRequires: libsecret-devel
 BuildRequires: gnutls-devel
 BuildRequires: sstp-client-devel >= 1.0.10
+BuildRequires: ppp-devel
+BuildRequires: pkgconfig(pppd)
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.7.0
 Requires: sstp-client >= 1.0.10
-Requires: ppp
+Requires: ppp = %{ppp_version}
 
 %global __provides_exclude ^libnm-.*\\.so
 
@@ -52,7 +56,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %configure \
         --disable-static \
-        --with-dist-version=%{version}-%{release}
+        --with-dist-version=%{version}-%{release} \
+        --with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version}
 %make_build
 
 %install
@@ -63,8 +68,10 @@ find %{buildroot} -name '*.la' -delete
 
 %files -f %{name}.lang
 %{_libdir}/NetworkManager/libnm-vpn-plugin-sstp.so
+%{_libdir}/pppd/%{ppp_version}/nm-sstp-pppd-plugin.so
 %{_prefix}/lib/NetworkManager/VPN/nm-sstp-service.name
 %{_libexecdir}/nm-sstp-service
+%{_datadir}/dbus-1/system.d/nm-sstp-service.conf
 %doc AUTHORS README
 %license COPYING
 

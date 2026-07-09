@@ -22,6 +22,7 @@ BuildRequires: gettext
 BuildRequires: libnma-devel >= 1.1.0
 BuildRequires: libsecret-devel
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.1.0
@@ -65,12 +66,13 @@ find %{buildroot} -name '*.la' -delete
 %{_libdir}/NetworkManager/libnm-vpn-plugin-ssh.so
 %{_prefix}/lib/NetworkManager/VPN/nm-ssh-service.name
 %{_libexecdir}/nm-ssh-service
+%{_datadir}/dbus-1/system.d/nm-ssh-service.conf
 %doc README README.md NEWS
 %license COPYING
 
 %files -n NetworkManager-ssh-gnome
 %{_libexecdir}/nm-ssh-auth-dialog
-%{_libdir}/NetworkManager/libnm-vpn-plugin-ssh-editor.so
+%{_libdir}/NetworkManager/libnm-gtk3-vpn-plugin-ssh-editor.so
 %{_datadir}/metainfo/network-manager-ssh.metainfo.xml
 
 %changelog

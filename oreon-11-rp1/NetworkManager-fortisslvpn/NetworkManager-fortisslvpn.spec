@@ -1,4 +1,5 @@
 %global source0_hash b055e26349b516b23585798ab3ef57b436b014800e92a8ac732cfc8e76c5dafa
+%global ppp_version %(pkg-config --modversion pppd 2>/dev/null || echo 2.5.1)
 
 Summary:   NetworkManager VPN plugin for Fortinet SSL VPN
 Name:      NetworkManager-fortisslvpn
@@ -20,11 +21,13 @@ BuildRequires: gettext
 BuildRequires: libnma-devel >= 1.8.33
 BuildRequires: libsecret-devel
 BuildRequires: ppp-devel
+BuildRequires: pkgconfig(pppd)
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.2.0
-Requires: ppp
+Requires: ppp = %{ppp_version}
 
 %global __provides_exclude ^libnm-.*\\.so
 
@@ -52,7 +55,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %configure \
         --disable-static \
-        --with-dist-version=%{version}-%{release}
+        --with-dist-version=%{version}-%{release} \
+        --with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version}
 %make_build
 
 %install
@@ -63,15 +67,18 @@ find %{buildroot} -name '*.la' -delete
 
 %files -f %{name}.lang
 %{_libdir}/NetworkManager/libnm-vpn-plugin-fortisslvpn.so
+%{_libdir}/pppd/%{ppp_version}/nm-fortisslvpn-pppd-plugin.so
 %{_prefix}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name
 %{_libexecdir}/nm-fortisslvpn-service
+%{_libexecdir}/nm-fortisslvpn-pinentry
+%{_sysconfdir}/dbus-1/system.d/nm-fortisslvpn-service.conf
 %doc AUTHORS NEWS README
 %license COPYING
 
 %files -n NetworkManager-fortisslvpn-gnome
 %{_libexecdir}/nm-fortisslvpn-auth-dialog
 %{_libdir}/NetworkManager/libnm-vpn-plugin-fortisslvpn-editor.so
-%{_datadir}/metainfo/network-manager-fortisslvpn.metainfo.xml
+%{_datadir}/appdata/network-manager-fortisslvpn.metainfo.xml
 
 %changelog
 %autochangelog

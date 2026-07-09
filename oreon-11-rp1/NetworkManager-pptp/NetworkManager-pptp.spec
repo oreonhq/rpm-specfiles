@@ -1,4 +1,5 @@
 %global source0_hash e5fa59fe46117f0ee86e9ca62c6943bc063884b04dd2396ccec38a2d1f414982
+%global ppp_version %(pkg-config --modversion pppd 2>/dev/null || echo 2.5.1)
 
 Summary:   NetworkManager VPN plugin for PPTP
 Name:      NetworkManager-pptp
@@ -19,11 +20,14 @@ BuildRequires: libtool
 BuildRequires: gettext
 BuildRequires: libnma-devel >= 1.2.0
 BuildRequires: libsecret-devel
+BuildRequires: ppp-devel
+BuildRequires: pkgconfig(pppd)
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.2.0
-Requires: ppp
+Requires: ppp = %{ppp_version}
 Requires: pptp
 
 %global __provides_exclude ^libnm-.*\\.so
@@ -49,7 +53,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %configure \
         --disable-static \
-        --with-dist-version=%{version}-%{release}
+        --with-dist-version=%{version}-%{release} \
+        --with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version}
 %make_build
 
 %install
@@ -60,8 +65,10 @@ find %{buildroot} -name '*.la' -delete
 
 %files -f %{name}.lang
 %{_libdir}/NetworkManager/libnm-vpn-plugin-pptp.so
+%{_libdir}/pppd/%{ppp_version}/nm-pptp-pppd-plugin.so
 %{_prefix}/lib/NetworkManager/VPN/nm-pptp-service.name
 %{_libexecdir}/nm-pptp-service
+%{_datadir}/dbus-1/system.d/nm-pptp-service.conf
 %doc AUTHORS NEWS README
 %license COPYING
 

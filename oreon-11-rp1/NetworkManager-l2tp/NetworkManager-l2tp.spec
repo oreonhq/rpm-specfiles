@@ -1,4 +1,5 @@
 %global source0_hash 7a951d81dfbcbe4044fb88114f7a4e91d4e8f3d55bde148c743d3ee4700df3d9
+%global ppp_version %(pkg-config --modversion pppd 2>/dev/null || echo 2.5.1)
 
 Summary:   NetworkManager VPN plugin for L2TP and L2TP/IPsec
 Name:      NetworkManager-l2tp
@@ -21,12 +22,15 @@ BuildRequires: libnma-devel >= 1.8.0
 BuildRequires: libsecret-devel
 BuildRequires: openssl-devel
 BuildRequires: nss-devel
+BuildRequires: ppp-devel
+BuildRequires: pkgconfig(pppd)
 BuildRequires: intltool
+BuildRequires: /usr/bin/file
 
 Requires: dbus
 Requires: NetworkManager >= 1:1.56.0
 Requires: xl2tpd
-Requires: ppp
+Requires: ppp = %{ppp_version}
 Recommends: strongswan
 
 %global __provides_exclude ^libnm-.*\\.so
@@ -54,7 +58,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %configure \
         --disable-static \
-        --with-dist-version=%{version}-%{release}
+        --with-dist-version=%{version}-%{release} \
+        --with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version}
 %make_build
 
 %install
@@ -65,8 +70,10 @@ find %{buildroot} -name '*.la' -delete
 
 %files -f %{name}.lang
 %{_libdir}/NetworkManager/libnm-vpn-plugin-l2tp.so
+%{_libdir}/pppd/%{ppp_version}/nm-l2tp-pppd-plugin.so
 %{_prefix}/lib/NetworkManager/VPN/nm-l2tp-service.name
 %{_libexecdir}/nm-l2tp-service
+%{_datadir}/dbus-1/system.d/nm-l2tp-service.conf
 %doc README.md NEWS
 %license COPYING
 
