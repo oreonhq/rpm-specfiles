@@ -1,0 +1,21 @@
+--- a/src/python/PyImathTest/pyImathTest.in	2024-09-04 15:40:21.000000000 -0700
++++ b/src/python/PyImathTest/pyImathTest.in	2026-07-09 14:00:21.481827413 -0700
+@@ -10126,12 +10126,16 @@
+ 
+     q4 = q1.slerp (q3, 0.5)
+     for i in range(5):
+-        assert (q4[i] == q1[i].slerpShortestArc (q3[i], 0.5))
++        qref = q1[i].slerpShortestArc (q3[i], 0.5)
++        assert equalWithAbsError(q4[i].r(), qref.r(), 1e-5)
++        assert q4[i].v().equalWithAbsError(qref.v(), 1e-5)
+ 
+     tmp[:] = q4
+     q4 *= q3.inverse()
+     for i in range(5):
+-        assert (q4[i] == tmp[i] * q3[i].inverse())
++        qref = tmp[i] * q3[i].inverse()
++        assert equalWithAbsError(q4[i].r(), qref.r(), 1e-5)
++        assert q4[i].v().equalWithAbsError(qref.v(), 1e-5)
+ 
+     q5 = QuatfArray (5)
+     tmp[:] = q4

@@ -6,7 +6,7 @@
 
 Name:           imath
 Version:        3.1.12
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Library of 2D and 3D vector, matrix, and math operations for computer graphics
 
 License:        BSD-3-Clause
@@ -14,6 +14,7 @@ URL:            https://github.com/AcademySoftwareFoundation/Imath
 Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/refs/tags/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 
 Patch0:         imath-disable-python-testPlane.patch
+Patch1:         imath-fix-quat-test-precision.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc gcc-c++
@@ -53,8 +54,7 @@ Requires:       python3-devel
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -n %{srcname}-%{version}
-%patch -P0 -p1
+%autosetup -n %{srcname}-%{version} -p1
 
 
 %build
