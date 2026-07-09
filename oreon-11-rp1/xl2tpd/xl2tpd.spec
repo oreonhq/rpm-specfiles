@@ -1,4 +1,5 @@
 %global source0_hash 3db95450c5e1efaeea7547af344b5621f4453af3c227f26ec43bcbc79087b045
+%global unitdir /usr/lib/systemd/system
 
 Summary:        Layer 2 Tunneling Protocol (L2TP) daemon
 Name:           xl2tpd
@@ -32,10 +33,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %make_build PREFIX=%{_prefix}
 
 %install
-%make_install PREFIX=%{_prefix} DESTDIR=%{buildroot}
-install -D -p -m 0644 doc/xl2tpd.conf.5 %{buildroot}%{_mandir}/man5/xl2tpd.conf.5
-install -D -p -m 0644 doc/l2tp-secrets.5 %{buildroot}%{_mandir}/man5/l2tp-secrets.5
-install -D -p -m 0644 debian/xl2tpd.service %{buildroot}%{_unitdir}/xl2tpd.service
+make install PREFIX=%{_prefix} \
+    SBINDIR=%{buildroot}%{_sbindir} \
+    BINDIR=%{buildroot}%{_bindir} \
+    MANDIR=%{buildroot}%{_mandir}
+install -D -p -m 0644 debian/xl2tpd.service %{buildroot}%{unitdir}/xl2tpd.service
 install -D -p -m 0644 examples/xl2tpd.conf %{buildroot}%{_sysconfdir}/xl2tpd/xl2tpd.conf
 install -D -p -m 0600 doc/l2tp-secrets.sample %{buildroot}%{_sysconfdir}/xl2tpd/l2tp-secrets
 
@@ -52,13 +54,17 @@ install -D -p -m 0600 doc/l2tp-secrets.sample %{buildroot}%{_sysconfdir}/xl2tpd/
 %license LICENSE
 %doc README.md CHANGES CREDITS
 %{_sbindir}/xl2tpd
+%{_sbindir}/xl2tpd-control
+%{_bindir}/pfc
 %dir %{_sysconfdir}/xl2tpd
 %config(noreplace) %{_sysconfdir}/xl2tpd/xl2tpd.conf
 %config(noreplace) %{_sysconfdir}/xl2tpd/l2tp-secrets
-%{_unitdir}/xl2tpd.service
+%{unitdir}/xl2tpd.service
+%{_mandir}/man1/pfc.1*
 %{_mandir}/man5/xl2tpd.conf.5*
 %{_mandir}/man5/l2tp-secrets.5*
 %{_mandir}/man8/xl2tpd.8*
+%{_mandir}/man8/xl2tpd-control.8*
 
 %changelog
 %autochangelog
