@@ -4,11 +4,12 @@ Summary:   NetworkManager VPN plugin for iodine
 Name:      NetworkManager-iodine
 Epoch:     1
 Version:   1.2.0
-Release:   2%{?dist}
+Release:   3%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN
 
 Source0:        https://download.gnome.org/sources/NetworkManager-iodine/1.2/%{name}-%{version}.tar.xz
+Patch0:         NetworkManager-iodine-1.2.0-g-add-private.patch
 
 BuildRequires: make
 BuildRequires: gcc
