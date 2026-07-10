@@ -1,0 +1,28 @@
+From 918bbff1db3b6dc94cb9aa68a3125d6167625419 Mon Sep 17 00:00:00 2001
+From: Akira TAGOH <akira@tagoh.org>
+Date: Wed, 4 Mar 2026 00:39:02 +0900
+Subject: [PATCH] Stop supporting KDE
+
+---
+ data/imsettings-target-checker.sh.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/data/imsettings-target-checker.sh.in b/data/imsettings-target-checker.sh.in
+index 0e8ce00..6ef1864 100755
+--- a/data/imsettings-target-checker.sh.in
++++ b/data/imsettings-target-checker.sh.in
+@@ -86,6 +86,11 @@ case $(get_desktop|tr '[A-Z]' '[a-z]') in
+         log "** Cinnamon isn't supported at all"
+         exit 0
+ 	;;
++    kde*)
++        # stop supporting KDE
++        log "** KDE isn't supported at all"
++        exit 0
++        ;;
+     *)
+         exit 1
+         ;;
+-- 
+2.53.0
+

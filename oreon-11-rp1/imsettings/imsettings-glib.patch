@@ -1,0 +1,24 @@
+diff -pruN imsettings-1.8.3.orig/imsettings-daemon/imsettings-server.c imsettings-1.8.3/imsettings-daemon/imsettings-server.c
+--- imsettings-1.8.3.orig/imsettings-daemon/imsettings-server.c	2021-11-29 17:00:38.000000000 +0900
++++ imsettings-1.8.3/imsettings-daemon/imsettings-server.c	2022-07-20 19:18:58.637801017 +0900
+@@ -732,7 +732,7 @@ imsettings_server_cb_is_supported_deskto
+ 
+ 	if (g_spawn_command_line_sync(cmd, NULL, NULL, &ret, &err))
+ 		match = TRUE;
+-	if (!g_spawn_check_wait_status(ret, &err))
++	if (!g_spawn_check_exit_status(ret, &err))
+ 		match = FALSE;
+ 	if (err) {
+ 		g_warning("%s", err->message);
+diff -pruN imsettings-1.8.3.orig/requires imsettings-1.8.3/requires
+--- imsettings-1.8.3.orig/requires	2021-11-26 20:02:48.000000000 +0900
++++ imsettings-1.8.3/requires	2022-07-20 18:39:38.992761870 +0900
+@@ -2,7 +2,7 @@ CHECK_REQUIRED=0.11.0
+ GDK_REQUIRED=2.12.0
+ GTK_REQUIRED=2.12.0
+ GIO_REQUIRED=2.26.0
+-GLIB_REQUIRED=2.70.0
++GLIB_REQUIRED=2.62.0
+ GOBJECT_REQUIRED=2.32.0
+ GTHREAD_REQUIRED=2.32.0
+ LIBGXIM_REQUIRED=0.5.0
