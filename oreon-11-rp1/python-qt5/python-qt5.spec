@@ -22,7 +22,7 @@
 Summary: PyQt5 is Python bindings for Qt5
 Name:    python-qt5
 Version: 5.15.11
-Release: 0.2%{?dist}
+Release: 0.3%{?dist}
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only
@@ -239,7 +239,7 @@ sed -i \
 %license LICENSE
 %{python3_dbus_dir}/pyqt5.abi3.so
 %dir %{python3_sitearch}/PyQt5/
-%glob %{python3_sitearch}/PyQt5-*.dist-info
+%{python3_sitearch}/PyQt5-%{version}.dist-info
 %{python3_sitearch}/PyQt5/__pycache__/__init__.*
 %{python3_sitearch}/PyQt5/__init__.py*
 %{python3_sitearch}/PyQt5/Qt.*
