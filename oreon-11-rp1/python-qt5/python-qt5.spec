@@ -22,7 +22,7 @@
 Summary: PyQt5 is Python bindings for Qt5
 Name:    python-qt5
 Version: 5.15.11
-Release: 0.3%{?dist}
+Release: 0.4%{?dist}
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only
@@ -37,6 +37,7 @@ Source1:        macros.pyqt5
 ## upstreamable patches
 # support newer Qt5 releases, but may not be needed anymore?  -- rdieter
 #Patch0: PyQt5-Timeline.patch
+Patch1: python-qt5-python315.patch
 
 BuildRequires: make
 BuildRequires: chrpath
@@ -156,7 +157,7 @@ Requires:  python%{python3_pkgversion}-qt5%{?_isa} = %{version}-%{release}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n PyQt5-%{version}
 
-#patch0 -p1
+%patch 1 -p1
 
 
 %build
@@ -188,6 +189,11 @@ sip-build \
 if [ "%{_prefix}" != "/usr" ]; then
   cp -ru %{buildroot}/usr/* %{buildroot}%{_prefix}/ || echo "Nothing to copy"
   rm -rf %{buildroot}/usr/*
+fi
+
+distinfo="%{buildroot}%{python3_sitearch}/pyqt5-%{version}.dist-info"
+if [ ! -d "$distinfo" ]; then
+  sip-distinfo --project-root="$PWD" --prefix="%{buildroot}/" --generator=rpm "$distinfo"
 fi
 
 # Explicitly byte compile as the automagic byte compilation doesn't work for
@@ -239,7 +245,7 @@ sed -i \
 %license LICENSE
 %{python3_dbus_dir}/pyqt5.abi3.so
 %dir %{python3_sitearch}/PyQt5/
-%{python3_sitearch}/PyQt5-%{version}.dist-info
+%{python3_sitearch}/pyqt5-%{version}.dist-info
 %{python3_sitearch}/PyQt5/__pycache__/__init__.*
 %{python3_sitearch}/PyQt5/__init__.py*
 %{python3_sitearch}/PyQt5/Qt.*

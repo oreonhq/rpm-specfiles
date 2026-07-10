@@ -1,0 +1,15 @@
+--- a/qpy/QtCore/qpycore_pyqtslot.cpp
++++ b/qpy/QtCore/qpycore_pyqtslot.cpp
+@@ -20,6 +20,13 @@
+ 
+ #include <Python.h>
+ 
++// PyWeakref_GetObject was removed from headers in Python 3.15 but remains in ABI
++#if PY_VERSION_HEX >= 0x030F0000
++extern "C" {
++PyAPI_FUNC(PyObject*) PyWeakref_GetObject(PyObject *ref);
++}
++#endif
++
+ #include "qpycore_chimera.h"
+ #include "qpycore_pyqtslot.h"
