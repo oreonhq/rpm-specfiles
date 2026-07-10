@@ -195,6 +195,7 @@ Patch169:        0020-QGtk3Theme-define-light-midlight-mid-dark-shadow-colors.pa
 
 # Latest QGnomePlatform needs to be specified to be used
 Patch200:        qtbase-use-qgnomeplatform-as-default-platform-theme-on-gnome.patch
+Patch201:        qtbase-everywhere-src-5.15-libproxy-0.5-pkgconfig.patch
 
 # Do not check any files in %%{_qt5_plugindir}/platformthemes/ for requires.
 # Those themes are there for platform integration. If the required libraries are
@@ -390,7 +391,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %package mysql
 Summary: MySQL driver for Qt5's SQL classes
-%if 0%{?rhel} && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+BuildRequires: mysql-devel
+%elseif 0%{?rhel} && 0%{?rhel} < 9
 BuildRequires: mysql-devel
 %else
 BuildRequires: mariadb-connector-c-devel
@@ -484,6 +487,7 @@ gzip -dc %{PATCH100} | patch -p1
 %patch -P102 -p1
 %patch -P103 -p1
 %patch -P104 -p1
+%patch -P201 -p1
 
 ## Qt 6 backports
 %if 0%{?fedora} > 30 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)

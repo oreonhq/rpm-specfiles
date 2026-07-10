@@ -1,0 +1,14 @@
+--- a/src/network/configure.json
++++ b/src/network/configure.json
+@@ -51,9 +51,9 @@
+                     "px_proxy_factory_free(factory);"
+                 ]
+             },
+-            "headers": "proxy.h",
++            "headers": "libproxy/proxy.h",
+             "sources": [
+-                "-lproxy"
++                { "type": "pkgConfig", "args": "libproxy-1.0" }
+             ]
+         },
+         "openssl_headers": {
