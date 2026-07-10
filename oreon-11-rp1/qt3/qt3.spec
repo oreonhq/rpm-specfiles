@@ -325,10 +325,8 @@ sed -i.KDE3_PLUGIN_PATH \
 %patch -P43 -p1 -b .system-sqlite2
 %patch -P44 -p1 -b .qimage-parentheses
 %patch -P45 -p1 -b .system-zlib-header
-%if 0%{?fedora} > 16 || 0%{?rhel} > 6
-# This patch works ONLY with libpng >= 1.5.
+# libpng >= 1.5 made png_info/png_struct opaque
 %patch -P46 -p0 -b .libpng15
-%endif
 %patch -P47 -p1 -b .#1037297
 %patch -P48 -p1 -b .freetype251
 %patch -P49 -p1 -b .postgresql11
