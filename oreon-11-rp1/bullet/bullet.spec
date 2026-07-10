@@ -4,7 +4,7 @@
 
 Name: bullet
 Version: 3.08
-Release: 17%{?dist}
+Release: 18%{?dist}
 Summary: 3D Collision Detection and Rigid Body Dynamics Library
 # Automatically converted from old format: zlib and MIT and BSD and Boost - review is highly recommended.
 License: Zlib AND LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD AND BSL-1.0
@@ -94,6 +94,7 @@ chmod -x src/BulletDynamics/ConstraintSolver/btSliderConstraint.cpp
 
 %build
 %cmake \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCLSOCKET_DEP_ONLY=ON \
   -DBUILD_BULLET2_DEMOS=OFF \
   -DBUILD_EXTRAS=ON \
