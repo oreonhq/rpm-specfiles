@@ -1,25 +1,17 @@
-%global source0_hash abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
+%global source0_hash 23cc0077e221c7d991bd0eb02150a0d49199bcca1ddf059edccee9ffd914939d
 
 %global forgeurl https://github.com/libimobiledevice/libimobiledevice
-%global commit ed9703db1ee6d54e3801b618cee9524563d709e1
-%global date 20240916
-%{?commit:%global shortcommit %(c=%{commit}; echo ${c:0:7})}
 
 Name:           libimobiledevice
-Version:        1.3.0^%{date}git%{shortcommit}
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Library for connecting to mobile devices
 
-License:        LGPL-2.0-or-later
+License:        LGPL-2.0-or-later AND MIT AND Zlib
 URL:            https://libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libimobiledevice/archive/refs/tags/ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz#/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
-# Use SHA256 signature, instead of SHA1 for pairing
-Patch:        https://github.com/libimobiledevice/libimobiledevice/pull/1616.patch
+Source0:        %{forgeurl}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
-BuildRequires:  autoconf
-BuildRequires:  automake
 BuildRequires:  gcc
-BuildRequires:  libtool
 BuildRequires:  make
 
 BuildRequires:  glib2-devel
@@ -32,10 +24,13 @@ BuildRequires:  libtatsu-devel
 BuildRequires:  libusbmuxd-devel
 BuildRequires:  libusbx-devel
 BuildRequires:  libxml2-devel
+BuildRequires:  python3-Cython
+BuildRequires:  python3-devel
 BuildRequires:  readline-devel
 
-# Applications using libimobiledevice might use sockets provided by usbmuxd to
-# work
+Provides:       bundled(ed25519)
+Provides:       bundled(SRP6a)
+
 Recommends: usbmuxd
 
 %description
@@ -49,6 +44,14 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description    devel
 Files for development with libimobiledevice.
 
+%package  -n    python3-libimobiledevice
+Summary:        Python3 bindings for libimobiledevice
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       python3
+
+%description -n python3-libimobiledevice
+%{name}, python3 libraries and bindings.
+
 %package        utils
 Summary:        Utilities for libimobiledevice
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -58,15 +61,11 @@ Utilities for use with libimobiledevice.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{commit}
-
-%if %{defined commit}
-echo %{version} > .tarball-version
-%endif
+%autosetup -p1 -n %{name}-%{version}
 
 %build
-NOCONFIGURE=1 ./autogen.sh
-%configure --disable-static --without-cython
+export PYTHON_VERSION="%{python3_version}"
+%configure --disable-static
 %make_build
 
 %install
@@ -88,6 +87,8 @@ NOCONFIGURE=1 ./autogen.sh
 %{_libdir}/libimobiledevice-1.0.so
 %{_includedir}/libimobiledevice/
 
+%files -n python3-libimobiledevice
+%{python3_sitearch}/imobiledevice.so
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0^%{date}git%{shortcommit}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
