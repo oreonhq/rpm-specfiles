@@ -7,7 +7,7 @@ Release:        1%{?dist}
 Summary:        Oreon security app
 License:        GPL-3.0-or-later
 URL:            https://github.com/oreonhq/oreon-defense-cpp
-Source0:        https://github.com/oreonhq/oreon-defense-cpp/archive/%{gitcommit}.tar.gz#/oreon-defense-%{version}.tar.gz
+Source0:        https://github.com/oreonhq/oreon-defense-cpp/archive/refs/tags/v%{version}.tar.gz
 Source1:        oreon-defense.desktop
 
 BuildRequires:  clamav-devel
