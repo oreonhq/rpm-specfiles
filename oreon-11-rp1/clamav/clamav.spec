@@ -75,8 +75,8 @@ Patch2:     clamav-private.patch
 Patch5:     clamav-clamonacc-service.patch
 # Allow freshclam service to run if cron.d file is present
 Patch6:     clamav-freshclam.service.patch
-# Debian patch to fix big-endian
-Patch7:     https://salsa.debian.org/clamav-team/clamav/-/raw/unstable/debian/patches/libclamav-pe-Use-endian-wrapper-in-more-places.patch
+# Debian big-endian pe.c fix, refreshed for 1.4.4 (salsa unstable dropped the old one)
+Patch7:     libclamav-pe-Use-endian-wrapper-in-more-places.patch
 # - Update the image crate dependency to 0.25, the current release,
 #   https://github.com/Cisco-Talos/clamav/pull/1366/commits/24d1341e8e34aa325ac03718121e33a3b4e5b75e,
 #   allowing 0.24 for backwards-compatibility with vendored dependencies in EPEL8

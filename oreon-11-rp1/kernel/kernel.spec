@@ -1762,11 +1762,13 @@ Requires: %{name}%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?
 Requires(pre): %{kernel_prereq}\
 Requires(pre): systemd >= 254-1\
 Recommends: uki-direct\
+AutoReqProv: no\
 %package %{?1:%{1}-}uki-virt-addons\
 Summary: %{variant_summary} unified kernel image addons for virtual machines\
 Provides: installonlypkg(kernel)\
 Requires: %{name}%{?1:-%{1}}-uki-virt = %{specrpmversion}-%{release}\
 Requires(pre): systemd >= 254-1\
+AutoReqProv: no\
 %endif\
 %if %{with_dtbloader} && ("%{?1}" == "" || "%{1}" == "debug")\
 # This is not a full UKI, uki is in the name for compat with kernel_variant_posttrans -u\
@@ -1777,6 +1779,7 @@ Provides: %{name}-uname-r = %{KVERREL}%{uname_suffix %{?1}}\
 Provides: %{name}%{?1:-%{1}}-core-uname-r = %{KVERREL}%{uname_suffix %{?1}}\
 Requires: %{name}%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?1}}\
 Requires(pre): %{kernel_prereq}\
+AutoReqProv: no\
 # "kernel-install add ..." treats this as a regular kernel, which is what we want.\
 # This causes a /boot/vmlinuz-$(uname -r) and BLS .conf file conflict with kernel-core.\
 Conflicts: %{name}%{?1:-%{1}}-core = %{specrpmversion}-%{release}\
