@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>punknova</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Punknova font family</name>
+  <summary>OpenType version of Knuth's Punk font</summary>
+  <description>
+    <p>
+      The font was generated from a METAPOST version of the sources of the 
+      ‘original’ punk font. Knuth’s original fonts generated different shapes 
+      at random. This isn't actually possible in an OpenType font; rather, the 
+      font contains several variants of each glyph, and uses the OpenType 
+      randomize function to select a variant for each invocation.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/punknova</url>
+</component>

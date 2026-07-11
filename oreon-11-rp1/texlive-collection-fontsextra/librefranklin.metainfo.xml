@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>librefranklin</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Libre Franklin</name>
+  <summary>The Libre Franklin font family</summary>
+  <description>
+    <p>
+      Libre Franklin is an interpretation and expansion based on the 1912 
+      Morris Fuller Benton’s classic, designed by Pablo Impallari, Rodrigo 
+      Fuenzalida and Nhung Nguyen.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/librefranklin</url>
+</component>

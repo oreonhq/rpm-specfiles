@@ -1,0 +1,12 @@
+diff -up tex/latex/coloring/coloring.sty.nol3regex tex/latex/coloring/coloring.sty
+--- tex/latex/coloring/coloring.sty.nol3regex	2025-08-20 14:00:40.917900500 -0400
++++ tex/latex/coloring/coloring.sty	2025-08-20 14:02:12.270837370 -0400
+@@ -2,7 +2,7 @@
+ 
+ \ProvidesPackage{coloring}[2016/05/11 v0.2]
+ 
+-\RequirePackage{xcolor,etoolbox,xparse,l3regex}
++\RequirePackage{xcolor,etoolbox,xparse}
+ 
+ \makeatletter
+ 

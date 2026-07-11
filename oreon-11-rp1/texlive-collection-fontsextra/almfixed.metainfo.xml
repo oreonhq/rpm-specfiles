@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>almfixed</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>almfixed</name>
+  <summary>An extension of TEX-Gyre Latin Modern Mono 10 to add full Arabic Unicode support</summary>
+  <description>
+    <p>
+      Arabic-Latin Modern Fixed is an extension of TEX-Gyre Latin Modern Mono 
+      10 Regular. Every glyph and OpenType feature of the Latin Modern Mono has 
+      been retained, with minor improvements. On the other hand, we have 
+      changed the vertical metrics of the font. Although the Arabic script is 
+      designed to use the same x-size as Latin Modern Mono, the former script 
+      needs greater ascender and descender space. Every Arabic glyph in each 
+      Unicode-code block is supported (up to Unicode 7.0): Arabic, Arabic 
+      Supplement, Arabic Extended, Arabic Presentation-Forms A, and Arabic 
+      Presentation-Forms B.
+
+      The unique feature of Arabic-Latin Modern is its treatment of vowels and 
+      diacritics. Each vowel and diacritic (ALM Fixed contains a total of 68 
+      such glyphs) may now be edited horizontally within any text editor or 
+      processor. The author believes this is the very first OpenType Arabic 
+      font ever to have this capability. Editing complex Arabic texts will now 
+      be much easier to input and to proofread.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/almfixed</url>
+</component>

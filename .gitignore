@@ -117,6 +117,17 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/texlive-collection-latex/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-latexrecommended/texlive-licenses.tar.xz
 !oreon-11-rp1/texlive-collection-xetex/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-plaingeneric/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-langenglish/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-langgerman/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-langarabic/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-luatex/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-pstricks/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-pictures/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-mathscience/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-bibtexextra/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-fontsextra/texlive-licenses.tar.xz
+!oreon-11-rp1/texlive-collection-latexextra/texlive-licenses.tar.xz
 !oreon-11-rp1/thunderbird/cbindgen-vendor.tar.xz
 oreon-11-rp1/**/_v/
 oreon-11-rp1/**/*.crate

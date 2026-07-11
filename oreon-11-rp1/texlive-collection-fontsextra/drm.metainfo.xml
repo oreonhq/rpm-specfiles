@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>drm</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Don's Revised Modern fonts</name>
+  <summary>A complete family of fonts written in METAFONT</summary>
+  <description>
+    <p>
+      The package provides access to the DRM (Don's Revised Modern) family of 
+      fonts, which includes a variety of optical sizes in Roman (in four 
+      weights), italic, and small caps, among other shapes, along with a set of 
+      symbols and ornaments. It is intended to be a full-body text font, but 
+      its larger sizes can also be used for simple display purposes, and its 
+      significant body of symbols can stand on its own. It comes complete with 
+      textual (“old-style”) and lining figures, and even has small-caps figures.
+      It also comes with extensible decorative rules to be used with ornaments 
+      from itself or other fonts, along with an extremely flexible ellipsis 
+      package.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/drm</url>
+</component>

@@ -1,0 +1,21 @@
+* Tue Apr 28 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78607-6
+- Update collection from svn74022 to svn78607
+- Update comprehensive
+- fix missing -doc provides/obsoletes
+
+* Tue Apr 07 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74022-5
+- Update hyphen-english, knuth-hint, knuth-pdf, yet-another-guide-latex2e
+
+* Sun Feb  8 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74022-4
+- fix licensing file
+
+* Tue Jan 20 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74022-3
+- drop drawing-with-metapost (license "OpenPublication" is non-free)
+- fix summaries
+- fix license tags
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74022-2
+- regen, no deps from docs
+
+* Wed Sep 17 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74022-1
+- Update to TeX Live 2025

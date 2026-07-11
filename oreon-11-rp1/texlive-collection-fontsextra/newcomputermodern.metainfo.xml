@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>newcomputermodern</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>New Computer Modern font</name>
+  <summary>Computer Modern fonts including matching non-latin alphabets</summary>
+  <description>
+    <p>
+      This is a new assembly of Computer Modern fonts plus glyphs for non latin 
+      alphabets which are considered compatible in style to CM fonts. The fonts 
+      contain Latin and accented Latin letters and combinations, Greek 
+      (monotonic and polytonic), and Cyrillic.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/newcomputermodern</url>
+</component>

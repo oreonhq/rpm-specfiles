@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>fbb</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Fbb font</name>
+  <summary>A free Bembo-like font</summary>
+  <description>
+    <p>
+      The package provides a Bembo-like font package based on Cardo but with 
+      many modifications, adding Bold Italic, small caps in all styles, six 
+      figure choices in all styles, updated kerning tables, added figure 
+      tables and corrected f-ligatures. Both OpenType and Adobe Type 1 
+      versions are provided; all necessary support files are provided.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/fbb</url>
+</component>

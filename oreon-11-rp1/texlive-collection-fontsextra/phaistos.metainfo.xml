@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>phaistos</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Disc of Phaistos font</name>
+  <summary>A font that contains all the symbols of the Disc of Phaistos</summary>
+  <description>
+    <p>
+      A font that contains all the symbols of the famous Disc of Phaistos, 
+      together with a LATEX package. The disc was ‘printed’ by stamping the wet
+      clay with some sort of punches, probably around 1700 BCE. The font is 
+      available in Adobe Type 1 and OpenType formats (the latter using the 
+      Unicode positions for the symbols). There are those who believe that this 
+      Cretan script was used to ‘write’ Greek (it is known, for example, that 
+      the rather later Cretan Linear B script was used to write Greek), but 
+      arguments for other languages have been presented.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/phaistos</url>
+</component>

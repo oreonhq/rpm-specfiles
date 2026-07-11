@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>librecaslon</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Libre Caslon</name>
+  <summary>The Libre Caslon font family</summary>
+  <description>
+    <p>
+      The Libre Caslon fonts are designed by Pablo Impallari. Although they 
+      have been designed for use as web fonts, they work well as conventional 
+      text fonts. A bold italic variant is not currently available. As a 
+      stopgap, an artificially slanted bold variant has been created and 
+      treated as italic.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/librecaslon</url>
+</component>

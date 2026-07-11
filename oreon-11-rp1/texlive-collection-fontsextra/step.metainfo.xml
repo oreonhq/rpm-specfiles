@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>step</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>STEP fonts</name>
+  <summary>A free Times-like font</summary>
+  <description>
+    <p>
+      The STEP fonts are a free Times-like (i.e., Times replacement) font 
+      family, implementing a design first created for The Times of London in 
+      1932. These fonts are meant to be compatible in design with Adobe’s 
+      digitization of Linotype Times, commonly used in publishing.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/step</url>
+</component>

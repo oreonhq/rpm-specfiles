@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>fetamont</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Fetamont Font</name>
+  <summary>Extended version of Knuth’s logo typeface</summary>
+  <description>
+    <p>
+      The fetamont typeface was designed in METAFONT and extends the Logo fonts 
+      to complete the T1 encoding. The designs of the glyphs A, E, F, M, N, O, 
+      P, S and T are based on the METAFONT constructions by D. E. Knuth. The 
+      glyphs Y and 1 imitate the shapes of the corresponding glyphs in the 
+      METATYPE1 logo.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/fetamont</url>
+</component>

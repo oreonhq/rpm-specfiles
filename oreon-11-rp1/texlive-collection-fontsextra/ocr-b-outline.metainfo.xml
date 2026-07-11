@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>ocr-b-outline</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>OCR-B Outline fonts</name>
+  <summary>Outline fonts</summary>
+  <description>
+    <p>
+      The package contains OCR-B fonts in Type1 and OpenType formats. 
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/ocr-b-outline</url>
+</component>

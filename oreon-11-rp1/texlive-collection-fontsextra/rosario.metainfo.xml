@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>rosario</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Rosario font family</name>
+  <summary>A singular typeface with 4 weight variants</summary>
+  <description>
+    <p>
+      Rosario is a singular typeface with 4 weight variants, plus matching 
+      italics. Its grace lies in the classic proportions. Its weak endings make
+      it subtle, yet dynamic. Named after a crowded city, it is suitable for 
+      diverse publishing contexts, such as popular magazines, poetry books, 
+      illustrated editions and academic journals. It was designed by Héctor 
+      Gatti initially for private use, later on developed by the Omnibus-Type 
+      Team, and optimized by Adobe Fonts.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/rosario</url>
+</component>

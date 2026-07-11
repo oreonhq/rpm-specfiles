@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>kurier</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Kurier Font</name>
+  <summary>A two-element sans-serif font</summary>
+  <description>
+    <p>
+      Kurier is a two-element sans-serif typeface. It was designed for a 
+      diploma in typeface design at the Warsaw Academy of Fine Arts under 
+      the supervision of Roman Tomaszewski. This distribution contains a 
+      significantly extended set of characters covering the following modern
+      alphabets: latin (including Vietnamese), Cyrillic and Greek as well as
+      a number of additional symbols (including mathematical symbols). The 
+      fonts are prepared in Type 1 and OpenType formats.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/kurier</url>
+</component>

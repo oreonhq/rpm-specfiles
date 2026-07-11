@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>umtypewriter</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>UMTypewriter font family</name>
+  <summary>Fonts to typeset with the xgreek package</summary>
+  <description>
+    <p>
+      The UMTypewriter font family is a monospaced font family that was built 
+      from glyphs from the CB Greek fonts, the CyrTUG Cyrillic alphabet fonts 
+      (“LH”), and the standard Computer Modern font family.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/umtypewriter</url>
+</component>

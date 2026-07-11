@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>asapsym</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>ASAP Symbol font</name>
+  <summary>A pictographic complement font for Asap Family</summary>
+  <description>
+    <p>
+      Asap Symbol is a libre icon-font produced as a pictographic complement for
+      Asap Family. It has a comprehensive set of more than 150 icons, covering 
+      contexts of education, public spaces, health, tourism and transport.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/asapsym</url>
+</component>

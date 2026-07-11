@@ -22,12 +22,16 @@ Qt6 library for talking to PackageKit over D-Bus.
 
 %package -n packagekit-qt6
 Summary:        Qt 6 PackageKit client library
+Provides:       PackageKit-Qt6 = %{version}-%{release}
+Provides:       PackageKit-Qt6%{?_isa} = %{version}-%{release}
 
 %description -n packagekit-qt6
 %{summary}.
 
 %package -n packagekit-qt6-devel
 Summary:        Development files for packagekit-qt6
+Provides:       PackageKit-Qt6-devel = %{version}-%{release}
+Provides:       PackageKit-Qt6-devel%{?_isa} = %{version}-%{release}
 Requires:       packagekit-qt6%{?_isa} = %{version}-%{release}
 Requires:       qt6-qtbase-devel
 Requires:       cmake(Qt6DBus)

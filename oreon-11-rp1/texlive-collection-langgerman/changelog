@@ -1,0 +1,25 @@
+* Tue Apr 28 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-7
+- Update babel-german
+- fix -doc provides/obsoletes
+
+* Mon Apr 13 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-6
+- Update babel-german, dtk-bibliography, hyphen-german
+
+* Sun Feb 08 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-5
+- Update babel-german, fix licensing files
+
+* Mon Jan 26 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-4
+- remove l2tabu (OPL is non-free)
+- update babel-german
+
+* Sat Jan 24 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-3
+- remove lshort-german (OPL is non-free)
+- update components
+- fix licensing
+- fix descriptions
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-2
+- regen, no deps from docs
+
+* Wed Sep 17 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74675-1
+- Update to TeX Live 2025

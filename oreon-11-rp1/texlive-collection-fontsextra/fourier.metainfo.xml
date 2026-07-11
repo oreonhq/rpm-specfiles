@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>fourier</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Fourier GUTenberg fonts</name>
+  <summary>Complementary typefaces for Utopia</summary>
+  <description>
+    <p>
+      Fourier-GUTenberg is a LATEX typesetting system which uses Adobe Utopia 
+      as its standard base font. Fourier-GUTenberg provides all complementary 
+      typefaces needed to allow Utopia based TEX typesetting, including an 
+      extensive mathematics set and several other symbols. The system is 
+      absolutely stand-alone: apart from Utopia and Fourier, no other 
+      typefaces are required.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/fourier</url>
+</component>

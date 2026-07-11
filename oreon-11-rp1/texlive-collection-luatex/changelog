@@ -1,0 +1,25 @@
+* Wed Apr 29 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78670-3
+- Update collection from svn77516 to svn78670
+- Add countwords
+- Add lua-list-hyphen
+- Add luahyperbolic
+- Add lualineno
+- Update 50 components
+
+* Sun Feb 08 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77516-2
+- Update to svn77516
+- fix licensing files
+- update luaxml luatexko luamplib
+
+* Fri Jan 23 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77106-1
+- Update to svn77106
+- description fixes
+- licensing fixes
+- manual license handling (be careful with minim)
+- updated components
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75911-2
+- regen, no deps from docs
+
+* Tue Sep 16 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75911-1
+- Update to TeX Live 2025

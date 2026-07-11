@@ -1,0 +1,13 @@
+diff -up tex/latex/rcsinfo/rcsinfo.sty.fixme tex/latex/rcsinfo/rcsinfo.sty
+--- tex/latex/rcsinfo/rcsinfo.sty.fixme	2020-05-11 11:27:58.018979581 -0400
++++ tex/latex/rcsinfo/rcsinfo.sty	2020-05-11 11:29:20.177598457 -0400
+@@ -119,7 +119,8 @@
+     \RequirePackage{fancyhdr}
+ \fi
+ \if@rcsInfoUseScrpage@
+-    \RequirePackage{scrpage2}
++    \RequirePackage{scrlfile}
++    \ReplacePackage{scrpage2}{scrlayer-scrpage}
+ \fi
+ \def\today{\ifcase\month\or
+   January\or February\or March\or April\or May\or June\or

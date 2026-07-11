@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>berenisadf</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Berenis ADF fonts</name>
+  <summary>The BerenisADF Pro font collection</summary>
+  <description>
+    <p>
+      The bundle provides the BerenisADF Pro font collection, in OpenType and 
+      PostScript Type 1 formats, together with support files to use the fonts 
+      in TEXnANSI (LY1) and LATEX standard T1 and TS1 encodings.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/berenisadf</url>
+</component>

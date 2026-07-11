@@ -1,0 +1,19 @@
+* Sat May 2 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78823-3
+- rebuild with fixed generator
+
+* Wed Apr 29 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78823-2
+- Update collection from svn77389 to svn78823
+- Add corasdiagram
+- Add eurion
+- Add sneaker
+- Add svg-animate
+- Update 45 components
+
+* Wed Feb 04 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77389-1
+- Update to svn77389, fix descriptions, licensing
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75936-2
+- regen, no deps from docs
+
+* Tue Sep 16 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75936-1
+- Update to TeX Live 2025

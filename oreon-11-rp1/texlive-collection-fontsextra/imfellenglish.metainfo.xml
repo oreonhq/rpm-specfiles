@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>imfellenglish</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>IM Fell English Fonts</name>
+  <summary>A revival of fonts bequeathed to Oxford</summary>
+  <description>
+    <p>
+      Igino Marini has implemented digital revivals of fonts bequeathed to 
+      Oxford University by Dr. John Fell, Bishop of Oxford and Dean of 
+      Christ Church in 1686. This package provides the English family, 
+      consisting of Roman, Italic and Small-Cap fonts.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/imfellenglish</url>
+</component>

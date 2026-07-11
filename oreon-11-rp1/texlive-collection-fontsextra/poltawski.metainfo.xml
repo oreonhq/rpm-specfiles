@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>poltawski</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Antykwa Półtawskiego font family</name>
+  <summary>A modern version of the font designed by Polish typographer Adam Półtawski(1881-1952)</summary>
+  <description>
+    <p>
+      The package contains the Antykwa Półtawskiego family of fonts in the 
+      PostScript Type 1 and OpenType formats. The original font was designed in 
+      the twenties of the XX century by the Polish typographer Adam 
+      Półtawski(1881-1952). Following the route set out by the Latin Modern and 
+      TEX Gyre projects (http://www.gust.org.pl/projects/e-foundry), the 
+      Antykwa Półtawskiego digitisation project aims at providing a rich 
+      collection of diacritical characters in the attempt to cover as many 
+      Latin-based scripts as possible. To our knowledge, the repertoire of 
+      characters covers all European languages as well as some other 
+      Latin-based alphabets such as Vietnamese and Navajo; at the request of 
+      users, recent extensions (following the enhancement of the Latin Modern 
+      collection) provide glyphs sufficient for typesetting of romanized 
+      transliterations of Arabic and Sanskrit scripts. The Antykwa Półtawskiego
+      family consists of 4 weights (light, normal, medium, bold), each having 
+      upright and italic forms and one of 5 design sizes: 6, 8, 10, 12 and 17pt.
+      Altogether, the collection comprises 40 font files, containing the same 
+      repertoire of 1126 characters.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/poltawski</url>
+</component>

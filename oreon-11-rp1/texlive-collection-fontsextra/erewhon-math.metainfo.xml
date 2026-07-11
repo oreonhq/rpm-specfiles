@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>erewhon-math</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Erewhon Math font</name>
+  <summary>Utopia based OpenType Math font</summary>
+  <description>
+    <p>
+      Erewhon Math is an OpenType math font meant to be used together with 
+      Erewhon text fonts. Like Fourier-GUTenberg, it is Utopia based and has 
+      been designed as a replacement of Fourier-GUTenberg for Unicode engines.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/erewhon-math</url>
+</component>

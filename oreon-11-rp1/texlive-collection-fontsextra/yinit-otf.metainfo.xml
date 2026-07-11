@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>yinit-otf</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Yinit font</name>
+  <summary>Yannis Haralambous' Old German decorative initials</summary>
+  <description>
+    <p>
+      Old German decorative initials.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/yinit-otf</url>
+</component>

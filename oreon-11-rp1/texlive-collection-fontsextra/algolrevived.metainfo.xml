@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>algolrevived</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>algolrevived</name>
+  <summary>A font revival of Frutiger's Algol alphabet</summary>
+  <description>
+    <p>
+      This font revives Frutiger's Algol alphabet, designed in 1963 for the code 
+      segments in an ALGOL manual. OpenType and type1, regular and medium 
+      weights, upright and slanted. Not monospaced, but good for listings if you
+      don't need code to be aligned with specific columns. It also makes a 
+      passable but limited text font.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/algolrevived</url>
+</component>

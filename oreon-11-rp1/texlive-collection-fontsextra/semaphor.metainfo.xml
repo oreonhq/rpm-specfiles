@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>semaphor</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Semaphor font</name>
+  <summary>Semaphor alphabet font</summary>
+  <description>
+    <p>
+      These fonts represent semaphore in a highly schematic, but very clear, 
+      fashion.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/semaphor</url>
+</component>

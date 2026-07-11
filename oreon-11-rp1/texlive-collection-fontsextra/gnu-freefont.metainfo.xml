@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>gnu-freefont</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>GNU Free font</name>
+  <summary>A Unicode font, with rather wide coverage</summary>
+  <description>
+    <p>
+      The package provides a set of outline (i.e. OpenType) fonts covering 
+      as much as possible of the Unicode character set. The set consists of 
+      three typefaces: one monospaced and two proportional (one with uniform 
+      and one with modulated stroke).
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/gnu-freefont</url>
+</component>

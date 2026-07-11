@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>xits</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>XITS font</name>
+  <summary>A Scientific Times-like font with support for mathematical typesetting</summary>
+  <description>
+    <p>
+      XITS is a Times-like font for scientific typesetting with proper 
+      mathematical support for modern, Unicode and OpenType capable TEX 
+      engines, namely LuaTEX and XETEX.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/xits</url>
+</component>

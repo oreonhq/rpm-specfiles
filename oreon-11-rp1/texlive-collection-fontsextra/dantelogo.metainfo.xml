@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>dantelogo</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>DANTE logo font</name>
+  <summary>A font for DANTE's logo</summary>
+  <description>
+    <p>
+      The DANTE font for the logo of DANTE (http://www.dante.de), the German 
+      speaking TEX users group.
+      The font includes only the five characters d, a, n, t, and e.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/dantelogo</url>
+</component>

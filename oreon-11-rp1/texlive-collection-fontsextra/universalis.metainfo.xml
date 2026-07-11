@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>universalis</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Universalis font</name>
+  <summary>Geometric sans-serif font</summary>
+  <description>
+    <p>
+      The UniversalisADFStd family of fonts, designed by Hirwin Harendal. The 
+      font is suitable as an alternative to fonts such as Adrian Frutiger's 
+      Univers and Frutiger.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/universalis</url>
+</component>

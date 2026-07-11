@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>coelacanth</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Coelacanth</name>
+  <summary>Coelacanth fonts</summary>
+  <description>
+    <p>
+      Coelacanth is inspired by the classic Centaur type design of Bruce 
+      Rogers, described by some as the most beautiful typeface ever 
+      designed. It aims to be a professional quality type family for 
+      general book typesetting.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/coelacanth</url>
+</component>

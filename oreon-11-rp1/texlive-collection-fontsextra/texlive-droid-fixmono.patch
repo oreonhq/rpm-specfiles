@@ -1,0 +1,11 @@
+diff -up tex/latex/droid/droid.sty.fixmono tex/latex/droid/droid.sty
+--- tex/latex/droid/droid.sty.fixmono	2025-09-11 11:00:05.532112266 -0400
++++ tex/latex/droid/droid.sty	2025-09-11 11:00:14.662790293 -0400
+@@ -18,6 +18,6 @@
+ 
+ \RequirePackage[default]{droidserif}
+ \RequirePackage[defaultsans]{droidsans}
+-\RequirePackage[defaultmono]{droidmono}
++\RequirePackage[defaultmono]{droidsansmono}
+ 
+ \endinput

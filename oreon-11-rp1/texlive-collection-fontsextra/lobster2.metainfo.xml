@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>lobster2</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Lobster Two Fonts</name>
+  <summary>A font with many versions of each letter and many different letter pairs</summary>
+  <description>
+    <p>
+      The Lobster font took a different approach. The new OpenType format gives 
+      us the possibility to have multiple versions of each letter, and that's 
+      exactly what we are doing: Instead of compromising the design of our 
+      letters to force connections, we do what lettering artist do. We draw 
+      many versions of each letter and a lot of different letter-pairs (aka 
+      "ligatures") so we always use the best possible variation of each letter 
+      depending of the context of the letter inside each word. All this happens 
+      automatically in any browser that supports ligatures.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/lobster2</url>
+</component>

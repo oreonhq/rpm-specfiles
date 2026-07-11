@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>mintspirit</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>MintSpirit font families</name>
+  <summary>The MintSpirit and MintSpiritNo2 families of fonts</summary>
+  <description>
+    <p>
+      The package provides the MintSpirit and MintSpiritNo2 families of fonts, 
+      designed by Hirwen Harendal. MintSpirit was originally designed for use 
+      as a system font on a Linux Mint system. The No. 2 variant provides more 
+      conventional shapes for some glyphs.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/mintspirit</url>
+</component>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>svrsymbols</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>SVRsymbols font</name>
+  <summary>A font with symbols for use in physics texts</summary>
+  <description>
+    <p>
+      The glyphs of this font are ideograms that have been designed for use in 
+      physics texts. Some symbols are standard and some are entirely new.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/svrsymbols</url>
+</component>

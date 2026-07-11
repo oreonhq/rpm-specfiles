@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>clara</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Clara font</name>
+  <summary>A serif font family</summary>
+  <description>
+    <p>
+      Clara is a type family created specially by Séamas Ó Brógáin for printing
+      A Dictionary of Editing (2015). The family includes italic, bold, bold 
+      italic, and small capitals, while the character set includes (monotonic) 
+      Greek, Cyrillic, ogham, phonetic and mathematical ranges, scribal 
+      abbreviations and other specialist characters. The fonts also include 
+      some OpenType features (such as ligature substitution, small capitals, 
+      and old-style numerals) and variant forms for particular languages.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/clara</url>
+</component>

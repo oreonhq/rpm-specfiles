@@ -1,0 +1,28 @@
+* Tue Apr 28 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78033-6
+- Update luabidi
+- add missing -doc provides/obsoletes
+
+* Tue Apr 07 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78033-5
+- Fix hyph-utf8 files ownership
+
+* Mon Apr 06 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78033-4
+- Update collection from svn76980 to svn78033
+- Add fariscovernew
+- Update 9 components
+
+* Wed Feb 11 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn76980-3
+- Update arabi bidi bidihl kurdishlipsum xepersian xepersian-hm
+- add .cls Provides
+
+* Sun Feb  8 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn76980-2
+- fix licensing files
+
+* Wed Jan 14 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn76980-1
+- Update to svn76980
+- fix descriptions
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74912-2
+- regen, no deps from docs
+
+* Wed Sep 17 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn74912-1
+- Update to TeX Live 2025

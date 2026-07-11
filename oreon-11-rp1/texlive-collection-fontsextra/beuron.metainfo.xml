@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>beuron</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Beuron fonts</name>
+  <summary>The script of the Beuronese art school</summary>
+  <description>
+    <p>
+      This package provides the script used in the works of the Beuron art 
+      school for use with TEX and LATEX. It is a monumental script 
+      consisting of capital letters only.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/beuron</url>
+</component>

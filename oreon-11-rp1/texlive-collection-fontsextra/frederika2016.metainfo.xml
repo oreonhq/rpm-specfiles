@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>frederika2016</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Frederika2016 font</name>
+  <summary>An OpenType Greek calligraphy font</summary>
+  <description>
+    <p>
+      Frederika2016 is an attempt to digitize Hermann Zapf's Frederika font. 
+      The font is the Greek companion of Virtuosa by the same designer. This 
+      font is a calligraphy font.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/frederika2016</url>
+</component>

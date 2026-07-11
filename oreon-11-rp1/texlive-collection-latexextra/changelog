@@ -1,0 +1,49 @@
+* Wed May 13 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78847-6
+- Update collection from svn78824 to svn78847
+- Add lucide-admonitions
+- Update 24 components
+- Remove preview
+
+* Wed Apr 29 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78824-5
+- Update collection from svn78352 to svn78824
+- Add booktabstabular
+- Add clawxiv
+- Add cleveref-icelandic
+- Add dirtreex
+- Add infufrgs
+- Add ltmermaid
+- Add metaphor
+- Add simplesystemtex
+- Add smartnotes
+- Add styleitems
+- Add user-persona
+- Add zebra
+- Update 53 components
+
+* Fri Mar 13 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn78352-4
+- Update to svn78352
+- new packages: aliascnt, beamertheme-westlake, elegantbook, elegantnote,
+                elegantpaper, fixtounicode, fox-listings, memoize-ext,
+                metacapture, milestonetimeline, pyjupyter, realscripts,
+                simplex, spotxcolor, tokglobalstack, tokgroupmark, xstix2
+- lots of existing packages updated
+- fix Obsoletes on newcommand-doc (bz2447035)
+
+* Sun Feb 08 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77598-3
+- Update to svn77598
+- update tagpdf starray numspell moderncv latex-tagging-status latex-lab-dev jsonparse beamer-reveal amsaddr
+
+* Tue Jan 27 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77261-2
+- update licensing, some components
+
+* Sat Jan 24 2026 Tom Callaway <spot@fedoraproject.org> - 12:svn77261-1
+- Update to svn77261, fix descriptions, fix licenses
+
+* Fri Oct 17 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn76561-1
+- update to svn76561
+
+* Wed Oct 08 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75967-2
+- regen, no deps from docs
+
+* Tue Sep 16 2025 Tom Callaway <spot@fedoraproject.org> - 12:svn75967-1
+- Update to TeX Live 2025

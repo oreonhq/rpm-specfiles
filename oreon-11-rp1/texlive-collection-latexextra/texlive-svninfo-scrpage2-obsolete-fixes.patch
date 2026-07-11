@@ -1,0 +1,13 @@
+diff -up tex/latex/svninfo/svninfo.sty.fixme tex/latex/svninfo/svninfo.sty
+--- tex/latex/svninfo/svninfo.sty.fixme	2020-05-11 11:34:20.516549642 -0400
++++ tex/latex/svninfo/svninfo.sty	2020-05-11 11:34:50.985037457 -0400
+@@ -144,7 +144,8 @@
+         \RequirePackage{fancyhdr}
+     \fi
+     \if@svnInfoUseScrpage@
+-        \RequirePackage{scrpage2}
++        \RequirePackage{scrlfile}
++        \ReplacePackage{scrpage2}{scrlayer-scrpage}
+     \fi
+     \if@svnInfoUseEsofoot@
+         \RequirePackage{eso-pic}

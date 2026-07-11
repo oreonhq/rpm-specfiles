@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>scholax</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>ScholaX font</name>
+  <summary>Extension of TEXGyreSchola (New Century Schoolbook) with math support</summary>
+  <description>
+    <p>
+      An extension of TEXGyreSchola with extensive superiors, inferior figures,
+      upright punctuation glyphs added to the Italic face for a theorem font, 
+      plus slanted and bold slanted faces.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/scholax</url>
+</component>
