@@ -513,6 +513,8 @@ fi
 
 %files -f %{name}.lang
 %{_libexecdir}/ksecretprompter
+%{_libexecdir}/plasma-startup-sound
+%{_kf6_datadir}/xdg-desktop-portal/portals/plasmanotify.portal
 %{_kf6_datadir}/applications/org.kde.baloorunner.desktop
 %{_kf6_datadir}/applications/org.kde.secretprompter.desktop
 %{_kf6_datadir}/xdg-desktop-portal/kde-portals.conf

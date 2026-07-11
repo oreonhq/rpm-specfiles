@@ -304,7 +304,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
 %{_bindir}/plasma-emojier
 %{_bindir}/tastenbrett
 %{_bindir}/krunner-plugininstaller
-%{_kf6_libexecdir}/kauth/kcmdatetimehelper
 %{_libexecdir}/kimpanel-ibus-panel
 %{_libexecdir}/kimpanel-ibus-panel-launcher
 %{_kf6_qmldir}/org/kde/plasma/private
@@ -336,13 +335,11 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
 %{_kf6_datadir}/knsrcfiles/
 %{_kf6_datadir}/kcmsolidactions/
 %{_kf6_datadir}/solid/devices/*.desktop
-%{_kf6_datadir}/dbus-1/system.d/*.conf
 %{_kf6_datadir}/knotifications6/*.notifyrc
 %{_datadir}/icons/hicolor/*/*/*
 %{_kf6_metainfodir}/*.xml
 %{_datadir}/applications/*.desktop
-%{_datadir}/dbus-1/system-services/*.service
-%{_datadir}/polkit-1/actions/org.kde.kcontrol.kcmclock.policy
+%{_kf6_datadir}/kconf_update/50-krunner-activate-typing.*
 %{_sysconfdir}/xdg/autostart/*.desktop
 %{_kf6_datadir}/accounts/providers/kde/*.provider
 %{_kf6_datadir}/accounts/services/kde/*.service
