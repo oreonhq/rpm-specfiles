@@ -1,4 +1,4 @@
-%global source0_hash 00a0589ff83c4920c3e9f372567248e813214826d8a64b8a9d2ea664804a3faf
+%global source0_hash 3b88dc0f73ba14bf9f363b7369da5ceba76484b4dca018fcc5d606a79dea54ef
 
 Name:           oreon-system-manager
 Version:        0.1.0
@@ -45,3 +45,6 @@ install -Dpm 0644 assets/logo.png %{buildroot}%{_datadir}/pixmaps/oreon-system-m
 %{_bindir}/oreon-system-manager
 %{_datadir}/applications/oreon-system-manager.desktop
 %{_datadir}/pixmaps/oreon-system-manager.png
+
+%changelog
+%autochangelog

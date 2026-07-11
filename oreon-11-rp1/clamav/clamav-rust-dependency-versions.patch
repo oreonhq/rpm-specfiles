@@ -1,0 +1,12 @@
+diff -Naur clamav-1.4.3-original/libclamav_rust/Cargo.toml clamav-1.4.3/libclamav_rust/Cargo.toml
+--- clamav-1.4.3-original/libclamav_rust/Cargo.toml	2025-12-04 10:01:33.233889863 +0000
++++ clamav-1.4.3/libclamav_rust/Cargo.toml	2025-12-04 10:02:29.088468217 +0000
+@@ -21,7 +21,7 @@
+ unicode-segmentation = "1.10"
+ bindgen = "0.72"
+ onenote_parser = "0.3.1"
+-hex-literal = "0.4"
++hex-literal = ">=0.4, <2.0"
+ inflate = "0.4"
+ bzip2-rs = "0.1"
+ byteorder = "1.5"

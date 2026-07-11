@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1f3c2401af7b388a13ffed7e6f72b5e70f1bed7c82c34c218379d0ee45595616
 
 #global prerelease  -rc
 
@@ -31,29 +31,16 @@ Version:    1.4.4
 Release:    2%{?dist}
 License:    %{?with_unrar:proprietary}%{!?with_unrar:GPL-2.0-only}
 URL:        https://www.clamav.net/
-%if %{with unrar}
 Source0:    https://www.clamav.net/downloads/production/%{name}-%{version}%{?prerelease}.tar.gz
 Source999:  https://www.clamav.net/downloads/production/%{name}-%{version}%{?prerelease}.tar.gz.sig
-%else
-# Unfortunately, clamav includes support for RAR v3, derived from GPL
-# incompatible unrar from RARlabs. We have to pull this code out.
-# tarball was created with update_clamav.sh
-Source0:    %{name}-%{version}%{?prerelease}-norar.tar.xz
-%endif
 # Multilib headers
 Source1:    clamav-types.h
 #for server
 Source3:    clamd.logrotate
 Source5:    clamd-README
-# To download the *.cvd, go to https://www.clamav.net and use the links
-# there (I renamed the files to add the -version suffix for verifying).
-# Check the first line of the file for version or run file *cvd
-# Attention file < 5.33-7 have bugs see https://bugzilla.redhat.com/show_bug.cgi?id=1539107
-#http://database.clamav.net/main.cvd
+# pinned virus DB snapshots (local). refresh with update_clamav_data.sh
 Source10:   main-63.cvd
-#http://database.clamav.net/daily.cvd
 Source11:   daily-27930.cvd
-#http://database.clamav.net/bytecode.cvd
 Source12:   bytecode-339.cvd
 #for update
 Source200:  freshclam-sleep
@@ -355,6 +342,10 @@ cd ..
 
 install -p -m0644 %{SOURCE300} clamav-milter/
 
+# drop GPL-incompatible unrar tree from the upstream tarball
+%if %{without unrar}
+rm -rf libclamunrar/*
+%endif
 mkdir -p libclamunrar{,_iface}
 %{!?with_unrar:touch libclamunrar/{Makefile.in,all,install}}
 

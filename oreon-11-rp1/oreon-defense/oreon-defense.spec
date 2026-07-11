@@ -1,5 +1,5 @@
 %global source0_hash 27283b046942d369132966e5cdb0cdfb0bf64e32859b6d8028925d9fbf9cc946
-%global gitcommit 930171a
+%global gitcommit 930171a34e1de1e84f62c49beaa3eaeb8644915e
 
 Name:           oreon-defense
 Version:        0.1.0
@@ -51,3 +51,6 @@ install -Dpm 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/oreon-defense.
 %doc README.md TODO.md
 %{_bindir}/oreon-defense
 %{_datadir}/applications/oreon-defense.desktop
+
+%changelog
+%autochangelog
