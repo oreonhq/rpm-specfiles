@@ -450,24 +450,20 @@ EOL
   -DINSTALL_SDDM_WAYLAND_SESSION:BOOL=ON \
   -DWITH_X11_SESSION:BOOL=OFF \
   -DGLIBC_LOCALE_GEN:BOOL=OFF \
-  -DGLIBC_LOCALE_PREGENERATED:BOOL=ON \
+  -DGLIBC_LOCALE_PREGENERATED:BOOL=ON
 %cmake_build
 
 
 %install
 %cmake_install
 
-#chrpath --delete %%{buildroot}%%{_kf6_qtplugindir}/phonon_platform/kde.so
+#chrpath --delete %{buildroot}%{_kf6_qtplugindir}/phonon_platform/kde.so
 
 # General startplasma symlink
 ln -sr %{buildroot}%{_kf6_bindir}/startplasma-wayland %{buildroot}%{_kf6_bindir}/startplasma
 
 # Drop (Wayland) qualifier from plasma.desktop
 sed -E 's| \(.*\)||g' -i %{buildroot}%{_datadir}/wayland-sessions/plasma.desktop
-
-# move sddm configuration snippet to the right place
-mkdir -p %{buildroot}%{_prefix}/lib/sddm
-mv %{buildroot}%{_sysconfdir}/sddm.conf.d %{buildroot}%{_prefix}/lib/sddm
 
 ## customize plasma-lookandfeel-fedora defaults
 # from [Wallpaper] Image=Next to Image=Fedora
