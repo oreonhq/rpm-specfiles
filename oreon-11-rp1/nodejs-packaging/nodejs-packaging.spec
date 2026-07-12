@@ -22,6 +22,7 @@ Source0007:        nodejs-symlink-deps
 Source0008:        nodejs.attr
 Source0009:        nodejs.prov
 Source0010:        nodejs.req
+Source0011:        nodejs.srpm.macros
 
 Source0111:        nodejs-packaging-bundler
 
