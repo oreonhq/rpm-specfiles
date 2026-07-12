@@ -8,11 +8,11 @@ Release:    7%{?dist}
 Summary:    Compiler built-ins
 License:    BSD-2-Clause OR GPL-2.0-or-later
 URL:        http://software.schmorp.de/pkg/libecb.html
-Source0:    http://cvs.schmorp.de/libecb/ecb.h?revision=1.216&view=co
-Source1:    http://cvs.schmorp.de/libecb/ecb.pod?revision=1.107&view=co
-Source2:    http://cvs.schmorp.de/libecb/LICENSE?revision=1.2&view=co
-Source3:    http://cvs.schmorp.de/libecb/README?revision=1.3&view=co
-Source4:    http://cvs.schmorp.de/libecb/Changes?revision=1.47&view=co
+Source0:    http://cvs.schmorp.de/libecb/ecb.h?revision=1.216&view=co#/ecb.h
+Source1:    http://cvs.schmorp.de/libecb/ecb.pod?revision=1.107&view=co#/ecb.pod
+Source2:    http://cvs.schmorp.de/libecb/LICENSE?revision=1.2&view=co#/LICENSE
+Source3:    http://cvs.schmorp.de/libecb/README?revision=1.3&view=co#/README
+Source4:    http://cvs.schmorp.de/libecb/Changes?revision=1.47&view=co#/Changes
 BuildRequires:  coreutils
 BuildRequires:  perl-podlators
 

@@ -126,10 +126,14 @@ for module in $(grep -E '/lib/modules/.+\.ko(\.gz|\.bz2|\.xz|\.zst)?$') "$@"; do
 
       match($0, /^([0-9a-f]+) [gl]...... (.*)	[0-9a-f]+ __crc_(.*)$/, a) {
           if (a[2] == "*ABS*") {
-              printf("%s(%s) = 0x%08x\n", dep_pfx, a[3], strtonum("0x" a[1]));
+              crc = strtonum("0x" a[1]);
+              if (crc != 0)
+                  printf("%s(%s) = 0x%08x\n", dep_pfx, a[3], crc);
           } else {
               if (!(a[2] in sectdata)) { readsect(a[2]) }
-              printf("%s(%s) = 0x%08s\n", dep_pfx, a[3], substr(sectdata[a[2]], (strtonum("0x" a[1]) * 2) + 1, 8))
+              crc = substr(sectdata[a[2]], (strtonum("0x" a[1]) * 2) + 1, 8);
+              if (crc != "" && crc != "00000000")
+                  printf("%s(%s) = 0x%08s\n", dep_pfx, a[3], crc);
           }
       }'
 
