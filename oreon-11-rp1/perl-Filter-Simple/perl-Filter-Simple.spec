@@ -37,6 +37,8 @@ Requires:       perl(warnings)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{__requires_exclude}|^perl\\(Filter::Simple::.*\\)
 
+Provides:       perl(Filter::Simple)
+Provides:       perl(Filter::Simple)
 %description
 The Filter::Simple Perl module provides a simplified interface to
 Filter::Util::Call; one that is sufficient for most common cases.

@@ -28,6 +28,7 @@ BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
 Requires:       perl(Devel::StackTrace)
 
+Provides:       perl(Object::Deadly)
 %description
 Object::Deadly is meant to be used in testing. All possible
 overloading and method calls die. You can pass this object into

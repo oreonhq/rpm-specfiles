@@ -51,6 +51,7 @@ Requires:       perl(XSLoader)
 
 %{?perl_default_filter}
 
+Provides:       perl(Variable::Magic)
 %description
 Magic is Perl way of enhancing objects. This mechanism let the user add
 extra data to any variable and hook syntactical operations (such as access,

@@ -29,6 +29,8 @@ BuildRequires:  perl(Test::More) >= 0.01
 # Dependencies
 # (none)
 
+Provides:       perl(accessors)
+Provides:       perl(accessors)
 %description
 The accessors pragma lets you create simple accessors at compile-time.
 

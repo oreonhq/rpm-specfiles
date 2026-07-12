@@ -40,6 +40,7 @@ Requires:       mailcap
 %endif
 Conflicts:      perl-libwww-perl < 6
 
+Provides:       perl(LWP::MediaTypes)
 %description
 This module provides functions for handling media (also known as MIME)
 types and encodings. The mapping from file extensions to media types is

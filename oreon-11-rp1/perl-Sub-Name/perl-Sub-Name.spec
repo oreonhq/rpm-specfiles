@@ -47,6 +47,7 @@ BuildRequires:	perl(Devel::CheckBin)
 # Don't "provide" private perl objects
 %{?perl_default_filter}
 
+Provides:       perl(Sub::Name)
 %description
 This module allows one to "name" or rename subroutines, including anonymous
 ones.

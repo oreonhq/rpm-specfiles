@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::More) >= 0.88
 BuildRequires:  perl(utf8)
 BuildRequires:  perl(version)
 
+Provides:       perl(Pod::Markdown)
 %description
 This module subclasses Pod::Parser and converts POD to Markdown.
 

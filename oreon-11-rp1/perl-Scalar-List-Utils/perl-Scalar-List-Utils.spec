@@ -46,6 +46,7 @@ BuildRequires:  perl(vars)
 
 %{?perl_default_filter}
 
+Provides:       perl(Sub::Util)
 %description
 This package contains a selection of subroutines that people have expressed
 would be nice to have in the perl core, but the usage would not really be

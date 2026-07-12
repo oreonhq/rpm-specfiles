@@ -56,6 +56,7 @@ BuildRequires:	perl(Test::Pod::Coverage) >= 1.08
 # Dependencies
 # (none)
 
+Provides:       perl(CPAN::Meta::Check)
 %description
 This module verifies if requirements described in a CPAN::Meta object are
 present.

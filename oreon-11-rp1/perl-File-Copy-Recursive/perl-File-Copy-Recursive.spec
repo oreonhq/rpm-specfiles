@@ -38,6 +38,7 @@ BuildRequires:  perl(Test::File)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Warnings)
 
+Provides:       perl(File::Copy::Recursive)
 %description
 This module copies and moves directories recursively to an optional depth and
 attempts to preserve each file or directory's mode.

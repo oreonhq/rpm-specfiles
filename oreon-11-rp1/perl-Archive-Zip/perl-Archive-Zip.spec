@@ -60,6 +60,7 @@ Requires:       perl(File::Spec) >= 0.80
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{__requires_exclude}|^perl\\(common\\)
 
+Provides:       perl(Archive::Zip)
 %description
 The Archive::Zip module allows a Perl program to create, manipulate,
 read, and write Zip archive files.

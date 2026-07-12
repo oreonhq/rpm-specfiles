@@ -66,6 +66,8 @@ Conflicts:      perl-DateTime <= 1:0.7000-3.fc16
 
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Dist::CheckConflicts\\)$
 
+Provides:       perl(DateTime::Locale)
+Provides:       perl(DateTime::Locale::Base)
 %description
 DateTime::Locale is primarily a factory for the various locale sub-classes.
 It also provides some functions for getting information on all the

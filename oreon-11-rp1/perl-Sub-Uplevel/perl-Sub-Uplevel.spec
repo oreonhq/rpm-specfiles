@@ -37,6 +37,7 @@ Requires:       perl(Carp)
 # Remove bogus perl(DB) provide
 %global __provides_exclude ^perl\\(DB\\)$
 
+Provides:       perl(Sub::Uplevel)
 %description
 Like Tcl's uplevel() function, but not quite so dangerous. The idea is
 just to fool caller(). All the really naughty bits of Tcl's uplevel()

@@ -21,6 +21,7 @@ BuildRequires:  perl(MIME::Base64)
 # Tests:
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Convert::Base64)
 %description
 This Perl module provides functions to convert strings to and from the Base64
 encoding as described in RFC 4648.

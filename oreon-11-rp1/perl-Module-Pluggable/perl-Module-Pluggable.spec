@@ -62,6 +62,8 @@ Recommends:     perl(Module::Runtime) >= 0.012
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(No::Middle\\)$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Module::Pluggable)
+Provides:       perl(Module::Pluggable::Object)
 %description
 This package provides a simple but, hopefully, extensible way of having
 'plugins' for your module. Essentially all it does is export a method into

@@ -64,6 +64,7 @@ Recommends:     perl(I18N::Langinfo)
 
 %{?perl_default_filter}
 
+Provides:       perl(Locale::TextDomain)
 %description
 The package libintl-perl is an internationalization library for Perl that
 aims to be compatible with the Uniforum message translations system as

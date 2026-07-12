@@ -116,6 +116,7 @@ Provides:       bundled(tzdata)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(T::RequireDateTime\\)
 
+Provides:       perl(DateTime::TimeZone)
 %description
 This class is the base class for all time zone objects. A time zone is
 represented internally as a set of observances, each of which describes the

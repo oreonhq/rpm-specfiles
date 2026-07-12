@@ -41,6 +41,7 @@ BuildRequires:	perl(File::Spec::Functions)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Scalar::Util\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(XSLoader\\)$
 
+Provides:       perl(Params::Util)
 %description
 Params::Util provides a basic set of importable functions that 
 makes checking parameters a hell of a lot easier.

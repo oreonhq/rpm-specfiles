@@ -25,6 +25,7 @@ BuildRequires:	perl(overload)
 # Dependencies
 Requires:	perl(Carp)
 
+Provides:       perl(Types::Serialiser)
 %description
 This module provides some extra data types that are used by common
 serialization formats such as JSON or CBOR. The idea is to have a repository of

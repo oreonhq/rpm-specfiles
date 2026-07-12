@@ -26,6 +26,7 @@ BuildRequires:  perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(Import::Into)
 %description
 Loading Import::Into creates a global method import::into which you can call on
 any package to import it into another package.

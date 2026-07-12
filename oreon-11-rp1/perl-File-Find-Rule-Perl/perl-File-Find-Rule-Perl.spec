@@ -25,6 +25,7 @@ BuildRequires:  perl(Params::Util) >= 0.38
 BuildRequires:  perl(Parse::CPAN::Meta) >= 1.38
 BuildRequires:  perl(Test::More) >= 0.47
 
+Provides:       perl(File::Find::Rule::Perl)
 %description
 Common rules for searching for Perl things.
 

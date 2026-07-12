@@ -38,6 +38,7 @@ Requires:       perl(Test::Builder) >= 0.13
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Test::Builder\\)$
 
+Provides:       perl(Test::Warn)
 %description
 This module provides a few convenience methods for testing warning
 based code.

@@ -31,6 +31,7 @@ BuildRequires:	perl(CPAN::Meta::Prereqs)
 # Dependencies
 Requires:	perl(XSLoader)
 
+Provides:       perl(XString)
 %description
 XString provides the B string helpers in one isolated package. Right now only
 cstring and perlstring are available.

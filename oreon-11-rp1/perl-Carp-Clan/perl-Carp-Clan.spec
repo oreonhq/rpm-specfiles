@@ -30,6 +30,7 @@ BuildRequires:  perl(Test::More)
 
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(DB\\)
 
+Provides:       perl(Carp::Clan)
 %description
 This module reports errors from the perspective of the caller of a
 "clan" of modules, similar to "Carp.pm" itself. But instead of giving

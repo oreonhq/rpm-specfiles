@@ -38,6 +38,7 @@ BuildRequires:	perl(CPAN::Meta::Prereqs)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(B::COW)
 %description
 B::COW provides some naïve additional B helpers to check the Copy On Write
 (COW) status of one SvPV (a Perl string variable).

@@ -31,6 +31,7 @@ BuildRequires:  perl(Test)
 
 %{?perl_default_filter}
 
+Provides:       perl(Devel::Leak)
 %description
 This module provides a basic way to discover if a piece of perl code
 is allocating perl data and not releasing them again.

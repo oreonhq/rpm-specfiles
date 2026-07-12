@@ -68,6 +68,7 @@ Requires:       perl(XSLoader)
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(version::vxs\\)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(version::vpp)
 %description
 Version objects were added to Perl in 5.10. This module implements version
 objects for older version of Perl and provides the version object API for

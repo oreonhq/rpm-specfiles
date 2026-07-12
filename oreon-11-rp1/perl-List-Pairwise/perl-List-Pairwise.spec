@@ -29,6 +29,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(Test::More) >= 0.42
 
+Provides:       perl(List::Pairwise)
 %description
 List::Pairwise provides functions to map and grep lists two elements at a
 time, setting $a and $b to each pair instead of setting $_ to each element.

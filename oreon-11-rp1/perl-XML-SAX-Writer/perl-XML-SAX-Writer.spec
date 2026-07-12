@@ -31,6 +31,7 @@ BuildRequires:  perl(XML::Filter::BufferText) >= 1.00
 BuildRequires:  perl(XML::NamespaceSupport) >= 1.00
 BuildRequires:  perl(XML::SAX::Exception) >= 1.01
 
+Provides:       perl(XML::SAX::Writer)
 %description
 A new XML Writer to match the SAX2 effort.
 

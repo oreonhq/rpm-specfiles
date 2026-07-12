@@ -43,6 +43,8 @@ Requires:       perl(XString) >= 0.003
 %global __requires_exclude %{__requires_exclude}|^perl\\(Sub::Name\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(ThreadsCheck\\)
 
+Provides:       perl(Sub::Quote)
+Provides:       perl(Sub::Defer)
 %description
 This package provides performant ways to generate subroutines from strings.
 

@@ -39,6 +39,7 @@ Requires:       perl(Module::Install)
 Requires:       perl(Module::Install::ReadmeFromPod)
 Requires:       perl(Pod::Markdown)
 
+Provides:       perl(Module::Install::ReadmeMarkdownFromPod)
 %description
 Module::Install::ReadmeMarkdownFromPod is a Module::Install extension that
 generates a README.mkdn file automatically from an indicated file

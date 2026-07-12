@@ -1,0 +1,42 @@
+diff -up Code-TidyAll-0.83/lib/Code/TidyAll/Plugin/PodSpell.pm.orig Code-TidyAll-0.83/lib/Code/TidyAll/Plugin/PodSpell.pm
+--- Code-TidyAll-0.83/lib/Code/TidyAll/Plugin/PodSpell.pm.orig	2023-07-20 15:07:29.641058518 +0200
++++ Code-TidyAll-0.83/lib/Code/TidyAll/Plugin/PodSpell.pm	2023-07-20 15:06:04.745436024 +0200
+@@ -25,7 +25,7 @@ has ispell_argv => (
+ has ispell_cmd => (
+     is      => 'ro',
+     isa     => t('NonEmptyStr'),
+-    default => 'ispell'
++    default => 'hunspell'
+ );
+ 
+ has suggest => (
+@@ -65,7 +65,7 @@ sub validate_file {
+ 
+ 1;
+ 
+-# ABSTRACT: Use Pod::Spell + ispell with tidyall
++# ABSTRACT: Use Pod::Spell + hunspell with tidyall
+ 
+ __END__
+ 
+@@ -75,7 +75,7 @@ __END__
+ 
+ =head1 NAME
+ 
+-Code::TidyAll::Plugin::PodSpell - Use Pod::Spell + ispell with tidyall
++Code::TidyAll::Plugin::PodSpell - Use Pod::Spell + hunspell with tidyall
+ 
+ =head1 VERSION
+ 
+diff -up Code-TidyAll-0.83/t/lib/TestFor/Code/TidyAll/Plugin/PodSpell.pm.orig Code-TidyAll-0.83/t/lib/TestFor/Code/TidyAll/Plugin/PodSpell.pm
+--- Code-TidyAll-0.83/t/lib/TestFor/Code/TidyAll/Plugin/PodSpell.pm.orig	2023-07-20 15:07:51.493218747 +0200
++++ Code-TidyAll-0.83/t/lib/TestFor/Code/TidyAll/Plugin/PodSpell.pm	2023-07-20 15:08:17.203407243 +0200
+@@ -19,7 +19,7 @@ sub test_filename {'Foo.pod'}
+ sub test_main : Tests {
+     my $self = shift;
+ 
+-    return unless $self->require_executable('ispell');
++    return unless $self->require_executable('hunspell');
+ 
+     if ( $^O eq 'MSWin32' ) {
+         $self->builder->skip('There is no ispell on Windows');

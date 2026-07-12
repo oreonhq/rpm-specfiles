@@ -49,6 +49,7 @@ Requires:       perl(version) >= 0.69
 # Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Module::Load::Conditional)
 %description
 This module provides simple ways to query and possibly load any of the modules
 you have installed on your system during run-time.

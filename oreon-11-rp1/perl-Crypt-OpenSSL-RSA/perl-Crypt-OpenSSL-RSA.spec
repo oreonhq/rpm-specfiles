@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::More)
 Requires:       perl(Crypt::OpenSSL::Random)
 Requires:	perl(Crypt::OpenSSL::Bignum)
 
+Provides:       perl(Crypt::OpenSSL::RSA)
 %description
 Crypt::OpenSSL::RSA - RSA encoding and decoding, using the openSSL libraries
 

@@ -1,0 +1,48 @@
+From ec0b4db5046f56f1f5c8e68523e464ce28d6e377 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 27 Feb 2018 17:34:10 +0100
+Subject: [PATCH] Adapt to changes in Perl-Tidy-20180219
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Perl-Tidy-20180219 corrected inserting semicolons after a last
+statement of a block. That break Mason-Tidy CLI.t tests like this:
+
+ #   Failed test 'no options'
+ #   at /builddir/build/BUILD/Mason-Tidy-2.57/blib/lib/Mason/Tidy/t/CLI.pm line 44.
+ #   (in Mason::Tidy::t::CLI->test_cli)
+ #          got: '% if (foo) {
+ # %     bar;
+ # % }
+ # '
+ #     expected: '% if (foo) {
+ # %     bar
+ # % }
+ # '
+
+This patch makes sure the simicolon is not inserted.
+
+CPAN RT#124604
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Mason/Tidy.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Mason/Tidy.pm b/lib/Mason/Tidy.pm
+index 0cdc7d2..4b60076 100644
+--- a/lib/Mason/Tidy.pm
++++ b/lib/Mason/Tidy.pm
+@@ -158,7 +158,7 @@ method tidy_method ($source) {
+     $self->perltidy(
+         source      => \$untidied_perl,
+         destination => \my $tidied_perl,
+-        argv        => $self->perltidy_line_argv . " -fnl -fbl",
++        argv        => $self->perltidy_line_argv . " -fnl -fbl -nasc ",
+     );
+     $tidied_perl =~ s/^{\n//;
+     $tidied_perl =~ s/}\n$//;
+-- 
+2.13.6
+

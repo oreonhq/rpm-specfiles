@@ -27,6 +27,7 @@ BuildRequires:  perl(warnings)
 
 %{?perl_default_filter}
 
+Provides:       perl(PadWalker)
 %description
 PadWalker is a module that allows you to inspect (and even change!)
 lexical variables in any subroutine that called you. It will only show

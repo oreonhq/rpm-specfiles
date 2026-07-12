@@ -42,6 +42,7 @@ BuildRequires:  perl(Test::Pod::Coverage)
 # Runtime
 Requires:       perl(B)
 
+Provides:       perl(Devel::Symdump)
 %description
 The perl module Devel::Symdump provides a convenient way to inspect
 perl's symbol table and the class hierarchy within a running program.

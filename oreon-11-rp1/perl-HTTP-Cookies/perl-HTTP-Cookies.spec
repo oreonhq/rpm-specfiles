@@ -38,6 +38,7 @@ Conflicts:      perl-libwww-perl < 6
 # function do not need it. We keep the module, but remove the dependency.
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\((HTTP::Date|HTTP::Headers::Util|Win32)\\)$
 
+Provides:       perl(HTTP::Cookies)
 %description
 This class is for objects that represent a "cookie jar" -- that is, a
 database of all the HTTP cookies that a given LWP::UserAgent object

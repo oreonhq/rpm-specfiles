@@ -83,6 +83,7 @@ Requires:	perl(PerlIO::utf8_strict) >= 0.003
 BuildRequires:	perl(Unicode::UTF8) >= 0.58
 Requires:	perl(Unicode::UTF8) >= 0.58
 
+Provides:       perl(Path::Tiny)
 %description
 This module attempts to provide a small, fast utility for working with file
 paths. It is friendlier to use than File::Spec and provides easy access to

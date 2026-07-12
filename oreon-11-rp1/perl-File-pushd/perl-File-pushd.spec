@@ -35,6 +35,7 @@ BuildRequires:  perl(CPAN::Meta) >= 2.120900
 BuildRequires:  perl(CPAN::Meta::Prereqs)
 # Dependencies
 
+Provides:       perl(File::pushd)
 %description
 File::pushd does a temporary chdir that is easily and automatically reverted,
 similar to pushd in some Unix command shells. It works by creating an object

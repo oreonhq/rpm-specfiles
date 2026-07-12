@@ -77,6 +77,7 @@ Requires:       perl(XSLoader)
 %endif
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Compress::Raw::Bzip2)
 %description
 This module provides a Perl interface to the bzip2 compression library.
 It is used by IO::Compress::Bzip2.

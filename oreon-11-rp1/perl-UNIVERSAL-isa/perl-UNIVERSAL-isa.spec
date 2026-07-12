@@ -32,6 +32,7 @@ BuildRequires:  perl(CPAN::Meta) >= 2.120900
 # Dependencies
 # (none)
 
+Provides:       perl(UNIVERSAL::isa)
 %description
 Whenever you use "isa" in UNIVERSAL as a function, a kitten using
 Test::MockObject dies. Normally, the kittens would be helpless, but

@@ -53,6 +53,22 @@ BuildRequires:  perl(vars)
 %global __requires_exclude %{__requires_exclude}|^perl\\(helpers\\)$
 
 
+Provides:       perl(Pod::Simple)
+Provides:       perl(Pod::Simple::Checker)
+Provides:       perl(Pod::Simple::Methody)
+Provides:       perl(Pod::Simple::RTF)
+Provides:       perl(Pod::Simple::XMLOutStream)
+Provides:       perl(Pod::Simple::PullParser)
+Provides:       perl(Pod::Simple::PullParserEndToken)
+Provides:       perl(Pod::Simple::PullParserStartToken)
+Provides:       perl(Pod::Simple::PullParserTextToken)
+Provides:       perl(Pod::Simple::Text)
+Provides:       perl(Pod::Simple::PullParser)
+Provides:       perl(Pod::Simple::PullParserEndToken)
+Provides:       perl(Pod::Simple::PullParserStartToken)
+Provides:       perl(Pod::Simple::PullParserTextToken)
+Provides:       perl(Pod::Simple::Text)
+Provides:       perl(Pod::Simple::XHTML)
 %description
 Pod::Simple is a Perl library for parsing text in the POD (plain old
 documentation) markup language that is typically used for writing

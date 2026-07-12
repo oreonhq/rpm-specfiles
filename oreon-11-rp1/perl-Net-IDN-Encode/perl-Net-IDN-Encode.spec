@@ -45,6 +45,7 @@ Requires:       perl(XSLoader)
 
 %{?perl_default_filter}
 
+Provides:       perl(Net::IDN::Encode)
 %description
 This module provides an easy-to-use interface for encoding and decoding
 Internationalized Domain Names (IDNs).

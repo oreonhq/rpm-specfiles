@@ -32,6 +32,7 @@ Requires:       perl(Text::Unidecode)
 
 %{?perl_default_filter}
 
+Provides:       perl(Text::Soundex)
 %description
 Soundex is a phonetic algorithm for indexing names by sound, as pronounced in
 English. This module implements the original soundex algorithm developed by

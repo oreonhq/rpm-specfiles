@@ -16,6 +16,7 @@ BuildRequires:	perl(Carp)
 BuildRequires:	perl(ExtUtils::MakeMaker)
 BuildRequires:	perl(Test::More)
 
+Provides:       perl(Number::Compare)
 %description
 Number::Compare compiles a simple comparison to an anonymous subroutine,
 which you can call with a value to be tested again.

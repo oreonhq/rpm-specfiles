@@ -48,6 +48,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.00
 Requires:       perl(Cwd)
 Requires:       perl(File::Path)
 
+Provides:       perl(File::DesktopEntry)
 %description
 This module is used to work with .desktop files. The format of these files
 is specified by the freedesktop "Desktop Entry" specification. This module

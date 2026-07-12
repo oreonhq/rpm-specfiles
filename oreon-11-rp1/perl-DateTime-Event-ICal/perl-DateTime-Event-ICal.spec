@@ -30,6 +30,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 # Runtime
 
+Provides:       perl(DateTime::Event::ICal)
 %description
 This module provides convenience methods that let you easily create
 DateTime::Set objects for rfc2445 style recurrences.

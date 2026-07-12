@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(Net::DNS::Resolver::Programmable)
 %description
 Net::DNS::Resolver::Programmable is a Net::DNS::Resolver descendant class
 that allows a virtual DNS to be emulated instead of querying the real DNS.

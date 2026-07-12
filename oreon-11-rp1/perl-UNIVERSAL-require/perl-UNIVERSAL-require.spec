@@ -32,6 +32,7 @@ BuildRequires:  perl(Test::More) >= 0.47
 # Dependencies
 Requires:       perl(UNIVERSAL)
 
+Provides:       perl(UNIVERSAL::require)
 %description
 %{summary}.
 

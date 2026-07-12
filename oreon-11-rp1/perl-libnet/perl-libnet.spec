@@ -96,6 +96,11 @@ Conflicts:      perl < 4:5.22.0-347
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((IO::Socket|Socket)\\)$
 
+Provides:       perl(Net::Config)
+Provides:       perl(Net::Domain)
+Provides:       perl(Net::FTP)
+Provides:       perl(Net::NNTP)
+Provides:       perl(Net::SMTP)
 %description
 This is a collection of Perl modules which provides a simple and
 consistent programming interface (API) to the client side of various

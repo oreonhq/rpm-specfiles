@@ -71,6 +71,7 @@ Requires:       perl(Time::Local)
 %global __requires_exclude %{__requires_exclude}|^perl\\(BrokenCookieJar\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(SimpleCookieJar\\)
 
+Provides:       perl(HTTP::Tiny)
 %description
 This is a very simple HTTP/1.1 client, designed for doing simple GET requests
 without the overhead of a large framework like LWP::UserAgent.

@@ -38,6 +38,8 @@ BuildRequires:	perl(Test::Pod)
 Requires:	perl(Net::Domain) >= 1.05
 Requires:	perl(Net::NNTP)
 
+Provides:       perl(Mail::Address)
+Provides:       perl(Mail::Send)
 %description
 MailTools is a set of ancient Perl modules related to mail applications.
 

@@ -48,6 +48,7 @@ Requires:       perl(YAML)
 # Filter bogus provide of perl(DB)
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(DB\\)
 
+Provides:       perl(Spiffy)
 %description
 "Spiffy" is a framework and methodology for doing object oriented (OO)
 programming in Perl. Spiffy combines the best parts of Exporter.pm, base.pm,

@@ -37,6 +37,7 @@ BuildRequires:	perl(Test)
 # Dependencies
 Requires:	perl(Time::HiRes)
 
+Provides:       perl(IO::Multiplex)
 %description
 IO::Multiplex is designed to take the effort out of managing multiple file
 handles. It is essentially a really fancy front end to the select system call.

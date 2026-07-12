@@ -50,6 +50,7 @@ Suggests:       perl(File::Slurper)
 Suggests:       perl(Scalar::Util) >= 1.18
 %endif
 
+Provides:       perl(Config::AutoConf)
 %description
 This module simulates some of the tasks autoconf macros do.  To detect
 a command, a library and similar.

@@ -44,6 +44,7 @@ Requires:       perl(Math::BigInt)
 # Don't "provide" private Perl libs or redundant unversioned provides
 %global __provides_exclude ^(perl\\(NetAddr::IP(::(InetBase|Util(PP)?))?\\)$|Util\\.so)
 
+Provides:       perl(NetAddr::IP)
 %description
 This module provides an object-oriented abstraction on top of IP addresses
 or IP subnets, that allows for easy manipulations.

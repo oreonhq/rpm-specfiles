@@ -51,6 +51,10 @@ Recommends:     perl(Unicode::GCString) >= 2013.10
 # Remove private test modules
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(main::HBase|main::HBase::Wrapped\\)$
 
+Provides:       perl(Term::Table)
+Provides:       perl(Term::Table::Cell)
+Provides:       perl(Term::Table::LineBreak)
+Provides:       perl(Term::Table::Util)
 %description
 This Perl module is able to format rows of data into tables.
 

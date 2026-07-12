@@ -33,6 +33,7 @@ BuildRequires:  perl(vars)
 # Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Module::Load)
 %description
 If you consult "perldoc -f require" you will see that "require" will behave
 differently when given a bare-word or a string. In the case of a string,

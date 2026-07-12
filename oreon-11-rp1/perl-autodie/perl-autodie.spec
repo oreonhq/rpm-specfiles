@@ -88,6 +88,8 @@ Requires:       perl(BSD::Resource)
 Requires:       perl(Import::Into) >= 1.002004
 %endif
 
+Provides:       perl(autodie)
+Provides:       perl(Fatal)
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".

@@ -59,6 +59,7 @@ Requires:       perl(Carp)
 Requires:       perl(Config)
 Requires:       perl(Fcntl)
 
+Provides:       perl(YAML::Tiny)
 %description
 YAML::Tiny is a Perl class for reading and writing YAML-style files,
 written with as little code as possible, reducing load time and

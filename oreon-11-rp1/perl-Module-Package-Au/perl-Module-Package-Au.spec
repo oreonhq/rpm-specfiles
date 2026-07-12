@@ -27,6 +27,7 @@ BuildRequires:	perl(Pod::Markdown) >= 1.301
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Module::Package::Au)
 %description
 This module defines a set of standard configurations for Makefile.PL
 files based on Module::Package.

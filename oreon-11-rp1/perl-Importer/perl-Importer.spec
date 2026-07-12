@@ -23,6 +23,7 @@ BuildRequires:  perl(Test::More) >= 0.98
 # Remove private modules
 %global __requires_exclude %{?__requires_exclude:__requires_exclude|}perl\\(My::Exporter\\)
 
+Provides:       perl(Importer)
 %description
 This Perl module acts as a layer between Exporter and modules which consume
 exports. It is feature-compatible with Exporter, plus some much needed

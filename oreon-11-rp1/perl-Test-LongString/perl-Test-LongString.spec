@@ -21,6 +21,7 @@ BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
 BuildRequires:	perl(Test::Pod) >= 1.14 
 
 
+Provides:       perl(Test::LongString)
 %description
 This module provides some drop-in replacements for the string comparison
 functions of Test::More, but which are more suitable when you test against

@@ -43,6 +43,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 
 %{?perl_default_filter}
 
+Provides:       perl(Perl::Version)
 %description
 Perl::Version provides a simple interface for parsing, manipulating and
 formatting Perl version strings.

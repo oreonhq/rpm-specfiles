@@ -30,6 +30,7 @@ BuildRequires:  perl(Tie::Scalar)
 
 %{?perl_default_filter}
 
+Provides:       perl(Test::Taint)
 %description
 Tainted data is data that comes from an unsafe source, such as the command
 line, or, in the case of web apps, any GET or POST transactions. Read the 

@@ -38,6 +38,7 @@ Requires:       perl(warnings)
 %{?perl_default_filter}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Encode\\)$
 
+Provides:       perl(Encode::Locale)
 %description
 In many applications it's wise to let Perl use Unicode for the strings
 it processes.  Most of the interfaces Perl has to the outside world is

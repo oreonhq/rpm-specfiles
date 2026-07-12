@@ -52,6 +52,9 @@ BuildRequires:	perl(Test::Pod::Coverage::TrustMe) => 0.002000
 # Dependencies
 # (none)
 
+Provides:       perl(CPAN::Changes)
+Provides:       perl(Test::CPAN::Changes)
+Provides:       perl(CPAN::Changes)
 %description
 It is standard practice to include a Changes file in your distribution. The
 purpose of the Changes file is to help a user figure out what has changed

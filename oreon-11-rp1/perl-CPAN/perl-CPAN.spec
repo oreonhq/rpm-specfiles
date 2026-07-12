@@ -245,6 +245,7 @@ Provides:       cpan = %{version}
 %global __requires_exclude %{__requires_exclude}|^perl\\(CPAN::MyConfig\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(local_utils\\)
 
+Provides:       perl(CPAN::HandleConfig)
 %description
 The CPAN module automates or at least simplifies the make and install of
 perl modules and extensions. It includes some primitive searching

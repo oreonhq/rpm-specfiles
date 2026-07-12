@@ -133,6 +133,14 @@ Recommends:     gcc
 %global __requires_exclude %{__requires_exclude}|^perl\\(MakeMaker::Test.*)\s*$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(ExtUtils::MakeMaker::Config)
+Provides:       perl(ExtUtils::Command::MM)
+Provides:       perl(ExtUtils::MM_Any)
+Provides:       perl(ExtUtils::MM_Unix)
+Provides:       perl(ExtUtils::MY)
+Provides:       perl(ExtUtils::Mkbootstrap)
+Provides:       perl(ExtUtils::Mksymlists)
+Provides:       perl(ExtUtils::testlib)
 %description
 This utility is designed to write a Makefile for an extension module from a
 Makefile.PL. It is based on the Makefile.SH model provided by Andy

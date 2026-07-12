@@ -77,6 +77,8 @@ Requires:       perl(YAML)
 %global __requires_exclude %{__requires_exclude}|^perl\\(TestBas
 %global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\(TestBas
 
+Provides:       perl(Test::Base)
+Provides:       perl(Test::Base::Filter)
 %description
 Testing is usually the ugly part of Perl module authoring. Perl gives you a
 standard way to run tests with Test::Harness, and basic testing primitives

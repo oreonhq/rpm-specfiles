@@ -38,6 +38,7 @@ Requires:       perl(Math::BigInt) >= 2.005001
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(.::t/.*.inc\\)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Math::BigInt::GMP)
 %description
 Provides support for big integer calculations by means of the GMP library, as
 a replacement (drop-in) module for Math::BigInt's core, Math::BigInt::Calc.pm.

@@ -35,6 +35,7 @@ BuildRequires:  perl(vars)
 # Tests
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Module::Install::Repository)
 %description
 Module::Install::Repository is a Module::Install plugin to automatically
 figure out repository URL and set it via repository(), which then will be

@@ -59,6 +59,8 @@ Requires:       perl(warnings)
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(JSON::(Backend::PP|backportPP::Boolean|Boolean|PP|PP::IncrParser)\\)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(JSON::(backportPP|backportPP::Boolean)\\)
 
+Provides:       perl(JSON)
+Provides:       perl(JSON::Syck)
 %description
 This module converts between JSON (JavaScript Object Notation) and Perl
 data structure into each other. For JSON, see http://www.crockford.com/JSON/.

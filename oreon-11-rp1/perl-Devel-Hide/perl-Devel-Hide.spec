@@ -39,6 +39,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 # Dependencies
 # (none)
 
+Provides:       perl(Devel::Hide)
 %description
 Given a list of Perl modules/filenames, this module makes require and use
 statements fail (regardless of whether the specified files/modules are

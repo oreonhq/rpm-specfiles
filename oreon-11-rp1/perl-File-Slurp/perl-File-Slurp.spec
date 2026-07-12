@@ -41,6 +41,8 @@ BuildRequires:  perl(Socket)
 BuildRequires:  perl(Symbol)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(File::Slurp)
+Provides:       perl(File::Slurp)
 %description
 This module provides subs that allow you to read or write entire files with
 one simple call. They are designed to be simple to use, have flexible ways

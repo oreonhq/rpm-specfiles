@@ -27,6 +27,9 @@ BuildRequires:  perl(utf8)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Date::Format)
+Provides:       perl(Date::Parse)
+Provides:       perl(Time::Zone)
 %description
 This module includes a number of smaller modules suited for
 manipulation of time and date strings with Perl. In particular, the

@@ -49,6 +49,7 @@ BuildRequires:  perl(Test::TrailingSpace)
 %endif
 # Runtime
 
+Provides:       perl(IO::Socket::INET6)
 %description
 Perl Object interface for AF_INET|AF_INET6 domain sockets.
 

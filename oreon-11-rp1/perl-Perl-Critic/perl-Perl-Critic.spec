@@ -103,6 +103,13 @@ Provides:       perl(Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNu
 Provides:       perl(Perl::Critic::Policy::NamingConventions::Capitalization)
 Provides:       perl(Perl::Critic::Utils)
 Provides:       perl(Perl::Critic::Violation)
+Provides:       perl(Perl::Critic::Policy::Editor::RequireEmacsFileVariables)
+Provides:       perl(Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions)
+Provides:       perl(Perl::Critic::Policy::Lax::ProhibitStringyEval::ExceptForRequire)
+Provides:       perl(Perl::Critic::Policy::Miscellanea::RequireRcsKeywords)
+Provides:       perl(Perl::Critic::Policy)
+Provides:       perl(Perl::Critic::Utils::PPI)
+Provides:       perl(Perl::Critic::Policy::Modules::ProhibitModuleShebang)
 %description
 Perl::Critic is an extensible framework for creating and applying coding
 standards to Perl source code. Essentially, it is a static source code

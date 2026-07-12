@@ -28,6 +28,7 @@ BuildRequires:	perl(warnings)
 Requires:	perl(Carp)
 Requires:	perl(Storable)
 
+Provides:       perl(Readonly)
 %description
 Readonly provides a facility for creating non-modifiable scalars,
 arrays, and hashes. Any attempt to modify a Readonly variable throws

@@ -43,6 +43,8 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.08
 %endif
 Conflicts:      perl < 4:5.22.0-351
 
+Provides:       perl(IPC::SysV)
+Provides:       perl(IPC::Semaphore)
 %description
 This is an object interface for System V messages, semaphores, and
 inter-process calls.

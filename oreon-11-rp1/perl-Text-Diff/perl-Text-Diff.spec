@@ -35,6 +35,7 @@ Requires:       perl(Algorithm::Diff) >= 1.19
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Algorithm::Diff\\)$
 
+Provides:       perl(Text::Diff)
 %description
 Text::Diff provides a basic set of services akin to the GNU diff utility.
 It is not anywhere near as feature complete as GNU diff, but it is better

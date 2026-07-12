@@ -37,6 +37,7 @@ BuildRequires:	perl(Test::TrailingSpace)
 # Dependencies
 # (none)
 
+Provides:       perl(XML::SemanticDiff)
 %description
 XML::SemanticDiff provides a way to compare the contents and structure of two
 XML documents. By default, it returns a list of hashrefs where each hashref

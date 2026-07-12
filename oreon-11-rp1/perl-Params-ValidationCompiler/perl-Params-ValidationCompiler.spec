@@ -64,6 +64,7 @@ BuildRequires:	perl(Types::Standard)
 Recommends:	perl(Class::XSAccessor) >= 1.17
 Recommends:	perl(Sub::Util) >= 1.40
 
+Provides:       perl(Params::ValidationCompiler)
 %description
 Create a customized, optimized, non-lobotomized, uncompromised, and thoroughly
 specialized parameter checking subroutine.

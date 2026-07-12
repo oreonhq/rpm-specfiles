@@ -33,6 +33,7 @@ Requires:       perl(version) >= 0.88
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(version\\)$
 
+Provides:       perl(Module::CoreList)
 %description
 Module::CoreList provides information on which core and dual-life modules
 are shipped with each version of perl.

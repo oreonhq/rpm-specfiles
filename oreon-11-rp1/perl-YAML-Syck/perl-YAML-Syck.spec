@@ -69,6 +69,9 @@ BuildRequires:  perl(Symbol)
 # Avoid provides for private perl objects
 %{?perl_default_filter}
 
+Provides:       perl(YAML::Syck)
+Provides:       perl(YAML::Syck)
+Provides:       perl(JSON::Syck)
 %description
 This module provides a Perl interface to the libsyck data serialization
 library. It exports the Dump and Load functions for converting Perl data

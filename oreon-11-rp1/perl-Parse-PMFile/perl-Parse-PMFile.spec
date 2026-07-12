@@ -45,6 +45,7 @@ Requires:       perl(version) >= 0.83
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((JSON::PP|version)\\)$
 
+Provides:       perl(Parse::PMFile)
 %description
 The most of the code of this module is taken from the PAUSE code as of
 April 2013 almost verbatim. Thus, the heart of this module should be quite

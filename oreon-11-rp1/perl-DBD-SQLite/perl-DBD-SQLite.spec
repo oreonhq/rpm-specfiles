@@ -81,6 +81,7 @@ BuildRequires:  perl(Unicode::UCD)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(SQLiteTest\\)
 
+Provides:       perl(DBD::SQLite)
 %description
 SQLite is a public domain, file-based, relational database engine that you can
 find at <https://www.sqlite.org/>. This package provides a Perl DBI driver for

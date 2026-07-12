@@ -43,6 +43,7 @@ BuildRequires:  perl(Test::Pod::Coverage)
 
 %{?perl_default_filter}
 
+Provides:       perl(BSD::Resource)
 %description
 A module providing an interface for testing and setting process limits
 and priorities.

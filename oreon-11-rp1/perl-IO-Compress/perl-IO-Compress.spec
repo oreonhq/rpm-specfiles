@@ -96,6 +96,21 @@ Provides:       perl-IO-Compress-Zlib = %{version}-%{release}
 %endif
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(IO::Compress::Base)
+Provides:       perl(IO::Compress::Base::Common)
+Provides:       perl(IO::Compress::Bzip2)
+Provides:       perl(IO::Compress::Deflate)
+Provides:       perl(IO::Compress::Gzip)
+Provides:       perl(IO::Compress::Xz)
+Provides:       perl(IO::Compress::Zip)
+Provides:       perl(Compress::Zlib)
+Provides:       perl(IO::Uncompress::AnyUncompress)
+Provides:       perl(IO::Uncompress::Base)
+Provides:       perl(IO::Uncompress::Bunzip2)
+Provides:       perl(IO::Uncompress::Gunzip)
+Provides:       perl(IO::Uncompress::Inflate)
+Provides:       perl(IO::Uncompress::RawInflate)
+Provides:       perl(IO::Uncompress::Unzip)
 %description
 This distribution provides a Perl interface to allow reading and writing of
 compressed data created with the zlib and bzip2 libraries.

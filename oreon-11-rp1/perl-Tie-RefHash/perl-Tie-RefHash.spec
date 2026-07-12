@@ -39,6 +39,7 @@ Conflicts:      perl-interpreter < 4:5.30.1-451
 # Remove underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Scalar::Util\\)$
 
+Provides:       perl(Tie::RefHash)
 %description
 This module provides the ability to use references as hash keys if you first
 "tie" the hash variable to this module. Normally, only the keys of the tied

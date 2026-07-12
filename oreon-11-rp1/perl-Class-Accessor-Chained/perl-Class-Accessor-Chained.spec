@@ -22,6 +22,8 @@ Requires:       perl(Carp)
 Requires:       perl(Class::Accessor)
 Requires:       perl(Class::Accessor::Fast)
 
+Provides:       perl(Class::Accessor::Chained)
+Provides:       perl(Class::Accessor::Chained::Fast)
 %description
 A chained accessor is one that always returns the object when called with
 parameters (to set), and the value of the field when called with no arguments.

@@ -42,6 +42,7 @@ Recommends:     perl(I18N::Langinfo)
 Recommends:     perl(POSIX)
 
 Provides:       perl(Pod::Spell)
+Provides:       perl(Pod::Wordlist)
 %description
 Pod::Spell is a Pod formatter whose output is good for spell-checking.
 Pod::Spell rather like Pod::Text, except that it doesn't put much

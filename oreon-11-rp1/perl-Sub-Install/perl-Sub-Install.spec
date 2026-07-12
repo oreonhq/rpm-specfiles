@@ -38,6 +38,7 @@ BuildRequires:  perl(Test::Output)
 # ================= Run-time ================================
 Requires:       perl(B)
 
+Provides:       perl(Sub::Install)
 %description
 This module makes it easy to install subroutines into packages without the
 unsightly mess of no strict or typeglobs lying about where just anyone

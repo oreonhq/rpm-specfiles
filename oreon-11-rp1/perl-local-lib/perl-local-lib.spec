@@ -51,6 +51,7 @@ Requires:       perl(File::Spec)
 %global __requires_exclude %{__requires_exclude}|^perl\\(TempDir\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Carp::Foo\\)
 
+Provides:       perl(local::lib)
 %description
 This module provides a quick, convenient way of bootstrapping a user-
 local Perl module library located within the user's home directory. It

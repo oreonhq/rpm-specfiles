@@ -31,6 +31,7 @@ BuildRequires:	perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(ExtUtils::InstallPaths)
 %description
 This module tries to make install path resolution as easy as possible.
 

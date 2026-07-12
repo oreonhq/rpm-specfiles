@@ -32,6 +32,7 @@ BuildRequires:	perl(warnings)
 
 BuildArch:	noarch
 
+Provides:       perl(File::Remove)
 %description
 %{summary}
 

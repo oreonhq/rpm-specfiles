@@ -32,6 +32,7 @@ Conflicts:      perl-libwww-perl < 6
 # Do not provide private imlementation of abstract class methods
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(WWW::RobotRules::InCore\\)
 
+Provides:       perl(WWW::RobotRules)
 %description
 This module parses /robots.txt files as specified in "A Standard for Robot
 Exclusion", at <https://www.robotstxt.org/robotstxt.html>. Webmasters can

@@ -29,6 +29,7 @@ Requires:       perl(Digest::SHA) >= 1
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Digest::(MD5|SHA)\\)$
 
+Provides:       perl(Digest::HMAC)
 %description
 HMAC is used for message integrity checks between two parties that
 share a secret key, and works in combination with some other Digest

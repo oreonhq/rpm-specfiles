@@ -23,6 +23,7 @@ BuildRequires:  perl(vars)
 # Tests
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(XML::NamespaceSupport)
 %description
 This module offers a simple to process name-spaced XML names (unames) from
 within any application that may need them. It also helps maintain a prefix

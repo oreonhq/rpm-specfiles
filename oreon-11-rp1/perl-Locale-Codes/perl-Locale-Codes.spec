@@ -36,6 +36,7 @@ Requires:       perl(deprecate)
 # Filter underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Test::Inter\\)$
 
+Provides:       perl(Locale::Country)
 %description
 Locale-Codes is a distribution containing a set of modules. The modules
 each deal with different types of codes which identify parts of the locale

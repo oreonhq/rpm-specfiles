@@ -78,6 +78,7 @@ Recommends:     shared-mime-info
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((File::BaseDir|File::DesktopEntry)\\)$
 
+Provides:       perl(File::MimeInfo)
 %description
 This module can be used to determine the mime type of a file. It tries to
 implement the freedesktop specification for a shared MIME database.

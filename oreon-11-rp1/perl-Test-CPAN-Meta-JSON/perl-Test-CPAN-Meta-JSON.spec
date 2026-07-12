@@ -36,6 +36,7 @@ BuildRequires:	perl(Test::Pod::Coverage) >= 0.08
 # Dependencies
 # (none)
 
+Provides:       perl(Test::CPAN::Meta::JSON)
 %description
 This module was written to ensure that a META.json file, provided with a
 standard distribution uploaded to CPAN, meets the specifications that are

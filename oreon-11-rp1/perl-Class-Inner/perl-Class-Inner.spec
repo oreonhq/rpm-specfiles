@@ -16,6 +16,7 @@ BuildRequires:  perl-generators
 BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Class::Inner)
 %description
 Yet another implementation of an anonymous class with per object overrideable
 methods, but with the added attraction of sort of working dispatch to the

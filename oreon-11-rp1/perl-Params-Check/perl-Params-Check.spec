@@ -29,6 +29,7 @@ BuildRequires:  perl(vars)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Params::Check)
 %description
 This is a generic input parsing/checking mechanism. It allows you to
 validate input via a template. The only requirement is that the arguments

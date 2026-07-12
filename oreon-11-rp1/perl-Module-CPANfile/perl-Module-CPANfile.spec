@@ -44,6 +44,7 @@ Requires:       perl(Pod::Usage)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(t::Utils\\)
 
+Provides:       perl(Module::CPANfile)
 %description
 Module::CPANfile is a tool to handle cpanfile format to load application
 specific dependencies, not just for CPAN distributions.

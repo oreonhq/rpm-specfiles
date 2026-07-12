@@ -33,6 +33,7 @@ BuildRequires:  perl(Test::More)
 
 %{?perl_default_filter}
 
+Provides:       perl(Term::ReadKey)
 %description
 Term::ReadKey is a compiled perl module dedicated to providing simple
 control over terminal driver modes (cbreak, raw, cooked, etc.)

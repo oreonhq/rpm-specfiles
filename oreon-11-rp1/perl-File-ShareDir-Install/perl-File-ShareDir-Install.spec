@@ -33,6 +33,7 @@ BuildRequires:  perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(File::ShareDir::Install)
 %description
 File::ShareDir::Install allows you to install read-only data files from a
 distribution. It is a companion module to File::ShareDir, which allows you

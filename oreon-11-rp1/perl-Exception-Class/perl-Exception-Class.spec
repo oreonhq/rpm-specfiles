@@ -36,6 +36,7 @@ BuildRequires:  perl(CPAN::Meta::Prereqs)
 # Dependencies
 # (none)
 
+Provides:       perl(Exception::Class)
 %description
 Exception::Class allows you to declare exception hierarchies in your
 modules in a "Java-esque" manner.

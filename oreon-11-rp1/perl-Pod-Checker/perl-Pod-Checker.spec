@@ -37,6 +37,7 @@ BuildRequires:  perl(vars)
 # VMS::Filespec not used
 Requires:       perl(Pod::Simple) >= 3.28
 
+Provides:       perl(Pod::Checker)
 %description
 Module and tools to verify POD documentation contents for compliance with the
 Plain Old Documentation format specifications.

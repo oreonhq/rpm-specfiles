@@ -34,6 +34,8 @@ BuildRequires:  perl(CPAN::Meta) >= 2.120900
 BuildRequires:  perl(CPAN::Meta::Prereqs)
 # Runtime
 
+Provides:       perl(Mixin::Linewise::Readers)
+Provides:       perl(Mixin::Linewise::Writers)
 %description
 It's boring to deal with opening files for IO, converting strings to
 handle-like objects, and all that. With Mixin::Linewise::Readers and

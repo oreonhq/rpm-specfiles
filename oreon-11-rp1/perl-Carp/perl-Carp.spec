@@ -37,6 +37,7 @@ BuildRequires:  perl(Test::More) >= 0.47
 # 2-digit number only
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(IPC::Open3\\)
 
+Provides:       perl(Carp::Heavy)
 %description
 The Carp routines are useful in your own modules because they act like
 die() or warn(), but with a message which is more likely to be useful to a

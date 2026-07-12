@@ -83,6 +83,15 @@ Requires:	perl(XString)
 # Avoid provides for private packages
 %global __provides_exclude ^perl\\(_T::.*\\)
 
+Provides:       perl(Specio)
+Provides:       perl(Specio::Declare)
+Provides:       perl(Specio::Exporter)
+Provides:       perl(Specio::Library::Builtins)
+Provides:       perl(Specio::Library::Numeric)
+Provides:       perl(Specio::Library::String)
+Provides:       perl(Specio::Subs)
+Provides:       perl(Specio::PartialDump)
+Provides:       perl(Test::Specio)
 %description
 The Specio distribution provides classes for representing type constraints
 and coercion, along with syntax sugar for declaring them.

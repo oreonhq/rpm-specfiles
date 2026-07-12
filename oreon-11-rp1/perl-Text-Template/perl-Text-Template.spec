@@ -40,6 +40,7 @@ BuildRequires:  perl(Test::Warnings)
 %endif
 Requires:       perl(Carp)
 
+Provides:       perl(Text::Template)
 %description
 This is a library for generating form letters, building HTML pages, or
 filling in templates generally.  A 'template' is a piece of text that

@@ -37,6 +37,7 @@ BuildRequires:  perl(Test::Warn)
 BuildRequires:  perl(utf8::all)
 
 
+Provides:       perl(Parallel::ForkManager)
 %description
 This module is intended for use in operations that can be done in parallel
 where the number of processes to be forked off should be limited. Typical

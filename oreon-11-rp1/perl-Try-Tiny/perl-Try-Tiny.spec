@@ -44,6 +44,7 @@ Requires:	perl(Sub::Util)
 # Do not provide private modules from tests packaged as a documentation
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_docdir}/
 
+Provides:       perl(Try::Tiny)
 %description
 This module provides bare bones try/catch statements that are designed to
 minimize common mistakes with eval blocks, and NOTHING else.

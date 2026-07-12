@@ -21,6 +21,7 @@ BuildRequires:  perl(constant)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
 
+Provides:       perl(Text::Glob)
 %description
 Text::Glob implements glob(3) style matching that can be used to match
 against text, rather than fetching names from a file-system.  If you

@@ -21,6 +21,7 @@ BuildRequires:  perl(Exporter)
 # Tests
 BuildRequires:	perl(Test::More)
 
+Provides:       perl(Class::ReturnValue)
 %description
 A return-value object that lets you treat it as as a boolean, array or object.
 

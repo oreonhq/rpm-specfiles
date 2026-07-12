@@ -24,6 +24,18 @@ BuildRequires: urw-base35-nimbus-sans-fonts
 BuildRequires:  %{_fontbasedir}/urw-base35/NimbusSans-Bold.afm
 %endif
 
+Provides:       perl(Font::Metrics::Courier)
+Provides:       perl(Font::Metrics::CourierBold)
+Provides:       perl(Font::Metrics::CourierBoldOblique)
+Provides:       perl(Font::Metrics::CourierOblique)
+Provides:       perl(Font::Metrics::Helvetica)
+Provides:       perl(Font::Metrics::HelveticaBold)
+Provides:       perl(Font::Metrics::HelveticaBoldOblique)
+Provides:       perl(Font::Metrics::HelveticaOblique)
+Provides:       perl(Font::Metrics::TimesBold)
+Provides:       perl(Font::Metrics::TimesBoldItalic)
+Provides:       perl(Font::Metrics::TimesItalic)
+Provides:       perl(Font::Metrics::TimesRoman)
 %description
 Interface to Adobe Font Metrics files
 

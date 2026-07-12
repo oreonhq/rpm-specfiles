@@ -59,6 +59,7 @@ BuildRequires:  perl(Taint::Runtime)
 
 %{?perl_default_filter}
 
+Provides:       perl(Clone)
 %description
 This module provides a clone() method that makes recursive
 copies of nested hash, array, scalar and reference types,

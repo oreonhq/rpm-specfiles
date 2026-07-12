@@ -39,6 +39,8 @@ BuildRequires:  perl(Test::More)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(IO::Tty)
+Provides:       perl(IO::Pty)
 %description
 IO::Tty and IO::Pty provide an interface to pseudo tty's.
 

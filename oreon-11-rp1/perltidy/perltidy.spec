@@ -53,6 +53,7 @@ Requires:	perl(HTML::Entities)
 Requires:	perl(Pod::Simple::XHTML)
 Provides:	perl-Perl-Tidy = %{version}-%{release}
 
+Provides:       perl(Perl::Tidy)
 %description
 Perltidy is a Perl script that indents and re-formats Perl scripts to
 make them easier to read. If you write Perl scripts, or spend much

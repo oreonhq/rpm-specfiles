@@ -81,6 +81,12 @@ Suggests:       perl(Time::HiRes)
 %global __requires_exclude %{__requires_exclude}|^perl\\(IO::c55Capture\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(NoFork\\)
 
+Provides:       perl(App::Prove)
+Provides:       perl(TAP::Harness)
+Provides:       perl(Test::Harness)
+Provides:       perl(TAP::Base)
+Provides:       perl(TAP::Harness::Env)
+Provides:       perl(TAP::Parser::Aggregator)
 %description
 This package allows tests to be run and results automatically aggregated and
 output to STDOUT.

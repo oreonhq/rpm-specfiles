@@ -27,6 +27,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(Test)
 BuildRequires:  perl(Text::Wrap)
 
+Provides:       perl(Text::Unidecode)
 %description
 
 Text::Unidecode provides a function, `unidecode(...)' that takes

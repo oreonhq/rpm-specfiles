@@ -77,6 +77,7 @@ BuildRequires: urw-base35-fonts-legacy
 Requires: urw-base35-fonts-legacy
 %endif
 
+Provides:       perl(Graphics::Magick)
 %description
 GraphicsMagick is a comprehensive image processing package which is initially
 based on ImageMagick 5.5.2, but which has undergone significant re-work by

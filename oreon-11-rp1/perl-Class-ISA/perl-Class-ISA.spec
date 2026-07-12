@@ -24,6 +24,7 @@ BuildRequires:  perl(vars)
 BuildRequires:  perl(Test)
 Requires:       perl(deprecate)
 
+Provides:       perl(Class::ISA)
 %description
 This library provides functions that return the list (in order) of names of
 (super-)classes Perl would search to find a method, with no duplicates.

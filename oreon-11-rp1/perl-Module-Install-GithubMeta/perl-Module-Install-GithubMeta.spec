@@ -34,6 +34,7 @@ Requires:      perl(Module::Install) >= 0.85
 
 %{?perl_default_filter}
 
+Provides:       perl(Module::Install::GithubMeta)
 %description
 Module::Install::GithubMeta is a Module::Install extension
 to include GitHub (http://github.com) meta information in

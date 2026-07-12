@@ -38,6 +38,7 @@ BuildRequires:  perl(Test::More) >= 0.62
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Cases\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\((TieEvil\|TieLC\|Utils)\\)
 
+Provides:       perl(Capture::Tiny)
 %description
 Capture::Tiny provides a simple, portable way to capture anything sent to
 STDOUT or STDERR, regardless of whether it comes from Perl, from XS code or

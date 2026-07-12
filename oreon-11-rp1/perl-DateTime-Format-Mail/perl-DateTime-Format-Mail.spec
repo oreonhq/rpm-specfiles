@@ -42,6 +42,7 @@ BuildRequires:  perl(Test::CPAN::Meta)
 # Dependencies
 # (none)
 
+Provides:       perl(DateTime::Format::Mail)
 %description
 RFCs 2822 and 822 specify date formats to be used by email. This module parses
 and emits such dates.

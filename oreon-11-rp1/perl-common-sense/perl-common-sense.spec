@@ -34,6 +34,7 @@ BuildRequires:	/usr/bin/pod2text
 # (no additional dependencies)
 # Dependencies
 
+Provides:       perl(common::sense)
 %description
 This module implements some sane defaults for Perl programs, as defined
 by two typical (or not so typical - use your common sense) specimens of

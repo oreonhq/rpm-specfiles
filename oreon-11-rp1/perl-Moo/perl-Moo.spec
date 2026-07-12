@@ -72,6 +72,9 @@ Requires:       perl(Role::Tiny) >= 1.003003
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Devel::GlobalDestruction|Import::Into|Module::Runtime|Role::Tiny)\\)$
 
+Provides:       perl(Moo)
+Provides:       perl(Moo::Role)
+Provides:       perl(Method::Generate::Accessor)
 %description
 This module is an extremely light-weight, high-performance Moose
 replacement. It also avoids depending on any XS modules to allow simple

@@ -31,6 +31,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 # Dependencies
 # (none)
 
+Provides:       perl(DateTime::Format::IBeat)
 %description
 No Time Zones, No Geographical Borders 
 

@@ -54,6 +54,7 @@ Requires:       perl(XSLoader)
 
 %{?perl_default_filter}
 
+Provides:       perl(DB_File)
 %description
 DB_File is a module which allows Perl programs to make use of the facilities
 provided by Berkeley DB version 1.x (if you have a newer version of DB, you

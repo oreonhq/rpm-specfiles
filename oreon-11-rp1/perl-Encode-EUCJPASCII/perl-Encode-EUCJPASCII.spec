@@ -29,6 +29,7 @@ BuildRequires:  perl-generators
 
 %{?perl_default_filter}
 
+Provides:       perl(Encode::EUCJPASCII)
 %description
 This module provides eucJP-ascii, one of eucJP-open mappings, and its
 derivative.

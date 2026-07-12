@@ -29,6 +29,7 @@ BuildRequires: perl(Test::MinimumVersion) >= 0.007
 BuildRequires: perl(Perl::MinimumVersion) >= 1.20
 BuildRequires: perl(Test::CPAN::Meta) >= 0.12
 
+Provides:       perl(prefork)
 %description
 Optimized module loading for forking or non-forking processes
 

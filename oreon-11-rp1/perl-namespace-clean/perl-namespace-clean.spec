@@ -55,6 +55,7 @@ Requires:	perl(Package::Stash) >= 0.23
 # namespace::clean::_Util is a private package
 %global __requires_exclude %{?__requires_exclude:__requires_exclude|}^perl\\(namespace::clean::_Util\\)
 
+Provides:       perl(namespace::clean)
 %description
 When you define a function, or import one, into a Perl package, it will
 naturally also be available as a method. This does not per se cause

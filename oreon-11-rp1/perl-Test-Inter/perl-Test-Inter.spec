@@ -30,6 +30,7 @@ BuildRequires:  perl(Test::More)
 # Test::Pod::Coverage 1.00 not used
 Requires:       perl(lib)
 
+Provides:       perl(Test::Inter)
 %description
 This is another framework for writing test scripts. It is loosely inspired
 by Test::More, and has most of it's functionality, but it is not a drop-in

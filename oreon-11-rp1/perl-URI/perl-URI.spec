@@ -84,6 +84,11 @@ Suggests:       perl(Regexp::IPv6) >= 0.03
 Obsoletes:      perl-URI-ws < 0.03-32
 Provides:       perl-URI-ws = %{version}-%{release}
 
+Provides:       perl(URI)
+Provides:       perl(URI::Escape)
+Provides:       perl(URI::URL)
+Provides:       perl(URI::_idna)
+Provides:       perl(URI::file)
 %description
 This module implements the URI class. Objects of this class represent
 "Uniform Resource Identifier references" as specified in RFC 2396 (and

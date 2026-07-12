@@ -72,6 +72,7 @@ Requires:       perl(MIME::Charset) >= 1.006.2
 %endif
 
 
+Provides:       perl(Unicode::GCString)
 %description
 Unicode::LineBreak performs Line Breaking Algorithm described in Unicode
 Standards Annex #14 [UAX #14]. East_Asian_Width informative properties

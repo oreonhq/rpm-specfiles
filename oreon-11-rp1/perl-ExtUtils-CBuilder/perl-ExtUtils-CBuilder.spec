@@ -64,6 +64,7 @@ Requires:       perl(Perl::OSType) >= 1
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((File::Spec|Perl::OSType)\\)$
 
+Provides:       perl(ExtUtils::CBuilder)
 %description
 This module can build the C portions of Perl modules by invoking the
 appropriate compilers and linkers in a cross-platform manner. It was motivated

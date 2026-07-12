@@ -19,6 +19,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 
+Provides:       perl(MIME::Base32)
 %description
 Encodes and decodes data in a similar way like MIME::Base64 does.
 

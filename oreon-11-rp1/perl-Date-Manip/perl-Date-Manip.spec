@@ -52,6 +52,7 @@ Obsoletes: perl-DateManip < 5.48-1
 # Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(tests.pl\\)
 
+Provides:       perl(Date::Manip)
 %description
 Date::Manip is a series of modules designed to make any common date/time
 operation easy to do. Operations such as comparing two times, determining

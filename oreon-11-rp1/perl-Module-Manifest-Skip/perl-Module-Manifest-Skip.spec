@@ -40,6 +40,7 @@ Requires:       perl(warnings)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TestModuleManifestSkip\\)$
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(TestModuleManifestSkip\\)$
 
+Provides:       perl(Module::Manifest::Skip)
 %description
 CPAN module authors use a MANIFEST.SKIP file to exclude certain well known
 files from getting put into a generated MANIFEST file, which would cause them

@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Pod) >= 1.14
 %endif
 
+Provides:       perl(Tie::IxHash)
 %description
 This Perl module implements Perl hashes that preserve the order in
 which the hash elements were added. The order is not affected when

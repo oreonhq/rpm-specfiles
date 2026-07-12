@@ -21,6 +21,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 # rpm doesn't catch this
 Requires:       perl(Class::Accessor::Chained::Fast)
 
+Provides:       perl(Text::vFile::asData)
 %description
 Text::vFile::asData reads vFile format files, such as vCard (RFC 2426) and
 vCalendar (RFC 2445).

@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 # Runtime
 
+Provides:       perl(File::MMagic)
 %description
 This module attempts to guess a file's type from its contents like the file(1)
 command.

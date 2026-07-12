@@ -46,6 +46,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 BuildRequires:  perl(Test::Pod::Coverage) >= 0.08
 # Runtime
 
+Provides:       perl(Test::CPAN::Meta)
 %description
 This module was written to ensure that a META.yml file, provided with a
 standard distribution uploaded to CPAN, meets the specifications that are

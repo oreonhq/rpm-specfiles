@@ -53,6 +53,8 @@ Recommends:     perl(POSIX)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(MakeMaker::Test::.*\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(TieOut\\)
 
+Provides:       perl(ExtUtils::Installed)
+Provides:       perl(ExtUtils::Packlist)
 %description
 Handles the installing and uninstalling of Perl modules, scripts, manual
 pages, etc.

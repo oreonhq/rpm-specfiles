@@ -26,6 +26,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 # Runtime
 
+Provides:       perl(File::ReadBackwards)
 %description
 This module reads a file backwards line by line. It is simple to use,
 memory efficient and fast. It supports both an object and a tied handle

@@ -51,6 +51,7 @@ Requires:       perl(warnings)
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(I18N::LangTags\\)$
 
+Provides:       perl(Locale::Maketext::Simple)
 %description
 It is a common feature of applications (whether run directly, or via the Web)
 for them to be "localized" -- i.e., for them to present an English interface

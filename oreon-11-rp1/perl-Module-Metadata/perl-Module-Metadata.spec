@@ -46,6 +46,7 @@ BuildRequires:	perl(CPAN::Meta) >= 2.120900
 Requires:	perl(Encode)
 Requires:	perl(Fcntl)
 
+Provides:       perl(Module::Metadata)
 %description
 This module provides a standard way to gather metadata about a .pm file
 without executing unsafe code.

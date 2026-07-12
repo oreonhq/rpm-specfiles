@@ -28,6 +28,7 @@ BuildRequires:  perl(Test::NoWarnings)
 BuildRequires:  perl(warnings)
 
 
+Provides:       perl(Encode::IMAPUTF7)
 %description
 This module is able to encode and decode IMAP mailbox names using the UTF-7
 modification specified in RFC2060 section 5.1.3.

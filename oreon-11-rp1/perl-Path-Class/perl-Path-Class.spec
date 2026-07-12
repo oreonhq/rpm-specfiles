@@ -38,6 +38,7 @@ BuildRequires:	perl(warnings)
 Requires:	perl(File::Copy)
 Requires:	perl(Perl::OSType)
 
+Provides:       perl(Path::Class)
 %description
 Path::Class is a module for manipulation of file and directory specifications
 (strings describing their locations, like '/home/ken/foo.txt' or

@@ -52,6 +52,13 @@ Requires:       perl(version) >= 0.88
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(CPAN::Meta::Converter\\)$
 %global __requires_exclude %{__requires_exclude}|^perl\\(CPAN::Meta::Requirements\\)$
 
+Provides:       perl(CPAN::Meta)
+Provides:       perl(CPAN::Meta::Converter)
+Provides:       perl(CPAN::Meta::Feature)
+Provides:       perl(CPAN::Meta::Merge)
+Provides:       perl(CPAN::Meta::Prereqs)
+Provides:       perl(CPAN::Meta::Validator)
+Provides:       perl(Parse::CPAN::Meta)
 %description
 Software distributions released to the CPAN include a META.json or, for older
 distributions, META.yml, which describes the distribution, its contents, and

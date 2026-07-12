@@ -44,6 +44,7 @@ BuildRequires:  perl(Crypt::CBC) > 1.22
 
 %{?perl_default_filter}
 
+Provides:       perl(Crypt::DES)
 %description
 DES encryption module. The module implements the Crypt::CBC interface.
 

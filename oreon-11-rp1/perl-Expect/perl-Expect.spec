@@ -40,6 +40,7 @@ BuildRequires:	perl(Test::More) >= 0.98
 # Dependencies
 # (none)
 
+Provides:       perl(Expect)
 %description
 This module provides Expect-like functionality to Perl. Expect is
 a tool for automating interactive applications such as telnet, ftp,

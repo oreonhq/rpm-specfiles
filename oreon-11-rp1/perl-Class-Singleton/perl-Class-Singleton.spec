@@ -25,6 +25,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(base)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Class::Singleton)
 %description
 This is the Class::Singleton module. A Singleton describes an object class
 that can have only one instance in any system. An example of a Singleton

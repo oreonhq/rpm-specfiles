@@ -30,6 +30,7 @@ BuildRequires:  perl(Module::Load::Conditional)
 
 %{?perl_default_filter}
 
+Provides:       perl(Test::Without::Module)
 %description
 This module allows you to deliberately hide modules from a program even
 though they are installed. This is mostly useful for testing modules that

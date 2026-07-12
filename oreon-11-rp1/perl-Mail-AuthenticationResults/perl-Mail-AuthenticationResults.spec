@@ -27,6 +27,8 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 
 
+Provides:       perl(Mail::AuthenticationResults::Header::AuthServID)
+Provides:       perl(Mail::AuthenticationResults::Parser)
 %description
 Object Oriented Authentication-Results email headers.
 

@@ -46,6 +46,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.08
 
 %?perl_default_filter
 
+Provides:       perl(Devel::Size)
 %description
 This module figures out the real sizes of Perl variables in bytes. Call
 functions with a reference to the variable you want the size of. If the

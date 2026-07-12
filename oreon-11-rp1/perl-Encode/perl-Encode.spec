@@ -83,6 +83,10 @@ Requires:       perl(parent) >= 0.221
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((Exporter|parent)\\)$
 
+Provides:       perl(Encode::CJKConstants)
+Provides:       perl(Encode::Encoding)
+Provides:       perl(Encode::JP::JIS7)
+Provides:       perl(Encode::MIME::Header)
 %description
 The Encode module provides the interface between Perl strings and the rest
 of the system. Perl strings are sequences of characters.

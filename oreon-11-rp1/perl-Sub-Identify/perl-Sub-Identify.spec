@@ -48,6 +48,7 @@ Requires:	perl(XSLoader)
 # Don't provide private perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Sub::Identify)
 %description
 Sub::Identify allows you to retrieve the real name of code references. For
 this, it uses Perl's introspection mechanism, provided by the B module.

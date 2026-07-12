@@ -78,6 +78,11 @@ Requires:       perl(XSLoader)
 # Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((DateTime::Locale|DateTime::TimeZone)\\)$
 
+Provides:       perl(DateTime)
+Provides:       perl(DateTime::Duration)
+Provides:       perl(DateTime::Infinite)
+Provides:       perl(DateTime::Span)
+Provides:       perl(DateTime::SpanSet)
 %description
 DateTime is a class for the representation of date/time combinations.  It
 represents the Gregorian calendar, extended backwards in time before its

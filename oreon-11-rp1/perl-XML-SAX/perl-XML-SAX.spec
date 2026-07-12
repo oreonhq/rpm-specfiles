@@ -55,6 +55,11 @@ Requires:       perl(LWP::UserAgent)
 %global __requires_exclude ^perl\\(XML::SAX::PurePerl
 %global __provides_exclude ^perl\\(XML::SAX::PurePerl\\)$
 
+Provides:       perl(XML::SAX)
+Provides:       perl(XML::SAX::DocumentLocator)
+Provides:       perl(XML::SAX::Exception)
+Provides:       perl(XML::SAX::ParserFactory)
+Provides:       perl(XML::SAX::PurePerl)
 %description
 XML::SAX consists of several framework classes for using and building
 Perl SAX2 XML parsers, filters, and drivers. It is designed around the

@@ -24,6 +24,7 @@ BuildRequires:  perl(Test::More)
 Requires:       perl(Module::Manifest::Skip) >= 0.18
 Requires:       perl(warnings)
 
+Provides:       perl(Module::Install::ManifestSkip)
 %description
 This module generates a MANIFEST.SKIP file for you (using
 Module::Manifest::Skip) that contains the common files that people do not

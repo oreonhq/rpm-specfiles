@@ -20,6 +20,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(XML::SAX::Base)
 
 
+Provides:       perl(XML::Filter::BufferText)
 %description
 This is a very simple filter. One common cause of grief (and programmer
 error) is that XML parsers aren't required to provide character events in

@@ -47,6 +47,7 @@ Conflicts:      perl(B::Hooks::OP::Check) < 0.19
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(t::code.*\\)
 
+Provides:       perl(Lexical::Sub)
 %description
 This module implements lexical scoping of static variables and subroutines.
 Although it can be used directly, it is mainly intended to be

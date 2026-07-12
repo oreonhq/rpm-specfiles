@@ -37,6 +37,8 @@ Requires:       perl(Pod::Parser) >= 1.13
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Pod::Find\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Pod::Parser\\)$
 
+Provides:       perl(Pod::Coverage)
+Provides:       perl(Pod::Coverage::CountParents)
 %description
 Developers hate writing documentation.  They'd hate it even more if their
 computer tattled on them, but maybe they'll be even more thankful in the

@@ -48,6 +48,7 @@ BuildRequires:	perl(Test::NoWarnings)
 # Dependencies
 # (none)
 
+Provides:       perl(IPC::System::Simple)
 %description
 Calling Perl's in-built 'system()' function is easy; determining if it
 was successful is _hard_. Let's face it, '$?' isn't the nicest variable

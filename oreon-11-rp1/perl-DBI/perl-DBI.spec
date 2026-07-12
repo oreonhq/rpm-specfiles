@@ -134,6 +134,10 @@ Suggests:       perl(SQL::Statement) >= 1.402
 %global __requires_exclude %{__requires_exclude}|^perl\\(DBI::st\\)
 
 Provides:       perl(DBD::File)
+Provides:       perl(DBI)
+Provides:       perl(DBI::Const::GetInfoType)
+Provides:       perl(DBI::DBD)
+Provides:       perl(DBD::DBM)
 %description 
 DBI is a database access Application Programming Interface (API) for
 the Perl Language. The DBI API Specification defines a set of

@@ -84,6 +84,9 @@ Requires:       perl(XML::Parser) >= 2.23
 # Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(tools\\)
 
+Provides:       perl(XML::Twig)
+Provides:       perl(XML::Twig::Elt)
+Provides:       perl(XML::Twig::Elt)
 %description
 This module provides a way to process XML documents. It is build on
 top of XML::Parser.  XML::Twig offers a tree interface to the

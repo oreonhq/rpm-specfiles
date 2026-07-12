@@ -32,6 +32,7 @@ BuildRequires:  perl(XML::Parser)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(XML::Catalog)
 %description
 This module implements draft 0.4 of John Cowan's XML Catalog (formerly
 known as XCatalog) see

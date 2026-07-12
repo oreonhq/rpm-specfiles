@@ -34,6 +34,7 @@ BuildRequires:	perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(ExtUtils::Helpers)
 %description
 This module provides various portable helper functions for module building
 modules.

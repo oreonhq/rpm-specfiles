@@ -52,6 +52,8 @@ Requires:       perl(URI::file)
 %{?perl_default_filter}
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(XML::Parser\\)$
 
+Provides:       perl(XML::Parser)
+Provides:       perl(XML::Parser::PerlSAX)
 %description
 This module provides ways to parse XML documents. It is built on top
 of XML::Parser::Expat, which is a lower level interface to James

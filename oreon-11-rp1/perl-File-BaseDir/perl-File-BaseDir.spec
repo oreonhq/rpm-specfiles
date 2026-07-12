@@ -39,6 +39,7 @@ BuildRequires:  perl(Test::More)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(Helper\\)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(File::BaseDir)
 %description
 This module can be used to find directories and files as specified by the
 Freedesktop.org Base Directory Specification. This specifications gives a

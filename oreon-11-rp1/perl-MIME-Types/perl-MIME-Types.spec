@@ -55,6 +55,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 # Dependencies
 # (none)
 
+Provides:       perl(MIME::Types)
 %description
 MIME types are used in many applications, for instance as part of e-mail
 and HTTP traffic, to indicate the type of content that is transmitted.

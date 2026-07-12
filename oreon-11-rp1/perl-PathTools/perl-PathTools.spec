@@ -60,6 +60,8 @@ Recommends:     perl(XSLoader)
 
 %{?perl_default_filter}
 
+Provides:       perl(File::Spec::Functions)
+Provides:       perl(File::Spec::Unix)
 %description
 This is the combined distribution for the File::Spec and Cwd modules.
 

@@ -29,6 +29,7 @@ Conflicts:      perl-libwww-perl < 6
 # Do not provide private modules
 %global __provides_exclude %{?__provides_exclude:__provides_exclude|}^perl\\(File::Listing::
 
+Provides:       perl(File::Listing)
 %description
 This module exports a single function called parse_dir(), which can be used
 to parse directory listings.

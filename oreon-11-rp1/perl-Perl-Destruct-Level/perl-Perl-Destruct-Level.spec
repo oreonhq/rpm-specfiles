@@ -31,6 +31,7 @@ BuildRequires:	perl(Test::More)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Perl::Destruct::Level)
 %description
 This module allows you to change perl's internal destruction level. The
 default value of the destruct level is 0; it means that perl won't bother

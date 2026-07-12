@@ -96,6 +96,11 @@ Requires:       perl(Time::Local)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Convert::ASN1\\)$
 %global __requires_exclude %{__requires_exclude}|^perl\\(t::common.pl\\)
 
+Provides:       perl(Net::LDAP)
+Provides:       perl(Net::LDAP::Schema)
+Provides:       perl(Net::LDAPI)
+Provides:       perl(Net::LDAPS)
+Provides:       perl-ldap
 %description
 Net::LDAP is a collection of modules that implements an LDAP services API
 for Perl programs. The module may be used to search directories or perform
@@ -213,5 +218,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.68-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

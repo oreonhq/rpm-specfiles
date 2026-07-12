@@ -55,6 +55,7 @@ Requires:       perl(version)
 Suggests:       perl(PAR::Dist)
 Suggests:       /usr/bin/perldoc
 
+Provides:       perl(Module::Signature)
 %description
 This package contains a command line tool and module for checking and creating
 SIGNATURE files for Perl CPAN distributions.

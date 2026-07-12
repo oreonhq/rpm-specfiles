@@ -39,6 +39,7 @@ BuildRequires:	perl(Test::Pod) >= 1.41
 %endif
 # Runtime
 
+Provides:       perl(Package::Generator)
 %description
 This module lets you quickly and easily construct new packages. It gives
 them unused names and sets up their package data, if provided.

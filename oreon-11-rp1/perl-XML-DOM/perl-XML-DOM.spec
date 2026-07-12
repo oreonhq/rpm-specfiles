@@ -35,6 +35,7 @@ Obsoletes:      perl-libxml-enno <= 1.02
 
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(XML::XQL::Node\\)
 
+Provides:       perl(XML::DOM)
 %description
 This is a Perl extension to XML::Parser. It adds a new 'Style' to
 XML::Parser, called 'DOM', that allows XML::Parser to build an Object

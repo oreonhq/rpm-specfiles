@@ -47,6 +47,7 @@ BuildRequires:	perl(Readonly)
 # Avoid provides for private objects
 %{?perl_default_filter}
 
+Provides:       perl(Ref::Util::XS)
 %description
 Ref::Util::XS introduces several functions to help identify references in a
 faster and smarter way.

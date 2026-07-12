@@ -39,6 +39,7 @@ BuildRequires:  perl(Test2::V0)
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Test::More\\)$
 
+Provides:       perl(DateTime::Format::ISO8601)
 %description
 Parses almost all ISO8601 date and time formats. ISO8601 time-intervals
 will be supported in a later release.

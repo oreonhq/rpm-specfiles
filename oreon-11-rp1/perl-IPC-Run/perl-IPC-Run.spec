@@ -66,6 +66,7 @@ Requires:       perl(Data::Dumper)
 Requires:       perl(File::Basename)
 Requires:       perl(IO::Pty) >= 1.08
 
+Provides:       perl(IPC::Run)
 %description
 IPC::Run allows you run and interact with child processes using files,
 pipes, and pseudo-ttys. Both system()-style and scripted usages are

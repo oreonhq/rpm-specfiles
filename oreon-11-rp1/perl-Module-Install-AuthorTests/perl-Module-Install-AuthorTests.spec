@@ -24,6 +24,7 @@ BuildRequires:  perl(Test::More)
 # Plug-in for Module::Install
 Requires:       perl(Module::Install)
 
+Provides:       perl(Module::Install::AuthorTests)
 %description
 Plug-in for Perl Module::Install package to declare tests in ./xt directory
 should be run only if the module is being built by an author.

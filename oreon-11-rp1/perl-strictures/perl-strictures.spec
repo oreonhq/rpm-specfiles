@@ -49,6 +49,7 @@ BuildRequires:  perl(bareword::filehandles)
 # Runtime
 Requires:       perl(Carp)
 
+Provides:       perl(strictures)
 %description
 This package turns on strict and makes most warnings fatal.
 

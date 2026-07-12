@@ -26,6 +26,7 @@ BuildRequires:  perl(Net::DNS::ZoneFile)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Exception)
 
+Provides:       perl(Net::DNS::Resolver::Mock)
 %description
 A subclass of Net::DNS::Resolver which parses a zonefile for it's data
 source. Primarily for use in testing.

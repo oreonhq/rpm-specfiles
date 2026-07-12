@@ -57,6 +57,8 @@ Requires:	perl(Package::Generator)
 %global __provides_exclude_from ^%{our_docdir}/
 %global __requires_exclude_from ^%{our_docdir}/
 
+Provides:       perl(Sub::Exporter)
+Provides:       perl(Sub::Exporter::Util)
 %description
 Sub::Exporter provides a sophisticated alternative to Exporter.pm. It allows
 for renaming, currying/sub-generation, and other cool stuff.

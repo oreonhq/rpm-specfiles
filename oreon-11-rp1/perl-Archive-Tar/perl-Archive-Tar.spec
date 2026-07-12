@@ -88,6 +88,7 @@ Requires:       perl(Text::Diff)
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(IO::Zlib\\)$
 
+Provides:       perl(Archive::Tar)
 %description
 Archive::Tar provides an object oriented mechanism for handling tar
 files.  It provides class methods for quick and easy files handling

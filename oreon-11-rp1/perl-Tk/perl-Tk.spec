@@ -134,6 +134,25 @@ Provides:       perl(Tk) = %{version}
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TkTest\\)
 
+Provides:       perl(Tk::BrowseEntry)
+Provides:       perl(Tk::Canvas)
+Provides:       perl(Tk::Derived)
+Provides:       perl(Tk::DialogBox)
+Provides:       perl(Tk::ROText)
+Provides:       perl(Tk::FileSelect)
+Provides:       perl(Tk::Frame)
+Provides:       perl(Tk::ItemStyle)
+Provides:       perl(Tk::LabEntry)
+Provides:       perl(Tk::Toplevel)
+Provides:       perl(Tk::Widget)
+Provides:       perl(Tk::FileSelect)
+Provides:       perl(Tk::Frame)
+Provides:       perl(Tk::ItemStyle)
+Provides:       perl(Tk::LabEntry)
+Provides:       perl(Tk::Toplevel)
+Provides:       perl(Tk::Tree)
+Provides:       perl(Tk::Widget)
+Provides:       perl(Tk::Tree)
 %description
 This a re-port of a perl interface to Tk8.4.
 C code is derived from Tcl/Tk8.4.5.

@@ -59,6 +59,7 @@ Requires:	perl(XSLoader) >= 0.02
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Unicode::UTF8)
 %description
 This module provides functions to encode and decode UTF-8 encoding form as
 specified by Unicode and ISO/IEC 10646:2011.

@@ -41,6 +41,7 @@ BuildRequires:  perl(Tie::Array)
 BuildRequires:  perl(Tie::Hash)
 BuildRequires:  perl(Readonly) >= 1.03
 
+Provides:       perl(Params::Validate)
 %description
 The Params::Validate module allows you to validate method or function
 call parameters to an arbitrary level of specificity. At the simplest

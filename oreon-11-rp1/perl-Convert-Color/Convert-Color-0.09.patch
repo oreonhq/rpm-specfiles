@@ -1,0 +1,13 @@
+diff -Naur Convert-Color-0.12.orig/lib/Convert/Color/HueChromaBased.pm Convert-Color-0.12/lib/Convert/Color/HueChromaBased.pm
+--- Convert-Color-0.12.orig/lib/Convert/Color/HueChromaBased.pm	2022-04-28 19:07:22.000000000 +0200
++++ Convert-Color-0.12/lib/Convert/Color/HueChromaBased.pm	2022-05-10 06:37:17.799903167 +0200
+@@ -3,8 +3,7 @@
+ #
+ #  (C) Paul Evans, 2009-2022 -- leonerd@leonerd.org.uk
+ 
+-package # hide from CPAN
+-   Convert::Color::HueChromaBased;
++package Convert::Color::HueChromaBased;
+ 
+ use v5.14;
+ use warnings;

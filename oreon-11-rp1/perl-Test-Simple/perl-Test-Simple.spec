@@ -140,6 +140,27 @@ Provides:       bundled(Sub::Info) = 0.002
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
 Provides:       perl(Test::More)
+Provides:       perl(Test2)
+Provides:       perl(Test2::API)
+Provides:       perl(Test2::Event)
+Provides:       perl(Test2::IPC)
+Provides:       perl(Test2::Plugin::UTF8)
+Provides:       perl(Test2::Require::Module)
+Provides:       perl(Test2::Tools::Tiny)
+Provides:       perl(Test2::Util::HashBase)
+Provides:       perl(Test2::V0)
+Provides:       perl(Test::Builder::Tester)
+Provides:       perl(Test::Tester)
+Provides:       perl(Test2::Require::Perl)
+Provides:       perl(Test2::Require::Threads)
+Provides:       perl(Test::Builder::Module)
+Provides:       perl(Test)
+Provides:       perl(Test::Builder)
+Provides:       perl(Test::Simple)
+Provides:       perl(Test::More)
+Provides:       perl(Test::Builder::Module)
+Provides:       perl(Test2::V0)
+Provides:       perl(Test::Tester)
 %description
 This package provides the bulk of the core testing facilities. For more
 information, see perldoc for Test::Simple, Test::More, etc.

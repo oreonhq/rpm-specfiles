@@ -66,6 +66,7 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 
+Provides:       perl(RRDs)
 %description
 RRD is the Acronym for Round Robin Database. RRD is a system to store and
 display time-series data (i.e. network bandwidth, machine-room temperature,

@@ -30,6 +30,7 @@ BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(Test::More)
 Requires:       ca-certificates
 
+Provides:       perl(Mozilla::CA)
 %description
 Mozilla::CA provides a path to ca-certificates copy of Mozilla's bundle of
 certificate authority certificates in a form that can be consumed by modules

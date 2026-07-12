@@ -26,6 +26,8 @@ BuildRequires:  perl(Test::More)
 # Optional tests:
 BuildRequires:  perl(Test::Pod) >= 1.14
 
+Provides:       perl(Test::Pod::Coverage)
+Provides:       perl(Test::Pod::Coverage::TrustMe)
 %description
 Test::Pod::Coverage is used to create a test for your distribution, to
 ensure that all relevant files in your distribution are appropriately

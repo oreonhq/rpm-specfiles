@@ -69,6 +69,7 @@ Suggests:       m4
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(rt_101033\\)
 
+Provides:       perl(Filter::Util::Call)
 %description
 Source filters alter the program text of a module before Perl sees it, much as
 a C preprocessor alters the source text of a C program before the compiler

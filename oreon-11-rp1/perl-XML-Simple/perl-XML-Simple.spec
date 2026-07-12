@@ -60,6 +60,7 @@ Requires:       perl(XML::SAX) >= 0.15
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TagsToUpper\\)
 
+Provides:       perl(XML::Simple)
 %description
 The XML::Simple module provides a simple API layer on top of an
 underlying XML parsing module (either XML::Parser or one of the SAX2

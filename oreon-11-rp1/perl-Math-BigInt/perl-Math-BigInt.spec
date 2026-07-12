@@ -53,6 +53,11 @@ Obsoletes:      perl-Math-BigRat < 0.2624-502
 %global __requires_exclude %{__requires_exclude}|perl\\(Math::BigInt::Lib::(Minimal\|TestUtil)\\)
 %global __requires_exclude %{__requires_exclude}|perl\\(Math::BigRat::Subclass\\)
 
+Provides:       perl(Math::BigInt)
+Provides:       perl(Math::BigInt::Calc)
+Provides:       perl(Math::BigInt::Lib)
+Provides:       perl(Math::BigFloat)
+Provides:       perl(Math::BigRat)
 %description
 This provides Perl modules for arbitrary-size integer and float mathematics.
 

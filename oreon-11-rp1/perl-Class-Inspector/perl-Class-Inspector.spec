@@ -19,6 +19,7 @@ BuildRequires:	perl(File::Spec) >= 0.80
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 
+Provides:       perl(Class::Inspector)
 %description
 Class::Inspector allows you to get information about a loaded class.
 Most or all of this information can be found in other ways, but they aren't

@@ -34,6 +34,7 @@ Requires:       perl(Term::Size::Perl)
 
 %{?perl_default_filter}
 
+Provides:       perl(Term::Size::Any)
 %description
 This is a unified interface to retrieve terminal size. It loads one module
 of a list of known alternatives, each implementing some way to get the

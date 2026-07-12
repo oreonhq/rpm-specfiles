@@ -47,6 +47,7 @@ BuildRequires:  perl(Test::Pod) >= 1.41
 %endif
 # Dependencies
 
+Provides:       perl(Data::Section)
 %description
 Data::Section provides an easy way to access multiple named chunks of
 line-oriented data in your module's DATA section. It was written to allow

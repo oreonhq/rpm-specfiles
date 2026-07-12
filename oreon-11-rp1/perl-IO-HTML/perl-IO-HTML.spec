@@ -28,6 +28,7 @@ BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Test::More) >= 0.88
 
+Provides:       perl(IO::HTML)
 %description
 IO::HTML provides an easy way to open a file containing HTML while
 automatically determining its encoding. It uses the HTML5 encoding sniffing

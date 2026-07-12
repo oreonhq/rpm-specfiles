@@ -32,6 +32,7 @@ BuildRequires:  perl(Test::More) >= 0.96
 BuildRequires:  perl(CPAN::Meta) >= 2.120900
 # Explicit dependencies:
 
+Provides:       perl(Pod::Eventual::Simple)
 %description
 POD is a pretty simple format to write, but it can be a big pain to deal with
 reading it and doing anything useful with it. Most existing POD parsers care

@@ -25,6 +25,7 @@ BuildRequires:  perl(vars)
 Requires:       perl(Carp)
 Requires:       perl(Getopt::Long)
 
+Provides:       perl(String::ShellQuote)
 %description
 This package contains a Perl module and a command line utility which
 are useful for quoting strings which are going to pass through the

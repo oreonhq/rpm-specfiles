@@ -26,6 +26,7 @@ BuildRequires:  perl(Test::More)
 
 %{?perl_default_filter}
 
+Provides:       perl(Devel::LexAlias)
 %description
 Devel::LexAlias provides the ability to alias a lexical variable in a
 subroutines scope to one of your choosing.

@@ -41,6 +41,7 @@ BuildRequires:  which
 # Optional tests
 %{?_with_testsuite:BuildRequires: perl(Test::Pod) >= 1.00}
 
+Provides:       perl(GSSAPI)
 %description
 This module gives access to the routines of the GSSAPI library, as
 described in rfc2743 and rfc2744 and implemented by the Kerberos-1.2

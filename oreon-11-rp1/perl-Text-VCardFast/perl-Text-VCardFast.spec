@@ -28,6 +28,7 @@ BuildRequires:  perl(FindBin)
 BuildRequires:  perl(JSON::XS)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Text::VCardFast)
 %description
 Text::VCardFast is designed to parse VCards very quickly compared to pure-Perl
 solutions. It has a Perl and an XS version of the same API, accessible

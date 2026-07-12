@@ -21,6 +21,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(CPAN::DistnameInfo)
 %description
 Many online services that are centered around CPAN attempt to
 associate multiple uploads by extracting a distribution name from the

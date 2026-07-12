@@ -48,6 +48,8 @@ BuildRequires:  perl(threads)
 
 Requires:       perl(XS::Parse::Keyword) >= 0.35
 
+Provides:       perl(Syntax::Keyword::Try)
+Provides:       perl(Syntax::Keyword::Try)
 %description
 This module provides a syntax plugin that implements exception-handling
 semantics in a form familiar to users of other languages, being built on a

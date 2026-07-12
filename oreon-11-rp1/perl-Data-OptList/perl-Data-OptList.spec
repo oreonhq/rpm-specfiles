@@ -51,6 +51,7 @@ BuildRequires:  perl(Test::Pod) >= 1.41
 # Dependencies
 # (none)
 
+Provides:       perl(Data::OptList)
 %description
 Hashes are great for storing named data, but if you want more than one entry
 for a name, you have to use a list of pairs. Even then, this is really boring

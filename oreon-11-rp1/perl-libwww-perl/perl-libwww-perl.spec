@@ -130,6 +130,11 @@ Provides:       perl(LWP::Protocol::http::SocketMethods) = %{version}
 # Remove underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Authen::NTLM|Encode|File::Listing|HTTP::Cookies|HTTP::Daemon|HTTP::Date|HTTP::Negotiate|HTTP::Request|HTTP::Response|HTTP::Status|LWP::MediaTypes|MIME::Base64|Net::FTP|Net::HTTP|Test::More|URI|WWW::RobotRules)\\)$
 
+Provides:       perl(LWP)
+Provides:       perl(LWP::Protocol::http)
+Provides:       perl(LWP::RobotUA)
+Provides:       perl(LWP::Simple)
+Provides:       perl(LWP::UserAgent)
 %description
 The libwww-perl collection is a set of Perl modules which provides a simple and
 consistent application programming interface to the World-Wide Web.  The main

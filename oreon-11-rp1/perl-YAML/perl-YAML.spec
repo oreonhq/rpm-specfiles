@@ -67,6 +67,9 @@ Requires:       perl(Carp)
 # perl(yaml_mapping) perl(yaml_scalar) perl(yaml_sequence)
 %global __provides_exclude ^perl\\(yaml_
 
+Provides:       perl(YAML)
+Provides:       perl(YAML::XS)
+Provides:       perl(YAML::Tests)
 %description
 If you need to use YAML with Perl, it is likely that you will have a look at
 this module (YAML.pm) first. There are several YAML modules in Perl and they

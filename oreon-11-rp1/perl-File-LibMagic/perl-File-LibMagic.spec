@@ -49,6 +49,7 @@ BuildRequires:	perl(CPAN::Meta::Prereqs)
 # Dependencies
 # (none)
 
+Provides:       perl(File::LibMagic)
 %description
 The File::LibMagic module is a simple perl interface to libmagic from the
 file (4.x or 5.x) package.

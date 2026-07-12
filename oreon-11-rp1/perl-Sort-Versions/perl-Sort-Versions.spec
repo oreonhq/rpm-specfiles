@@ -21,6 +21,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Sort::Versions)
 %description
 A perl 5 module for sorting of revision-like numbers
 

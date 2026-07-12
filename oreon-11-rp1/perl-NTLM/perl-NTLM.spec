@@ -33,6 +33,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(Test::Pod)
 %endif
 
+Provides:       perl(Authen::NTLM)
 %description
 This module provides methods to use NTLM authentication.  It can be used
 as an authenticate method with the Mail::IMAPClient module to perform

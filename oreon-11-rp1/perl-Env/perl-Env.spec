@@ -27,6 +27,7 @@ BuildRequires:  perl(Tie::Array)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(vars)
 
+Provides:       perl(Env)
 %description
 Perl maintains environment variables in a special hash named %%ENV. For when
 this access method is inconvenient, the Perl module Env allows environment

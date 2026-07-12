@@ -37,6 +37,7 @@ Suggests:       perl(JSON::PP) >= 2.27300
 # Remove under-specified version
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Time::Local\\)$
 
+Provides:       perl(HTTP::Date)
 %description
 This module provides functions that deal the date formats used by the HTTP
 protocol (and then some more). Only the first two functions, time2str() and

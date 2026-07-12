@@ -91,6 +91,7 @@ Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{name}7            < %{epoch}:%{version}-%{release}
 Provides:       %{name}7            = %{epoch}:%{version}-%{release}
 
+Provides:       perl(Image::Magick)
 %description
 ImageMagick is an image display and manipulation tool for the X
 Window System. ImageMagick can read and write JPEG, TIFF, PNM, GIF,

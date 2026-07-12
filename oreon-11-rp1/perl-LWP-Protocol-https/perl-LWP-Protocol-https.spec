@@ -49,6 +49,7 @@ Requires:       perl(Net::HTTPS) >= 6
 # Remove underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Net::HTTPS\\)\\s*$
 
+Provides:       perl(LWP::Protocol::https)
 %description
 The LWP::Protocol::https module provides support for using HTTPS schemed
 URLs with LWP. This module is a plug-in to the LWP protocol handling, so

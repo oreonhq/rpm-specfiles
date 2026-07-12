@@ -65,6 +65,7 @@ Requires:       perl(XSLoader)
 
 %{?perl_default_filter}
 
+Provides:       perl(Sys::Syslog)
 %description
 Sys::Syslog is an interface to the UNIX syslog(3) function. Call syslog() with
 a string priority and a list of printf() arguments just like at syslog(3).

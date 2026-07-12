@@ -46,6 +46,9 @@ Provides:	perl-IO-Stringy = %{version}-%{release}
 # Avoid doc-file dependency on /usr/bin/perl
 %{?perl_default_filter}
 
+Provides:       perl(IO::Scalar)
+Provides:       perl(IO::Stringy)
+Provides:       perl(IO::WrapTie)
 %description
 This toolkit primarily provides modules for performing both traditional
 and object-oriented I/O) on things *other* than normal filehandles; in

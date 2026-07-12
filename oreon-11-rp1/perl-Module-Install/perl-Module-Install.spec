@@ -112,6 +112,17 @@ Requires:       perl(YAML::Tiny) >= 1.38
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %__requires_exclude|^perl\\(MyTest\\)$
 
+Provides:       perl(Module::Install)
+Provides:       perl(Module::Install::AutoInstall)
+Provides:       perl(Module::Install::Base)
+Provides:       perl(Module::Install::Can)
+Provides:       perl(Module::Install::Makefile)
+Provides:       perl(Module::Install::Metadata)
+Provides:       perl(Module::Install::Win32)
+Provides:       perl(Module::Install::WriteAll)
+Provides:       perl(Module::Install::Include)
+Provides:       perl(inc::Module::Install)
+Provides:       perl(Module::Install::Include)
 %description
 Module::Install is a package for writing installers for CPAN (or CPAN-like)
 distributions that are clean, simple, minimalist, act in a strictly correct

@@ -69,6 +69,8 @@ Requires:       perl(XML::Parser) >= 2.23
 #   "use parent qw/-norequire XML::XPath::Node/;"
 %global __requires_exclude %{__requires_exclude}|^perl\\(-norequire\\)
 
+Provides:       perl(XML::XPath)
+Provides:       perl(XML::XPath::XMLParser)
 %description
 This module aims to comply exactly to the XPath specification at
 http://www.w3.org/TR/xpath and yet allow extensions to be added in the

@@ -35,6 +35,7 @@ BuildRequires:	perl(Test::Pod) >= 1.41
 # Dependencies
 Requires:	perl(Data::Dumper)
 
+Provides:       perl(Test::YAML)
 %description
 Test::YAML is a subclass of Test::Base with YAML specific support.
 

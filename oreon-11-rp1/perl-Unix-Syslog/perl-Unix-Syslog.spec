@@ -37,6 +37,7 @@ Requires:       syslog
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Unix::Syslog)
 %description
 This module provides an interface to the system logger syslogd(8) via
 Perl's XSUBs. The implementation attempts to resemble the native

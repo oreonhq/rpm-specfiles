@@ -35,6 +35,7 @@ BuildRequires: perl(File::Compare)
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
 
+Provides:       perl(Font::TTF::Font)
 %description
 Perl module for TrueType font hacking. Supports reading, processing and writing
 of the following tables: GDEF, GPOS, GSUB, LTSH, OS/2, PCLT, bsln, cmap, cvt,

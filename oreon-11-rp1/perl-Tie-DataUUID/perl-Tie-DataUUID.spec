@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::More)
 # Test::Pod 1.14 not used
 # Test::Pod::Coverage 1.04 not used
 
+Provides:       perl(Tie::DataUUID)
 %description
 This is a simple tie interface to the Data::UUID Perl module.
 

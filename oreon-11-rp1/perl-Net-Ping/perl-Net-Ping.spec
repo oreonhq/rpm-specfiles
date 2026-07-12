@@ -59,6 +59,7 @@ Requires:       perl(IO::Socket::INET)
 Suggests:       perl(Net::Ping::External)
 Conflicts:      perl < 4:5.22.0-350
 
+Provides:       perl(Net::Ping)
 %description
 Net::Ping module contains methods to test the reachability of remote hosts on
 a network.

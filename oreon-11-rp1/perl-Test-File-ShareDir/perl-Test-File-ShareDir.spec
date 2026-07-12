@@ -36,6 +36,7 @@ Requires:       perl(Scope::Guard)
 
 %{?perl_default_filter}
 
+Provides:       perl(Test::File::ShareDir::Dist)
 %description
 Create a fake ShareDir for your modules for testing.
 

@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::Pod) >= 1.14
 %endif
 %endif
 
+Provides:       perl(HTML::Tagset)
 %description
 This module contains several data tables useful in various kinds of
 HTML parsing operations, such as tag and entity names.

@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::Builder::Tester)
 # Dependencies:
 # (none)
 
+Provides:       perl(Test::TrailingSpace)
 %description
 This module is used to test for presence of trailing space.
 

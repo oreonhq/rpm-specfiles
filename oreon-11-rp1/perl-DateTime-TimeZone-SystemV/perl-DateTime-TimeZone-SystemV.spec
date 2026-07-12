@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::Pod::Coverage)
 # Dependencies
 # (none)
 
+Provides:       perl(DateTime::TimeZone::SystemV)
 %description
 An instance of this class represents a timezone that was specified by means
 of a System V timezone recipe or the POSIX extended form of the same

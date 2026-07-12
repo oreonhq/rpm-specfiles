@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::More) >= 0.47
 # Test::Pod::Coverage 0.08 not used
 Conflicts:      perl < 4:5.22.0-347
 
+Provides:       perl(Text::Balanced)
 %description
 These Perl subroutines may be used to extract a delimited substring, possibly
 after skipping a specified prefix string.

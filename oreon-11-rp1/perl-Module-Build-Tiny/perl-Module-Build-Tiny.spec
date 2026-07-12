@@ -60,6 +60,7 @@ BuildRequires:	gcc, gcc-c++
 Requires:	gcc, gcc-c++
 %endif
 
+Provides:       perl(Module::Build::Tiny)
 %description
 Many Perl distributions use a Build.PL file instead of a Makefile.PL file to
 drive distribution configuration, build, test and installation. Traditionally,

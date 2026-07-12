@@ -37,6 +37,7 @@ BuildRequires:  perl(utf8)
 
 %{?perl_default_filter}
 
+Provides:       perl(PerlIO::utf8_strict)
 %description
 This module provides a fast and correct UTF-8 PerlIO layer. Unlike perl's
 default :utf8 layer it checks the input for correctness.

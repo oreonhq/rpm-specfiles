@@ -54,6 +54,7 @@ Requires:       perl(Pod::Text) >= 4
 %global __requires_exclude %{?__requires_exclude|%{__requires_exclude}|}^perl\\(File::Spec\\)$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Pod::Usage)
 %description
 pod2usage will print a usage message for the invoking script (using its
 embedded POD documentation) and then exit the script with the desired exit

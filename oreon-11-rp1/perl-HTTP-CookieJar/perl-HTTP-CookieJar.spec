@@ -38,6 +38,7 @@ BuildRequires:  perl(URI)
 # Dependencies
 Recommends:     perl(Mozilla::PublicSuffix)
 
+Provides:       perl(HTTP::CookieJar::LWP)
 %description
 This module implements a minimalist HTTP user agent cookie jar in
 conformance with RFC 6265.

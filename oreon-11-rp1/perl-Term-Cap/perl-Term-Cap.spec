@@ -27,6 +27,7 @@ Requires:       ncurses
 Requires:       perl(Carp)
 Conflicts:      perl < 4:5.22.0-347
 
+Provides:       perl(Term::Cap)
 %description
 These are low-level functions to extract and use capabilities from a terminal
 capability (termcap) database.

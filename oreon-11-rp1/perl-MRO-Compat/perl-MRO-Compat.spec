@@ -22,6 +22,7 @@ BuildRequires:	perl(warnings)
 BuildRequires:	perl(Test::More) >= 0.47
 # Dependencies
 
+Provides:       perl(MRO::Compat)
 %description
 The "mro" namespace provides several utilities for dealing with method
 resolution order and method caching in general in Perl 5.9.5 and higher.

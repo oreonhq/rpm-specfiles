@@ -25,6 +25,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(Test)
 BuildRequires:  perl(utf8)
 
+Provides:       perl(Pod::Escapes)
 %description
 This module provides things that are useful in decoding Pod E<...> sequences.
 

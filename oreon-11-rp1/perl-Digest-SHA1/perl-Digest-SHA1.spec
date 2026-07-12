@@ -28,6 +28,8 @@ BuildRequires:  perl(vars)
 BuildRequires:  perl(Test)
 Recommends:     perl(Digest::base)
 
+Provides:       perl(Digest::SHA1)
+Provides:       perl(Digest::SHA1)
 %description
 The Digest::SHA1 module allows you to use the NIST SHA-1 message
 digest algorithm from within Perl programs. The algorithm takes as

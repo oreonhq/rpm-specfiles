@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::More)
 # BuildRequires:  perl(Getopt::Long)
 # BuildRequires:  perl(Time::HiRes)
 
+Provides:       perl(IO::Compress::Brotli)
 %description
 IO::Compress::Brotli is a module that compresses Brotli buffers and
 streams. Despite its name, it is not a subclass of IO::Compress::Base

@@ -29,6 +29,7 @@ BuildRequires: 	perl(warnings)
 BuildRequires: 	perl(Test::Differences)
 
 
+Provides:       perl(File::Find::Rule)
 %description
 File::Find::Rule is a friendlier interface to File::Find.  It allows
 you to build rules which specify the desired files and directories.

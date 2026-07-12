@@ -32,6 +32,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 
 %{?perl_default_filter}
 
+Provides:       perl(Crypt::OpenSSL::Random)
 %description
 Crypt::OpenSSL::Random provides the ability to seed and query the OpenSSL
 and LibreSSL library's pseudo-random number generators.

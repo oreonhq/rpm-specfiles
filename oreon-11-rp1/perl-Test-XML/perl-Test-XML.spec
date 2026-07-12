@@ -42,6 +42,7 @@ BuildRequires:	perl(XML::SAX::Base)
 Requires:	perl(XML::LibXML)
 Requires:	perl(XML::XPath)
 
+Provides:       perl(Test::XML)
 %description
 This module contains generic XML testing tools. Functions include:
 

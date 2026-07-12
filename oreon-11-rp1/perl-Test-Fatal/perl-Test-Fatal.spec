@@ -53,6 +53,7 @@ BuildRequires:	perl(Test::Pod) >= 1.41
 # Dependencies
 Requires:	perl(Test::Builder)
 
+Provides:       perl(Test::Fatal)
 %description
 Test::Fatal is an alternative to the popular Test::Exception. It does much
 less, but should allow greater flexibility in testing exception-throwing code

@@ -48,6 +48,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 
 %{?perl_default_filter}
 
+Provides:       perl(IO::Socket::IP)
 %description
 This module provides a protocol-independent way to use IPv4 and IPv6
 sockets, intended as a replacement for IO::Socket::INET. Most constructor

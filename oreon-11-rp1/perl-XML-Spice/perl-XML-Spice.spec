@@ -29,6 +29,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::XML)
 Suggests:       perl(XML::Tidy::Tiny)
 
+Provides:       perl(XML::Spice)
 %description
 XML::Spice is yet another XML generation Perl module. It tries to take some of
 the pain out of generating XML by making it more like Perl.

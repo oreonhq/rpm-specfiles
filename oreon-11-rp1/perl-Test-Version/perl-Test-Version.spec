@@ -69,6 +69,7 @@ BuildRequires:	perl(Test::Portability::Files)
 # ===================================================================
 Requires:	perl(Test::More) >= 0.96
 
+Provides:       perl(Test::Version)
 %description
 This module's goal is to be a one stop shop for checking to see that your
 versions across your dist are sane.

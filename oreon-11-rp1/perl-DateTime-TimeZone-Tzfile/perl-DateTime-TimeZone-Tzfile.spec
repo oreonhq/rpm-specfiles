@@ -40,6 +40,7 @@ BuildRequires:  perl(Test::Pod::Coverage)
 # Dependencies
 Requires:       perl(DateTime::TimeZone::SystemV) >= 0.009
 
+Provides:       perl(DateTime::TimeZone::Tzfile)
 %description
 An instance of this class represents a timezone that was encoded in a file
 in the tzfile(5) format. These can express arbitrary patterns of offsets

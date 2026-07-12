@@ -41,6 +41,7 @@ BuildRequires:  perl(Test::Pod::Coverage)
 # Dependencies
 Requires:       perl(Exporter)
 
+Provides:       perl(Date::ISO8601)
 %description
 The international standard ISO 8601 "Data elements and interchange formats
 - Information interchange - Representation of dates and times" defines

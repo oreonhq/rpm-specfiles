@@ -30,6 +30,7 @@ Conflicts:      perl-XML-SAX < 0.99-1
 # https://fedoraproject.org/wiki/Changes/UnversionedDocdirs
 %global our_docdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
+Provides:       perl(XML::SAX::Base)
 %description
 This module has a very simple task - to be a base class for Perl SAX drivers
 and filters. Its default behavior is to pass the input directly to the

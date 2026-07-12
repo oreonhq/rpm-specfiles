@@ -54,6 +54,7 @@ BuildRequires:	perl(Variable::Magic)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Package::Stash::XS)
 %description
 This is a back-end for Package::Stash, which provides the functionality in a
 way that's less buggy and much faster. It will be used by default if it's

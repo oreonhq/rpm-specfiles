@@ -30,6 +30,10 @@ Requires:       perl(MIME::Base64)
 # Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Digest)
+Provides:       perl(Digest::HMAC_MD5)
+Provides:       perl(Digest::HMAC_SHA1)
+Provides:       perl(Digest::base)
 %description
 The Digest:: modules calculate digests, also called "fingerprints" or
 "hashes", of some data, called a message. The digest is (usually) some

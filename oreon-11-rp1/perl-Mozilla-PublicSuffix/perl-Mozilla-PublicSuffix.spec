@@ -44,6 +44,7 @@ BuildRequires:  perl(Test::More)
 
 Requires:       publicsuffix-list
 
+Provides:       perl(Mozilla::PublicSuffix)
 %description
 This module provides a single function that returns the public suffix of a
 domain name by referencing a parsed copy of Mozilla's Public Suffix List.

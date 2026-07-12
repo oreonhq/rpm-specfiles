@@ -43,6 +43,7 @@ Requires:       perl(XML::Spice) >= 0.03
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((HTTP::Tiny|Tie::DataUUID|URI|XML::Fast|XML::Spice)\\)$
 
+Provides:       perl(Net::DAVTalk)
 %description
 This is a Perl library for accessing DAV servers.
 

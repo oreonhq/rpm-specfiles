@@ -32,6 +32,7 @@ Requires:       perl(Carp)
 
 %{?perl_default_filter}
 
+Provides:       perl(Taint::Runtime)
 %description
 This module enables run-time taint checking, for cases where the -T
 switch on the command line is not appropriate or viable. There are

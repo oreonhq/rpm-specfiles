@@ -59,6 +59,7 @@ Requires:	perl(XSLoader)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(CompTestUtils\\)
 
+Provides:       perl(Compress::Raw::Lzma)
 %description
 This module provides a Perl interface to the lzma compression library.
 It is used by IO::Compress::Lzma.

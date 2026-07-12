@@ -69,6 +69,7 @@ BuildRequires:	perl(Test::Version)
 Requires:	perl(Carp)
 Requires:	perl(Fcntl)
 
+Provides:       perl(CPAN::Meta::YAML)
 %description
 This module implements a subset of the YAML specification for use in reading
 and writing CPAN metadata files like META.yml and MYMETA.yml. It should not be

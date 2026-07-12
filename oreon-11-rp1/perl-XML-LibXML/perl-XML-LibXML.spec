@@ -98,6 +98,12 @@ Obsoletes:      perl-XML-LibXML-Common <= 0.13
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::LeakTrace)\s*$
 %endif
 
+Provides:       perl(XML::LibXML)
+Provides:       perl(XML::LibXML::Boolean)
+Provides:       perl(XML::LibXML::Literal)
+Provides:       perl(XML::LibXML::NodeList)
+Provides:       perl(XML::LibXML::Number)
+Provides:       perl(XML::LibXML::Reader)
 %description
 This module implements a Perl interface to the GNOME libxml2 library
 which provides interfaces for parsing and manipulating XML files. This

@@ -28,6 +28,7 @@ BuildRequires:  perl(vars)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 
+Provides:       perl(Set::Infinite)
 %description
 Set::Infinite is a Set Theory module for infinite sets.
 

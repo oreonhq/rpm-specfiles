@@ -32,6 +32,7 @@ BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Test::More)
 Requires:       perl(Tie::Handle)
 
+Provides:       perl(Authen::SASL)
 %description
 SASL is a generic mechanism for authentication used by several network
 protocols. Authen::SASL provides an implementation framework that all

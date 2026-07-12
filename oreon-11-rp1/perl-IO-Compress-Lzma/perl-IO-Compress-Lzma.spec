@@ -66,6 +66,7 @@ BuildRequires:	/usr/bin/7z
 # Dependencies
 # (none)
 
+Provides:       perl(IO::Uncompress::UnXz)
 %description
 This distribution provides a Perl interface to allow reading and writing of
 compressed data created with the lzma library.

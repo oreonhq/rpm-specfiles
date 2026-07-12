@@ -30,6 +30,7 @@ Recommends:     openssl
 
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(Exporter\\)\\s*$
 
+Provides:       perl(Crypt::OpenSSL::Guess)
 %description
 Crypt::OpenSSL::Guess provides helpers to guess OpenSSL include path on any
 platforms.

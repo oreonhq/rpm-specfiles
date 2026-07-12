@@ -25,6 +25,7 @@ BuildRequires:  perl(warnings)
 # Tests:
 BuildRequires:  perl(Test)
 
+Provides:       perl(Text::LevenshteinXS)
 %description
 This module implements the Levenshtein edit distance in a XS way.
 

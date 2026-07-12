@@ -32,6 +32,7 @@ Requires:       perl(Test::More) >= 0.62
 # Remove Test::Pod dependecy from *tests package
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Test::Pod)
 %description
 Check POD files for errors or warnings in a test file, using Pod::Simple to do
 the heavy lifting.

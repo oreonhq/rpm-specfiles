@@ -36,6 +36,7 @@ BuildRequires:  perl(Test)
 # Filter the Perl extension module
 %{?perl_default_filter}
 
+Provides:       perl(Socket6)
 %description
 This module supports getaddrinfo() and getnameinfo() to intend to enable
 protocol independent programming. If your environment supports IPv6, IPv6

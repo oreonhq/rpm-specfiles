@@ -24,6 +24,7 @@ BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 
+Provides:       perl(Devel::StackTrace)
 %description
 The Devel::StackTrace module contains two classes, Devel::StackTrace
 and Devel::StackTraceFrame.  The goal of this object is to encapsulate

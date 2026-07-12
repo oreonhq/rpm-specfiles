@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.00
 # Dependencies
 Requires:       perl(Carp)
 
+Provides:       perl(Class::Data::Inheritable)
 %description
 Class::Data::Inheritable is for creating accessor/mutators to 
 class data. That is, if you want to store something about your 

@@ -30,6 +30,7 @@ BuildRequires:  perl(XSLoader)
 Requires:       perl(Unicode::Normalize)
 Conflicts:      perl < 4:5.22.0-347
 
+Provides:       perl(Unicode::Collate::Locale)
 %description
 This package is Perl implementation of Unicode Technical Standard #10 (Unicode
 Collation Algorithm).

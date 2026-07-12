@@ -25,6 +25,7 @@ BuildRequires:  perl(Test::More)
 # and produces different code for ppc and x86
 %global  debug_package %nil
 
+Provides:       perl(Term::Size::Perl)
 %description
 Yet another implementation of Term::Size. Now in pure Perl, with the
 exception of a C probe run on build time.

@@ -27,6 +27,7 @@ BuildRequires:	perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(Test::RequiresInternet)
 %description
 This module is intended to easily test network connectivity before functional
 tests begin to non-local Internet resources. It does not require any modules

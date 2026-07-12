@@ -49,6 +49,7 @@ BuildRequires:  perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(File::Find::Object::Rule)
 %description
 File::Find::Object::Rule is a friendlier interface to File::Find::Object. It 
 allows you to build rules that specify the desired files and directories.

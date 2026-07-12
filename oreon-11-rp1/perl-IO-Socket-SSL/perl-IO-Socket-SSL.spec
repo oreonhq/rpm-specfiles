@@ -77,6 +77,8 @@ Requires:	perl(IO::Socket::IP) >= 0.31
 Requires:	perl(Socket) >= 1.95
 Requires:	perl(URI::_idna)
 
+Provides:       perl(IO::Socket::SSL)
+Provides:       perl(IO::Socket::SSL::Utils)
 %description
 This module is a true drop-in replacement for IO::Socket::INET that
 uses SSL to encrypt data before it is transferred to a remote server

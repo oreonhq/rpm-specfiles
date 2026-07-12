@@ -59,6 +59,10 @@ Provides:       perl(:XS_Parse_Infix_ABI_2) = 2
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(testcase\\)
 %global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\(testcase\\)
 
+Provides:       perl(XS::Parse::Keyword)
+Provides:       perl(XS::Parse::Keyword::Builder)
+Provides:       perl(XS::Parse::Infix)
+Provides:       perl(XS::Parse::Infix::Builder)
 %description
 This module provides some XS functions to assist in writing syntax modules
 that provide new perl-visible syntax, primarily for authors of keyword plugins

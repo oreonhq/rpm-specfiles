@@ -42,6 +42,7 @@ Requires:       perl(Carp)
 %global __provides_exclude_from ^%{_docdir}
 %global __requires_exclude_from ^%{_docdir}
 
+Provides:       perl(Error)
 %description
 The Error package provides two interfaces. Firstly Error provides a
 procedural interface to exception handling. Secondly Error is a base class

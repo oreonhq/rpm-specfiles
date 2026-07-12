@@ -23,6 +23,7 @@ BuildRequires:  perl(Test)
 Requires:       perl(Data::Dumper)
 Requires:       perl(IO::Handle)
 
+Provides:       perl(IO::String)
 %description
 The "IO::String" module provides the "IO::File" interface for in-core
 strings.  An "IO::String" object can be attached to a string, and

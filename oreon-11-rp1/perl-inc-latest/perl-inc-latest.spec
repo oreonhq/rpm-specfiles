@@ -23,6 +23,7 @@ BuildRequires:  perl(Test::More)
 Requires:       perl(ExtUtils::Installed)
 Conflicts:      perl-Module-Build < 2:0.42.10-4
 
+Provides:       perl(inc::latest)
 %description
 The inc::latest module helps bootstrap configure-time dependencies for CPAN
 distributions. These dependencies get bundled into the inc directory within

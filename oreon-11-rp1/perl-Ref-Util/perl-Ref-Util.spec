@@ -58,6 +58,7 @@ BuildRequires:	perl(Readonly)
 # Dependencies
 Requires:	perl(Ref::Util::XS)
 
+Provides:       perl(Ref::Util)
 %description
 Ref::Util introduces several functions to help identify references in a faster
 and smarter way.

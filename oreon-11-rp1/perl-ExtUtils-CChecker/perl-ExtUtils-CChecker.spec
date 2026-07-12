@@ -30,6 +30,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 # Dependencies:
 Requires:       perl(Module::Build)
 
+Provides:       perl(ExtUtils::CChecker)
 %description
 Often Perl modules are written to wrap functionality found in existing C
 headers, libraries, or to use OS-specific features. It is useful in the

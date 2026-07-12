@@ -53,6 +53,7 @@ Requires:       perl(utf8)
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Math::BigInt\\)$
 
+Provides:       perl(Convert::ASN1)
 %description
 Convert::ASN1 encodes and decodes ASN.1 data structures using BER/DER rules.
 

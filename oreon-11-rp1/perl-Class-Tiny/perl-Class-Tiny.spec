@@ -48,6 +48,7 @@ Requires:       perl(mro)
 # Devel::GlobalDestruction not needed on Perl >= 5.14
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Devel::GlobalDestruction\\)
 
+Provides:       perl(Class::Tiny)
 %description
 This module offers a minimalist class construction kit in around 120 lines
 of code. Here is a list of features:

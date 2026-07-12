@@ -56,6 +56,8 @@ BuildRequires:  perl(Test::Pod)
 # Dependencies
 # (none)
 
+Provides:       perl(Software::License)
+Provides:       perl(Software::LicenseUtils)
 %description
 Software-License contains templates for common open source software licenses.
 

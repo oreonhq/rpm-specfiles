@@ -48,6 +48,11 @@ BuildRequires:  perl(Pod::Checker) >= 1.40
 Requires:       perl(Config)
 # Circular dependency Pod::Usage <-> Pod::Select
 
+Provides:       perl(Pod::Parser)
+Provides:       perl(Pod::Find)
+Provides:       perl(Pod::ParseUtils)
+Provides:       perl(Pod::PlainText)
+Provides:       perl(Pod::Select)
 %description
 This software distribution contains the packages for using Perl5 POD (Plain
 Old Documentation). See the "perlpod" and "perlsyn" manual pages from your

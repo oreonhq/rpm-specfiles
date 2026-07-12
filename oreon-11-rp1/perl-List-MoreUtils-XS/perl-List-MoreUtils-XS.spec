@@ -59,6 +59,7 @@ BuildRequires:	perl(Tie::Array)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(List::MoreUtils::XS)
 %description
 This module provides accelerated versions of functions in List::MoreUtils.
 

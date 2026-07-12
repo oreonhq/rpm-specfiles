@@ -63,6 +63,7 @@ Requires:       perl(URI) >= 1.76
 %global __requires_exclude %{__requires_exclude}|^perl\\(Apache)\s*$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(CGI)
 %description
 CGI.pm is a stable, complete and mature solution for processing and preparing
 HTTP requests and responses. Major features including processing form

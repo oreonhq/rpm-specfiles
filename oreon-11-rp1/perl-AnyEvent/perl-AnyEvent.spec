@@ -173,6 +173,8 @@ Requires:       perl(Unicode::Normalize)
 %global __provides_exclude ^perl[(](AnyEvent(::Impl::(Cocoa|FLTK|UV))?|DB)[)]$
 
 
+Provides:       perl(AnyEvent)
+Provides:       perl(AnyEvent)
 %description
 AnyEvent provides an identical interface to multiple event loops. This allows
 module authors to utilize an event loop without forcing module users to use the

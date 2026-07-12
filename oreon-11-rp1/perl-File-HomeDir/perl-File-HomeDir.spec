@@ -44,6 +44,7 @@ Requires:       perl(File::Which) >= 0.05
 # Remove unwanted and under-specified dependencies
 %global __requires_exclude perl\\(Cwd\\)|perl\\(File::Path\\)|perl\\(File::Spec\\)|perl\\(File::Temp\\)|perl\\(File::Which\\)|perl\\(Mac::|perl\\(Win32
 
+Provides:       perl(File::HomeDir)
 %description
 File::HomeDir is a module for locating the directories that are "owned"
 by a user (typically your user) and to solve the various issues that

@@ -36,6 +36,7 @@ BuildRequires:  perl(Test::More)
 # Really optional
 Suggests:       perl(MIME::Base64)
 
+Provides:       perl(Data::Dump)
 %description
 This module provides a single function called dump() that takes a list of
 values as its argument and produces a string as its result. The string

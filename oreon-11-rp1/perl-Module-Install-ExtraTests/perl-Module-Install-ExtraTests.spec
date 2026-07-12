@@ -33,6 +33,7 @@ Requires:       perl(ExtUtils::Command)
 Requires:       perl(File::Find)
 Requires:       perl(File::Spec)
 
+Provides:       perl(Module::Install::ExtraTests)
 %description
 This allows extra_tests; to be declared in Makefile.PL, indicating that the 
 test files found in the directory ./xt should be run only in certain 

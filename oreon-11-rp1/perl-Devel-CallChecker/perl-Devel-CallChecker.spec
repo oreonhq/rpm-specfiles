@@ -58,6 +58,7 @@ Requires:       perl(DynaLoader::Functions) >= 0.001
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((t::LoadXS|t::WriteHeader)\\)$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Devel::CallChecker)
 %description
 This module makes some new features of the Perl 5.14.0 C API available to
 XS modules running on older versions of Perl. The features are centered

@@ -79,6 +79,7 @@ Requires:       perl(XSLoader)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
 
+Provides:       perl(Compress::Raw::Zlib)
 %description
 The Compress::Raw::Zlib module provides a Perl interface to the zlib
 compression library, which is used by IO::Compress::Zlib.

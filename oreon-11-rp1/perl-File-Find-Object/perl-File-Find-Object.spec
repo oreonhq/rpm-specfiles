@@ -39,6 +39,7 @@ BuildRequires:  perl(Test::More) >= 0.88
 # Dependencies
 # (none)
 
+Provides:       perl(File::Find::Object)
 %description
 File::Find::Object does the same job as File::Find but works like an object
 and with an iterator. As File::Find is not object oriented, one cannot

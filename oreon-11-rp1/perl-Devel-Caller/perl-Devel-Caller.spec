@@ -36,6 +36,7 @@ Requires:       perl(PadWalker) >= 0.08
 %global __provides_exclude %{?__provides_exclude:__provides_exclude|}^perl\\(DB\\)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(PadWalker\\)$
 
+Provides:       perl(Devel::Caller)
 %description
 Devel::Caller - Meatier versions of caller.
 

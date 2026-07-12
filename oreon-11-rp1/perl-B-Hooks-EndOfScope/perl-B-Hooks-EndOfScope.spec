@@ -96,6 +96,7 @@ BuildRequires:	perl(Test::Spelling), hunspell-en
 # Dependencies
 # (none)
 
+Provides:       perl(B::Hooks::EndOfScope)
 %description
 This module allows you to execute code when Perl has finished compiling the
 surrounding scope.

@@ -33,6 +33,7 @@ Requires:       perl(HTTP::Date) >= 1.44
 %global __requires_exclude %{?__requires_exclude|%__requires_exclude|}^perl\\(DateTime\\)$
 %global __requires_exclude %{?__requires_exclude|%__requires_exclude|}^perl\\(HTTP::Date\\)$
 
+Provides:       perl(DateTime::Format::HTTP)
 %description
 This module provides functions that deal with the date formats used by the
 HTTP protocol (and then some).

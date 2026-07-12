@@ -37,6 +37,7 @@ Requires:	perl(Carp)
 # Avoid doc-file dependency on perl(base)
 %{?perl_default_filter}
 
+Provides:       perl(Exporter::Tiny)
 %description
 Exporter::Tiny supports many of Sub::Exporter's external-facing features
 including renaming imported functions with the -as, -prefix and -suffix

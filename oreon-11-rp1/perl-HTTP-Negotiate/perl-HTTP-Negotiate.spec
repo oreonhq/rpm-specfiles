@@ -27,6 +27,7 @@ Conflicts:      perl-libwww-perl < 6
 # Remove underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(HTTP::Headers\\)$
 
+Provides:       perl(HTTP::Negotiate)
 %description
 This module provides a complete implementation of the HTTP content
 negotiation algorithm specified in draft-ietf-http-v11-spec-00.ps chapter

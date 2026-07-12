@@ -36,6 +36,7 @@ BuildRequires:	perl(CPAN::Meta::Prereqs)
 # Dependencies
 # (none)
 
+Provides:       perl(Test2::Plugin::NoWarnings)
 %description
 Loading this plugin causes your tests to fail if there are any warnings while
 they run. Each warning generates a new failing test and the warning content is

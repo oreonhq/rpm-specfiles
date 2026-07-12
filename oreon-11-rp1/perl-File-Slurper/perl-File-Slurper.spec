@@ -32,6 +32,7 @@ BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Warnings)
 Recommends:     perl(PerlIO::utf8_strict)
 
+Provides:       perl(File::Slurper)
 %description
 This module provides functions for fast and correct slurping and spewing.
 All functions are optionally exported.

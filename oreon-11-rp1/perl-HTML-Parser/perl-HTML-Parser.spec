@@ -40,6 +40,9 @@ Requires:       perl(URI)
 %{?perl_default_filter}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(HTML::Tagset\\)$
 
+Provides:       perl(HTML::Parser)
+Provides:       perl(HTML::Entities)
+Provides:       perl(HTML::HeadParser)
 %description
 The HTML-Parser module for perl to parse and extract information from
 HTML documents, including the HTML::Entities, HTML::HeadParser,

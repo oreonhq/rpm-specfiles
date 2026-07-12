@@ -27,6 +27,7 @@ BuildRequires:	perl(Data::Dumper)
 BuildRequires:	perl(Test::More) >= 0.47
 # Runtime
 
+Provides:       perl(Test::Requires)
 %description
 Test::Requires checks to see if the module can be loaded.
 

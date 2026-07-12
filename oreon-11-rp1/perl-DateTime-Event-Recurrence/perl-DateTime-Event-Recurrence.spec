@@ -32,6 +32,7 @@ Requires:       perl(DateTime::Set) >= 0.3600
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(DateTime\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(DateTime::Set\\)$
 
+Provides:       perl(DateTime::Event::Recurrence)
 %description
 This module provides convenience methods that let you easily create
 DateTime::Set objects for various recurrences, such as "once a month" or

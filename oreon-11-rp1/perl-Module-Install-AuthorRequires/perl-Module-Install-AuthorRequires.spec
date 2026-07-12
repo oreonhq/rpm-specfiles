@@ -22,6 +22,7 @@ BuildRequires:  perl(Module::Install::Base)
 # Tests:
 BuildRequires:  perl(Test::More)
 
+Provides:       perl(Module::Install::AuthorRequires)
 %description
 Modules often have optional requirements, for example dependencies that
 are useful for (optional) tests, but not required for the module to

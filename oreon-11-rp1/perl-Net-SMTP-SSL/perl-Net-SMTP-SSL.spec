@@ -25,6 +25,7 @@ BuildRequires:  perl(Net::SMTP)
 # Tests only
 BuildRequires:  perl(Test::More) >= 0.47
 
+Provides:       perl(Net::SMTP::SSL)
 %description
 Implements the same API as Net::SMTP, but uses IO::Socket::SSL for its
 network operations.

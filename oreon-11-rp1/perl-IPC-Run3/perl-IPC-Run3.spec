@@ -34,6 +34,7 @@ BuildRequires:  perl(Test::Pod)
 # Upstream considers the issue to be a known implementation limitation.
 Patch0:         0001-test-and-fix-for-RT-52317-Calling-run3-garbles-STDIN.patch
 
+Provides:       perl(IPC::Run3)
 %description
 This module allows you to run a subprocess and redirect stdin, stdout,
 and/or stderr to files and perl data structures. It aims to satisfy 99% of

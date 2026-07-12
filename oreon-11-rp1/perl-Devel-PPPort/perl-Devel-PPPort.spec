@@ -51,6 +51,7 @@ BuildRequires:  perl(Test::Pod) >= 0.95
 # Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(.::parts/.*\\)
 
+Provides:       perl(Devel::PPPort)
 %description
 Perl's API has changed over time, gaining new features, new functions,
 increasing its flexibility, and reducing the impact on the C name space

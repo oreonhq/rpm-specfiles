@@ -47,6 +47,7 @@ Requires:       perl(Carp)
 # Avoid doc-file dependencies
 %{?perl_default_filter}
 
+Provides:       perl(Class::Method::Modifiers)
 %description
 Method modifiers are a powerful feature from the CLOS (Common Lisp Object
 System) world.

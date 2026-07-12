@@ -34,6 +34,7 @@ Requires:       gzip
 Requires:       perl(Compress::Zlib) >= 2
 Requires:       perl(IO::Handle)
 
+Provides:       perl(IO::Zlib)
 %description
 IO::Zlib provides an IO:: style interface to Compress::Zlib and hence to
 gzip/zlib-compressed files. It provides many of the same methods as the

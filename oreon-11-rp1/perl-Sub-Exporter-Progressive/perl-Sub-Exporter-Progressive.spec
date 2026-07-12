@@ -33,6 +33,7 @@ Requires:	perl(Carp)
 Requires:	perl(Exporter) >= 5.58
 Requires:	perl(Sub::Exporter)
 
+Provides:       perl(Sub::Exporter::Progressive)
 %description
 Sub::Exporter is an incredibly powerful module, but with that power comes
 great responsibility, er- as well as some runtime penalties. This module is a

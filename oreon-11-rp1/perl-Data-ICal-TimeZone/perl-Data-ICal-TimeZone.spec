@@ -27,6 +27,7 @@ BuildRequires:  perl(Test::More)
 # TODO: Regenerate bundled data, CPAN RT#118709
 Provides:       bundled(tzdata) = 2007g
 
+Provides:       perl(Data::ICal::TimeZone)
 %description
 Data::ICal::TimeZone provides a mechanism for adding the Olson standard
 time zones to your iCalendar documents, plus a copy of the Olson time zone

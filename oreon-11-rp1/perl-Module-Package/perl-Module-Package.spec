@@ -28,6 +28,9 @@ BuildRequires:  perl(Test::More)
 Requires:       perl(Data::Dumper)
 Requires:       perl(File::Path)
 
+Provides:       perl(Module::Package)
+Provides:       perl(Module::Package::Plugin)
+Provides:       perl(inc::Module::Package)
 %description
 This module is a drop-in replacement for Module::Install. It does everything
 Module::Install does, but just a bit better.

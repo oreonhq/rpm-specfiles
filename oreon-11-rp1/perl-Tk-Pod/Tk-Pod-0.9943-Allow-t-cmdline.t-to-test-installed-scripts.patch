@@ -1,0 +1,78 @@
+From 07f7ebcd653e66b538207ef7c1d81f180421a7a7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 25 Sep 2024 09:24:57 +0200
+Subject: [PATCH] Allow t/cmdline.t to test installed scripts
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When running tests out of the source tree to validate installed
+Tk-Pod, t/cmdline.t fails like this:
+
+    $ xvfb-run -d perl -I. t/cmdline.t -d
+    1..25
+    /usr/bin/perl -Mblib=/usr/libexec/perl-Tk-Pod/t/../blib /usr/libexec/perl-Tk-Pod/t/../blib/script/tkpod -geometry +10+10 -tk
+    Can't open perl script "/usr/libexec/perl-Tk-Pod/t/../blib/script/tkpod": No such file or directory
+    not ok 1 - Trying tkpod with -tk
+    #   Failed test 'Trying tkpod with -tk'
+    #   at t/cmdline.t line 206.
+    #          got: '512'
+    #     expected: '0'
+
+The cause is that the test hardcodes blib/script path the the
+executed tkpod and tkmore.
+
+This patch adds a fallback to $Config{installscript}, so that it falls
+back to a system installation paths as loading module does.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/cmdline.t | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/t/cmdline.t b/t/cmdline.t
+index 612190c..74ac147 100755
+--- a/t/cmdline.t
++++ b/t/cmdline.t
+@@ -7,6 +7,7 @@
+ 
+ use strict;
+ use Cwd qw(getcwd);
++use Config;
+ use FindBin;
+ use File::Basename qw(basename);
+ use File::Spec;
+@@ -37,8 +38,10 @@ BEGIN {
+ my $DEBUG = 0;
+ 
+ my $blib   = File::Spec->rel2abs("$FindBin::RealBin/../blib");
+-my $script = "$blib/script/tkpod";
+-my $tkmore_script = "$blib/script/tkmore";
++my $scriptdir = "$blib/script";
++$scriptdir = $Config{installscript} unless -d $scriptdir;
++my $script = "$scriptdir/tkpod";
++my $tkmore_script = "$scriptdir/tkmore";
+ 
+ my $batch_mode = defined $ENV{BATCH} ? $ENV{BATCH} : 1;
+ 
+@@ -95,7 +98,7 @@ my @opt = (
+ 	   ($perl_has_doc ? ['-exit'] : ()), # a call with implicite perl.pod
+ 	   ['-exit', $script], # the pod of tkpod itself
+ 	   ['-exit', '-notree', $script],
+-	   ['-exit', '-Mblib',  $script],
++	   (-d $blib ? ['-exit', '-Mblib',  $script] : ()),
+ 	   ['-exit', '-d',      $script],
+ 	   ['-exit', '-server', $script],
+ 	   ['-exit',
+@@ -227,7 +230,7 @@ for my $opt (@opt) {
+ 
+ sub run_tkpod {
+     my($script, $this_opts_ref) = @_;
+-    my @cmd = ($^X, "-Mblib=$blib", $script, "-geometry", "+10+10", @$this_opts_ref);
++    my @cmd = ($^X, (-d $blib)?"-Mblib=$blib":(), $script, "-geometry", "+10+10", @$this_opts_ref);
+     warn "@cmd\n" if $DEBUG;
+     if ($batch_mode) {
+ 	open(STDERR, ">" . File::Spec->devnull) unless $DEBUG;
+-- 
+2.46.1
+

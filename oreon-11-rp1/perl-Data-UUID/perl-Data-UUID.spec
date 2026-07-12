@@ -50,6 +50,7 @@ BuildRequires:	perl(Test::Pod::Coverage) >= 1.06
 # Avoid provides for private shared objects
 %{?perl_default_filter}
 
+Provides:       perl(Data::UUID)
 %description
 This module provides a framework for generating v3 UUIDs (Universally Unique
 Identifiers, also known as GUIDs (Globally Unique Identifiers). A UUID is 128

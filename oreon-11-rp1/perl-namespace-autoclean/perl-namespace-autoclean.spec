@@ -63,6 +63,7 @@ BuildRequires:  perl(Sub::Name)
 # Dependencies
 Requires:       perl(Sub::Util) >= 1.40
 
+Provides:       perl(namespace::autoclean)
 %description
 When you import a function into a Perl package, it will naturally also be
 available as a method. The 'namespace::autoclean' pragma will remove all

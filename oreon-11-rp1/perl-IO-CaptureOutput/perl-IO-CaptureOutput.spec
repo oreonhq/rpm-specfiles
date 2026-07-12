@@ -46,6 +46,7 @@ BuildRequires:  perl(Inline::C)
 # Dependencies:
 # (none)
 
+Provides:       perl(IO::CaptureOutput)
 %description
 %{summary}.
 

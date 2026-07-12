@@ -80,6 +80,13 @@ Conflicts:      perl-libwww-perl < 6
 %global __requires_exclude %{__requires_exclude}|^perl\\((Secret|Time::Local)\\)
 %global __provides_exclude %{__provides_exclude}|^perl\\(Secret\\)$
 
+Provides:       perl(HTTP::Config)
+Provides:       perl(HTTP::Headers)
+Provides:       perl(HTTP::Headers::Util)
+Provides:       perl(HTTP::Request)
+Provides:       perl(HTTP::Request::Common)
+Provides:       perl(HTTP::Response)
+Provides:       perl(HTTP::Status)
 %description
 The HTTP-Message distribution contains classes useful for representing the
 messages passed in HTTP style communication.  These are classes representing

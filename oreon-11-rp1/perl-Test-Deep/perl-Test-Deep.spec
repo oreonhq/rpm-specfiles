@@ -35,6 +35,8 @@ BuildRequires:  perl(Test::Tester) >= 0.107
 # Dependencies
 Requires:       perl(Test::Builder)
 
+Provides:       perl(Test::Deep)
+Provides:       perl(Test::Deep::NoTest)
 %description
 Test::Deep gives you very flexible ways to check that the result you
 got is the result you were expecting. At its simplest it compares two

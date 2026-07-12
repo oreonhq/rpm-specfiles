@@ -85,6 +85,7 @@ Requires:	perl(XSLoader)
 # Don't "provide" private Perl libs or the redundant unversioned perl(Net::SSLeay) provide
 %global __provides_exclude ^(perl\\(Net::SSLeay\\)$|SSLeay\\.so)
 
+Provides:       perl(Net::SSLeay)
 %description
 This module offers some high level convenience functions for accessing
 web pages on SSL servers (for symmetry, same API is offered for

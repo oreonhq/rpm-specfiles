@@ -51,6 +51,7 @@ BuildRequires:  perl(CPAN::Meta::Prereqs)
 # Dependencies
 # (none)
 
+Provides:       perl(DateTime::Format::Strptime)
 %description
 This module implements most of strptime(3), the POSIX function that is the
 reverse of strftime(3), for DateTime. While strftime takes a DateTime and a

@@ -64,6 +64,7 @@ Conflicts:      perl-libwww-perl < 6
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TestServer|TestServer::(BasicTests|Reflect)\\)$
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(TestServer|TestServer::(BasicTests|Reflect)\\)$
 
+Provides:       perl(HTTP::Daemon)
 %description
 Instances of the HTTP::Daemon class are HTTP/1.1 servers that listen on a
 socket for incoming requests. The HTTP::Daemon is a subclass of

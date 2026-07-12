@@ -37,6 +37,7 @@ Requires:       perl(Carp)
 # Avoid bogus perl(DB) provide
 %{?perl_default_filter}
 
+Provides:       perl(Test::Exception)
 %description
 This module provides a few convenience methods for testing exception
 based code. It is built with Test::Builder and plays happily with

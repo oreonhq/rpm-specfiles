@@ -77,6 +77,7 @@ Requires:       perl(Pod::Text) >= 3.13
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Module::Install::Base\\)$
 
+Provides:       perl(Module::Install::ReadmeFromPod)
 %description
 Module::Install::ReadmeFromPod is a Module::Install extension that
 generates a README file automatically from an indicated file containing

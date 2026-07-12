@@ -29,6 +29,7 @@ BuildRequires:	perl(Test::More) >= 0.88
 Requires:	perl(Scalar::Util) >= 1.20
 Requires:	perl(Sub::Identify) >= 0.03
 
+Provides:       perl(SUPER)
 %description
 When subclassing a class, you occasionally want to dispatch control to the
 superclass - at least conditionally and temporarily. This module provides

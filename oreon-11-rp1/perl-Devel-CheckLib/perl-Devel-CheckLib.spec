@@ -51,6 +51,7 @@ Requires:       redhat-rpm-config
 # Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Devel::CheckLib)
 %description
 Devel::CheckLib is a perl module that checks whether a particular C library
 and its headers are available.

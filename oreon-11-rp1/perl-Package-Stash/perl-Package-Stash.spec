@@ -69,6 +69,7 @@ Requires:	perl(Package::Stash::XS) >= 0.26
 # Not found by rpm auto-provides
 Provides:	perl(Package::Stash::Conflicts) = 0
 
+Provides:       perl(Package::Stash)
 %description
 Manipulating stashes (Perl's symbol tables) is occasionally necessary, but
 incredibly messy, and easy to get wrong. This module hides all of that behind

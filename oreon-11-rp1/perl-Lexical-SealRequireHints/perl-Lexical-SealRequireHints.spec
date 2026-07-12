@@ -47,6 +47,7 @@ Conflicts:      perl(B:Hooks::OP::Check) < 0.19
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(t::.*\\)
 
+Provides:       perl(Lexical::SealRequireHints)
 %description
 This module works around two historical bugs in Perl's handling of the %%^H
 (lexical hints) variable. One bug causes lexical state in one file to leak

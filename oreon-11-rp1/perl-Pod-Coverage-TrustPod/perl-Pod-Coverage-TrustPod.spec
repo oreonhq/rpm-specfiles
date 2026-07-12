@@ -33,6 +33,7 @@ BuildRequires:  perl(lib)
 BuildRequires:  perl(Test::More) >= 0.88
 # Explicit dependencies:
 
+Provides:       perl(Pod::Coverage::TrustPod)
 %description
 This is a Pod::Coverage subclass (actually, a subclass of
 Pod::Coverage::CountParents) that allows the POD itself to declare certain

@@ -33,6 +33,8 @@ BuildRequires:  perl(Time::HiRes)
 # Do not require private module
 %global __requires_exclude %{?__requires_exclude:__requires_exclude|}perl\\(Class::XSAccessor::Heavy\\)
 
+Provides:       perl(Class::XSAccessor)
+Provides:       perl(Class::XSAccessor::Array)
 %description
 Class::XSAccessor implements fast read, write and read/write accessors in
 XS. Additionally, it can provide predicates such as has_foo() for testing

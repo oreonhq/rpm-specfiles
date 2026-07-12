@@ -28,6 +28,7 @@ BuildRequires:  perl(vars)
 # Tests:
 BuildRequires:  perl(Test)
 
+Provides:       perl(Crypt::OpenSSL::Bignum)
 %description
 Crypt::OpenSSL::Bignum provides access to OpenSSL multiprecision integer
 arithmetic libraries. Presently, many though not all of the arithmetic

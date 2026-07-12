@@ -51,6 +51,7 @@ BuildRequires:	perl(Test::Pod::Coverage) >= 1.08
 # Dependencies
 # (none)
 
+Provides:       perl(Dist::CheckConflicts)
 %description
 One shortcoming of the CPAN clients that currently exist is that they have no
 way of specifying conflicting downstream dependencies of modules. This module

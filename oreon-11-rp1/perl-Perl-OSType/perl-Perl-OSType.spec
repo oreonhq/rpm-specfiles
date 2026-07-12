@@ -55,6 +55,7 @@ BuildRequires:	perl(Test::Version)
 # Dependencies
 # (none)
 
+Provides:       perl(Perl::OSType)
 %description
 Modules that provide OS-specific behaviors often need to know if the current
 operating system matches a more generic type of operating systems. For example,

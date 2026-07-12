@@ -34,6 +34,8 @@ BuildRequires:  perl(Test)
 # Explicit requirements:
 Requires:       perl(Carp)
 
+Provides:       perl(Algorithm::Diff)
+Provides:       perl(Algorithm::DiffOld)
 %description
 This is a module for computing the difference between two files, two strings,
 or any other two lists of things. It uses an intelligent algorithm similar to

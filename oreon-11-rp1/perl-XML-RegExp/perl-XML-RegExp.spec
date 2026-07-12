@@ -17,6 +17,7 @@ BuildRequires:  perl-interpreter
 BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
 BuildRequires:  perl(vars)
 
+Provides:       perl(XML::RegExp)
 %description
 This package contains an utility module containing regular expressions
 for the following XML tokens: BaseChar, Ideographic, Letter, Digit,

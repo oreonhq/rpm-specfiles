@@ -27,6 +27,8 @@ BuildRequires:  perl(Tie::Hash)
 # Dependencies
 # (none)
 
+Provides:       perl(Class::Accessor)
+Provides:       perl(Class::Accessor::Fast)
 %description
 This module automagically generates accessors/mutators for your class.
 

@@ -31,6 +31,7 @@ BuildRequires:  perl(overload)
 BuildRequires:  perl(Test::More)
 # Dependencies:
 
+Provides:       perl(UNIVERSAL::can)
 %description
 The UNIVERSAL class provides a few default methods so that all objects
 can use them. Object orientation allows programmers to override these

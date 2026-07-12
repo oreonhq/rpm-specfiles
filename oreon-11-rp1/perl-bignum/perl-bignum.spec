@@ -46,6 +46,7 @@ Conflicts:      perl < 4:5.22.0-348
 %global __requires_exclude %{__requires_exclude}|^perl\\(Math::BigRat\\)$
 %global __requires_exclude %{__requires_exclude}|^perl\\(Carp\\)$
 
+Provides:       perl(bigint)
 %description
 This package attempts to make it easier to write scripts that use BigInts and
 BigFloats in a transparent way.

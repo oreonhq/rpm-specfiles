@@ -34,6 +34,7 @@ BuildRequires:	perl(Test::More) >= 0.88
 # Dependencies
 Requires:	perl(Data::Dumper)
 
+Provides:       perl(ExtUtils::Config)
 %description
 ExtUtils::Config is an abstraction around the %%Config hash.
 

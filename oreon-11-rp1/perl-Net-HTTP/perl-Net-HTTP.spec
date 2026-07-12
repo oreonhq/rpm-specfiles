@@ -63,6 +63,8 @@ Requires:       perl(IO::Socket::SSL) >= 2.012
 %endif
 Conflicts:      perl-libwww-perl < 6
 
+Provides:       perl(Net::HTTP)
+Provides:       perl(Net::HTTPS)
 %description
 The Net::HTTP class is a low-level HTTP client. An instance of the
 Net::HTTP class represents a connection to an HTTP server. The HTTP

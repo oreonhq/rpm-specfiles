@@ -18,6 +18,7 @@ BuildRequires:  perl(Config)
 BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
 Requires:       perl(ExtUtils::MakeMaker)
 
+Provides:       perl(Canary::Stability)
 %description
 This module is used by Schmorp's modules during configuration stage to test
 the installed perl for compatibility with his modules.

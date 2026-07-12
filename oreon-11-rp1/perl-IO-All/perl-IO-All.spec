@@ -89,6 +89,7 @@ Recommends:     perl(MLDBM)
 Requires:       perl(Tie::File)
 Requires:       perl(warnings)
 
+Provides:       perl(IO::All)
 %description
 The IO::All object is a proxy for IO::File, IO::Dir, IO::Socket,
 IO::String, Tie::File, File::Spec, File::Path and File::ReadBackwards; as

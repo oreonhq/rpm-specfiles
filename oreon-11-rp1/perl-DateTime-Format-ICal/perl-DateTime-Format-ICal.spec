@@ -33,6 +33,7 @@ Requires:       perl(Params::Validate) >= 0.59
 %global __requires_exclude %__requires_exclude|^perl\\(DateTime::Event::ICal\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(Params::Validate\\)$
 
+Provides:       perl(DateTime::Format::ICal)
 %description
 This module understands the ICal date/time and duration formats, as defined
 in RFC 2445. It can be used to parse these formats in order to create the

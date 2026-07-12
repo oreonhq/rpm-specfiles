@@ -35,6 +35,7 @@ Requires:       perl(Math::BigInt) >= 2.005001
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(.::t/.*.inc\\)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Math::BigInt::FastCalc)
 %description
 This Perl module provides support for fast big integer calculations.
 

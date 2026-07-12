@@ -35,6 +35,7 @@ Requires:       perl(Storable) >= 2.21
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Bit::Vector\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Carp::Clan\\)\s*$
 
+Provides:       perl(Bit::Vector)
 %description
 Bit::Vector is an efficient C library which allows you to handle bit
 vectors, sets (of integers), "big integer arithmetic" and boolean

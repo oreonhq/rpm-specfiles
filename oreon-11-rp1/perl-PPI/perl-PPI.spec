@@ -72,6 +72,8 @@ Requires:       perl(Task::Weaken)
 
 Provides:       perl(PPI)
 Provides:       perl(PPI::Util)
+Provides:       perl(PPI::Dumper)
+Provides:       perl(PPI::Document)
 %description
 Parse, analyze and manipulate Perl (without perl).
 

@@ -42,6 +42,7 @@ BuildRequires:	perl(threads::shared)
 # Dependencies
 # (none)
 
+Provides:       perl(Devel::GlobalDestruction)
 %description
 Perl's global destruction is a little tricky to deal with with respect to
 finalizers because it's not ordered and objects can sometimes disappear.

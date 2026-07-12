@@ -29,6 +29,7 @@ BuildRequires:  perl(Test)
 # Filter the Perl extension module
 %{?perl_default_filter}
 
+Provides:       perl(Net::LibIDN)
 %description
 Provides perl bindings for GNU Libidn, a C library for handling
 Internationalized Domain Names according to IDNA (RFC 3490), in

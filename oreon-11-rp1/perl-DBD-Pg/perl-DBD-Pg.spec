@@ -67,6 +67,8 @@ Requires:       perl(DBI) >= 1.614
 %global __requires_exclude %{__requires_exclude}|^perl\\(App::Info.*\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(dbdpg_test_setup.pl\\)
 
+Provides:       perl(DBD::Pg)
+Provides:       perl(DBD::Pg)
 %description
 DBD::Pg is a Perl module that works with the DBI module to provide access
 to PostgreSQL databases.

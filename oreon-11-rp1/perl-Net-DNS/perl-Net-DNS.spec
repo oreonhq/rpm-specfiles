@@ -91,6 +91,12 @@ Suggests:      perl(Scalar::Util) >= 1.25
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(TestToolkit\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TestToolkit\\)$
 
+Provides:       perl(Net::DNS)
+Provides:       perl(Net::DNS::Packet)
+Provides:       perl(Net::DNS::Question)
+Provides:       perl(Net::DNS::RR)
+Provides:       perl(Net::DNS::Resolver)
+Provides:       perl(Net::DNS::ZoneFile)
 %description
 Net::DNS is a collection of Perl modules that act as a Domain Name System
 (DNS) resolver. It allows the programmer to perform DNS queries that are

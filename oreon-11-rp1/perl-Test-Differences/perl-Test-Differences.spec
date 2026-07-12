@@ -39,6 +39,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.08
 Requires:       perl(B::Deparse)
 Requires:       perl(Text::Diff) >= 1.43
 
+Provides:       perl(Test::Differences)
 %description
 When the code you're testing returns multiple lines, records or data
 structures and they're just plain wrong, an equivalent to the Unix

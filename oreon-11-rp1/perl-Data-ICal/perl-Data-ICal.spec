@@ -35,6 +35,13 @@ BuildRequires:  perl(inc::Module::Install)
 # rpm doesn't catch this
 Requires:       perl(Class::Accessor)
 
+Provides:       perl(Data::ICal)
+Provides:       perl(Data::ICal::Entry::Alarm::Display)
+Provides:       perl(Data::ICal::Entry::Alarm::Email)
+Provides:       perl(Data::ICal::Entry::Event)
+Provides:       perl(Data::ICal::Entry::TimeZone)
+Provides:       perl(Data::ICal::Entry::TimeZone::Daylight)
+Provides:       perl(Data::ICal::Entry::TimeZone::Standard)
 %description
 A Data::ICal object represents a VCALENDAR object as defined in the
 iCalendar protocol (RFC 2445, MIME type "text/calendar"), as implemented in

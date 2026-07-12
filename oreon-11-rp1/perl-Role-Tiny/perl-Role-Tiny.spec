@@ -32,6 +32,8 @@ Requires:       perl(Carp)
 Requires:       perl(Class::Method::Modifiers) >= 1.05
 Requires:       perl(mro)
 
+Provides:       perl(Role::Tiny)
+Provides:       perl(Role::Tiny::With)
 %description
 Role::Tiny is a minimalist role composition tool.
 

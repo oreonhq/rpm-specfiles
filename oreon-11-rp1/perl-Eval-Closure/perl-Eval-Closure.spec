@@ -50,6 +50,7 @@ BuildRequires:  perl(Test::Output)
 Requires:       perl(Devel::LexAlias) >= 0.05
 Requires:       perl(Perl::Tidy)
 
+Provides:       perl(Eval::Closure)
 %description
 String eval is often used for dynamic code generation. For instance, Moose uses
 it heavily, to generate inlined versions of accessors and constructors, which

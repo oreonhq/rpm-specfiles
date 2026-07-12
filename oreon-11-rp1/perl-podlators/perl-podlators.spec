@@ -92,6 +92,11 @@ Conflicts:      perl < 4:5.16.1-234
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::Podlators\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::RRA.*\\)
 
+Provides:       perl(Pod::Man)
+Provides:       perl(Pod::Text)
+Provides:       perl(Pod::Text::Color)
+Provides:       perl(Pod::Text::Termcap)
+Provides:       perl(Pod::ParseLink)
 %description
 This package contains Pod::Man and Pod::Text modules which convert POD input
 to *roff source output, suitable for man pages, or plain text.  It also

@@ -27,6 +27,7 @@ Requires:       perl(File::Spec) >= 0.60
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(File::Spec\\)$
 
+Provides:       perl(File::Which)
 %description
 File::Which is a portable implementation (in Perl) of 'which', and can
 be used to get the absolute filename of an executable program

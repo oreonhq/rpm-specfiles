@@ -42,6 +42,7 @@ BuildRequires:  perl(Time::Local)
 BuildRequires:  perl(Try::Tiny) >= 0.24
 BuildRequires:  perl(warnings)
 
+Provides:       perl(Mail::Sender)
 %description
 %{summary}.
 

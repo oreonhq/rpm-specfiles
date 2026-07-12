@@ -58,6 +58,7 @@ BuildRequires:	perl(Test::LeakTrace)
 Requires:	perl(Carp)
 Requires:	perl(List::MoreUtils::XS) >= 0.430
 
+Provides:       perl(List::MoreUtils)
 %description
 List::MoreUtils provides some trivial but commonly needed functionality
 on lists that is not going to go into List::Util.

@@ -31,6 +31,7 @@ BuildRequires:  perl(warnings)
 # Dependencies
 Requires:       pkgconfig
 
+Provides:       perl(ExtUtils::PkgConfig)
 %description
 The pkg-config program retrieves information about installed libraries,
 usually for the purposes of compiling against and linking to them.

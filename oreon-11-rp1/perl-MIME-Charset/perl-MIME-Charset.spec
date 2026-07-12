@@ -45,6 +45,7 @@ BuildRequires:  perl(Test::Pod) >= 1.00
 # Filter under-specified symbols
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(MIME::Charset\\)$
 
+Provides:       perl(MIME::Charset)
 %description
 MIME::Charset provides information about character sets used for MIME
 messages on Internet.

@@ -88,6 +88,7 @@ BuildRequires:	perl(Test::Spelling) >= 0.12
 # ===================================================================
 Requires:	perl(Carp)
 
+Provides:       perl(Module::Implementation)
 %description
 This module abstracts out the process of choosing one of several underlying
 implementations for a module. This can be used to provide XS and pure Perl

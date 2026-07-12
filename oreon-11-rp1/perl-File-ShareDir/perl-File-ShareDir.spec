@@ -56,6 +56,7 @@ Recommends:     perl(Params::Util) >= 1.07
 %{?perl_default_filter}
 %global __requires_exclude %{?__requires_exclude}|perl\\(Class::Inspector\\)$
 
+Provides:       perl(File::ShareDir)
 %description
 The intent of File::ShareDir is to provide a companion to Class::Inspector
 and File::HomeDir, modules that take a process that is well-known by

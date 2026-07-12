@@ -34,6 +34,7 @@ BuildRequires:  perl(List::Util)
 
 %{?perl_default_filter}
 
+Provides:       perl(Test::FailWarnings)
 %description
 This module hooks $SIG{__WARN__} and converts warnings to Test::More's
 fail() calls. It is designed to be used with done_testing, when you don't

@@ -47,6 +47,7 @@ Requires:       perl(DynaLoader)
 
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(VMS::Filespec\\)
 
+Provides:       perl(DynaLoader::Functions)
 %description
 This module provides a function-based interface to dynamic loading as used
 by Perl. Some details of dynamic loading are very platform-dependent, so

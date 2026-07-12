@@ -39,6 +39,7 @@ BuildRequires:  perl(Test::Tester) >= 0.107
 Suggests:       perl(Devel::StackTrace)
 %endif
 
+Provides:       perl(Test::NoWarnings)
 %description
 In general, your tests shouldn't produce warnings. This module causes any
 warnings to be captured and stored. It automatically adds an extra test

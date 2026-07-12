@@ -132,6 +132,8 @@ Requires:       perl(Pod::Text)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Software::License.*\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Tie::CPHash\\)
 
+Provides:       perl(Module::Build)
+Provides:       perl(Module::Build::Compat)
 %description
 Module::Build is a system for building, testing, and installing Perl
 modules. It is meant to be an alternative to ExtUtils::MakeMaker.

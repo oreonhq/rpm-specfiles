@@ -26,6 +26,7 @@ BuildRequires:  perl(warnings)
 # Remove private modules
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Module::Runtime)
 %description
 The functions exported by this module deal with runtime handling of Perl
 modules, which are normally handled at compile time.

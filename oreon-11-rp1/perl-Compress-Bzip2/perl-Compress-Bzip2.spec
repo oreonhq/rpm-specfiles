@@ -58,6 +58,7 @@ Requires:       perl(constant) >= 1.04
 # Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(constant\\)$
 
+Provides:       perl(Compress::Bzip2)
 %description
 The Compress::Bzip2 module provides a Perl interface to the Bzip2 compression
 library. A relevant subset of the functionality provided by Bzip2 is available

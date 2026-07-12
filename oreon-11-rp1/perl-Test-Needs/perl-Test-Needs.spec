@@ -32,6 +32,7 @@ BuildRequires:  perl(warnings)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TestAPI\\)$
 
+Provides:       perl(Test::Needs)
 %description
 Skip test scripts if modules are not available. The requested modules will
 be loaded, and optionally have their versions checked. If the module is

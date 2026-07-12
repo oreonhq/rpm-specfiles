@@ -92,6 +92,8 @@ Requires:       perl(Symbol)
 # Remove underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((Pod::Man|Pod::Simple::XMLOutStream|Pod::Simple::RTF)\\)$
 
+Provides:       perl(Pod::Perldoc)
+Provides:       perl(Pod::Perldoc::ToMan)
 %description
 perldoc looks up a piece of documentation in POD format that is embedded
 in the perl installation tree or in a Perl script, and displays it via

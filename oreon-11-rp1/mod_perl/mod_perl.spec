@@ -138,6 +138,8 @@ Requires:       perl(Linux::Pid)
 %global __requires_exclude %__requires_exclude|^perl\\(Apache2::MPM\\)
 
 Provides:       perl(Apache2::Log)
+Provides:       perl(Apache2::Log)
+Provides:       perl(ModPerl::Util)
 %description
 Mod_perl incorporates a Perl interpreter into the Apache web server,
 so that the Apache web server can directly execute Perl code.

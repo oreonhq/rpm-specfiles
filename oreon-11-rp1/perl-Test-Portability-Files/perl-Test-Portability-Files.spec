@@ -31,6 +31,7 @@ BuildRequires:  perl(Test::More) >= 0.88
 BuildRequires:  perl(utf8)
 # Dependencies
 
+Provides:       perl(Test::Portability::Files)
 %description
 This module is used to check the portability across operating systems of
 the names of the files present in the distribution of a module. The tests

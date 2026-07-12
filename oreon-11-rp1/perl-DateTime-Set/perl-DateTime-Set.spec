@@ -27,6 +27,7 @@ BuildRequires:  perl(vars)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
 
+Provides:       perl(DateTime::Set)
 %description
 DateTime::Set is a module for datetime sets. It can be used to handle two
 different types of sets. The first is a fixed set of predefined datetime

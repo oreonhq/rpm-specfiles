@@ -48,6 +48,8 @@ BuildRequires:  perl(Test::LeakTrace)
 Requires:       perl(HTML::Parser) >= 3.46
 Requires:       perl(HTML::Tagset) >= 3.02
 
+Provides:       perl(HTML::Element)
+Provides:       perl(HTML::TreeBuilder)
 %description
 This distribution contains a suite of modules for representing,
 creating, and extracting information from HTML syntax trees; there is

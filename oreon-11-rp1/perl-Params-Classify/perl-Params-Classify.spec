@@ -50,6 +50,7 @@ Requires:       perl(XSLoader)
 # Don't "provide" private Perl libs
 %{?perl_default_filter}
 
+Provides:       perl(Params::Classify)
 %description
 This module provides various type-testing functions. These are intended
 for functions that, unlike most Perl code, care what type of data they

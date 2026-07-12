@@ -39,6 +39,7 @@ BuildRequires:  sed
 Requires:       perl(Module::Install) >= 0.85
 Requires:       perl(Software::License) >= 0.01
 
+Provides:       perl(Module::Install::AutoLicense)
 %description
 Module::Install::AutoLicense is a Module::Install extension that generates
 a LICENSE file automatically whenever the author runs Makefile.PL. On the

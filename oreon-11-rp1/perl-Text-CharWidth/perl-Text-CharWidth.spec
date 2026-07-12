@@ -25,6 +25,7 @@ BuildRequires:  perl(warnings)
 
 %{?perl_default_filter}
 
+Provides:       perl(Text::CharWidth)
 %description
 This is a module to provide equivalent feature as wcwidth(3) and
 wcswidth(3). This also provides mblen(3) equivalent subroutine.

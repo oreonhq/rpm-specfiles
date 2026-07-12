@@ -46,6 +46,7 @@ BuildRequires:  perl(IPC::System::Simple)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Test::RRA.*\\)
 
+Provides:       perl(Term::ANSIColor)
 %description
 This module has two interfaces, one through color() and colored() and the
 other through constants. It also offers the utility functions uncolor(),

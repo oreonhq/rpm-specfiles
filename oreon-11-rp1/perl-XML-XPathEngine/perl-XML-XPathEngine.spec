@@ -37,6 +37,7 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 %endif
 Requires:       perl(POSIX)
 
+Provides:       perl(XML::XPathEngine)
 %description
 This module provides an XPath engine, that can be re-used by other
 module/classes that implement trees.

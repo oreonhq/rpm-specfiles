@@ -32,6 +32,7 @@ BuildRequires:  perl(utf8)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(Test::NoWarnings)
 
+Provides:       perl(XML::Fast)
 %description
 This Perl module implements simple, state machine based, XML parser
 written in C. It could parse and recover some kind of broken XML's.

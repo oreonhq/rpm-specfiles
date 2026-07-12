@@ -33,6 +33,7 @@ BuildRequires:  perl(Test::Tester) >= 0.107
 BuildRequires:  perl(Test::Pod) >= 1.14
 BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 
+Provides:       perl(Test::Output)
 %description
 Test::Output provides a simple interface for testing output sent to STDOUT
 or STDERR. A number of different utilities are included to try and be as

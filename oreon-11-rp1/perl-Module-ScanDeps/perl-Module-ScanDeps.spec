@@ -92,6 +92,7 @@ Suggests:       perl(CPANPLUS::Backend)
 %global __requires_exclude_from %{?__requires_exclude_from:%__requires_exclude_from|}^%{_libexecdir}/%{name}/t/data
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Utils\\)
 
+Provides:       perl(Module::ScanDeps)
 %description
 This module scans potential modules used by perl programs and returns a
 hash reference.  Its keys are the module names as they appear in %%INC (e.g.

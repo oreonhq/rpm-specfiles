@@ -28,6 +28,7 @@ BuildRequires:  perl(Test::More)
 # Dependencies
 # (none)
 
+Provides:       perl(Scope::Guard)
 %description
 This module provides a convenient way to perform cleanup or other forms of
 resource management at the end of a scope. It is particularly useful when
