@@ -34,6 +34,7 @@ Provides:       bundled(libev)
 
 
 Provides:       perl(EV)
+Provides:       perl(EV::MakeMaker)
 %description
 This module provides an interface to libev
 (<http://software.schmorp.de/pkg/libev.html>). While the included documentation

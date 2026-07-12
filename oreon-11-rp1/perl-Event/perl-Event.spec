@@ -36,6 +36,7 @@ Requires:	perl(Time::HiRes)
 %{?perl_default_filter}
 
 Provides:       perl(Event)
+Provides:       perl(Event::MakeMaker)
 %description
 The Event module provide a central facility to watch for various types of
 events and invoke a callback when these events occur. The idea is to delay the

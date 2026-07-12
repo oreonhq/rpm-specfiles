@@ -1,0 +1,4 @@
+from Config import *
+addFilter("spelling-error .* coros");
+addFilter("devel-file-in-non-devel-package /usr/lib64/perl5/Coro/CoroAPI.h");
+addFilter("-tests.noarch: W: no-documentation");
