@@ -1,0 +1,2 @@
+addFilter('spelling-error .* (ithreads|perl|pthreads)')
+addFilter('-tests\.noarch: W: no-documentation')
