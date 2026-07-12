@@ -37,13 +37,12 @@ noinline, assume, unreachable and so on.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-mkdir -p libecb-%{snapshot}
-cp -a %{SOURCE0} libecb-%{snapshot}/ecb.h
-cp -a %{SOURCE1} libecb-%{snapshot}/ecb.pod
-cp -a %{SOURCE2} libecb-%{snapshot}/LICENSE
-cp -a %{SOURCE3} libecb-%{snapshot}/README
-cp -a %{SOURCE4} libecb-%{snapshot}/Changes
-cd libecb-%{snapshot}
+%setup -T -c -n libecb-%{snapshot}
+cp -a %{SOURCE0} ecb.h
+cp -a %{SOURCE1} ecb.pod
+cp -a %{SOURCE2} LICENSE
+cp -a %{SOURCE3} README
+cp -a %{SOURCE4} Changes
 
 %build
 pod2man ecb.pod > ecb.3
