@@ -7,7 +7,7 @@
 # * With `gcc-toolset-13`, the AVX-512 test segfaults when ASAN is enabled.
 %global needs_gcc_toolset 0%{?el8} || 0%{?el9}
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_without tbb
 %else
 %bcond_with tbb
@@ -36,8 +36,8 @@ BuildRequires:  gcc
 BuildRequires:  libasan
 BuildRequires:  libubsan
 %endif
-%if %{with tbb}
 BuildRequires:  gcc-c++
+%if %{with tbb}
 BuildRequires:  tbb-devel >= 2021.11
 %endif
 BuildRequires:  python3
