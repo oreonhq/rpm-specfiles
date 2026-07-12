@@ -130,7 +130,7 @@
 # See mariadb-libfmt.patch for detailed description.
 # As the breaking issues are no longer present in fedora 41
 # and higher, this issue only remains in rhel
-%if 0%{?rhel} && 0%{?rhel} < 11 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 11
 %bcond bundled_fmt 1
 %else
 %bcond bundled_fmt 0
@@ -843,7 +843,9 @@ sources.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%if %{with bundled_fmt}
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+%endif
 %if %{with bundled_pcre}
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 %endif
