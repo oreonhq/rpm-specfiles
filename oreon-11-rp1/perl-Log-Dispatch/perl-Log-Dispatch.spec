@@ -114,6 +114,7 @@ Provides:       perl(Log::Dispatch)
 Provides:       perl(Log::Dispatch::Screen)
 Provides:       perl(Log::Dispatch::File)
 Provides:       perl(Log::Dispatch::Syslog)
+Provides:       perl(Log::Dispatch::Output)
 %description
 Log::Dispatch is a suite of OO modules for logging messages to
 multiple outputs, each of which can have a minimum and maximum log

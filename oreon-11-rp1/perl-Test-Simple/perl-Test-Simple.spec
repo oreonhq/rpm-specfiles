@@ -1,4 +1,4 @@
-%global source0_hash 420600911230de768427f6646758d89b6c07977b565e5b40118e5b8440dbb30b
+%global source0_hash 7cf84a18d6c9450e53ae8b4de5d5fa32c9fe99f3cebbe408fe59433f19921ec2
 
 # Disable non-core dependencies when bootstrapping a core module
 # Run optional tests with additional dependencies
@@ -16,7 +16,7 @@
 Name:           perl-Test-Simple
 Summary:        Basic utilities for writing tests
 Epoch:          3
-Version:        1.302219
+Version:        1.302222
 Release:        2%{?dist}
 # CC0-1.0: lib/ok.pm
 # Public Domain: lib/Test/Tutorial.pod
@@ -139,6 +139,7 @@ Provides:       bundled(Sub::Info) = 0.002
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(TieOut\\)$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 
+Provides:       perl(Test::More)
 %description
 This package provides the bulk of the core testing facilities. For more
 information, see perldoc for Test::Simple, Test::More, etc.
