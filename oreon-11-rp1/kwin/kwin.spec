@@ -75,7 +75,7 @@ BuildRequires:  pipewire-devel
 
 # Wayland
 BuildRequires:  wayland-devel >= 1.23.0
-BuildRequires:  wayland-protocols-devel
+BuildRequires:  wayland-protocols-devel >= 1.48
 BuildRequires:  libxkbcommon-devel >= 0.4
 BuildRequires:  pkgconfig(libinput) >= 0.10
 BuildRequires:  pkgconfig(libudev)

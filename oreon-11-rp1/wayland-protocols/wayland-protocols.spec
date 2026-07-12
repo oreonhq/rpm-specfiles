@@ -1,11 +1,11 @@
-%global source0_hash 5fd4349bcbc9bab9a46f8cf77d1f434296a7a052c87440a094f63fcf62a58e20
+%global source0_hash ec4c8f74942d6dff7ace8b4ce4764f0ef9ff618a935d974ea77edee2ad240b14
 
 # Header-only library
 %global debug_package %{nil}
 
 Name:           wayland-protocols
-Version:        1.47
-Release:        2%{?dist}
+Version:        1.49
+Release:        1%{?dist}
 Summary:        Wayland protocols that adds functionality not available in the core protocol
 
 License:        MIT
@@ -13,7 +13,7 @@ URL:            https://wayland.freedesktop.org/
 Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
-BuildRequires:  gcc-g++
+BuildRequires:  gcc-c++
 BuildRequires:  meson
 BuildRequires:  wayland-devel
 
