@@ -1,0 +1,57 @@
+%global source0_hash ab15438a09b041c072023294fc66bd8fd13d5e4701daf3b8463b3855fde4493f
+%global source1_hash 9e2a80b4d1c6948e725fe231e0c99f779c83822f91d3c2998e69876427bfc296
+
+%global _texdir /usr/share/texlive
+%global _texmf_main %{_texdir}/texmf-dist
+
+Name:           texlive-zhmetrics
+Epoch:          12
+Version:        svn79618
+Release:        1%{?dist}
+Summary:        TFM subfont metrics for Chinese
+License:        LPPL-1.3c
+URL:            http://tug.org/texlive/
+BuildArch:      noarch
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.doc.tar.xz
+BuildRequires:  tar
+Provides:       texlive-zhmetrics-doc = %{epoch}:%{version}-%{release}
+Obsoletes:      texlive-zhmetrics-doc <= 11:%{version}
+Provides:       tex(zhwinfonts.tex)
+
+%description
+TFM subfont metrics for Chinese.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+
+%build
+
+%install
+mkdir -p %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE0} -C %{buildroot}%{_texmf_main}
+tar -xf %{SOURCE1} -C %{buildroot}%{_texmf_main}
+rm -rf %{buildroot}%{_texmf_main}/tlpkg
+
+%files
+%doc %{_texmf_main}/doc/fonts/zhmetrics/
+%{_texmf_main}/fonts/tfm/zhmetrics/cyberb/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbk/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbkfs/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbkhei/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbkkai/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbkli/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbksong/
+%{_texmf_main}/fonts/tfm/zhmetrics/gbkyou/
+%{_texmf_main}/fonts/tfm/zhmetrics/unifs/
+%{_texmf_main}/fonts/tfm/zhmetrics/unihei/
+%{_texmf_main}/fonts/tfm/zhmetrics/unikai/
+%{_texmf_main}/fonts/tfm/zhmetrics/unili/
+%{_texmf_main}/fonts/tfm/zhmetrics/unisong/
+%{_texmf_main}/fonts/tfm/zhmetrics/uniyou/
+%{_texmf_main}/tex/generic/zhmetrics/
+%{_texmf_main}/tex/latex/zhmetrics/
+
+%changelog
+%autochangelog
