@@ -1,11 +1,7 @@
 %global source0_hash none
 
-%if 0%{?oreon} >= 11
 %global tcl_version 9.0
-%else
-%{!?tcl_version: %global tcl_version 8.6}
-%endif
-%{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
+%global tcl_sitearch %{_libdir}/tcl%{tcl_version}
 %global majorver 5.45.4
 
 Summary: A program-script interaction and testing utility
