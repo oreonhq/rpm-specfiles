@@ -42,12 +42,7 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg
 
 %files
 %doc %{_texmf_main}/doc/generic/t2/
-%{_texmf_main}/fonts/enc/t2/t2a-mod1.enc/
-%{_texmf_main}/fonts/enc/t2/t2a-mod2.enc/
-%{_texmf_main}/fonts/enc/t2/t2a.enc/
-%{_texmf_main}/fonts/enc/t2/t2b.enc/
-%{_texmf_main}/fonts/enc/t2/t2c.enc/
-%{_texmf_main}/fonts/enc/t2/x2.enc/
+%{_texmf_main}/fonts/enc/t2/
 %{_texmf_main}/tex/generic/t2/
 %{_texmf_main}/tex/latex/t2/
 
