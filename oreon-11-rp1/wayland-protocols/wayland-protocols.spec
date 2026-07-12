@@ -15,7 +15,7 @@ Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{vers
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  meson
-BuildRequires:  wayland-devel
+BuildRequires:  wayland-devel >= 1.25.0
 
 %description
 wayland-protocols contains Wayland protocols that adds functionality not

@@ -1,8 +1,8 @@
-%global source0_hash 82892487a01ad67b334eca83b54317a7c86a03a89cfadacfef5211f11a5d0536
+%global source0_hash c065f040afdff3177680600f249727e41a1afc22fccf27222f15f5306faa1f03
 
 Name:           wayland
-Version:        1.24.0
-Release:        3%{?dist}
+Version:        1.25.0
+Release:        1%{?dist}
 Summary:        Wayland Compositor Infrastructure
 
 # SPDX
@@ -11,6 +11,7 @@ URL:            http://wayland.freedesktop.org/
 Source0:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
 Source1:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz.sig
 Source2:        emersion-gpg-key.asc
+Patch0:         wayland-1.25.0-optional-mdbook.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -121,5 +122,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libwayland-server.so.0*
 
 %changelog
+* Sun Jul 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.25.0-1
+- 1.25.0
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.24.0-3
 - Import
