@@ -101,6 +101,8 @@ Requires:	perl(Term::ANSIColor) >= 2.02
 Provides:       perl(Perl::Critic)
 Provides:       perl(Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers)
 Provides:       perl(Perl::Critic::Policy::NamingConventions::Capitalization)
+Provides:       perl(Perl::Critic::Utils)
+Provides:       perl(Perl::Critic::Violation)
 %description
 Perl::Critic is an extensible framework for creating and applying coding
 standards to Perl source code. Essentially, it is a static source code
