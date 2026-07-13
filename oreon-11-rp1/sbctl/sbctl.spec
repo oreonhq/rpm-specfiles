@@ -1,4 +1,5 @@
 %global source0_hash d274451b145b0aaecfdf2d01ad45473b61ab40f3f58e4735cee50aa7573c584d
+%global source3_hash 6706a2ded6f76b8901ef427d9f0d21e5e8817e5f9f339659fb7c916c4a61a562
 
 # https://gitlab.archlinux.org/archlinux/packaging/packages/sbctl/-/blob/main/PKGBUILD?ref_type=heads
 %global fingerprint C100346676634E80C940FB9E9C02FF419FECBE16
@@ -13,6 +14,7 @@ URL:            https://github.com/Foxboron/sbctl
 Source0:        https://github.com/Foxboron/sbctl/releases/download/%{version}/sbctl-%{version}.tar.gz
 Source1:        https://github.com/Foxboron/sbctl/releases/download/%{version}/sbctl-%{version}.tar.gz.sig
 Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x%{fingerprint}#/%{fingerprint}.gpg
+Source3:        sbctl-%{version}-vendor.tar.gz
 
 ExclusiveArch:  %{golang_arches}
 
@@ -35,8 +37,10 @@ needs to be signed in the boot chain.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
+tar -xzf %{SOURCE3}
 
 sed -i.orig '/go build/d' Makefile
 ! diff -q Makefile.orig Makefile
@@ -47,6 +51,7 @@ sed -i.orig '/libpcsclite_real\.so\.1/ s,/usr/lib,%{_libdir},' lsm/lsm.go
 
 %build
 export GOPATH=%{_builddir}/go
+export GOFLAGS="${GOFLAGS:+$GOFLAGS }-mod=vendor"
 %global gomodulesmode GO111MODULE=on
 %gobuild -o sbctl ./cmd/sbctl
 %make_build
@@ -55,7 +60,6 @@ export GOPATH=%{_builddir}/go
 %install
 %make_install PREFIX=%{_prefix}
 
-# Debian only.
 rm %{buildroot}%{_prefix}/lib/kernel/postinst.d/91-sbctl.install
 
 
@@ -81,4 +85,5 @@ fi
 
 
 %changelog
-%autochangelog
+* Sun Jul 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.18-1
+- Import
