@@ -25,11 +25,8 @@ Source1:        shim.conf
 # keep these two lists of sources synched up arch-wise.  That is 0 and 10
 # match, 1 and 11 match, ...
 Source10:        BOOTAA64.CSV
-Source20:        shimaa64.efi
 Source11:        BOOTIA32.CSV
-Source21:        shimia32.efi
 Source12:        BOOTX64.CSV
-Source22:        shimx64.efi
 #Source13:	BOOTARM.CSV
 #Source23:	shimarm.efi
 
@@ -56,10 +53,10 @@ Source22:        shimx64.efi
 %global bootcsvia32 %{expand:%{SOURCE11}}
 %global bootcsvx64 %{expand:%{SOURCE12}}
 
-%global shimefiaa64 %{expand:%{SOURCE20}}
+%global shimefiaa64 %{shimdiraa64}/shimaa64.efi
 %global shimefiarm %{expand:%{SOURCE23}}
-%global shimefiia32 %{expand:%{SOURCE21}}
-%global shimefix64 %{expand:%{SOURCE22}}
+%global shimefiia32 %{shimdiria32}/shimia32.efi
+%global shimefix64 %{shimdirx64}/shimx64.efi
 
 %global shimveraa64 16.1-1
 %global shimverarm 15.4-1.fc34
