@@ -1,7 +1,7 @@
 %global source0_hash 3b88dc0f73ba14bf9f363b7369da5ceba76484b4dca018fcc5d606a79dea54ef
 
 Name:           oreon-system-manager
-Version:        0.1.0
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        Oreon system management GUI
 License:        GPL-3.0-or-later
