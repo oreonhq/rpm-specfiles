@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Oreon System Manager
-GenericName=System Manager
-Comment=Manage packages, repos, drivers, and containers
-Exec=oreon-system-manager
-Icon=oreon-system-manager
-Categories=Settings;System;
-StartupNotify=true

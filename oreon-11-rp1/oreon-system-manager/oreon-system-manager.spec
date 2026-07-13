@@ -1,50 +1,54 @@
-%global source0_hash 3b88dc0f73ba14bf9f363b7369da5ceba76484b4dca018fcc5d606a79dea54ef
+%global source0_hash f2c116fecbf9b6b84d5dc9a77f4d4ea97922732078f91b79ae16561dba31b5ba
 
 Name:           oreon-system-manager
-Version:        0.1.0
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        Oreon system management GUI
 License:        GPL-3.0-or-later
 URL:            https://github.com/oreonhq/oreon-system-manager
 Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/tags/v%{version}.tar.gz#/oreon-system-manager-%{version}.tar.gz
-Source1:        oreon-system-manager.desktop
 
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  ninja-build
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  cmake(Qt6Concurrent)
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  gcc
+BuildRequires:  pkg-config
+BuildRequires:  gtk4-devel
+BuildRequires:  glib2-devel
+BuildRequires:  graphene-devel
+BuildRequires:  pango-devel
+BuildRequires:  cairo-devel
+BuildRequires:  gdk-pixbuf2-devel
 
-Requires:       qt6-qtbase%{?_isa}
+Requires:       gtk4%{?_isa}
 Requires:       dnf
 Requires:       polkit
 Recommends:     docker
 Recommends:     distrobox
 
 %description
-Qt6 GUI for package, repo, driver, and container management on Oreon.
+GTK4 GUI for package, repo, driver, and container management on Oreon.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n oreon-system-manager-%{version}
+%cargo_prep
+
+%generate_buildrequires
+%cargo_generate_buildrequires
 
 %build
-%cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
-%cmake_build
+%cargo_build
 
 %install
-%cmake_install
-install -Dpm 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/oreon-system-manager.desktop
-install -Dpm 0644 assets/logo.png %{buildroot}%{_datadir}/pixmaps/oreon-system-manager.png
+install -Dpm 0755 target/release/oreon-system-manager %{buildroot}%{_bindir}/oreon-system-manager
+install -Dpm 0644 packaging/oreon-system-manager.desktop %{buildroot}%{_datadir}/applications/oreon-system-manager.desktop
+install -Dpm 0644 assets/logo.png %{buildroot}%{_datadir}/icons/hicolor/200x200/apps/oreon-system-manager.png
 
 %files
 %license LICENSE
 %doc README.md
 %{_bindir}/oreon-system-manager
 %{_datadir}/applications/oreon-system-manager.desktop
-%{_datadir}/pixmaps/oreon-system-manager.png
+%{_datadir}/icons/hicolor/200x200/apps/oreon-system-manager.png
 
 %changelog
 %autochangelog
