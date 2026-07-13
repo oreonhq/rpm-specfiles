@@ -997,8 +997,12 @@ Source14: oreonsecureboot302.cer
 Source20: mod-denylist.sh
 Source21: mod-sign.sh
 Source22: filtermods.py
+Source26: ksyms-prov-cat.sh
 
 %define modsign_cmd %{SOURCE21}
+
+%global __provided_ksyms_path .*/modules[^/]*\\.ksyms\\.prov$
+%global __provided_ksyms_provides %{SOURCE26}
 
 %if 0%{?include_rhel} || (0%{?oreon} >= 11)
 Source24: %{name}-aarch64-rhel.config
@@ -2037,6 +2041,7 @@ Prebuilt default kernel image with auto DTB selection for ARM64 UEFI devices.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+chmod 0755 %{SOURCE26}
 %{log_msg "Start of prep stage"}
 
 %{log_msg "Sanity checks"}
@@ -3109,6 +3114,35 @@ BuildKernel() {
         create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
 %if 0%{!?fedora:1}
         create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
+%endif
+        gen_ksyms_prov() {
+            local rel="$1" name="$2" pfx="$3" abs="$4"
+            local out="$RPM_BUILD_ROOT/lib/modules/$KernelVer/$name.ksyms.prov"
+            [ -f Module.symvers ] || touch Module.symvers
+            [ -f "$rel" ] || : > "$rel"
+            awk -F'\t' -v list="$rel" -v pfx="$pfx" '
+            BEGIN {
+                while ((getline l < list) > 0) {
+                    sub(/^kernel\//, "", l)
+                    sub(/^internal\//, "", l)
+                    sub(/^partner\//, "", l)
+                    sub(/\.(ko|ko\.gz|ko\.bz2|ko\.xz|ko\.zst)$/, "", l)
+                    if (l != "") want[l] = 1
+                }
+                close(list)
+            }
+            ($3 in want) && ($1 != "") && ($1 != "0x00000000") {
+                print pfx "(" $2 ") = " $1
+            }
+            ' Module.symvers > "$out"
+            echo "/lib/modules/$KernelVer/$name.ksyms.prov" >> "$abs"
+        }
+        gen_ksyms_prov ../modules-core.list modules-core kernel ../kernel${Variant:+-${Variant}}-modules-core.list
+        gen_ksyms_prov ../modules.list modules kernel ../kernel${Variant:+-${Variant}}-modules.list
+        gen_ksyms_prov ../modules-extra.list modules-extra kernel ../kernel${Variant:+-${Variant}}-modules-extra.list
+        gen_ksyms_prov ../modules-internal.list modules-internal ksym ../kernel${Variant:+-${Variant}}-modules-internal.list
+%if 0%{!?fedora:1}
+        gen_ksyms_prov ../modules-partner.list modules-partner ksym ../kernel${Variant:+-${Variant}}-modules-partner.list
 %endif
     fi # $DoModules -eq 1
 
