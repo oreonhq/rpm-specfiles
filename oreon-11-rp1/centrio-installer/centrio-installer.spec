@@ -2,7 +2,7 @@
 
 Name:           centrio-installer
 Version:        2.0
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
 URL:            https://github.com/oreonhq/centrio
@@ -49,8 +49,4 @@ test -f %{_builddir}/centrio-%{version}/src/main.py
 %{_datadir}/applications/liveinst.desktop
 
 %changelog
-* Sun Apr 26 2026 Brandon Lester <blester@oreonhq.com> - 2.0-2
-- Fix several issues related to locale & software selection
-
-* Fri Feb 20 2026 Brandon Lester <blester@oreonhq.com> - 2.0-1
-- Prepare Centrio 2.0 for Oreon 11
+%autochangelog
