@@ -61,6 +61,9 @@
 # Use all vendored dependencies when bootstrapping
 %bcond all_deps_bundled %{with bootstrap}
 
+# === Distro-wide build configuration adjustments ===
+# v8 cannot be built with LTO enabled
+%global _lto_cflags %{nil}
 
 # === Additional definitions ===
 # Architecture-dependent suffix for requiring/providing .so names
@@ -328,11 +331,21 @@ readonly -a extra_cflags=(
     # v8 segfaults when Identical Code Folding is enabled
     # - https://github.com/nodejs/node/issues/47865
     -fno-ipa-icf
+    -Wno-class-memaccess
+    -Wno-template-id-cdtor
+    -Wno-comment
+    -Wno-deprecated-declarations
+    -Wno-maybe-uninitialized
+    -Wno-pessimizing-move
+    -Wno-stringop-overflow
+    -Wno-uninitialized
+    -Wno-unused-variable
+    -Wno-unused-function
 )
 # configuration flags
 readonly -a configure_flags=(
     # Basic build options
-    --verbose --ninja
+    --ninja
     # Use FHS and build separate libnode.so
     --prefix=%{_prefix} --shared --libdir=%{_lib}
     # Use system OpenSSL
@@ -353,8 +366,6 @@ readonly -a configure_flags=(
 %if %{without bundled_nodejs_undici}
     --shared-builtin-undici/undici-path=%{nodejs_common_sitelib}/undici/loader.js
 %endif
-    # Enable LTO where possible
-    --enable-lto
     # Compile with small icu, extendable via full-i18n subpackage
     --with-intl=small-icu --with-icu-default-data-dir=%{nodejs_datadir}/icudata
     # Do not ship corepack
@@ -365,7 +376,7 @@ readonly -a configure_flags=(
 
 export CFLAGS="${CFLAGS} ${extra_cflags[*]}" CXXFLAGS="${CXXFLAGS} ${extra_cflags[*]}"
 %python3 configure.py "${configure_flags[@]}"
-%ninja_build -C out/Release
+%{__ninja} -C out/Release %{?_smp_mflags}
 
 %install
 # Fill in values in configuration file templates
