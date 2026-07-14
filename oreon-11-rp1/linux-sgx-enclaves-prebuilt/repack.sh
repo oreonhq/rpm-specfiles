@@ -4,7 +4,7 @@ set -e
 
 # @1: archive basename
 # @*: paths to strip
-function repack {
+repack() {
     basename=$1
     shift
 
@@ -19,10 +19,11 @@ function repack {
 	tar zxf ../$archive
 
 	echo "Begin stripping files"
-	for arg in $@
+	for arg in "$@"
 	do
-	    find -name $arg -delete -print
+	    find . -name "$arg" -delete -print
 	done
+	find . \( -name '*.h' -o -name '*.H' \) -delete -print
 	echo "Done stripping files"
 
 	tar zcf ../$newarchive *
@@ -31,10 +32,9 @@ function repack {
     echo "Wrote $newarchive"
 }
 
-dcap_version=$(grep dcap_version linux-sgx*spec | head -1 | awk '{print $3}')
+dcap_version=$(grep '%%global dcap_version\|%global dcap_version' linux-sgx*spec | head -1 | awk '{print $3}')
 
 repack prebuilt_dcap_${dcap_version} \
        libcrypto.a \
-       *.h *.H \
        policy.wasm \
        libsgx_qve.signed.so
