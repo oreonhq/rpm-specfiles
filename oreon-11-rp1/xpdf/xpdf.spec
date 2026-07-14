@@ -14,7 +14,6 @@ Url: https://www.xpdfreader.com/
 Source0: https://dl.xpdfreader.com/%{name}-%{version}.tar.gz
 Source1: https://dl.xpdfreader.com/%{name}-%{version}.tar.gz.sig
 Source2: gpg-key.txt
-%if 0%{?fedora} || 0%{?oreon} >= 11
 Source3: https://dl.xpdfreader.com/xpdf-chinese-simplified.tar.gz
 Source4: https://dl.xpdfreader.com/xpdf-chinese-traditional.tar.gz
 Source5: https://dl.xpdfreader.com/xpdf-japanese.tar.gz
@@ -28,7 +27,6 @@ Source13: https://dl.xpdfreader.com/xpdf-greek.tar.gz
 Source14: https://dl.xpdfreader.com/xpdf-hebrew.tar.gz
 Source15: https://dl.xpdfreader.com/xpdf-latin2.tar.gz
 Source16: https://dl.xpdfreader.com/xpdf-turkish.tar.gz
-%endif
 
 Patch3: xpdf-4.01-ext.patch
 Patch9: xpdf-3.00-papersize.patch
@@ -61,7 +59,7 @@ Requires: xorg-x11-fonts-ISO8859-1-75dpi
 Requires: xorg-x11-fonts-ISO8859-1-100dpi
 Requires: qt5-qtsvg
 
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: qt5-qtbase-devel, cmake
 BuildRequires: freetype-devel >= 2.1.7
 BuildRequires: fontconfig-devel
@@ -81,13 +79,13 @@ BuildRequires: gpgverify
 BuildRequires: gnupg2
 
 Provides:  %{name}-chinese-simplified = %{version}-%{release}
-Obsoletes: %{name}-chinese-simplified
+Obsoletes: %{name}-chinese-simplified < %{epoch}:%{version}-%{release}
 Provides:  %{name}-chinese-traditional = %{version}-%{release}
-Obsoletes: %{name}-chinese-traditional
+Obsoletes: %{name}-chinese-traditional < %{epoch}:%{version}-%{release}
 Provides:  %{name}-korean = %{version}-%{release}
-Obsoletes: %{name}-korean
+Obsoletes: %{name}-korean < %{epoch}:%{version}-%{release}
 Provides:  %{name}-japanese = %{version}-%{release}
-Obsoletes: %{name}-japanese
+Obsoletes: %{name}-japanese < %{epoch}:%{version}-%{release}
 
 Requires: %{name}-libs%{_isa} = %{epoch}:%{version}-%{release}
 
@@ -97,7 +95,7 @@ Xpdf is an X Window System based viewer for Portable Document Format
 standard X fonts.
 
 %package devel
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires: %{name}%{_isa} = %{epoch}:%{version}-%{release}
 Requires: libpaper-devel
 %endif
@@ -118,7 +116,7 @@ Libraries from xpdf.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %gpgverify -k2 -s1 -d0
-%if 0%{?fedora} || 0%{?oreon} >= 11 
+%if 0%{?fedora} || (0%{?oreon} >= 11) 
 %setup -q -a 3 -a 4 -a 5 -a 6 -a 7 -a 8 -a 12 -a 13 -a 14 -a 15 -a 16
 %else
 %setup -q
@@ -162,7 +160,7 @@ sed -i 's|urlCommand|#urlCommand|g' doc/sample-xpdfrc
 %build
 find -name "*orig" | xargs rm -f
 
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # This may seem pointless, but in the unlikely event that _sysconfdir != /etc ...
 for file in doc/*.1 doc/*.5 xpdf-*/README; do
   sed -i -e 's:/etc/xpdfrc:%{_sysconfdir}/xpdfrc:g' $file
@@ -179,12 +177,12 @@ export CXXFLAGS="%{optflags} -Wno-deprecated -fPIC"
 %cmake -DMULTITHREADED=ON -DOPI_SUPPORT=ON -DXPDFWIDGET_PRINTING=1 -DSYSTEM_XPDFRC="%{_sysconfdir}/xpdfrc" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %cmake_build
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %cmake_build --target xpdf
 %endif
 
 %install
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/xpdf/arabic \
          $RPM_BUILD_ROOT%{_datadir}/xpdf/chinese-simplified \
          $RPM_BUILD_ROOT%{_datadir}/xpdf/chinese-traditional \
@@ -218,7 +216,7 @@ cp -a splash/*.h $RPM_BUILD_ROOT%{_includedir}/xpdf/splash/
 cp -a xpdf/*.h $RPM_BUILD_ROOT%{_includedir}/xpdf/
 cp -a %{__cmake_builddir}/aconf.h $RPM_BUILD_ROOT%{_includedir}/xpdf/
 
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
 %if 0%{?rhel} > 5 || 0%{?fedora} || 0%{?oreon} >= 11
 desktop-file-install            \
@@ -282,7 +280,7 @@ sed -i -e 's:/usr/local/share/:%{_datadir}/:g' $RPM_BUILD_ROOT%{_sysconfdir}/xpd
 
 %ldconfig_scriptlets
 
-%if 0%{?fedora} || 0%{?oreon} >= 11
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %files
 %license COPYING COPYING3
 %doc CHANGES README README.*
