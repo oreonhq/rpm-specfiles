@@ -1,5 +1,5 @@
 %global source0_hash 1c38f527c46caee0f712386d42a885b96a31ed9ce11904e872559859894d137e
-%global source2_key_fpr 0A62DCA5FC14C18435400D51978D2C05C42A0958
+%global source2_key_fpr A56006CA75CF8B13FA2F120DF4825F5397271342
 
 %undefine __cmake_in_source_build
 
