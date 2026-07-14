@@ -313,6 +313,9 @@ readonly -a extra_cflags=(
     # v8 segfaults when Identical Code Folding is enabled
     # - https://github.com/nodejs/node/issues/47865
     -fno-ipa-icf
+    # v8::base::bit_cast uses memcpy on Object handles; modern gcc
+    # spams -Wclass-memaccess and blows out build logs mid-compile
+    -Wno-class-memaccess
 )
 # configuration flags
 readonly -a configure_flags=(
@@ -349,7 +352,8 @@ readonly -a configure_flags=(
 
 export CFLAGS="${CFLAGS} ${extra_cflags[*]}" CXXFLAGS="${CXXFLAGS} ${extra_cflags[*]}"
 %python3 configure.py "${configure_flags[@]}"
-%ninja_build -C out/Release
+# skip macros.ninja -v, V8 warn spam eats the whole ORBS log buffer
+%{__ninja} -C out/Release %{?_smp_mflags}
 
 %install
 # Fill in values in configuration file templates
