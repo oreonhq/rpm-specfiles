@@ -795,7 +795,7 @@ BuildRequires: dwarves
 BuildRequires: python3
 BuildRequires: python3-devel
 BuildRequires: python3-pyyaml
-BuildRequires: kernel-rpm-macros
+BuildRequires: kernel-rpm-macros >= 205-31
 # glibc-static is required for a consistent build environment (specifically
 # CONFIG_CC_CAN_LINK_STATIC=y).
 BuildRequires: glibc-static
@@ -997,12 +997,7 @@ Source14: oreonsecureboot302.cer
 Source20: mod-denylist.sh
 Source21: mod-sign.sh
 Source22: filtermods.py
-Source26: ksyms-prov-cat.sh
-
 %define modsign_cmd %{SOURCE21}
-
-%global __provided_ksyms_path .*/modules[^/]*\\.ksyms\\.prov$
-%global __provided_ksyms_provides %{SOURCE26}
 
 %if 0%{?include_rhel} || (0%{?oreon} >= 11)
 Source24: %{name}-aarch64-rhel.config
@@ -2041,7 +2036,6 @@ Prebuilt default kernel image with auto DTB selection for ARM64 UEFI devices.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-chmod 0755 %{SOURCE26}
 %{log_msg "Start of prep stage"}
 
 %{log_msg "Sanity checks"}
@@ -3178,7 +3172,7 @@ BuildKernel() {
     # it after this point.  We need the link to actually point to something
     # when kernel-devel is installed, and a relative link doesn't work across
     # the F17 UsrMove feature.
-    ln -sf $DevelDir $RPM_BUILD_ROOT/lib/modules/$KernelVer/build
+    ln -sfr $RPM_BUILD_ROOT$DevelDir $RPM_BUILD_ROOT/lib/modules/$KernelVer/build
 
 %if %{with_debuginfo}
     # Generate vmlinux.h and put it to kernel-devel path
