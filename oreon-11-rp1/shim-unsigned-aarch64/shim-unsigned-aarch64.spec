@@ -88,8 +88,6 @@ BuildArch:	noarch
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n shim-%{version}
-git config --unset user.email
-git config --unset user.name
 mkdir build-%{efiarch}
 sed -e 's/@@VERSION@@/%{version}/g' \
     -e 's/@@RELEASE@@/%{release}/g' \
