@@ -142,8 +142,9 @@ Provides:   nodejs(engine) = %{node_version}
 # Main source tarball; see packaging/make-nodejs-tarball.sh on how it is created
 Source:         https://nodejs.org/dist/v%{node_version}/node-v%{node_version}.tar.gz
 # Sources 001-099: reserved for additional sources to be installed
-# - Full ICU database data
-Source001:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-b.zip
+# - Full ICU database data (little + big endian)
+Source001:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-l.zip
+Source002:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-b.zip
 # - Downstream/distribution configuration files
 Source003:        nodejs.pc.in
 Source004:        v8.pc.in
@@ -445,7 +446,7 @@ popd  # from ${RPM_BUILD_ROOT}%%{_defaultdocdir}
 if test "$(%{python3} -Ic 'import sys; print(sys.byteorder)')" = "little"; then
 readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}l.dat'
 else
-readonly icu_source='%{SOURCE1}' icu_data_file='icudt%{icu_version_major}b.dat'
+readonly icu_source='%{SOURCE2}' icu_data_file='icudt%{icu_version_major}b.dat'
 fi
 readonly icu_data_dir="${RPM_BUILD_ROOT}%{nodejs_datadir}/icudata"
 readonly icu_doc_dir="full-icu"
