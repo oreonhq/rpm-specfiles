@@ -73,7 +73,7 @@ make check PYTHON=%{__python3}
 %config(noreplace) %{_sysconfdir}/dnf/libdnf5-plugins/actions.d/root-protection.actions
 %config(noreplace) %{_sysconfdir}/dnf/plugins/root_protection.conf
 %config(noreplace) %{_sysconfdir}/grub.d/42_root-protection
-%{python3_sitelib}/dnf-plugins/root_protection.py
+%pycached %{python3_sitelib}/dnf-plugins/root_protection.py
 /usr/local/bin/sudo
 %dir %{_localstatedir}/lib/root-protection
 %dir %{_localstatedir}/log/root-protection
