@@ -2,7 +2,7 @@
 
 Name:           centrio-installer
 Version:        2.0
-Release:        22%{?dist}
+Release:        23%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
 URL:            https://github.com/oreonhq/centrio
@@ -10,7 +10,7 @@ BuildArch:      noarch
 Source0:        https://tarballs.oreonhq.com/centrio-%{version}.tar.xz
 Source1:        liveinst.desktop
 Source2:        centrio-live-sudoers
-Requires:       python3-pyside6 qt6-qtbase qt6-qtwayland python3-blockdev
+Requires:       python3-pyside6 qt6-qtbase qt6-qtwayland python3-blockdev libblockdev-lvm
 BuildRequires:  python3-devel
 
 %description
