@@ -51,6 +51,7 @@ Source2:	%{dbxfile}
 Source3:        sbat.redhat.csv
 
 Source100:        shim-find-debuginfo.sh
+Patch0:         0001-Fix-build-with-binutils-2.46.patch
 
 
 
@@ -105,6 +106,7 @@ BuildArch:	noarch
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n shim-%{version}
+%patch -P0 -p1
 mkdir build-%{efiarch}
 mkdir build-%{efialtarch}
 cp %{SOURCE3} data/
