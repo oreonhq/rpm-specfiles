@@ -1747,7 +1747,7 @@ Requires: %{name}-%{?1:%{1}-}-modules-core-uname-r = %{KVERREL}%{uname_variant %
 %{expand:%%kernel_modules_extra_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}} %{-m:%{-m}}}\
 %if %{-m:0}%{!-m:1}\
 %{expand:%%kernel_modules_internal_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1} && 0%{!?oreon:1}\
 %{expand:%%kernel_modules_partner_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
 %endif\
 %{expand:%%kernel_debuginfo_package %{?1:%{1}}}\
@@ -3106,7 +3106,7 @@ BuildKernel() {
         create_module_file_list "kernel" ../modules.list ../kernel${Variant:+-${Variant}}-modules.list 0 0
         create_module_file_list "internal" ../modules-internal.list ../kernel${Variant:+-${Variant}}-modules-internal.list 0 1
         create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
-%if 0%{!?fedora:1}
+%if 0%{!?fedora:1} && 0%{!?oreon:1}
         create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
 %endif
         gen_ksyms_prov() {
@@ -3135,7 +3135,7 @@ BuildKernel() {
         gen_ksyms_prov ../modules.list modules kernel ../kernel${Variant:+-${Variant}}-modules.list
         gen_ksyms_prov ../modules-extra.list modules-extra kernel ../kernel${Variant:+-${Variant}}-modules-extra.list
         gen_ksyms_prov ../modules-internal.list modules-internal ksym ../kernel${Variant:+-${Variant}}-modules-internal.list
-%if 0%{!?fedora:1}
+%if 0%{!?fedora:1} && 0%{!?oreon:1}
         gen_ksyms_prov ../modules-partner.list modules-partner ksym ../kernel${Variant:+-${Variant}}-modules-partner.list
 %endif
     fi # $DoModules -eq 1
@@ -4222,7 +4222,7 @@ fi\
 %{expand:%%kernel_modules_core_post %{?-v*}}\
 %{expand:%%kernel_modules_extra_post %{?-v*}}\
 %{expand:%%kernel_modules_internal_post %{?-v*}}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1} && 0%{!?oreon:1}\
 %{expand:%%kernel_modules_partner_post %{?-v*}}\
 %endif\
 %{expand:%%kernel_variant_posttrans %{?-v*:-v %{-v*}}}\
@@ -4681,7 +4681,7 @@ fi\
 %{expand:%%files %{?3:%{3}-}devel-matched}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-extra.list %{?3:%{3}-}modules-extra}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-internal.list %{?3:%{3}-}modules-internal}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1} && 0%{!?oreon:1}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-partner.list %{?3:%{3}-}modules-partner}\
 %endif\
 %if %{with_debuginfo}\
