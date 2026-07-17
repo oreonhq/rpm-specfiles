@@ -3575,6 +3575,14 @@ if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/vmlinuz" ]; then
 fi
 %endif
 
+_listpub="$RPM_BUILD_DIR/kernel-%{tarfile_release}"
+if [ -d "$_listpub" ]; then
+    for _lf in "$_listpub"/kernel*.list "$_listpub"/debuginfo*.list "$_listpub"/module-dirs.list; do
+        [ -f "$_lf" ] || continue
+        cp -p "$_lf" "$RPM_BUILD_DIR/"
+    done
+fi
+
 # Module signing (modsign)
 #
 # This must be run _after_ find-debuginfo.sh runs, otherwise that will strip
@@ -3634,7 +3642,17 @@ if [ "%{with_debuginfo}" = "1" ]; then \
   done; \
 fi \
 %{nil}
+%define __kernel_publish_file_lists \
+_listpub="$RPM_BUILD_DIR/kernel-%{tarfile_release}"; \
+if [ -d "$_listpub" ]; then \
+  for _lf in "$_listpub"/kernel*.list "$_listpub"/debuginfo*.list "$_listpub"/module-dirs.list; do \
+    [ -f "$_lf" ] || continue; \
+    cp -p "$_lf" "$RPM_BUILD_DIR/"; \
+  done; \
+fi \
+%{nil}
 %define __kernel_verify_core_manifest \
+%{__kernel_publish_file_lists}\
 if [ "%{with_stock_base}" = "1" ]; then \
   for _kf in vmlinuz .vmlinuz.hmac System.map symvers.%compext config; do \
     if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/$_kf" ]; then \
