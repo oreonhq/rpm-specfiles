@@ -908,13 +908,7 @@ BuildRequires: binutils-%{_build_arch}-linux-gnu, gcc-%{_build_arch}-linux-gnu
 %define cross_opts CROSS_COMPILE=%{_build_arch}-linux-gnu-
 %define __strip %{_build_arch}-linux-gnu-strip
 
-%if 0%{?fedora} && 0%{?fedora} <= 41 || (0%{?oreon} >= 11)
-# Work around find-debuginfo for cross builds.
-# find-debuginfo doesn't support any of CROSS options (RHEL-21797),
-# and since debugedit > 5.0-16.el10, or since commit
-#   dfe1f7ff30f4 ("find-debuginfo.sh: Exit with real exit status in parallel jobs")
-# it now aborts on failure and build fails.
-# debugedit-5.1-5 in F42 added support to override tools with target versions.
+%if 0%{?fedora} && 0%{?fedora} <= 41
 %undefine _include_gdb_index
 %endif
 %endif
@@ -3221,6 +3215,17 @@ BuildKernel() {
     fi
 %endif
 
+%if %{with_debuginfo}
+    %{log_msg "Archive variant source files for debuginfo"}
+    VariantSrcKeep="../variant-debug-src${Variant:++${Variant}}"
+    rm -rf "$VariantSrcKeep"
+    mkdir -p "$VariantSrcKeep"
+    find . -name '*.mod.c' -print0 | xargs -0 -r cp --parents -t "$VariantSrcKeep"
+    if [ -f kernel/debug/kdb/gen-kdb_cmds.c ]; then
+        cp --parents kernel/debug/kdb/gen-kdb_cmds.c "$VariantSrcKeep"
+    fi
+%endif
+
     if [ -n "${_kernel_rpm_tmp:-}" ] && [ -d "${_kernel_rpm_tmp}" ]; then
         rm -rf "${_kernel_rpm_tmp}"
     fi
@@ -3588,6 +3593,15 @@ find Documentation -type d | xargs chmod u+w
 # we have to delete them to avoid an error messages about unpackaged
 # files.
 # Delete the debuginfo for kernel-devel files
+%define __kernel_restore_variant_debug_src \
+if [ "%{with_debuginfo}" = "1" ]; then \
+  _kdst="$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}"; \
+  for _keep in "$RPM_BUILD_DIR/kernel-%{tarfile_release}/variant-debug-src"*; do \
+    [ -d "$_keep" ] || continue; \
+    (cd "$_keep" && cp -an . "$_kdst/"); \
+  done; \
+fi \
+%{nil}
 %define __remove_unwanted_dbginfo_install_post \
   if [ "%{with_selftests}" -ne "0" ]; then \
     rm -rf $RPM_BUILD_ROOT/usr/lib/debug/usr/libexec/ksamples; \
@@ -3614,6 +3628,7 @@ find Documentation -type d | xargs chmod u+w
 #
 %define __spec_install_post \
   %{?__override_target_tools_for_debugedit:%{__override_target_tools_for_debugedit}}\
+  %{__kernel_restore_variant_debug_src}\
   %{?__debug_package:%{__debug_install_post}}\
   %{__arch_install_post}\
   %{__os_install_post}\
