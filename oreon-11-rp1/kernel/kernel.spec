@@ -3217,13 +3217,15 @@ BuildKernel() {
 
 %if %{with_debuginfo}
     %{log_msg "Archive variant source files for debuginfo"}
-    VariantSrcKeep="../variant-debug-src${Variant:++${Variant}}"
-    rm -rf "$VariantSrcKeep"
-    mkdir -p "$VariantSrcKeep"
-    find . -name '*.mod.c' -print0 | xargs -0 -r cp --parents -t "$VariantSrcKeep"
-    if [ -f kernel/debug/kdb/gen-kdb_cmds.c ]; then
-        cp --parents kernel/debug/kdb/gen-kdb_cmds.c "$VariantSrcKeep"
+    VariantSrcArchive="$RPM_BUILD_DIR/kernel-%{tarfile_release}/variant-debug-src${Variant:++${Variant}}.tar"
+    _modc_list="$(mktemp)"
+    find . \( -name '*.mod.c' -o -path './kernel/debug/kdb/gen-kdb_cmds.c' \) > "$_modc_list"
+    if [ -s "$_modc_list" ]; then
+        tar -cf "$VariantSrcArchive" -T "$_modc_list"
+    else
+        rm -f "$VariantSrcArchive"
     fi
+    rm -f "$_modc_list"
 %endif
 
     if [ -n "${_kernel_rpm_tmp:-}" ] && [ -d "${_kernel_rpm_tmp}" ]; then
@@ -3544,6 +3546,27 @@ find Documentation -type d | xargs chmod u+w
 %{log_msg "end install docs"}
 %endif
 
+%if %{with_debuginfo}
+_kdst="$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}"
+for _vtar in "$RPM_BUILD_DIR/kernel-%{tarfile_release}"/variant-debug-src*.tar; do
+    [ -f "$_vtar" ] || continue
+    tar -xf "$_vtar" -C "$_kdst"
+done
+%endif
+
+%if %{with_stock_base}
+if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/vmlinuz" ]; then
+    echo "kernel.spec: stock vmlinuz missing from buildroot after %%build" >&2
+    exit 1
+fi
+%endif
+%if %{with_stock} && %{with_debug}
+if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/vmlinuz" ]; then
+    echo "kernel.spec: debug vmlinuz missing from buildroot after %%build" >&2
+    exit 1
+fi
+%endif
+
 # Module signing (modsign)
 #
 # This must be run _after_ find-debuginfo.sh runs, otherwise that will strip
@@ -3558,6 +3581,7 @@ find Documentation -type d | xargs chmod u+w
 #
 %define __modsign_install_post \
   if [ "%{signmodules}" -eq "1" ]; then \
+    cd "$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}" || exit 1; \
     %{log_msg "Signing kernel modules ..."} \
     modules_dirs="$(shopt -s nullglob; echo $RPM_BUILD_ROOT/lib/modules/%{KVERREL}*)" \
     for modules_dir in $modules_dirs; do \
@@ -3596,10 +3620,22 @@ find Documentation -type d | xargs chmod u+w
 %define __kernel_restore_variant_debug_src \
 if [ "%{with_debuginfo}" = "1" ]; then \
   _kdst="$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}"; \
-  for _keep in "$RPM_BUILD_DIR/kernel-%{tarfile_release}/variant-debug-src"*; do \
-    [ -d "$_keep" ] || continue; \
-    (cd "$_keep" && cp -an . "$_kdst/"); \
+  for _vtar in "$RPM_BUILD_DIR/kernel-%{tarfile_release}"/variant-debug-src*.tar; do \
+    [ -f "$_vtar" ] || continue; \
+    tar -xf "$_vtar" -C "$_kdst"; \
   done; \
+fi \
+%{nil}
+%define __kernel_verify_core_images \
+if [ "%{with_stock_base}" = "1" ]; then \
+  if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/vmlinuz" ]; then \
+    echo "kernel.spec: stock vmlinuz missing after find-debuginfo" >&2; exit 1; \
+  fi; \
+fi \
+if [ "%{with_stock}" = "1" ] && [ "%{with_debug}" = "1" ]; then \
+  if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/vmlinuz" ]; then \
+    echo "kernel.spec: debug vmlinuz missing after find-debuginfo" >&2; exit 1; \
+  fi; \
 fi \
 %{nil}
 %define __remove_unwanted_dbginfo_install_post \
@@ -3630,6 +3666,7 @@ fi \
   %{?__override_target_tools_for_debugedit:%{__override_target_tools_for_debugedit}}\
   %{__kernel_restore_variant_debug_src}\
   %{?__debug_package:%{__debug_install_post}}\
+  %{__kernel_verify_core_images}\
   %{__arch_install_post}\
   %{__os_install_post}\
   %{__remove_unwanted_dbginfo_install_post}\
@@ -4057,6 +4094,19 @@ find -type d -exec install -d %{buildroot}%{_libexecdir}/kselftests/vDSO/{} \;
 find -type f -executable -exec install -D -m755 {} %{buildroot}%{_libexecdir}/kselftests/vDSO/{} \;
 find -type f ! -executable -exec install -D -m644 {} %{buildroot}%{_libexecdir}/kselftests/vDSO/{} \;
 popd
+%endif
+
+%if %{with_stock_base}
+if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/vmlinuz" ]; then
+    echo "kernel.spec: stock vmlinuz missing from buildroot after %%install" >&2
+    exit 1
+fi
+%endif
+%if %{with_stock} && %{with_debug}
+if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/vmlinuz" ]; then
+    echo "kernel.spec: debug vmlinuz missing from buildroot after %%install" >&2
+    exit 1
+fi
 %endif
 
 ###
