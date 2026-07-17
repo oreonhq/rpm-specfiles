@@ -117,10 +117,12 @@
 # Use "%undefine _auto_set_build_flags" to disable"
 %_auto_set_build_flags 1
 %__spec_build_pre %{___build_pre} \
+  unset VERSION; \
   %{?_auto_set_build_flags:%{set_build_flags}} \
   %{?_generate_package_note_file}
 
 %__spec_check_pre %{___build_pre} \
+  unset VERSION; \
   %{?_auto_set_build_flags:%{set_build_flags}} \
   %{?_generate_package_note_file}
 
@@ -268,6 +270,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
     [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "${RPM_BUILD_ROOT}"\
     mkdir -p "`dirname "$RPM_BUILD_ROOT"`"\
     mkdir "$RPM_BUILD_ROOT"\
+    unset VERSION; \
     %{?_auto_set_build_flags:%{set_build_flags}}\
 %{nil}
 

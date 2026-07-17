@@ -495,6 +495,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 
+unset VERSION
 autoreconf -ivf
 
 %configure \
