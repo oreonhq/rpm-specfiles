@@ -3698,10 +3698,10 @@ done \
 %{nil}
 %define __kernel_save_boot_images \
 if [ "%{with_stock_base}" = "1" ]; then \
-  %{buildroot_save_unstripped} "lib/modules/%{KVERREL}/vmlinuz"; \
+  %buildroot_save_unstripped "lib/modules/%{KVERREL}/vmlinuz"; \
 fi \
 if [ "%{with_stock}" = "1" ] && [ "%{with_debug}" = "1" ]; then \
-  %{buildroot_save_unstripped} "lib/modules/%{KVERREL}+debug/vmlinuz"; \
+  %buildroot_save_unstripped "lib/modules/%{KVERREL}+debug/vmlinuz"; \
 fi \
 %{nil}
 %define __remove_unwanted_dbginfo_install_post \
