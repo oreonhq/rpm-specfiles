@@ -1928,6 +1928,16 @@ This package includes a version of the Linux kernel compiled with the
 PREEMPT_RT real-time preemption support, targeted for Automotive platforms
 %endif
 
+%if %{with_stock_base}
+%define variant_summary The Linux kernel
+%kernel_variant_package
+%description core
+The kernel package contains the Linux kernel (vmlinuz), the core of any
+Linux operating system.  The kernel handles the basic functions
+of the operating system: memory allocation, process allocation, device
+input and output, etc.
+%endif
+
 %if %{with_stock} && %{with_debug}
 %if !%{debugbuildsenabled}
 %kernel_variant_package -m debug
@@ -1943,18 +1953,6 @@ input and output, etc.
 This variant of the kernel has numerous debugging options enabled.
 It should only be installed when trying to gather additional information
 on kernel bugs, as some of these options impact performance noticably.
-%endif
-
-%if %{with_stock_base}
-# And finally the main -core package
-
-%define variant_summary The Linux kernel
-%kernel_variant_package
-%description core
-The kernel package contains the Linux kernel (vmlinuz), the core of any
-Linux operating system.  The kernel handles the basic functions
-of the operating system: memory allocation, process allocation, device
-input and output, etc.
 %endif
 
 %if %{with_stock} && %{with_debug} && %{with_efiuki}
@@ -2374,17 +2372,6 @@ InitBuildVars() {
     %{log_msg "InitBuildVars: USING ARCH=$Arch"}
 
     KCFLAGS="%{?kcflags}"
-    _glibc_roots="$RPM_BUILD_DIR $(dirname "$RPM_BUILD_DIR")"
-    for _glibc_root in $_glibc_roots; do
-        for _glibc_br in "$_glibc_root"/glibc-* "$_glibc_root"/*/glibc-*; do
-            [ -d "$_glibc_br" ] || continue
-            case "$KCFLAGS" in
-            *"${_glibc_br}=/usr"*) continue ;;
-            esac
-            KCFLAGS="${KCFLAGS} -fdebug-prefix-map=${_glibc_br}=/usr"
-            %{log_msg "InitBuildVars: vdso debug map ${_glibc_br} to /usr"}
-        done
-    done
 
     _kernel_rpm_tmp="$(pwd)/rpm-kbuild-tmp${Variant:+-${Variant}}"
     mkdir -p "${_kernel_rpm_tmp}"
@@ -3114,35 +3101,6 @@ BuildKernel() {
         create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
 %if 0%{!?fedora:1} && 0%{!?oreon:1}
         create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
-%endif
-        gen_ksyms_prov() {
-            local rel="$1" name="$2" pfx="$3" abs="$4"
-            local out="$RPM_BUILD_ROOT/lib/modules/$KernelVer/$name.ksyms.prov"
-            [ -f Module.symvers ] || touch Module.symvers
-            [ -f "$rel" ] || : > "$rel"
-            awk -F'\t' -v list="$rel" -v pfx="$pfx" '
-            BEGIN {
-                while ((getline l < list) > 0) {
-                    sub(/^kernel\//, "", l)
-                    sub(/^internal\//, "", l)
-                    sub(/^partner\//, "", l)
-                    sub(/\.(ko|ko\.gz|ko\.bz2|ko\.xz|ko\.zst)$/, "", l)
-                    if (l != "") want[l] = 1
-                }
-                close(list)
-            }
-            ($3 in want) && ($1 != "") && ($1 != "0x00000000") {
-                print pfx "(" $2 ") = " $1
-            }
-            ' Module.symvers > "$out"
-            echo "/lib/modules/$KernelVer/$name.ksyms.prov" >> "$abs"
-        }
-        gen_ksyms_prov ../modules-core.list modules-core kernel ../kernel${Variant:+-${Variant}}-modules-core.list
-        gen_ksyms_prov ../modules.list modules kernel ../kernel${Variant:+-${Variant}}-modules.list
-        gen_ksyms_prov ../modules-extra.list modules-extra kernel ../kernel${Variant:+-${Variant}}-modules-extra.list
-        gen_ksyms_prov ../modules-internal.list modules-internal ksym ../kernel${Variant:+-${Variant}}-modules-internal.list
-%if 0%{!?fedora:1} && 0%{!?oreon:1}
-        gen_ksyms_prov ../modules-partner.list modules-partner ksym ../kernel${Variant:+-${Variant}}-modules-partner.list
 %endif
     fi # $DoModules -eq 1
 
