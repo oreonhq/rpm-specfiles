@@ -201,6 +201,7 @@ Summary: The Linux kernel
 # libexec dir is not used by the linker, so the shared object there
 # should not be exported to RPM provides
 %global __provides_exclude_from ^%{_libexecdir}/kselftests
+%global __modalias_path ^$
 
 # The following build options are (mostly) enabled by default, but may become
 # enabled/disabled by later architecture-specific checks.
