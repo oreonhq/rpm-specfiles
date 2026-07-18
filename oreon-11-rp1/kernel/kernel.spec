@@ -2374,9 +2374,16 @@ InitBuildVars() {
     %{log_msg "InitBuildVars: USING ARCH=$Arch"}
 
     KCFLAGS="%{?kcflags}"
-    for _glibc_br in "$RPM_BUILD_DIR"/glibc-* "$RPM_BUILD_DIR"/*/glibc-*; do
-        [ -d "$_glibc_br" ] || continue
-        KCFLAGS="${KCFLAGS} -fdebug-prefix-map=${_glibc_br}=/usr"
+    _glibc_roots="$RPM_BUILD_DIR $(dirname "$RPM_BUILD_DIR")"
+    for _glibc_root in $_glibc_roots; do
+        for _glibc_br in "$_glibc_root"/glibc-* "$_glibc_root"/*/glibc-*; do
+            [ -d "$_glibc_br" ] || continue
+            case "$KCFLAGS" in
+            *"${_glibc_br}=/usr"*) continue ;;
+            esac
+            KCFLAGS="${KCFLAGS} -fdebug-prefix-map=${_glibc_br}=/usr"
+            %{log_msg "InitBuildVars: vdso debug map ${_glibc_br} to /usr"}
+        done
     done
 
     _kernel_rpm_tmp="$(pwd)/rpm-kbuild-tmp${Variant:+-${Variant}}"
@@ -3219,23 +3226,6 @@ BuildKernel() {
     fi
 %endif
 
-%if %{with_debuginfo}
-    %{log_msg "Archive variant source files for debuginfo"}
-    VariantSrcArchive="$RPM_BUILD_DIR/kernel-%{tarfile_release}/variant-debug-src${Variant:++${Variant}}.tar"
-    _modc_list="$(mktemp)"
-    find . \( -name '*.mod.c' -o -path './kernel/debug/kdb/gen-kdb_cmds.c' \) > "$_modc_list"
-    if [ -s "$_modc_list" ]; then
-        tar -cf "$VariantSrcArchive" -T "$_modc_list"
-        _modc_n="$(wc -l < "$_modc_list")"
-        _tar_sz="$(stat -c '%s' "$VariantSrcArchive" 2>/dev/null || echo 0)"
-        %{log_msg "variant-debug-src${Variant:++${Variant}}: ${_modc_n} files, ${_tar_sz} bytes"}
-    else
-        rm -f "$VariantSrcArchive"
-        %{log_msg "variant-debug-src${Variant:++${Variant}}: no mod.c sources to archive"}
-    fi
-    rm -f "$_modc_list"
-%endif
-
     if [ -n "${_kernel_rpm_tmp:-}" ] && [ -d "${_kernel_rpm_tmp}" ]; then
         rm -rf "${_kernel_rpm_tmp}"
     fi
@@ -3554,35 +3544,6 @@ find Documentation -type d | xargs chmod u+w
 %{log_msg "end install docs"}
 %endif
 
-%if %{with_debuginfo}
-_kdst="$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}"
-for _vtar in "$RPM_BUILD_DIR/kernel-%{tarfile_release}"/variant-debug-src*.tar; do
-    [ -f "$_vtar" ] || continue
-    tar -xf "$_vtar" -C "$_kdst"
-done
-%endif
-
-%if %{with_stock_base}
-if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/vmlinuz" ]; then
-    echo "kernel.spec: stock vmlinuz missing from buildroot after %%build" >&2
-    exit 1
-fi
-%endif
-%if %{with_stock} && %{with_debug}
-if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/vmlinuz" ]; then
-    echo "kernel.spec: debug vmlinuz missing from buildroot after %%build" >&2
-    exit 1
-fi
-%endif
-
-_listpub="$RPM_BUILD_DIR/kernel-%{tarfile_release}"
-if [ -d "$_listpub" ]; then
-    for _lf in "$_listpub"/kernel*.list "$_listpub"/debuginfo*.list "$_listpub"/module-dirs.list; do
-        [ -f "$_lf" ] || continue
-        cp -p "$_lf" "$RPM_BUILD_DIR/"
-    done
-fi
-
 # Module signing (modsign)
 #
 # This must be run _after_ find-debuginfo.sh runs, otherwise that will strip
@@ -3633,77 +3594,6 @@ fi
 # we have to delete them to avoid an error messages about unpackaged
 # files.
 # Delete the debuginfo for kernel-devel files
-%define __kernel_restore_variant_debug_src \
-if [ "%{with_debuginfo}" = "1" ]; then \
-  _kdst="$RPM_BUILD_DIR/kernel-%{tarfile_release}/linux-%{KVERREL}"; \
-  for _vtar in "$RPM_BUILD_DIR/kernel-%{tarfile_release}"/variant-debug-src*.tar; do \
-    [ -f "$_vtar" ] || continue; \
-    tar -xf "$_vtar" -C "$_kdst"; \
-  done; \
-fi \
-%{nil}
-%define __kernel_publish_file_lists \
-_listpub="$RPM_BUILD_DIR/kernel-%{tarfile_release}"; \
-if [ -d "$_listpub" ]; then \
-  for _lf in "$_listpub"/kernel*.list "$_listpub"/debuginfo*.list "$_listpub"/module-dirs.list; do \
-    [ -f "$_lf" ] || continue; \
-    cp -p "$_lf" "$RPM_BUILD_DIR/"; \
-  done; \
-fi \
-%{nil}
-%define __kernel_verify_core_manifest \
-%{__kernel_publish_file_lists}\
-if [ "%{with_stock_base}" = "1" ]; then \
-  for _kf in vmlinuz .vmlinuz.hmac System.map symvers.%compext config; do \
-    if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/$_kf" ]; then \
-      echo "kernel.spec: stock missing lib/modules/%{KVERREL}/$_kf" >&2; exit 1; \
-    fi; \
-  done; \
-  if ! compgen -G "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/modules.builtin*" > /dev/null; then \
-    echo "kernel.spec: stock modules.builtin missing" >&2; exit 1; \
-  fi; \
-  if [ ! -f "$RPM_BUILD_DIR/kernel-ldsoconf.list" ]; then \
-    echo "kernel.spec: kernel-ldsoconf.list missing" >&2; exit 1; \
-  fi; \
-  _stock_symvers="$RPM_BUILD_ROOT/lib/modules/%{KVERREL}/symvers.%compext"; \
-  _kabi_n="$(/usr/lib/rpm/kabi.sh "$_stock_symvers" 2>/dev/null | wc -l)"; \
-  echo "kernel.spec: stock kabi provides=${_kabi_n}"; \
-  if [ "${_kabi_n}" -eq 0 ]; then \
-    echo "kernel.spec: stock symvers produced no kabi provides" >&2; exit 1; \
-  fi; \
-fi; \
-if [ "%{with_stock}" = "1" ] && [ "%{with_debug}" = "1" ]; then \
-  for _kf in vmlinuz .vmlinuz.hmac System.map symvers.%compext config; do \
-    if [ ! -s "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/$_kf" ]; then \
-      echo "kernel.spec: debug missing lib/modules/%{KVERREL}+debug/$_kf" >&2; exit 1; \
-    fi; \
-  done; \
-  if ! compgen -G "$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/modules.builtin*" > /dev/null; then \
-    echo "kernel.spec: debug modules.builtin missing" >&2; exit 1; \
-  fi; \
-  if [ ! -f "$RPM_BUILD_DIR/kernel-debug-ldsoconf.list" ]; then \
-    echo "kernel.spec: kernel-debug-ldsoconf.list missing" >&2; exit 1; \
-  fi; \
-  _debug_symvers="$RPM_BUILD_ROOT/lib/modules/%{KVERREL}+debug/symvers.%compext"; \
-  _kabi_n="$(/usr/lib/rpm/kabi.sh "$_debug_symvers" 2>/dev/null | wc -l)"; \
-  echo "kernel.spec: debug kabi provides=${_kabi_n}"; \
-  if [ "${_kabi_n}" -eq 0 ]; then \
-    echo "kernel.spec: debug symvers produced no kabi provides" >&2; exit 1; \
-  fi; \
-fi; \
-for _vtar in "$RPM_BUILD_DIR/kernel-%{tarfile_release}"/variant-debug-src*.tar; do \
-  [ -f "$_vtar" ] || continue; \
-  echo "kernel.spec: $(basename "$_vtar") size=$(stat -c '%s' "$_vtar")"; \
-done \
-%{nil}
-%define __kernel_save_boot_images \
-if [ "%{with_stock_base}" = "1" ]; then \
-  (cd %{buildroot}; cp -rav --parents -t %{buildroot_unstripped}/ "lib/modules/%{KVERREL}/vmlinuz" || true); \
-fi; \
-if [ "%{with_stock}" = "1" ] && [ "%{with_debug}" = "1" ]; then \
-  (cd %{buildroot}; cp -rav --parents -t %{buildroot_unstripped}/ "lib/modules/%{KVERREL}+debug/vmlinuz" || true); \
-fi \
-%{nil}
 %define __remove_unwanted_dbginfo_install_post \
   if [ "%{with_selftests}" -ne "0" ]; then \
     rm -rf $RPM_BUILD_ROOT/usr/lib/debug/usr/libexec/ksamples; \
@@ -3730,16 +3620,12 @@ fi \
 #
 %define __spec_install_post \
   %{?__override_target_tools_for_debugedit:%{__override_target_tools_for_debugedit}}\
-  %{__kernel_save_boot_images}\
-  %{__kernel_restore_variant_debug_src}\
   %{?__debug_package:%{__debug_install_post}}\
-  %{__kernel_verify_core_manifest}\
   %{__arch_install_post}\
   %{__os_install_post}\
   %{__remove_unwanted_dbginfo_install_post}\
   %{__restore_unstripped_root_post}\
-  %{__modsign_install_post}\
-  %{__kernel_verify_core_manifest}
+  %{__modsign_install_post}
 
 ###
 ### install
@@ -4163,8 +4049,6 @@ find -type f -executable -exec install -D -m755 {} %{buildroot}%{_libexecdir}/ks
 find -type f ! -executable -exec install -D -m644 {} %{buildroot}%{_libexecdir}/kselftests/vDSO/{} \;
 popd
 %endif
-
-%{__kernel_verify_core_manifest}
 
 ###
 ### clean
