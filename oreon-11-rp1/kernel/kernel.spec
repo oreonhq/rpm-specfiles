@@ -1,4 +1,4 @@
-%global source0_hash be41c068e88f5242a19bccdbffbe077b18c47b45f627e2325504b4fab79dd1dc
+%global source0_hash 1c63922a119675d38e3ae0f8f6ee07f15c41a786ab9ed66563749bb8c9a08e2e
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -174,19 +174,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.1.3
-%define specversion 7.1.3
+%define specrpmversion 7.1.4
+%define specversion 7.1.4
 %define patchversion 7.1
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.1.3
+%define tarfile_release 7.1.4
 # This is needed to do merge window version magic
-%define patchlevel 0
+%define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.1.3
+%define kabiversion 7.1.4
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -1131,11 +1131,6 @@ Source2002: kvm_stat.logrotate
 # source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
 Source3001: kernel-local
-Source3003: kernel-71-config-snippet
-Source3004: kernel-71-config-aarch64-snippet
-Source3005: kernel-71-config-x86_64-snippet
-Source3006: kernel-71-config-riscv64-snippet
-Source3007: kernel-71-config-s390x-snippet
 %if %{patchlist_changelog}
 Source3002: Patchlist.changelog
 %endif
@@ -2166,16 +2161,6 @@ cp %{SOURCE3000} .
 # kernel-local - rename and copy for partial snippet config process
 cp %{SOURCE3001} partial-kernel-local-snip.config
 cp %{SOURCE3001} partial-kernel-local-debug-snip.config
-cp %{SOURCE3003} partial-kernel-71-config-snip.config
-cp %{SOURCE3003} partial-kernel-71-config-debug-snip.config
-cp %{SOURCE3005} partial-kernel-71-config-x86_64-snip.config
-cp %{SOURCE3005} partial-kernel-71-config-x86_64-debug-snip.config
-cp %{SOURCE3006} partial-kernel-71-config-riscv64-snip.config
-cp %{SOURCE3006} partial-kernel-71-config-riscv64-debug-snip.config
-cp %{SOURCE3007} partial-kernel-71-config-s390x-snip.config
-cp %{SOURCE3007} partial-kernel-71-config-s390x-debug-snip.config
-cp %{SOURCE3004} partial-kernel-71-config-aarch64-snip.config
-cp %{SOURCE3004} partial-kernel-71-config-aarch64-debug-snip.config
 FLAVOR=%{primary_target} SPECPACKAGE_NAME=%{name} SPECVERSION=%{specversion} SPECRPMVERSION=%{specrpmversion} ./generate_all_configs.sh %{debugbuildsenabled}
 
 # Collect custom defined config options
@@ -2190,7 +2175,7 @@ PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE72} %{SOURCE73}"
 %if %{with clang_lto}
 PARTIAL_CONFIGS="$PARTIAL_CONFIGS %{SOURCE74} %{SOURCE75} %{SOURCE76} %{SOURCE77}"
 %endif
-PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config partial-kernel-71-config-snip.config partial-kernel-71-config-debug-snip.config partial-kernel-71-config-x86_64-snip.config partial-kernel-71-config-x86_64-debug-snip.config partial-kernel-71-config-riscv64-snip.config partial-kernel-71-config-riscv64-debug-snip.config partial-kernel-71-config-s390x-snip.config partial-kernel-71-config-s390x-debug-snip.config partial-kernel-71-config-aarch64-snip.config partial-kernel-71-config-aarch64-debug-snip.config"
+PARTIAL_CONFIGS="$PARTIAL_CONFIGS partial-kernel-local-snip.config partial-kernel-local-debug-snip.config"
 
 GetArch()
 {
@@ -2927,7 +2912,7 @@ BuildKernel() {
 
 	rm -f $KernelUnifiedInitrd
 
-	KernelAddonsDirOut="$KernelUnifiedImage.extra.d"
+	KernelAddonsDirOut="$KernelUnifiedImage.extras/"
 	mkdir -p $KernelAddonsDirOut
 	python3 %{SOURCE151} %{SOURCE152} $KernelAddonsDirOut virt %{primary_target} %{_target_cpu} @uki-addons.sbat
 
@@ -4680,8 +4665,8 @@ fi\
 %attr(0644, root, root) /lib/modules/%{KVERREL}%{?3:+%{3}}/.%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi.hmac\
 %ghost /%{image_install_path}/efi/EFI/Linux/%{?-k:%{-k*}}%{!?-k:*}-%{KVERREL}%{?3:+%{3}}.efi\
 %{expand:%%files %{?3:%{3}-}uki-virt-addons}\
-%dir /lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi.extra.d/ \
-/lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi.extra.d/*.addon.efi\
+%dir /lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi.extras/ \
+/lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-virt.efi.extras/*.addon.efi\
 %endif\
 %if %{with_dtbloader} && ("%{?3}" == "" || "%{3}" == "debug")\
 %{expand:%%files %{?3:%{3}-}uki-dtbloader}\
