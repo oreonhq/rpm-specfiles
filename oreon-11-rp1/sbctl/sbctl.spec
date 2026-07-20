@@ -6,7 +6,7 @@
 
 Name:           sbctl
 Version:        0.18
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Secure Boot key manager
 
 License:        MIT
@@ -15,6 +15,7 @@ Source0:        https://github.com/Foxboron/sbctl/releases/download/%{version}/s
 Source1:        https://github.com/Foxboron/sbctl/releases/download/%{version}/sbctl-%{version}.tar.gz.sig
 Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x%{fingerprint}#/%{fingerprint}.gpg
 Source3:        sbctl-%{version}-vendor.tar.gz
+Source4:        91-sbctl.install
 
 ExclusiveArch:  %{golang_arches}
 
@@ -61,6 +62,7 @@ export GOFLAGS="${GOFLAGS:+$GOFLAGS }-mod=vendor"
 %make_install PREFIX=%{_prefix}
 
 rm %{buildroot}%{_prefix}/lib/kernel/postinst.d/91-sbctl.install
+install -Dpm 0755 %{SOURCE4} %{buildroot}%{_prefix}/lib/kernel/install.d/91-sbctl.install
 
 
 %transfiletriggerin -P 1 -- /boot /efi /usr/lib /usr/libexec
