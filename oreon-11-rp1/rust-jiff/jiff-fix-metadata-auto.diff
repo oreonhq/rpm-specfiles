@@ -1,0 +1,75 @@
+--- jiff-0.2.32/Cargo.toml	2006-07-24T01:21:28+00:00
++++ jiff-0.2.32/Cargo.toml	2026-07-09T11:10:45.578092+00:00
+@@ -69,7 +69,6 @@
+ [features]
+ alloc = [
+     "serde_core?/alloc",
+-    "portable-atomic-util/alloc",
+     "defmt?/alloc",
+ ]
+ default = [
+@@ -83,8 +82,6 @@
+ ]
+ defmt = ["dep:defmt"]
+ js = [
+-    "dep:wasm-bindgen",
+-    "dep:js-sys",
+ ]
+ logging = ["dep:log"]
+ perf-inline = []
+@@ -102,14 +99,12 @@
+ tz-fat = ["jiff-static?/tz-fat"]
+ tz-system = [
+     "std",
+-    "dep:windows-link",
+ ]
+ tzdb-bundle-always = [
+     "dep:jiff-tzdb",
+     "alloc",
+ ]
+ tzdb-bundle-platform = [
+-    "dep:jiff-tzdb-platform",
+     "alloc",
+ ]
+ tzdb-concatenated = ["std"]
+@@ -201,35 +196,11 @@
+ [dev-dependencies.walkdir]
+ version = "2.5.0"
+ 
+-[target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.dependencies.js-sys]
+-version = "0.3.50"
+-optional = true
+-
+-[target.'cfg(all(any(target_arch = "wasm32", target_arch = "wasm64"), target_os = "unknown"))'.dependencies.wasm-bindgen]
+-version = "0.2.70"
+-optional = true
+-
+ [target."cfg(any())".dependencies.jiff-static]
+ version = "=0.2.32"
+ 
+-[target.'cfg(any(windows, target_family = "wasm"))'.dependencies.jiff-tzdb-platform]
+-version = "0.1.3"
+-optional = true
+-
+ [target.'cfg(not(target_family = "wasm"))'.dev-dependencies.hifitime]
+ version = "4.3.0"
+-
+-[target.'cfg(not(target_has_atomic = "ptr"))'.dependencies.portable-atomic]
+-version = "1.10.0"
+-default-features = false
+-
+-[target.'cfg(not(target_has_atomic = "ptr"))'.dependencies.portable-atomic-util]
+-version = "0.2.4"
+-default-features = false
+-
+-[target."cfg(windows)".dependencies.windows-link]
+-version = "0.2.1"
+-optional = true
+ 
+ [lints.rust.unexpected_cfgs]
+ level = "allow"
+@@ -239,3 +210,4 @@
+ [profile.testrelease]
+ debug-assertions = false
+ inherits = "test"
++

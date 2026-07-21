@@ -1,0 +1,27 @@
+--- crossbeam-epoch-0.9.20/Cargo.toml	2006-07-24T01:21:28+00:00
++++ crossbeam-epoch-0.9.20/Cargo.toml	2026-07-06T19:53:47.080296+00:00
+@@ -41,7 +41,6 @@
+ alloc = []
+ default = ["std"]
+ loom = [
+-    "loom-crate",
+     "crossbeam-utils/loom",
+ ]
+ nightly = ["crossbeam-utils/nightly"]
+@@ -81,11 +80,6 @@
+ [dev-dependencies.rand]
+ version = "0.8"
+ 
+-[target."cfg(crossbeam_loom)".dependencies.loom-crate]
+-version = "0.7.1"
+-optional = true
+-package = "loom"
+-
+ [lints.clippy.declare_interior_mutable_const]
+ level = "allow"
+ priority = 1
+@@ -101,3 +95,4 @@
+     "cfg(crossbeam_loom)",
+     "cfg(crossbeam_sanitize)",
+ ]
++

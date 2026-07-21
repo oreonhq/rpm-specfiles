@@ -1,0 +1,60 @@
+--- jiff-0.2.32/Cargo.toml	2006-07-24T01:21:28+00:00
++++ jiff-0.2.32/Cargo.toml	2026-07-09T11:11:26.956614+00:00
+@@ -69,7 +69,6 @@
+ [features]
+ alloc = [
+     "serde_core?/alloc",
+-    "defmt?/alloc",
+ ]
+ default = [
+     "std",
+@@ -80,29 +79,17 @@
+     "tzdb-concatenated",
+     "perf-inline",
+ ]
+-defmt = ["dep:defmt"]
+-js = [
+-]
+ logging = ["dep:log"]
+ perf-inline = []
+ serde = ["dep:serde_core"]
+-static = [
+-    "static-tz",
+-    "jiff-static?/tzdb",
+-]
+-static-tz = ["dep:jiff-static"]
+ std = [
+     "alloc",
+     "log?/std",
+     "serde_core?/std",
+ ]
+-tz-fat = ["jiff-static?/tz-fat"]
++tz-fat = []
+ tz-system = [
+     "std",
+-]
+-tzdb-bundle-always = [
+-    "dep:jiff-tzdb",
+-    "alloc",
+ ]
+ tzdb-bundle-platform = [
+     "alloc",
+@@ -117,18 +104,6 @@
+ [[test]]
+ name = "integration"
+ path = "tests/lib.rs"
+-
+-[dependencies.defmt]
+-version = "1.0.0"
+-optional = true
+-
+-[dependencies.jiff-static]
+-version = "0.2"
+-optional = true
+-
+-[dependencies.jiff-tzdb]
+-version = "0.1.8"
+-optional = true
+ 
+ [dependencies.log]
+ version = "0.4.21"
