@@ -1,0 +1,152 @@
+.TH TOKEI "1" "November 2025" "" "User Commands"
+.SH NAME
+.B tokei
+\(en Count your code, quickly
+.SH SYNOPSIS
+.B tokei
+.RI [ OPTIONS ]
+.RI [ input ]...
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.RI [ input ]...
+The path(s) to the file or directory to be counted.
+(default current directory)
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-c\fR,\ \fB\-\-columns\fR\ <\fIcolumns\fR>
+Sets a strict column width of the output,
+only available for terminal output.
+.TP
+.B \-e\fR,\ \fB\-\-exclude\fR\ <\fIexclude\fR>
+Ignore all files & directories matching the pattern.
+.TP
+.B \-f\fR,\ \fB\-\-files
+Will print out statistics on individual files.
+.TP
+.B \-i\fR,\ \fB\-\-input\fR\ <\fIfile_input\fR>
+Gives statistics from a previous tokei run.
+Can be given a file path, or
+.RB \(lq stdin \(rq
+to read from stdin.
+.TP
+.B \-\-hidden
+Count hidden files.
+.TP
+.B \-l\fR,\ \fB\-\-languages
+Prints out supported languages and their extensions.
+.TP
+.B \-\-no\-ignore
+Don\(cqt respect
+ignore files
+.RB ( .gitignore ,
+.BR .ignore ,
+etc.).
+This implies
+.BR \-\-no\-ignore\-parent ,
+.BR \-\-no\-ignore\-dot ,
+and
+.BR \-\-no\-ignore\-vcs .
+.TP
+.B \-\-no\-ignore\-parent
+Don\(cqt respect
+ignore files
+.RB ( .gitignore ,
+.BR .ignore ,
+etc.) in parent directories.
+.TP
+.B \-\-no\-ignore\-dot
+Don\(cqt respect
+.B .ignore
+and
+.B .tokeignore
+files, including those in parent directories.
+.TP
+.B \-\-no\-ignore\-vcs
+Don\(cqt respect
+VCS ignore files
+.RB ( .gitignore ,
+.BR .hgignore ,
+etc.) including those in parent directories.
+.TP
+.B \-o\fR,\ \fB\-\-output\fR\ <\fIoutput\fR>
+Outputs Tokei in a specific format.
+.\" Compile with additional features for more format support.
+.TP
+.B \-\-streaming\fR\ <\fIstreaming\fR>
+Prints the
+.BI ( language , 
+.IB path ,
+.IB lines ,
+.IB blanks ,
+.IB code ,
+.IB comments )
+records as simple lines or as Json for batch processing
+[possible values:
+.BR simple ,
+.BR json ]
+.TP
+.B \-s\fR,\ \fB\-\-sort\fR\ <\fIsort\fR>
+Sort languages based on column
+[possible values:
+.BR files ,
+.BR lines ,
+.BR blanks ,
+.BR code ,
+.BR comments ]
+.TP
+.B \-r\fR,\ \fB\-\-rsort\fR\ <\fIrsort\fR>
+Reverse sort languages based on column
+[possible values:
+.BR files ,
+.BR lines ,
+.BR blanks ,
+.BR code ,
+.BR comments ]
+.TP
+.B \-t\fR,\ \fB\-\-types\fR\ <\fItypes\fR>
+Filters output by language type,
+separated by a comma.
+i.e. \fB\-t=Rust,Markdown
+.TP
+.B \-C\fR,\ \fB\-\-compact
+Do not print statistics about embedded languages.
+.TP
+.B \-n\fR,\ \fB\-\-num\-format\fR\ <\fInum_format_style\fR>
+Format of printed numbers,
+i.e.,
+.B plain
+.RB ( 1234 ,
+default),
+.B commas
+.RB ( 1,234 ),
+.B dots
+.RB ( 1.234 ),
+or
+.B underscores
+.RB ( 1_234 ).
+Cannot be used with
+.BR \-\-output .
+[possible values:
+.BR commas ,
+.BR dots ,
+.BR plain ,
+.BR underscores ]
+.TP
+.B \-v\fR,\ \fB\-\-verbose\fR...\:
+Set log output level:
+.RS +7n
+.IP \fB1\fR: 3
+to show unknown file extensions,
+.IP \fB2\fR: 3
+reserved for future debugging,
+.IP \fB3\fR: 3
+enable file level trace.
+Not recommended on multiple files
+.RE
+.TP
+.B \-h\fR,\ \fB\-\-help
+Print help
+.TP
+.B \-V\fR,\ \fB\-\-version
+Print version

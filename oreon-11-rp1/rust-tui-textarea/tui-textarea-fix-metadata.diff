@@ -1,0 +1,99 @@
+--- tui-textarea-0.7.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tui-textarea-0.7.0/Cargo.toml	2026-03-15T17:43:46.317767+00:00
+@@ -51,7 +51,6 @@
+ features = [
+     "search",
+     "crossterm",
+-    "termwiz",
+     "termion",
+     "serde",
+ ]
+@@ -102,34 +101,6 @@
+ required-features = ["crossterm"]
+ 
+ [[example]]
+-name = "termion"
+-path = "examples/termion.rs"
+-required-features = ["termion"]
+-
+-[[example]]
+-name = "termwiz"
+-path = "examples/termwiz.rs"
+-required-features = ["termwiz"]
+-
+-[[example]]
+-name = "tuirs_editor"
+-path = "examples/tuirs_editor.rs"
+-required-features = [
+-    "tuirs-crossterm",
+-    "search",
+-]
+-
+-[[example]]
+-name = "tuirs_minimal"
+-path = "examples/tuirs_minimal.rs"
+-required-features = ["tuirs-crossterm"]
+-
+-[[example]]
+-name = "tuirs_termion"
+-path = "examples/tuirs_termion.rs"
+-required-features = ["tuirs-termion"]
+-
+-[[example]]
+ name = "variable"
+ path = "examples/variable.rs"
+ required-features = ["crossterm"]
+@@ -173,11 +144,6 @@
+ optional = true
+ package = "crossterm"
+ 
+-[dependencies.crossterm-025]
+-version = "0.25"
+-optional = true
+-package = "crossterm"
+-
+ [dependencies.ratatui]
+ version = "0.29.0"
+ optional = true
+@@ -195,20 +161,6 @@
+ [dependencies.termion]
+ version = "4.0"
+ optional = true
+-
+-[dependencies.termion-15]
+-version = "1.5"
+-optional = true
+-package = "termion"
+-
+-[dependencies.termwiz]
+-version = "0.22.0"
+-optional = true
+-
+-[dependencies.tui]
+-version = "0.19"
+-optional = true
+-default-features = false
+ 
+ [dependencies.unicode-width]
+ version = "0.2.0"
+@@ -233,20 +185,3 @@
+     "dep:termion",
+     "ratatui/termion",
+ ]
+-termwiz = [
+-    "ratatui",
+-    "dep:termwiz",
+-    "ratatui/termwiz",
+-]
+-tuirs = ["dep:tui"]
+-tuirs-crossterm = [
+-    "tuirs",
+-    "dep:crossterm-025",
+-    "tui/crossterm",
+-]
+-tuirs-no-backend = ["tuirs"]
+-tuirs-termion = [
+-    "tuirs",
+-    "dep:termion-15",
+-    "tui/termion",
+-]

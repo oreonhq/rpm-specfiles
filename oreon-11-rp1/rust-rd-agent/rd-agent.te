@@ -1,0 +1,23 @@
+policy_module(rd-agent, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type resctl_demo_t;
+type resctl_demo_exec_t;
+init_daemon_domain(resctl_demo_t, resctl_demo_exec_t);
+
+type var_lib_resctl_demo_bin_t;
+files_type(var_lib_resctl_demo_bin_t);
+
+########################################
+#
+# rd-agent local policy
+#
+
+allow resctl_demo_exec_t var_lib_resctl_demo_bin_t:file execute;
+
+manage_dirs_pattern(resctl_demo_exec_t, var_lib_resctl_demo_bin_t, var_lib_resctl_demo_bin_t);
+manage_files_pattern(resctl_demo_exec_t, var_lib_resctl_demo_bin_t, var_lib_resctl_demo_bin_t);

@@ -1,0 +1,12 @@
+--- glib-0.22.3/Cargo.toml	2006-07-24T01:21:28+00:00
++++ glib-0.22.3/Cargo.toml	2026-03-16T20:37:03.584208+00:00
+@@ -252,9 +252,6 @@
+     "const_new",
+ ]
+ 
+-[dev-dependencies.criterion]
+-version = "0.8.2"
+-
+ [dev-dependencies.gir-format-check]
+ version = "^0.1"
+ 

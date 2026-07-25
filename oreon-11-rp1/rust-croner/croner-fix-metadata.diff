@@ -1,0 +1,14 @@
+--- croner-3.0.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ croner-3.0.1/Cargo.toml	2025-11-27T21:45:05.896996+00:00
+@@ -80,10 +80,7 @@
+ features = ["derive"]
+ 
+ [dev-dependencies.chrono-tz]
+-version = "0.10.4"
+-
+-[dev-dependencies.criterion]
+-version = "0.7.0"
++version = ">=0.10,<0.13"
+ 
+ [dev-dependencies.rstest]
+ version = "0.26.1"

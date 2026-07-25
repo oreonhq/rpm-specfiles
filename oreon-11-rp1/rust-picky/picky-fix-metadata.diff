@@ -1,0 +1,11 @@
+--- picky-7.0.0-rc.15/Cargo.toml	1970-01-01T00:00:01+00:00
++++ picky-7.0.0-rc.15/Cargo.toml	2025-08-07T11:42:10.349894+00:00
+@@ -311,7 +311,7 @@
+ version = "0.17"
+ 
+ [dev-dependencies.rstest]
+-version = "0.25"
++version = "0.26"
+ 
+ [dev-dependencies.tempfile]
+ version = "3.13"

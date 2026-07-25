@@ -1,0 +1,20 @@
+--- papergrid-0.12.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ papergrid-0.12.0/Cargo.toml	2024-11-15T04:50:14.848793+00:00
+@@ -85,10 +85,16 @@
+ version = "1.0"
+ 
+ [dependencies.unicode-width]
+-version = "=0.1.11"
++version = "0.1.11"
+ 
+ [dev-dependencies.owo-colors]
+ version = "3.4.0"
++
++[dev-dependencies.testing_table]
++version = "0.1"
++features = [
++    "ansi",
++]
+ 
+ [features]
+ ansi = [

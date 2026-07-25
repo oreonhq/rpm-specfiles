@@ -1,0 +1,12 @@
+MIT OR Apache-2.0: rust-varlink_parser 4.2.0
+MIT or ASL 2.0: rust-chainerror 0.7.0
+MIT or ASL 2.0: rust-getopts 0.2.21
+MIT or ASL 2.0: rust-proc-macro2 1.0.40
+MIT or ASL 2.0: rust-quote 1.0.20
+MIT or ASL 2.0: rust-syn 1.0.98
+MIT or ASL 2.0: rust-unicode-ident 1.0.1
+MIT or ASL 2.0: rust-unicode-width 0.1.9
+MIT: rust-ansi_term 0.12.1
+MIT: rust-peg 0.6.3
+MIT: rust-peg-macros 0.6.3
+MIT: rust-peg-runtime 0.6.3

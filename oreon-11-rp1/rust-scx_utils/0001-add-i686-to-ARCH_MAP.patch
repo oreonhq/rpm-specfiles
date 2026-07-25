@@ -1,0 +1,24 @@
+From a705fba5cc035752ca33f7ec1f80005bfe595636 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 23 Jan 2026 20:55:47 +0100
+Subject: [PATCH] add i686 to ARCH_MAP
+
+---
+ src/bpf_builder.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/bpf_builder.rs b/src/bpf_builder.rs
+index 0637924..dca0282 100644
+--- a/src/bpf_builder.rs
++++ b/src/bpf_builder.rs
+@@ -22,6 +22,7 @@ lazy_static::lazy_static! {
+     // tools/lib/bpf/bpf_tracing.h in the kernel tree.
+     static ref ARCH_MAP: HashMap<&'static str, &'static str> = vec![
+     ("x86", "x86"),
++    ("i686", "x86"),
+     ("x86_64", "x86"),
+     ("s390", "s390"),
+     ("s390x", "s390"),
+-- 
+2.52.0
+

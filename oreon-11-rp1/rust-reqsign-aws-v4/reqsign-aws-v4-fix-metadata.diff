@@ -1,0 +1,22 @@
+--- reqsign-aws-v4-3.0.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ reqsign-aws-v4-3.0.0/Cargo.toml	2026-03-24T13:46:10.795222+00:00
+@@ -92,19 +92,6 @@
+ [dependencies.sha1]
+ version = "0.10"
+ 
+-[dev-dependencies.aws-credential-types]
+-version = "1.1.8"
+-
+-[dev-dependencies.aws-sigv4]
+-version = "1.2.0"
+-
+-[dev-dependencies.criterion]
+-version = "0.8.1"
+-features = [
+-    "async_tokio",
+-    "html_reports",
+-]
+-
+ [dev-dependencies.dotenvy]
+ version = "0.15"
+ 

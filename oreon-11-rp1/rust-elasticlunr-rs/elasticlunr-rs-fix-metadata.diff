@@ -1,0 +1,71 @@
+--- elasticlunr-rs-3.0.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ elasticlunr-rs-3.0.3/Cargo.toml	2025-03-17T15:58:10.363174+00:00
+@@ -53,10 +53,6 @@
+ fr = ["rust-stemmers"]
+ hu = ["rust-stemmers"]
+ it = ["rust-stemmers"]
+-ja = [
+-    "lindera",
+-    "lindera-core",
+-]
+ ko = []
+ languages = [
+     "ar",
+@@ -68,7 +64,6 @@
+     "fr",
+     "hu",
+     "it",
+-    "ja",
+     "ko",
+     "no",
+     "pt",
+@@ -76,7 +71,6 @@
+     "ru",
+     "sv",
+     "tr",
+-    "zh",
+ ]
+ no = ["rust-stemmers"]
+ pt = ["rust-stemmers"]
+@@ -84,7 +78,6 @@
+ ru = ["rust-stemmers"]
+ sv = ["rust-stemmers"]
+ tr = ["rust-stemmers"]
+-zh = ["jieba-rs"]
+ 
+ [lib]
+ name = "elasticlunr"
+@@ -102,24 +95,6 @@
+ name = "test-pipeline"
+ path = "tests/test-pipeline.rs"
+ 
+-[[bench]]
+-name = "bench"
+-path = "benches/bench.rs"
+-harness = false
+-
+-[dependencies.jieba-rs]
+-version = "0.6"
+-optional = true
+-
+-[dependencies.lindera]
+-version = "0.14"
+-features = ["ipadic"]
+-optional = true
+-
+-[dependencies.lindera-core]
+-version = "0.13.5"
+-optional = true
+-
+ [dependencies.regex]
+ version = "1"
+ 
+@@ -136,8 +111,5 @@
+ [dependencies.serde_json]
+ version = "1"
+ 
+-[dev-dependencies.criterion]
+-version = ">=0.4.0,<0.6.0"
+-
+ [dev-dependencies.maplit]
+ version = "1"

@@ -1,0 +1,23 @@
+--- glib-0.20.12/Cargo.toml	1970-01-01T00:00:01+00:00
++++ glib-0.20.12/Cargo.toml	2025-07-08T16:03:21.693910+00:00
+@@ -155,10 +155,6 @@
+ path = "tests/print.rs"
+ 
+ [[test]]
+-name = "regex_compiletest"
+-path = "tests/regex_compiletest.rs"
+-
+-[[test]]
+ name = "structured_log"
+ path = "tests/structured_log.rs"
+ 
+@@ -232,9 +228,6 @@
+     "const_new",
+ ]
+ 
+-[dev-dependencies.criterion]
+-version = "0.5.1"
+-
+ [dev-dependencies.gir-format-check]
+ version = "^0.1"
+ 

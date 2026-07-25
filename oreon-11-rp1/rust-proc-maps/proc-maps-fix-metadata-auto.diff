@@ -1,0 +1,33 @@
+--- proc-maps-0.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ proc-maps-0.4.0/Cargo.toml	2025-02-14T11:18:13.784910+00:00
+@@ -28,29 +28,5 @@
+ 
+ [features]
+ default = ["generate-bindings"]
+-generate-bindings = ["bindgen"]
++generate-bindings = []
+ 
+-[target."cfg(target_os=\"freebsd\")".build-dependencies.bindgen]
+-version = "0.70.1"
+-optional = true
+-
+-[target."cfg(target_os=\"macos\")".dependencies.anyhow]
+-version = "1.0.40"
+-
+-[target."cfg(target_os=\"macos\")".dependencies.libproc]
+-version = "0.14.2"
+-
+-[target."cfg(target_os=\"macos\")".dependencies.mach2]
+-version = "0.4.0"
+-
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = [
+-    "tlhelp32",
+-    "processthreadsapi",
+-    "handleapi",
+-    "impl-default",
+-    "dbghelp",
+-    "memoryapi",
+-    "sysinfoapi",
+-]

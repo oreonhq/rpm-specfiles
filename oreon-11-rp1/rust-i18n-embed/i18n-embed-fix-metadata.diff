@@ -1,0 +1,25 @@
+--- i18n-embed-0.16.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ i18n-embed-0.16.0/Cargo.toml	2025-12-30T15:34:23.356002+00:00
+@@ -69,7 +69,6 @@
+     "i18n-embed-impl",
+     "i18n-embed-impl/gettext-system",
+ ]
+-web-sys-requester = ["web-sys"]
+ 
+ [lib]
+ name = "i18n_embed"
+@@ -139,14 +138,6 @@
+ version = "2.4"
+ optional = true
+ 
+-[dependencies.web-sys]
+-version = "0.3"
+-features = [
+-    "Window",
+-    "Navigator",
+-]
+-optional = true
+-
+ [dev-dependencies.doc-comment]
+ version = "0.3"
+ 

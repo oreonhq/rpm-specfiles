@@ -1,0 +1,11 @@
+--- x11rb-0.13.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ x11rb-0.13.2/Cargo.toml	2025-11-10T00:58:55.892165+00:00
+@@ -231,7 +231,7 @@
+ optional = true
+ 
+ [dependencies.gethostname]
+-version = "1.0"
++version = ">=0.4.3,<2.0"
+ 
+ [dependencies.libc]
+ version = "0.2"

@@ -1,0 +1,36 @@
+--- gitui-0.28.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ gitui-0.28.0/Cargo.toml	2026-02-12T23:23:13.565146+00:00
+@@ -48,7 +48,6 @@
+     "ghemoji",
+     "regex-fancy",
+     "trace-libgit",
+-    "vendor-openssl",
+ ]
+ ghemoji = ["gh-emoji"]
+ regex-fancy = [
+@@ -61,7 +60,6 @@
+ ]
+ timing = ["scopetime/enabled"]
+ trace-libgit = ["asyncgit/trace-libgit"]
+-vendor-openssl = ["asyncgit/vendor-openssl"]
+ 
+ [[bin]]
+ name = "gitui"
+@@ -181,7 +179,7 @@
+ default-features = false
+ 
+ [dependencies.struct-patch]
+-version = "0.10"
++version = "0.9"
+ 
+ [dependencies.syntect]
+ version = "5.3"
+@@ -198,7 +196,7 @@
+ version = "0.7"
+ 
+ [dependencies.two-face]
+-version = "0.4.4"
++version = "0.5.1"
+ default-features = false
+ 
+ [dependencies.unicode-segmentation]

@@ -1,0 +1,47 @@
+--- matugen-3.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ matugen-3.1.0/Cargo.toml	2026-02-12T15:26:35.239662+00:00
+@@ -29,14 +29,12 @@
+ description = "A material you color generation tool with templates"
+ readme = "README.md"
+ categories = ["command-line-utilities"]
+-license = "GPL-2.0"
++license = "GPL-2.0-only"
+ repository = "https://github.com/InioX/matugen"
+ 
+ [features]
+ default = ["dump-json"]
+ dump-json = ["dep:serde_json"]
+-update-informer = ["dep:update-informer"]
+-web-image = ["dep:reqwest"]
+ 
+ [[bin]]
+ name = "matugen"
+@@ -108,15 +106,6 @@
+ version = "0.10.0"
+ default-features = false
+ 
+-[dependencies.reqwest]
+-version = "0.12.5"
+-features = [
+-    "blocking",
+-    "rustls-tls",
+-]
+-optional = true
+-default-features = false
+-
+ [dependencies.resolve-path]
+ version = "0.1.0"
+ 
+@@ -145,12 +134,3 @@
+     "display",
+ ]
+ default-features = false
+-
+-[dependencies.update-informer]
+-version = "1.1.0"
+-optional = true
+-
+-[dev-dependencies.criterion]
+-version = "0.5"
+-features = ["html_reports"]
+-

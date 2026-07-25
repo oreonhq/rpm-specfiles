@@ -1,0 +1,12 @@
+--- tokio-1.53.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tokio-1.53.1/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -968,9 +968,6 @@
+ ]
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.61"
+-optional = true
+ 
+ [target."cfg(windows)".dev-dependencies.windows-sys]
+ version = "0.61"

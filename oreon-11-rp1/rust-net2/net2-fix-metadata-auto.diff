@@ -1,0 +1,15 @@
+--- net2-0.2.39/Cargo.toml	1970-01-01T00:00:01+00:00
++++ net2-0.2.39/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -40,12 +40,3 @@
+ [target."cfg(any(unix, target_os=\"wasi\"))".dependencies.libc]
+ version = "0.2.139"
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = [
+-    "handleapi",
+-    "winsock2",
+-    "ws2def",
+-    "ws2ipdef",
+-    "ws2tcpip",
+-]

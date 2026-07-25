@@ -1,0 +1,55 @@
+--- sysinfo-0.30.13/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sysinfo-0.30.13/Cargo.toml	2025-02-24T17:56:54.237389+00:00
+@@ -116,52 +116,9 @@
+ [target.'cfg(all(target_os = "linux", not(target_os = "android")))'.dev-dependencies.tempfile]
+ version = "3.9"
+ 
+-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.core-foundation-sys]
+-version = "0.8"
+-
+ [target.'cfg(any(windows, target_os = "linux", target_os = "android"))'.dependencies.once_cell]
+ version = "1.18"
+ 
+ [target.'cfg(not(any(target_os = "unknown", target_arch = "wasm32")))'.dependencies.libc]
+ version = "^0.2.153"
+ 
+-[target."cfg(windows)".dependencies.ntapi]
+-version = "0.4"
+-
+-[target."cfg(windows)".dependencies.windows]
+-version = "0.52"
+-features = [
+-    "Wdk_System_SystemInformation",
+-    "Wdk_System_SystemServices",
+-    "Wdk_System_Threading",
+-    "Win32_Foundation",
+-    "Win32_NetworkManagement_IpHelper",
+-    "Win32_NetworkManagement_NetManagement",
+-    "Win32_NetworkManagement_Ndis",
+-    "Win32_Networking_WinSock",
+-    "Win32_Security",
+-    "Win32_Security_Authentication_Identity",
+-    "Win32_Security_Authorization",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Com",
+-    "Win32_System_Diagnostics_Debug",
+-    "Win32_System_IO",
+-    "Win32_System_Ioctl",
+-    "Win32_System_LibraryLoader",
+-    "Win32_System_Kernel",
+-    "Win32_System_Memory",
+-    "Win32_System_Ole",
+-    "Win32_System_Performance",
+-    "Win32_System_Power",
+-    "Win32_System_ProcessStatus",
+-    "Win32_System_Registry",
+-    "Win32_System_RemoteDesktop",
+-    "Win32_System_Rpc",
+-    "Win32_System_SystemInformation",
+-    "Win32_System_SystemServices",
+-    "Win32_System_Threading",
+-    "Win32_System_Variant",
+-    "Win32_System_WindowsProgramming",
+-    "Win32_System_Wmi",
+-    "Win32_UI_Shell",
+-]

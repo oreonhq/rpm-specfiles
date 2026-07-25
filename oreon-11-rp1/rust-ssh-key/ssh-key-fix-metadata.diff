@@ -1,0 +1,11 @@
+--- ssh-key-0.6.7/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ssh-key-0.6.7/Cargo.toml	2025-12-03T13:51:47.695489+00:00
+@@ -190,7 +190,7 @@
+ default-features = false
+ 
+ [dev-dependencies.hex-literal]
+-version = "0.4.1"
++version = ">=0.4.1, <2.0"
+ 
+ [dev-dependencies.rand_chacha]
+ version = "0.3"

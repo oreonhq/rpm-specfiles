@@ -1,0 +1,11 @@
+--- testing_table-0.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ testing_table-0.1.1/Cargo.toml	2024-11-15T03:43:43.141442+00:00
+@@ -47,7 +47,7 @@
+ optional = true
+ 
+ [dependencies.unicode-width]
+-version = "=0.1.11"
++version = "0.1.11"
+ 
+ [features]
+ ansi = ["ansitok"]

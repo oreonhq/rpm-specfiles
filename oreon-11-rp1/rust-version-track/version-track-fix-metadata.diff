@@ -1,0 +1,11 @@
+--- version-track-1.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ version-track-1.0.0/Cargo.toml	2024-07-23T04:18:17.444008+00:00
+@@ -37,7 +37,7 @@
+ name = "version_track"
+ 
+ [dependencies.uuid]
+-version = "1.10.0"
++version = "1.9.1"
+ features = [
+     "v4",
+     "fast-rng",

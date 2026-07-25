@@ -1,0 +1,11 @@
+--- ipnetwork-0.17.0/Cargo.toml	2020-07-13T10:52:23+00:00
++++ ipnetwork-0.17.0/Cargo.toml	2023-08-05T21:46:28.298290+00:00
+@@ -28,8 +28,6 @@
+ [dependencies.serde]
+ version = "1"
+ optional = true
+-[dev-dependencies.criterion]
+-version = "0.3.0"
+ 
+ [dev-dependencies.serde_derive]
+ version = "1"

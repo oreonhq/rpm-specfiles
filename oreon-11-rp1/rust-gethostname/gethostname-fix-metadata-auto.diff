@@ -1,0 +1,13 @@
+--- gethostname-0.5.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ gethostname-0.5.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -31,10 +31,4 @@
+ license = "Apache-2.0"
+ repository = "https://github.com/swsnr/gethostname.rs.git"
+ 
+-[target."cfg(not(windows))".dependencies.rustix]
+-version = "0.38.34"
+-features = ["system"]
+-default-features = false
+ 
+-[target."cfg(windows)".dependencies.windows-targets]
+-version = "0.52.4"

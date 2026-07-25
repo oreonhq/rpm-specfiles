@@ -1,0 +1,29 @@
+--- opendal-0.55.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ opendal-0.55.0/Cargo.toml	2026-01-22T18:21:38.932045+00:00
+@@ -677,25 +677,6 @@
+     "tracing-log",
+ ]
+ 
+-[target.'cfg(target_arch = "wasm32")'.dependencies.backon]
+-version = "1.6"
+-features = ["gloo-timers-sleep"]
+-
+-[target.'cfg(target_arch = "wasm32")'.dependencies.getrandom]
+-version = "0.2"
+-features = ["js"]
+-
+-[target.'cfg(target_arch = "wasm32")'.dependencies.tokio]
+-version = "1.48"
+-features = ["time"]
+-
+-[target.'cfg(target_arch = "wasm32")'.dependencies.uuid]
+-version = "1.18"
+-features = [
+-    "serde",
+-    "v4",
+-    "js",
+-]
+-
+ [lints.clippy]
+ unused_async = "warn"
++

@@ -1,0 +1,34 @@
+--- sys-locale-0.3.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sys-locale-0.3.2/Cargo.toml	2024-11-07T17:29:35.267984+00:00
+@@ -43,31 +43,5 @@
+ 
+ [features]
+ js = [
+-    "js-sys",
+-    "wasm-bindgen",
+-    "web-sys",
+ ]
+ 
+-[target.'cfg(all(target_family = "wasm", not(unix)))'.dependencies.js-sys]
+-version = "0.3"
+-optional = true
+-
+-[target.'cfg(all(target_family = "wasm", not(unix)))'.dependencies.wasm-bindgen]
+-version = "0.2"
+-optional = true
+-
+-[target.'cfg(all(target_family = "wasm", not(unix)))'.dependencies.web-sys]
+-version = "0.3"
+-features = [
+-    "Window",
+-    "WorkerGlobalScope",
+-    "Navigator",
+-    "WorkerNavigator",
+-]
+-optional = true
+-
+-[target.'cfg(all(target_family = "wasm", not(unix)))'.dev-dependencies.wasm-bindgen-test]
+-version = "0.3"
+-
+-[target.'cfg(target_os = "android")'.dependencies.libc]
+-version = "0.2"

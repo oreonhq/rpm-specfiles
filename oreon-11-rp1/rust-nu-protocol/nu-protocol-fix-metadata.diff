@@ -1,0 +1,33 @@
+--- nu-protocol-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-protocol-0.99.1/Cargo.toml	2026-02-03T11:29:29.480044+00:00
+@@ -26,7 +26,7 @@
+ bench = false
+ 
+ [dependencies.brotli]
+-version = "5.0"
++version = ">=7.0, <9.0"
+ optional = true
+ 
+ [dependencies.byte-unit]
+@@ -48,10 +48,10 @@
+ version = "0.2.3"
+ 
+ [dependencies.dirs]
+-version = "5.0"
++version = ">=5.0, <7.0"
+ 
+ [dependencies.fancy-regex]
+-version = "0.13"
++version = "0.16"
+ 
+ [dependencies.heck]
+ version = "0.5.0"
+@@ -115,7 +115,7 @@
+ version = "1.4"
+ 
+ [dev-dependencies.rstest]
+-version = "0.18"
++version = "0.26"
+ default-features = false
+ 
+ [dev-dependencies.serde_json]

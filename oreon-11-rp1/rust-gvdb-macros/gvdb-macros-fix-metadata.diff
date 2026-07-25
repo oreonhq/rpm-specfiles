@@ -1,0 +1,11 @@
+--- gvdb-macros-0.1.15/Cargo.toml	1970-01-01T00:00:01+00:00
++++ gvdb-macros-0.1.15/Cargo.toml	2026-03-04T12:46:54.106138+00:00
+@@ -51,7 +51,7 @@
+ default-features = false
+ 
+ [dependencies.litrs]
+-version = "0.5"
++version = "1.0"
+ features = ["proc-macro2"]
+ 
+ [dependencies.proc-macro2]

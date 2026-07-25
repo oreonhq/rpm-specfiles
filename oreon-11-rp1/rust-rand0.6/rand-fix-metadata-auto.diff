@@ -1,0 +1,12 @@
+--- rand-0.6.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rand-0.6.5/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -80,9 +80,6 @@
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2"
+ default-features = false
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["minwindef", "ntsecapi", "profileapi", "winnt"]
+ [badges.appveyor]
+ repository = "rust-random/rand"
+ 

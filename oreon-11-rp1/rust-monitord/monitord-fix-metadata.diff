@@ -1,0 +1,19 @@
+--- monitord-0.12.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ monitord-0.12.1/Cargo.toml	2026-01-05T10:58:32.245414+00:00
+@@ -72,7 +72,7 @@
+ version = "0.14.0"
+ 
+ [dependencies.procfs]
+-version = "0.15.1"
++version = "0.18"
+ 
+ [dependencies.serde]
+ version = "1.0"
+@@ -106,7 +106,6 @@
+     "rt",
+     "rt-multi-thread",
+     "macros",
+-    "tracing",
+     "time",
+     "sync",
+ ]

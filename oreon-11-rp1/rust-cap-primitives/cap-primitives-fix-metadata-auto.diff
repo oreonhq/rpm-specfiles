@@ -1,0 +1,30 @@
+--- cap-primitives-3.4.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cap-primitives-3.4.5/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -70,27 +70,5 @@
+ [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies.rustix-linux-procfs]
+ version = "0.1.1"
+ 
+-[target."cfg(not(windows))".dependencies.rustix]
+-version = "1.0.0"
+-features = [
+-    "fs",
+-    "process",
+-    "termios",
+-    "time",
+-]
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = ">=0.52, <=0.59"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Security",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Kernel",
+-    "Win32_System_WindowsProgramming",
+-    "Win32_System_IO",
+-    "Wdk_Storage_FileSystem",
+-    "Wdk_Foundation",
+-]
+ 
+-[target."cfg(windows)".dependencies.winx]
+-version = "0.36.0"

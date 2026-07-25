@@ -1,0 +1,16 @@
+--- tokio-tfo-0.3.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tokio-tfo-0.3.4/Cargo.toml	2025-05-26T19:50:33.644114+00:00
+@@ -81,13 +81,3 @@
+     "time",
+ ]
+ 
+-[target."cfg(windows)".dependencies.once_cell]
+-version = "1.8"
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.52"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_System_IO",
+-    "Win32_Networking_WinSock",
+-]

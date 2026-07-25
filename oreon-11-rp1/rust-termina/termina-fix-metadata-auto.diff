@@ -1,0 +1,16 @@
+--- termina-0.3.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ termina-0.3.3/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -78,13 +78,3 @@
+ [target."cfg(unix)".dependencies.signal-hook]
+ version = "0.3"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = ">=0.60"
+-features = [
+-    "Win32_System_Console",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_IO",
+-    "Win32_System_Threading",
+-    "Win32_Security",
+-]
+-default-features = false

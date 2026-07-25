@@ -1,0 +1,11 @@
+--- findshlibs-0.10.2/Cargo.toml	1970-01-01T00:00:00+00:00
++++ findshlibs-0.10.2/Cargo.toml	2023-08-06T14:29:24.999620+00:00
+@@ -24,8 +24,3 @@
+ version = "0.2.104"
+ [build-dependencies.cc]
+ version = "1.0.67"
+-[target."cfg(any(target_os = \"macos\", target_os = \"ios\"))".dependencies.lazy_static]
+-version = "1.4"
+-[target."cfg(target_os = \"windows\")".dependencies.winapi]
+-version = "0.3.9"
+-features = ["psapi", "memoryapi", "libloaderapi", "processthreadsapi"]

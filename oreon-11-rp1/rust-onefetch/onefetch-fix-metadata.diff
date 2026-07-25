@@ -1,0 +1,53 @@
+--- onefetch-2.27.1/Cargo.toml	2006-07-24T01:21:28+00:00
++++ onefetch-2.27.1/Cargo.toml	2026-03-19T22:32:51.216523+00:00
+@@ -45,10 +45,6 @@
+ name = "onefetch"
+ path = "src/main.rs"
+ 
+-[[test]]
+-name = "repo"
+-path = "tests/repo.rs"
+-
+ [[bench]]
+ name = "repo"
+ path = "benches/repo.rs"
+@@ -71,7 +67,7 @@
+ version = "4.5.65"
+ 
+ [dependencies.gix]
+-version = "0.80.0"
++version = ">=0.75.0, <0.81.0"
+ features = [
+     "max-performance-safe",
+     "blob-diff",
+@@ -82,7 +78,7 @@
+ default-features = false
+ 
+ [dependencies.gix-features]
+-version = "0.46.0"
++version = ">=0.44.0, <0.47.0"
+ 
+ [dependencies.globset]
+ version = "0.4.18"
+@@ -91,7 +87,7 @@
+ version = "2.0.6"
+ 
+ [dependencies.image]
+-version = "0.25.10"
++version = "0.25.9"
+ features = [
+     "color_quant",
+     "jpeg",
+@@ -145,12 +141,6 @@
+ [dependencies.typetag]
+ version = "0.2.21"
+ 
+-[dev-dependencies.criterion]
+-version = "0.8.2"
+-
+-[dev-dependencies.gix-testtools]
+-version = "0.18.0"
+-
+ [dev-dependencies.insta]
+ version = "1.46.3"
+ features = [

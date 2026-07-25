@@ -1,0 +1,93 @@
+From be89fbe48a8104d4fa17cd74805f33ac11f7182d Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jeremycline@microsoft.com>
+Date: Thu, 19 Mar 2026 12:35:58 -0400
+Subject: [PATCH] sigul-pesign-bridge: switch to using the standard temp dir
+
+Previously, the service would write temporary files into its runtime
+directory. However, this is apparently problematic as the Fedora
+deployment is experiencing permission denied errors. It's not clear
+exactly why, which is unsatisfying. However, we can try using the normal
+default /tmp/ directory (and have systemd create a dedicated one for us)
+to see if that resolves this issue.
+
+An alternative which is likely equivalent for systems that back tmpfs
+with memory is to just never write out the kernel, but this would mean
+giving up on validating the results with sbverify since it wants a path
+as input.
+
+Signed-off-by: Jeremy Cline <jeremycline@microsoft.com>
+---
+ sigul-pesign-bridge.service |  5 +++--
+ src/service.rs              | 25 ++++++++++++++++++-------
+ 2 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/sigul-pesign-bridge.service b/sigul-pesign-bridge.service
+index 0bf2f58..2755cdd 100644
+--- a/sigul-pesign-bridge.service
++++ b/sigul-pesign-bridge.service
+@@ -37,7 +37,9 @@ PrivateDevices=true
+ # For systemd >= 257 this directive should be removed.
+ # Refer to https://github.com/systemd/systemd/issues/35959.
+ DeviceAllow=/dev/tpmrm0
+-PrivateTmp=true
++# We never need to share tmpfiles with other processes, so request a completely
++# new tmpfs instance.
++PrivateTmp=disconnected
+ ProtectClock=true
+ ProtectControlGroups=true
+ ProtectHome=true
+@@ -68,4 +70,3 @@ SystemCallFilter=@system-service
+ # $ systemd-creds encrypt /secure/ramfs/private-key.pem /etc/credstore.encrypted/sigul.client.private_key
+ # $ systemd-ask-password | systemd-creds encrypt - /etc/credstore.encrypted/sigul.signing-key.passphrase
+ ImportCredential=sigul.*
+-
+diff --git a/src/service.rs b/src/service.rs
+index 5672f2a..0637a0d 100644
+--- a/src/service.rs
++++ b/src/service.rs
+@@ -13,7 +13,7 @@
+ use std::{
+     fs::File,
+     io,
+-    os::{fd::AsFd, unix::fs::PermissionsExt},
++    os::{fd::AsFd, linux::fs::MetadataExt, unix::fs::PermissionsExt},
+     time::Duration,
+ };
+ 
+@@ -358,16 +358,27 @@ async fn sign_attached_with_filetype(
+ ) -> Result<(), anyhow::Error> {
+     let key = request.key(&context.config.keys)?;
+     tracing::debug!(?key, "signing request mapped to a known key");
++    let temp_dir_root = std::env::temp_dir();
+     let temp_dir = tempfile::Builder::new()
+         .prefix(".work")
+         .rand_bytes(16)
+-        .tempdir_in(&context.runtime_directory)
++        .tempdir_in(&temp_dir_root)
+         .inspect_err(|error| {
+-            tracing::error!(
+-                ?error,
+-                ?context.runtime_directory,
+-                "Failed to make temporary directory inside the runtime directory"
+-            );
++            match temp_dir_root.metadata() {
++                Ok(metadata) => tracing::error!(
++                    temp_dir_root_uid=?metadata.st_uid(),
++                    temp_dir_root_gid=?metadata.st_gid(),
++                    temp_dir_root_mode=?metadata.st_mode(),
++                    ?error,
++                    ?temp_dir_root,
++                    "Failed to make temporary directory inside {temp_dir_root:?}",
++                ),
++                Err(metadata_read_error) => tracing::error!(
++                    ?metadata_read_error,
++                    ?error,
++                    "Failed to make temporary directory, and failed to read metadata of {temp_dir_root:?}"
++                ),
++            };
+         })?;
+     let sigul_input = temp_dir.path().join("unsigned_file");
+     let sigul_output = temp_dir.path().join("signed_file");
+-- 
+2.53.0
+

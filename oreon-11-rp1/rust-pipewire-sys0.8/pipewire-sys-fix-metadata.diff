@@ -1,0 +1,11 @@
+--- pipewire-sys-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ pipewire-sys-0.8.0/Cargo.toml	2026-01-20T23:36:41.739201+00:00
+@@ -48,7 +48,7 @@
+ package = "libspa-sys"
+ 
+ [build-dependencies.bindgen]
+-version = "0.69"
++version = "0.72.1"
+ features = ["runtime"]
+ default-features = false
+ 

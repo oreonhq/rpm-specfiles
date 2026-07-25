@@ -1,0 +1,160 @@
+From a2c7f39fb6ae3ddaa56797211a954aada5db2a3f Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 27 Mar 2026 22:28:17 +0100
+Subject: [PATCH] port to uutils 0.7.0
+
+---
+ src/filesystem/mktemp.rs |  8 ++++----
+ src/filesystem/ucp.rs    | 10 ++++++----
+ src/filesystem/umkdir.rs | 10 +++++++++-
+ src/filesystem/umv.rs    |  8 +++++---
+ src/system/uname.rs      |  4 +++-
+ 5 files changed, 27 insertions(+), 13 deletions(-)
+
+diff --git a/src/filesystem/mktemp.rs b/src/filesystem/mktemp.rs
+index 9a0c041..7636a5e 100644
+--- a/src/filesystem/mktemp.rs
++++ b/src/filesystem/mktemp.rs
+@@ -73,14 +73,14 @@ impl Command for Mktemp {
+         _input: PipelineData,
+     ) -> Result<PipelineData, ShellError> {
+         let span = call.head;
+-        let template = call
++        let template: String = call
+             .rest(engine_state, stack, 0)?
+             .first()
+             .cloned()
+             .map(|i: Spanned<String>| i.item)
+             .unwrap_or("tmp.XXXXXXXXXX".to_string()); // same as default in coreutils
+         let directory = call.has_flag(engine_state, stack, "directory")?;
+-        let suffix = call.get_flag(engine_state, stack, "suffix")?;
++        let suffix: Option<String> = call.get_flag(engine_state, stack, "suffix")?;
+         let tmpdir = call.has_flag(engine_state, stack, "tmpdir")?;
+         let tmpdir_path = call
+             .get_flag(engine_state, stack, "tmpdir-path")?
+@@ -99,8 +99,8 @@ impl Command for Mktemp {
+             directory,
+             dry_run: false,
+             quiet: false,
+-            suffix,
+-            template,
++            suffix: suffix.map(Into::into),
++            template: template.into(),
+             tmpdir,
+             treat_as_template: true,
+         };
+diff --git a/src/filesystem/ucp.rs b/src/filesystem/ucp.rs
+index 3bc7f13..28b8556 100644
+--- a/src/filesystem/ucp.rs
++++ b/src/filesystem/ucp.rs
+@@ -116,9 +116,9 @@ impl Command for UCp {
+     ) -> Result<PipelineData, ShellError> {
+         let interactive = call.has_flag(engine_state, stack, "interactive")?;
+         let (update, copy_mode) = if call.has_flag(engine_state, stack, "update")? {
+-            (UpdateMode::ReplaceIfOlder, CopyMode::Update)
++            (UpdateMode::IfOlder, CopyMode::Update)
+         } else {
+-            (UpdateMode::ReplaceAll, CopyMode::Copy)
++            (UpdateMode::All, CopyMode::Copy)
+         };
+ 
+         let force = call.has_flag(engine_state, stack, "force")?;
+@@ -258,7 +258,7 @@ impl Command for UCp {
+             dereference: !recursive,
+             progress_bar: progress,
+             attributes_only: false,
+-            backup: BackupMode::NoBackup,
++            backup: BackupMode::None,
+             copy_contents: false,
+             cli_dereference: false,
+             copy_mode,
+@@ -270,12 +270,14 @@ impl Command for UCp {
+             backup_suffix: String::from("~"),
+             target_dir: None,
+             update,
++            set_selinux_context: false,
++            context: None,
+         };
+ 
+         if let Err(error) = uu_cp::copy(&sources, &target_path, &options) {
+             match error {
+                 // code should still be EXIT_ERR as does GNU cp
+-                uu_cp::Error::NotAllFilesCopied => {}
++                uu_cp::CpError::NotAllFilesCopied => {}
+                 _ => {
+                     return Err(ShellError::GenericError {
+                         error: format!("{}", error),
+diff --git a/src/filesystem/umkdir.rs b/src/filesystem/umkdir.rs
+index 6f4c77e..99665a9 100644
+--- a/src/filesystem/umkdir.rs
++++ b/src/filesystem/umkdir.rs
+@@ -76,7 +76,15 @@ impl Command for UMkdir {
+         }
+ 
+         for dir in directories {
+-            if let Err(error) = mkdir(&dir, IS_RECURSIVE, get_mode(), is_verbose) {
++            let config = uu_mkdir::Config {
++                recursive: IS_RECURSIVE,
++                mode: get_mode(),
++                verbose: is_verbose,
++                set_security_context: false,
++                context: None,
++            };
++
++            if let Err(error) = mkdir(&dir, &config) {
+                 return Err(ShellError::GenericError {
+                     error: format!("{}", error),
+                     msg: format!("{}", error),
+diff --git a/src/filesystem/umv.rs b/src/filesystem/umv.rs
+index 0f49a7d..f9ca5b8 100644
+--- a/src/filesystem/umv.rs
++++ b/src/filesystem/umv.rs
+@@ -93,9 +93,9 @@ impl Command for UMv {
+             uu_mv::OverwriteMode::Force
+         };
+         let update = if call.has_flag(engine_state, stack, "update")? {
+-            UpdateMode::ReplaceIfOlder
++            UpdateMode::IfOlder
+         } else {
+-            UpdateMode::ReplaceAll
++            UpdateMode::All
+         };
+ 
+         #[allow(deprecated)]
+@@ -183,11 +183,13 @@ impl Command for UMv {
+             progress_bar: progress,
+             verbose,
+             suffix: String::from("~"),
+-            backup: BackupMode::NoBackup,
++            backup: BackupMode::None,
+             update,
+             target_dir: None,
+             no_target_dir: false,
+             strip_slashes: false,
++            debug: false,
++            context: None,
+         };
+         if let Err(error) = uu_mv::mv(&files, &options) {
+             return Err(ShellError::GenericError {
+diff --git a/src/system/uname.rs b/src/system/uname.rs
+index 47a40b2..1dfe307 100644
+--- a/src/system/uname.rs
++++ b/src/system/uname.rs
+@@ -1,3 +1,5 @@
++use std::ffi::OsString;
++
+ use nu_engine::command_prelude::*;
+ use nu_protocol::{record, Value};
+ 
+@@ -66,7 +68,7 @@ impl Command for UName {
+                     .as_ref()
+                     .ok_or("unknown")
+                     .map_err(|_| ShellError::NotFound { span })?
+-                    .to_string())
++                    .display().to_string())
+             })
+             .collect::<Result<Vec<String>, ShellError>>()?;
+         Ok(PipelineData::Value(
+-- 
+2.53.0
+

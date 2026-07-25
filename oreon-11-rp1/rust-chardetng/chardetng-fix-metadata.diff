@@ -1,0 +1,21 @@
+--- chardetng-0.1.17/Cargo.toml	1970-01-01T00:00:01+00:00
++++ chardetng-0.1.17/Cargo.toml	2025-10-05T21:11:17.723709+00:00
+@@ -23,15 +23,16 @@
+ license = "Apache-2.0 OR MIT"
+ repository = "https://github.com/hsivonen/chardetng"
+ [dependencies.arrayvec]
+-version = "0.5.1"
++version = "0.7.6"
+ optional = true
+ 
+ [dependencies.cfg-if]
+ version = "1.0"
+ 
+ [dependencies.encoding_rs]
+-version = "0.8.29"
++version = "0.8.31"
+ default-features = false
++features = ["alloc"]
+ 
+ [dependencies.memchr]
+ version = "2.2.0"

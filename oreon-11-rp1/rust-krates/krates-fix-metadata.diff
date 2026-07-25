@@ -1,0 +1,28 @@
+--- krates-0.20.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ krates-0.20.0/Cargo.toml	2025-12-11T13:16:38.214868+00:00
+@@ -93,21 +93,15 @@
+ version = "4.5"
+ features = ["derive"]
+ 
+-[dev-dependencies.insta]
+-version = "1.40"
+-features = ["json"]
+-
++[dev-dependencies.serde]
++version = "1.0"
++features = ["derive"]
++ 
+ [dev-dependencies.serde_json]
+ version = "1.0"
+ 
+ [dev-dependencies.similar-asserts]
+ version = "1.6"
+ 
+-[dev-dependencies.tame-index]
+-version = "0.21"
+-
+-[profile.dev.package.insta]
+-opt-level = 3
+-
+ [profile.dev.package.similar]
+ opt-level = 3

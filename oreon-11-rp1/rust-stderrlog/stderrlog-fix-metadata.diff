@@ -1,0 +1,39 @@
+--- stderrlog-0.6.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ stderrlog-0.6.0/Cargo.toml	2025-01-18T16:12:05.135613+00:00
+@@ -35,7 +35,6 @@
+ features = [
+     "clock",
+     "std",
+-    "wasmbind",
+ ]
+ optional = true
+ default-features = false
+@@ -48,27 +47,13 @@
+ features = ["std"]
+ 
+ [dependencies.termcolor]
+-version = "~1.1"
++version = "1.1"
+ 
+ [dependencies.thread_local]
+-version = "~1.1"
+-
+-[dev-dependencies.clap]
+-version = "3"
+-features = ["cargo"]
+-
+-[dev-dependencies.docopt]
+ version = "1.1"
+ 
+ [dev-dependencies.libc]
+ version = "0.2.18"
+-
+-[dev-dependencies.serde]
+-version = "1.0"
+-features = ["derive"]
+-
+-[dev-dependencies.structopt]
+-version = "0.3.20"
+ 
+ [features]
+ default = ["timestamps"]

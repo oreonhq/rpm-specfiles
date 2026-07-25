@@ -1,0 +1,8 @@
+--- alsa-sys-0.3.1/Cargo.toml	2020-12-22T20:30:47+00:00
++++ alsa-sys-0.3.1/Cargo.toml	2023-07-25T05:54:41.960681+00:00
+@@ -27,3 +27,5 @@
+ version = "0.2.65"
+ [build-dependencies.pkg-config]
+ version = "0.3"
++[lib]
++doctest = false

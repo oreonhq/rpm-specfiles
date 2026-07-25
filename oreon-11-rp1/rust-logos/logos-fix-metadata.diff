@@ -1,0 +1,11 @@
+--- logos-0.14.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ logos-0.14.4/Cargo.toml	2025-05-04T13:16:43.283124+00:00
+@@ -101,7 +101,7 @@
+ optional = true
+ 
+ [dev-dependencies.ariadne]
+-version = "0.2.0"
++version = "0.4"
+ features = ["auto-color"]
+ 
+ [features]

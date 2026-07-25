@@ -1,0 +1,50 @@
+From 2c3dae6e77726122ee2bbba8340beae74b823287 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
+Date: Thu, 8 Feb 2024 15:41:14 -0800
+Subject: [PATCH] Remove unneeded IntoError trait methods
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The ok_or_invalid_input() and ok_or_unexpected_eof() methods of the
+IntoError trait aren't actually used by the crate (anymore). Current
+versions of Rust lament this fact.
+Remove them to make the toolchain happy.
+
+Signed-off-by: Daniel Müller <deso@posteo.net>
+---
+ libbpf-rs/src/error.rs | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/libbpf-rs/src/error.rs b/libbpf-rs/src/error.rs
+index 1b602fa..d9d89d0 100644
+--- a/src/error.rs
++++ b/src/error.rs
+@@ -516,24 +516,6 @@ where
+     {
+         self.ok_or_error(io::ErrorKind::InvalidData, f)
+     }
+-
+-    #[inline]
+-    fn ok_or_invalid_input<C, F>(self, f: F) -> Result<T, Error>
+-    where
+-        C: ToString,
+-        F: FnOnce() -> C,
+-    {
+-        self.ok_or_error(io::ErrorKind::InvalidInput, f)
+-    }
+-
+-    #[inline]
+-    fn ok_or_unexpected_eof<C, F>(self, f: F) -> Result<T, Error>
+-    where
+-        C: ToString,
+-        F: FnOnce() -> C,
+-    {
+-        self.ok_or_error(io::ErrorKind::UnexpectedEof, f)
+-    }
+ }
+ 
+ impl<T> IntoError<T> for Option<T> {
+-- 
+2.45.1
+

@@ -1,0 +1,14 @@
+--- cargo-husky-1.5.0/Cargo.toml	1970-01-01T00:00:00+00:00
++++ cargo-husky-1.5.0/Cargo.toml	2024-09-13T20:52:01.260164+00:00
+@@ -18,10 +18,9 @@
+ include = ["build.rs", "LICENSE.txt", "Cargo.toml", "src/**/*.rs"]
+ description = "husky for cargo"
+ homepage = "https://github.com/rhysd/cargo-husky#readme"
+-readme = "README.md"
+ keywords = ["git", "hook", "cargo"]
+ categories = ["development-tools"]
+-license-file = "LICENSE.txt"
++license = "MIT"
+ repository = "https://github.com/rhysd/cargo-husky"
+ [package.metadata.release]
+ no-dev-version = true

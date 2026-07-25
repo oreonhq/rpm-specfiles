@@ -1,0 +1,11 @@
+--- metrics-exporter-prometheus-0.17.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ metrics-exporter-prometheus-0.17.2/Cargo.toml	2026-02-19T08:46:09.953518+00:00
+@@ -70,7 +70,7 @@
+ [dependencies.hyper-rustls]
+ version = "0.27"
+ features = [
+-    "aws-lc-rs",
++    "ring",
+     "http1",
+     "rustls-native-certs",
+ ]

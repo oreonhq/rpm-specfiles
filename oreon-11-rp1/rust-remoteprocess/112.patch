@@ -1,0 +1,23 @@
+From cde294ce23ee214a8fe7f42bfffbf62beebd73a1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 4 Nov 2025 22:48:52 +0000
+Subject: [PATCH] Remove execute permissions from Rust sources
+
+---
+ src/linux/libunwind/bindings_arm.rs | 0
+ src/windows/symbolication.rs        | 0
+ src/windows/unwinder.rs             | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 src/linux/libunwind/bindings_arm.rs
+ mode change 100755 => 100644 src/windows/symbolication.rs
+ mode change 100755 => 100644 src/windows/unwinder.rs
+
+diff --git a/src/linux/libunwind/bindings_arm.rs b/src/linux/libunwind/bindings_arm.rs
+old mode 100755
+new mode 100644
+diff --git a/src/windows/symbolication.rs b/src/windows/symbolication.rs
+old mode 100755
+new mode 100644
+diff --git a/src/windows/unwinder.rs b/src/windows/unwinder.rs
+old mode 100755
+new mode 100644

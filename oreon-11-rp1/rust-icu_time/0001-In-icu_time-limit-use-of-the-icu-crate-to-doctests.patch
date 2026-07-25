@@ -1,0 +1,25 @@
+From bd6099ceeb9abf12224ed1ebfe4a270a875a5ae7 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 6 Mar 2026 06:45:08 +0000
+Subject: [PATCH] In icu_time, limit use of the icu crate to doctests
+
+---
+ src/zone/windows.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/zone/windows.rs b/src/zone/windows.rs
+index d0795aa728..fca38d1860 100644
+--- a/src/zone/windows.rs
++++ b/src/zone/windows.rs
+@@ -155,7 +155,7 @@ impl WindowsParserBorrowed<'_> {
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+-    use icu::locale::subtags::subtag;
++    use icu_locale_core::subtags::subtag;
+ 
+     #[test]
+     fn basic_windows_tz_lookup() {
+-- 
+2.53.0
+

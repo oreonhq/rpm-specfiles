@@ -1,0 +1,11 @@
+--- tiny-dfr-0.3.7/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tiny-dfr-0.3.7/Cargo.toml	2026-03-16T10:22:52.204008+00:00
+@@ -54,7 +54,7 @@
+ version = "0.37"
+ 
+ [dependencies.input]
+-version = "0.8"
++version = "0.9"
+ 
+ [dependencies.input-linux]
+ version = "0.7"

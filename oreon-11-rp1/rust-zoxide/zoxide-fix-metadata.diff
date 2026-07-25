@@ -1,0 +1,28 @@
+--- zoxide-0.9.8/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zoxide-0.9.8/Cargo.toml	2025-08-18T10:56:19.986633+00:00
+@@ -122,7 +122,7 @@
+ version = "0.3.4"
+ 
+ [dependencies.dirs]
+-version = "6.0.0"
++version = ">=5.0.0, <7.0.0"
+ 
+ [dependencies.dunce]
+ version = "1.0.1"
+@@ -144,14 +144,14 @@
+ version = "2.0.0"
+ 
+ [dev-dependencies.rstest]
+-version = "0.25.0"
++version = "0.26.0"
+ default-features = false
+ 
+ [dev-dependencies.rstest_reuse]
+ version = "0.7.0"
+ 
+ [dev-dependencies.tempfile]
+-version = "=3.15.0"
++version = "3.15.0"
+ 
+ [build-dependencies.clap]
+ version = "4.3.0"

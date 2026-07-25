@@ -1,0 +1,11 @@
+--- atty-0.2.14/Cargo.toml	1970-01-01T00:00:01+00:00
++++ atty-0.2.14/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -27,8 +27,5 @@
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2"
+ default-features = false
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["consoleapi", "processenv", "minwinbase", "minwindef", "winbase"]
+ [badges.travis-ci]
+ repository = "softprops/atty"

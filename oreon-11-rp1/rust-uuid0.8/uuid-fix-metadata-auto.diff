@@ -1,0 +1,12 @@
+--- uuid-0.8.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ uuid-0.8.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -72,9 +72,6 @@
+ v4 = ["getrandom"]
+ v5 = ["sha1"]
+ wasm-bindgen = ["getrandom", "getrandom/js"]
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-optional = true
+ [badges.appveyor]
+ repository = "uuid-rs/uuid"
+ 

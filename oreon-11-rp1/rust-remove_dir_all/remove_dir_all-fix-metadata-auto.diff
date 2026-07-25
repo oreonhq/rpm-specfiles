@@ -1,0 +1,19 @@
+--- remove_dir_all-1.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ remove_dir_all-1.0.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -102,16 +102,5 @@
+ log = ["dep:log"]
+ parallel = ["dep:rayon"]
+ 
+-[target."cfg(not(windows))".dependencies.cvt]
+-version = "0.1.1"
+ 
+-[target."cfg(not(windows))".dependencies.libc]
+-version = "0.2"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.59.0"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Threading",
+-]

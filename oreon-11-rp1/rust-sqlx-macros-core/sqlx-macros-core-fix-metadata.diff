@@ -1,0 +1,12 @@
+--- sqlx-macros-core-0.8.6/Cargo.toml	1970-01-01T00:00:01+00:00
++++ sqlx-macros-core-0.8.6/Cargo.toml	2025-05-20T08:21:01.876117+00:00
+@@ -175,8 +175,7 @@
+     "sqlx-postgres?/rust_decimal",
+ ]
+ sqlite = [
+-    "_sqlite",
+-    "sqlx-sqlite/bundled",
++    "sqlite-unbundled",
+ ]
+ sqlite-unbundled = [
+     "_sqlite",

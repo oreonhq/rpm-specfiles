@@ -1,0 +1,25 @@
+From 79665ed16e13065094da978b331ff213493f65bd Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Thu, 1 Jan 2026 21:59:41 +0100
+Subject: [PATCH] fix compilation error in doctests
+
+---
+ src/lib.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 10bcae7..2891b19 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -51,7 +51,7 @@
+ //! }
+ //!
+ //! fn main() -> Result<(), confy::ConfyError> {
+-//!     let cfg = confy::load("my-app-name")?;
++//!     let cfg: MyConfig = confy::load("my-app-name")?;
+ //!     Ok(())
+ //! }
+ //! ```
+-- 
+2.52.0
+

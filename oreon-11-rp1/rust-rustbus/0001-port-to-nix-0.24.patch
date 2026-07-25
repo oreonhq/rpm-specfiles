@@ -1,0 +1,91 @@
+From 4d3e5730e932df8a652a6a68ca3901867238d88a Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 26 Dec 2025 20:55:16 +0100
+Subject: [PATCH 1/4] port to nix 0.24
+
+---
+ src/connection/ll_conn.rs | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/src/connection/ll_conn.rs b/src/connection/ll_conn.rs
+index 7cd8091..8919080 100644
+--- a/src/connection/ll_conn.rs
++++ b/src/connection/ll_conn.rs
+@@ -6,6 +6,8 @@ use crate::message_builder::MarshalledMessage;
+ use crate::wire::marshal;
+ use crate::wire::unmarshal;
+ 
++use std::io::IoSlice;
++use std::io::IoSliceMut;
+ use std::time;
+ 
+ use std::os::unix::io::RawFd;
+@@ -13,11 +15,11 @@ use std::os::unix::io::{AsRawFd, FromRawFd};
+ use std::os::unix::net::UnixStream;
+ 
+ use nix::cmsg_space;
++use nix::sys::socket::SockaddrStorage;
+ use nix::sys::socket::{
+     self, connect, recvmsg, sendmsg, socket, ControlMessage, ControlMessageOwned, MsgFlags,
+-    SockAddr, UnixAddr,
++    UnixAddr,
+ };
+-use nix::sys::uio::IoVec;
+ 
+ /// A lowlevel abstraction over the raw unix socket
+ #[derive(Debug)]
+@@ -60,7 +62,7 @@ impl RecvConn {
+ 
+         const BUFSIZE: usize = 512;
+         let mut tmpbuf = [0u8; BUFSIZE];
+-        let iovec = IoVec::from_mut_slice(&mut tmpbuf[..usize::min(bytes_to_read, BUFSIZE)]);
++        let iovec = IoSliceMut::new(&mut tmpbuf[..usize::min(bytes_to_read, BUFSIZE)]);
+ 
+         let mut cmsgspace = cmsg_space!([RawFd; 10]);
+         let flags = MsgFlags::empty();
+@@ -77,9 +79,9 @@ impl RecvConn {
+                 self.stream.set_nonblocking(true)?;
+             }
+         }
+-        let msg = recvmsg(
++        let msg = recvmsg::<SockaddrStorage>(
+             self.stream.as_raw_fd(),
+-            &[iovec],
++            &mut [iovec],
+             Some(&mut cmsgspace),
+             flags,
+         )
+@@ -389,8 +391,8 @@ impl SendMessageContext<'_> {
+         let body_slice_to_send = &self.msg.get_buf()[body_bytes_sent..];
+ 
+         let iov = [
+-            IoVec::from_slice(header_slice_to_send),
+-            IoVec::from_slice(body_slice_to_send),
++            IoSlice::new(header_slice_to_send),
++            IoSlice::new(body_slice_to_send),
+         ];
+         let flags = MsgFlags::empty();
+ 
+@@ -420,7 +422,7 @@ impl SendMessageContext<'_> {
+         } else {
+             vec![]
+         };
+-        let bytes_sent = sendmsg(
++        let bytes_sent = sendmsg::<SockaddrStorage>(
+             self.conn.stream.as_raw_fd(),
+             &iov,
+             &[ControlMessage::ScmRights(&raw_fds)],
+@@ -448,8 +450,8 @@ impl DuplexConn {
+             socket::SockFlag::empty(),
+             None,
+         )?;
+-        let sock_addr = SockAddr::Unix(addr);
+-        connect(sock, &sock_addr)?;
++
++        connect(sock, &addr)?;
+         let mut stream = unsafe { UnixStream::from_raw_fd(sock) };
+         match auth::do_auth(&mut stream)? {
+             auth::AuthResult::Ok => {}
+-- 
+2.52.0
+

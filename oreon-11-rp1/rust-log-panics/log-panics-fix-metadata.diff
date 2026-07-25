@@ -1,0 +1,11 @@
+--- log-panics-2.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ log-panics-2.1.0/Cargo.toml	2025-02-15T13:36:52.118762+00:00
+@@ -33,7 +33,7 @@
+ version = "0.4"
+ 
+ [dev-dependencies.env_logger]
+-version = "0.7"
++version = "0.11"
+ 
+ [features]
+ with-backtrace = ["backtrace"]

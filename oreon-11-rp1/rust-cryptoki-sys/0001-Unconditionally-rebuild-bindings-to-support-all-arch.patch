@@ -1,0 +1,160 @@
+--- cryptoki-sys-0.1.7/build.rs.orig	2024-01-21 22:02:08.607751895 +0000
++++ cryptoki-sys-0.1.7/build.rs	2024-01-21 22:04:36.891338152 +0000
+@@ -1,14 +1,9 @@
+ // Copyright 2021,2023 Contributors to the Parsec project.
+ // SPDX-License-Identifier: Apache-2.0
+ fn main() {
+-    #[cfg(feature = "generate-bindings")]
+-    {
+-        generate::generate_bindings();
+-    }
++    generate::generate_bindings();
+ }
+ 
+-// Only on a specific feature
+-#[cfg(feature = "generate-bindings")]
+ mod generate {
+     use bindgen::callbacks;
+     #[derive(Debug)]
+--- cryptoki-sys-0.1.7/src/lib.rs.orig	2024-01-21 22:02:19.474794863 +0000
++++ cryptoki-sys-0.1.7/src/lib.rs	2024-01-21 22:06:51.405869987 +0000
+@@ -14,139 +14,6 @@
+ // https://github.com/rust-lang/rust-bindgen/issues/1651
+ #![allow(deref_nullptr)]
+ 
+-// For supported targets: use the generated and committed bindings.
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "x86_64",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/x86_64-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "x86",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/i686-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "powerpc64",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/powerpc64-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "aarch64",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/aarch64-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "arm",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/arm-unknown-linux-gnueabi.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "loongarch64",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/loongarch64-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "riscv64",
+-    target_os = "linux"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/riscv64gc-unknown-linux-gnu.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "x86_64",
+-    target_os = "macos"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/x86_64-apple-darwin.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "aarch64",
+-    target_os = "macos"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/aarch64-apple-darwin.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "x86_64",
+-    target_os = "windows"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/x86_64-pc-windows-msvc.rs"
+-));
+-
+-#[cfg(all(
+-    not(feature = "generate-bindings"),
+-    target_arch = "x86_64",
+-    target_os = "freebsd"
+-))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/x86_64-unknown-freebsd.rs"
+-));
+-
+-// For supported targets: use the generated and committed bindings.
+-#[cfg(not(any(
+-    feature = "generate-bindings",
+-    all(target_arch = "x86_64", target_os = "linux"),
+-    all(target_arch = "x86", target_os = "linux"),
+-    all(target_arch = "powerpc64", target_os = "linux"),
+-    all(target_arch = "aarch64", target_os = "linux"),
+-    all(target_arch = "arm", target_os = "linux"),
+-    all(target_arch = "loongarch64", target_os = "linux"),
+-    all(target_arch = "riscv64", target_os = "linux"),
+-    all(target_arch = "x86_64", target_os = "macos"),
+-    all(target_arch = "aarch64", target_os = "macos"),
+-    all(target_arch = "x86_64", target_os = "windows"),
+-    all(target_arch = "x86_64", target_os = "freebsd"),
+-)))]
+-include!(concat!(
+-    env!("CARGO_MANIFEST_DIR"),
+-    "/src/bindings/generic.rs"
+-));
+-
+-// If the "generate-bindings" feature is on, use the generated bindings.
+-#[cfg(feature = "generate-bindings")]
+ include!(concat!(env!("OUT_DIR"), "/pkcs11_bindings.rs"));
+ 
+ // bindgen generates u64::MAX value for ~0UL macro definition, it's not valid on 32bit ulong platforms.

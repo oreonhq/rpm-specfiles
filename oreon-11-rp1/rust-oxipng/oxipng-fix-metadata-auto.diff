@@ -1,0 +1,26 @@
+--- oxipng-10.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ oxipng-10.1.0/Cargo.toml	2026-01-26T06:20:48.967437+00:00
+@@ -84,7 +84,6 @@
+ [features]
+ binary = [
+     "dep:clap",
+-    "dep:glob",
+     "dep:env_logger",
+     "dep:parse-size",
+ ]
+@@ -196,10 +195,6 @@
+ 
+ [dev-dependencies.serde_json]
+ version = "1.0.147"
+-
+-[target."cfg(windows)".dependencies.glob]
+-version = "0.3.3"
+-optional = true
+ 
+ [lints.clippy]
+ cloned_instead_of_copied = "warn"
+@@ -242,3 +237,4 @@
+ lto = "fat"
+ panic = "abort"
+ strip = "symbols"
++

@@ -1,0 +1,11 @@
+--- hashbrown-0.17.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ hashbrown-0.17.1/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -164,7 +164,7 @@
+ [dev-dependencies.serde_test]
+ version = "1.0"
+ 
+-[target."cfg(any())".dependencies.serde]
++[dependencies.serde]
+ version = "1.0.220"
+ optional = true
+ default-features = false

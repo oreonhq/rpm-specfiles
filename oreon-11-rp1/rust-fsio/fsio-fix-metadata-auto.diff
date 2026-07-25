@@ -1,0 +1,8 @@
+--- fsio-0.4.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ fsio-0.4.1/Cargo.toml	2025-02-25T18:29:23.051311+00:00
+@@ -76,5 +76,3 @@
+ [dev-dependencies.doc-comment]
+ version = "^0.3"
+ 
+-[target."cfg(windows)".dependencies.dunce]
+-version = "^1"

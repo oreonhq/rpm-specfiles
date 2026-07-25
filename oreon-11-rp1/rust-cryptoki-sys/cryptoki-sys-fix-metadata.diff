@@ -1,0 +1,17 @@
+--- cryptoki-sys-0.5.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cryptoki-sys-0.5.0/Cargo.toml	2026-01-07T17:13:13.806827+00:00
+@@ -39,7 +39,8 @@
+ repository = "https://github.com/parallaxsecond/rust-cryptoki"
+ 
+ [features]
+-generate-bindings = ["bindgen"]
++generate-bindings = []
++bindgen = []
+ 
+ [lib]
+ name = "cryptoki_sys"
+@@ -50,4 +51,3 @@
+ 
+ [build-dependencies.bindgen]
+ version = "0.72.1"
+-optional = true

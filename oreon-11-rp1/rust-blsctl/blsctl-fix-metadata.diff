@@ -1,0 +1,11 @@
+--- blsctl-0.2.3/Cargo.toml	2020-11-12T23:04:14+00:00
++++ blsctl-0.2.3/Cargo.toml	2023-05-17T10:04:51.958028+00:00
+@@ -20,7 +20,7 @@
+ 
+ [lib]
+ name = "blsctl"
+-crate-type = ["lib", "cdylib"]
++crate-type = ["lib"]
+ [dev-dependencies.serial_test]
+ version = "0.5"
+ 

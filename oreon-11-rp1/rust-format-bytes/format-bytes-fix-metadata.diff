@@ -1,0 +1,11 @@
+--- format-bytes-0.3.0/Cargo.toml	2021-12-17T10:39:46+00:00
++++ format-bytes-0.3.0/Cargo.toml	2023-08-06T14:39:17.241777+00:00
+@@ -17,7 +17,7 @@
+ authors = ["Raphaël Gomès <rgomes@octobus.net>"]
+ description = "A macro to format bytestrings"
+ readme = "README.md"
+-license-file = "LICENCE"
++license = "MIT"
+ repository = "https://foss.heptapod.net/octobus/rust/format-bytes/"
+ [dependencies.format-bytes-macros]
+ version = "0.4.0"

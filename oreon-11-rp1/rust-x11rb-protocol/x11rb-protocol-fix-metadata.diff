@@ -1,0 +1,18 @@
+--- x11rb-protocol-0.13.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ x11rb-protocol-0.13.2/Cargo.toml	2025-11-10T00:45:42.885674+00:00
+@@ -127,15 +127,7 @@
+ name = "request_parsing_tests"
+ path = "tests/request_parsing_tests.rs"
+ 
+-[[bench]]
+-name = "proto_connection"
+-path = "benches/proto_connection.rs"
+-harness = false
+-
+ [dependencies.serde]
+ version = "1"
+ features = ["derive"]
+ optional = true
+-
+-[dev-dependencies.criterion]
+-version = "0.5"

@@ -1,0 +1,11 @@
+--- igvm_defs-0.4.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ igvm_defs-0.4.0/Cargo.toml	2025-08-18T21:22:27.273858+00:00
+@@ -46,7 +46,7 @@
+ path = "src/lib.rs"
+ 
+ [dependencies.bitfield-struct]
+-version = "0.10"
++version = "0.12.1"
+ 
+ [dependencies.open-enum]
+ version = "0.5.2"

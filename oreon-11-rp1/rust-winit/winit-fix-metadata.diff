@@ -1,0 +1,89 @@
+--- winit-0.30.12/Cargo.toml	1970-01-01T00:00:01+00:00
++++ winit-0.30.12/Cargo.toml	2025-07-30T18:41:55.164512+00:00
+@@ -79,7 +79,6 @@
+ ]
+ mint = ["dpi/mint"]
+ rwh_04 = [
+-    "dep:rwh_04",
+ ]
+ rwh_05 = [
+     "dep:rwh_05",
+@@ -124,31 +123,6 @@
+ name = "winit"
+ path = "src/lib.rs"
+ 
+-[[example]]
+-name = "child_window"
+-path = "examples/child_window.rs"
+-
+-[[example]]
+-name = "control_flow"
+-path = "examples/control_flow.rs"
+-
+-[[example]]
+-name = "pump_events"
+-path = "examples/pump_events.rs"
+-
+-[[example]]
+-name = "run_on_demand"
+-path = "examples/run_on_demand.rs"
+-
+-[[example]]
+-name = "window"
+-path = "examples/window.rs"
+-doc-scrape-examples = true
+-
+-[[example]]
+-name = "x11_embed"
+-path = "examples/x11_embed.rs"
+-
+ [[test]]
+ name = "send_objects"
+ path = "tests/send_objects.rs"
+@@ -170,11 +144,6 @@
+ [dependencies.dpi]
+ version = "0.1.1"
+ 
+-[dependencies.rwh_04]
+-version = "0.4"
+-optional = true
+-package = "raw-window-handle"
+-
+ [dependencies.rwh_05]
+ version = "0.5.2"
+ features = ["std"]
+@@ -199,19 +168,10 @@
+ version = "0.1.40"
+ default-features = false
+ 
+-[dev-dependencies.image]
+-version = "0.25.0"
+-features = ["png"]
+-default-features = false
+-
+ [dev-dependencies.tracing]
+ version = "0.1.40"
+ features = ["log"]
+ default-features = false
+-
+-[dev-dependencies.tracing-subscriber]
+-version = "0.3.18"
+-features = ["env-filter"]
+ 
+ [build-dependencies.cfg_aliases]
+ version = "0.2.1"
+@@ -301,14 +261,3 @@
+ 
+ [target.'cfg(all(unix, not(any(target_os = "redox", target_family = "wasm", target_os = "android", target_os = "ios", target_os = "macos"))))'.dependencies.xkbcommon-dl]
+ version = "0.4.2"
+-
+-[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dev-dependencies.softbuffer]
+-version = "0.4.0"
+-features = [
+-    "x11",
+-    "x11-dlopen",
+-    "wayland",
+-    "wayland-dlopen",
+-]
+-default-features = false
+-

@@ -1,0 +1,9 @@
+--- html5ever-0.26.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ html5ever-0.26.0/Cargo.toml	2024-09-24T14:12:25.444112+00:00
+@@ -43,5 +43,4 @@
+ [build-dependencies.syn]
+ version = "1"
+ features = ["extra-traits", "full", "fold"]
+-[target."cfg(bench)".dev-dependencies.criterion]
+-version = "0.3"
++

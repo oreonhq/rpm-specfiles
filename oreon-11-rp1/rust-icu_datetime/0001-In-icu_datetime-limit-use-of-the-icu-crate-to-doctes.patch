@@ -1,0 +1,49 @@
+From 2076bbb0f36adcb1254da77011a4dac14a7473a2 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 9 Mar 2026 11:36:05 +0000
+Subject: [PATCH 1/2] In icu_datetime, limit use of the icu crate to doctests
+
+---
+ src/format/datetime.rs | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/format/datetime.rs b/src/format/datetime.rs
+index e76af02583..f0804d9018 100644
+--- a/src/format/datetime.rs
++++ b/src/format/datetime.rs
+@@ -658,10 +658,10 @@ mod tests {
+ 
+     #[test]
+     fn julian_day() {
+-        let locale = icu::locale::locale!("en");
++        let locale = icu_locale::locale!("en");
+         let parsed_pattern = crate::pattern::DateTimePattern::try_from_pattern_str("g").unwrap();
+         let mut names = crate::pattern::FixedCalendarDateTimeNames::<
+-            icu::calendar::cal::Gregorian,
++            icu_calendar::cal::Gregorian,
+             crate::fieldsets::enums::DateFieldSet,
+         >::try_new(locale.into())
+         .unwrap();
+@@ -674,16 +674,16 @@ mod tests {
+ 
+     #[test]
+     fn extended_year() {
+-        let locale = icu::locale::locale!("en");
++        let locale = icu_locale::locale!("en");
+         let parsed_pattern = crate::pattern::DateTimePattern::try_from_pattern_str("u").unwrap();
+         let mut names = crate::pattern::FixedCalendarDateTimeNames::<
+-            icu::calendar::cal::Ethiopian,
++            icu_calendar::cal::Ethiopian,
+             crate::fieldsets::enums::DateFieldSet,
+         >::try_new(locale.into())
+         .unwrap();
+         let formatted_datetime = names.include_for_pattern(&parsed_pattern).unwrap().format(
+             &crate::input::Date::try_new_ethiopian(
+-                icu::calendar::cal::EthiopianEraStyle::AmeteMihret,
++                icu_calendar::cal::EthiopianEraStyle::AmeteMihret,
+                 10,
+                 9,
+                 2,
+-- 
+2.53.0
+

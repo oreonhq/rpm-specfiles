@@ -1,0 +1,51 @@
+From 687e0babff052b6aee6c555aa97a831a5698ffb5 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Wed, 28 Feb 2024 18:48:11 -0800
+Subject: [PATCH] build bindings unconditionally
+
+---
+ Cargo.toml            | 2 +-
+ binding_rust/build.rs | 2 --
+ binding_rust/ffi.rs   | 4 ----
+ 3 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/binding_rust/build.rs b/binding_rust/build.rs
+index 6f44e83c..77f887f0 100644
+--- a/binding_rust/build.rs
++++ b/binding_rust/build.rs
+@@ -3,7 +3,6 @@ use std::{env, fs, path::PathBuf};
+ fn main() {
+     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+ 
+-    #[cfg(feature = "bindgen")]
+     generate_bindings(&out_dir);
+ 
+     fs::copy(
+@@ -48,7 +47,6 @@ fn main() {
+     println!("cargo:include={}", include_path.display());
+ }
+ 
+-#[cfg(feature = "bindgen")]
+ fn generate_bindings(out_dir: &std::path::Path) {
+     const HEADER_PATH: &str = "include/tree_sitter/api.h";
+ 
+diff --git a/binding_rust/ffi.rs b/binding_rust/ffi.rs
+index 755d2d52..41b405c3 100644
+--- a/binding_rust/ffi.rs
++++ b/binding_rust/ffi.rs
+@@ -2,12 +2,8 @@
+ #![allow(non_upper_case_globals)]
+ #![allow(non_camel_case_types)]
+ 
+-#[cfg(feature = "bindgen")]
+ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+ 
+-#[cfg(not(feature = "bindgen"))]
+-include!("./bindings.rs");
+-
+ #[cfg(unix)]
+ #[cfg(feature = "std")]
+ extern "C" {
+-- 
+2.47.0
+

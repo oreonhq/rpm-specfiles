@@ -1,0 +1,25 @@
+--- app_dirs2-2.5.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ app_dirs2-2.5.5/Cargo.toml	2024-02-05T12:14:49.691618+00:00
+@@ -34,6 +34,13 @@
+ ]
+ license = "MIT"
+ repository = "https://github.com/app-dirs-rs/app_dirs2"
++exclude = [
++    "/appveyor.yml",
++    "/appveyor_rust_install.ps1",
++    "/rustfmt.toml",
++    "/.github/",
++    "/.travis.yml",
++]
+ 
+ [[example]]
+ name = "android"
+@@ -46,7 +53,7 @@
+ version = "3.3.0"
+ 
+ [dev-dependencies.test-case]
+-version = "2.2.1"
++version = "3"
+ 
+ [target."cfg(all(unix, not(target_os = \"macos\")))".dependencies.xdg]
+ version = "2.4.1"

@@ -1,0 +1,13 @@
+--- rustyline-14.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rustyline-14.0.0/Cargo.toml	2025-12-18T15:07:18.045179+00:00
+@@ -115,9 +115,8 @@
+ optional = true
+ 
+ [dependencies.rusqlite]
+-version = "0.31.0"
++version = ">=0.28,<0.32"
+ features = [
+-    "bundled",
+     "backup",
+ ]
+ optional = true

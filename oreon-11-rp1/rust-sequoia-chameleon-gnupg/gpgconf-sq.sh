@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+matches_any() # needle haystack [haystack...]
+{
+  needle="$1"
+  shift 1
+  for x
+  do
+      if [ "$x" = "$needle" ]
+      then
+	  return 0
+      fi
+  done
+  return 1
+}
+
+if [ "$#" = 0 ] || matches_any "--list-components" "$@"
+then
+    BASEDIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+    CHAMELEON="$BASEDIR/gpg"
+
+    if "$CHAMELEON" --version >/dev/null 2>&1
+    then
+	/usr/bin/gpgconf "$@" | sed -e "s|^gpg:OpenPGP:.*$|gpg:OpenPGP:$CHAMELEON|"
+	exit "${PIPESTATUS[0]}"
+    fi
+fi
+exec /usr/bin/gpgconf "$@"

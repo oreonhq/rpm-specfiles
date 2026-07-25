@@ -1,0 +1,17 @@
+--- format-bytes-macros-0.4.0/Cargo.toml	2021-12-17T10:39:30+00:00
++++ format-bytes-macros-0.4.0/Cargo.toml	2024-12-11T12:45:38.675007+00:00
+@@ -17,7 +17,7 @@
+ authors = ["Raphaël Gomès <rgomes@octobus.net>"]
+ description = "Macros for the format-bytes crate"
+ readme = "README.md"
+-license-file = "LICENCE"
++license = "MIT"
+ repository = "https://foss.heptapod.net/octobus/rust/format-bytes/"
+ 
+ [lib]
+@@ -32,4 +32,4 @@
+ version = "1.0"
+ features = ["full", "extra-traits"]
+ [dev-dependencies.pretty_assertions]
+-version = "0.6"
++version = "1.4"

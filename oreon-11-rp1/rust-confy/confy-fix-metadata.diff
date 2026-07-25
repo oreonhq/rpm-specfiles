@@ -1,0 +1,11 @@
+--- confy-0.4.0/Cargo.toml	2020-03-13T13:15:45+00:00
++++ confy-0.4.0/Cargo.toml	2025-11-07T14:49:10.092534+00:00
+@@ -23,7 +23,7 @@
+ [[example]]
+ name = "simple"
+ [dependencies.directories]
+-version = "^2.0"
++version = ">=5.0, <7.0"
+ 
+ [dependencies.serde]
+ version = "^1.0"

@@ -1,0 +1,20 @@
+diff -Naur blazesym-0.2.0-rc.0-original/src/symbolize/symbolizer.rs blazesym-0.2.0-rc.0/src/symbolize/symbolizer.rs
+--- blazesym-0.2.0-rc.0-original/src/symbolize/symbolizer.rs	2006-07-24 02:21:28.000000000 +0100
++++ blazesym-0.2.0-rc.0/src/symbolize/symbolizer.rs	2025-11-04 22:14:32.456477477 +0000
+@@ -108,14 +108,14 @@
+             .map(|x| Cow::Owned(format!("{x:#}"))),
+         SrcLang::Cpp => cpp_demangle::Symbol::new(name.as_ref())
+             .ok()
+-            .and_then(|x| x.demangle(&Default::default()).ok().map(Cow::Owned)),
++            .and_then(|x| x.demangle_with_options(&Default::default()).ok().map(Cow::Owned)),
+         SrcLang::Unknown => rustc_demangle::try_demangle(name.as_ref())
+             .map(|x| Cow::Owned(format!("{x:#}")))
+             .ok()
+             .or_else(|| {
+                 cpp_demangle::Symbol::new(name.as_ref())
+                     .ok()
+-                    .and_then(|sym| sym.demangle(&Default::default()).ok().map(Cow::Owned))
++                    .and_then(|sym| sym.demangle_with_options(&Default::default()).ok().map(Cow::Owned))
+             }),
+     }
+     .unwrap_or(name)

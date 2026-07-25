@@ -1,0 +1,14 @@
+--- bracoxide-0.1.8/Cargo.toml	1970-01-01T00:00:01+00:00
++++ bracoxide-0.1.8/Cargo.toml	2026-01-12T15:03:46.856117+00:00
+@@ -35,11 +35,3 @@
+ [lib]
+ name = "bracoxide"
+ path = "src/lib.rs"
+-
+-[[bench]]
+-name = "explode_benchmark"
+-path = "benches/explode_benchmark.rs"
+-harness = false
+-
+-[dev-dependencies.criterion]
+-version = "0.5.1"

@@ -1,0 +1,38 @@
+diff --git a/src/io_uring/constants.rs b/src/io_uring/constants.rs
+index 43957cd..fe5f58b 100644
+--- a/src/io_uring/constants.rs
++++ b/src/io_uring/constants.rs
+@@ -42,9 +42,18 @@ pub const IORING_SETUP_CQSIZE: u32 = 8;
+ pub const IORING_SETUP_CLAMP: u32 = 16;
+ pub const IORING_FSYNC_DATASYNC: u8 = 1;
+ pub const IORING_TIMEOUT_ABS: u32 = 1;
++#[cfg(target_pointer_width = "64")]
+ pub const IORING_OFF_SQ_RING: i64 = 0;
++#[cfg(target_pointer_width = "32")]
++pub const IORING_OFF_SQ_RING: i32 = 0;
++#[cfg(target_pointer_width = "64")]
+ pub const IORING_OFF_CQ_RING: i64 = 0x0800_0000;
++#[cfg(target_pointer_width = "32")]
++pub const IORING_OFF_CQ_RING: i32 = 0x0800_0000;
++#[cfg(target_pointer_width = "64")]
+ pub const IORING_OFF_SQES: i64 = 0x1000_0000;
++#[cfg(target_pointer_width = "32")]
++pub const IORING_OFF_SQES: i32 = 0x1000_0000;
+ pub const IORING_SQ_NEED_WAKEUP: u32 = 1;
+ pub const IORING_ENTER_GETEVENTS: u32 = 1;
+ pub const IORING_ENTER_SQ_WAKEUP: u32 = 2;
+diff --git a/src/io_uring/mod.rs b/src/io_uring/mod.rs
+index 0cb4092..a25e6ff 100644
+--- a/src/io_uring/mod.rs
++++ b/src/io_uring/mod.rs
+@@ -77,7 +77,10 @@ pub enum Ordering {
+ fn uring_mmap(
+     size: usize,
+     ring_fd: i32,
++    #[cfg(target_pointer_width = "64")]
+     offset: i64,
++    #[cfg(target_pointer_width = "32")]
++    offset: i32,
+ ) -> io::Result<*mut libc::c_void> {
+     #[allow(unsafe_code)]
+     let ptr = unsafe {

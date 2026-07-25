@@ -1,0 +1,23 @@
+From 905655d8f4cf55db446c94d731b321a405240ff8 Mon Sep 17 00:00:00 2001
+From: David Michael <fedora.dm0@gmail.com>
+Date: Fri, 24 Jan 2025 08:28:50 -0500
+Subject: [PATCH] tests: Conditionally compile affected tests using
+ debug_assert
+
+This allows all tests to pass with optimized build settings.
+---
+ tests/number_range.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/number_range.rs b/tests/number_range.rs
+index a187aa5..d75b6fe 100644
+--- a/tests/number_range.rs
++++ b/tests/number_range.rs
+@@ -42,6 +42,7 @@ mod basic {
+     );
+     neg!(nan, "nan", 0, 0, "invalid digit found in string");
+ 
++    #[cfg(debug_assertions)]
+     #[test]
+     #[should_panic]
+     fn min_max_debug_assert() {

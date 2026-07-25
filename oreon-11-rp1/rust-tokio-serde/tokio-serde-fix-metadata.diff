@@ -1,0 +1,20 @@
+--- tokio-serde-0.8.0/Cargo.toml	2020-12-24T05:41:58+00:00
++++ tokio-serde-0.8.0/Cargo.toml	2026-01-04T09:38:47.420054+00:00
+@@ -43,7 +43,7 @@
+ version = "1.0"
+ 
+ [dependencies.educe]
+-version = "0.4"
++version = ">=0.4, <0.7"
+ optional = true
+ default-features = false
+ 
+@@ -57,7 +57,7 @@
+ version = "1"
+ 
+ [dependencies.rmp-serde]
+-version = "0.15"
++version = "1"
+ optional = true
+ 
+ [dependencies.serde]

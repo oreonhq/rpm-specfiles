@@ -1,0 +1,32 @@
+--- cursive-0.20.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cursive-0.20.0/Cargo.toml	2026-02-24T10:15:01.850003+00:00
+@@ -92,7 +92,7 @@
+ optional = true
+ 
+ [dependencies.termion]
+-version = "1"
++version = "4"
+ optional = true
+ 
+ [dependencies.unicode-segmentation]
+@@ -100,9 +100,6 @@
+ 
+ [dependencies.unicode-width]
+ version = "0.1"
+-
+-[dev-dependencies.atty]
+-version = "0.2"
+ 
+ [dev-dependencies.pretty-bytes]
+ version = "0.2"
+@@ -114,9 +111,8 @@
+ ansi = ["cursive_core/ansi"]
+ blt-backend = ["bear-lib-terminal"]
+ crossterm-backend = ["crossterm"]
+-default = ["ncurses-backend"]
++default = ["crossterm-backend"]
+ doc-cfg = ["cursive_core/doc-cfg"]
+-markdown = ["cursive_core/markdown"]
+ ncurses-backend = [
+     "ncurses",
+     "maplit",

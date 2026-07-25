@@ -1,0 +1,27 @@
+--- vergen-8.3.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ vergen-8.3.2/Cargo.toml	2026-01-28T14:02:14.956593+00:00
+@@ -103,13 +103,13 @@
+ optional = true
+ 
+ [dependencies.git2-rs]
+-version = "0.19.0"
++version = "0.20.0"
+ optional = true
+ default-features = false
+ package = "git2"
+ 
+ [dependencies.gix]
+-version = "0.63.0"
++version = "0.75.0"
+ features = [
+     "revision",
+     "interrupt",
+@@ -140,7 +140,7 @@
+ optional = true
+ 
+ [dev-dependencies.gix]
+-version = "0.63.0"
++version = "0.75.0"
+ 
+ [dev-dependencies.lazy_static]
+ version = "1.4.0"

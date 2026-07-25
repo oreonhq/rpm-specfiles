@@ -1,0 +1,58 @@
+--- image-extras-0.1.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ image-extras-0.1.0/Cargo.toml	2026-03-05T14:01:10.932799+00:00
+@@ -33,23 +33,9 @@
+ 
+ [features]
+ default = [
+-    "ora",
+-    "otb",
+-    "pcx",
+-    "sgi",
+     "xbm",
+     "xpm",
+-    "wbmp",
+ ]
+-ora = [
+-    "image/png",
+-    "dep:zip",
+-    "dep:ouroboros",
+-]
+-otb = []
+-pcx = ["dep:pcx"]
+-sgi = []
+-wbmp = ["dep:wbmp"]
+ xbm = []
+ xpm = []
+ 
+@@ -61,24 +47,6 @@
+ version = "0.25.8"
+ default-features = false
+ 
+-[dependencies.ouroboros]
+-version = "0.18.5"
+-optional = true
+-
+-[dependencies.pcx]
+-version = "0.2.4"
+-optional = true
+-
+-[dependencies.wbmp]
+-version = "0.1.2"
+-optional = true
+-
+-[dependencies.zip]
+-version = "5.1.1"
+-features = ["deflate"]
+-optional = true
+-default-features = false
+-
+ [dev-dependencies.image]
+ version = "0.25.8"
+ features = [
+@@ -86,6 +54,3 @@
+     "tiff",
+ ]
+ default-features = false
+-
+-[dev-dependencies.walkdir]
+-version = "2.5.0"

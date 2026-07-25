@@ -1,0 +1,54 @@
+--- auto_enums-0.8.7/Cargo.toml	1970-01-01T00:00:01+00:00
++++ auto_enums-0.8.7/Cargo.toml	2025-01-26T15:51:01.271247+00:00
+@@ -93,10 +93,6 @@
+ ]
+ default-features = false
+ 
+-[dev-dependencies.futures01_crate]
+-version = "0.1"
+-package = "futures"
+-
+ [dev-dependencies.futures03_crate]
+ version = "0.3"
+ features = [
+@@ -123,22 +119,6 @@
+ version = "1"
+ package = "serde"
+ 
+-[dev-dependencies.tokio01_crate]
+-version = "0.1"
+-features = ["io"]
+-default-features = false
+-package = "tokio"
+-
+-[dev-dependencies.tokio02_crate]
+-version = "0.2"
+-default-features = false
+-package = "tokio"
+-
+-[dev-dependencies.tokio03_crate]
+-version = "0.3"
+-default-features = false
+-package = "tokio"
+-
+ [dev-dependencies.tokio1_crate]
+ version = "1"
+ default-features = false
+@@ -150,7 +130,6 @@
+ default = ["std"]
+ fmt = []
+ fn_traits = []
+-futures01 = []
+ futures03 = []
+ generator_trait = ["coroutine_trait"]
+ http_body1 = []
+@@ -158,9 +137,6 @@
+ rayon = []
+ serde = []
+ std = []
+-tokio01 = []
+-tokio02 = []
+-tokio03 = []
+ tokio1 = []
+ transpose_methods = []
+ trusted_len = []

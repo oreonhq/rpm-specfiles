@@ -1,0 +1,13 @@
+--- cmd_lib-2.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cmd_lib-2.0.0/Cargo.toml	2025-10-06T07:00:18.200755+00:00
+@@ -67,10 +67,6 @@
+ path = "examples/rust_cookbook.rs"
+ 
+ [[example]]
+-name = "tetris"
+-path = "examples/tetris.rs"
+-
+-[[example]]
+ name = "tracing"
+ path = "examples/tracing.rs"
+ required-features = ["tracing"]

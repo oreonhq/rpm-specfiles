@@ -1,0 +1,12 @@
+--- glutin_egl_sys-0.7.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ glutin_egl_sys-0.7.1/Cargo.toml	2025-01-19T16:50:48.821524+00:00
+@@ -33,9 +33,3 @@
+ [build-dependencies.gl_generator]
+ version = "0.14"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.52"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Graphics_Gdi",
+-]

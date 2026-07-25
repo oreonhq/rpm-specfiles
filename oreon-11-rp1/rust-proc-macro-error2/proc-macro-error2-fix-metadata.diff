@@ -1,0 +1,13 @@
+--- proc-macro-error2-2.0.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ proc-macro-error2-2.0.1/Cargo.toml	2024-10-08T15:24:13.169063+00:00
+@@ -43,10 +43,6 @@
+ path = "tests/macro-errors.rs"
+ 
+ [[test]]
+-name = "ok"
+-path = "tests/ok.rs"
+-
+-[[test]]
+ name = "runtime-errors"
+ path = "tests/runtime-errors.rs"
+ 

@@ -1,0 +1,18 @@
+--- git-interactive-rebase-tool-2.4.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ git-interactive-rebase-tool-2.4.1/Cargo.toml	2026-02-07T14:58:35.746086+00:00
+@@ -199,10 +199,6 @@
+ default = []
+ dev = []
+ zlib-ng-compat = ["git2/zlib-ng-compat"]
+-
+-[target."cfg(target_os = \"macos\")".dependencies.crossterm]
+-version = "0.27.0"
+-features = ["use-dev-tty"]
+ 
+ [lints.clippy]
+ absolute_paths = "allow"
+@@ -344,3 +340,4 @@
+ missing_crate_level_docs = "allow"
+ private_doc_tests = "warn"
+ private_intra_doc_links = "warn"
++

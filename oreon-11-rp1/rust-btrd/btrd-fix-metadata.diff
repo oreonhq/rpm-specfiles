@@ -1,0 +1,28 @@
+--- btrd-0.5.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ btrd-0.5.3/Cargo.toml	2026-01-29T21:19:17.629442+00:00
+@@ -20,7 +20,7 @@
+     "btrfs",
+     "debugger",
+ ]
+-license = "GPL-2.0"
++license = "GPL-2.0-only"
+ repository = "https://github.com/danobi/btrd"
+ 
+ [dependencies.anyhow]
+@@ -40,13 +40,14 @@
+ version = "0.9"
+ 
+ [dependencies.nix]
+-version = "0.26"
++version = "0.30"
++features = ["dir", "fs", "ioctl"]
+ 
+ [dependencies.pom]
+ version = "3.2"
+ 
+ [dependencies.rustyline]
+-version = "12"
++version = "14"
+ features = ["derive"]
+ 
+ [dependencies.simplelog]

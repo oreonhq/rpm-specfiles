@@ -1,0 +1,11 @@
+--- pretty-git-prompt-0.2.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ pretty-git-prompt-0.2.2/Cargo.toml	2026-02-07T15:11:01.846167+00:00
+@@ -34,7 +34,7 @@
+ default-features = false
+ 
+ [dependencies.git2]
+-version = "0.18"
++version = "0.20"
+ features = []
+ default-features = false
+ 

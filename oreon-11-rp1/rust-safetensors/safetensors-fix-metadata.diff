@@ -1,0 +1,12 @@
+--- safetensors-0.6.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ safetensors-0.6.2/Cargo.toml	2025-08-09T23:33:02.587807+00:00
+@@ -80,9 +80,6 @@
+ version = "1.0"
+ default-features = false
+ 
+-[dev-dependencies.criterion]
+-version = "0.6"
+-
+ [dev-dependencies.memmap2]
+ version = "0.9"
+ 

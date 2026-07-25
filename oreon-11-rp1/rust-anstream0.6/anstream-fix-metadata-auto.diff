@@ -1,0 +1,12 @@
+--- anstream-0.6.21/Cargo.toml	1970-01-01T00:00:01+00:00
++++ anstream-0.6.21/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -142,9 +142,6 @@
+ [dev-dependencies.strip-ansi-escapes]
+ version = "0.2.1"
+ 
+-[target."cfg(windows)".dependencies.anstyle-wincon]
+-version = "3.0.5"
+-optional = true
+ 
+ [lints.clippy]
+ bool_assert_comparison = "allow"

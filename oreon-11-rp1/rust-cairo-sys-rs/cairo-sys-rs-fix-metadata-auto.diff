@@ -1,0 +1,19 @@
+--- cairo-sys-rs-0.22.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ cairo-sys-rs-0.22.0/Cargo.toml	2026-03-01T13:06:10.113923+00:00
+@@ -70,7 +70,7 @@
+ use_glib = ["glib-sys"]
+ v1_16 = []
+ v1_18 = ["v1_16"]
+-win32-surface = ["windows-sys"]
++win32-surface = []
+ xcb = []
+ xlib = ["x11"]
+ 
+@@ -93,7 +93,3 @@
+ [build-dependencies.system-deps]
+ version = "7"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = ">=0.52, <=0.61"
+-features = ["Win32_Graphics_Gdi"]
+-optional = true

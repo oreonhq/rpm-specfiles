@@ -1,0 +1,12 @@
+--- titlecase-3.6.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ titlecase-3.6.0/Cargo.toml	2025-07-13T19:35:36.274385+00:00
+@@ -43,8 +43,7 @@
+ [lib]
+ name = "titlecase"
+ crate-type = [
+-    "cdylib",
+-    "rlib",
++    "lib",
+ ]
+ path = "src/lib.rs"
+ 

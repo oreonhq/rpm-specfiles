@@ -1,0 +1,11 @@
+--- nu-path-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-path-0.99.1/Cargo.toml	2025-11-10T12:42:56.952701+00:00
+@@ -24,7 +24,7 @@
+ bench = false
+ 
+ [dependencies.dirs]
+-version = "5.0"
++version = ">=5.0, <7.0"
+ 
+ [target."cfg(all(unix, not(target_os = \"macos\"), not(target_os = \"android\")))".dependencies.pwd]
+ version = "1.3"

@@ -1,0 +1,16 @@
+--- nu-cmd-lang-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-cmd-lang-0.99.1/Cargo.toml	2024-11-15T05:55:23.201550+00:00
+@@ -39,11 +39,11 @@
+ version = "0.99.1"
+ 
+ [dependencies.shadow-rs]
+-version = "0.35"
++version = "0.8"
+ default-features = false
+ 
+ [build-dependencies.shadow-rs]
+-version = "0.35"
++version = "0.8"
+ default-features = false
+ 
+ [features]

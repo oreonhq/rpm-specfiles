@@ -1,0 +1,11 @@
+--- wl-clipboard-rs-0.9.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ wl-clipboard-rs-0.9.3/Cargo.toml	2025-12-27T20:53:46.149634+00:00
+@@ -90,7 +90,7 @@
+ version = "1"
+ 
+ [dev-dependencies.proptest-derive]
+-version = "0.7"
++version = ">=0.5.1,<0.8"
+ 
+ [dev-dependencies.wayland-protocols]
+ version = "0.32.9"

@@ -1,0 +1,26 @@
+From 3ea784f2d6b7eae64d0bf0ea29b00f36b3b26057 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sat, 13 Dec 2025 09:30:40 +0000
+Subject: [PATCH] Downstream: temporarily preserve gix 0.73 compatibility
+
+This partially reverts 7e0cff3.
+---
+ src/advisories/helpers/db.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/advisories/helpers/db.rs b/src/advisories/helpers/db.rs
+index c0f9241..6bf2d57 100644
+--- a/src/advisories/helpers/db.rs
++++ b/src/advisories/helpers/db.rs
+@@ -331,7 +331,7 @@ fn fetch_and_checkout(repo: &mut gix::Repository) -> anyhow::Result<()> {
+         .context("unable to checkout, repository is bare")?;
+     let root_tree = repo
+         .head()?
+-        .try_peel_to_id()?
++        .try_peel_to_id_in_place()?
+         .context("unable to peel HEAD")?
+         .object()
+         .context("HEAD commit not downloaded from remote")?
+-- 
+2.52.0
+

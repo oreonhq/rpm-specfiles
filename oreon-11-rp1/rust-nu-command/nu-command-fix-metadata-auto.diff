@@ -1,0 +1,23 @@
+--- nu-command-0.99.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nu-command-0.99.1/Cargo.toml	2026-03-27T00:33:00.759748+00:00
+@@ -378,19 +378,6 @@
+ [target."cfg(unix)".dependencies.umask]
+ version = "2.1"
+ 
+-[target."cfg(windows)".dependencies.windows]
+-version = "0.54"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Environment",
+-    "Win32_System_SystemServices",
+-    "Win32_Security",
+-    "Win32_System_Threading",
+-]
+-
+-[target."cfg(windows)".dependencies.winreg]
+-version = "0.52"
+-
+ [lints.clippy]
+ unchecked_duration_subtraction = "warn"
++

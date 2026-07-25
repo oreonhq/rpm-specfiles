@@ -1,0 +1,18 @@
+--- concolor-0.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ concolor-0.1.1/Cargo.toml	2023-03-30T14:09:19.977543+00:00
+@@ -66,7 +66,6 @@
+     "clicolor",
+     "no_color",
+     "term",
+-    "windows",
+ ]
+ clicolor = [
+     "core",
+@@ -89,7 +88,3 @@
+     "core",
+     "dep:concolor-query",
+ ]
+-windows = [
+-    "core",
+-    "dep:concolor-query",
+-]

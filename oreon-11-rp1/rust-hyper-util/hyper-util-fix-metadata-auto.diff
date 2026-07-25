@@ -1,0 +1,9 @@
+--- hyper-util-0.1.20/Cargo.toml	1970-01-01T00:00:01+00:00
++++ hyper-util-0.1.20/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -254,6 +254,3 @@
+ version = "0.7"
+ optional = true
+ 
+-[target."cfg(windows)".dependencies.windows-registry]
+-version = ">=0.3, <0.7"
+-optional = true

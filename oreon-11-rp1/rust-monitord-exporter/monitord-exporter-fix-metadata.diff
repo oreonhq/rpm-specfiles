@@ -1,0 +1,11 @@
+--- monitord-exporter-0.4.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ monitord-exporter-0.4.1/Cargo.toml	2025-01-31T08:30:52.253564+00:00
+@@ -51,7 +51,7 @@
+ features = ["derive"]
+ 
+ [dependencies.monitord]
+-version = "0.10.1"
++version = "0.12"
+ 
+ [dependencies.prometheus_exporter]
+ version = "0.8"

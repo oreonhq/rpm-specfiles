@@ -1,0 +1,20 @@
+--- serde-untagged-0.1.9/Cargo.toml	1970-01-01T00:00:01+00:00
++++ serde-untagged-0.1.9/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -65,6 +65,10 @@
+ [dependencies.typeid]
+ version = "1"
+ 
++[dependencies.serde]
++version = "1.0.220"
++default-features = false
++
+ [dev-dependencies.serde]
+ version = "1.0.220"
+ 
+@@ -77,6 +81,3 @@
+ [dev-dependencies.toml]
+ version = "0.9"
+ 
+-[target."cfg(any())".dependencies.serde]
+-version = "1.0.220"
+-default-features = false

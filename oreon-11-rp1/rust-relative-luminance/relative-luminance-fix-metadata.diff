@@ -1,0 +1,26 @@
+--- relative-luminance-1.0.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ relative-luminance-1.0.0/Cargo.toml	2025-05-13T00:06:00.510468+00:00
+@@ -24,7 +24,7 @@
+ autoexamples = false
+ autotests = false
+ autobenches = false
+-description = "Utlities to manage relative luminance"
++description = "Utilities to manage relative luminance"
+ readme = "README.md"
+ keywords = [
+     "color",
+@@ -41,14 +41,4 @@
+ name = "relative_luminance"
+ path = "src/lib.rs"
+ 
+-[[example]]
+-name = "contrast"
+-path = "examples/contrast.rs"
+-
+ [dependencies]
+-
+-[dev-dependencies.hsl]
+-version = "0.1"
+-
+-[dev-dependencies.owo-colors]
+-version = "4"

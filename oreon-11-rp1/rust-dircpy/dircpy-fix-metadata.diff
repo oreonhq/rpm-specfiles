@@ -1,0 +1,30 @@
+--- dircpy-0.3.20/Cargo.toml	2006-07-24T01:21:28+00:00
++++ dircpy-0.3.20/Cargo.toml	2026-03-28T15:19:26.057858+00:00
+@@ -38,11 +38,6 @@
+ name = "dircpy"
+ path = "src/lib.rs"
+ 
+-[[bench]]
+-name = "copy_rustlang"
+-path = "benches/copy_rustlang.rs"
+-harness = false
+-
+ [dependencies.jwalk]
+ version = "0.8"
+ optional = true
+@@ -53,15 +48,5 @@
+ [dependencies.walkdir]
+ version = "2.5"
+ 
+-[dev-dependencies.criterion]
+-version = "0.5"
+-
+ [dev-dependencies.env_logger]
+ version = "0.11"
+-
+-[dev-dependencies.reqwest]
+-version = "0.13"
+-features = ["blocking"]
+-
+-[dev-dependencies.unzip]
+-version = "0.1"

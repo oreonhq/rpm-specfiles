@@ -1,0 +1,20 @@
+--- reedline-0.37.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ reedline-0.37.0/Cargo.toml	2025-08-07T12:08:51.769154+00:00
+@@ -168,7 +168,7 @@
+ version = "1.4.0"
+ 
+ [dev-dependencies.rstest]
+-version = "0.18.0"
++version = "0.26.0"
+ default-features = false
+ 
+ [dev-dependencies.tempfile]
+@@ -178,7 +178,7 @@
+ bashisms = []
+ external_printer = ["crossbeam"]
+ sqlite = [
+-    "rusqlite/bundled",
++    "rusqlite",
+     "serde_json",
+ ]
+ sqlite-dynlib = [

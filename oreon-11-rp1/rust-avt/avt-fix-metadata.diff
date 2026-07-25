@@ -1,0 +1,36 @@
+--- avt-0.16.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ avt-0.16.0/Cargo.toml	2025-09-25T14:24:59.548653+00:00
+@@ -19,27 +19,18 @@
+ readme = "README.md"
+ license = "Apache-2.0"
+ repository = "https://github.com/asciinema/avt"
+-
+-[[bench]]
+-name = "parser"
+-harness = false
+-
+-[[bench]]
+-name = "vt"
+-harness = false
+-
+-[[bench]]
+-name = "charset"
+-harness = false
++exclude = [
++    "/benches/",
++    "/examples/",
++    "/flake.*",
++    "/fuzz.sh",
++]
+ 
+ [dependencies.rgb]
+ version = "0.8.33"
+ 
+ [dependencies.unicode-width]
+ version = "0.1.13"
+-
+-[dev-dependencies.criterion]
+-version = "0.3"
+ 
+ [dev-dependencies.pretty_assertions]
+ version = "1.0"

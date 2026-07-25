@@ -1,0 +1,78 @@
+From 910374f37cf37a977cadcec5a2e8a9aaa94a688c Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 19 Jan 2024 20:04:44 +0100
+Subject: [PATCH] backport: tests: port from unmaintained crate encoding to
+ encoding_rs
+
+---
+ Cargo.toml                |  4 ++--
+ tests/integration_test.rs | 23 ++++++++++++++++++-----
+ 2 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 703c953..1d17a1d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -109,8 +109,8 @@ version = "0.1"
+ version = "1.6.3"
+ features = ["attributes"]
+ 
+-[dev-dependencies.encoding]
+-version = "0.2"
++[dev-dependencies.encoding_rs]
++version = "0.8.32"
+ 
+ [dev-dependencies.tempfile]
+ version = "3.1"
+diff --git a/tests/integration_test.rs b/tests/integration_test.rs
+index 9d0fbc7..4b08ae2 100644
+--- a/tests/integration_test.rs
++++ b/tests/integration_test.rs
+@@ -346,14 +346,23 @@ fn uncompress_to_dir_with_utf8_pathname() {
+ 
+ #[test]
+ fn uncompress_to_dir_with_cjk_pathname() {
+-    use encoding::{all::*, DecoderTrap, Encoding};
++    use encoding_rs::{GBK, SHIFT_JIS};
+ 
+     let dir = tempfile::TempDir::new().expect("Failed to create the tmp directory");
+     let mut source_utf8 = std::fs::File::open("tests/fixtures/encoding-utf8.zip").unwrap();
+     let mut source_gbk = std::fs::File::open("tests/fixtures/encoding-gbk.zip").unwrap();
+     let mut source_sjis = std::fs::File::open("tests/fixtures/encoding-sjis.zip").unwrap();
+-    let decode_gbk = |bytes: &[u8]| Ok(GBK.decode(bytes, DecoderTrap::Strict)?);
+-    let decode_sjis = |bytes: &[u8]| Ok(WINDOWS_31J.decode(bytes, DecoderTrap::Strict)?);
++    let decode_gbk = |bytes: &[u8]| {
++        GBK.decode_without_bom_handling_and_without_replacement(bytes)
++            .map(String::from)
++            .ok_or(Error::Encoding(std::borrow::Cow::Borrowed("GBK failure")))
++    };
++    let decode_sjis = |bytes: &[u8]| {
++        SHIFT_JIS
++            .decode_without_bom_handling_and_without_replacement(bytes)
++            .map(String::from)
++            .ok_or(Error::Encoding(std::borrow::Cow::Borrowed("GBK failure")))
++    };
+ 
+     uncompress_archive_with_encoding(&mut source_utf8, dir.path(), Ownership::Ignore, decode_utf8)
+         .expect("Failed to uncompress the file");
+@@ -597,11 +606,15 @@ fn iterate_7z() {
+ 
+ #[test]
+ fn iterate_zip_with_cjk_pathname() {
+-    use encoding::{all::*, DecoderTrap, Encoding};
++    use encoding_rs::GBK;
+ 
+     let source = std::fs::File::open("tests/fixtures/encoding-gbk-tree.zip").unwrap();
+ 
+-    let decode_gbk = |bytes: &[u8]| Ok(GBK.decode(bytes, DecoderTrap::Strict)?);
++    let decode_gbk = |bytes: &[u8]| {
++        GBK.decode_without_bom_handling_and_without_replacement(bytes)
++            .map(String::from)
++            .ok_or(Error::Encoding(std::borrow::Cow::Borrowed("GBK failure")))
++    };
+     let contents = collect_iterate_results_with_encoding(source, decode_gbk);
+ 
+     let expected: Vec<(String, usize)> = vec![
+-- 
+2.43.0
+

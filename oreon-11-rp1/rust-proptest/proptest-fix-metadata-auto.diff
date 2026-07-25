@@ -1,0 +1,20 @@
+--- proptest-1.11.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ proptest-1.11.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -76,7 +76,6 @@
+     "tempfile",
+ ]
+ handle-panics = ["std"]
+-hardware-rng = ["x86"]
+ no_std = ["num-traits/libm"]
+ std = [
+     "rand/std",
+@@ -169,9 +168,6 @@
+ [dependencies.unarray]
+ version = "0.1.4"
+ 
+-[dependencies.x86]
+-version = "0.52.0"
+-optional = true
+ 
+ [dev-dependencies.regex]
+ version = "1.0"

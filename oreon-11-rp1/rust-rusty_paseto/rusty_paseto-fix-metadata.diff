@@ -1,0 +1,50 @@
+--- rusty_paseto-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ rusty_paseto-0.8.0/Cargo.toml	2025-10-10T10:27:34.011111+00:00
+@@ -135,11 +135,6 @@
+ path = "src/lib.rs"
+ doctest = true
+ 
+-[[example]]
+-name = "actix_identity"
+-path = "examples/actix_identity/main.rs"
+-required-features = ["default"]
+-
+ [[test]]
+ name = "build_payload_from_claims_prop_test"
+ path = "tests/build_payload_from_claims_prop_test.rs"
+@@ -213,7 +208,7 @@
+ optional = true
+ 
+ [dependencies.iso8601]
+-version = "0.6"
++version = ">=0.4,<0.7"
+ 
+ [dependencies.p384]
+ version = "0.13"
+@@ -257,15 +252,6 @@
+ version = "1.4"
+ features = ["zeroize_derive"]
+ 
+-[dev-dependencies.actix-identity]
+-version = "0.4"
+-
+-[dev-dependencies.actix-utils]
+-version = "3.0"
+-
+-[dev-dependencies.actix-web]
+-version = "4"
+-
+ [dev-dependencies.anyhow]
+ version = "1.0"
+ 
+@@ -280,10 +266,3 @@
+ 
+ [dev-dependencies.serde_json]
+ version = "1.0"
+-
+-[dev-dependencies.tokio]
+-version = "1.17"
+-
+-[dev-dependencies.uuid]
+-version = "1.8"
+-features = ["v4"]

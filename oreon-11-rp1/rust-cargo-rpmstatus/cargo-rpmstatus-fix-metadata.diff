@@ -1,0 +1,11 @@
+--- cargo-rpmstatus-0.2.4/Cargo.toml	1970-01-01T00:00:01+00:00
++++ cargo-rpmstatus-0.2.4/Cargo.toml	2025-12-16T10:56:13.870973+00:00
+@@ -38,7 +38,7 @@
+ version = "1.0"
+ 
+ [dependencies.bzip2]
+-version = ">=0.4.4, <0.6"
++version = ">=0.4.4, <0.7"
+ 
+ [dependencies.cargo_metadata]
+ version = "0.19"

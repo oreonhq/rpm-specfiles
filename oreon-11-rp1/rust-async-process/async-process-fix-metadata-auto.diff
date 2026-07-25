@@ -1,0 +1,11 @@
+--- async-process-2.5.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ async-process-2.5.0/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -95,8 +95,6 @@
+ ]
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.blocking]
+-version = "1.0.0"
+ 
+ [target."cfg(windows)".dev-dependencies.windows-sys]
+ version = "0.61"

@@ -1,0 +1,12 @@
+--- concolor-query-0.3.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ concolor-query-0.3.3/Cargo.toml	2023-03-30T14:04:18.578437+00:00
+@@ -34,9 +34,3 @@
+ license = "MIT OR Apache-2.0"
+ repository = "https://github.com/rust-cli/concolor"
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.45.0"
+-features = [
+-    "Win32_System_Console",
+-    "Win32_Foundation",
+-]

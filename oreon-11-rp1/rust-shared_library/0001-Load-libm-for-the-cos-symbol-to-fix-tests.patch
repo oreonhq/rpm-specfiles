@@ -1,0 +1,32 @@
+From f03bf885e9859355ccfc7692236f616bb3dd21c3 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sun, 20 Jul 2025 20:26:16 +0200
+Subject: [PATCH] Load libm for the "cos" symbol to fix tests
+
+---
+ src/dynamic_library.rs | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/dynamic_library.rs b/src/dynamic_library.rs
+index 753b632..f9802fc 100644
+--- a/src/dynamic_library.rs
++++ b/src/dynamic_library.rs
+@@ -166,9 +166,12 @@ mod test {
+     #[test]
+     #[cfg_attr(any(windows, target_os = "android"), ignore)] // FIXME #8818, #10379
+     fn test_loading_cosine() {
+-        // The math library does not need to be loaded since it is already
+-        // statically linked in
+-        let libm = match DynamicLibrary::open(None) {
++        #[cfg(target_pointer_width = "64")]
++        let path = Path::new("/lib64/libm.so.6");
++        #[cfg(target_pointer_width = "32")]
++        let path = Path::new("/lib/libm.so.6");
++
++        let libm = match DynamicLibrary::open(Some(&path)) {
+             Err(error) => panic!("Could not load self as module: {}", error),
+             Ok(libm) => libm
+         };
+-- 
+2.50.1
+

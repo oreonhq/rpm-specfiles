@@ -1,0 +1,11 @@
+--- libdeflater-1.25.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ libdeflater-1.25.2/Cargo.toml	2026-02-08T11:59:40.672418+00:00
+@@ -77,8 +77,5 @@
+ [dev-dependencies.adler32]
+ version = "1.2.0"
+ 
+-[dev-dependencies.criterion]
+-version = "0.3"
+-
+ [dev-dependencies.flate2]
+ version = "1.0.11"

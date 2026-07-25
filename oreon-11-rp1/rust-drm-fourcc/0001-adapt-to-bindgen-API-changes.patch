@@ -1,0 +1,25 @@
+From a3b53ffb0070a4c1eb08e2da41db061d9525d267 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 10 Oct 2025 23:14:03 +0200
+Subject: [PATCH] adapt to bindgen API changes
+
+---
+ build.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build.rs b/build.rs
+index 61fce85..2d70885 100644
+--- a/build.rs
++++ b/build.rs
+@@ -140,7 +140,7 @@ mod generate {
+         bindgen::builder()
+             .ctypes_prefix("crate::_fake_ctypes")
+             .header(wrapper_path.as_os_str().to_str().unwrap())
+-            .whitelist_var("DRM_FOURCC_.*")
++            .allowlist_var("DRM_FOURCC_.*")
+             .generate()
+             .unwrap()
+             .write_to_file("src/consts.rs")?;
+-- 
+2.51.0
+

@@ -1,0 +1,75 @@
+From 09e4b963a8a5fb8fe348867941358f25bd30021e Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sat, 15 Jun 2024 19:25:12 +0200
+Subject: [PATCH 1/2] drop broken build-script based git versioning
+
+---
+ build.rs       | 22 ----------------------
+ src/version.rs | 22 +++++-----------------
+ 2 files changed, 5 insertions(+), 39 deletions(-)
+ delete mode 100644 build.rs
+
+diff --git a/build.rs b/build.rs
+deleted file mode 100644
+index 4943cdb..0000000
+--- a/build.rs
++++ /dev/null
+@@ -1,22 +0,0 @@
+-
+-fn main() {
+-    vergen();
+-}
+-
+-fn vergen() {
+-    // Generate the "cargo:" instruction cargo:rustc-env=VERGEN_GIT_SHA=<SHA>
+-    //
+-    // If the source directory is not a git repository, e.g. a tarball, this
+-    // produces an Error and VERGEN_GIT_SHA is not set.
+-    // In our case that is okay, because do not care for vergen variables other
+-    // than VERGEN_GIT_SHA and only use it if it is set (see
+-    // rnp_version_string_full in src/version.rs).
+-    //
+-    // Upstream issue: https://github.com/rustyhorde/vergen/issues/299#issuecomment-2095609569
+-    let _ = vergen::EmitBuilder::builder()
+-        // Fail instead of setting vars to VERGEN_IDEMPOTENT_OUTPUT.
+-        .fail_on_error()
+-        .git_sha(/* short */ true)
+-        .emit();
+-}
+-
+diff --git a/src/version.rs b/src/version.rs
+index d2852c7..c830ea7 100644
+--- a/src/version.rs
++++ b/src/version.rs
+@@ -67,23 +67,11 @@ pub unsafe extern "C" fn rnp_version_string_full() -> *const c_char {
+     static VERSION: OnceLock<Vec<u8>> = OnceLock::new();
+     VERSION.get_or_init(
+         || {
+-            let mut b = match option_env!("VERGEN_GIT_SHA") {
+-                Some(git_sha) => {
+-                    format!(
+-                        "{}-{}+sequoia-openpgp-{}",
+-                        env!("CARGO_PKG_VERSION"),
+-                        git_sha,
+-                        sequoia_openpgp::VERSION
+-                    ).into_bytes()
+-                }
+-                None => {
+-                    format!(
+-                        "{}+sequoia-openpgp-{}",
+-                        env!("CARGO_PKG_VERSION"),
+-                        sequoia_openpgp::VERSION
+-                    ).into_bytes()
+-                }
+-            };
++            let mut b = format!(
++                "{}+sequoia-openpgp-{}",
++                env!("CARGO_PKG_VERSION"),
++                sequoia_openpgp::VERSION
++            ).into_bytes();
+             b.push(0); // Sentinel.
+             b
+         })
+-- 
+2.47.1
+

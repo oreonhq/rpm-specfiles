@@ -1,0 +1,30 @@
+--- hf-hub-0.4.3/Cargo.toml	1970-01-01T00:00:01+00:00
++++ hf-hub-0.4.3/Cargo.toml	2025-12-03T21:42:44.393816+00:00
+@@ -65,7 +65,6 @@
+     "dep:tokio",
+     "tokio/rt-multi-thread",
+     "dep:libc",
+-    "dep:windows-sys",
+ ]
+ ureq = [
+     "dep:http",
+@@ -76,7 +75,6 @@
+     "dep:thiserror",
+     "dep:ureq",
+     "dep:libc",
+-    "dep:windows-sys",
+ ]
+ 
+ [lib]
+@@ -168,11 +166,3 @@
+ version = "0.2"
+ optional = true
+ 
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.60"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_IO",
+-]
+-optional = true

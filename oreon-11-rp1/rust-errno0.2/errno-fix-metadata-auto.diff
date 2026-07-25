@@ -1,0 +1,9 @@
+--- errno-0.2.8/Cargo.toml	1970-01-01T00:00:01+00:00
++++ errno-0.2.8/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -30,6 +30,3 @@
+ version = "0.2"
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2"
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3"
+-features = ["errhandlingapi", "minwindef", "ntdef", "winbase"]

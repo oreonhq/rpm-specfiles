@@ -1,0 +1,10 @@
+--- tree-sitter-ocaml-0.24.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tree-sitter-ocaml-0.24.0/Cargo.toml	2025-01-30T12:54:55.472002+00:00
+@@ -15,6 +15,7 @@
+ version = "0.24.0"
+ build = "bindings/rust/build.rs"
+ include = [
++    "LICENSE",
+     "bindings/rust",
+     "common",
+     "grammars/ocaml/grammar.js",

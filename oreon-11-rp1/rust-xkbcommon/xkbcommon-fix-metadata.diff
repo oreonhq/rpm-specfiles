@@ -1,0 +1,22 @@
+--- xkbcommon-0.8.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ xkbcommon-0.8.0/Cargo.toml	2025-02-09T21:39:48.144256+00:00
+@@ -29,9 +29,6 @@
+ [package.metadata.docs.rs]
+ all-features = true
+ 
+-[[example]]
+-name = "quick-evdev"
+-
+ [dependencies.as-raw-xcb-connection]
+ version = "1.0"
+ optional = true
+@@ -46,9 +43,6 @@
+ [dependencies.xkeysym]
+ version = "0.2.0"
+ 
+-[dev-dependencies.evdev]
+-version = "0.11.4"
+-
+ [features]
+ default = ["wayland"]
+ wayland = ["memmap2"]

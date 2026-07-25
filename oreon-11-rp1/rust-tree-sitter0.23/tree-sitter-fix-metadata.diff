@@ -1,0 +1,35 @@
+--- tree-sitter-0.23.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ tree-sitter-0.23.2/Cargo.toml	2026-01-23T19:38:08.339530+00:00
+@@ -42,7 +42,7 @@
+     "parsing",
+     "text-editors",
+ ]
+-license = "MIT"
++license = "MIT AND Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain"
+ repository = "https://github.com/tree-sitter/tree-sitter"
+ 
+ [lib]
+@@ -61,16 +61,8 @@
+ [dependencies.tree-sitter-language]
+ version = "0.1.1"
+ 
+-[dependencies.wasmtime-c-api]
+-version = "24.0.0"
+-features = ["cranelift"]
+-optional = true
+-default-features = false
+-package = "wasmtime-c-api-impl"
+-
+ [build-dependencies.bindgen]
+-version = "0.70.1"
+-optional = true
++version = "0.72.1"
+ 
+ [build-dependencies.cc]
+ version = "1.1.19"
+@@ -82,4 +74,4 @@
+     "regex/perf",
+     "regex-syntax/unicode",
+ ]
+-wasm = ["wasmtime-c-api"]
++wasm = []

@@ -1,0 +1,35 @@
+--- fern-0.6.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ fern-0.6.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -111,32 +111,8 @@
+ syslog-4 = ["syslog4"]
+ syslog-6 = ["syslog6"]
+ 
+-[target."cfg(not(windows))".dependencies.libc]
+-version = "0.2.58"
+-optional = true
+ 
+-[target."cfg(not(windows))".dependencies.reopen03]
+-version = "^0.3"
+-optional = true
+-package = "reopen"
+ 
+-[target."cfg(not(windows))".dependencies.reopen1]
+-version = "~1"
+-features = ["signals"]
+-optional = true
+-package = "reopen"
+ 
+-[target."cfg(not(windows))".dependencies.syslog3]
+-version = "3"
+-optional = true
+-package = "syslog"
+ 
+-[target."cfg(not(windows))".dependencies.syslog4]
+-version = "4"
+-optional = true
+-package = "syslog"
+ 
+-[target."cfg(not(windows))".dependencies.syslog6]
+-version = "6"
+-optional = true
+-package = "syslog"

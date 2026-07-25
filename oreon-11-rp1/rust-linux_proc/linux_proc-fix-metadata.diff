@@ -1,0 +1,18 @@
+--- linux_proc-0.1.1/Cargo.toml	1970-01-01T00:00:00+00:00
++++ linux_proc-0.1.1/Cargo.toml	2023-06-07T20:17:00.501271+00:00
+@@ -15,14 +15,12 @@
+ name = "linux_proc"
+ version = "0.1.1"
+ authors = ["Richard Dodd <richard.o.dodd@gmail.com>"]
+-include = ["Cargo.toml", "README.md", "src/**/*.rs"]
++include = ["Cargo.toml", "README.md", "src/**/*.rs", "LICENSE-*"]
+ description = "A library to help reading the contents of `/proc` on linux"
+ readme = "README.md"
+ keywords = ["linux", "proc", "system", "info", "top"]
+ categories = ["command-line-interface", "filesystem", "os::unix-apis", "parser-implementations"]
+ license = "MIT/Apache-2.0"
+ repository = "https://github.com/derekdreery/linux_proc"
+-[dev-dependencies.quicli]
+-version = "0.3"
+ [badges.travis-ci]
+ repository = "derekdreery/linux_proc"

@@ -1,0 +1,12 @@
+--- crossterm-0.23.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ crossterm-0.23.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -84,9 +84,4 @@
+ [target."cfg(unix)".dependencies.signal-hook-mio]
+ version = "0.2.3"
+ features = ["support-v0_8"]
+-[target."cfg(windows)".dependencies.crossterm_winapi]
+-version = "0.9"
+ 
+-[target."cfg(windows)".dependencies.winapi]
+-version = "0.3.9"
+-features = ["winuser", "winerror"]

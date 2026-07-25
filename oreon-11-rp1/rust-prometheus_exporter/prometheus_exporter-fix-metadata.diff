@@ -1,0 +1,19 @@
+--- prometheus_exporter-0.8.5/Cargo.toml	1970-01-01T00:00:01+00:00
++++ prometheus_exporter-0.8.5/Cargo.toml	2025-09-30T20:22:40.979600+00:00
+@@ -47,14 +47,14 @@
+ optional = true
+ 
+ [dependencies.prometheus]
+-version = "0.13"
++version = "0.14"
+ default-features = false
+ 
+ [dependencies.thiserror]
+ version = "1"
+ 
+ [dependencies.tiny_http]
+-version = "0.10"
++version = "0.12"
+ default-features = false
+ 
+ [dev-dependencies.env_logger]

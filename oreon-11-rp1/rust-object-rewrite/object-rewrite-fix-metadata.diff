@@ -1,0 +1,20 @@
+--- object-rewrite-0.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ object-rewrite-0.1.1/Cargo.toml	2026-01-23T10:40:27.436150+00:00
+@@ -16,6 +16,8 @@
+ include = [
+     "/Cargo.lock",
+     "/Cargo.toml",
++    "/LICENSE-APACHE",
++    "/LICENSE-MIT",
+     "/src",
+ ]
+ description = "Rewrite object files with modifications"
+@@ -53,7 +55,7 @@
+ optional = true
+ 
+ [dependencies.object]
+-version = "0.35.0"
++version = ">=0.35.0, <0.39.0"
+ features = [
+     "build",
+     "elf",

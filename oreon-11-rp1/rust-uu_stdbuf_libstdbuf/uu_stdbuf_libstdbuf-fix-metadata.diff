@@ -1,0 +1,11 @@
+--- uu_stdbuf_libstdbuf-0.7.0/Cargo.toml	2006-07-24T01:21:28+00:00
++++ uu_stdbuf_libstdbuf-0.7.0/Cargo.toml	2026-03-19T15:33:39.327963+00:00
+@@ -37,7 +37,7 @@
+ 
+ [lib]
+ name = "stdbuf"
+-crate-type = ["cdylib"]
++crate-type = ["lib"]
+ path = "src/libstdbuf.rs"
+ 
+ [dependencies.ctor]

@@ -1,0 +1,13 @@
+--- assert_cli-0.6.3/Cargo.toml	1970-01-01T00:00:00+00:00
++++ assert_cli-0.6.3/Cargo.toml	2023-02-04T22:33:50.016282+00:00
+@@ -22,9 +22,8 @@
+ categories = ["development-tools::testing"]
+ license = "MIT OR Apache-2.0"
+ repository = "https://github.com/assert-rs/assert_cli.git"
++autobins = false
+ 
+-[[bin]]
+-name = "assert_fixture"
+ [dependencies.colored]
+ version = "1.5"
+ 

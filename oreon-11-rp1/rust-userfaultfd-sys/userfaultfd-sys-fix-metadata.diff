@@ -1,0 +1,11 @@
+--- userfaultfd-sys-0.5.0/Cargo.toml	1970-01-01T00:00:01+00:00
++++ userfaultfd-sys-0.5.0/Cargo.toml	2026-01-11T18:30:00.637858+00:00
+@@ -23,7 +23,7 @@
+ version = "^1.0.0"
+ 
+ [build-dependencies.bindgen]
+-version = "^0.68.1"
++version = "^0.72"
+ features = ["runtime"]
+ default-features = false
+ 

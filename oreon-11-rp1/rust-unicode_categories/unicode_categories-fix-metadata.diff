@@ -1,0 +1,7 @@
+--- unicode_categories-0.1.1/Cargo.toml	2016-10-22T17:56:37+00:00
++++ unicode_categories-0.1.1/Cargo.toml	2023-03-20T18:33:08.215533+00:00
+@@ -8,3 +8,4 @@
+ repository = "https://github.com/swgillespie/unicode-categories"
+ documentation = "http://swgillespie.github.io/unicode-categories/unicode_categories/"
+ readme = "README.md"
++exclude = ["/scripts/*"]

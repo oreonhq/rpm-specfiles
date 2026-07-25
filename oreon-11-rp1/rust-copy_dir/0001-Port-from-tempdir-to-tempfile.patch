@@ -1,0 +1,79 @@
+From cd84d0279df32a43e3961b943f13c0cab43bc68d Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Mon, 20 Jan 2025 23:10:54 +0100
+Subject: [PATCH] Port from tempdir to tempfile
+
+---
+ src/lib.rs | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 374cc86..e5c09a2 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -154,7 +154,7 @@ mod tests {
+     use std::path::Path;
+     use std::process::Command;
+ 
+-    extern crate tempdir;
++    extern crate tempfile;
+     extern crate walkdir;
+ 
+     #[test]
+@@ -174,7 +174,7 @@ mod tests {
+ 
+     #[test]
+     fn source_does_not_exist() {
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+         let source_path = base_dir.as_ref().join("noexist.file");
+         match super::copy_dir(&source_path, "dest.file") {
+             Ok(_) => panic!("expected Err"),
+@@ -187,7 +187,7 @@ mod tests {
+ 
+     #[test]
+     fn target_exists() {
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+         let source_path = base_dir.as_ref().join("exist.file");
+         let target_path = base_dir.as_ref().join("exist2.file");
+ 
+@@ -207,7 +207,7 @@ mod tests {
+ 
+     #[test]
+     fn attempt_copy_under_self() {
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+         let dir = Dir(
+             "foo",
+             vec![File("bar"), Dir("baz", vec![File("quux"), File("fobe")])],
+@@ -300,7 +300,7 @@ mod tests {
+         explicit_name: bool,
+         o_pre_state: Option<&DirMaker>,
+     ) {
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+ 
+         let source_dir = base_dir.as_ref().join("source");
+         let our_dir = base_dir.as_ref().join("ours");
+@@ -346,7 +346,7 @@ mod tests {
+     fn dir_maker_and_assert_dirs_same_baseline() {
+         let dir = Dir("foobar", vec![File("bar"), Dir("baz", Vec::new())]);
+ 
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+ 
+         let a_path = base_dir.as_ref().join("a");
+         let b_path = base_dir.as_ref().join("b");
+@@ -367,7 +367,7 @@ mod tests {
+ 
+         let dir2 = Dir("foobar", vec![File("fobe"), File("beez")]);
+ 
+-        let base_dir = tempdir::TempDir::new("copy_dir_test").unwrap();
++        let base_dir = tempfile::TempDir::with_prefix("copy_dir_test").unwrap();
+ 
+         let a_path = base_dir.as_ref().join("a");
+         let b_path = base_dir.as_ref().join("b");
+-- 
+2.48.1
+

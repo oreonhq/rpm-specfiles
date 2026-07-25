@@ -1,0 +1,12 @@
+--- desed-1.2.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ desed-1.2.2/Cargo.toml	2025-01-11T18:40:13.451718+00:00
+@@ -59,8 +59,6 @@
+ default-features = false
+ package = "ratatui"
+ 
+-[target.'cfg(any(target_os="macos", target_os="dragonfly", target_os="freebsd", target_os="netbsd", target_os="openbsd"))'.dependencies.kqueue]
+-version = "1.0.6"
+-
+ [target.'cfg(target_os = "linux")'.dependencies.inotify]
+ version = "0.10.0"
++
