@@ -1,0 +1,15 @@
+--- winapi-util-0.1.11/Cargo.toml	1970-01-01T00:00:01+00:00
++++ winapi-util-0.1.11/Cargo.toml	2025-09-07T12:24:31.000000+00:00
+@@ -43,12 +43,3 @@
+ [lib]
+ name = "winapi_util"
+ path = "src/lib.rs"
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = ">=0.48.0, <=0.61.*"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Console",
+-    "Win32_System_SystemInformation",
+-]
