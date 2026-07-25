@@ -1,0 +1,20 @@
+--- ar_archive_writer-0.5.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ar_archive_writer-0.5.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -50,7 +50,7 @@
+ path = "tests/round_trip.rs"
+ 
+ [dependencies.object]
+-version = "0.37.1"
++version = "0.38"
+ features = [
+     "std",
+     "read",
+@@ -61,7 +61,7 @@
+ version = "0.3.6"
+ 
+ [dev-dependencies.object]
+-version = "0.37.1"
++version = "0.38"
+ features = [
+     "write",
+     "xcoff",

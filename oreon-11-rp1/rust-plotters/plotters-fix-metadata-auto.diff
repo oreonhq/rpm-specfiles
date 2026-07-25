@@ -1,14 +1,26 @@
 --- plotters-0.3.7/Cargo.toml	1970-01-01T00:00:01+00:00
 +++ plotters-0.3.7/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -198,7 +198,6 @@
- 
- [features]
- ab_glyph = [
--    "dep:ab_glyph",
-     "once_cell",
+@@ -222,16 +222,10 @@
+ colormaps = []
+ datetime = ["chrono"]
+ default = [
+-    "bitmap_backend",
+-    "bitmap_encoder",
+-    "bitmap_gif",
+     "svg_backend",
+-    "chrono",
+-    "ttf",
+-    "image",
+-    "deprecated_items",
+-    "all_series",
+-    "all_elements",
++    "area_series",
++    "line_series",
++    "point_series",
+     "full_palette",
+     "colormaps",
  ]
- all_elements = [
-@@ -257,68 +256,6 @@
+@@ -257,68 +251,6 @@
      "pathfinder_geometry",
  ]
  

@@ -1,0 +1,45 @@
+--- chrono-0.4.45/Cargo.toml	1970-01-01T00:00:01+00:00
++++ chrono-0.4.45/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -58,17 +58,11 @@
+ __internal_bench = []
+ alloc = []
+ clock = [
+-    "winapi",
+-    "iana-time-zone",
++        "iana-time-zone",
+     "now",
+ ]
+ core-error = []
+-default = [
+-    "clock",
+-    "std",
+-    "oldtime",
+-    "wasmbind",
+-]
++default = ["clock", "std", "oldtime"]
+ defmt = [
+     "dep:defmt",
+     "pure-rust-locales?/defmt",
+@@ -160,22 +154,8 @@
+ [dev-dependencies.windows-bindgen]
+ version = "0.66"
+ 
+-[target.'cfg(all(target_arch = "wasm32", not(any(target_os = "emscripten", target_os = "wasi"))))'.dependencies.js-sys]
+-version = "0.3"
+-optional = true
+-
+-[target.'cfg(all(target_arch = "wasm32", not(any(target_os = "emscripten", target_os = "wasi"))))'.dependencies.wasm-bindgen]
+-version = "0.2"
+-optional = true
+-
+-[target.'cfg(all(target_arch = "wasm32", not(any(target_os = "emscripten", target_os = "wasi"))))'.dev-dependencies.wasm-bindgen-test]
+-version = "0.3"
+-
+ [target."cfg(unix)".dependencies.iana-time-zone]
+ version = "0.1.45"
+ features = ["fallback"]
+ optional = true
+ 
+-[target."cfg(windows)".dependencies.windows-link]
+-version = "0.2"
+-optional = true
