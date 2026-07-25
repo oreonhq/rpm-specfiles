@@ -1,0 +1,22 @@
+--- snapbox-1.2.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ snapbox-1.2.2/Cargo.toml	2026-01-01T00:00:00+00:00
+@@ -84,7 +84,6 @@
+     "dep:os_pipe",
+     "dep:wait-timeout",
+     "dep:libc",
+-    "dep:windows-sys",
+ ]
+ color = [
+     "dep:anstream",
+@@ -221,11 +220,6 @@
+ 
+ [target."cfg(unix)".dependencies.libc]
+ version = "0.2.183"
+-optional = true
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.61.2"
+-features = ["Win32_Foundation"]
+ optional = true
+ 
+ [lints.clippy]
