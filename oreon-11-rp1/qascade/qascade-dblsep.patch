@@ -1,0 +1,10 @@
+--- qascade_main.ui~	2003-05-03 02:04:13.000000000 +0300
++++ qascade_main.ui	2005-03-18 18:18:28.000000000 +0200
+@@ -11149,7 +11149,6 @@
+     <item text="&amp;File" name="fileMenu">
+         <action name="fileNewAction"/>
+         <separator/>
+-        <separator/>
+         <action name="fileExitAction"/>
+     </item>
+     <item text="View" name="PopupMenu">

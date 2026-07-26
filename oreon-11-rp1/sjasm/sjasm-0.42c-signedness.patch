@@ -1,0 +1,31 @@
+From 2eac7aa3a1c3ebe76acd16729806c8322ae86ddc Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 22 Nov 2022 04:40:13 +0100
+Subject: [PATCH] Fix a signedness problem
+
+  Sjasm Z80 Assembler v0.42c - www.xl2s.tk
+  terminate called after throwing an instance of 'std::out_of_range'
+    what():  basic_string::substr: __pos (which is 4294967295) > this->size() (which is 4)
+---
+ sjasmsrc42c/rawsource.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sjasmsrc42c/rawsource.cpp b/sjasmsrc42c/rawsource.cpp
+index 43ba7f2..e8a81e2 100644
+--- a/sjasmsrc42c/rawsource.cpp
++++ b/sjasmsrc42c/rawsource.cpp
+@@ -229,9 +229,9 @@ void RawSource::_Group2(string &line) {
+ 
+ void RawSource::_CutLines(string &line) {
+   string res="";
+-  unsigned pos;
++  int pos;
+   while ('o') {
+-    pos=(int)line.find_first_of("\\\"'");
++    pos=line.find_first_of("\\\"'");
+     if (pos) res+=line.substr(0,pos);
+     if (pos==string::npos) break;
+     line=line.substr(pos);
+-- 
+2.38.1
+

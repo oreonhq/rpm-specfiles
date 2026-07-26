@@ -1,0 +1,99 @@
+diff -ur slim_v2_6_3/test/Makefile slim_v2_6_3-slimdata/test/Makefile
+--- slim_v2_6_3/test/Makefile	2009-03-17 10:16:07.000000000 -0400
++++ slim_v2_6_3-slimdata/test/Makefile	2009-05-12 21:41:16.000000000 -0400
+@@ -21,6 +21,7 @@
+ test: all $(FAKE_DATA)
+ 	export LD_LIBRARY_PATH=$(LIB); export LIBRARY_PATH=$(LIB); \
+ 	./test_slim.py
++	export LD_LIBRARY_PATH=$(LIB); export LIBRARY_PATH=$(LIB); \
+ 	./unittest
+ 
+ $(FAKE_DATA): generate_random_data
+diff -ur slim_v2_6_3/test/unittest slim_v2_6_3-slimdata/test/unittest
+--- slim_v2_6_3/test/unittest	2009-03-17 10:16:07.000000000 -0400
++++ slim_v2_6_3-slimdata/test/unittest	2009-05-12 22:38:45.000000000 -0400
+@@ -47,7 +47,7 @@
+         fp = open(file,"w")
+         fp.write("random text file, not a slim file")
+         fp.close()
+-        cmd = "unslim %s"%file
++        cmd = "../bin/unslim %s"%file
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertNotEquals( stat, 0 )
+         self.assert_( "not a slim file" in out )
+@@ -57,11 +57,11 @@
+         """Should return error code and report when a file does not exist."""
+         file = "ridiculousfile.dat"
+         assert not os.path.exists( file )
+-        cmd = "slim %s"%file
++        cmd = "../bin/slim %s"%file
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertNotEquals( stat, 0 )
+         self.assert_( "does not exist" in out )
+-        cmd = "unslim %s"%file
++        cmd = "../bin/unslim %s"%file
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertNotEquals( stat, 0 )
+         self.assert_( "does not exist" in out )
+@@ -74,17 +74,17 @@
+         fp = open(file,"w")
+         fp.write("random text file, not a slim file")
+         fp.close()
+-        cmd = "slim --preserve --force -u1 -m2 %s && chmod a-r %s/*"%(file,dir)
++        cmd = "../bin/slim --preserve --force -u1 -m2 %s && chmod a-r %s/*"%(file,dir)
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+         # Test
+         EXPECTED_MSG = "permission denied"
+-        cmd = "unslim --preserve %s.slm"%file
++        cmd = "../bin/unslim --preserve %s.slm"%file
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertNotEquals( stat, 0 )
+         self.assert_( EXPECTED_MSG in out )
+         os.remove("%s.slm"%file)
+-        cmd = "slim --preserve -u1 -m2 %s"%file
++        cmd = "../bin/slim --preserve -u1 -m2 %s"%file
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertNotEquals( stat, 0 )
+         self.assert_( EXPECTED_MSG in out )
+@@ -121,14 +121,14 @@
+ 
+         # Slim with or without --deltas
+         if deltas:
+-            cmd = "slim -pC -m5 --deltas %s %s"%(file1, file2)
++            cmd = "../bin/slim -pC -m5 --deltas %s %s"%(file1, file2)
+         else:
+-            cmd = "slim -pC -m5 %s %s"%(file1, file2)
++            cmd = "../bin/slim -pC -m5 %s %s"%(file1, file2)
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+         #print commands.getoutput("slim_dump %s/*.slm"%dir)
+         
+-        cmd = "unslim -p %s.slm %s.slm"%(file1, file2)
++        cmd = "../bin/unslim -p %s.slm %s.slm"%(file1, file2)
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+ 
+@@ -168,18 +168,18 @@
+ 
+         # Slim with or without --deltas
+         if deltas:
+-            cmd = "slim --force -pC -m2 --deltas %s %s"%(file1, file2)
++            cmd = "../bin/slim --force -pC -m2 --deltas %s %s"%(file1, file2)
+         else:
+-            cmd = "slim --force -pC -m2 %s %s"%(file1, file2)
++            cmd = "../bin/slim --force -pC -m2 %s %s"%(file1, file2)
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+         #print commands.getoutput("ls -l %s; slim_dump %s/*.slm"%(dir,dir))
+         
+-        cmd = "unslim -p %s.slm"%file1
++        cmd = "../bin/unslim -p %s.slm"%file1
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+ 
+-        cmd = "unslim -p %s.slm"%file2
++        cmd = "../bin/unslim -p %s.slm"%file2
+         stat,out = commands.getstatusoutput( cmd )
+         self.assertEquals( stat, 0 )
+ 

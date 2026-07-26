@@ -1,0 +1,65 @@
+From ae83472e07db5af7d15c0873c9b8bc4fb7423ca8 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 5 Dec 2025 13:22:15 +0000
+Subject: [PATCH 1/2] Remove executable perms from examples/run_all.sh
+
+It has no shebang line, so having the execute bit set is not useful.
+---
+ examples/run_all.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 examples/run_all.sh
+
+diff --git a/examples/run_all.sh b/examples/run_all.sh
+old mode 100755
+new mode 100644
+
+From a13d955d489fd0be430a6ddc50e8292bc3633573 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 5 Dec 2025 13:23:07 +0000
+Subject: [PATCH 2/2] Convert examples/run_loa line terminations from CRLF
+
+---
+ examples/run_loa.py | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/examples/run_loa.py b/examples/run_loa.py
+index 901d6e6b..fcdb534e 100644
+--- a/examples/run_loa.py
++++ b/examples/run_loa.py
+@@ -1,18 +1,18 @@
+-# encoding=utf8
+-# This is temporary fix to import module from parent folder
+-# It will be removed when package is published on PyPI
+-import sys
+-
+-sys.path.append('../')
+-# End of fix
+-
+-from niapy.algorithms.basic import LionOptimizationAlgorithm
+-from niapy.task import Task
+-from niapy.problems import Sphere
+-
+-# we will run Lion Optimization Algorithm for 5 independent runs
+-for i in range(5):
+-    task = Task(problem=Sphere(dimension=10), max_evals=10000)
+-    algo = LionOptimizationAlgorithm(population_size=40)
+-    best = algo.run(task)
++# encoding=utf8
++# This is temporary fix to import module from parent folder
++# It will be removed when package is published on PyPI
++import sys
++
++sys.path.append('../')
++# End of fix
++
++from niapy.algorithms.basic import LionOptimizationAlgorithm
++from niapy.task import Task
++from niapy.problems import Sphere
++
++# we will run Lion Optimization Algorithm for 5 independent runs
++for i in range(5):
++    task = Task(problem=Sphere(dimension=10), max_evals=10000)
++    algo = LionOptimizationAlgorithm(population_size=40)
++    best = algo.run(task)
+     print(best)
+\ No newline at end of file

@@ -1,0 +1,121 @@
+From 171b89e1ec8860e8f560d21430f9c7d5c4dbc792 Mon Sep 17 00:00:00 2001
+From: Ryan Brue <ryanbrue.dev@gmail.com>
+Date: Sun, 27 Oct 2024 23:24:31 -0500
+Subject: [PATCH] feat: optionally use `POP_LAUNCHER_LIB_DIR` env variable
+
+This environment variable describes where the pop-launcher distribution path exists. The default for this is `/usr/lib/pop-launcher`; however, some distributions would like to use `/usr/libexec/pop-launcher` instead.
+
+Signed-off-by: Ryan Brue <ryanbrue.dev@gmail.com>
+---
+ justfile                   |  4 +++-
+ plugins/src/scripts/mod.rs | 17 ++++++++++-------
+ src/lib.rs                 | 23 +++++++++++------------
+ 3 files changed, 24 insertions(+), 20 deletions(-)
+
+diff --git a/justfile b/justfile
+index 06793e9..53c4c11 100644
+--- a/justfile
++++ b/justfile
+@@ -12,10 +12,12 @@ base-dir := if rootdir == '' {
+     rootdir / 'usr'
+ }
+ 
++lib-path := 'lib'
++
+ lib-dir := if rootdir == '' {
+     base-dir / 'share'
+ } else {
+-    base-dir / 'lib'
++    base-dir / lib-path
+ }
+ 
+ bin-dir := base-dir / 'bin'
+diff --git a/plugins/src/scripts/mod.rs b/plugins/src/scripts/mod.rs
+index b0b75d7..a8a6cbb 100644
+--- a/plugins/src/scripts/mod.rs
++++ b/plugins/src/scripts/mod.rs
+@@ -13,10 +13,6 @@ use std::process::Stdio;
+ use tokio::io::AsyncBufReadExt;
+ use tokio::process::Command;
+ 
+-const LOCAL_PATH: &str = ".local/share/pop-launcher/scripts";
+-const SYSTEM_ADMIN_PATH: &str = "/etc/pop-launcher/scripts";
+-const DISTRIBUTION_PATH: &str = "/usr/lib/pop-launcher/scripts";
+-
+ pub async fn main() {
+     let mut requests = json_input_stream(async_stdin());
+ 
+@@ -103,13 +99,20 @@ impl App {
+ 
+         let mut queue = VecDeque::new();
+ 
++        let local_path = ".local/share/pop-launcher/scripts";
++        let system_admin_path = "/etc/pop-launcher/scripts";
++        let distribution_path = &format!(
++            "{}/scripts",
++            option_env!("POP_LAUNCHER_LIB_DIR").unwrap_or("/usr/lib/pop-launcher")
++        );
++
+         queue.push_back(
+             dirs::home_dir()
+                 .expect("user does not have home dir")
+-                .join(LOCAL_PATH),
++                .join(local_path),
+         );
+-        queue.push_back(Path::new(SYSTEM_ADMIN_PATH).to_owned());
+-        queue.push_back(Path::new(DISTRIBUTION_PATH).to_owned());
++        queue.push_back(Path::new(system_admin_path).to_owned());
++        queue.push_back(Path::new(distribution_path).to_owned());
+ 
+         let script_sender = async move {
+             while let Some(path) = queue.pop_front() {
+diff --git a/src/lib.rs b/src/lib.rs
+index e626e9d..ad5987f 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -6,34 +6,33 @@ pub mod config;
+ 
+ pub use self::codec::*;
+ 
+-use const_format::concatcp;
+ use serde::{Deserialize, Serialize};
+ use std::{
+     borrow::Cow,
+     path::{Path, PathBuf},
+ };
+ 
+-pub const LOCAL: &str = "~/.local/share/pop-launcher";
+-pub const LOCAL_PLUGINS: &str = concatcp!(LOCAL, "/plugins");
++pub fn plugin_paths<'a>() -> impl Iterator<Item = PathBuf> {
++    let local = "~/.local/share/pop-launcher";
++    let local_plugins = format!("{}/plugins", local);
+ 
+-pub const SYSTEM: &str = "/etc/pop-launcher";
+-pub const SYSTEM_PLUGINS: &str = concatcp!(SYSTEM, "/plugins");
++    let system = "/etc/pop-launcher";
++    let system_plugins = format!("{}/plugins", system);
+ 
+-pub const DISTRIBUTION: &str = "/usr/lib/pop-launcher";
+-pub const DISTRIBUTION_PLUGINS: &str = concatcp!(DISTRIBUTION, "/plugins");
++    let distribution = option_env!("POP_LAUNCHER_LIB_DIR").unwrap_or("/usr/lib/pop-launcher");
++    let distribution_plugins = format!("{}/plugins", distribution);
+ 
+-pub const PLUGIN_PATHS: &[&str] = &[LOCAL_PLUGINS, SYSTEM_PLUGINS, DISTRIBUTION_PLUGINS];
++    let plugin_paths = vec![local_plugins, system_plugins, distribution_plugins];
+ 
+-pub fn plugin_paths() -> impl Iterator<Item = Cow<'static, Path>> {
+-    PLUGIN_PATHS.iter().map(|path| {
++    plugin_paths.into_iter().map(|path| {
+         #[allow(deprecated)]
+         if let Some(path) = path.strip_prefix("~/") {
+             let path = dirs::home_dir()
+                 .expect("user does not have home dir")
+                 .join(path);
+-            Cow::Owned(path)
++            path
+         } else {
+-            Cow::Borrowed(Path::new(path))
++            Path::new(&path).to_owned()
+         }
+     })
+ }

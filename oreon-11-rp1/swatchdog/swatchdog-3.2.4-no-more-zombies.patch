@@ -1,0 +1,12 @@
+diff -up swatchdog-3.2.4/lib/Swatchdog/Actions.pm.fixed swatchdog-3.2.4/lib/Swatchdog/Actions.pm
+--- swatchdog-3.2.4/lib/Swatchdog/Actions.pm.fixed	2022-09-23 14:50:19.598213866 -0400
++++ swatchdog-3.2.4/lib/Swatchdog/Actions.pm	2022-09-23 14:50:36.639300066 -0400
+@@ -96,7 +96,7 @@ sub exec_command {
+ 
+  EXECFORK: {
+     if ($exec_pid = fork) {
+-      waitpid(-1, WNOHANG);
++      waitpid($exec_pid, 0);
+       return 0;
+     } elsif (defined $exec_pid) {
+       exec($command);

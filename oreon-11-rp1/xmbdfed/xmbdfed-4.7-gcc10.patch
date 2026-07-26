@@ -1,0 +1,11 @@
+diff -up xmbdfed-4.7/setup.c.gcc10 xmbdfed-4.7/setup.c
+--- xmbdfed-4.7/setup.c.gcc10	2020-02-01 05:51:05.788798755 -0500
++++ xmbdfed-4.7/setup.c	2020-02-01 05:51:15.643593665 -0500
+@@ -92,7 +92,6 @@ typedef struct {
+     Boolean saved;
+ } MXFEditorSetup;
+ 
+-unsigned long active_editor;
+ static MXFEditorSetup setup;
+ static MXFEditorOtherOptions other;
+ 

@@ -1,0 +1,27 @@
+From fbe4748d49ac87504ee8d3e7352da0de3485144c Mon Sep 17 00:00:00 2001
+From: geemus <geemus@gmail.com>
+Date: Fri, 21 Nov 2025 13:32:59 -0600
+Subject: [PATCH] adjust ractor usage for Ruby 3.5+
+
+closes #892
+---
+ spec/requests/basic_spec.rb | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/spec/requests/basic_spec.rb b/spec/requests/basic_spec.rb
+index 33692bc1..098787cd 100644
+--- a/spec/requests/basic_spec.rb
++++ b/spec/requests/basic_spec.rb
+@@ -50,7 +50,11 @@
+         response.body
+       end
+ 
+-      expect(r.take).to eq 'foo'
++      if Ractor.method_defined?(:value)
++        expect(r.value).to eq 'foo'
++      else
++        expect(r.take).to eq 'foo'
++      end
+     end
+   end
+ end

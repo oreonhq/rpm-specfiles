@@ -1,0 +1,362 @@
+From 41e57e84b97d6690a29d7788d6d19ffd63339818 Mon Sep 17 00:00:00 2001
+From: Mathias De Mare <mathias.de_mare@nokia.com>
+Date: Wed, 8 Mar 2023 17:04:58 +0100
+Subject: [PATCH] hglib tests: migrate away from (unmaintained) nose
+
+---
+ Makefile                                      |  4 +--
+ heptapod-ci.yml                               |  5 ++-
+ test.py                                       |  7 ----
+ tests/__init__.py                             | 22 -------------
+ tests/common.py                               | 19 ++++++++++-
+ tests/{test-annotate.py => test_annotate.py}  |  0
+ .../{test-bookmarks.py => test_bookmarks.py}  |  0
+ tests/{test-branch.py => test_branch.py}      |  0
+ tests/{test-branches.py => test_branches.py}  |  0
+ tests/{test-bundle.py => test_bundle.py}      |  0
+ tests/{test-clone.py => test_clone.py}        |  0
+ tests/{test-commit.py => test_commit.py}      |  0
+ tests/{test-config.py => test_config.py}      |  0
+ tests/{test-context.py => test_context.py}    |  0
+ tests/{test-copy.py => test_copy.py}          |  0
+ tests/{test-diff.py => test_diff.py}          |  0
+ tests/{test-encoding.py => test_encoding.py}  |  0
+ tests/{test-forget.py => test_forget.py}      |  0
+ tests/{test-grep.py => test_grep.py}          |  0
+ tests/{test-heads.py => test_heads.py}        |  0
+ tests/{test-hglib.py => test_hglib.py}        |  0
+ tests/{test-hidden.py => test_hidden.py}      |  0
+ tests/{test-import.py => test_import.py}      |  0
+ tests/{test-init.py => test_init.py}          |  0
+ tests/{test-log.py => test_log.py}            |  0
+ tests/{test-manifest.py => test_manifest.py}  |  0
+ tests/{test-merge.py => test_merge.py}        |  0
+ tests/{test-move.py => test_move.py}          |  0
+ ...-incoming.py => test_outgoing_incoming.py} |  0
+ tests/{test-parents.py => test_parents.py}    |  0
+ tests/{test-paths.py => test_paths.py}        |  0
+ tests/{test-phase.py => test_phase.py}        |  0
+ tests/{test-pull.py => test_pull.py}          |  0
+ tests/{test-push.py => test_push.py}          |  0
+ tests/{test-remove.py => test_remove.py}      |  0
+ tests/{test-resolve.py => test_resolve.py}    |  0
+ tests/{test-status.py => test_status.py}      |  0
+ tests/{test-summary.py => test_summary.py}    |  0
+ tests/{test-tags.py => test_tags.py}          |  0
+ tests/{test-update.py => test_update.py}      |  0
+ tests/with_hg.py                              | 33 -------------------
+ 41 files changed, 22 insertions(+), 68 deletions(-)
+ delete mode 100644 test.py
+ rename tests/{test-annotate.py => test_annotate.py} (100%)
+ rename tests/{test-bookmarks.py => test_bookmarks.py} (100%)
+ rename tests/{test-branch.py => test_branch.py} (100%)
+ rename tests/{test-branches.py => test_branches.py} (100%)
+ rename tests/{test-bundle.py => test_bundle.py} (100%)
+ rename tests/{test-clone.py => test_clone.py} (100%)
+ rename tests/{test-commit.py => test_commit.py} (100%)
+ rename tests/{test-config.py => test_config.py} (100%)
+ rename tests/{test-context.py => test_context.py} (100%)
+ rename tests/{test-copy.py => test_copy.py} (100%)
+ rename tests/{test-diff.py => test_diff.py} (100%)
+ rename tests/{test-encoding.py => test_encoding.py} (100%)
+ rename tests/{test-forget.py => test_forget.py} (100%)
+ rename tests/{test-grep.py => test_grep.py} (100%)
+ rename tests/{test-heads.py => test_heads.py} (100%)
+ rename tests/{test-hglib.py => test_hglib.py} (100%)
+ rename tests/{test-hidden.py => test_hidden.py} (100%)
+ rename tests/{test-import.py => test_import.py} (100%)
+ rename tests/{test-init.py => test_init.py} (100%)
+ rename tests/{test-log.py => test_log.py} (100%)
+ rename tests/{test-manifest.py => test_manifest.py} (100%)
+ rename tests/{test-merge.py => test_merge.py} (100%)
+ rename tests/{test-move.py => test_move.py} (100%)
+ rename tests/{test-outgoing-incoming.py => test_outgoing_incoming.py} (100%)
+ rename tests/{test-parents.py => test_parents.py} (100%)
+ rename tests/{test-paths.py => test_paths.py} (100%)
+ rename tests/{test-phase.py => test_phase.py} (100%)
+ rename tests/{test-pull.py => test_pull.py} (100%)
+ rename tests/{test-push.py => test_push.py} (100%)
+ rename tests/{test-remove.py => test_remove.py} (100%)
+ rename tests/{test-resolve.py => test_resolve.py} (100%)
+ rename tests/{test-status.py => test_status.py} (100%)
+ rename tests/{test-summary.py => test_summary.py} (100%)
+ rename tests/{test-tags.py => test_tags.py} (100%)
+ rename tests/{test-update.py => test_update.py} (100%)
+ delete mode 100644 tests/with_hg.py
+
+diff --git a/Makefile b/Makefile
+index c8a1e88..f17e890 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-PYTHON=python
++PYTHON=python3
+ help:
+ 	@echo 'Commonly used make targets:'
+ 	@echo '  tests - run all tests in the automatic test suite'
+@@ -14,4 +14,4 @@ dist: MANIFEST.in
+ 	TAR_OPTIONS="--owner=root --group=root --mode=u+w,go-w,a+rX-s" $(PYTHON) setup.py -q sdist
+ 
+ tests:
+-	$(PYTHON) test.py --with-doctest
++	$(PYTHON) -m unittest discover
+diff --git a/test.py b/test.py
+deleted file mode 100644
+index e0b4021..0000000
+--- a/test.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#!/usr/bin/env python
+-
+-import nose
+-from tests import with_hg
+-
+-if __name__ == '__main__':
+-    nose.main(addplugins=[with_hg.WithHgPlugin()])
+diff --git a/tests/__init__.py b/tests/__init__.py
+index 46bafb6..e69de29 100644
+--- a/tests/__init__.py
++++ b/tests/__init__.py
+@@ -1,22 +0,0 @@
+-import os, tempfile, sys, shutil
+-
+-def setUp():
+-    os.environ['LANG'] = os.environ['LC_ALL'] = os.environ['LANGUAGE'] = 'C'
+-    os.environ["EMAIL"] = "Foo Bar <foo.bar@example.com>"
+-    os.environ['CDPATH'] = ''
+-    os.environ['COLUMNS'] = '80'
+-    os.environ['GREP_OPTIONS'] = ''
+-    os.environ['http_proxy'] = ''
+-
+-    os.environ["HGEDITOR"] = sys.executable + ' -c "import sys; sys.exit(0)"'
+-    os.environ["HGMERGE"] = "internal:merge"
+-    os.environ["HGUSER"]   = "test"
+-    os.environ["HGENCODING"] = "ascii"
+-    os.environ["HGENCODINGMODE"] = "strict"
+-    tmpdir = tempfile.mkdtemp('', 'python-hglib.')
+-    os.environ["HGTMP"] = os.path.realpath(tmpdir)
+-    os.environ["HGRCPATH"] = os.pathsep
+-
+-def tearDown(self):
+-    os.chdir('..')
+-    shutil.rmtree(os.environ["HGTMP"])
+diff --git a/tests/common.py b/tests/common.py
+index 4dc4789..b955dda 100644
+--- a/tests/common.py
++++ b/tests/common.py
+@@ -14,6 +14,22 @@ def resultappender(list):
+ 
+ class basetest(unittest.TestCase):
+     def setUp(self):
++        os.environ['LANG'] = os.environ['LC_ALL'] = os.environ['LANGUAGE'] = 'C'
++        os.environ["EMAIL"] = "Foo Bar <foo.bar@example.com>"
++        os.environ['CDPATH'] = ''
++        os.environ['COLUMNS'] = '80'
++        os.environ['GREP_OPTIONS'] = ''
++        os.environ['http_proxy'] = ''
++
++        os.environ["HGEDITOR"] = sys.executable + ' -c "import sys; sys.exit(0)"'
++        os.environ["HGMERGE"] = "internal:merge"
++        os.environ["HGUSER"]   = "test"
++        os.environ["HGENCODING"] = "ascii"
++        os.environ["HGENCODINGMODE"] = "strict"
++        tmpdir = tempfile.mkdtemp('', 'python-hglib.')
++        os.environ["HGTMP"] = os.path.realpath(tmpdir)
++        os.environ["HGRCPATH"] = os.pathsep
++
+         self._testtmp = os.environ["TESTTMP"] = os.environ["HOME"] = \
+             os.path.join(os.environ["HGTMP"], self.__class__.__name__)
+ 
+@@ -37,8 +53,9 @@ class basetest(unittest.TestCase):
+             if client.server is not None:
+                 client.close()
+         os.chdir('..')
++
+         try:
+-            shutil.rmtree(self._testtmp)
++            shutil.rmtree(self._testtmp, ignore_errors=True)
+         except AttributeError:
+             pass # if our setUp was overriden
+ 
+diff --git a/tests/test-annotate.py b/tests/test_annotate.py
+similarity index 100%
+rename from tests/test-annotate.py
+rename to tests/test_annotate.py
+diff --git a/tests/test-bookmarks.py b/tests/test_bookmarks.py
+similarity index 100%
+rename from tests/test-bookmarks.py
+rename to tests/test_bookmarks.py
+diff --git a/tests/test-branch.py b/tests/test_branch.py
+similarity index 100%
+rename from tests/test-branch.py
+rename to tests/test_branch.py
+diff --git a/tests/test-branches.py b/tests/test_branches.py
+similarity index 100%
+rename from tests/test-branches.py
+rename to tests/test_branches.py
+diff --git a/tests/test-bundle.py b/tests/test_bundle.py
+similarity index 100%
+rename from tests/test-bundle.py
+rename to tests/test_bundle.py
+diff --git a/tests/test-clone.py b/tests/test_clone.py
+similarity index 100%
+rename from tests/test-clone.py
+rename to tests/test_clone.py
+diff --git a/tests/test-commit.py b/tests/test_commit.py
+similarity index 100%
+rename from tests/test-commit.py
+rename to tests/test_commit.py
+diff --git a/tests/test-config.py b/tests/test_config.py
+similarity index 100%
+rename from tests/test-config.py
+rename to tests/test_config.py
+diff --git a/tests/test-context.py b/tests/test_context.py
+similarity index 100%
+rename from tests/test-context.py
+rename to tests/test_context.py
+diff --git a/tests/test-copy.py b/tests/test_copy.py
+similarity index 100%
+rename from tests/test-copy.py
+rename to tests/test_copy.py
+diff --git a/tests/test-diff.py b/tests/test_diff.py
+similarity index 100%
+rename from tests/test-diff.py
+rename to tests/test_diff.py
+diff --git a/tests/test-encoding.py b/tests/test_encoding.py
+similarity index 100%
+rename from tests/test-encoding.py
+rename to tests/test_encoding.py
+diff --git a/tests/test-forget.py b/tests/test_forget.py
+similarity index 100%
+rename from tests/test-forget.py
+rename to tests/test_forget.py
+diff --git a/tests/test-grep.py b/tests/test_grep.py
+similarity index 100%
+rename from tests/test-grep.py
+rename to tests/test_grep.py
+diff --git a/tests/test-heads.py b/tests/test_heads.py
+similarity index 100%
+rename from tests/test-heads.py
+rename to tests/test_heads.py
+diff --git a/tests/test-hglib.py b/tests/test_hglib.py
+similarity index 100%
+rename from tests/test-hglib.py
+rename to tests/test_hglib.py
+diff --git a/tests/test-hidden.py b/tests/test_hidden.py
+similarity index 100%
+rename from tests/test-hidden.py
+rename to tests/test_hidden.py
+diff --git a/tests/test-import.py b/tests/test_import.py
+similarity index 100%
+rename from tests/test-import.py
+rename to tests/test_import.py
+diff --git a/tests/test-init.py b/tests/test_init.py
+similarity index 100%
+rename from tests/test-init.py
+rename to tests/test_init.py
+diff --git a/tests/test-log.py b/tests/test_log.py
+similarity index 100%
+rename from tests/test-log.py
+rename to tests/test_log.py
+diff --git a/tests/test-manifest.py b/tests/test_manifest.py
+similarity index 100%
+rename from tests/test-manifest.py
+rename to tests/test_manifest.py
+diff --git a/tests/test-merge.py b/tests/test_merge.py
+similarity index 100%
+rename from tests/test-merge.py
+rename to tests/test_merge.py
+diff --git a/tests/test-move.py b/tests/test_move.py
+similarity index 100%
+rename from tests/test-move.py
+rename to tests/test_move.py
+diff --git a/tests/test-outgoing-incoming.py b/tests/test_outgoing_incoming.py
+similarity index 100%
+rename from tests/test-outgoing-incoming.py
+rename to tests/test_outgoing_incoming.py
+diff --git a/tests/test-parents.py b/tests/test_parents.py
+similarity index 100%
+rename from tests/test-parents.py
+rename to tests/test_parents.py
+diff --git a/tests/test-paths.py b/tests/test_paths.py
+similarity index 100%
+rename from tests/test-paths.py
+rename to tests/test_paths.py
+diff --git a/tests/test-phase.py b/tests/test_phase.py
+similarity index 100%
+rename from tests/test-phase.py
+rename to tests/test_phase.py
+diff --git a/tests/test-pull.py b/tests/test_pull.py
+similarity index 100%
+rename from tests/test-pull.py
+rename to tests/test_pull.py
+diff --git a/tests/test-push.py b/tests/test_push.py
+similarity index 100%
+rename from tests/test-push.py
+rename to tests/test_push.py
+diff --git a/tests/test-remove.py b/tests/test_remove.py
+similarity index 100%
+rename from tests/test-remove.py
+rename to tests/test_remove.py
+diff --git a/tests/test-resolve.py b/tests/test_resolve.py
+similarity index 100%
+rename from tests/test-resolve.py
+rename to tests/test_resolve.py
+diff --git a/tests/test-status.py b/tests/test_status.py
+similarity index 100%
+rename from tests/test-status.py
+rename to tests/test_status.py
+diff --git a/tests/test-summary.py b/tests/test_summary.py
+similarity index 100%
+rename from tests/test-summary.py
+rename to tests/test_summary.py
+diff --git a/tests/test-tags.py b/tests/test_tags.py
+similarity index 100%
+rename from tests/test-tags.py
+rename to tests/test_tags.py
+diff --git a/tests/test-update.py b/tests/test_update.py
+similarity index 100%
+rename from tests/test-update.py
+rename to tests/test_update.py
+diff --git a/tests/with_hg.py b/tests/with_hg.py
+deleted file mode 100644
+index e458942..0000000
+--- a/tests/with_hg.py
++++ /dev/null
+@@ -1,33 +0,0 @@
+-import os
+-from nose.plugins import Plugin
+-
+-class WithHgPlugin(Plugin):
+-    name = 'with-hg'
+-    enabled = False
+-
+-    def options(self, parser, env):
+-        Plugin.options(self, parser, env)
+-        parser.add_option('--with-hg',
+-                          action='store',
+-                          type='string',
+-                          metavar='HG',
+-                          dest='with_hg',
+-                          help='test using specified hg script.')
+-
+-    def configure(self, options, conf):
+-        Plugin.configure(self, options, conf)
+-        if options.with_hg:
+-            self.enabled = True
+-            self.hgpath = os.path.realpath(options.with_hg)
+-
+-    def begin(self):
+-        import hglib
+-
+-        p = hglib.util.popen([self.hgpath, 'version'])
+-        p.communicate()
+-
+-        if p.returncode:
+-            raise ValueError("custom hg %r doesn't look like Mercurial"
+-                             % self.hgpath)
+-
+-        hglib.HGPATH = self.hgpath
+-- 
+2.49.0
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+	<id type="desktop">tuxanci.desktop</id>
+	<name>Tuxánci</name>
+	<summary>A First Tux Shooter Game</summary>
+	<developer_name>Oroborus</developer_name>
+	<developer_name>helb</developer_name>
+	<developer_name>xHire</developer_name>
+	<developer_name>paces</developer_name>
+	<developer_name>Timoo</developer_name>
+	<developer_name>avp8</developer_name>
+	<metadata_license>CC0</metadata_license>
+	<project_license>GPL-2.0</project_license>
+	<description>
+		<p>
+			Tuxánci is a first tux shooter game supporting single player and multiplayer
+			modes both on a single computer and over the network.
+		</p>
+	</description>
+	<screenshots>
+		<screenshot type="default">
+			<image width="800" height="600">https://src.fedoraproject.org/repo/pkgs/rpms/tuxanci/screenshot.png/sha512/000a526d04e5bf97fbe0c96841f0ab662b5ad737d6382964838c24ac6b68519824929bd4e117fde77cbfa35cf72f64f1b879f4b3459ce7c45aeefc9c29e3e153/screenshot.png</image>
+		</screenshot>
+	</screenshots>
+	<updatecontact>lkundrak@v3.sk</updatecontact>
+</application>

@@ -1,0 +1,72 @@
+.TH TEND\-EXPAND "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-expand \- converts masked non-redundant tensor images to redundant
+.SH SYNOPSIS
+.B tend\ expand
+.RB [ \-t
+.RI < thresh >]
+.RB [ \-s
+.RI < scale >]
+.B [ \-unmf ]
+.B [ \-ro ]
+.B [ \-roo ]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Converts masked non-redundant tensor images to redundant.
+For
+images of 3D tensors, this converts from a 7-value tensor starting with the
+confidence/mask value
+.BI ( conf ,\  Dxx ,\  Dxy ,\  Dxz ,\  Dyy ,\  Dyz ,\  Dzz )
+to a 9-value tensor
+with the full matrix
+.BI ( Dxx ,\  Dxy ,\  Dxz ,\  Dxy ,\  Dyy ,\  Dyz ,\  Dxz ,\  Dyz ,\  Dzz ).
+This is set to all zeros when the confidence is below the given threshold.
+For
+images
+of 2D tensors, the conversion is from
+.BI ( conf ,\  Dxx ,\  Dxy ,\  Dyy )
+to
+.BI ( Dxx ,\  Dxy ,\  Dxy ,\  Dyy ).
+.SH OPTIONS
+.TP
+.B \-t\fR <\fIthresh\fR>
+confidence level to threshold output tensors at.
+Should be between
+.B 0.0
+and
+.BR 1.0 .
+.RI ( float );
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-s\fR <\fIscale\fR>
+how to scale values before saving as 9-value tensor.
+Useful for visualization tools which assume certain characteristic ranges of
+eigenvalues
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-unmf
+apply and remove the measurement frame, if it exists
+.TP
+.B \-ro
+reduce general image orientation to axis-aligned spacings
+.TP
+.B \-roo
+reduce general image orientation to axis-aligned spacings, while also making
+some effort to set axis mins from space origin
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume, with 7 values per sample; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume, with the 9 matrix components per sample
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-shrink (1)

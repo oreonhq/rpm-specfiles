@@ -1,0 +1,11 @@
+diff -rupN --no-dereference ephem-4.2/setup.py ephem-4.2-new/setup.py
+--- ephem-4.2/setup.py	2025-02-18 15:08:04.000000000 +0100
++++ ephem-4.2-new/setup.py	2025-03-01 11:30:10.278782580 +0100
+@@ -42,6 +42,7 @@ extensions = [
+         ['extensions/_libastro.c', 'extensions/dtoa.c']
+         + libastro_files + libastro_data,
+         extra_compile_args=['-ffloat-store'],
++        extra_link_args=['-Wl,-Bsymbolic'],
+         include_dirs=['libastro', '.'],
+         libraries = libraries,
+     ),

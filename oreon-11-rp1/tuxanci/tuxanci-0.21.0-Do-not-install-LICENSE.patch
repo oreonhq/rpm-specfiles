@@ -1,0 +1,30 @@
+From 3fcd8ee4aa11df680c8981277d0d83b4f18faf34 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 27 Apr 2020 13:55:28 +0200
+Subject: [PATCH] Do not install LICENSE
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We install it manually elsewhere.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ CMakeLists.txt      |   2 --
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7abee8..c261239 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -185,8 +185,6 @@ ADD_SUBDIRECTORY ( src )
+ ###############################################################################
+ # path which user send us
+ ADD_SUBDIRECTORY ( data )
+-INSTALL ( FILES ${CMAKE_SOURCE_DIR}/LICENCE
+-	DESTINATION ${CMAKE_INSTALL_DOCDIR}/${APPNAME}/ )
+ INSTALL ( FILES ${CMAKE_SOURCE_DIR}/AUTHORS
+ 	DESTINATION ${CMAKE_INSTALL_DOCDIR}/${APPNAME}/ )
+ INSTALL ( FILES ${CMAKE_SOURCE_DIR}/README
+-- 
+2.21.3
+

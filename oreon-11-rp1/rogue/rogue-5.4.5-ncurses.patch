@@ -1,0 +1,26 @@
+--- rogue5.4.5/main.c.orig	2025-01-15 15:54:42.927949094 -0700
++++ rogue5.4.5/main.c	2025-01-15 16:00:31.069181472 -0700
+@@ -8,6 +8,8 @@
+  * @(#)main.c	4.22 (Berkeley) 02/05/99
+  */
+ 
++#define NCURSES_INTERNALS
++
+ #include <stdlib.h>
+ #include <string.h>
+ #include <signal.h>
+--- rogue5.4.5/mdport.c.orig	2019-02-12 06:39:25.000000000 -0600
++++ rogue5.4.5/mdport.c	2019-02-12 06:40:28.000000000 -0600
+@@ -264,9 +264,10 @@
+ {
+ #if defined(clr_eol)
+ #ifdef NCURSES_VERSION
+-    if (cur_term == NULL)
++    TERMTYPE *tp = (TERMTYPE *) (cur_term);
++    if (tp == NULL)
+ 	return(0);
+-    if (cur_term->type.Strings == NULL)
++    if (tp->Strings == NULL)
+ 	return(0);
+ #endif
+     return((clr_eol != NULL) && (*clr_eol != 0));

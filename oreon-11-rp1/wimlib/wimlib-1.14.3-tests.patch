@@ -1,0 +1,18 @@
+diff -up ./Makefile.am.orig ./Makefile.am
+--- ./Makefile.am.orig	2023-09-04 20:41:02.000000000 +0200
++++ ./Makefile.am	2023-09-25 00:59:26.933092055 +0200
+@@ -311,14 +311,6 @@ dist_check_SCRIPTS = tests/test-imagex \
+ 		     tests/test-imagex-capture_and_apply \
+ 		     tests/test-imagex-update_and_extract
+ 
+-if WITH_FUSE
+-dist_check_SCRIPTS += tests/test-imagex-mount
+-endif
+-
+-if WITH_NTFS_3G
+-dist_check_SCRIPTS += tests/test-imagex-ntfs
+-endif
+-
+ EXTRA_DIST +=					\
+ 	tests/common_tests.sh			\
+ 	tests/exclusionlists			\

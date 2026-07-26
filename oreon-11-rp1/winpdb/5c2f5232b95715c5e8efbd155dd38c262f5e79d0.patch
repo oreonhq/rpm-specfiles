@@ -1,0 +1,22 @@
+From 5c2f5232b95715c5e8efbd155dd38c262f5e79d0 Mon Sep 17 00:00:00 2001
+From: Philippe F <phil.fremy@free.fr>
+Date: Tue, 17 Nov 2020 15:11:06 +0100
+Subject: [PATCH] Do not use deprecated function
+
+---
+ winpdb.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/winpdb.py b/winpdb.py
+index 1e27f88..18d0988 100644
+--- a/winpdb.py
++++ b/winpdb.py
+@@ -4178,7 +4178,7 @@ def init2(self):
+             return
+ 
+         pwd_dialog = CPwdDialog(self, pwd)
+-        pos = self.GetPositionTuple()
++        pos = self.GetPosition()
+         pwd_dialog.SetPosition((pos[0] + 50, pos[1] + 50))
+         r = pwd_dialog.ShowModal()
+         if r != wx.ID_OK:

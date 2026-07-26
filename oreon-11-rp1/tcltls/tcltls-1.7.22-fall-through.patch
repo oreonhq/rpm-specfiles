@@ -1,0 +1,30 @@
+Patch by Sergei Golovan (Debian) to fix the compiler warnings about implicit fall-through
+in case.
+
+--- tcltls-1.7.22/tlsBIO.c				2020-10-12 22:39:22.000000000 +0200
++++ tcltls-1.7.22/tlsBIO.c.fall-through			2022-05-28 21:25:07.516152714 +0200
+@@ -231,9 +231,12 @@
+ 	switch (cmd) {
+ 		case BIO_CTRL_RESET:
+ 			dprintf("Got BIO_CTRL_RESET");
+-			num = 0;
++			ret = 0;
++			break;
+ 		case BIO_C_FILE_SEEK:
+ 			dprintf("Got BIO_C_FILE_SEEK");
++			ret = 0;
++			break;
+ 		case BIO_C_FILE_TELL:
+ 			dprintf("Got BIO_C_FILE_TELL");
+ 			ret = 0;
+--- tcltls-1.7.22/tls.c					2020-10-12 22:39:22.000000000 +0200
++++ tcltls-1.7.22/tls.c.fall-through			2022-05-28 21:25:07.515152707 +0200
+@@ -1424,7 +1424,7 @@
+ 		channelName = Tcl_GetStringFromObj(objv[2], NULL);
+ 		break;
+ 	    }
+-	    /* else fall... */
++	    /* else fall-through ... */
+ 	default:
+ 	    Tcl_WrongNumArgs(interp, 1, objv, "?-local? channel");
+ 	    return TCL_ERROR;

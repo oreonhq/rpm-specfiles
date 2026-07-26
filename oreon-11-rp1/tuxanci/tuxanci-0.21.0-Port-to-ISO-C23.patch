@@ -1,0 +1,71 @@
+From 6aab9e8a6438efa0f412b03e78ddad3362ca32b1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 14 Feb 2025 14:37:17 +0100
+Subject: [PATCH] Port to ISO C23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Building with GCC 15, which moved to ISO C23, failed like this:
+
+src/screen/screen_world.c:113:44: error: passing argument 3 of ‘addTaskToTimer’ from incompatible pointer type [-Wincompatible-pointer-types]
+  113 |                                            timer_endArena, NULL, TIMER_END_ARENA);
+      |                                            ^~~~~~~~~~~~~~
+      |                                            |
+      |                                            void (*)(void)
+src/base/myTimer.h:23:64: note: expected ‘void (*)(void *)’ but argument is of type ‘void (*)(void)’
+   23 | extern int addTaskToTimer(list_t * listTimer, int type, void (*fce) (void *p),
+      |                                                         ~~~~~~~^~~~~~~~~~~~~~
+
+and:
+
+src/base/arena.c:348:9: error: too many arguments to function ‘drawLayer’; expected 0, have 2
+  348 |         drawLayer(tux->x, tux->y);
+      |         ^~~~~~~~~ ~~~~~~
+src/client/layer.h:47:13: note: declared here
+   47 | extern void drawLayer();
+      |             ^~~~~~~~~
+
+The first is error obviously needs to pass a dummy argument. The
+latter reveals real programming mistake. I guess that author's
+intention was calling drawLayerCenter(tux->x, tux->y) and this patch
+fixes it like that.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2341467
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/base/arena.c          | 2 +-
+ src/screen/screen_world.c | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/base/arena.c b/src/base/arena.c
+index 4391af9..ab7fc02 100644
+--- a/src/base/arena.c
++++ b/src/base/arena.c
+@@ -345,7 +345,7 @@ void drawSimpleArena(arena_t * arena)
+ 
+ 	drawBackground(arena, screen_x, screen_y);
+ 	drawObjects(arena, screen_x, screen_y);
+-	drawLayer(tux->x, tux->y);
++	drawLayerCenter(tux->x, tux->y);
+ }
+ 
+ void drawArena(arena_t * arena)
+diff --git a/src/screen/screen_world.c b/src/screen/screen_world.c
+index a2d0baf..0c87872 100644
+--- a/src/screen/screen_world.c
++++ b/src/screen/screen_world.c
+@@ -86,8 +86,9 @@ void setWorldEnd()
+ 	isEndWorld = TRUE;
+ }
+ 
+-static void timer_endArena()
++static void timer_endArena(void *arg)
+ {
++    (void)arg;
+ 	if (getNetTypeGame() != NET_GAME_TYPE_CLIENT) {
+ 		setWorldEnd();
+ 		return;
+-- 
+2.48.1
+

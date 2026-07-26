@@ -1,0 +1,37 @@
+Fix crash when running on foreground
+
+http://sourceforge.net/tracker/?func=detail&aid=2984246&group_id=38605&atid=422840
+--- logging.c	2003-04-21 10:20:35.000000000 -0700
++++ logging.c.new	2010-04-08 19:31:40.068876565 -0700
+@@ -138,8 +138,6 @@
+   char time_buf[32];
+   char level_char = ' ';
+ 
+-  va_start(arg_list, format);
+-
+   if ( (log_fp != NULL && level <= log_file_level) ||
+        level <= log_stderr_level ) {
+     now = time(NULL);
+@@ -150,18 +148,20 @@
+ 
+     if (level <= log_file_level) {
+       fprintf(log_fp, "%s %c ", time_buf, (int)level_char);
++      va_start(arg_list, format);
+       vfprintf(log_fp, format, arg_list);
++      va_end(arg_list);
+       fprintf(log_fp, "\n");
+       fflush(log_fp);
+     }
+     if (level <= log_stderr_level) {
+       fprintf(stderr, "%s %c ", time_buf, (int)level_char);
++      va_start(arg_list, format);
+       vfprintf(stderr, format, arg_list);
++      va_end(arg_list);
+       fprintf(stderr, "\n");
+       fflush(stderr);
+     }
+   }
+-
+-  va_end(arg_list);
+ }
+ 

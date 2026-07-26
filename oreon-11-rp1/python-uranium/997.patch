@@ -1,0 +1,90 @@
+From fd201d1c12f9148b267a3a46353ef8110b8385a4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Mon, 26 May 2025 12:22:59 +0200
+Subject: [PATCH] Access ast.Constant.value, not .s -- the latter is gone from
+ Python 3.14+
+
+Followup for https://github.com/Ultimaker/Uranium/issues/498
+
+Test failures this fixes:
+
+    _____________________________ test_init_good["x"] ______________________________
+
+    setting_function_good = <UM.Settings.SettingFunction (0x7f36b42aa200) ="x" >
+
+        def test_init_good(setting_function_good):
+            assert setting_function_good is not None
+    >       assert setting_function_good.isValid()
+    E       assert False
+    E        +  where False = isValid()
+    E        +    where isValid = <UM.Settings.SettingFunction (0x7f36b42aa200) ="x" >.isValid
+
+    tests/Settings/TestSettingFunction.py:64: AssertionError
+    ---------------------------- Captured stdout setup -----------------------------
+    [MainThread] UM.Settings.SettingFunction._safeCompile [80]: Exception in function ('Constant' object has no attribute 's') for setting: "x"
+    _______________________________ test_call[data1] _______________________________
+
+    data = {'code': '"x"', 'result': 'x'}
+
+        @pytest.mark.parametrize("data", test_call_data)
+        def test_call(data):
+            value_provider = MockValueProvider()
+            function = SettingFunction(data["code"])
+    >       assert function(value_provider) == data["result"]
+    E       assert None == 'x'
+    E        +  where None = <UM.Settings.SettingFunction (0x7f36be9e57f0) ="x" >(<tests.Settings.TestSettingFunction.MockValueProvider object at 0x7f36c0f27250>)
+
+    tests/Settings/TestSettingFunction.py:115: AssertionError
+    ----------------------------- Captured stdout call -----------------------------
+    [MainThread] UM.Settings.SettingFunction._safeCompile [80]: Exception in function ('Constant' object has no attribute 's') for setting: "x"
+    _________________________ test_getUsedSettings[data1] __________________________
+
+    data = {'code': '"x"', 'variables': ['x']}
+
+        @pytest.mark.parametrize("data", test_getUsedSettings_data)
+        def test_getUsedSettings(data):
+            function = SettingFunction(data["code"])
+            answer = function.getUsedSettingKeys()
+    >       assert len(answer) == len(data["variables"])
+    E       AssertionError: assert 0 == 1
+    E        +  where 0 = len(frozenset())
+    E        +  and   1 = len(['x'])
+
+    tests/Settings/TestSettingFunction.py:159: AssertionError
+    ----------------------------- Captured stdout call -----------------------------
+    [MainThread] UM.Settings.SettingFunction._safeCompile [80]: Exception in function ('Constant' object has no attribute 's') for setting: "x"
+    _________________________ test_getUsedSettings[data7] __________________________
+
+    data = {'code': "sqrt('x')", 'variables': ['x']}
+
+        @pytest.mark.parametrize("data", test_getUsedSettings_data)
+        def test_getUsedSettings(data):
+            function = SettingFunction(data["code"])
+            answer = function.getUsedSettingKeys()
+    >       assert len(answer) == len(data["variables"])
+    E       AssertionError: assert 0 == 1
+    E        +  where 0 = len(frozenset())
+    E        +  and   1 = len(['x'])
+
+    tests/Settings/TestSettingFunction.py:159: AssertionError
+    ----------------------------- Captured stdout call -----------------------------
+    [MainThread] UM.Settings.SettingFunction._safeCompile [80]: Exception in function ('Constant' object has no attribute 's') for setting: sqrt('x')
+---
+ UM/Settings/SettingFunction.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/UM/Settings/SettingFunction.py b/UM/Settings/SettingFunction.py
+index 194087a00..5f3240cb6 100644
+--- a/UM/Settings/SettingFunction.py
++++ b/UM/Settings/SettingFunction.py
+@@ -274,8 +274,8 @@ def visit_Constant(self, node) -> None:
+ 
+         if node.value in self._blacklist:
+             raise IllegalMethodError(node.value)
+-        if node.s.startswith("_"):
+-            raise IllegalMethodError(node.s)
++        if node.value.startswith("_"):
++            raise IllegalMethodError(node.value)
+         if node.value not in self._knownNames and node.value not in dir(builtins):  # type: ignore #AST uses getattr stuff, so ignore type of node.value.
+             self.keys.add(node.value)  # type: ignore
+ 

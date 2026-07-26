@@ -1,0 +1,420 @@
+diff -U3 -r warzone2100.old/3rdparty/basis_universal/CMakeLists.txt warzone2100/3rdparty/basis_universal/CMakeLists.txt
+--- warzone2100.old/3rdparty/basis_universal/CMakeLists.txt	2025-09-16 11:43:01.000000000 -0500
++++ warzone2100/3rdparty/basis_universal/CMakeLists.txt	2025-11-11 13:15:40.969955726 -0600
+@@ -1,6 +1,6 @@
+ # Important: The Basis Universal encoder and transcoder libraries must be compiled with -fno-strict-aliasing (MSVC's default, and also the Linux kernel).
+ # It should also work without this option, but we do not test with it.
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(basisu)
+ option(STATIC "static linking" FALSE)
+diff -U3 -r warzone2100.old/3rdparty/basis_universal_host_build/CMakeLists.txt warzone2100/3rdparty/basis_universal_host_build/CMakeLists.txt
+--- warzone2100.old/3rdparty/basis_universal_host_build/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/3rdparty/basis_universal_host_build/CMakeLists.txt	2025-11-11 13:15:40.980348748 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.5...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(basis_universal_host_build_wrapper)
+ 
+ set(BASIS_UNIVERSAL_SRC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../basis_universal")
+diff -U3 -r warzone2100.old/3rdparty/CMakeLists.txt warzone2100/3rdparty/CMakeLists.txt
+--- warzone2100.old/3rdparty/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/3rdparty/CMakeLists.txt	2025-11-11 13:15:40.971048267 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ include(CheckCompilerFlagsOutput)
+ 
+diff -U3 -r warzone2100.old/3rdparty/date/CMakeLists.txt warzone2100/3rdparty/date/CMakeLists.txt
+--- warzone2100.old/3rdparty/date/CMakeLists.txt	2025-09-16 11:43:01.000000000 -0500
++++ warzone2100/3rdparty/date/CMakeLists.txt	2025-11-11 13:15:40.979193010 -0600
+@@ -15,7 +15,7 @@
+ 
+ #]===================================================================]
+ 
+-cmake_minimum_required( VERSION 3.7 )
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project( date VERSION 3.0.4 )
+ set(ABI_VERSION 3) # used as SOVERSION, increment when ABI changes
+diff -U3 -r warzone2100.old/3rdparty/discord-rpc/CMakeLists.txt warzone2100/3rdparty/discord-rpc/CMakeLists.txt
+--- warzone2100.old/3rdparty/discord-rpc/CMakeLists.txt	2025-09-16 11:43:01.000000000 -0500
++++ warzone2100/3rdparty/discord-rpc/CMakeLists.txt	2025-11-11 13:15:40.973974804 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.2...3.14)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project (DiscordRPC)
+ 
+ include(GNUInstallDirs)
+diff -U3 -r warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/example/CMakeLists.txt warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/example/CMakeLists.txt
+--- warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/example/CMakeLists.txt	2025-09-16 11:43:03.000000000 -0500
++++ warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/example/CMakeLists.txt	2025-11-11 13:15:40.973728553 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ if(POLICY CMP0054)
+   cmake_policy(SET CMP0054 NEW)
+diff -U3 -r warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/CMakeLists.txt warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/CMakeLists.txt
+--- warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/CMakeLists.txt	2025-11-11 13:15:40.971423408 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ if (POLICY CMP0048)
+   cmake_policy(SET CMP0048 NEW)
+diff -U3 -r warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt
+--- warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googlemock/CMakeLists.txt	2025-11-11 13:15:40.971643490 -0600
+@@ -43,7 +43,7 @@
+   cmake_policy(SET CMP0048 NEW)
+   project(gmock VERSION 1.9.0 LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ if (COMMAND set_up_hermetic_build)
+   set_up_hermetic_build()
+diff -U3 -r warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt
+--- warzone2100.old/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/discord-rpc/thirdparty/rapidjson/thirdparty/gtest/googletest/CMakeLists.txt	2025-11-11 13:15:40.972078077 -0600
+@@ -50,7 +50,7 @@
+   cmake_policy(SET CMP0048 NEW)
+   project(gtest VERSION 1.9.0 LANGUAGES CXX C)
+ endif()
+-cmake_minimum_required(VERSION 2.6.4)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ if (POLICY CMP0063) # Visibility
+   cmake_policy(SET CMP0063 NEW)
+diff -U3 -r warzone2100.old/3rdparty/EmbeddedJSONSignature/CMakeLists.txt warzone2100/3rdparty/EmbeddedJSONSignature/CMakeLists.txt
+--- warzone2100.old/3rdparty/EmbeddedJSONSignature/CMakeLists.txt	2025-09-16 11:42:25.000000000 -0500
++++ warzone2100/3rdparty/EmbeddedJSONSignature/CMakeLists.txt	2025-11-11 13:15:40.969719514 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.5...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+ 
+diff -U3 -r warzone2100.old/3rdparty/expected/CMakeLists.txt warzone2100/3rdparty/expected/CMakeLists.txt
+--- warzone2100.old/3rdparty/expected/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/expected/CMakeLists.txt	2025-11-11 13:15:40.981945460 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.14)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(tl-expected
+   HOMEPAGE_URL https://tl.tartanllama.xyz
+   DESCRIPTION "C++11/14/17 std::expected with functional-style extensions"
+diff -U3 -r warzone2100.old/3rdparty/fmt/CMakeLists.txt warzone2100/3rdparty/fmt/CMakeLists.txt
+--- warzone2100.old/3rdparty/fmt/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/fmt/CMakeLists.txt	2025-11-11 13:15:40.976616850 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.8...3.28)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ # Fallback for using newer policies on CMake <3.12.
+ if (${CMAKE_VERSION} VERSION_LESS 3.12)
+diff -U3 -r warzone2100.old/3rdparty/fmt/test/add-subdirectory-test/CMakeLists.txt warzone2100/3rdparty/fmt/test/add-subdirectory-test/CMakeLists.txt
+--- warzone2100.old/3rdparty/fmt/test/add-subdirectory-test/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/fmt/test/add-subdirectory-test/CMakeLists.txt	2025-11-11 13:15:40.978473268 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.8...3.25)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(fmt-test CXX)
+ 
+diff -U3 -r warzone2100.old/3rdparty/fmt/test/compile-error-test/CMakeLists.txt warzone2100/3rdparty/fmt/test/compile-error-test/CMakeLists.txt
+--- warzone2100.old/3rdparty/fmt/test/compile-error-test/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/fmt/test/compile-error-test/CMakeLists.txt	2025-11-11 13:15:40.977741731 -0600
+@@ -1,6 +1,6 @@
+ # Test if compile errors are produced where necessary.
+ 
+-cmake_minimum_required(VERSION 3.8...3.25)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(compile-error-test CXX)
+ 
+ set(fmt_headers "
+@@ -64,7 +64,7 @@
+   ")
+ 
+   file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/test/CMakeLists.txt" "
+-    cmake_minimum_required(VERSION 3.8...3.25)
++cmake_minimum_required(VERSION 3.10...4.0)
+     project(tests CXX)
+     add_subdirectory(${FMT_DIR} fmt)
+     ${cmake_targets}
+diff -U3 -r warzone2100.old/3rdparty/fmt/test/find-package-test/CMakeLists.txt warzone2100/3rdparty/fmt/test/find-package-test/CMakeLists.txt
+--- warzone2100.old/3rdparty/fmt/test/find-package-test/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/fmt/test/find-package-test/CMakeLists.txt	2025-11-11 13:15:40.978662191 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.8...3.25)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(fmt-test)
+ 
+diff -U3 -r warzone2100.old/3rdparty/fmt/test/static-export-test/CMakeLists.txt warzone2100/3rdparty/fmt/test/static-export-test/CMakeLists.txt
+--- warzone2100.old/3rdparty/fmt/test/static-export-test/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/fmt/test/static-export-test/CMakeLists.txt	2025-11-11 13:15:40.978096369 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.8...3.25)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(fmt-link CXX)
+ 
+diff -U3 -r warzone2100.old/3rdparty/GameNetworkingSockets/CMakeLists.txt warzone2100/3rdparty/GameNetworkingSockets/CMakeLists.txt
+--- warzone2100.old/3rdparty/GameNetworkingSockets/CMakeLists.txt	2025-09-16 11:42:25.000000000 -0500
++++ warzone2100/3rdparty/GameNetworkingSockets/CMakeLists.txt	2025-11-11 13:15:40.974793781 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.9)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ # If vcpkg present as submodule, bring in the toolchain
+ if( EXISTS ${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake )
+@@ -14,7 +14,7 @@
+ 
+ # CMP0069: INTERPROCEDURAL_OPTIMIZATION is enforced when enabled.
+ # This variable is needed for abseil, which has a different
+-# cmake_minimum_required version set (3.5).
++cmake_minimum_required(VERSION 3.10...4.0)
+ set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
+ 
+ # Put all the output from all projects into the same folder
+diff -U3 -r warzone2100.old/3rdparty/GameNetworkingSockets/examples/vcpkg_example_chat/CMakeLists.txt warzone2100/3rdparty/GameNetworkingSockets/examples/vcpkg_example_chat/CMakeLists.txt
+--- warzone2100.old/3rdparty/GameNetworkingSockets/examples/vcpkg_example_chat/CMakeLists.txt	2025-09-16 11:42:25.000000000 -0500
++++ warzone2100/3rdparty/GameNetworkingSockets/examples/vcpkg_example_chat/CMakeLists.txt	2025-11-11 13:15:40.976404204 -0600
+@@ -2,7 +2,7 @@
+ # Example porject that uses GameNetworkingSockets, obtaining
+ # dependencies, etc entirely through vcpkg.
+ #
+-cmake_minimum_required(VERSION 3.9)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project( example_chat_vcpkg )
+ 
+ # Ask vcpkg to fetch gamenetworkingsockets and all
+diff -U3 -r warzone2100.old/3rdparty/glm/CMakeLists.txt warzone2100/3rdparty/glm/CMakeLists.txt
+--- warzone2100.old/3rdparty/glm/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/glm/CMakeLists.txt	2025-11-11 13:15:40.967344329 -0600
+@@ -1,5 +1,5 @@
+ # 3.6 is the actual minimun. 3.14 as the upper policy limit avoids CMake deprecation warnings.
+-cmake_minimum_required(VERSION 3.6...3.14 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10...4.0)
+ cmake_policy(VERSION 3.6...3.14)
+ 
+ file(READ "glm/detail/setup.hpp" GLM_SETUP_FILE)
+diff -U3 -r warzone2100.old/3rdparty/glm/test/cmake/CMakeLists.txt warzone2100/3rdparty/glm/test/cmake/CMakeLists.txt
+--- warzone2100.old/3rdparty/glm/test/cmake/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/glm/test/cmake/CMakeLists.txt	2025-11-11 13:15:40.968124096 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10...4.0)
+ cmake_policy(VERSION 3.6)
+ project(test_find_glm)
+ 
+diff -U3 -r warzone2100.old/3rdparty/json/CMakeLists.txt warzone2100/3rdparty/json/CMakeLists.txt
+--- warzone2100.old/3rdparty/json/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/3rdparty/json/CMakeLists.txt	2025-11-11 13:15:40.979565140 -0600
+@@ -1,6 +1,6 @@
+ # A simplified version of: https://github.com/nlohmann/json/blob/b21c34517900c46a943c804d9af3a20cd0c77062/CMakeLists.txt
+ 
+-cmake_minimum_required(VERSION 3.1...3.14)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(nlohmann_json LANGUAGES CXX)
+ 
+diff -U3 -r warzone2100.old/3rdparty/launchinfo/CMakeLists.txt warzone2100/3rdparty/launchinfo/CMakeLists.txt
+--- warzone2100.old/3rdparty/launchinfo/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/launchinfo/CMakeLists.txt	2025-11-11 13:15:40.980134929 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.5...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project (launchinfo C CXX)
+ 
+ file(GLOB HEADERS "include/LaunchInfo.h")
+diff -U3 -r warzone2100.old/3rdparty/libplum/CMakeLists.txt warzone2100/3rdparty/libplum/CMakeLists.txt
+--- warzone2100.old/3rdparty/libplum/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/libplum/CMakeLists.txt	2025-11-11 13:15:40.979826761 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.7...4.0)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project (libplum
+ 	VERSION 0.5.3
+ 	LANGUAGES C)
+diff -U3 -r warzone2100.old/3rdparty/optional-lite/CMakeLists.txt warzone2100/3rdparty/optional-lite/CMakeLists.txt
+--- warzone2100.old/3rdparty/optional-lite/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/3rdparty/optional-lite/CMakeLists.txt	2025-11-11 13:15:40.970277697 -0600
+@@ -1,6 +1,6 @@
+ # A very simple version of: https://github.com/martinmoene/optional-lite/blob/master/CMakeLists.txt
+ 
+-cmake_minimum_required(VERSION 3.5...3.24)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(
+     optional_lite
+diff -U3 -r warzone2100.old/3rdparty/quickjs-wz/CMakeLists.txt warzone2100/3rdparty/quickjs-wz/CMakeLists.txt
+--- warzone2100.old/3rdparty/quickjs-wz/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/quickjs-wz/CMakeLists.txt	2025-11-11 13:15:40.982219004 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.10...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project (quickjs-wz C)
+ 
+ if(${CMAKE_VERSION} VERSION_LESS 3.12)
+diff -U3 -r warzone2100.old/3rdparty/re2/CMakeLists.txt warzone2100/3rdparty/re2/CMakeLists.txt
+--- warzone2100.old/3rdparty/re2/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/re2/CMakeLists.txt	2025-11-11 13:15:40.966731441 -0600
+@@ -4,7 +4,7 @@
+ 
+ # Old enough to support Ubuntu Bionic,
+ # but just the MAJOR.MINOR components.
+-cmake_minimum_required(VERSION 3.10)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project(RE2 CXX)
+ include(CMakePackageConfigHelpers)
+diff -U3 -r warzone2100.old/3rdparty/readerwriterqueue/CMakeLists.txt warzone2100/3rdparty/readerwriterqueue/CMakeLists.txt
+--- warzone2100.old/3rdparty/readerwriterqueue/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/readerwriterqueue/CMakeLists.txt	2025-11-11 13:15:40.981667922 -0600
+@@ -1,7 +1,7 @@
+ # See https://discourse.cmake.org/t/how-to-fix-cmake-minimum-required-deprecation-warning/2487/2
+ # for more on setting the minimum required version.
+ 
+-cmake_minimum_required(VERSION 3.9...3.31.7)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(readerwriterqueue VERSION 1.0.7)
+ 
+ include(GNUInstallDirs)
+diff -U3 -r warzone2100.old/3rdparty/utf8proc/CMakeLists.txt warzone2100/3rdparty/utf8proc/CMakeLists.txt
+--- warzone2100.old/3rdparty/utf8proc/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/utf8proc/CMakeLists.txt	2025-11-11 13:15:40.970489260 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.10)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ include (utils.cmake)
+ 
+diff -U3 -r warzone2100.old/3rdparty/utf8proc/test/app/CMakeLists.txt warzone2100/3rdparty/utf8proc/test/app/CMakeLists.txt
+--- warzone2100.old/3rdparty/utf8proc/test/app/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/utf8proc/test/app/CMakeLists.txt	2025-11-11 13:15:40.970768384 -0600
+@@ -1,5 +1,5 @@
+ # This is a test app to test consuming utf8proc with CMake.
+-cmake_minimum_required(VERSION 3.16)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(utf8proc-test)
+ find_package(utf8proc REQUIRED)
+ add_executable(app app.c)
+diff -U3 -r warzone2100.old/3rdparty/utfcpp/tests/CMakeLists.txt warzone2100/3rdparty/utfcpp/tests/CMakeLists.txt
+--- warzone2100.old/3rdparty/utfcpp/tests/CMakeLists.txt	2025-09-16 11:43:06.000000000 -0500
++++ warzone2100/3rdparty/utfcpp/tests/CMakeLists.txt	2025-11-11 13:15:40.966264301 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.5)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project(utfcpptests LANGUAGES CXX)
+ enable_testing()
+ 
+diff -U3 -r warzone2100.old/build_tools/CMakeLists.txt warzone2100/build_tools/CMakeLists.txt
+--- warzone2100.old/build_tools/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/build_tools/CMakeLists.txt	2025-11-11 13:15:40.965846621 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ ############################
+ # Versioning (autorevision)
+diff -U3 -r warzone2100.old/CMakeLists.txt warzone2100/CMakeLists.txt
+--- warzone2100.old/CMakeLists.txt	2025-11-11 13:15:14.473586912 -0600
++++ warzone2100/CMakeLists.txt	2025-11-11 13:15:40.982956680 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ set(_OLD_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+diff -U3 -r warzone2100.old/data/fonts/CMakeLists.txt warzone2100/data/fonts/CMakeLists.txt
+--- warzone2100.old/data/fonts/CMakeLists.txt	2025-09-16 11:43:07.000000000 -0500
++++ warzone2100/data/fonts/CMakeLists.txt	2025-11-11 13:15:40.959816797 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.5...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ configure_file(
+ 	"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/LICENSE"
+diff -U3 -r warzone2100.old/lib/netplay/3rdparty/miniupnp/miniupnpc/CMakeLists.txt warzone2100/lib/netplay/3rdparty/miniupnp/miniupnpc/CMakeLists.txt
+--- warzone2100.old/lib/netplay/3rdparty/miniupnp/miniupnpc/CMakeLists.txt	2025-09-16 11:43:08.000000000 -0500
++++ warzone2100/lib/netplay/3rdparty/miniupnp/miniupnpc/CMakeLists.txt	2025-11-11 13:15:40.965482788 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project (miniupnpc
+          VERSION 2.3.3
+diff -U3 -r warzone2100.old/lib/sound/3rdparty/opusfile/CMakeLists.txt warzone2100/lib/sound/3rdparty/opusfile/CMakeLists.txt
+--- warzone2100.old/lib/sound/3rdparty/opusfile/CMakeLists.txt	2025-09-16 11:43:08.000000000 -0500
++++ warzone2100/lib/sound/3rdparty/opusfile/CMakeLists.txt	2025-11-11 13:15:40.964008420 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+ 
+diff -U3 -r warzone2100.old/lib/wzmaplib/CMakeLists.txt warzone2100/lib/wzmaplib/CMakeLists.txt
+--- warzone2100.old/lib/wzmaplib/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/lib/wzmaplib/CMakeLists.txt	2025-11-11 13:15:40.962781424 -0600
+@@ -9,7 +9,7 @@
+ ##############################
+ # wzmaplib project
+ 
+-cmake_minimum_required(VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ project (wzmaplib CXX)
+ 
+ OPTION(WZMAPLIB_ENABLE_ZIPIOPROVIDER "wzmaplib: Provide ZipIOProvider (which requires libzip)" ON)
+diff -U3 -r warzone2100.old/po/CMakeLists.txt warzone2100/po/CMakeLists.txt
+--- warzone2100.old/po/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/po/CMakeLists.txt	2025-11-11 13:15:40.956128485 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ if(NOT ENABLE_NLS)
+ 	message(STATUS "Skipping translations generation / native language support")
+diff -U3 -r warzone2100.old/src/integrations/CMakeLists.txt warzone2100/src/integrations/CMakeLists.txt
+--- warzone2100.old/src/integrations/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/src/integrations/CMakeLists.txt	2025-11-11 13:15:40.959547975 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16...3.31)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ ##################################################
+ # WZ Discord RPC support
+diff -U3 -r warzone2100.old/tools/map/old/CMakeLists.txt warzone2100/tools/map/old/CMakeLists.txt
+--- warzone2100.old/tools/map/old/CMakeLists.txt	2025-09-16 11:41:32.000000000 -0500
++++ warzone2100/tools/map/old/CMakeLists.txt	2025-11-11 13:15:40.958291818 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ project (maptools)
+ 
+diff -U3 -r warzone2100.old/tools/maptools-cli/CMakeLists.txt warzone2100/tools/maptools-cli/CMakeLists.txt
+--- warzone2100.old/tools/maptools-cli/CMakeLists.txt	2025-09-16 11:43:08.000000000 -0500
++++ warzone2100/tools/maptools-cli/CMakeLists.txt	2025-11-11 13:15:40.957878508 -0600
+@@ -7,7 +7,7 @@
+ 	set(_cmake_min_ver_supported 3.11) # CMake 3.11 is the minimum version for FetchContent
+ endif()
+ 
+-cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.14)
++cmake_minimum_required(VERSION 3.10...4.0)
+ 
+ set(_OLD_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+--- a/3rdparty/utfcpp/CMakeLists.txt~	2025-12-09 07:31:34.000000000 -0600
++++ b/3rdparty/utfcpp/CMakeLists.txt	2025-12-09 13:53:08.443636881 -0600
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.14...3.27)
++cmake_minimum_required (VERSION 3.10...4.0)
+ project (utf8cpp 
+          VERSION 4.0.8
+          LANGUAGES CXX

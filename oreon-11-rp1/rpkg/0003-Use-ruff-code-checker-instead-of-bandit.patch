@@ -1,0 +1,256 @@
+From 4187379b9c316aa245602f704ed9b88aac8d8c2c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Wed, 26 Nov 2025 00:11:47 +0100
+Subject: [PATCH] Use ruff code checker instead of bandit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In the testing CI (Jenkins), stop using bandit in favour of ruff.
+Bandit is deprecated in the latest Fedora release (F43).
+Added an environment for code coverage analysis.
+
+JIRA: RHELCMP-14985
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ CONTRIBUTING.md         |  4 +++-
+ Jenkinsfile             |  2 +-
+ jenkins_test.dockerfile |  6 +++---
+ pyproject.toml          | 34 ++++++++++++++++++++++++++++++++++
+ pyrpkg/__init__.py      |  8 ++++----
+ pyrpkg/cli.py           |  2 +-
+ tests/test_cli.py       |  2 +-
+ tests/test_commands.py  |  6 +++---
+ tox.ini                 | 23 ++++++++++++++++++++---
+ 9 files changed, 70 insertions(+), 17 deletions(-)
+
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index b3c1d31..a14d3d5 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -32,11 +32,13 @@ You can increase the chance of your Pull Request being merged by:
+ * having good test coverage
+ * writing documentation
+ * following PEP 8 for code formatting
+-* don't have [bandit][bandit] complains
++* ~~don't have [bandit][bandit] complains~~ (not active in the Jenkins)
++* don't have [ruff][ruff] complains (some categories are currently excluded in the configuration)
+ * writing [a good commit message][commit-message]
+ 
+ [commit-message]: https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+ [bandit]: https://bandit.readthedocs.io
++[ruff]: https://github.com/astral-sh/ruff
+ 
+ 
+ [places]:
+diff --git a/Jenkinsfile b/Jenkinsfile
+index 9b38735..61872ed 100644
+--- a/Jenkinsfile
++++ b/Jenkinsfile
+@@ -49,7 +49,7 @@ git fetch proposed
+ git checkout "origin/$params.BRANCH_TO"
+ git merge --no-ff "proposed/$params.BRANCH" -m "Merge PR"
+ 
+-podman run --rm -v .:/src:Z quay.io/exd-guild-source-tools/rpkg-test:latest tox -e py36,py39,py312,py313,flake8,bandit --workdir /tmp/tox ${TOX_POSARGS}
++podman run --rm -v .:/src:Z quay.io/exd-guild-source-tools/rpkg-test:latest tox -e py36,py39,py312,py313,py314,flake8,ruff --workdir /tmp/tox ${TOX_POSARGS}
+ # disabled py27 environment for now; keep just flake8 for Python 2
+ podman run --rm -v .:/src:Z quay.io/exd-guild-source-tools/rpkg-test-py2:latest tox -e flake8python2 --workdir /tmp/tox ${TOX_POSARGS}
+                         """
+diff --git a/jenkins_test.dockerfile b/jenkins_test.dockerfile
+index 8ef932a..e950280 100644
+--- a/jenkins_test.dockerfile
++++ b/jenkins_test.dockerfile
+@@ -1,4 +1,4 @@
+-FROM fedora:41
++FROM fedora:42
+ LABEL \
+     name="rpkg test" \
+     description="Run tests using tox with Python 3" \
+@@ -27,11 +27,11 @@ RUN dnf -y install \
+         openssl-devel \
+         make \
+         git \
+-        bandit
++        ruff
+ RUN dnf clean all
+ 
+ WORKDIR /src
+ 
+ COPY . .
+ 
+-CMD ["tox", "-e", "py36,py39,py312,py313,py314,flake8,bandit"]
++CMD ["tox", "-e", "py36,py39,py312,py313,py314,flake8,ruff"]
+diff --git a/pyproject.toml b/pyproject.toml
+index 255a7bc..d9f30a7 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -87,3 +87,37 @@ include = [
+ packages = [
+     "pyrpkg",
+ ]
++
++[tool.ruff]
++line-length = 100
++
++[tool.ruff.lint]
++select = [
++    # pycodestyle
++    "E",
++    # pycodestyle warnings
++    "W",
++    # Pyflakes
++    "F",
++    # pyupgrade
++    #"UP",
++    # flake8-bugbear
++    #"B",
++    # flake8-simplify
++    #"SIM",
++    # isort
++    #"I",
++    # flake8-bandit
++    "S",
++    # flake8-type-checking
++    #"TCH",
++    # flake8-comprehensions
++    #"C4",
++    # pep8-naming
++    #"N",
++    # flake8-annotations
++    #"ANN",
++    # flake8-pytest-style
++    #"PT",
++]
++ignore = ["S101", "S311", "S603", "S607"]
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index 4d453ca..a4b4dd7 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -832,7 +832,7 @@ class Commands(object):
+         tmp_resultdir = tempfile.mkdtemp(prefix="mock_resultdir")
+         cmd += ['-r', root, '--chroot', '--resultdir', tmp_resultdir]
+ 
+-        tmp_root = '/var/tmp'  # temporary directory inside the mock root  # nosec
++        tmp_root = '/var/tmp'  # temporary directory inside the mock root  # nosec # noqa: S108
+         copyin_cmd = cmd + ['--copyin', specfile_path, tmp_root]
+ 
+         # We make sure there is a space at the end of our query so that
+@@ -1405,7 +1405,7 @@ class Commands(object):
+             # anyway.
+             if int(re.search(r'\d+', self.distval).group()) < 6:
+                 return 'md5'
+-        except Exception:
++        except Exception:  # noqa: S110
+             # An error here is OK, don't bother the user.
+             pass
+ 
+@@ -2004,7 +2004,7 @@ class Commands(object):
+             try:
+                 output = subprocess.check_output(cmd)
+                 hash = output.split()[0]
+-            except Exception:
++            except Exception:  # noqa: S110
+                 # don't do anything here, we'll handle not having hash
+                 # later
+                 pass
+@@ -4187,7 +4187,7 @@ class Commands(object):
+                 data = body
+             auth = requests_gssapi.HTTPSPNEGOAuth(
+                 mutual_authentication=requests_gssapi.OPTIONAL)
+-            resp = requests.request(verb, url, data=data, auth=auth, **kwargs)
++            resp = requests.request(verb, url, data=data, auth=auth, timeout=1800, **kwargs)
+             if resp.status_code == 401:
+                 raise rpkgError('MBS authentication using Kerberos failed. '
+                                 'Make sure you have a valid Kerberos ticket.')
+diff --git a/pyrpkg/cli.py b/pyrpkg/cli.py
+index decef3f..160baff 100644
+--- a/pyrpkg/cli.py
++++ b/pyrpkg/cli.py
+@@ -66,7 +66,7 @@ class _ArgumentParser(argparse.ArgumentParser):
+             return None
+ 
+         # if it doesn't start with a prefix, it was meant to be positional
+-        if not arg_string[0] in self.prefix_chars:
++        if arg_string[0] not in self.prefix_chars:
+             return None
+ 
+         # if the option string is present in the parser, return the action
+diff --git a/tests/test_cli.py b/tests/test_cli.py
+index f734c43..efe50f1 100644
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -1475,7 +1475,7 @@ class LookasideCacheMock(object):
+             f.write('binary data')
+ 
+     def hash_file(self, filename):
+-        md5 = hashlib.md5()  # nosec
++        md5 = hashlib.md5()  # nosec # noqa: S324
+         with open(filename, 'rb') as f:
+             content = f.read()
+             md5.update(content)
+diff --git a/tests/test_commands.py b/tests/test_commands.py
+index b0b18a3..a757c7e 100644
+--- a/tests/test_commands.py
++++ b/tests/test_commands.py
+@@ -1113,11 +1113,11 @@ class TestRunCommand(CommandTestCase):
+     def test_run_command_within_shell(self, Popen):
+         Popen.return_value.wait.return_value = 0
+ 
+-        result = self.cmd._run_command(['rpmbuild'], shell=True)  # nosec
++        result = self.cmd._run_command(['rpmbuild'], shell=True)  # nosec # noqa: S604
+ 
+         self.assertEqual((0, None, None), result)
+-        Popen.assert_called_once_with(
+-            'rpmbuild', env=os.environ, shell=True, cwd=None,  # nosec
++        Popen.assert_called_once_with(   # nosec # noqa: S604
++            'rpmbuild', env=os.environ, shell=True, cwd=None,
+             stdin=subprocess.DEVNULL, stdout=None, stderr=None,
+             universal_newlines=False)
+ 
+diff --git a/tox.ini b/tox.ini
+index ccbdac2..8bf9c3f 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,5 +1,6 @@
+ [tox]
+-envlist = py27,py36,py39,py312,py313,py314,flake8,doc,bandit
++envlist = py27,py36,py39,py312,py313,py314,flake8,doc,bandit,coverage,ruff
++basepython = {env:TOXPYTHON:python3}
+ 
+ [testenv]
+ skip_install = True
+@@ -13,8 +14,6 @@ basepython=
+     py314: {env:TOXPYTHON:python3.14}
+     flake8: {env:TOXPYTHON:python3.6}
+     flake8python2: {env:TOXPYTHON:python2.7}
+-    doc: {env:TOXPYTHON:python3}
+-    bandit: {env:TOXPYTHON:python3}
+ 
+ deps =
+     -r{toxinidir}/requirements/pypi.txt
+@@ -71,3 +70,21 @@ skip_install = true
+ deps = bandit
+ commands = bandit -r -ll pyrpkg tests
+ ignore_outcome = False
++
++[testenv:coverage]
++deps =
++    {[testenv]deps}
++    pytest-cov
++skip_install = True
++commands =
++    python -m pytest --cov=pyrpkg --cov-report=term --cov-report=html {posargs}
++
++[coverage:run]
++source = pyrpkg
++omit =
++
++[testenv:ruff]
++deps = ruff
++skip_install = True
++commands =
++    python -m ruff check pyrpkg/ tests/
+-- 
+2.51.1
+

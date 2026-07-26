@@ -1,0 +1,29 @@
+From b0cb8f6ff7070a43c13b5ffaffd9be19dfb3a2f4 Mon Sep 17 00:00:00 2001
+From: Juan Orti Alcaine <jorti@pm.me>
+Date: Fri, 20 Feb 2026 17:39:35 +0100
+Subject: [PATCH] Use fork method in multiprocess
+
+In Python 3.14 multiprocess started using the forkserver method by
+default, which breaks the startup of the instances.
+Explicitly set the fork method to avoid this problem.
+
+Fedora bug: https://bugzilla.redhat.com/show_bug.cgi?id=2441312
+---
+ virtualbmc/manager.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/virtualbmc/manager.py b/virtualbmc/manager.py
+index 40a5241..2dc7ad7 100644
+--- a/virtualbmc/manager.py
++++ b/virtualbmc/manager.py
+@@ -172,6 +172,7 @@ class VirtualBMCManager(object):
+ 
+                 if not instance or not instance.is_alive():
+ 
++                    multiprocessing.set_start_method('fork', force=True)
+                     instance = multiprocessing.Process(
+                         name='vbmcd-managing-domain-%s' % domain_name,
+                         target=vbmc_runner,
+-- 
+2.53.0
+

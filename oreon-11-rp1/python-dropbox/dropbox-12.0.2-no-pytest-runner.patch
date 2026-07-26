@@ -1,0 +1,42 @@
+diff -Naur dropbox-12.0.2-original/setup.cfg dropbox-12.0.2/setup.cfg
+--- dropbox-12.0.2-original/setup.cfg	2024-06-03 17:45:26.000000000 +0100
++++ dropbox-12.0.2/setup.cfg	2026-01-22 14:17:16.419433749 +0000
+@@ -1,6 +1,3 @@
+-[aliases]
+-test = pytest
+-
+ [metadata]
+ description_file = README.rst
+ 
+diff -Naur dropbox-12.0.2-original/setup.py dropbox-12.0.2/setup.py
+--- dropbox-12.0.2-original/setup.py	2024-06-03 17:45:16.000000000 +0100
++++ dropbox-12.0.2/setup.py	2026-01-22 14:17:35.466709052 +0000
+@@ -30,19 +30,6 @@
+     'stone>=2,<3.3.3',
+ ]
+ 
+-setup_requires = [
+-    # Pin pytest-runner to 5.2.0, since 5.3.0 uses `find_namespaces` directive, not supported in
+-    # Python 2.7
+-    'pytest-runner==5.2.0',
+-]
+-
+-# WARNING: This imposes limitations on test/requirements.txt such that the
+-# full Pip syntax is not supported. See also
+-# <http://stackoverflow.com/questions/14399534/>.
+-test_reqs = []
+-with open('test/requirements.txt') as f:
+-    test_reqs += f.read().splitlines()
+-
+ with codecs.open('README.rst', encoding='utf-8') as f:
+     README = f.read()
+ 
+@@ -50,8 +37,6 @@
+     name='dropbox',
+     version=version,
+     install_requires=install_reqs,
+-    setup_requires=setup_requires,
+-    tests_require=test_reqs,
+     packages=['dropbox'],
+     zip_safe=False,
+     author_email='dev-platform@dropbox.com',

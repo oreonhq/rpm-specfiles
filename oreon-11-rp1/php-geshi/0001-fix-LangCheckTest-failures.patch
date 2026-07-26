@@ -1,0 +1,57 @@
+diff -U4 -r geshi--orig/src/geshi/ispfpanel.php geshi--patched/src/geshi/ispfpanel.php
+--- geshi--orig/src/geshi/ispfpanel.php	2019-10-20 22:54:46.000000000 +0200
++++ geshi--patched/src/geshi/ispfpanel.php	2021-07-29 20:20:13.843850648 +0200
+@@ -113,11 +113,8 @@
+             4 => 'color: #876C00;',
+             5 => 'color: #00FF00;'
+             ),
+         'COMMENTS' => array(
+-            0 => 'color: #002EB8; font-style: italic;',
+-            //1 => 'color: #002EB8; font-style: italic;',
+-            //2 => 'color: #002EB8; font-style: italic;',
+             'MULTI' => 'color: #002EB8; font-style: italic;'
+             ),
+         'ESCAPE_CHAR' => array(
+             0 => ''
+diff -U4 -r geshi--orig/src/geshi/jcl.php geshi--patched/src/geshi/jcl.php
+--- geshi--orig/src/geshi/jcl.php	2019-10-20 22:54:46.000000000 +0200
++++ geshi--patched/src/geshi/jcl.php	2021-07-29 20:26:39.716682750 +0200
+@@ -95,11 +95,8 @@
+             3 => 'color: #FF00FF;',
+             4 => 'color: #876C00;'
+             ),
+         'COMMENTS' => array(
+-            0 => 'color: #0000FF;',
+-            //1 => 'color: #0000FF;',
+-            //2 => 'color: #0000FF;',
+             3 => 'color: #0000FF;'
+             ),
+         'ESCAPE_CHAR' => array(
+             0 => ''
+diff -U4 -r geshi--orig/src/geshi/nagios.php geshi--patched/src/geshi/nagios.php
+--- geshi--orig/src/geshi/nagios.php	2019-10-20 22:54:46.000000000 +0200
++++ geshi--patched/src/geshi/nagios.php	2021-07-29 20:21:10.204264293 +0200
+@@ -119,9 +119,8 @@
+         'NUMBERS' => array(
+             0 => ''
+             ),
+         'COMMENTS' => array(
+-            0 => 'color: #AAAAAA; font-style: italic;',
+             1 => 'color: #AAAAAA; font-style: italic;',
+             2 => 'color: #AAAAAA; font-style: italic;'
+             ),
+         'BRACKETS' => array(
+--- geshi--orig/phpunit.xml	2023-02-19 13:05:59.000000000 +0100
++++ geshi--patched/phpunit.xml	2023-04-24 12:55:44.260196886 +0200
+@@ -2,10 +2,9 @@
+ <phpunit backupGlobals="false"
+          backupStaticAttributes="false"
+          convertErrorsToExceptions="true"
+          convertNoticesToExceptions="true"
+-         convertWarningsToExceptions="true"
+-         bootstrap="vendor/autoload.php">
++         convertWarningsToExceptions="true">
+     <testsuites>
+         <testsuite name="Test Suite">
+             <directory suffix=".php">./tests/</directory>
+         </testsuite>

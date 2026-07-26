@@ -1,0 +1,208 @@
+--- netkit-rwall-0.17/rwall/rwall.1.netgroup	2000-07-31 01:57:05.000000000 +0200
++++ netkit-rwall-0.17/rwall/rwall.1	2004-09-02 20:13:25.000000000 +0200
+@@ -42,10 +42,14 @@
+ .Nm rwall
+ .Ar host
+ .Op Ar file
++.Nm rwall
++.Ar -n netgroup
++.Op Ar file
+ .Sh DESCRIPTION
+ The
+ .Nm rwall
+-command sends a message to the users logged into the specified host. The
++command sends a message to the users logged into the specified host or
++to users on all hosts in the specified netgroup. The
+ message to be sent can be typed in and terminated with EOF or it can
+ be in a
+ .Ar file .
+--- netkit-rwall-0.17/rwall/rwall.c.netgroup	1999-12-12 19:05:05.000000000 +0100
++++ netkit-rwall-0.17/rwall/rwall.c	2004-09-02 20:13:25.000000000 +0200
+@@ -59,6 +59,7 @@
+ #include <paths.h>
+ 
+ #include <rpc/rpc.h>
++#include <rpcsvc/ypclnt.h>
+ #include "rwall.h"
+ 
+ #include "../version.h"
+@@ -67,22 +68,126 @@
+ static unsigned mbufsize;
+ static char *mbuf;
+ 
++void gethostnames(const char *, char *, int);
++char *expandgroup(const char *, const char *, char *, size_t *);
++int callmsg(const char *);
+ static void makemsg(const char *);
+ 
+ int
+ main(int argc, char *argv[])
+ {
+-	char *wallhost, res;
+-	CLIENT *cl;
++	char hostname[256]=""; /* should accomodate length of most host/domain names */
+ 
+-	if ((argc < 2) || (argc > 3)) {
++	if ((argc < 2) || (argc > 4)) {
+ 		fprintf(stderr, "usage: %s hostname [file]\n", argv[0]);
++		fprintf(stderr, "       %s -n netgroup [file]\n", argv[0]);
+ 		exit(1);
+ 	}
+ 
+-	wallhost = argv[1];
++	if( strcmp("-n",argv[1])) {	/* send message to a single host */
++		makemsg(argv[2]);
++		if(callmsg(argv[1])) exit(1);
++	} else {			/* send messages to all host in a netgroup */
++		makemsg(argv[3]);
++		gethostnames(argv[2], hostname, 1);
++		if( ! strlen(hostname)){
++			fprintf(stderr,"netgroup %s not found\n", argv[2]);
++			exit(1);
++		}
++		do{
++			fprintf(stdout, "sending message to %s\n", hostname);
++			if(callmsg(hostname)){
++				fprintf(stdout, "host %s timed out\n", hostname);
++			}
++			gethostnames(argv[2], hostname, 0);
++		}while(strlen(hostname));
++		fprintf(stdout, "Done...\n");
++	}
++        exit(0);;
++}
++
++#define HLISTCHUNK	256
++
++void
++gethostnames(const char *netgroup, char *hostname, int first) 
++{
++	static char *domainname = NULL, *hlist = NULL, *hnext=NULL, *cp;
++	size_t hsize=HLISTCHUNK, error;
++
++	*hostname='\0';  /* assume failure */
++
++	if( first) {
++		hlist = (char *) malloc(hsize * sizeof(char));
++		if( ! hlist) {
++			fprintf(stderr, "%s: can't allocate %d bytes for host names\n",
++				"gethostnames", hsize * sizeof(char));
++			return;
++		}
++		*hlist = '\0';
++		if ((error = yp_get_default_domain (&domainname)) != 0) {
++ 			fprintf (stderr, "%s: can't get local yp domain: %s\n",
++ 				"gethostnames", yperr_string (error));
++			return;
++		}
++		fprintf(stdout, "Searching for netgroup %s in domain %s\n", 
++			netgroup, domainname); 
++		hnext = hlist = expandgroup(domainname, netgroup, hlist, &hsize);
++		fprintf(stdout, "Your message will be sent to the following hosts:\n");
++		fprintf(stdout, "  %s\n", hlist);
++	}
++	if( ! hlist) return; /* failed remalloc()? */
++
++	/* we have a list of space delimited hostnames... 
++	   peel one off and advance the marker */
++	cp = strchr(hnext, ' ');
++	if( ! cp) return;  /* no more */
++	*cp = '\0';
++	strcpy(hostname, hnext);
++	hnext = cp+1;
++}
++
++char *
++expandgroup(const char *domainname, const char *netgroup, char *hlist, size_t *hsize)
++{
++	char list[1024], *val = NULL, *cp, *cp2, *gotend;
++	int vallen, res;
+ 
+-	makemsg(argv[2]);
++	res = yp_match (domainname, "netgroup", netgroup, strlen (netgroup),
++                          &val, &vallen);
++	cp = strtok_r(val, " ", (char **) &list);
++	while( cp){
++		if( *cp != '(') expandgroup(domainname, cp, hlist, hsize);
++		else {
++			gotend = strchr(cp+1, ')'); /* was closing par in this token? */
++			cp2 = strchr(cp+1,',');
++			if(cp2) *cp2 = '\0';
++			if( strlen(hlist) + strlen(cp) + 1 > *hsize) {
++				*hsize += HLISTCHUNK;  /* add more space */
++				hlist = realloc(hlist, *hsize * sizeof(char));
++				if( ! hlist) {
++					fprintf(stderr, 
++						"%s: can't reallocate %d bytes for host names\n",
++						"expandgroup", *hsize * sizeof(char));
++					return hlist;
++				}
++			}
++			strcat(hlist, cp+1);
++			strcat(hlist, " ");
++			while( ! gotend) {  /* toss everything to closing parentheses */
++				cp = strtok_r(NULL, " ", (char **) &list);
++				gotend = strchr(cp, ')');
++			}
++		}
++		cp = strtok_r(NULL, " ", (char **) &list);
++	}
++	return hlist;
++}
++
++int 
++callmsg(const char *wallhost)
++{
++	CLIENT *cl;
++	char res;
+ 
+ 	/*
+ 	 * Create client "handle" used for calling MESSAGEPROG on the
+@@ -96,7 +201,7 @@
+ 		 * Print error message and die.
+ 		 */
+ 		clnt_pcreateerror(wallhost);
+-		exit(1);
++		return -1;
+ 	}
+ 
+ 	if (clnt_call(cl, WALLPROC_WALL, 
+@@ -108,10 +213,10 @@
+ 		 * Print error message and die.
+ 		 */
+ 		clnt_perror(cl, wallhost);
+-		exit(1);
++		return -1;
+ 	}
+ 
+-	exit(0);
++	return 0;
+ }
+ 
+ static void
+@@ -176,4 +281,8 @@
+ 		exit(1);
+ 	}
+ 	(void)close(fd);
++	mbuf[mbufsize-1] = '\0'; /* terminate */
+ }
++
++/* EOF */
++
+--- netkit-rwall-0.17/ChangeLog.netgroup	2000-07-23 06:43:22.000000000 +0200
++++ netkit-rwall-0.17/ChangeLog	2004-09-02 20:13:25.000000000 +0200
+@@ -0,0 +1,3 @@
++06-Apr-2002:
++	added option to message all hosts in a netgroup (Jack Perdue - ss@siliconslick.com)
++
+--- netkit-rwall-0.17/configure.netgroup	2000-07-23 07:42:25.000000000 +0200
++++ netkit-rwall-0.17/configure	2004-09-02 20:13:25.000000000 +0200
+@@ -147,7 +147,7 @@
+ fi
+ 
+ LDFLAGS=
+-LIBS=
++LIBS=-lnsl
+ 
+ rm -f __conftest*
+ 

@@ -1,0 +1,538 @@
+From e067640ac3f14cbdb90532fe3972f9600612db2f Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Mon, 18 Nov 2024 02:03:30 -0600
+Subject: [PATCH] Use standard library mock when possible
+
+---
+ requirements-dev.txt                                 | 2 +-
+ tests/conftest.py                                    | 5 ++++-
+ tests/formatter/to_python_test.py                    | 5 ++++-
+ tests/formatter/to_wire_test.py                      | 5 ++++-
+ tests/model/bless_models_test.py                     | 5 ++++-
+ tests/model/create_model_type_test.py                | 5 ++++-
+ tests/model/get_model_name_test.py                   | 5 ++++-
+ tests/model/model_discovery_test.py                  | 5 ++++-
+ tests/model/model_test.py                            | 5 ++++-
+ tests/model/post_process_spec_test.py                | 5 ++++-
+ tests/model/tag_models_test.py                       | 5 ++++-
+ tests/operation/security_object_test.py              | 5 ++++-
+ tests/param/add_file_test.py                         | 5 ++++-
+ tests/param/cast_request_param_test.py               | 5 ++++-
+ tests/param/get_param_type_spec_test.py              | 5 ++++-
+ tests/param/marshal_param_test.py                    | 6 ++++--
+ tests/param/unmarshal_param_test.py                  | 6 ++++--
+ tests/request/unmarshal_request_test.py              | 5 ++++-
+ tests/response/unmarshal_response_test.py            | 6 ++++--
+ tests/response/validate_response_body_test.py        | 5 ++++-
+ tests/response/validate_response_headers_test.py     | 5 ++++-
+ tests/response/validate_response_test.py             | 6 ++++--
+ tests/spec/Spec/build_test.py                        | 6 ++++--
+ tests/spec/Spec/flattened_spec_test.py               | 5 ++++-
+ tests/spec/build_http_handlers_test.py               | 5 ++++-
+ tests/spec/pickling_test.py                          | 5 ++++-
+ tests/swagger20_validator/enum_validator_test.py     | 6 ++++--
+ tests/swagger20_validator/format_validator_test.py   | 5 ++++-
+ tests/swagger20_validator/ref_validator_test.py      | 6 ++++--
+ tests/swagger20_validator/required_validator_test.py | 6 ++++--
+ tests/swagger20_validator/type_validator_test.py     | 5 ++++-
+ tests/util_test.py                                   | 5 ++++-
+ 32 files changed, 125 insertions(+), 40 deletions(-)
+
+diff --git a/requirements-dev.txt b/requirements-dev.txt
+index ed986a8..f096db6 100644
+--- a/requirements-dev.txt
++++ b/requirements-dev.txt
+@@ -1,6 +1,6 @@
+ # TODO: avoids an issue with hanging forever in tests (CORESERV-12009).
+ jsonschema<4
+-mock
++mock; python_version<'3.3'
+ mypy
+ mypy-extensions
+ pre-commit
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 8126277..b1ad43b 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -6,7 +6,10 @@ from itertools import chain
+ import pytest
+ import simplejson as json
+ import yaml
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ from six import iteritems
+ from six import iterkeys
+ from six.moves.urllib import parse as urlparse
+diff --git a/tests/formatter/to_python_test.py b/tests/formatter/to_python_test.py
+index 9aa6fea..48bde85 100644
+--- a/tests/formatter/to_python_test.py
++++ b/tests/formatter/to_python_test.py
+@@ -3,7 +3,10 @@ from datetime import date
+ from datetime import datetime
+ 
+ import six
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from bravado_core.formatter import SwaggerFormat
+ from bravado_core.formatter import to_python
+diff --git a/tests/formatter/to_wire_test.py b/tests/formatter/to_wire_test.py
+index 803de4e..e6df8cb 100644
+--- a/tests/formatter/to_wire_test.py
++++ b/tests/formatter/to_wire_test.py
+@@ -4,7 +4,10 @@ from datetime import datetime
+ 
+ import pytest
+ import six
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ from pytz import timezone
+ 
+ from bravado_core.exception import SwaggerMappingError
+diff --git a/tests/model/bless_models_test.py b/tests/model/bless_models_test.py
+index a596a6b..c928d55 100644
+--- a/tests/model/bless_models_test.py
++++ b/tests/model/bless_models_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core.model import _bless_models
+diff --git a/tests/model/create_model_type_test.py b/tests/model/create_model_type_test.py
+index a9ac13f..c5dd359 100644
+--- a/tests/model/create_model_type_test.py
++++ b/tests/model/create_model_type_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core.model import create_model_type
+diff --git a/tests/model/get_model_name_test.py b/tests/model/get_model_name_test.py
+index bdf7578..e49e1c4 100644
+--- a/tests/model/get_model_name_test.py
++++ b/tests/model/get_model_name_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core.model import _get_model_name
+diff --git a/tests/model/model_discovery_test.py b/tests/model/model_discovery_test.py
+index f72b8b4..11469f4 100644
+--- a/tests/model/model_discovery_test.py
++++ b/tests/model/model_discovery_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core.model import _run_post_processing
+diff --git a/tests/model/model_test.py b/tests/model/model_test.py
+index 387ed39..1268ad4 100644
+--- a/tests/model/model_test.py
++++ b/tests/model/model_test.py
+@@ -3,7 +3,10 @@ import datetime
+ from copy import deepcopy
+ 
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ from six import add_metaclass
+ 
+ from bravado_core.content_type import APP_JSON
+diff --git a/tests/model/post_process_spec_test.py b/tests/model/post_process_spec_test.py
+index 44e66c5..c45667c 100644
+--- a/tests/model/post_process_spec_test.py
++++ b/tests/model/post_process_spec_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import functools
+ 
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.model import _post_process_spec
+ from bravado_core.spec import Spec
+diff --git a/tests/model/tag_models_test.py b/tests/model/tag_models_test.py
+index 7af50ed..7046443 100644
+--- a/tests/model/tag_models_test.py
++++ b/tests/model/tag_models_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import copy
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core import model
+diff --git a/tests/operation/security_object_test.py b/tests/operation/security_object_test.py
+index f2f602d..c11ce59 100644
+--- a/tests/operation/security_object_test.py
++++ b/tests/operation/security_object_test.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ from six import iteritems
+ 
+ from bravado_core.exception import SwaggerSchemaError
+diff --git a/tests/param/add_file_test.py b/tests/param/add_file_test.py
+index 0612bf0..85dfa7e 100644
+--- a/tests/param/add_file_test.py
++++ b/tests/param/add_file_test.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.exception import SwaggerMappingError
+ from bravado_core.operation import Operation
+diff --git a/tests/param/cast_request_param_test.py b/tests/param/cast_request_param_test.py
+index 4cb1534..1cd560f 100644
+--- a/tests/param/cast_request_param_test.py
++++ b/tests/param/cast_request_param_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from bravado_core.param import cast_request_param
+ 
+diff --git a/tests/param/get_param_type_spec_test.py b/tests/param/get_param_type_spec_test.py
+index 1c2af8e..2184ca6 100644
+--- a/tests/param/get_param_type_spec_test.py
++++ b/tests/param/get_param_type_spec_test.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.exception import SwaggerMappingError
+ from bravado_core.operation import Operation
+diff --git a/tests/param/marshal_param_test.py b/tests/param/marshal_param_test.py
+index b39000b..6e9329e 100644
+--- a/tests/param/marshal_param_test.py
++++ b/tests/param/marshal_param_test.py
+@@ -5,8 +5,10 @@ from json import loads
+ 
+ import pytest
+ from jsonschema import ValidationError
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.content_type import APP_JSON
+ from bravado_core.operation import Operation
+diff --git a/tests/param/unmarshal_param_test.py b/tests/param/unmarshal_param_test.py
+index a10476b..d306caa 100644
+--- a/tests/param/unmarshal_param_test.py
++++ b/tests/param/unmarshal_param_test.py
+@@ -2,8 +2,10 @@
+ import datetime
+ 
+ import pytest
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.operation import Operation
+ from bravado_core.param import Param
+diff --git a/tests/request/unmarshal_request_test.py b/tests/request/unmarshal_request_test.py
+index 7b1af3a..92a0f03 100644
+--- a/tests/request/unmarshal_request_test.py
++++ b/tests/request/unmarshal_request_test.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.exception import SwaggerMappingError
+ from bravado_core.operation import Operation
+diff --git a/tests/response/unmarshal_response_test.py b/tests/response/unmarshal_response_test.py
+index cc302ea..9b28f27 100644
+--- a/tests/response/unmarshal_response_test.py
++++ b/tests/response/unmarshal_response_test.py
+@@ -2,8 +2,10 @@
+ import msgpack
+ import pytest
+ from jsonschema import ValidationError
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.content_type import APP_JSON
+ from bravado_core.content_type import APP_MSGPACK
+diff --git a/tests/response/validate_response_body_test.py b/tests/response/validate_response_body_test.py
+index d7e2bd6..4faf37b 100644
+--- a/tests/response/validate_response_body_test.py
++++ b/tests/response/validate_response_body_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import msgpack
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.content_type import APP_MSGPACK
+ from bravado_core.exception import SwaggerMappingError
+diff --git a/tests/response/validate_response_headers_test.py b/tests/response/validate_response_headers_test.py
+index 4b9612c..b5ddf9f 100644
+--- a/tests/response/validate_response_headers_test.py
++++ b/tests/response/validate_response_headers_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from jsonschema.exceptions import ValidationError
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado_core.operation import Operation
+ from bravado_core.response import OutgoingResponse
+diff --git a/tests/response/validate_response_test.py b/tests/response/validate_response_test.py
+index b339a72..d88e50d 100644
+--- a/tests/response/validate_response_test.py
++++ b/tests/response/validate_response_test.py
+@@ -1,6 +1,8 @@
+ # -*- coding: utf-8 -*-
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.operation import Operation
+ from bravado_core.response import OutgoingResponse
+diff --git a/tests/spec/Spec/build_test.py b/tests/spec/Spec/build_test.py
+index 86f53ac..5fb66e3 100644
+--- a/tests/spec/Spec/build_test.py
++++ b/tests/spec/Spec/build_test.py
+@@ -1,7 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ from six import iterkeys
+ from six.moves.urllib.request import pathname2url
+ from swagger_spec_validator.common import SwaggerValidationError
+diff --git a/tests/spec/Spec/flattened_spec_test.py b/tests/spec/Spec/flattened_spec_test.py
+index 8c0e948..7d44252 100644
+--- a/tests/spec/Spec/flattened_spec_test.py
++++ b/tests/spec/Spec/flattened_spec_test.py
+@@ -3,7 +3,10 @@ import copy
+ import functools
+ import os
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ from six.moves.urllib.parse import urlparse
+ from swagger_spec_validator import validator20
+diff --git a/tests/spec/build_http_handlers_test.py b/tests/spec/build_http_handlers_test.py
+index 269c360..5b10036 100644
+--- a/tests/spec/build_http_handlers_test.py
++++ b/tests/spec/build_http_handlers_test.py
+@@ -2,7 +2,10 @@
+ import json
+ from io import StringIO
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ import yaml
+ 
+diff --git a/tests/spec/pickling_test.py b/tests/spec/pickling_test.py
+index 34a3407..b59fbb5 100644
+--- a/tests/spec/pickling_test.py
++++ b/tests/spec/pickling_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ from six.moves.cPickle import dumps
+ from six.moves.cPickle import loads
+diff --git a/tests/swagger20_validator/enum_validator_test.py b/tests/swagger20_validator/enum_validator_test.py
+index f163a87..f149206 100644
+--- a/tests/swagger20_validator/enum_validator_test.py
++++ b/tests/swagger20_validator/enum_validator_test.py
+@@ -1,8 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from jsonschema import ValidationError
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.spec import Spec
+ from bravado_core.swagger20_validator import enum_validator
+diff --git a/tests/swagger20_validator/format_validator_test.py b/tests/swagger20_validator/format_validator_test.py
+index 8e6bd8f..2ff0e84 100644
+--- a/tests/swagger20_validator/format_validator_test.py
++++ b/tests/swagger20_validator/format_validator_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from jsonschema import ValidationError
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from bravado_core.exception import SwaggerValidationError
+ from bravado_core.formatter import SwaggerFormat
+diff --git a/tests/swagger20_validator/ref_validator_test.py b/tests/swagger20_validator/ref_validator_test.py
+index b9c71a2..844cc1f 100644
+--- a/tests/swagger20_validator/ref_validator_test.py
++++ b/tests/swagger20_validator/ref_validator_test.py
+@@ -1,8 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from jsonschema.validators import RefResolver
+-from mock import MagicMock
+-from mock import Mock
++try:
++    from unittest.mock import MagicMock, Mock
++except ImportError:
++    from mock import MagicMock, Mock
+ 
+ from bravado_core.swagger20_validator import ref_validator
+ 
+diff --git a/tests/swagger20_validator/required_validator_test.py b/tests/swagger20_validator/required_validator_test.py
+index 13e33bf..8b07ac8 100644
+--- a/tests/swagger20_validator/required_validator_test.py
++++ b/tests/swagger20_validator/required_validator_test.py
+@@ -1,8 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from jsonschema.exceptions import ValidationError
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado_core.swagger20_validator import required_validator
+ 
+diff --git a/tests/swagger20_validator/type_validator_test.py b/tests/swagger20_validator/type_validator_test.py
+index 01375aa..7d6d749 100644
+--- a/tests/swagger20_validator/type_validator_test.py
++++ b/tests/swagger20_validator/type_validator_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from bravado_core.swagger20_validator import type_validator
+ 
+diff --git a/tests/util_test.py b/tests/util_test.py
+index 6ee8fb1..d3e7b82 100644
+--- a/tests/util_test.py
++++ b/tests/util_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ from inspect import getcallargs
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado_core.util import AliasKeyDict
+-- 
+2.47.0
+

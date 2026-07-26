@@ -1,0 +1,10 @@
+--- starplot-0.95.5/src/gui/infodialogs.cc~	2008-04-10 21:18:29.000000000 +0200
++++ starplot-0.95.5/src/gui/infodialogs.cc	2015-06-23 07:17:22.163973474 +0200
+@@ -35,6 +35,7 @@
+       GTK_DIALOG_DESTROY_WITH_PARENT,
+       GTK_MESSAGE_ERROR,
+       GTK_BUTTONS_CLOSE,
++      "%s",
+       error_msg);
+   gtk_dialog_run (GTK_DIALOG (dialog));
+   gtk_widget_destroy (dialog);

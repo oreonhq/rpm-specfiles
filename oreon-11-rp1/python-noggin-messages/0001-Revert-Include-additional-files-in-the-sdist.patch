@@ -1,0 +1,32 @@
+From ad9bbef1d4a5136ca9f06a4b4bbb29fe88467fe2 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Sun, 26 Jul 2020 18:47:38 -0400
+Subject: [PATCH] Revert "Include additional files in the sdist"
+
+This makes it install properly as an RPM.
+
+This reverts commit c88201622dade95a2a07105a8e29449d3ded18d8.
+---
+ pyproject.toml | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index dfbacbe..4c3bd4f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -16,12 +16,6 @@ homepage = "https://github.com/fedora-infra/noggin-messages"
+ 
+ keywords = ['security']
+ 
+-include = [
+-    "tox.ini",
+-    "docs/*",
+-    "docs/*/*",
+-]
+-
+ [tool.poetry.plugins."fedora.messages"]
+ "noggin.group.member.sponsor.v1"="noggin_messages:MemberSponsorV1"
+ "noggin.user.create.v1"="noggin_messages:UserCreateV1"
+-- 
+2.26.2
+

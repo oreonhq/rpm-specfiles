@@ -1,0 +1,27 @@
+From c18db2ab460c7b863171083f7ec4982dbebd1050 Mon Sep 17 00:00:00 2001
+From: Guilherme Amadio <amadio@cern.ch>
+Date: Tue, 18 Nov 2025 21:46:24 +0100
+Subject: [PATCH] [Tests] Ensure extra test fixtures are ready before server
+ setup
+
+This is needed in case test fixtures create files which are used
+in the configuration of a server/cluster.
+---
+ tests/XRootD/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/XRootD/CMakeLists.txt b/tests/XRootD/CMakeLists.txt
+index 6e8f9e874..7b5c1531b 100644
+--- a/tests/XRootD/CMakeLists.txt
++++ b/tests/XRootD/CMakeLists.txt
+@@ -28,6 +28,7 @@ foreach(CONFIG ${XROOTD_CONFIGS})
+   set_tests_properties(XRootD::${CONFIG}::setup
+     PROPERTIES
+       FIXTURES_SETUP XRootD::${CONFIG}
++      FIXTURES_REQUIRED "${${CONFIG}_FIXTURES}"
+       ENVIRONMENT "BINARY_DIR=${CMAKE_BINARY_DIR}"
+   )
+ 
+-- 
+2.51.1
+

@@ -1,0 +1,161 @@
+From eeb6172912b878d7ccb14d69682b73f3e3599826 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Mon, 8 Sep 2025 21:18:15 +0800
+Subject: [PATCH 2/3] Wrap forward declaration within QT_NAMESPACE
+
+---
+ src/qt6ct/appearancepage.h    | 4 ++++
+ src/qt6ct/fontconfigdialog.h  | 4 ++++
+ src/qt6ct/fontspage.h         | 4 ++++
+ src/qt6ct/iconthemepage.h     | 4 ++++
+ src/qt6ct/mainwindow.h        | 4 ++++
+ src/qt6ct/paletteeditdialog.h | 4 ++++
+ src/qt6ct/qsseditordialog.h   | 4 ++++
+ src/qt6ct/qsspage.h           | 4 ++++
+ 8 files changed, 32 insertions(+)
+
+diff --git a/src/qt6ct/appearancepage.h b/src/qt6ct/appearancepage.h
+index 8e4902e..ff9d0be 100644
+--- a/src/qt6ct/appearancepage.h
++++ b/src/qt6ct/appearancepage.h
+@@ -36,9 +36,13 @@ class AppearancePage;
+ class PreviewForm;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QStyle;
+ class QAction;
+ 
++QT_END_NAMESPACE
++
+ class AppearancePage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/src/qt6ct/fontconfigdialog.h b/src/qt6ct/fontconfigdialog.h
+index f391f34..0aea541 100644
+--- a/src/qt6ct/fontconfigdialog.h
++++ b/src/qt6ct/fontconfigdialog.h
+@@ -35,8 +35,12 @@ namespace Ui {
+ class FontConfigDialog;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QXmlStreamWriter;
+ 
++QT_END_NAMESPACE
++
+ class FontConfigDialog : public QDialog
+ {
+     Q_OBJECT
+diff --git a/src/qt6ct/fontspage.h b/src/qt6ct/fontspage.h
+index 276c741..cf3b95c 100644
+--- a/src/qt6ct/fontspage.h
++++ b/src/qt6ct/fontspage.h
+@@ -35,9 +35,13 @@ namespace Ui {
+ class FontsPage;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QLabel;
+ class QSettings;
+ 
++QT_END_NAMESPACE
++
+ class FontsPage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/src/qt6ct/iconthemepage.h b/src/qt6ct/iconthemepage.h
+index 9ad3580..66596e9 100644
+--- a/src/qt6ct/iconthemepage.h
++++ b/src/qt6ct/iconthemepage.h
+@@ -37,10 +37,14 @@ namespace Ui {
+ class IconThemePage;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QTreeWidgetItem;
+ class QProgressBar;
+ class QThread;
+ 
++QT_END_NAMESPACE
++
+ class IconThemePage : public TabPage
+ {
+     Q_OBJECT
+diff --git a/src/qt6ct/mainwindow.h b/src/qt6ct/mainwindow.h
+index 5d1e690..b36565f 100644
+--- a/src/qt6ct/mainwindow.h
++++ b/src/qt6ct/mainwindow.h
+@@ -32,8 +32,12 @@
+ #include <QWidget>
+ #include <QStringList>
+ 
++QT_BEGIN_NAMESPACE
++
+ class QAbstractButton;
+ 
++QT_END_NAMESPACE
++
+ namespace Ui {
+ class MainWindow;
+ }
+diff --git a/src/qt6ct/paletteeditdialog.h b/src/qt6ct/paletteeditdialog.h
+index b7ea9b5..e18947e 100644
+--- a/src/qt6ct/paletteeditdialog.h
++++ b/src/qt6ct/paletteeditdialog.h
+@@ -32,9 +32,13 @@
+ #include <QDialog>
+ #include <QPalette>
+ 
++QT_BEGIN_NAMESPACE
++
+ class QTableWidgetItem;
+ class QStyle;
+ 
++QT_END_NAMESPACE
++
+ namespace Ui {
+ class PaletteEditDialog;
+ }
+diff --git a/src/qt6ct/qsseditordialog.h b/src/qt6ct/qsseditordialog.h
+index bd8d8a4..afe3bea 100644
+--- a/src/qt6ct/qsseditordialog.h
++++ b/src/qt6ct/qsseditordialog.h
+@@ -36,8 +36,12 @@ namespace Ui {
+ class QSSEditorDialog;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QAbstractButton;
+ 
++QT_END_NAMESPACE
++
+ class QSSEditorDialog : public QDialog
+ {
+     Q_OBJECT
+diff --git a/src/qt6ct/qsspage.h b/src/qt6ct/qsspage.h
+index a5e6693..7131ad7 100644
+--- a/src/qt6ct/qsspage.h
++++ b/src/qt6ct/qsspage.h
+@@ -35,9 +35,13 @@ namespace Ui {
+ class QSSPage;
+ }
+ 
++QT_BEGIN_NAMESPACE
++
+ class QListWidgetItem;
+ class QMenu;
+ 
++QT_END_NAMESPACE
++
+ class QSSPage : public TabPage
+ {
+     Q_OBJECT
+-- 
+2.51.0
+

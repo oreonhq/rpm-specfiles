@@ -1,0 +1,74 @@
+%global source0_hash e68121a6e0f39acdde9c6e611acd8bce8bc7c9a8910ddcd53f0477063dae1bbd
+
+# Created by pyp2rpm-3.3.5
+%global pypi_name codecov
+
+%global common_description %{expand:
+Find coverage reports for supported languages, gather them and submit them to
+Codecov.}
+
+Name:           python-%{pypi_name}
+Version:        2.1.12
+Release:        %autorelease
+Summary:        Python report uploader for Codecov
+
+# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+License:        Apache-2.0
+URL:            https://github.com/codecov/codecov-python
+# PyPI doesn't include tests so use the GitHub tarball instead
+Source0:        %{url}/archive/v%{version}/codecov-python-%{version}.tar.gz
+# Maintainers, please upstream
+Patch0:         python-codecov-rm-python-mock-usage.diff
+
+BuildArch:      noarch
+
+BuildRequires:  sed
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(ddt)
+BuildRequires:  python3dist(requests)
+
+%description
+%{common_description}
+
+%package -n     python3-%{pypi_name}
+Summary:        %{summary}
+%if 0%{?fedora} == 32
+%py_provides    python3-%{pypi_name}
+%endif
+
+%description -n python3-%{pypi_name}
+%{common_description}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n codecov-python-%{version}
+# Remove bundled egg-info
+rm -rf %{pypi_name}.egg-info
+# Remove unneeded shebang
+sed -e "\|#!/usr/bin/env python3|d" -i %{pypi_name}/*.py
+
+%build
+%py3_build
+
+%install
+%py3_install
+
+%check
+# Disable tests that require network access
+%pytest tests/test.py \
+  --deselect tests/test.py::TestUploader::test_bowerrc_none \
+  --deselect tests/test.py::TestUploader::test_prefix \
+  --deselect tests/test.py::TestUploader::test_send
+
+%files -n python3-%{pypi_name}
+%license LICENSE
+%doc README.md CHANGELOG.md
+%{_bindir}/codecov
+%{python3_sitelib}/%{pypi_name}
+%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
+
+%changelog
+%autochangelog

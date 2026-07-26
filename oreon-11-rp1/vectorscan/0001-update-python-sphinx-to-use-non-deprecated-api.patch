@@ -1,0 +1,45 @@
+From ab1fd57a767791313ff3aa795102c813bb608a1a Mon Sep 17 00:00:00 2001
+From: Jeremy Linton <jeremy.linton@arm.com>
+Date: Mon, 28 Jul 2025 18:41:50 -0500
+Subject: [PATCH] update python/sphinx to use non deprecated api
+
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+---
+ doc/dev-reference/CMakeLists.txt | 5 ++++-
+ doc/dev-reference/conf.py.in     | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/doc/dev-reference/CMakeLists.txt b/doc/dev-reference/CMakeLists.txt
+index 6f48e2e4..48349c22 100644
+--- a/doc/dev-reference/CMakeLists.txt
++++ b/doc/dev-reference/CMakeLists.txt
+@@ -34,7 +34,7 @@ add_custom_target(dev-reference
+     DEPENDS dev-reference-doxygen
+     COMMENT "Building HTML dev reference with Sphinx")
+ 
+-add_custom_target(dev-reference-man
++add_custom_target(dev-reference-man ALL
+     ${SPHINX_BUILD}
+         -b man
+         -c "${CMAKE_CURRENT_BINARY_DIR}"
+@@ -43,4 +43,7 @@ add_custom_target(dev-reference-man
+         "${SPHINX_MAN_DIR}"
+     DEPENDS dev-reference-doxygen
+     COMMENT "Building man page reference with Sphinx")
++
++install(FILES ${CMAKE_BINARY_DIR}/doc/dev-reference/man/vectorscan.7
++    DESTINATION "${CMAKE_INSTALL_MANDIR}/man7/")
+ endif()
+diff --git a/doc/dev-reference/conf.py.in b/doc/dev-reference/conf.py.in
+index 298a54b1..082f07e0 100644
+--- a/doc/dev-reference/conf.py.in
++++ b/doc/dev-reference/conf.py.in
+@@ -272,4 +272,4 @@ breathe_domain_by_extension = {"h" : "c"}
+ # -- Add some customisation -----------------------------------------------
+ 
+ def setup(app):
+-    app.add_stylesheet("hyperscan.css") # Custom stylesheet for e.g. :regex:
++    app.add_css_file("hyperscan.css") # Custom stylesheet for e.g. :regex:
+-- 
+2.50.1
+

@@ -1,0 +1,17 @@
+diff -ur planets-0.1.13.old/options.ml planets-0.1.13/options.ml
+--- planets-0.1.13.old/options.ml	2019-04-01 09:06:40.965599836 +0100
++++ planets-0.1.13/options.ml	2019-04-01 09:07:15.128743881 +0100
+@@ -16,11 +16,11 @@
+   Char.chr ((Char.code 'a') + rand)
+ 
+ let random_name length = 
+-  let str = String.create length in
++  let str = Bytes.create length in
+   for i = 0 to length -1 do
+     str.[i] <-  random_chr ()
+   done;
+-  str
++  Bytes.to_string str
+ 
+ module StringMap = AugMap.Make(
+   struct 

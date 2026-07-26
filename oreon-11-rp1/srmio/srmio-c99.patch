@@ -1,0 +1,18 @@
+This is not the correct fix.  The configure machinery does not work as
+intended.  But on GNU/Linux, we can assume that <time.h> is always
+available.
+
+Submitted upstream: <https://github.com/rclasen/srmio/pull/3>
+
+diff --git a/srmio.h b/srmio.h
+index 64eed95159aa3f3a..47c56bcfa4d66ad5 100644
+--- a/srmio.h
++++ b/srmio.h
+@@ -11,6 +11,7 @@
+ #define _SRMIO_H
+ 
+ #include <stdio.h>
++#include <time.h>
+ #include "srmio_config.h"
+ 
+ #ifdef __cplusplus

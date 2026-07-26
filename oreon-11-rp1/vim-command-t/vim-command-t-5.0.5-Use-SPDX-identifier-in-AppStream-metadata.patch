@@ -1,0 +1,22 @@
+From 654b440fdfd5eaf52fac6882035f3b53ab48a39f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Mon, 14 Oct 2024 15:20:53 +0200
+Subject: [PATCH] Use SPDX identifier in AppStream metadata
+
+https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-metadata_license
+---
+ appstream/vim-command-t.metainfo.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/appstream/vim-command-t.metainfo.xml b/appstream/vim-command-t.metainfo.xml
+index 53807879..78d08bdd 100644
+--- a/appstream/vim-command-t.metainfo.xml
++++ b/appstream/vim-command-t.metainfo.xml
+@@ -7,6 +7,6 @@
+ <summary>Provides an extremely fast, intuitive mechanism for opening files with a minimal number of keystrokes</summary>
+ <url type="homepage">https://github.com/wincent/command-t</url>
+ <metadata_license>CC0-1.0</metadata_license>
+-<project_license>BSD</project_license>
++<project_license>BSD-2-Clause</project_license>
+ <updatecontact>v.ondruch@gmail.com</updatecontact>
+ </component>

@@ -1,0 +1,227 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Thu, 14 Mar 2024 20:11:55 +0000
+Subject: [PATCH 1/7] fix wrong prototype of freeaddrinfo_t
+
+closes #557
+---
+ src/core.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core.h b/src/core.h
+index 3edece82120d..59a8e1254f1e 100644
+--- a/src/core.h
++++ b/src/core.h
+@@ -103,7 +103,7 @@ typedef int (*close_t)(int);
+ typedef int (*close_range_t)(unsigned, unsigned, int);
+ typedef int (*connect_t)(int, const struct sockaddr *, socklen_t);
+ typedef struct hostent* (*gethostbyname_t)(const char *);
+-typedef int (*freeaddrinfo_t)(struct addrinfo *);
++typedef void (*freeaddrinfo_t)(struct addrinfo *);
+ typedef struct hostent *(*gethostbyaddr_t) (const void *, socklen_t, int);
+ 
+ typedef int (*getaddrinfo_t)(const char *, const char *, const struct addrinfo *, 
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Thu, 13 Jun 2024 12:21:16 +0000
+Subject: [PATCH 2/7] add new --fat-binary-m2 option
+
+this enables arm64e in the proxychains4 binary additionally to the
+injected library, which already did so with the -m1 option.
+
+closes #569
+---
+ configure | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/configure b/configure
+index 7ceb122e9288..273f657745b8 100755
+--- a/configure
++++ b/configure
+@@ -87,6 +87,7 @@ usage() {
+ 	echo "	to preload from current dir (possibly insecure, but handy)"
+ 	echo "--fat-binary : build for both i386 and x86_64 architectures on 64-bit Macs"
+ 	echo "--fat-binary-m1 : build for both arm64e and x86_64 architectures on M1 Macs"
++	echo "--fat-binary-m2 : build for arm64, arm64e and x86_64 architectures on M2+ Macs"
+ 	echo "--hookmethod=dlsym|dyld   hook method for osx. default: auto"
+ 	echo "  if OSX >= 12 is detected, dyld method will be used if auto."
+ 	echo "--help : show this text"
+@@ -102,6 +103,7 @@ spliteq() {
+ 
+ fat_binary=
+ fat_binary_m1=
++fat_binary_m2=
+ ignore_cve=no
+ hookmethod=auto
+ 
+@@ -118,6 +120,7 @@ parsearg() {
+ 	--hookmethod=*) hookmethod=`spliteq $1`;;
+ 	--fat-binary) fat_binary=1;;
+ 	--fat-binary-m1) fat_binary_m1=1;;
++	--fat-binary-m2) fat_binary_m2=1;;
+ 	--help) usage;;
+ 	esac
+ }
+@@ -289,6 +292,12 @@ if ismac ; then
+ 		echo "FAT_LDFLAGS=-arch arm64 -arch arm64e -arch x86_64">>config.mak
+ 		echo "FAT_BIN_LDFLAGS=-arch arm64 -arch x86_64">>config.mak
+ 	fi
++	if [ "$fat_binary_m2" = 1 ] ; then
++		echo "Configuring a fat binary for arm64[e] and x86_64"
++		echo "MAC_CFLAGS+=-arch arm64 -arch arm64e -arch x86_64">>config.mak
++		echo "FAT_LDFLAGS=-arch arm64 -arch arm64e -arch x86_64">>config.mak
++		echo "FAT_BIN_LDFLAGS=-arch arm64 -arch arm64e -arch x86_64">>config.mak
++	fi
+ elif isbsd ; then
+ 	echo LIBDL=>>config.mak
+ 	echo "CFLAGS+=-DIS_BSD">>config.mak
+@@ -302,3 +311,6 @@ elif ishaiku ; then
+ fi
+ 
+ echo "Done, now run $make_cmd && $make_cmd install"
++if [ "$fat_binary_m2" = 1 ] ; then
++echo "Don't forget to run csrutil disable and sudo nvram boot-args=-arm64e_preview_abi"
++fi
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Thu, 29 Aug 2024 09:31:35 +0000
+Subject: [PATCH 3/7] core: use string instead of compound literal
+
+fixes compilation when memcpy is defined as a function-like macro at
+the cost of one more byte used for the unused zero terminator.
+
+closes #578
+---
+ src/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core.c b/src/core.c
+index d45597bfc8e8..bd7691b7bc20 100644
+--- a/src/core.c
++++ b/src/core.c
+@@ -999,7 +999,7 @@ err_nn:
+ 	} else if(!node && !(hints->ai_flags & AI_PASSIVE)) {
+ 		af = ((struct sockaddr_in *) &space->sockaddr_space)->sin_family = AF_INET;
+ 		memcpy(&((struct sockaddr_in *) &space->sockaddr_space)->sin_addr,
+-		       (char[]){127,0,0,1}, 4);
++		       "\177\0\0\1", 4);
+ 	}
+ 	if(service) mygetservbyname_r(service, NULL, &se_buf, buf, sizeof(buf), &se);
+ 
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dimitris Apostolou <dimitris.apostolou@icloud.com>
+Date: Thu, 2 Jan 2025 21:25:43 +0200
+Subject: [PATCH 4/7] fix missing bracket in solaris codepath (#589)
+
+---
+ src/libproxychains.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libproxychains.c b/src/libproxychains.c
+index 84a8f004cb5e..e630e5137c3b 100644
+--- a/src/libproxychains.c
++++ b/src/libproxychains.c
+@@ -767,7 +767,7 @@ HOOKFUNC(int, connect, int sock, const struct sockaddr *addr, unsigned int len)
+ }
+ 
+ #ifdef IS_SOLARIS
+-HOOKFUNC(int, __xnet_connect, int sock, const struct sockaddr *addr, unsigned int len)
++HOOKFUNC(int, __xnet_connect, int sock, const struct sockaddr *addr, unsigned int len) {
+ 	return connect(sock, addr, len);
+ }
+ #endif
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Sat, 18 Oct 2025 12:13:11 +0000
+Subject: [PATCH 5/7] fix potential buffer overflow in config file parsing
+
+could be triggered by using username or password exceeding 255
+bytes for http type proxies.
+
+closes #606
+---
+ src/libproxychains.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libproxychains.c b/src/libproxychains.c
+index e630e5137c3b..40d8a11893fb 100644
+--- a/src/libproxychains.c
++++ b/src/libproxychains.c
+@@ -241,7 +241,7 @@ static int proxy_from_string(const char *proxystring,
+ 		ul = p-u;
+ 		p++;
+ 		pl = at-p;
+-		if(proxytype == RS_PT_SOCKS5 && (ul > 255 || pl > 255))
++		if(ul > 255 || pl > 255)
+ 			return 0;
+ 		memcpy(user_buf, u, ul);
+ 		user_buf[ul]=0;
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Sun, 21 Dec 2025 03:54:09 +0000
+Subject: [PATCH 6/7] configure: detect netbsd as bsd
+
+---
+ configure | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure b/configure
+index 273f657745b8..53c53f1f96ff 100755
+--- a/configure
++++ b/configure
+@@ -220,6 +220,7 @@ check_define __APPLE__ && {
+ 	fi
+ }
+ check_define __FreeBSD__ && bsd_detected=true
++check_define __NetBSD__ && bsd_detected=true
+ check_define __OpenBSD__ && {
+ bsd_detected=true
+ echo "CFLAGS+=-DIS_OPENBSD">>config.mak
+-- 
+2.51.1
+
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pablo Greco <psgreco@gmail.com>
+Date: Sat, 27 Dec 2025 19:06:01 -0800
+Subject: [PATCH 7/7] daemon: fix "_GNU_SOURCE redefined" warning (#611)
+
+---
+ src/daemon/daemon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/daemon/daemon.c b/src/daemon/daemon.c
+index a0e8f2a493aa..2c961b697085 100644
+--- a/src/daemon/daemon.c
++++ b/src/daemon/daemon.c
+@@ -5,6 +5,7 @@
+ 
+ */
+ 
++#undef _GNU_SOURCE
+ #define _GNU_SOURCE
+ #include <unistd.h>
+ #define _POSIX_C_SOURCE 200809L
+-- 
+2.51.1
+

@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index b244da4..6c1b37b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -72,6 +72,6 @@ setup(
+     classifiers      = CLASSIFIERS,
+     package_data     = {NAME: ['requirements.txt', 'LICENSE']},
+ 
+-    setup_requires   = ['setuptools_scm<6.0'],  # setuptools_scm>=6.0 doesn't support Python 3.5
++    setup_requires   = ['setuptools_scm'],  # setuptools_scm>=6.0 doesn't support Python 3.5
+     use_scm_version  = True,
+ )  # yapf: disable

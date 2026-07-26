@@ -1,0 +1,12 @@
+diff --git a/mk/xe-linux-distribution.service b/mk/xe-linux-distribution.service
+index 4e60a85..6296069 100644
+--- a/mk/xe-linux-distribution.service
++++ b/mk/xe-linux-distribution.service
+@@ -3,6 +3,7 @@ Description=Linux Guest Agent
+ ConditionVirtualization=xen
+ 
+ [Service]
++ExecStartPre=/usr/sbin/sysctl net.ipv4.conf.all.arp_notify=1
+ ExecStartPre=/usr/share/oem/xs/xe-linux-distribution /var/cache/xe-linux-distribution
+ ExecStart=/usr/share/oem/xs/xe-daemon
+ 

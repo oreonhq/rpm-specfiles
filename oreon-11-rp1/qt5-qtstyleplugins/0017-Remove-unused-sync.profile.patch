@@ -1,0 +1,30 @@
+From 73263716edf178abc0b0446d7563a502b40fbc3b Mon Sep 17 00:00:00 2001
+From: Alexander Volkov <a.volkov@rusbitech.ru>
+Date: Wed, 14 Dec 2016 00:06:38 +0300
+Subject: [PATCH 17/23] Remove unused sync.profile
+
+Change-Id: I255d467349d8db7cdb02cd9f0a02552e57a4ed8c
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ sync.profile | 9 ---------
+ 1 file changed, 9 deletions(-)
+ delete mode 100644 sync.profile
+
+diff --git a/sync.profile b/sync.profile
+deleted file mode 100644
+index ccc4a15..0000000
+--- a/sync.profile
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# Module dependencies.
+-# Every module that is required to build this module should have one entry.
+-# Each of the module version specifiers can take one of the following values:
+-#   - A specific Git revision.
+-#   - any git symbolic ref resolvable from the module's repository (e.g. "refs/heads/master" to track master branch)
+-#
+-%dependencies = (
+-        "qtbase" => "refs/heads/stable",
+-);
+-- 
+2.9.3
+

@@ -1,0 +1,129 @@
+Reported upstream: <https://sourceforge.net/p/sblim/bugs/2765/>
+
+diff -ur sblim-cmpi-rpm-1.0.1.orig/aclocal.m4 sblim-cmpi-rpm-1.0.1/aclocal.m4
+--- sblim-cmpi-rpm-1.0.1.orig/aclocal.m4	2007-07-19 10:24:37.000000000 +0200
++++ sblim-cmpi-rpm-1.0.1/aclocal.m4	2022-11-23 13:13:47.978589067 +0100
+@@ -870,10 +870,6 @@
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -889,7 +885,7 @@
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff -ur sblim-cmpi-rpm-1.0.1.orig/configure sblim-cmpi-rpm-1.0.1/configure
+--- sblim-cmpi-rpm-1.0.1.orig/configure	2007-07-19 10:24:40.000000000 +0200
++++ sblim-cmpi-rpm-1.0.1/configure	2022-11-23 13:13:26.912808546 +0100
+@@ -2834,7 +2834,7 @@
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+   for ac_declaration in \
+-   '' \
++   '#include <stdlib.h>' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
+    'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+@@ -4315,8 +4315,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -4819,7 +4819,7 @@
+   fi
+ fi
+ for ac_declaration in \
+-   '' \
++   '#include <stdlib.h>' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
+    'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+@@ -9211,10 +9211,6 @@
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -9230,7 +9226,7 @@
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -9311,10 +9307,6 @@
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -9330,7 +9322,7 @@
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -19047,8 +19039,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+@@ -19820,7 +19812,7 @@
+     double value;
+     value = strtod (string, &term);
+     if (value != 69 || term != (string + 4))
+-      exit (1);
++      return 1;
+   }
+ 
+   {
+@@ -19830,9 +19822,9 @@
+     char *term;
+     strtod (string, &term);
+     if (term != string && *(term - 1) == 0)
+-      exit (1);
++      return 1;
+   }
+-  exit (0);
++  return 0;
+ }
+ 
+ _ACEOF

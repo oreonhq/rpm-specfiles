@@ -1,0 +1,38 @@
+.\" postdownload command
+.TH "postdownload" "1" "30 July 2008" "Steve Conklin"
+.SH "NAME"
+postdownload \- A front-end to the usgs2sdf utility
+.SH "SYNOPSIS"
+\fBpostdownload\fP file
+.SH "DESCRIPTION"
+.PP
+\fBpostdownload\fP is a front-end to the usgs2sdf utility. \fBpostdownload\fP takes as an argument the name of the gzipped Digital Elevation Model (DEM) down loaded from the US Geological Survey (ie: wilmington-w.gz). \fBpostdownload\fP uncompresses the DEM file, adds necessary record delimiters, and invokes usgs2sdf to produce a SPLAT Data File (SDF).
+.PP
+USGS Digital Elevation Models may be downloaded from
+.IP "http://edcftp.cr.usgs.gov/pub/data/DEM/250/"
+.br
+Invoke postdownload with the name of each DEM file downloaded to produce a database of SPLAT Data Files.
+.br
+.SH "EXAMPLES"
+.IP "\fBpostdownload aberdeen\fP"
+.br
+.SH "FILES"
+.IP "/usr/bin/postdownload"
+.br
+.SH "SEE ALSO"
+.nf
+.I msplat (1)
+.fi
+
+.SH "BUGS"
+.IP "No known bugs at this time."
+
+.SH "AUTHORS"
+.nf
+Steve Conklin <fedora@conklinhouse.com>
+Dan Mossor <dmossor@fedorapoeple.org>
+.fi
+
+.SH "HISTORY"
+.IP "2008 - Text copied from README"
+.IP "2014 - Text reformatted"

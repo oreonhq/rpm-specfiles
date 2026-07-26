@@ -1,0 +1,18 @@
+--- wallpapoz-0.6.1/src/wallpapoz.deletefirst	2011-12-30 15:35:31.000000000 +0900
++++ wallpapoz-0.6.1/src/wallpapoz	2011-12-30 15:38:56.000000000 +0900
+@@ -1062,13 +1062,13 @@
+         lowest_iter = self.store.get_iter((path_iter-1,))
+       else:
+         index_temp = 0
++        before_path_iter = 0
+         for single_iter in self.selected_iter[1:]:
+           path_iter = self.store.get_path(single_iter)[0]
+           if path_iter == (index_temp + 1):
+             index_temp = index_temp + 1
+             before_path_iter = path_iter
+-          else:
+-            lowest_iter = self.store.get_iter((before_path_iter+1,))
++        lowest_iter = self.store.get_iter((before_path_iter+1,))
+ 
+       # remove the iter
+       for single_iter in self.selected_iter:

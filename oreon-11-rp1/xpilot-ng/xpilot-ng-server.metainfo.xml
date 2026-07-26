@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>xpilot-ng-server</id>
+  <extends>xpilot-ng-sdl.desktop</extends>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>XPilot NG server</name>
+  <summary>Server for hosting XPilot NG games</summary>
+  <url type="homepage">http://xpilot.sourceforge.net/</url>
+  <updatecontact>jwrdegoede_at_gmail.com</updatecontact>
+</component>

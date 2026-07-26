@@ -1,0 +1,11 @@
+--- bundled/singular/apps/ideal/src/singularIdeal.cc.orig	2023-11-06 04:02:24.000000000 -0700
++++ bundled/singular/apps/ideal/src/singularIdeal.cc	2024-02-04 09:33:12.774304348 -0700
+@@ -218,7 +218,7 @@ public:
+    {
+       check_ring(singRing);
+       load_library("elim.lib");
+-      idhdl sathdl = get_singular_function("sat");
++      idhdl sathdl = get_singular_function("sat_with_exp");
+       
+       ::ideal J = idInit(safe_cast(rhs.size()), 1);
+       // Converting monomials as described in libsing-test2.cc.

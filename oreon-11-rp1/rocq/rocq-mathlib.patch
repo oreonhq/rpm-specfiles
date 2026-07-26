@@ -1,0 +1,10 @@
+--- rocq-9.1.1/kernel/byterun/dune.orig	2026-02-09 05:39:54.000000000 -0700
++++ rocq-9.1.1/kernel/byterun/dune	2026-03-02 09:36:55.634559217 -0700
+@@ -2,6 +2,7 @@
+  (name coqrun)
+  (synopsis "Rocq's Kernel Abstract Reduction Machine [C implementation]")
+  (public_name rocq-runtime.vm)
++ (c_library_flags -lm)
+  (foreign_stubs
+   (language c)
+   (names rocq_fix_code rocq_float64 rocq_memory rocq_values rocq_interp)

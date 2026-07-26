@@ -1,0 +1,12 @@
+diff -up yubikey-val-2.39/Makefile.install yubikey-val-2.39/Makefile
+--- yubikey-val-2.39/Makefile.install	2016-11-01 03:33:20.000000000 -0600
++++ yubikey-val-2.39/Makefile	2018-11-14 14:29:08.721971046 -0700
+@@ -101,7 +101,7 @@ install:
+ 	install -D ykval-munin-responses.pl $(DESTDIR)$(muninprefix)/ykval_responses
+ 	install -D ykval-munin-ksmresponses.pl $(DESTDIR)$(muninprefix)/ykval_ksmresponses
+ 	install -D ykval-munin-yubikeystats.php $(DESTDIR)$(muninprefix)/ykval_yubikeystats
+-	install -D --backup --mode 640 --group $(wwwgroup) ykval-config.php $(DESTDIR)$(etcprefix)/ykval-config.php
++	install -D --backup --mode 640 ykval-config.php $(DESTDIR)$(etcprefix)/ykval-config.php
+ 	install -D --mode 644 ykval-db.sql $(DESTDIR)$(docprefix)/ykval-db.sql
+ 	install -D --mode 644 ykval-db.oracle.sql $(DESTDIR)$(docprefix)/ykval-db.oracle.sql
+ 	install -D --mode 644 $(DOCS) $(DESTDIR)$(docprefix)/

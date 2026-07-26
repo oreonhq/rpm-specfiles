@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>org.polarsys.B612-sans</id>
+  <metadata_license>EPL-1.0 and BSD</metadata_license>
+  <project_license>EPL-1.0 and BSD and OFL-1.1</project_license>
+  <name>B612</name>
+  <summary>Sans-serif fonts designed for reading comfort and safety in aeroplane cockpits</summary>
+  <description>
+    <p>
+      Commissioned by Airbus and designed by Intactile Design, B612 is a
+      digital font intended to be used in an aeronautical context. B612
+      is built with legibility as its core: every character is designed
+      to be highly recognizable even in critical reading
+      conditions. B612 drawing has been optimized for screen display,
+      and full hinting has been added to all sizes of alpha numeric
+      characters.
+    </p>
+  </description>
+  <url type="homepage">https://projects.eclipse.org/projects/polarsys.b612</url>
+  <url type="bugtracker">https://github.com/polarsys/b612/issues</url>
+  <url type="faq">https://github.com/polarsys/b612/raw/master/docs/B612-Leaflet.pdf</url>
+  <url type="donation">https://www.eclipse.org/donate/</url>
+  <provides>
+    <font>B612 Regular</font>
+    <font>B612 Bold</font>
+    <font>B612 Italic</font>
+    <font>B612 Bold Italic</font>
+  </provides>
+</component>

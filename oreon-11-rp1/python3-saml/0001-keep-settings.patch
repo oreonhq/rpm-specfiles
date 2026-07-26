@@ -1,0 +1,8 @@
+--- python3-saml-1.15.0/.gitignore.orig	2022-12-28 05:54:09.000000000 +0800
++++ python3-saml-1.15.0/.gitignore	2023-08-19 17:43:22.413715269 +0800
+@@ -29,5 +29,4 @@
+ *.crt
+ *.pem
+ 
+-settings.py
+ advanced_settings.py

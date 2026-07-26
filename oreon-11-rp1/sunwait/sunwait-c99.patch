@@ -1,0 +1,53 @@
+Ensure prototypes for all called functions, for improved compatibility
+with future C99 compilers.  Add the print.h header file for a
+declaration of print_everything.
+
+Already fixed in this Git repository: <https://github.com/risacher/sunwait>
+(But history is incomplete over there.)
+
+diff --git a/main.c b/main.c
+index 018185c2f26b1685..fad6a92c7ee91bd3 100644
+--- a/main.c
++++ b/main.c
+@@ -6,8 +6,10 @@
+ #include <string.h>
+ #include <math.h>
+ #include <time.h>
++#include <unistd.h>
+ 
+ #include "sunriset.h"
++#include "print.h"
+ 
+ #define MODE_USAGE  0x0
+ 
+@@ -51,7 +53,7 @@ map options[] = {
+   { NULL, 0, 0 }
+ };
+ 
+-print_usage() 
++void print_usage(void) 
+ {
+   FILE* f = stdout;
+   fprintf(f, "usage: sunwait [options] [sun|civ|naut|astr] [up|down] [+/-offset] [latitude] [longitude]\n\n");
+diff --git a/print.c b/print.c
+index b59bc1059f1a8e7d..f44b254af8133574 100644
+--- a/print.c
++++ b/print.c
+@@ -4,6 +4,7 @@
+ #include <time.h>
+ 
+ #include "sunriset.h"
++#include "print.h"
+ 
+ char* months[] = {
+   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+diff --git a/print.h b/print.h
+new file mode 100644
+index 0000000000000000..bb3d554064ae4aa9
+--- /dev/null
++++ b/print.h
+@@ -0,0 +1,4 @@
++struct tm;
++int print_everything(int year, int month, int day, 
++		     double lat, double lon,
++		     struct tm* tm, char local);

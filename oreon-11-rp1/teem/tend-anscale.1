@@ -1,0 +1,44 @@
+.TH TEND\-ANSCALE "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-anscale \- scale the anisotropic component of the tensors
+.SH SYNOPSIS
+.B tend\ anscale
+.B \-s
+.RI < scale >
+.RB [ \-fd ]
+.RB [ \-mp ]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Scale the anisotropic component of the tensors.
+This maintains the isotropic component of the tensor, and fixes either the
+trace or determinant, while scaling up (or down) the \(lqdeviatoric\(rq
+component of the tensor.
+Good for exaggerating the shape of nearly isotropic tensors.
+.SH OPTIONS
+.TP
+.B \-s\fR <\fIscale\fR>
+Amount by which to scale deviatoric component of tensor.
+.RI ( float )
+.TP
+.B \-fd
+instead of fixing the per-sample trace (the default), fix the determinant
+(ellipsoid volume)
+.TP
+.B \-mp
+after changing the eigenvalues of the tensor, enforce their non-negative-ness.
+By default, no such constraint is imposed.
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

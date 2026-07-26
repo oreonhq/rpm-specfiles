@@ -1,0 +1,34 @@
+--- a/docs/source/api.rst
++++ b/docs/source/api.rst
+@@ -2478,7 +2478,7 @@
+    :show-inheritance:
+    :members:
+ 
+-.. autoexception:: cyclopts.CommandCollisionError
++.. autoclass:: cyclopts.CommandCollisionError
+    :show-inheritance:
+    :members:
+ 
+@@ -2486,18 +2486,18 @@
+    :show-inheritance:
+    :members:
+ 
+-.. autoexception:: cyclopts.EditorError
++.. autoclass:: cyclopts.EditorError
+    :show-inheritance:
+    :members:
+ 
+-.. autoexception:: cyclopts.EditorNotFoundError
++.. autoclass:: cyclopts.EditorNotFoundError
+    :show-inheritance:
+    :members:
+ 
+-.. autoexception:: cyclopts.EditorDidNotSaveError
++.. autoclass:: cyclopts.EditorDidNotSaveError
+    :show-inheritance:
+    :members:
+ 
+-.. autoexception:: cyclopts.EditorDidNotChangeError
++.. autoclass:: cyclopts.EditorDidNotChangeError
+    :show-inheritance:
+    :members:

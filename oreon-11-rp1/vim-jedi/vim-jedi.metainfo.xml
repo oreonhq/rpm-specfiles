@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Petr Hracek <phracek@redhat.com> -->
+<component type="addon">
+    <id>vim-jedi</id>
+    <extends>gvim.desktop</extends>
+    <name>vim-jedi</name>
+    <summary>vim-jedi is a VIM binding to awesome auto completion library Jedi.</summary>
+    <url type="homepage">https://github.com/davidhalter/jedi-vim</url>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LGPLv3</project_license>
+    <updatecontact>phracek@redhat.com</updatecontact>
+</component>

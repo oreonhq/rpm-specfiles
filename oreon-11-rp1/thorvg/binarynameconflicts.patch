@@ -1,0 +1,311 @@
+diff -ruN thorvg-0.15.11/CONTRIBUTING.md thorvg-0.15.11-mod2/CONTRIBUTING.md
+--- thorvg-0.15.11/CONTRIBUTING.md	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/CONTRIBUTING.md	2025-03-29 09:07:04.804682150 +0300
+@@ -33,7 +33,7 @@
+ This also suggests who might need to review your patch.
+ If your change doesn't belong to any sub-modules, you can either replace this with a suitable name or skip it.
+ The name should be written entirely in lowercase letters.
+-  - e.g., build, doc, infra, common, sw_engine, gl_engine, svg_loader, examples, wasm, svg2png...
++  - e.g., build, doc, infra, common, sw_engine, gl_engine, svg_loader, examples, wasm, thorvgsvg2png...
+ 
+ - [Feature] indicates the primary function or feature you modified. Typically, this represents a class or file name.
+ This is an optional.
+diff -ruN thorvg-0.15.11/.github/workflows/regression.yml thorvg-0.15.11-mod2/.github/workflows/regression.yml
+--- thorvg-0.15.11/.github/workflows/regression.yml	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/.github/workflows/regression.yml	2025-03-29 09:39:50.157757328 +0300
+@@ -152,7 +152,7 @@
+           rm files.zip
+           cp test/regression/check_same_image_size.py check_same_image_size.py
+           # Forces to run tasks on different threads if possible, which should help find problem with data races
+-          taskset -c 0-15 python3 check_same_image_size.py AA_5.svg ./build/src/tools/svg2png/svg2png 100 500 2>&1 | tee result_image_size.txt
++          taskset -c 0-15 python3 check_same_image_size.py AA_5.svg ./build/src/tools/svg2png/tvg-svg2png 100 500 2>&1 | tee result_image_size.txt
+ 
+       - name: Check results
+         run: |
+@@ -189,4 +189,4 @@
+           if [[ -f "fail_ci.txt" ]]; then
+             echo "Check Check results section for more details which tests failed"
+             exit 1
+-          fi
+\ No newline at end of file
++          fi
+diff -ruN thorvg-0.15.11/meson_options.txt thorvg-0.15.11-mod2/meson_options.txt
+--- thorvg-0.15.11/meson_options.txt	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/meson_options.txt	2025-03-29 09:25:32.471632560 +0300
+@@ -67,4 +67,4 @@
+    type: 'array',
+    choices: ['', 'lottie_expressions'],
+    value: ['lottie_expressions'],
+-   description: '"Enable support for exceptionally advanced features')
+\ No newline at end of file
++   description: '"Enable support for exceptionally advanced features')
+diff -ruN thorvg-0.15.11/README.md thorvg-0.15.11-mod2/README.md
+--- thorvg-0.15.11/README.md	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/README.md	2025-03-29 09:37:14.164568399 +0300
+@@ -416,22 +416,22 @@
+ </p>
+ 
+ ### Lottie to GIF
+-ThorVG provides an executable `lottie2gif` converter that generates a GIF file from a Lottie file.
++ThorVG provides an executable `tvg-lottie2gif` converter that generates a GIF file from a Lottie file.
+ 
+-To use the `lottie2gif`, you must turn on this feature in the build option:
++To use the `tvg-lottie2gif`, you must turn on this feature in the build option:
+ ```
+ meson setup builddir -Dtools=lottie2gif -Dsavers=gif
+ ```
+-To use the 'lottie2gif' converter, you need to provide the 'Lottie files' parameter. This parameter can be a file name with the '.json' extension or a directory name. It also accepts multiple files or directories separated by spaces. If a directory is specified, the converter will search for files with the '.json' extension within that directory and all its subdirectories.<br />
++To use the 'tvg-lottie2gif' converter, you need to provide the 'Lottie files' parameter. This parameter can be a file name with the '.json' extension or a directory name. It also accepts multiple files or directories separated by spaces. If a directory is specified, the converter will search for files with the '.json' extension within that directory and all its subdirectories.<br />
+ <br />
+ Optionally, you can specify the image resolution in the 'WxH' format, with two numbers separated by an 'x' sign, following the '-r' flag.<br />
+ <br />
+ Both flags, if provided, are applied to all of the `.json` files.
+ 
+-The usage examples of the `lottie2gif`:
++The usage examples of the `tvg-lottie2gif`:
+ ```
+ Usage:
+-    lottie2gif [Lottie file] or [Lottie folder] [-r resolution] [-f fps] [-b background color]
++    tvg-lottie2gif [Lottie file] or [Lottie folder] [-r resolution] [-f fps] [-b background color]
+ 
+ Flags:
+     -r set the output image resolution.
+@@ -439,22 +439,22 @@
+     -b specifies the base background color (RGB in hex). If not specified, the background color will follow the original content.
+ 
+ Examples:
+-    $ lottie2gif input.json
+-    $ lottie2gif input.json -f 30
+-    $ lottie2gif input.json -r 600x600 -f 30
+-    $ lottie2gif lottiefolder
+-    $ lottie2gif lottiefolder -r 600x600
+-    $ lottie2gif lottiefolder -r 600x600 -f 30 -b fa7410
++    $ tvg-lottie2gif input.json
++    $ tvg-lottie2gif input.json -f 30
++    $ tvg-lottie2gif input.json -r 600x600 -f 30
++    $ tvg-lottie2gif lottiefolder
++    $ tvg-lottie2gif lottiefolder -r 600x600
++    $ tvg-lottie2gif lottiefolder -r 600x600 -f 30 -b fa7410
+ ```
+ 
+ ### SVG to PNG
+-ThorVG provides an executable `svg2png` converter that generates a PNG file from an SVG file.
++ThorVG provides an executable `tvg-svg2png` converter that generates a PNG file from an SVG file.
+ 
+-To use the `svg2png`, you must turn on this feature in the build option:
++To use the `tvg-svg2png`, you must turn on this feature in the build option:
+ ```
+ meson setup builddir -Dtools=svg2png
+ ```
+-To use the 'svg2png' converter, you need to provide the 'SVG files' parameter. This parameter can be a file name with the '.svg' extension or a directory name. It also accepts multiple files or directories separated by spaces. If a directory is specified, the converter will search for files with the '.svg' extension within that directory and all its subdirectories.<br />
++To use the 'tvg-svg2png' converter, you need to provide the 'SVG files' parameter. This parameter can be a file name with the '.svg' extension or a directory name. It also accepts multiple files or directories separated by spaces. If a directory is specified, the converter will search for files with the '.svg' extension within that directory and all its subdirectories.<br />
+ <br />
+ Optionally, you can specify the image resolution in the 'WxH' format, with two numbers separated by an 'x' sign, following the '-r' flag.<br />
+ <br />
+@@ -462,39 +462,39 @@
+ <br />
+ Both flags, if provided, are applied to all of the `.svg` files.
+ 
+-The usage examples of the `svg2png`:
++The usage examples of the `tvg-svg2png`:
+ ```
+ Usage:
+-    svg2png [SVG files] [-r resolution] [-b bgColor]
++    tvg-svg2png [SVG files] [-r resolution] [-b bgColor]
+ 
+ Flags:
+     -r set the output image resolution.
+     -b set the output image background color.
+ 
+ Examples:
+-    $ svg2png input.svg
+-    $ svg2png input.svg -r 200x200
+-    $ svg2png input.svg -r 200x200 -b ff00ff
+-    $ svg2png input1.svg input2.svg -r 200x200 -b ff00ff
+-    $ svg2png . -r 200x200
++    $ tvg-svg2png input.svg
++    $ tvg-svg2png input.svg -r 200x200
++    $ tvg-svg2png input.svg -r 200x200 -b ff00ff
++    $ tvg-svg2png input1.svg input2.svg -r 200x200 -b ff00ff
++    $ tvg-svg2png . -r 200x200
+ ```
+ 
+ ### SVG to TVG
+-ThorVG provides an executable `svg2tvg` converter that generates a TVG file from an SVG file.
++ThorVG provides an executable `tvg-svg2tvg` converter that generates a TVG file from an SVG file.
+ 
+-To use `svg2tvg`, you need to activate this feature in the build option:
++To use `tvg-svg2tvg`, you need to activate this feature in the build option:
+ ```
+ meson setup builddir -Dtools=svg2tvg -Dsavers=tvg
+ ```
+ 
+-Examples of the usage of the `svg2tvg`:
++Examples of the usage of the `tvg-svg2tvg`:
+ ```
+ Usage:
+-   svg2tvg [SVG file] or [SVG folder]
++   tvg-svg2tvg [SVG file] or [SVG folder]
+ 
+ Examples:
+-    $ svg2tvg input.svg
+-    $ svg2tvg svgfolder
++    $ tvg-svg2tvg input.svg
++    $ tvg-svg2tvg svgfolder
+ ```
+ 
+ [Back to contents](#contents)
+diff -ruN thorvg-0.15.11/test/regression/check_same_image_size.py thorvg-0.15.11-mod2/test/regression/check_same_image_size.py
+--- thorvg-0.15.11/test/regression/check_same_image_size.py	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/test/regression/check_same_image_size.py	2025-03-29 09:15:31.566777820 +0300
+@@ -8,19 +8,19 @@
+     or not os.path.isfile(sys.argv[1])
+     or not os.path.isfile(sys.argv[2])
+ ):
+-    print('Proper usage "python app.py AA.svg /path/to/svg2png 400 100"')
++    print('Proper usage "python app.py AA.svg /path/to/tvg-svg2png 400 100"')
+     print('Proper usage "python app.py SVG_FILE SVG_PNG_PATH SIZE_IMAGE NUMBER_OF_TRIES"')
+     raise ValueError(
+-        "POSSIBLE_PROBLEM - Missing or invalid input file or missing path to svg2png"
++        "POSSIBLE_PROBLEM - Missing or invalid input file or missing path to tvg-svg2png"
+     )
+ 
+ try_number = int(sys.argv[4])
+ image_size = sys.argv[3]
+-svg2png_path = sys.argv[2]
++tvg-svg2png_path = sys.argv[2]
+ image_input = sys.argv[1]
+ image_output = image_input.replace(".svg", ".png")
+ 
+-args = [svg2png_path, image_input, "-r", f"{image_size}x{image_size}"]
++args = [tvg-svg2png_path, image_input, "-r", f"{image_size}x{image_size}"]
+ sizes: dict = {}
+ for i in range(try_number + 1):
+     # if i % 100 == 0:
+diff -ruN thorvg-0.15.11/test/regression/settings_comparison.toml thorvg-0.15.11-mod2/test/regression/settings_comparison.toml
+--- thorvg-0.15.11/test/regression/settings_comparison.toml	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/test/regression/settings_comparison.toml	2025-03-29 09:27:02.016305972 +0300
+@@ -27,12 +27,12 @@
+ 
+ [first_tool]
+ name = "thorvg_pr"
+-path = "./build/src/tools/svg2png/svg2png"
++path = "./build/src/tools/svg2png/tvg-svg2png"
+ png_name_ending = "_thorvg_pr.png"
+ arguments = "{FILE} -r {SIZE}x{SIZE} -b ffffff"
+ 
+ [other_tool]
+ name = "thorvg_develop"
+-path = "./thorvg_develop/build/src/tools/svg2png/svg2png"
++path = "./thorvg_develop/build/src/tools/svg2png/tvg-svg2png"
+ png_name_ending = "_thorvg_develop.png"
+ arguments = "{FILE} -r {SIZE}x{SIZE} -b ffffff"
+diff -ruN thorvg-0.15.11/test/regression/settings_crash_leak.toml thorvg-0.15.11-mod2/test/regression/settings_crash_leak.toml
+--- thorvg-0.15.11/test/regression/settings_crash_leak.toml	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/test/regression/settings_crash_leak.toml	2025-03-29 09:27:41.984601593 +0300
+@@ -21,19 +21,19 @@
+ lottie_path = ""
+ lottie_broken_files_path = ""
+ lottie_test = false
+-thorvg_path = "./build/src/tools/svg2png/svg2png"
++thorvg_path = "./build/src/tools/svg2png/tvg-svg2png"
+ thorvg_broken_files_path = "BrokenFILES"
+ thorvg_test = true
+ 
+ [first_tool]
+ name = "thorvg_pr"
+-path = "./build/src/tools/svg2png/svg2png"
++path = "./build/src/tools/svg2png/tvg-svg2png"
+ png_name_ending = "_thorvg_pr.png"
+ arguments = "{FILE} -r {SIZE}x{SIZE} -b ffffff"
+ 
+ [other_tool]
+ name = "thorvg_develop"
+-path = "./thorvg_develop/build/src/tools/svg2png/svg2png"
++path = "./thorvg_develop/build/src/tools/svg2png/tvg-svg2png"
+ png_name_ending = "_thorvg_develop.png"
+ arguments = "{FILE} -r {SIZE}x{SIZE} -b ffffff"
+ 
+diff -ruN thorvg-0.15.11/tools/lottie2gif/lottie2gif.cpp thorvg-0.15.11-mod2/tools/lottie2gif/lottie2gif.cpp
+--- thorvg-0.15.11/tools/lottie2gif/lottie2gif.cpp	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/lottie2gif/lottie2gif.cpp	2025-03-29 09:40:55.230075397 +0300
+@@ -53,7 +53,7 @@
+ 
+    void helpMsg()
+    {
+-      cout << "Usage: \n   lottie2gif [Lottie file] or [Lottie folder] [-r resolution] [-f fps] [-b background color]\n\nExamples: \n    $ lottie2gif input.json\n    $ lottie2gif input.json -r 600x600\n    $ lottie2gif input.json -f 30\n    $ lottie2gif input.json -r 600x600 -f 30\n    $ lottie2gif lottiefolder\n    $ lottie2gif lottiefolder -r 600x600 -f 30 -b fa7410\n\n";
++      cout << "Usage: \n   tvg-lottie2gif [Lottie file] or [Lottie folder] [-r resolution] [-f fps] [-b background color]\n\nExamples: \n    $ tvg-lottie2gif input.json\n    $ tvg-lottie2gif input.json -r 600x600\n    $ tvg-lottie2gif input.json -f 30\n    $ tvg-lottie2gif input.json -r 600x600 -f 30\n    $ tvg-lottie2gif lottiefolder\n    $ tvg-lottie2gif lottiefolder -r 600x600 -f 30 -b fa7410\n\n";
+    }
+ 
+    bool validate(string& lottieName)
+@@ -280,4 +280,4 @@
+ {
+    App app;
+    return app.setup(argc, argv);
+-}
+\ No newline at end of file
++}
+diff -ruN thorvg-0.15.11/tools/lottie2gif/meson.build thorvg-0.15.11-mod2/tools/lottie2gif/meson.build
+--- thorvg-0.15.11/tools/lottie2gif/meson.build	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/lottie2gif/meson.build	2025-03-29 09:42:55.183054332 +0300
+@@ -1,6 +1,6 @@
+ lottie2gif_src  = files('lottie2gif.cpp')
+ 
+-executable('lottie2gif',
++executable('tvg-lottie2gif',
+            lottie2gif_src,
+            include_directories : headers,
+            cpp_args : compiler_flags,
+diff -ruN thorvg-0.15.11/tools/svg2png/meson.build thorvg-0.15.11-mod2/tools/svg2png/meson.build
+--- thorvg-0.15.11/tools/svg2png/meson.build	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/svg2png/meson.build	2025-03-29 09:28:17.216898307 +0300
+@@ -1,6 +1,6 @@
+ svg2png_src  = files('svg2png.cpp', 'lodepng.cpp')
+ 
+-executable('svg2png',
++executable('tvg-svg2png',
+            svg2png_src,
+            include_directories : headers,
+            cpp_args : compiler_flags,
+diff -ruN thorvg-0.15.11/tools/svg2png/svg2png.cpp thorvg-0.15.11-mod2/tools/svg2png/svg2png.cpp
+--- thorvg-0.15.11/tools/svg2png/svg2png.cpp	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/svg2png/svg2png.cpp	2025-03-29 09:30:47.873861643 +0300
+@@ -293,7 +293,7 @@
+ private:
+     int help()
+     {
+-        cout << "Usage:\n   svg2png [SVG file] or [SVG folder] [-r resolution] [-b bgColor]\n\nFlags:\n    -r set the output image resolution.\n    -b set the output image background color.\n\nExamples:\n    $ svg2png input.svg\n    $ svg2png input.svg -r 200x200\n    $ svg2png input.svg -r 200x200 -b ff00ff\n    $ svg2png input1.svg input2.svg -r 200x200 -b ff00ff\n    $ svg2png . -r 200x200\n\nNote:\n    In the case, where the width and height in the SVG file determine the size of the image in resolution higher than 8k (7680 x 4320), limiting the resolution to this value is enforced.\n\n";
++        cout << "Usage:\n   tvg-svg2png [SVG file] or [SVG folder] [-r resolution] [-b bgColor]\n\nFlags:\n    -r set the output image resolution.\n    -b set the output image background color.\n\nExamples:\n    $ tvg-svg2png input.svg\n    $ tvg-svg2png input.svg -r 200x200\n    $ tvg-svg2png input.svg -r 200x200 -b ff00ff\n    $ tvg-svg2png input1.svg input2.svg -r 200x200 -b ff00ff\n    $ tvg-svg2png . -r 200x200\n\nNote:\n    In the case, where the width and height in the SVG file determine the size of the image in resolution higher than 8k (7680 x 4320), limiting the resolution to this value is enforced.\n\n";
+         return 1;
+     }
+ 
+diff -ruN thorvg-0.15.11/tools/svg2tvg/meson.build thorvg-0.15.11-mod2/tools/svg2tvg/meson.build
+--- thorvg-0.15.11/tools/svg2tvg/meson.build	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/svg2tvg/meson.build	2025-03-29 09:32:46.579007466 +0300
+@@ -1,6 +1,6 @@
+ svg2tvg_src  = files('svg2tvg.cpp')
+ 
+-executable('svg2tvg',
++executable('tvg-svg2tvg',
+            svg2tvg_src,
+            include_directories : headers,
+            cpp_args : compiler_flags,
+diff -ruN thorvg-0.15.11/tools/svg2tvg/svg2tvg.cpp thorvg-0.15.11-mod2/tools/svg2tvg/svg2tvg.cpp
+--- thorvg-0.15.11/tools/svg2tvg/svg2tvg.cpp	2025-03-12 23:02:51.000000000 +0300
++++ thorvg-0.15.11-mod2/tools/svg2tvg/svg2tvg.cpp	2025-03-29 09:33:33.938996072 +0300
+@@ -47,7 +47,7 @@
+ 
+    void helpMsg()
+    {
+-      cout << "Usage: \n   svg2tvg [SVG file] or [SVG folder]\n\nExamples: \n    $ svg2tvg input.svg\n    $ svg2tvg svgfolder\n\n";
++      cout << "Usage: \n   tvg-svg2tvg [SVG file] or [SVG folder]\n\nExamples: \n    $ tvg-svg2tvg input.svg\n    $ thorvgsvg2tvg svgfolder\n\n";
+    }
+ 
+    bool validate(string& svgName)
+@@ -218,4 +218,4 @@
+ {
+    App app;
+    return app.setup(argc, argv);
+-}
+\ No newline at end of file
++}

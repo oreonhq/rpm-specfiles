@@ -1,0 +1,45 @@
+--- ugene-40.1/src/corelibs/U2Core/src/io/ZlibAdapter.cpp.char_bigen	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/corelibs/U2Core/src/io/ZlibAdapter.cpp	2021-11-09 16:41:07.802412220 +0900
+@@ -29,6 +29,12 @@
+ 
+ #include "LocalFileAdapter.h"
+ 
++QT_BEGIN_NAMESPACE
++#if defined(Q_BYTE_ORDER) && Q_BYTE_ORDER == Q_BIG_ENDIAN
++template <> inline Q_DECL_CONSTEXPR char qbswap<char>(char source) { return source; }
++#endif
++QT_END_NAMESPACE
++
+ namespace U2 {
+ 
+ class GzipUtil {
+--- ugene-40.1/src/corelibs/U2Core/src/util/DatatypeSerializeUtils.cpp.char_bigen	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/corelibs/U2Core/src/util/DatatypeSerializeUtils.cpp	2021-11-09 14:55:12.703372481 +0900
+@@ -31,6 +31,12 @@
+ #include <U2Core/TextUtils.h>
+ #include <U2Core/U2SafePoints.h>
+ 
++QT_BEGIN_NAMESPACE
++#if defined(Q_BYTE_ORDER) && Q_BYTE_ORDER == Q_BIG_ENDIAN
++template <> inline Q_DECL_CONSTEXPR char qbswap<char>(char source) { return source; }
++#endif
++QT_END_NAMESPACE
++
+ namespace U2 {
+ 
+ const QString DNAChromatogramSerializer::ID = "chroma_1.14";
+--- ugene-40.1/src/libs_3rdparty/samtools/src/SamtoolsAdapter.cpp.char_bigen	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/samtools/src/SamtoolsAdapter.cpp	2021-11-09 16:40:41.872455587 +0900
+@@ -27,6 +27,12 @@
+ #include <U2Core/U2OpStatus.h>
+ #include <U2Core/U2SafePoints.h>
+ 
++QT_BEGIN_NAMESPACE
++#if defined(Q_BYTE_ORDER) && Q_BYTE_ORDER == Q_BIG_ENDIAN
++template <> inline Q_DECL_CONSTEXPR char qbswap<char>(char source) { return source; }
++#endif
++QT_END_NAMESPACE
++
+ extern "C" {
+ #include "samtools_core/htslib/cram/cram_samtools.h"
+ }

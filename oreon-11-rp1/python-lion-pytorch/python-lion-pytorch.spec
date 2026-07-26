@@ -1,0 +1,54 @@
+%global source0_hash 42ba117ce857e9dd6c67c727e22e575671fd72e441900af137b05e7ee5c8fd88
+
+Name:           python-lion-pytorch
+Version:        0.2.3
+Release:        %autorelease
+Summary:        A Pytorch optimizer
+
+License:        MIT
+URL:            https://github.com/lucidrains/lion-pytorch
+Source:         %{pypi_source lion_pytorch}
+
+BuildArch:      noarch
+# Pytorch only on X86_64 and aarch64
+ExclusiveArch:  x86_64 aarch64
+
+BuildRequires:  python3-devel
+
+%global _description %{expand:
+Lion, EvoLved Sign Momentum, new optimizer discovered by Google Brain
+that is purportedly better than Adam(w), in Pytorch. This is nearly a
+straight copy from here, with few minor modifications.
+
+It is so simple, we may as well get it accessible and used asap by
+everyone to train some great models, if it really works. }
+
+%description %_description
+
+%package -n     python3-lion-pytorch
+Summary:        %{summary}
+
+%description -n python3-lion-pytorch %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n lion_pytorch-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l lion_pytorch
+
+%check
+%pyproject_check_import
+
+%files -n python3-lion-pytorch -f %{pyproject_files}
+
+%changelog
+%autochangelog

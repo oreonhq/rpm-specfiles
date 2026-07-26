@@ -1,0 +1,187 @@
+From 1b00f1ff4e15306f9e838ba49540e54af5bec6e7 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Tue, 6 Jan 2026 20:11:53 -0600
+Subject: [PATCH] Fedora dependency adjustments
+
+* Remove upper bound: uv_build
+* Remove lower bound: aiohttp, cryptography, dbus-python, dirty-equals, pydantic, pytest, pytest-asyncio
+* Remove linting modules: basedpyright, ruff, types-hvac
+* Remove unused modules: pytest-mock
+* Remove unnecessary pytest plugins and their options: pytest-dotenv, pytest-timeout, pytest-xdist
+---
+ key-value/key-value-aio/pyproject.toml         | 18 ++++++------------
+ key-value/key-value-shared-test/pyproject.toml | 14 ++++----------
+ key-value/key-value-shared/pyproject.toml      |  7 +------
+ key-value/key-value-sync/pyproject.toml        | 18 ++++++------------
+ 4 files changed, 17 insertions(+), 40 deletions(-)
+
+diff --git a/key-value/key-value-aio/pyproject.toml b/key-value/key-value-aio/pyproject.toml
+index 6d118c1..91a9b07 100644
+--- a/key-value/key-value-aio/pyproject.toml
++++ b/key-value/key-value-aio/pyproject.toml
+@@ -21,7 +21,7 @@ dependencies = [
+ 
+ 
+ [build-system]
+-requires = ["uv_build>=0.8.2,<0.9.0"]
++requires = ["uv_build>=0.8.2"]
+ build-backend = "uv_build"
+ 
+ [tool.uv.build-backend]
+@@ -38,35 +38,29 @@ filetree = ["aiofile>=3.5.0", "anyio>=4.4.0"]
+ redis = ["redis>=4.3.0"]
+ mongodb = ["pymongo>=4.0.0"]
+ valkey = ["valkey-glide>=2.1.0"]
+-vault = ["hvac>=2.3.0", "types-hvac>=2.3.0"]
++vault = ["hvac>=2.3.0"]
+ memcached = ["aiomcache>=0.8.0"]
+-elasticsearch = ["elasticsearch>=8.0.0", "aiohttp>=3.12"]
++elasticsearch = ["elasticsearch>=8.0.0", "aiohttp"]
+ dynamodb = ["aioboto3>=13.3.0", "types-aiobotocore-dynamodb>=2.16.0"]
+ keyring = ["keyring>=25.6.0"]
+-keyring-linux = ["keyring>=25.6.0", "dbus-python>=1.4.0"]
+-pydantic = ["pydantic>=2.11.9"]
++keyring-linux = ["keyring>=25.6.0", "dbus-python"]
++pydantic = ["pydantic"]
+ rocksdb = [
+     "rocksdict>=0.3.24 ; python_version >= '3.12'", # RocksDB 0.3.24 is the first version to support Python 3.13
+     "rocksdict>=0.3.2 ; python_version < '3.12'"
+ ]
+ duckdb = ["duckdb>=1.1.1", "pytz>=2025.2"]
+-wrappers-encryption = ["cryptography>=45.0.0"]
++wrappers-encryption = ["cryptography"]
+ 
+ [tool.pytest.ini_options]
+ asyncio_mode = "auto"
+ addopts = [
+     "--inline-snapshot=disable",
+-    "-n=auto",
+-    "--dist=loadfile",
+     "--maxfail=5"
+ ]
+ markers = [
+     "skip_on_ci: Skip running the test when running on CI",
+ ]
+-timeout = 10
+-timeout_func_only = true
+-
+-env_files = [".env"]
+ 
+ [dependency-groups]
+ dev = [
+diff --git a/key-value/key-value-shared-test/pyproject.toml b/key-value/key-value-shared-test/pyproject.toml
+index 0dc5cb1..7389f43 100644
+--- a/key-value/key-value-shared-test/pyproject.toml
++++ b/key-value/key-value-shared-test/pyproject.toml
+@@ -18,7 +18,7 @@ classifiers = [
+ 
+ 
+ [build-system]
+-requires = ["uv_build>=0.8.2,<0.9.0"]
++requires = ["uv_build>=0.8.2"]
+ build-backend = "uv_build"
+ 
+ [tool.uv.build-backend]
+@@ -26,17 +26,11 @@ module-name = "key_value.shared_test"
+ 
+ [dependency-groups]
+ dev = [
+-    "basedpyright>=1.32.1",
+-    "dirty-equals>=0.10.0",
++    "dirty-equals",
+     "docker>=7.1.0",
+     "inline-snapshot>=0.30.1",
+-    "pytest-asyncio>=1.2.0",
+-    "pytest-dotenv>=0.5.2",
+-    "pytest-mock>=3.15.1",
+-    "pytest-timeout>=2.4.0",
+-    "pytest-xdist>=3.8.0",
+-    "pytest>=8.4.2",
+-    "ruff>=0.14.2",
++    "pytest-asyncio",
++    "pytest",
+ ]
+ 
+ [tool.ruff]
+diff --git a/key-value/key-value-shared/pyproject.toml b/key-value/key-value-shared/pyproject.toml
+index 91ad4c8..60a62a7 100644
+--- a/key-value/key-value-shared/pyproject.toml
++++ b/key-value/key-value-shared/pyproject.toml
+@@ -22,7 +22,7 @@ dependencies = [
+ 
+ 
+ [build-system]
+-requires = ["uv_build>=0.8.2,<0.9.0"]
++requires = ["uv_build>=0.8.2"]
+ build-backend = "uv_build"
+ 
+ [tool.uv.build-backend]
+@@ -33,15 +33,10 @@ asyncio_mode = "auto"
+ addopts = [
+     "--inline-snapshot=disable",
+     "-vv",
+-    "-n=auto",
+-    "--dist=loadfile",
+ ]
+ markers = [
+     "skip_on_ci: Skip running the test when running on CI",
+ ]
+-timeout = 10
+-
+-env_files = [".env"]
+ 
+ [dependency-groups]
+ dev = [
+diff --git a/key-value/key-value-sync/pyproject.toml b/key-value/key-value-sync/pyproject.toml
+index 6efdfe1..6be2651 100644
+--- a/key-value/key-value-sync/pyproject.toml
++++ b/key-value/key-value-sync/pyproject.toml
+@@ -25,7 +25,7 @@ py-key-value = { workspace = true }
+ py-key-value-shared-test = { workspace = true }
+ 
+ [build-system]
+-requires = ["uv_build>=0.8.2,<0.9.0"]
++requires = ["uv_build>=0.8.2"]
+ build-backend = "uv_build"
+ 
+ [tool.uv.build-backend]
+@@ -38,34 +38,28 @@ filetree = ["anyio>=4.4.0"]
+ redis = ["redis>=4.3.0"]
+ mongodb = ["pymongo>=4.0.0"]
+ valkey = ["valkey-glide-sync>=2.1.0"]
+-vault = ["hvac>=2.3.0", "types-hvac>=2.3.0"]
++vault = ["hvac>=2.3.0"]
+ memcached = ["aiomcache>=0.8.0"]
+-elasticsearch = ["elasticsearch>=8.0.0", "aiohttp>=3.12"]
+-pydantic = ["pydantic>=2.11.9"]
++elasticsearch = ["elasticsearch>=8.0.0", "aiohttp"]
++pydantic = ["pydantic"]
+ keyring = ["keyring>=25.6.0"]
+-keyring-linux = ["keyring>=25.6.0", "dbus-python>=1.4.0"]
++keyring-linux = ["keyring>=25.6.0", "dbus-python"]
+ rocksdb = [
+     "rocksdict>=0.3.24 ; python_version >= '3.12'", # RocksDB 0.3.24 is the first version to support Python 3.13
+     "rocksdict>=0.3.2 ; python_version < '3.12'"
+ ]
+ duckdb = ["duckdb>=1.1.1", "pytz>=2025.2"]
+-wrappers-encryption = ["cryptography>=45.0.0"]
++wrappers-encryption = ["cryptography"]
+ 
+ [tool.pytest.ini_options]
+ asyncio_mode = "auto"
+ addopts = [
+     "--inline-snapshot=disable",
+-    "-n=auto",
+-    "--dist=loadfile",
+     "--maxfail=5"
+ ]
+ markers = [
+     "skip_on_ci: Skip running the test when running on CI",
+ ]
+-timeout = 10
+-timeout_func_only = true
+-
+-env_files = [".env"]
+ 
+ [dependency-groups]
+ dev = [

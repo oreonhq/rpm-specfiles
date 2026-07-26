@@ -1,0 +1,14 @@
+--- stripesnoop-1.5/ss.cpp.BAD	2005-08-04 13:31:42.000000000 -0500
++++ stripesnoop-1.5/ss.cpp	2005-08-04 13:32:06.000000000 -0500
+@@ -31,9 +31,9 @@
+ #define EVEN 0
+ 
+ /* select the OS to compile for? */
+-#define WIN9X 1
++/*#define WIN9X 1*/
+ /*#define WINNT 1*/
+-/*#define LINUX 1*/
++#define LINUX
+ 
+ /* Standard Includes */
+ #include <stdio.h>

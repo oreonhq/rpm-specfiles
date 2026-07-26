@@ -1,0 +1,12 @@
+diff -ur a/astropy/config/configuration.py b/astropy/config/configuration.py
+--- a/astropy/config/configuration.py	2025-06-22 14:13:29.893646002 +0200
++++ b/astropy/config/configuration.py	2025-06-22 14:14:38.059812404 +0200
+@@ -28,7 +28,7 @@
+ 
+ import numpy as np
+ 
+-from astropy.extern.configobj import configobj, validate
++import configobj, validate
+ from astropy.utils import find_current_module, silence
+ from astropy.utils.exceptions import AstropyDeprecationWarning, AstropyWarning
+ 

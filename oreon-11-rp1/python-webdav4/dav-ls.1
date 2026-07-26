@@ -1,0 +1,41 @@
+.TH DAV\-LS "1" "February 2024" "" "User Commands"
+.SH NAME
+.B dav\ ls
+\(en List files
+.SH SYNOPSIS
+.B dav\ ls
+.RB [ \-h ]
+.RB [ \-\-recursive ]
+.RB [ \-\-L\ \fILEVEL ]
+.RB [ \-\-full\-path ]
+.RI [ path ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I path
+Path to list from
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-\-recursive\fR,\ \fB\-R
+Recurse into directories
+.TP
+.B \-L\ \fILEVEL\fR,\ \fB\-\-level\ \fILEVEL
+Limit the depth of recursion
+.TP
+.B \-\-full\-path
+Show full path of the files and the directories
+.SH "SEE\ ALSO"
+.\" .BR dav\-ls (1),
+.BR dav\-cp (1),
+.BR dav\-mv (1),
+.BR dav\-rm (1),
+.BR dav\-mkdir (1),
+.BR dav\-run (1),
+.BR dav\-cat (1),
+.BR dav\-sync (1),
+.BR dav\-du (1)
+.P
+.BR dav (1)

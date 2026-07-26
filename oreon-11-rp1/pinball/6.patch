@@ -1,0 +1,41 @@
+From 99399bb1919754f325967b726a0a6882e6a69bb0 Mon Sep 17 00:00:00 2001
+From: Gwyn Ciesla <gwync@protonmail.com>
+Date: Wed, 4 Dec 2019 09:43:35 -0600
+Subject: [PATCH] Apply keyboard config patch from
+ https://github.com/sergiomb2/pinball/commit/6d222fcdbf2238c16198a4bbcdf1b9afaea8a187
+ Original patch author: Github user moleculext.
+
+---
+ src/Pinball.cpp | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/src/Pinball.cpp b/src/Pinball.cpp
+index 2b6faeb2..7a0c63b6 100644
+--- a/src/Pinball.cpp
++++ b/src/Pinball.cpp
+@@ -151,8 +151,6 @@ class MyMenuKey : public MenuFct {
+     return EM_MENU_NOP;
+   }
+   const char * getText() {
+-    ostrstream stm; //TODO
+-    stm.clear();
+     string name(m_Name);
+     const char * keyname = Config::getInstance()->getKeyCommonName(Config::getInstance()->getKey(name));
+     string key;
+@@ -168,10 +166,13 @@ class MyMenuKey : public MenuFct {
+     while (key.size() < 12) {
+       key = " " + key;
+     }
+-    stm << name << key << '\0';
+-    string text = stm.str();
+-    return text.c_str();
++
++    m_textBuffer = name + key;
++    return m_textBuffer.c_str();
+   }
++  
++private:
++    std::string m_textBuffer;
+ };
+ 
+ 

@@ -1,0 +1,45 @@
+From f359d145d6d792b0113b96d6bd7cdf4f211ff167 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 25 Jul 2022 14:35:22 +0200
+Subject: [PATCH] Install container script as rmbcontainer
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It seems that upstream forgot to install it.
+"container" name is awfully generic.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile           | 1 +
+ doc/rbm_remote.asc | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 2f4e4a1..99f80ff 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,6 +17,7 @@ all:
+ install:
+ 	install -d $(DESTDIR)$(bindir) $(DESTDIR)$(sysconfdir)
+ 	install -m 755 $(BINFILES) $(DESTDIR)$(bindir)
++	install -m 755 container $(DESTDIR)$(bindir)/rbmcontainer
+ 	install -d $(DESTDIR)$(perldir) $(DESTDIR)$(perldir)/RBM
+ 	install -m 644 $(PERL_MODULE_MAIN) $(DESTDIR)$(perldir)
+ 	install -m 644 $(PERL_MODULES) $(DESTDIR)$(perldir)/RBM
+diff --git a/doc/rbm_remote.asc b/doc/rbm_remote.asc
+index 07d2f61..efbcd38 100644
+--- a/doc/rbm_remote.asc
++++ b/doc/rbm_remote.asc
+@@ -62,7 +62,7 @@ unique identifier of the current build.
+ REMOTE BUILD WITH ROOTLESS CONTAINERS
+ -------------------------------------
+ 
+-rbm includes a `container` script which allows creating rootless
++rbm includes a `rbmcontainer` script which allows creating rootless
+ containers (ie. creating some Linux namespaces, without requiring root
+ priviledges).
+ 
+-- 
+2.37.1
+

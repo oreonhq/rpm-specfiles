@@ -1,0 +1,38 @@
+diff --git a/pymdownx/blocks/tab.py b/pymdownx/blocks/tab.py
+index 949f19f5..bb1aa18a 100644
+--- a/pymdownx/blocks/tab.py
++++ b/pymdownx/blocks/tab.py
+@@ -84,8 +84,12 @@ class TabbedTreeprocessor(Treeprocessor):
+ 
+                     # Generate slugged IDs
+                     for inpt, label in zip(inputs, labels):
+-                        innerhtml = toc.render_inner_html(toc.remove_fnrefs(label), self.md)
+-                        innertext = html.unescape(toc.strip_tags(innerhtml))
++                        if hasattr(toc, "render_inner_html"):
++                            innerhtml = toc.render_inner_html(toc.remove_fnrefs(label), self.md)
++                            innertext = html.unescape(toc.strip_tags(innerhtml))
++                        else:
++                            text = toc.get_name(label)
++                            innertext = toc.unescape(toc.stashedHTML2text(text, self.md))
+                         if self.combine_header_slug:
+                             parent_slug = self.get_parent_header_slug(doc, header_map, parent_map, el)
+                         else:
+diff --git a/pymdownx/tabbed.py b/pymdownx/tabbed.py
+index a9c6a64d..861074a3 100644
+--- a/pymdownx/tabbed.py
++++ b/pymdownx/tabbed.py
+@@ -375,8 +375,12 @@ class TabbedTreeprocessor(Treeprocessor):
+ 
+                     # Generate slugged IDs
+                     for inpt, label in zip(inputs, labels):
+-                        innerhtml = toc.render_inner_html(toc.remove_fnrefs(label), self.md)
+-                        innertext = html.unescape(toc.strip_tags(innerhtml))
++                        if hasattr(toc, "render_inner_html"):
++                            innerhtml = toc.render_inner_html(toc.remove_fnrefs(label), self.md)
++                            innertext = html.unescape(toc.strip_tags(innerhtml))
++                        else:
++                            text = toc.get_name(label)
++                            innertext = toc.unescape(toc.stashedHTML2text(text, self.md))
+                         if self.combine_header_slug:
+                             parent_slug = self.get_parent_header_slug(doc, header_map, parent_map, el)
+                         else:

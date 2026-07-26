@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Qascade
+Comment=Classic puzzle game
+Exec=qascade
+Icon=qascade
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Game;BoardGame;

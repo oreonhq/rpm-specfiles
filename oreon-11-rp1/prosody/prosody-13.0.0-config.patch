@@ -1,0 +1,128 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for prosody >= 13.0.0 which sets defaults
+specific for Fedora and Red Hat Enterprise Linux (including CentOS Stream, and derivatives
+like Rocky Linux), adds helpful comments about optional dependencies, and finally includes
+some upstream recommendations.
+
+--- prosody-13.0.0/prosody.cfg.lua.dist			2025-03-13 14:12:42.338894080 +0100
++++ prosody-13.0.0/prosody.cfg.lua.dist.config		2025-04-01 01:03:37.454869228 +0200
+@@ -1,4 +1,4 @@
+--- Prosody Example Configuration File
++-- Prosody XMPP Configuration File
+ --
+ -- Information on configuring Prosody can be found on our
+ -- website at https://prosody.im/doc/configure
+@@ -11,8 +11,7 @@
+ --
+ -- Upgrading from a previous release? Check https://prosody.im/doc/upgrading
+ --
+--- The only thing left to do is rename this file to remove the .dist ending, and fill in the
+--- blanks. Good luck, and happy Jabbering!
++-- Good luck, and happy Jabbering!
+ 
+ 
+ ---------- Server-wide settings ----------
+@@ -148,7 +147,8 @@
+ -- through modules. An "sql" backend is included by default, but requires
+ -- additional dependencies. See https://prosody.im/doc/storage for more info.
+ 
+---storage = "sql" -- Default is "internal"
++--storage = "sql" -- Default is "internal" (Note: "sql" requires installed
++-- lua-dbi RPM package)
+ 
+ -- For the "sql" backend, you can uncomment *one* of the below to configure:
+ --sql = { driver = "SQLite3", database = "prosody.sqlite" } -- Default. 'database' is the filename.
+@@ -185,9 +185,11 @@
+ -- Logging configuration
+ -- For advanced logging see https://prosody.im/doc/logging
+ log = {
+-	info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
+-	error = "prosody.err";
+-	-- "*syslog"; -- Uncomment this for logging to syslog
++	-- Log everything of level "info" and higher (that is, all except "debug" messages)
++	-- to /var/log/prosody/prosody.log and errors also to /var/log/prosody/prosody.err
++	info = "/var/log/prosody/prosody.log"; -- Change 'info' to 'debug' for verbose logging
++	error = "/var/log/prosody/prosody.err"; -- Log errors also to file
++	-- error = "*syslog"; -- Log errors also to syslog
+ 	-- "*console"; -- Log to the console, useful for debugging when running in the foreground
+ }
+ 
+@@ -205,13 +207,19 @@
+ -- (from e.g. Let's Encrypt) see https://prosody.im/doc/certificates
+ 
+ -- Location of directory to find certificates in (relative to main config file):
+-certificates = "certs"
++certificates = "/etc/pki/prosody/"
++
++
++-- POSIX configuration
++-- For more info see https://prosody.im/doc/configure#posix-only_options
++pidfile = "/run/prosody/prosody.pid";
++
+ 
+ ----------- Virtual hosts -----------
+ -- You need to add a VirtualHost entry for each domain you wish Prosody to serve.
+ -- Settings under each VirtualHost entry apply *only* to that host.
+ 
+-VirtualHost "localhost"
++--VirtualHost "localhost"
+ -- Prosody requires at least one enabled VirtualHost to function. You can
+ -- safely remove or disable 'localhost' once you have added another.
+ 
+@@ -241,6 +249,14 @@
+ --	component_secret = "password"
+ 
+ 
++------ Additional config files ------
++-- For organizational purposes you may prefer to add VirtualHost and
++-- Component definitions in their own config files. This line includes
++-- all config files in /etc/prosody/conf.d/
++
++Include "conf.d/*.cfg.lua"
++
++
+ ---------- End of the Prosody Configuration file ----------
+ -- You usually **DO NOT** want to add settings here at the end, as they would
+ -- only apply to the last defined VirtualHost or Component.
+--- prosody-13.0.0/core/certmanager.lua			2025-03-13 14:12:42.338894080 +0100
++++ prosody-13.0.0/core/certmanager.lua.config		2025-04-01 01:02:10.737608852 +0200
+@@ -181,7 +181,8 @@
+ 
+ -- Built-in defaults
+ local core_defaults = {
+-	capath = "/etc/ssl/certs";
++	capath = "/etc/pki/tls/certs";
++	cafile = "/etc/pki/tls/certs/ca-bundle.crt";
+ 	depth = 9;
+ 	protocol = "tlsv1+";
+ 	verify = "none";
+--- prosody-13.0.0/plugins/mod_admin_socket.lua		2025-03-13 14:12:42.338894080 +0100
++++ prosody-13.0.0/plugins/mod_admin_socket.lua.config	2025-04-01 01:02:35.741763581 +0200
+@@ -21,7 +21,7 @@
+ local adminstream = require "prosody.util.adminstream";
+ local st = require "prosody.util.stanza";
+ 
+-local socket_path = module:get_option_path("admin_socket", "prosody.sock", "data");
++local socket_path = module:get_option_path("admin_socket", "/run/prosody/prosody.sock", "data");
+ 
+ local sessions = module:shared("sessions");
+ 
+--- prosody-13.0.0/util/prosodyctl/shell.lua		2025-03-13 14:12:42.338894080 +0100
++++ prosody-13.0.0/util/prosodyctl/shell.lua.config	2025-04-01 01:09:08.700472484 +0200
+@@ -66,7 +66,7 @@
+ 
+ local function check()
+ 	local lfs = require "lfs";
+-	local socket_path = path.resolve_relative_path(prosody.paths.data, config.get("*", "admin_socket") or "prosody.sock");
++	local socket_path = config.get("*", "admin_socket") or "/run/prosody/prosody.sock";
+ 	local state = lfs.attributes(socket_path, "mode");
+ 	return state == "socket";
+ end
+@@ -159,7 +159,7 @@
+ 
+ 	client.prompt_string = config.get("*", "admin_shell_prompt");
+ 
+-	local socket_path = path.resolve_relative_path(prosody.paths.data, opts.socket or config.get("*", "admin_socket") or "prosody.sock");
++	local socket_path = opts.socket or config.get("*", "admin_socket") or "/run/prosody/prosody.sock";
+ 	local conn = adminstream.connection(socket_path, client.listeners);
+ 	local ok, err = conn:connect();
+ 	if not ok then

@@ -1,0 +1,28 @@
+diff -up xmakemol-5.16/elements.fsf xmakemol-5.16/elements
+--- xmakemol-5.16/elements.fsf	2007-08-25 14:27:32.000000000 +0300
++++ xmakemol-5.16/elements	2018-09-07 08:40:13.744107716 +0300
+@@ -13,8 +13,8 @@
+ !
+ ! You should have received a copy of the GNU General Public License
+ ! along with XMakemol; see the file COPYING. If not, write to the Free
+-! Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+-! 02111-1307 USA
++! Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++! 02110-1301, USA.
+ !
+ ! Z     Symbol       Mass        Colour          Cov rad         VdW rad
+   0     DU           0.000       White           0.500           0.000
+diff -up xmakemol-5.16/xmake_anim.pl.fsf xmakemol-5.16/xmake_anim.pl
+--- xmakemol-5.16/xmake_anim.pl.fsf	2007-08-25 14:25:41.000000000 +0300
++++ xmakemol-5.16/xmake_anim.pl	2018-09-07 08:40:27.354023553 +0300
+@@ -15,8 +15,8 @@
+ 
+ #  You should have received a copy of the GNU General Public License
+ #  along with XMakemol; see the file COPYING. If not, write to the
+-#  Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+-#  MA 02111-1307 USA
++#  Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++#  Boston, MA 02110-1301, USA.
+ 
+ # Script to make an animated gif from a series of .xpm files produced
+ # by XMakemol. Uses the `convert' and `gifsicle' programs.

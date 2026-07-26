@@ -1,0 +1,47 @@
+From 5147a93a4b6cdb60cfa0ed1b792de711f44cd7b4 Mon Sep 17 00:00:00 2001
+From: Greg Hurrell <greg@hurrell.net>
+Date: Fri, 26 Aug 2022 23:59:38 +0200
+Subject: [PATCH] test: avoid another deprecation warning
+
+    spec/command-t/watchman/utils_spec.rb:17: warning: constant
+    ::Fixnum is deprecated
+
+According to:
+
+    https://bugs.ruby-lang.org/issues/12005
+
+> CRuby has two Integer classes, Fixnum and Bignum.
+> But it is implementation detail.
+> They should be seen as a single class Integer
+
+Unification happened in Ruby 2.4.0, which is approximately $zillion
+years ago (well, 25 Dec 2016):
+
+    https://www.ruby-lang.org/en/news/2016/12/25/ruby-2-4-0-released/
+
+I doubt anybody running these tests is on such an old version at this
+point, so it seems safe to switch to `Integer`.
+
+Removed the comments because I am not certain whether we're going to hit
+that first `if` branch's body any more, and I'd rather have no comments
+than something inaccurate or misleading.
+---
+ spec/command-t/watchman/utils_spec.rb | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/spec/command-t/watchman/utils_spec.rb b/spec/command-t/watchman/utils_spec.rb
+index 271589b6..6bfd0d0d 100644
+--- a/spec/command-t/watchman/utils_spec.rb
++++ b/spec/command-t/watchman/utils_spec.rb
+@@ -14,9 +14,9 @@ def binary(str)
+ 
+   def little_endian?
+     byte = [0xff00].pack('s')[0]
+-    if byte.is_a?(Fixnum) # ie. Ruby 1.8
++    if byte.is_a?(Integer)
+       byte.zero?
+-    elsif byte.is_a?(String) # ie. Ruby >= 1.9
++    elsif byte.is_a?(String)
+       byte == "\x00"
+     else
+       raise 'unable to determine endianness'

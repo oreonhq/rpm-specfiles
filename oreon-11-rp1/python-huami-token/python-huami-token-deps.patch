@@ -1,0 +1,14 @@
+diff -up huami-token/pyproject.toml.orig huami-token/pyproject.toml
+--- huami-token/pyproject.toml.orig	2023-06-08 17:20:21.000000000 +0200
++++ huami-token/pyproject.toml	2024-09-24 12:26:51.839419990 +0200
+@@ -17,8 +17,8 @@ classifiers = [
+     "Operating System :: OS Independent",
+ ]
+ dependencies = [
+-    "requests == 2.25.1",
+-    "types-requests == 2.25.1"
++    "requests >= 2.25.1",
++    "types-requests >= 2.25.1"
+ ]
+ 
+ [project.urls]

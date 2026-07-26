@@ -1,0 +1,72 @@
+--- ttcp-1.12/ttcp.c.cvut	2005-02-22 14:33:55.000000000 +0100
++++ ttcp-1.12/ttcp.c	2005-02-22 14:54:44.580964680 +0100
+@@ -58,11 +58,17 @@
+  *      Binding to group address when receiving multicast
+  *      Added SO_REUSEADDR so multiple processes can listen to same port
+  *
++ * Modified Jan. 2005 by Vladimir Mencl at Charles University, Prague
++ *      include stdlib,h (define malloc, required for IA64)
++ *      clean compile on Linux (IA64, i686), FreeBSD
++ *
+  * Distribution Status -
+  *      Public Domain.  Distribution Unlimited.
+  */
+ #ifndef lint
+ static char RCSid[] = "ttcp.c $Revision: 1.12 $";
++/* avoid warning: `RCSid' defined but not used */
++static char * useRCSid = ( RCSid + ( (char *)&useRCSid - (char *)&useRCSid ) );
+ #endif
+ 
+ #include <sys/types.h>
+@@ -407,7 +413,7 @@
+ 		if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) == -1)
+ 			err("reuseaddr");
+ #endif
+-		if (bind(fd, res->ai_addr, res->ai_addrlen) < 0)
++		if (bind(fd, (struct sockaddr *)res->ai_addr, res->ai_addrlen) < 0)
+ 			err("bind");
+ 	}
+ 
+@@ -445,7 +451,7 @@
+ 			mes("nodelay");
+ 		}
+ #endif
+-		if (connect(fd, res->ai_addr, res->ai_addrlen) < 0)
++		if (connect(fd, (struct sockaddr *)res->ai_addr, res->ai_addrlen) < 0)
+ 			err("connect");
+ 		mes("connect");
+ 	    } else {
+@@ -690,13 +696,13 @@
+ 
+ 		case 'U':
+ 			tvsub(&tdiff, &r1->ru_utime, &r0->ru_utime);
+-			sprintf(outp, "%ld.%01ld", tdiff.tv_sec, tdiff.tv_usec/100000);
++			sprintf(outp, "%ld.%01ld", (long)tdiff.tv_sec, ((long)tdiff.tv_usec)/100000);		
+ 			END(outp);
+ 			break;
+ 
+ 		case 'S':
+ 			tvsub(&tdiff, &r1->ru_stime, &r0->ru_stime);
+-			sprintf(outp, "%ld.%01ld", tdiff.tv_sec, tdiff.tv_usec/100000);
++ 			sprintf(outp, "%ld.%01ld", (long)tdiff.tv_sec, ((long)tdiff.tv_usec)/100000);
+ 			END(outp);
+ 			break;
+ 
+@@ -712,7 +718,7 @@
+ 
+ 		case 'W':
+ 			i = r1->ru_nswap - r0->ru_nswap;
+-			sprintf(outp, "%d", i);
++			sprintf(outp, "%ld", i);
+ 			END(outp);
+ 			break;
+ 
+@@ -846,7 +852,7 @@
+ 	register int cnt;
+ 	if (udp) {
+ again:
+-		cnt = sendto(fd, buf, count, 0, res->ai_addr, res->ai_addrlen);
++		cnt = sendto(fd, buf, count, 0, (struct sockaddr *)res->ai_addr, res->ai_addrlen);
+ 		numCalls++;
+ 		if (cnt<0 && errno == ENOBUFS)  {
+ 			delay(18000);

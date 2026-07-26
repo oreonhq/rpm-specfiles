@@ -1,0 +1,9 @@
+diff -up ./docs/conf.py.intersphinx ./docs/conf.py
+--- ./docs/conf.py.intersphinx	2022-02-12 12:24:42.405448232 -0500
++++ ./docs/conf.py	2022-02-12 12:25:01.966543855 -0500
+@@ -266,4 +266,4 @@ texinfo_documents = [
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++#intersphinx_mapping = {'http://docs.python.org/': None}

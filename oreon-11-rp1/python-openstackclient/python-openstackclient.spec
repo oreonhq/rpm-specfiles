@@ -1,0 +1,196 @@
+%global source0_hash 84b6f1726fcb92a314d9dc93318848075da247b798314842d1b152f336441a5d
+
+%{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
+%global sources_gpg_sign 0xf8675126e2411e7748dd46662fc2093e4682645f
+%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
+# we are excluding some BRs from automatic generator
+%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order whereto python-zunclient python-watcherclient python-cyborgclient python-senlinclient python-muranoclient python-saharaclient python-designateclient python-magnumclient python-barbicanclient
+# Exclude sphinx from BRs if docs are disabled
+%if ! 0%{?with_doc}
+%global excluded_brs %{excluded_brs} sphinx openstackdocstheme
+%endif
+# Exclude some BRs for Fedora
+%if 0%{?fedora}
+%global excluded_brs %{excluded_brs} tempest osc-placement python-ironic-inspector-client osprofiler
+%endif
+
+# Command name
+%global cname openstack
+
+# library name
+%global sname %{cname}client
+
+%global with_doc 1
+
+%global common_desc \
+python-%{sname} is a unified command-line client for the OpenStack APIs. \
+It is a thin wrapper to the stock python-*client modules that implement the \
+actual REST API client actions.
+
+Name:             python-%{sname}
+Version:          7.1.2
+Release:          10%{?dist}
+Summary:          OpenStack Command-line Client
+
+License:          Apache-2.0
+URL:              http://launchpad.net/%{name}
+Source0:          https://tarballs.openstack.org/%{name}/%{name}-%{upstream_version}.tar.gz
+%if %{lua:print(rpm.vercmp(rpm.expand("%{version}"), '7.1.3'));} <= 0
+# Patch https://review.opendev.org/c/openstack/python-openstackclient/+/930911 on 7.1.2
+Patch0001:        0001-identity-in-service-set-command-don-t-pass-the-enabl.patch
+# Patch https://review.opendev.org/c/openstack/python-openstackclient/+/931031 on 7.1.2
+Patch0002:        0001-Always-resolve-domain-id.patch
+%endif
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+Source101:        https://tarballs.openstack.org/%{name}/%{name}-%{upstream_version}.tar.gz.asc
+Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
+%endif
+
+BuildArch:        noarch
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+BuildRequires:  /usr/bin/gpgv2
+%endif
+
+BuildRequires:    git-core
+
+%description
+%{common_desc}
+
+%package -n python3-%{sname}
+Summary:    OpenStack Command-line Client
+
+BuildRequires:    python3-devel
+BuildRequires:    pyproject-rpm-macros
+BuildRequires:    python3-osc-lib-tests
+# Required to compile translation files
+BuildRequires:    python3-babel
+
+Requires:         python-%{sname}-lang = %{version}-%{release}
+# Dependency for auto-completion
+%if 0%{?fedora} || 0%{?rhel} > 7
+Recommends:         bash-completion
+%endif
+
+%description -n python3-%{sname}
+%{common_desc}
+
+%if 0%{?with_doc}
+%package -n python-%{sname}-doc
+Summary:          Documentation for OpenStack Command-line Client
+
+Requires: python3-%{sname} = %{version}-%{release}
+
+%description -n python-%{sname}-doc
+%{common_desc}
+
+This package contains auto-generated documentation.
+%endif
+
+%package  -n python-%{sname}-lang
+Summary:   Translation files for Openstackclient
+
+%description -n python-%{sname}-lang
+Translation files for Openstackclient
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
+%endif
+%autosetup -n %{name}-%{upstream_version} -S git
+
+# (TODO) Remove this sed after fix is merged upstream
+# https://review.opendev.org/c/openstack/python-openstackclient/+/808079
+# Replace assertItemsEqual by assertCountEqual in test_volume_messages.py file
+sed -i 's/assertItemsEqual/assertCountEqual/g' ./openstackclient/tests/unit/volume/v3/test_volume_message.py
+
+sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
+sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
+sed -i /^minversion.*/d tox.ini
+sed -i /^requires.*virtualenv.*/d tox.ini
+sed -i '/sphinx-build/ s/-W//' tox.ini
+sed -i '/whereto*/d' tox.ini
+
+# Exclude some bad-known BRs
+for pkg in %{excluded_brs}; do
+  for reqfile in doc/requirements.txt test-requirements.txt; do
+    if [ -f $reqfile ]; then
+      sed -i /^${pkg}.*/d $reqfile
+    fi
+  done
+done
+
+# Automatic BR generation
+%generate_buildrequires
+%if 0%{?with_doc}
+  %pyproject_buildrequires -t -e %{default_toxenv},docs
+%else
+  %pyproject_buildrequires -t -e %{default_toxenv}
+%endif
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+# Generate i18n files
+%{__python3} setup.py compile_catalog -d %{buildroot}%{python3_sitelib}/%{sname}/locale --domain openstackclient
+
+# Create a versioned binary for backwards compatibility until everything is pure py3
+ln -s %{cname} %{buildroot}%{_bindir}/%{cname}-3
+
+%if 0%{?with_doc}
+export PYTHONPATH=.
+%tox -e docs
+sphinx-build -b man doc/source doc/build/man
+install -p -D -m 644 doc/build/man/%{cname}.1 %{buildroot}%{_mandir}/man1/%{cname}.1
+
+# Fix hidden-file-or-dir warnings
+rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo doc/build/html/.htaccess
+%endif
+
+# Install i18n .mo files (.po and .pot are not required)
+install -d -m 755 %{buildroot}%{_datadir}
+rm -f %{buildroot}%{python3_sitelib}/%{sname}/locale/*/LC_*/%{sname}*po
+rm -f %{buildroot}%{python3_sitelib}/%{sname}/locale/*pot
+mv %{buildroot}%{python3_sitelib}/%{sname}/locale %{buildroot}%{_datadir}/locale
+rm -rf %{buildroot}%{python3_sitelib}/%{sname}/locale
+
+# Find language files
+%find_lang %{sname} --all-name
+
+%post -n python3-%{sname}
+mkdir -p /etc/bash_completion.d
+openstack complete | sed -n '/_openstack/,$p' > /etc/bash_completion.d/osc.bash_completion
+
+%check
+export PYTHON=%{__python3}
+%tox -e %{default_toxenv} -- -- --exclude-regex 'openstackclient.tests.unit.common.test_module.TestModuleList.*'
+
+%files -n python3-%{sname}
+%license LICENSE
+%doc README.rst
+%{_bindir}/%{cname}
+%{_bindir}/%{cname}-3
+%{python3_sitelib}/%{sname}
+%{python3_sitelib}/*.dist-info
+%if 0%{?with_doc}
+%{_mandir}/man1/%{cname}.1*
+
+%files -n python-%{sname}-doc
+%license LICENSE
+%doc doc/build/html
+%endif
+
+%files -n python-%{sname}-lang -f %{sname}.lang
+%license LICENSE
+
+%changelog
+%autochangelog

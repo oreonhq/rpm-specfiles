@@ -1,0 +1,2 @@
+addFilter(r" incoherent-version*")
+addFilter(r" spelling-error*")

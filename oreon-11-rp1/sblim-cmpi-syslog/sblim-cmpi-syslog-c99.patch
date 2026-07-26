@@ -1,0 +1,18 @@
+Include "util/syslogconfutil.h" for the parse_list function.  This
+avoids an implicit function declaration and build failures with future
+compilers.
+
+Submitted upstream: <https://sourceforge.net/p/sblim/bugs/2770/>
+
+diff --git a/syslog-conf/test/system/linux/setting.c b/syslog-conf/test/system/linux/setting.c
+index 917692d04f9f5076..3910f3f701999865 100644
+--- a/syslog-conf/test/system/linux/setting.c
++++ b/syslog-conf/test/system/linux/setting.c
+@@ -3,6 +3,7 @@
+ #include <ctype.h>
+ #include <string.h>
+ #include "config.h"
++#include "util/syslogconfutil.h"
+ 
+ #define LINE_MAX 2048
+                                                                                 

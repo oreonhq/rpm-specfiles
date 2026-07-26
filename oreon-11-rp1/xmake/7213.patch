@@ -1,0 +1,344 @@
+From 5a41cf81382a49f1a88b613f2e6b10b8ce7223c7 Mon Sep 17 00:00:00 2001
+From: ruki <waruqi@gmail.com>
+Date: Mon, 12 Jan 2026 22:41:16 +0800
+Subject: [PATCH 1/4] fix installdir of imporfiles
+
+---
+ .../action/install/cmake_importfiles.lua      | 31 ++++++++++---------
+ .../action/install/pkgconfig_importfiles.lua  |  3 +-
+ 2 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/xmake/modules/target/action/install/cmake_importfiles.lua b/xmake/modules/target/action/install/cmake_importfiles.lua
+index 6b876922564..0b1195c68ab 100644
+--- a/xmake/modules/target/action/install/cmake_importfiles.lua
++++ b/xmake/modules/target/action/install/cmake_importfiles.lua
+@@ -22,12 +22,12 @@
+ import("core.project.project")
+ 
+ -- get the lib file of the target
+-function _get_libfile(target, installdir)
++function _get_libfile(target, libdir)
+     local libfile = path.filename(target:targetfile())
+     if target:is_plat("windows") then
+         libfile = libfile:gsub("%.dll$", ".lib")
+     elseif target:is_plat("mingw") then
+-        if os.isfile(path.join(installdir, "lib", libfile:gsub("%.dll$", ".dll.a"))) then
++        if os.isfile(path.join(libdir, libfile:gsub("%.dll$", ".dll.a"))) then
+             libfile = libfile:gsub("%.dll$", ".dll.a")
+         else
+             libfile = libfile:gsub("%.dll$", ".lib")
+@@ -37,7 +37,7 @@ function _get_libfile(target, installdir)
+ end
+ 
+ -- get the builtin variables
+-function _get_builtinvars(target, installdir, libdir)
++function _get_builtinvars(target, libdir)
+     local target_ptrbytes
+     if target:is_plat("cross") then
+         target_ptrbytes = target:check_sizeof("void*")
+@@ -47,7 +47,7 @@ function _get_builtinvars(target, installdir, libdir)
+     return {LIBDIR          = libdir,
+             TARGETNAME      = target:name(),
+             PROJECTNAME     = project.name() or target:name(),
+-            TARGETFILENAME  = target:targetfile() and _get_libfile(target, installdir),
++            TARGETFILENAME  = target:targetfile() and _get_libfile(target, libdir),
+             TARGETKIND      = target:is_headeronly() and "INTERFACE" or (target:is_shared() and "SHARED" or "STATIC"),
+             PACKAGE_VERSION = target:get("version") or "1.0.0",
+             TARGET_PTRBYTES = target_ptrbytes}
+@@ -55,18 +55,19 @@ end
+ 
+ -- install cmake config file
+ function _install_cmake_configfile(target, installdir, filename, opt)
++    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt and opt.libdir or "lib"
++    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+-    local importfile_dst = path.join(installdir, libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
++    local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
+ 
+     -- trace
+     vprint("generating %s ..", importfile_dst)
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, installdir, libdir)
++    local builtinvars = _get_builtinvars(target, libdir)
+ 
+     -- copy and replace builtin variables
+     local content = io.readfile(importfile_src)
+@@ -83,15 +84,16 @@ end
+ 
+ -- append target to cmake config file
+ function _append_cmake_configfile(target, installdir, filename, opt)
++    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt and opt.libdir or "lib"
++    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+-    local importfile_dst = path.join(installdir, libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
++    local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, installdir, libdir)
++    local builtinvars = _get_builtinvars(target, libdir)
+ 
+     -- generate the file if not exist / file is outdated
+     if target:is_headeronly() or not os.isfile(importfile_dst) or os.mtime(importfile_dst) < os.mtime(target:targetfile()) then
+@@ -119,18 +121,19 @@ end
+ 
+ -- install cmake target file
+ function _install_cmake_targetfile(target, installdir, filename, opt)
++    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt and opt.libdir or "lib"
++    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+-    local importfile_dst = path.join(installdir, libdir, "cmake", projectname, (filename:gsub("xxx", target:name())))
++    local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", target:name())))
+ 
+     -- trace
+     vprint("generating %s ..", importfile_dst)
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, installdir, libdir)
++    local builtinvars = _get_builtinvars(target, libdir)
+ 
+     -- copy and replace builtin variables
+     local content = io.readfile(importfile_src)
+@@ -142,7 +145,7 @@ function _install_cmake_targetfile(target, installdir, filename, opt)
+         end)
+         local libfile = path.filename(target:targetfile())
+         local postfix = is_mode("debug") and "DEBUG" or "RELEASE"
+-        if target:is_shared() and (_get_libfile(target, installdir) ~= libfile) then
++        if target:is_shared() and (_get_libfile(target, libdir) ~= libfile) then
+             -- On DLL platforms, the import library is named differently from the target file
+             content = content:gsub("# IMPORTED_IMPLIB_" .. postfix, "IMPORTED_IMPLIB_" .. postfix)
+             content = content:gsub(
+diff --git a/xmake/modules/target/action/install/pkgconfig_importfiles.lua b/xmake/modules/target/action/install/pkgconfig_importfiles.lua
+index b96833071e7..cdeb42831bb 100644
+--- a/xmake/modules/target/action/install/pkgconfig_importfiles.lua
++++ b/xmake/modules/target/action/install/pkgconfig_importfiles.lua
+@@ -30,7 +30,8 @@ function main(target, opt)
+     end
+ 
+     -- get pkgconfig/.pc file
+-    local pcfile = path.join(installdir, opt and opt.libdir or "lib", "pkgconfig", opt.filename or (target:basename() .. ".pc"))
++    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    local pcfile = path.join(libdir, "pkgconfig", opt.filename or (target:basename() .. ".pc"))
+ 
+     -- get includedirs
+     local includedirs = opt.includedirs
+
+From 168fe49abe77fbf2a1c1ba865bf22d4d8cdd371d Mon Sep 17 00:00:00 2001
+From: ruki <waruqi@gmail.com>
+Date: Mon, 12 Jan 2026 22:43:39 +0800
+Subject: [PATCH 2/4] fix libdir
+
+---
+ .../target/action/install/cmake_importfiles.lua  | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/xmake/modules/target/action/install/cmake_importfiles.lua b/xmake/modules/target/action/install/cmake_importfiles.lua
+index 0b1195c68ab..ae2155ec7cf 100644
+--- a/xmake/modules/target/action/install/cmake_importfiles.lua
++++ b/xmake/modules/target/action/install/cmake_importfiles.lua
+@@ -37,14 +37,20 @@ function _get_libfile(target, libdir)
+ end
+ 
+ -- get the builtin variables
+-function _get_builtinvars(target, libdir)
++function _get_builtinvars(target, installdir, libdir)
+     local target_ptrbytes
+     if target:is_plat("cross") then
+         target_ptrbytes = target:check_sizeof("void*")
+     else
+         target_ptrbytes = target:is_arch64() and "8" or "4"
+     end
+-    return {LIBDIR          = libdir,
++    local libsubdir
++    if libdir:startswith(installdir) then
++        libsubdir = path.relative(libdir, installdir)
++    else
++        raise("target(%s): libdir(%s) is not in installdir(%s)", target:name(), libdir, installdir)
++    end
++    return {LIBDIR          = libsubdir,
+             TARGETNAME      = target:name(),
+             PROJECTNAME     = project.name() or target:name(),
+             TARGETFILENAME  = target:targetfile() and _get_libfile(target, libdir),
+@@ -67,7 +73,7 @@ function _install_cmake_configfile(target, installdir, filename, opt)
+     vprint("generating %s ..", importfile_dst)
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, libdir)
++    local builtinvars = _get_builtinvars(target, installdir, libdir)
+ 
+     -- copy and replace builtin variables
+     local content = io.readfile(importfile_src)
+@@ -93,7 +99,7 @@ function _append_cmake_configfile(target, installdir, filename, opt)
+     local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, libdir)
++    local builtinvars = _get_builtinvars(target, installdir, libdir)
+ 
+     -- generate the file if not exist / file is outdated
+     if target:is_headeronly() or not os.isfile(importfile_dst) or os.mtime(importfile_dst) < os.mtime(target:targetfile()) then
+@@ -133,7 +139,7 @@ function _install_cmake_targetfile(target, installdir, filename, opt)
+     vprint("generating %s ..", importfile_dst)
+ 
+     -- get the builtin variables
+-    local builtinvars = _get_builtinvars(target, libdir)
++    local builtinvars = _get_builtinvars(target, installdir, libdir)
+ 
+     -- copy and replace builtin variables
+     local content = io.readfile(importfile_src)
+
+From 3ffd904326d6a06f8f63a92bc1d2334a8d8441fd Mon Sep 17 00:00:00 2001
+From: ruki <waruqi@gmail.com>
+Date: Mon, 12 Jan 2026 22:54:07 +0800
+Subject: [PATCH 3/4] improve cmake installdir
+
+---
+ .../target/action/install/cmake_importfiles.lua   | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/xmake/modules/target/action/install/cmake_importfiles.lua b/xmake/modules/target/action/install/cmake_importfiles.lua
+index ae2155ec7cf..b4efecb0862 100644
+--- a/xmake/modules/target/action/install/cmake_importfiles.lua
++++ b/xmake/modules/target/action/install/cmake_importfiles.lua
+@@ -21,6 +21,12 @@
+ -- imports
+ import("core.project.project")
+ 
++-- get install libdir
++function _get_install_libdir(target, installdir, opt)
++    opt = opt or {}
++    return opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++end
++
+ -- get the lib file of the target
+ function _get_libfile(target, libdir)
+     local libfile = path.filename(target:targetfile())
+@@ -61,10 +67,9 @@ end
+ 
+ -- install cmake config file
+ function _install_cmake_configfile(target, installdir, filename, opt)
+-    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    local libdir = _get_install_libdir(target, installdir, opt)
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+     local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
+@@ -90,10 +95,9 @@ end
+ 
+ -- append target to cmake config file
+ function _append_cmake_configfile(target, installdir, filename, opt)
+-    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    local libdir = _get_install_libdir(target, installdir, opt)
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+     local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", projectname)))
+@@ -127,10 +131,9 @@ end
+ 
+ -- install cmake target file
+ function _install_cmake_targetfile(target, installdir, filename, opt)
+-    opt = opt or {}
+ 
+     -- get import file path
+-    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    local libdir = _get_install_libdir(target, installdir, opt)
+     local projectname = project.name() or target:name()
+     local importfile_src = path.join(os.programdir(), "scripts", "cmake_importfiles", filename)
+     local importfile_dst = path.join(libdir, "cmake", projectname, (filename:gsub("xxx", target:name())))
+
+From 6c20d1006e21b8fe6ac33f65f8600152b81830b1 Mon Sep 17 00:00:00 2001
+From: ruki <waruqi@gmail.com>
+Date: Mon, 12 Jan 2026 22:55:01 +0800
+Subject: [PATCH 4/4] improve installdir
+
+---
+ .../target/action/install/cmake_importfiles.lua     | 13 +++++++------
+ .../target/action/install/pkgconfig_importfiles.lua |  5 ++++-
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/xmake/modules/target/action/install/cmake_importfiles.lua b/xmake/modules/target/action/install/cmake_importfiles.lua
+index b4efecb0862..c9c45455466 100644
+--- a/xmake/modules/target/action/install/cmake_importfiles.lua
++++ b/xmake/modules/target/action/install/cmake_importfiles.lua
+@@ -24,11 +24,11 @@ import("core.project.project")
+ -- get install libdir
+ function _get_install_libdir(target, installdir, opt)
+     opt = opt or {}
+-    return opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    return path.normalize(opt.libdir and path.join(installdir, opt.libdir) or target:libdir())
+ end
+ 
+ -- get the lib file of the target
+-function _get_libfile(target, libdir)
++function _get_libfilename(target, libdir)
+     local libfile = path.filename(target:targetfile())
+     if target:is_plat("windows") then
+         libfile = libfile:gsub("%.dll$", ".lib")
+@@ -59,7 +59,7 @@ function _get_builtinvars(target, installdir, libdir)
+     return {LIBDIR          = libsubdir,
+             TARGETNAME      = target:name(),
+             PROJECTNAME     = project.name() or target:name(),
+-            TARGETFILENAME  = target:targetfile() and _get_libfile(target, libdir),
++            TARGETFILENAME  = target:targetfile() and _get_libfilename(target, libdir),
+             TARGETKIND      = target:is_headeronly() and "INTERFACE" or (target:is_shared() and "SHARED" or "STATIC"),
+             PACKAGE_VERSION = target:get("version") or "1.0.0",
+             TARGET_PTRBYTES = target_ptrbytes}
+@@ -152,14 +152,14 @@ function _install_cmake_targetfile(target, installdir, filename, opt)
+             local value = builtinvars[variable]
+             return type(value) == "function" and value() or value
+         end)
+-        local libfile = path.filename(target:targetfile())
++        local libfilename = path.filename(target:targetfile())
+         local postfix = is_mode("debug") and "DEBUG" or "RELEASE"
+-        if target:is_shared() and (_get_libfile(target, libdir) ~= libfile) then
++        if target:is_shared() and (_get_libfilename(target, libdir) ~= libfilename) then
+             -- On DLL platforms, the import library is named differently from the target file
+             content = content:gsub("# IMPORTED_IMPLIB_" .. postfix, "IMPORTED_IMPLIB_" .. postfix)
+             content = content:gsub(
+                 "IMPORTED_LOCATION_" .. postfix .. " \"%${_IMPORT_PREFIX}/lib/.-\"",
+-                "IMPORTED_LOCATION_" .. postfix .. " \"${_IMPORT_PREFIX}/bin/" .. libfile .. "\""
++                "IMPORTED_LOCATION_" .. postfix .. " \"${_IMPORT_PREFIX}/bin/" .. libfilename .. "\""
+             )
+         end
+         io.writefile(importfile_dst, content)
+@@ -180,6 +180,7 @@ function main(target, opt)
+     end
+ 
+     -- do install
++    installdir = path.normalize(installdir)
+     _append_cmake_configfile(target, installdir, "xxxConfig.cmake", opt)
+     _install_cmake_configfile(target, installdir, "xxxConfigVersion.cmake", opt)
+     _install_cmake_targetfile(target, installdir, "xxxTargets.cmake", opt)
+diff --git a/xmake/modules/target/action/install/pkgconfig_importfiles.lua b/xmake/modules/target/action/install/pkgconfig_importfiles.lua
+index cdeb42831bb..9a9b8ee8107 100644
+--- a/xmake/modules/target/action/install/pkgconfig_importfiles.lua
++++ b/xmake/modules/target/action/install/pkgconfig_importfiles.lua
+@@ -30,8 +30,11 @@ function main(target, opt)
+     end
+ 
+     -- get pkgconfig/.pc file
+-    local libdir = opt.libdir and path.join(installdir, opt.libdir) or target:libdir()
++    local libdir = path.unix(path.normalize(opt.libdir and path.join(installdir, opt.libdir) or target:libdir()))
+     local pcfile = path.join(libdir, "pkgconfig", opt.filename or (target:basename() .. ".pc"))
++    if not libdir:startswith(installdir) then
++        raise("target(%s): libdir(%s) is not in installdir(%s)", target:name(), libdir, installdir)
++    end
+ 
+     -- get includedirs
+     local includedirs = opt.includedirs

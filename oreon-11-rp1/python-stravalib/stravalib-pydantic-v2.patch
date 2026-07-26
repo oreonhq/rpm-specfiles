@@ -1,0 +1,4260 @@
+diff --git a/.github/workflows/type-check.yml b/.github/workflows/type-check.yml
+index c2e3622..19f8dd8 100644
+--- a/.github/workflows/type-check.yml
++++ b/.github/workflows/type-check.yml
+@@ -20,10 +20,10 @@ jobs:
+ 
+     steps:
+       - uses: actions/checkout@v4
+-      - name: Set up Python 3.10
++      - name: Set up Python 3.11
+         uses: actions/setup-python@v5
+         with:
+-          python-version: "3.10"
++          python-version: "3.11"
+       - name: Set Variables
+         id: set_variables
+         shell: bash
+diff --git a/changelog.md b/changelog.md
+index f64ce20..4fb5613 100644
+--- a/changelog.md
++++ b/changelog.md
+@@ -1,6 +1,10 @@
+ # Change Log
+ 
+ ## Unreleased
++- Fix: Add `naive_datetime()` test to the `pydantic-v2 branch`. (@bmeares, #522)
++- Fix: Add custom types that pass static type checks (@jsamoocha, #534)
++- Fix: Replace invariant with covariant container types (@lwasser, @jsamoocha, #510)
++- Fix: Rename unithelper.py --> unit_helper.py (@lwasser, #535)
+ 
+ ## v1.7
+ 
+diff --git a/docs/contributing/development-guide.md b/docs/contributing/development-guide.md
+index df82746..aca2987 100644
+--- a/docs/contributing/development-guide.md
++++ b/docs/contributing/development-guide.md
+@@ -263,19 +263,21 @@ they are running against the installed version of the package that you are worki
+ To run the test suite across all python versions that we support use:
+ 
+ ```
+-nox -s test
++nox -s tests
+ ```
+ 
+-`nox -s test` does a few things:
++`nox -s tests` does a few things:
+ 
+ 1. It create a temporary directory called `tmp-test-dir-stravalib` in which your tests are run. We create this test directory to ensure that tests are being run against the installed version of stravalib (with the most recent local development changes as installed) rather than the flat files located in the GitHub repository.
+ 2. It runs the tests and provides output (see below)
+ 3. Finally it removes the temporary directory
+ 
+-If you are a conda/mamba user, you can use:
++To run tests for a specific python version use nox -s tests-python-version-here.
+ 
+-```
+-nox -s test_mamba
++For example, below we run tests for only Python 3.10.
++
++```bash
++nox -s tests-3.10
+ ```
+ 
+ ### Functional end-to-end test suite
+diff --git a/docs/reference.rst b/docs/reference.rst
+index 55c0cd1..6eabb90 100644
+--- a/docs/reference.rst
++++ b/docs/reference.rst
+@@ -17,5 +17,4 @@ Below the main modules are listed.
+    Unit helper <reference/unithelper>
+    Protocol <reference/protocol>
+    Limiter (Util Submodule) <reference/utilities>
+-   Field Conversions <reference/field-conversions>
+    Exceptions <reference/exceptions>
+diff --git a/docs/reference/field-conversions.rst b/docs/reference/field-conversions.rst
+deleted file mode 100644
+index a2b9fb2..0000000
+--- a/docs/reference/field-conversions.rst
++++ /dev/null
+@@ -1,18 +0,0 @@
+-============================
+-Field Conversions Module
+-============================
+-.. currentmodule:: stravalib.field_conversions
+-
+-The `field_conversions` module provides helper utility
+-functions to convert fields to (rich) types, e.g., `int` → `timedelta`.
+-
+-Summary Functions
+-------------------
+-
+-.. autosummary::
+-   :toctree: api/
+-
+-   optional_input
+-   enum_value
+-   enum_values
+-   timezone
+diff --git a/docs/reference/unithelper.rst b/docs/reference/unithelper.rst
+index d7393a9..7f5fad6 100644
+--- a/docs/reference/unithelper.rst
++++ b/docs/reference/unithelper.rst
+@@ -12,7 +12,6 @@ Summary Functions
+ .. autosummary::
+    :toctree: api/
+ 
+-   is_quantity_type
+    c2f
+ 
+ 
+@@ -21,6 +20,5 @@ Summary Classes
+ .. autosummary::
+    :toctree: api/
+ 
+-   UnitsQuantity
+-   Quantity
++   _Quantity
+    UnitConverter
+diff --git a/noxfile.py b/noxfile.py
+index 3e3d2d3..37df525 100644
+--- a/noxfile.py
++++ b/noxfile.py
+@@ -52,7 +52,7 @@ def docs_live(session):
+ 
+ 
+ # Use this for venv envs nox -s mypy
+-@nox.session(python="3.10")
++@nox.session(python="3.11")
+ def mypy(session):
+     session.install(".[lint]")
+     session.run(
+diff --git a/pyproject.toml b/pyproject.toml
+index aeb7059..2d7a017 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -49,7 +49,7 @@ classifiers = [
+   "Programming Language :: Python :: 3.12",
+ ]
+ 
+-dependencies = ["pint", "pytz", "arrow", "requests", "pydantic<2.0"]
++dependencies = ["pint", "pytz", "arrow", "requests", "pydantic>=2.0"]
+ 
+ [project.urls]
+ documentation = "https://stravalib.readthedocs.io"
+diff --git a/src/stravalib/client.py b/src/stravalib/client.py
+index 0a97acd..c0abf92 100644
+--- a/src/stravalib/client.py
++++ b/src/stravalib/client.py
+@@ -32,7 +32,7 @@ import pytz
+ from pydantic import BaseModel
+ from requests import Session
+ 
+-from stravalib import exc, model, strava_model, unithelper
++from stravalib import exc, model, strava_model, unit_helper
+ from stravalib.exc import (
+     ActivityPhotoUploadNotSupported,
+     warn_attribute_unofficial,
+@@ -42,7 +42,6 @@ from stravalib.exc import (
+     warn_param_unsupported,
+ )
+ from stravalib.protocol import AccessInfo, ApiV3, Scope
+-from stravalib.unithelper import is_quantity_type
+ from stravalib.util import limiter
+ 
+ if TYPE_CHECKING:
+@@ -271,7 +270,7 @@ class Client:
+         before: datetime | str | None = None,
+         after: datetime | str | None = None,
+         limit: int | None = None,
+-    ) -> BatchedResultsIterator[model.Activity]:
++    ) -> BatchedResultsIterator[model.SummaryActivity]:
+         """Get activities for authenticated user sorted by newest first.
+ 
+         https://developers.strava.com/docs/reference/#api-Activities-getLoggedInAthleteActivities
+@@ -285,12 +284,12 @@ class Client:
+             Result will start with activities whose start date is after
+             specified value. (UTC)
+         limit : int or None, default=None
+-            How many maximum activities to return.
++            Maximum number of activities to return.
+ 
+         Returns
+         -------
+         class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.Activity` objects.
++            An iterator of :class:`stravalib.model.SummaryActivity` objects.
+ 
+         """
+ 
+@@ -302,13 +301,13 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.Activity,
++            entity=model.SummaryActivity,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+             limit=limit,
+         )
+ 
+-    def get_athlete(self) -> model.Athlete:
++    def get_athlete(self) -> model.DetailedAthlete:
+         """Gets the specified athlete; if athlete_id is None then retrieves a
+         detail-level representation of currently authenticated athlete;
+         otherwise summary-level representation returned of athlete.
+@@ -322,12 +321,15 @@ class Client:
+ 
+         Returns
+         -------
+-        class:`stravalib.model.Athlete`
++        class:`stravalib.model.DetailedAthlete`
+             The athlete model object.
+ 
+         """
+         raw = self.protocol.get("/athlete")
+-        return model.Athlete.parse_obj({**raw, **{"bound_client": self}})
++
++        return model.DetailedAthlete.model_validate(
++            {**raw, **{"bound_client": self}}
++        )
+ 
+     def update_athlete(
+         self,
+@@ -336,7 +338,7 @@ class Client:
+         country: str | None = None,
+         sex: str | None = None,
+         weight: float | None = None,
+-    ) -> model.Athlete:
++    ) -> model.DetailedAthlete:
+         """Updates the properties of the authorized athlete.
+ 
+         https://developers.strava.com/docs/reference/#api-Athletes-updateLoggedInAthlete
+@@ -382,7 +384,7 @@ class Client:
+             params["weight"] = float(weight)
+ 
+         raw_athlete = self.protocol.put("/athlete", **params)
+-        return model.Athlete.parse_obj(
++        return model.DetailedAthlete.model_validate(
+             {**raw_athlete, **{"bound_client": self}}
+         )
+ 
+@@ -448,28 +450,32 @@ class Client:
+         # TODO: Better error handling - this will return a 401 if this athlete
+         #       is not the authenticated athlete.
+ 
+-        return model.AthleteStats.parse_obj(raw)
++        return model.AthleteStats.model_validate(raw)
+ 
+-    def get_athlete_clubs(self) -> list[model.Club]:
++    def get_athlete_clubs(
++        self, limit: int | None = None
++    ) -> BatchedResultsIterator[model.SummaryClub]:
+         """List the clubs for the currently authenticated athlete.
+ 
+         https://developers.strava.com/docs/reference/#api-Clubs-getLoggedInAthleteClubs
+ 
++        limit : int or None, default=None
++            Maximum number of club objects to return.
+ 
+         Returns
+         -------
+-        :class:`list`
+-            A list of :class:`stravalib.model.Club`
++        class:`BatchedResultsIterator`
++            An iterator of :class:`stravalib.model.SummaryClub` objects
+ 
+         """
+ 
+-        # TODO: This should return a BatchedResultsIterator or otherwise at
+-        # most 30 clubs are returned!
+-        club_structs = self.protocol.get("/athlete/clubs")
+-        return [
+-            model.Club.parse_obj({**raw, **{"bound_client": self}})
+-            for raw in club_structs
+-        ]
++        result_fetcher = functools.partial(self.protocol.get, "/athlete/clubs")
++        return BatchedResultsIterator(
++            entity=model.SummaryClub,
++            bind_client=self,
++            result_fetcher=result_fetcher,
++            limit=limit,
++        )
+ 
+     def join_club(self, club_id: int) -> None:
+         """Joins the club on behalf of authenticated athlete.
+@@ -507,7 +513,7 @@ class Client:
+         """
+         self.protocol.post("clubs/{id}/leave", id=club_id)
+ 
+-    def get_club(self, club_id: int) -> model.Club:
++    def get_club(self, club_id: int) -> model.DetailedClub:
+         """Return a specific club object.
+ 
+         https://developers.strava.com/docs/reference/#api-Clubs-getClubById
+@@ -519,15 +525,21 @@ class Client:
+ 
+         Returns
+         -------
+-        class: `model.Club` object containing the club data.
++        class: `model.DetailedClub` object containing the club data.
++
++        Notes
++        ------
+ 
++        https://developers.strava.com/docs/reference/#api-Clubs-getClubById
+         """
+         raw = self.protocol.get("/clubs/{id}", id=club_id)
+-        return model.Club.parse_obj({**raw, **{"bound_client": self}})
++        return model.DetailedClub.model_validate(
++            {**raw, **{"bound_client": self}}
++        )
+ 
+     def get_club_members(
+         self, club_id: int, limit: int | None = None
+-    ) -> BatchedResultsIterator[model.Athlete]:
++    ) -> BatchedResultsIterator[strava_model.ClubAthlete]:
+         """Gets the member objects for specified club ID.
+ 
+         https://developers.strava.com/docs/reference/#api-Clubs-getClubMembersById
+@@ -550,7 +562,7 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.Athlete,
++            entity=strava_model.ClubAthlete,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+             limit=limit,
+@@ -558,7 +570,7 @@ class Client:
+ 
+     def get_club_activities(
+         self, club_id: int, limit: int | None = None
+-    ) -> BatchedResultsIterator[model.Activity]:
++    ) -> BatchedResultsIterator[model.ClubActivity]:
+         """Gets the activities associated with specified club.
+ 
+         https://developers.strava.com/docs/reference/#api-Clubs-getClubActivitiesById
+@@ -573,7 +585,7 @@ class Client:
+         Returns
+         -------
+         class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.Activity` objects.
++            An iterator of :class:`stravalib.model.ClubActivity` objects.
+ 
+         """
+         result_fetcher = functools.partial(
+@@ -581,7 +593,39 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.Activity,
++            entity=model.ClubActivity,
++            bind_client=self,
++            result_fetcher=result_fetcher,
++            limit=limit,
++        )
++
++    def get_club_admins(
++        self, club_id: int, limit: int | None = None
++    ) -> BatchedResultsIterator[model.SummaryAthlete]:
++        """Returns a list of the administrators of a given club.
++
++        https://developers.strava.com/docs/reference/#api-Clubs-getClubAdminsById
++
++        Parameters
++        ----------
++        club_id : int
++            The numeric ID for the club.
++        limit : int
++            Maximum number of admins to return. (default unlimited)
++
++        Returns
++        -------
++        class:`BatchedResultsIterator`
++            An iterator of :class:`stravalib.model.SummaryAthlete` objects.
++
++        """
++
++        result_fetcher = functools.partial(
++            self.protocol.get, "/clubs/{id}/admins", id=club_id
++        )
++
++        return BatchedResultsIterator(
++            entity=model.SummaryAthlete,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+             limit=limit,
+@@ -589,7 +633,7 @@ class Client:
+ 
+     def get_activity(
+         self, activity_id: int, include_all_efforts: bool = False
+-    ) -> model.Activity:
++    ) -> model.DetailedActivity:
+         """Gets specified activity.
+ 
+         Will be detail-level if owned by authenticated user; otherwise
+@@ -607,7 +651,7 @@ class Client:
+ 
+         Returns
+         -------
+-        class: `model.Activity`
++        class: `model.DetailedActivity`
+             An Activity object containing the requested activity data.
+ 
+         """
+@@ -616,26 +660,8 @@ class Client:
+             id=activity_id,
+             include_all_efforts=include_all_efforts,
+         )
+-        return model.Activity.parse_obj({**raw, **{"bound_client": self}})
+-
+-    # TODO: REMOVE from API altogether given deprecation of end point
+-    def get_friend_activities(self, limit: int | None = None) -> NoReturn:
+-        """DEPRECATED This endpoint was removed by Strava in Jan 2018.
+-
+-        Parameters
+-        ----------
+-        limit : int
+-            Maximum number of activities to return. (default unlimited)
+-
+-        Returns
+-        -------
+-        class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.Activity` objects.
+-
+-        """
+-        raise NotImplementedError(
+-            "The /activities/following endpoint was removed by Strava.  "
+-            "See https://developers.strava.com/docs/january-2018-update/"
++        return model.DetailedActivity.model_validate(
++            {**raw, **{"bound_client": self}}
+         )
+ 
+     def _validate_activity_type(
+@@ -656,10 +682,10 @@ class Client:
+             Deprecated. Prefer to use sport_type. In a request where both type
+             and sport_type are present, this field will be ignored.
+             See https://developers.strava.com/docs/reference/#api-models-UpdatableActivity.
+-            For possible values see: :class:`stravalib.model.Activity.TYPES`
++            For possible values see: :class:`stravalib.model.DetailedActivity.TYPES`
+         sport_type : str, default=None
+             For possible values (case-sensitive) see:
+-            :class:`stravalib.model.Activity.SPORT_TYPES`
++            :class:`stravalib.model.DetailedActivity.SPORT_TYPES`
+ 
+         Returns
+         -------
+@@ -675,9 +701,9 @@ class Client:
+         # Check for sport_type first. If provided, it is favored over
+         # activity_type / type
+         if sport_type is not None:
+-            if not sport_type in model.Activity.SPORT_TYPES:
++            if not sport_type in model.DetailedActivity.SPORT_TYPES:
+                 raise ValueError(
+-                    f"Invalid activity type: {sport_type}. Possible values: {model.Activity.SPORT_TYPES!r}"
++                    f"Invalid activity type: {sport_type}. Possible values: {model.DetailedActivity.SPORT_TYPES!r}"
+                 )
+             params["sport_type"] = sport_type
+             return params
+@@ -687,10 +713,10 @@ class Client:
+         # sport_type.
+         elif activity_type is not None:
+             if not activity_type.lower() in [
+-                t.lower() for t in model.Activity.TYPES
++                t.lower() for t in model.DetailedActivity.TYPES
+             ]:
+                 raise ValueError(
+-                    f"Invalid activity type: {activity_type}. Possible values: {model.Activity.TYPES!r}"
++                    f"Invalid activity type: {activity_type}. Possible values: {model.DetailedActivity.TYPES!r}"
+                 )
+             params["type"] = activity_type.lower()
+             warn_param_deprecation(
+@@ -701,8 +727,6 @@ class Client:
+ 
+         return params
+ 
+-    # TODO: according to the strava api docs we can add an optional trainer
+-    # and commute param here with boolean 0/1 values
+     def create_activity(
+         self,
+         name: str,
+@@ -712,7 +736,9 @@ class Client:
+         activity_type: ActivityType | None = None,
+         description: str | None = None,
+         distance: pint.Quantity | float | None = None,
+-    ) -> model.Activity:
++        trainer: bool | None = None,
++        commute: bool | None = None,
++    ) -> model.DetailedActivity:
+         """Create a new manual activity.
+ 
+         If you would like to create an activity from an uploaded GPS file, see the
+@@ -727,10 +753,10 @@ class Client:
+             Deprecated. Prefer to use sport_type. In a request where both type
+             and sport_type are present, this field will be ignored.
+             See https://developers.strava.com/docs/reference/#api-models-UpdatableActivity.
+-            For possible values see: :class:`stravalib.model.Activity.TYPES`
++            For possible values see: :class:`stravalib.model.DetailedActivity.TYPES`
+         sport_type : str, default=None
+             For possible values (case-sensitive) see: For possible values
+-            see: :class:`stravalib.model.Activity.SPORT_TYPES`
++            see: :class:`stravalib.model.DetailedActivity.SPORT_TYPES`
+         start_date_local : class:`datetime.datetime` or string in ISO8601 format
+             Local date/time of activity start. (TZ info will be ignored)
+         elapsed_time : class:`datetime.timedelta` or int (seconds)
+@@ -739,7 +765,15 @@ class Client:
+             The description for the activity.
+         distance : class:`pint.Quantity` or float (meters), default=None
+             The distance in meters (float) or a :class:`pint.Quantity` instance.
++        trainer : bool
++            Whether this activity was completed using a trainer (or not)
++        commute : bool
++            Whether the activity is a commute or not.
+ 
++        Notes
++        -----
++        See: https://developers.strava.com/docs/reference/#api-Uploads-createUpload
++        See: https://developers.strava.com/docs/reference/#api-Activities-createActivity
+         """
+ 
+         # Strava API requires either sport_type or activity_type to be defined
+@@ -752,8 +786,8 @@ class Client:
+         if isinstance(elapsed_time, timedelta):
+             elapsed_time = elapsed_time.seconds
+ 
+-        if is_quantity_type(distance):
+-            distance = float(unithelper.meters(cast(pint.Quantity, distance)))
++        if isinstance(distance, pint.Quantity):
++            distance = unit_helper.meters(distance).magnitude
+ 
+         if isinstance(start_date_local, datetime):
+             start_date_local = start_date_local.strftime("%Y-%m-%dT%H:%M:%SZ")
+@@ -764,11 +798,16 @@ class Client:
+             elapsed_time=elapsed_time,
+         )
+ 
+-        if description is not None:
+-            params["description"] = description
++        update_params = {
++            "description": description,
++            "distance": distance,
++            "commute": commute,
++            "trainer": trainer,
++        }
+ 
+-        if distance is not None:
+-            params["distance"] = distance
++        for key, value in update_params.items():
++            if value is not None:
++                params[key] = value
+ 
+         params = self._validate_activity_type(
+             params, activity_type, sport_type
+@@ -776,7 +815,7 @@ class Client:
+ 
+         raw_activity = self.protocol.post("/activities", **params)
+ 
+-        return model.Activity.parse_obj(
++        return model.DetailedActivity.model_validate(
+             {**raw_activity, **{"bound_client": self}}
+         )
+ 
+@@ -793,11 +832,9 @@ class Client:
+         gear_id: int | None = None,
+         device_name: str | None = None,
+         hide_from_home: bool | None = None,
+-    ) -> model.Activity:
++    ) -> model.DetailedActivity:
+         """Updates the properties of a specific activity.
+ 
+-        https://developers.strava.com/docs/reference/#api-Activities-updateActivityById
+-
+         Parameters
+         ----------
+         activity_id : int
+@@ -809,9 +846,9 @@ class Client:
+             Deprecated. Prefer to use sport_type. In a request where both type
+             and sport_type are present, this field will be ignored.
+             See https://developers.strava.com/docs/reference/#api-models-UpdatableActivity.
+-            For possible values see: :class:`stravalib.model.Activity.TYPES`
++            For possible values see: :class:`stravalib.model.DetailedActivity.TYPES`
+         sport_type : str, default=None
+-            For possible values see: :class:`stravalib.model.Activity.SPORT_TYPES`
++            For possible values see: :class:`stravalib.model.DetailedActivity.SPORT_TYPES`
+         private : bool, default=None
+             Whether the activity is private.
+             .. deprecated:: 1.0
+@@ -836,6 +873,11 @@ class Client:
+         Returns
+         -------
+             Updates the activity in the selected Strava account
++
++        Notes
++        ------
++        See: https://developers.strava.com/docs/reference/#api-Activities-updateActivityById
++
+         """
+ 
+         # Convert the kwargs into a params dict
+@@ -876,7 +918,7 @@ class Client:
+             "/activities/{activity_id}", activity_id=activity_id, **params
+         )
+ 
+-        return model.Activity.parse_obj(
++        return model.DetailedActivity.model_validate(
+             {**raw_activity, **{"bound_client": self}}
+         )
+ 
+@@ -959,10 +1001,10 @@ class Client:
+             params["description"] = description
+         if activity_type is not None:
+             if not activity_type.lower() in [
+-                t.lower() for t in model.Activity.TYPES
++                t.lower() for t in model.DetailedActivity.TYPES
+             ]:
+                 raise ValueError(
+-                    f"Invalid activity type: {activity_type}. Possible values: {model.Activity.TYPES!r}"
++                    f"Invalid activity type: {activity_type}. Possible values: {model.DetailedActivity.TYPES!r}"
+                 )
+             warn_param_unofficial("activity_type")
+             params["activity_type"] = activity_type.lower()
+@@ -985,12 +1027,10 @@ class Client:
+ 
+         return ActivityUploader(self, response=initial_response)
+ 
+-    def get_activity_zones(
+-        self, activity_id: int
+-    ) -> list[model.BaseActivityZone]:
+-        """Gets zones for activity.
++    def get_activity_zones(self, activity_id: int) -> list[model.ActivityZone]:
++        """Gets activity zones for activity.
+ 
+-        Requires premium account.
++        Activity zones relate to a users effort (heartrate and power).
+ 
+         https://developers.strava.com/docs/reference/#api-Activities-getZonesByActivityId
+ 
+@@ -1002,12 +1042,19 @@ class Client:
+         Returns
+         -------
+         :class:`list`
+-            A list of :class:`stravalib.model.BaseActivityZone` objects.
++            A list of :class:`stravalib.model.ActivityZone` objects.
++
++        Notes
++        -----
++        Activity zones require a Strava premium account.
++        The Strava API has the return value for activity zones incorrectly
++        typed as `int` when it can return either `int` or `float`.
+ 
+         """
+         zones = self.protocol.get("/activities/{id}/zones", id=activity_id)
++
+         return [
+-            model.BaseActivityZone.parse_obj({**z, **{"bound_client": self}})
++            model.ActivityZone.model_validate({**z, **{"bound_client": self}})
+             for z in zones
+         ]
+ 
+@@ -1052,7 +1099,7 @@ class Client:
+ 
+     def get_activity_kudos(
+         self, activity_id: int, limit: int | None = None
+-    ) -> BatchedResultsIterator[model.ActivityKudos]:
++    ) -> BatchedResultsIterator[model.SummaryAthlete]:
+         """Gets the kudos for an activity.
+ 
+         https://developers.strava.com/docs/reference/#api-Activities-getKudoersByActivityId
+@@ -1075,7 +1122,7 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.ActivityKudos,
++            entity=model.SummaryAthlete,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+             limit=limit,
+@@ -1132,7 +1179,7 @@ class Client:
+ 
+     def get_activity_laps(
+         self, activity_id: int
+-    ) -> BatchedResultsIterator[model.ActivityLap]:
++    ) -> BatchedResultsIterator[model.Lap]:
+         """Gets the laps from an activity.
+ 
+         https://developers.strava.com/docs/reference/#api-Activities-getLapsByActivityId
+@@ -1145,7 +1192,7 @@ class Client:
+         Returns
+         -------
+         class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.ActivityLaps` objects.
++            An iterator of :class:`stravalib.model.Lap` objects.
+ 
+         """
+         result_fetcher = functools.partial(
+@@ -1153,36 +1200,12 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.ActivityLap,
++            entity=model.Lap,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+         )
+ 
+-    # TODO remove this method given deprecation of end point
+-    def get_related_activities(
+-        self, activity_id: int, limit: int | None = None
+-    ) -> NoReturn:
+-        """Deprecated. This endpoint was removed by strava in Jan 2018.
+-
+-        Parameters
+-        ----------
+-        activity_id : int
+-            The activity for which to fetch related activities.
+-        limit : int, default=None
+-             Rate limit value for getting activities
+-
+-        Returns
+-        -------
+-        class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.Activity` objects.
+-
+-        """
+-        raise NotImplementedError(
+-            "The /activities/{id}/related endpoint was removed by Strava.  "
+-            "See https://developers.strava.com/docs/january-2018-update/"
+-        )
+-
+-    def get_gear(self, gear_id: str) -> model.Gear:
++    def get_gear(self, gear_id: str) -> strava_model.DetailedGear:
+         """Get details for an item of gear.
+ 
+         https://developers.strava.com/docs/reference/#api-Gears
+@@ -1194,11 +1217,10 @@ class Client:
+ 
+         Returns
+         -------
+-        class:`stravalib.model.Gear`
+-            The Bike or Shoe subclass object.
++        class:`stravalib.strava_model.DetailedGear`
+ 
+         """
+-        return model.Gear.parse_obj(
++        return strava_model.DetailedGear.model_validate(
+             self.protocol.get("/gear/{id}", id=gear_id)
+         )
+ 
+@@ -1218,7 +1240,7 @@ class Client:
+             The specified effort on a segment.
+ 
+         """
+-        return model.SegmentEffort.parse_obj(
++        return model.SegmentEffort.model_validate(
+             self.protocol.get("/segment_efforts/{id}", id=effort_id)
+         )
+ 
+@@ -1238,7 +1260,7 @@ class Client:
+             A segment object.
+ 
+         """
+-        return model.Segment.parse_obj(
++        return model.Segment.model_validate(
+             {
+                 **self.protocol.get("/segments/{id}", id=segment_id),
+                 **{"bound_client": self},
+@@ -1247,7 +1269,7 @@ class Client:
+ 
+     def get_starred_segments(
+         self, limit: int | None = None
+-    ) -> BatchedResultsIterator[model.Segment]:
++    ) -> BatchedResultsIterator[model.SummarySegment]:
+         """Returns a summary representation of the segments starred by the
+          authenticated user. Pagination is supported.
+ 
+@@ -1261,7 +1283,7 @@ class Client:
+         Returns
+         -------
+         class:`BatchedResultsIterator`
+-            An iterator of :class:`stravalib.model.Segment` starred by authenticated user.
++            An iterator of :class:`stravalib.model.SummarySegment` starred by authenticated user.
+ 
+         """
+ 
+@@ -1274,7 +1296,7 @@ class Client:
+         )
+ 
+         return BatchedResultsIterator(
+-            entity=model.Segment,
++            entity=model.SummarySegment,
+             bind_client=self,
+             result_fetcher=result_fetcher,
+             limit=limit,
+@@ -1461,7 +1483,7 @@ class Client:
+ 
+         raw = self.protocol.get("/segments/explore", **params)
+         return [
+-            model.SegmentExplorerResult.parse_obj(
++            model.SegmentExplorerResult.model_validate(
+                 {**v, **{"bound_client": self}}
+             )
+             for v in raw["segments"]
+@@ -1523,10 +1545,10 @@ class Client:
+             warn_param_unofficial("series_type")
+             extra_params["series_type"] = series_type
+         if not types:
+-            types = strava_model.StreamType.schema()["enum"]
++            types = strava_model.StreamType.model_json_schema()["enum"]
+         assert types is not None
+         invalid_types = set(types).difference(
+-            strava_model.StreamType.schema()["enum"]
++            strava_model.StreamType.model_json_schema()["enum"]
+         )
+         if invalid_types:
+             raise ValueError(
+@@ -1538,7 +1560,7 @@ class Client:
+             stream_url, keys=types_arg, key_by_type=True, **extra_params
+         )
+         return {
+-            stream_type: model.Stream.parse_obj(stream)
++            stream_type: model.Stream.model_validate(stream)
+             for stream_type, stream in response.items()
+         }
+ 
+@@ -1764,7 +1786,7 @@ class Client:
+ 
+         """
+         raw = self.protocol.get("/routes/{id}", id=route_id)
+-        return model.Route.parse_obj({**raw, **{"bound_client": self}})
++        return model.Route.model_validate({**raw, **{"bound_client": self}})
+ 
+     def get_route_streams(
+         self, route_id: int
+@@ -1849,9 +1871,10 @@ class Client:
+             verify_token=verify_token,
+         )
+         raw = self.protocol.post("/push_subscriptions", **params)
+-        return model.Subscription.parse_obj({**raw, **{"bound_client": self}})
++        return model.Subscription.model_validate(
++            {**raw, **{"bound_client": self}}
++        )
+ 
+-    # TODO: UPDATE - this method uses (de)serialize which is deprecated
+     def handle_subscription_callback(
+         self,
+         raw: dict[str, Any],
+@@ -1871,7 +1894,8 @@ class Client:
+             The JSON response expected by Strava to the challenge request.
+ 
+         """
+-        callback = model.SubscriptionCallback.parse_obj(raw)
++
++        callback = model.SubscriptionCallback.model_validate(raw)
+         callback.validate_token(verify_token)
+ 
+         assert callback.hub_challenge is not None
+@@ -1894,7 +1918,7 @@ class Client:
+             The subscription update model object.
+ 
+         """
+-        return model.SubscriptionUpdate.parse_obj(
++        return model.SubscriptionUpdate.model_validate(
+             {**raw, **{"bound_client": self}}
+         )
+ 
+@@ -2035,7 +2059,7 @@ class BatchedResultsIterator(Generic[T]):
+ 
+         entities = []
+         for raw in raw_results:
+-            new_entity = self.entity.parse_obj(
++            new_entity = self.entity.model_validate(
+                 {**raw, **{"bound_client": self.bind_client}}
+             )
+             entities.append(new_entity)
+@@ -2219,7 +2243,7 @@ class ActivityUploader:
+ 
+     def wait(
+         self, timeout: float | None = None, poll_interval: float = 1.0
+-    ) -> model.Activity:
++    ) -> model.DetailedActivity:
+         """Wait for the upload to complete or to err out.
+ 
+         Will return the resulting Activity or raise an exception if the
+@@ -2236,7 +2260,7 @@ class ActivityUploader:
+ 
+         Returns
+         -------
+-        class:`stravalib.model.Activity`
++        class:`stravalib.model.DetailedActivity
+ 
+         Raises
+         ------
+diff --git a/src/stravalib/field_conversions.py b/src/stravalib/field_conversions.py
+deleted file mode 100644
+index 51ab706..0000000
+--- a/src/stravalib/field_conversions.py
++++ /dev/null
+@@ -1,73 +0,0 @@
+-from __future__ import annotations
+-
+-import logging
+-from collections.abc import Sequence
+-from functools import wraps
+-from typing import Callable, TypeVar
+-
+-import pytz
+-from pytz.exceptions import UnknownTimeZoneError
+-
+-from stravalib.strava_model import ActivityType, SportType
+-
+-LOGGER = logging.getLogger(__name__)
+-
+-T = TypeVar("T")
+-U = TypeVar("U")
+-
+-
+-def optional_input(
+-    field_conversion_fn: Callable[[T], U]
+-) -> Callable[[T | None], U | None]:
+-    """
+-    Transform a one argument function to make the input optional.
+-
+-    When None is passed as argument the wrapped function return None.
+-    """
+-
+-    @wraps(field_conversion_fn)
+-    def fn_wrapper(field_value: T | None) -> U | None:
+-        if field_value is not None:
+-            return field_conversion_fn(field_value)
+-        else:
+-            return None
+-
+-    return fn_wrapper
+-
+-
+-@optional_input
+-def enum_value(v: ActivityType | SportType) -> str:
+-    try:
+-        return v.__root__
+-    except AttributeError:
+-        LOGGER.warning(
+-            f"{v} is not an enum, returning itself instead of its value"
+-        )
+-        return v  # type: ignore[return-value]
+-
+-
+-@optional_input
+-def enum_values(enums: Sequence[ActivityType | SportType]) -> list[str | None]:
+-    # Pydantic (1.x) has config for using enum values, but unfortunately
+-    # it doesn't work for lists of enums.
+-    # See https://github.com/pydantic/pydantic/issues/5005
+-    return [enum_value(e) for e in enums]
+-
+-
+-@optional_input
+-def timezone(
+-    tz: str,
+-) -> pytz._UTCclass | pytz.tzinfo.StaticTzInfo | pytz.tzinfo.DstTzInfo | None:
+-    if " " in tz:
+-        # (GMT-08:00) America/Los_Angeles
+-        tzname = tz.split(" ", 1)[1]
+-    else:
+-        # America/Los_Angeles
+-        tzname = tz
+-    try:
+-        return pytz.timezone(tzname)
+-    except UnknownTimeZoneError as e:
+-        LOGGER.warning(
+-            f"Encountered unknown time zone {tzname}, returning None"
+-        )
+-        return None
+diff --git a/src/stravalib/model.py b/src/stravalib/model.py
+index 5879ae1..7b3b72e 100644
+--- a/src/stravalib/model.py
++++ b/src/stravalib/model.py
+@@ -13,58 +13,56 @@ related entities from the API.
+ from __future__ import annotations
+ 
+ import logging
++from abc import ABC, abstractmethod
++from collections.abc import Sequence
+ from datetime import date, datetime, timedelta
+ from functools import wraps
+ from typing import (
+     TYPE_CHECKING,
++    Annotated,
+     Any,
+     Callable,
+     ClassVar,
++    Generic,
+     Literal,
++    Mapping,
+     Optional,
++    Type,
+     TypeVar,
+     Union,
+     get_args,
+ )
+ 
+-from pydantic import BaseModel, Field, root_validator, validator
+-from pydantic.datetime_parse import parse_datetime
+-from typing_extensions import Self
++import pytz
++from dateutil import parser
++from dateutil.parser import ParserError
++from pydantic import (
++    AliasChoices,
++    BaseModel,
++    Field,
++    GetCoreSchemaHandler,
++    GetJsonSchemaHandler,
++    field_validator,
++    model_validator,
++)
++from pydantic.json_schema import JsonSchemaValue
++from pydantic_core import core_schema
++from pytz import UnknownTimeZoneError
+ 
+ from stravalib import exc, strava_model
+-from stravalib import unithelper as uh
+-from stravalib.field_conversions import (
+-    enum_value,
+-    enum_values,
+-    timezone,
+-)
+ from stravalib.strava_model import (
+-    ActivityStats,
+-    ActivityTotal,
+     ActivityType,
+-    ActivityZone,
+     BaseStream,
+     Comment,
+-    DetailedActivity,
+-    DetailedAthlete,
+-    DetailedClub,
+-    DetailedGear,
+-    DetailedSegment,
+-    DetailedSegmentEffort,
+     ExplorerSegment,
+-    Lap,
+     LatLng,
+     PhotosSummary,
+     PolylineMap,
+     Primary,
+     SportType,
+-    SummaryClub,
+     SummaryGear,
+-    SummaryPRSegmentEffort,
+-    SummarySegmentEffort,
+-    TimedZoneRange,
+ )
+-from stravalib.strava_model import Route as RouteStrava
++from stravalib.unit_helper import _Quantity
+ 
+ if TYPE_CHECKING:
+     from stravalib.client import BatchedResultsIterator
+@@ -75,6 +73,67 @@ T = TypeVar("T")
+ U = TypeVar("U", bound="BoundClientEntity")
+ 
+ 
++# Create alias for this type so docs are more readable
++AllDateTypes = Union[
++    datetime,
++    str,
++    bytes,
++    int,
++    float,
++]
++
++
++# Could naive_datetime also be run in a validator?
++def naive_datetime(value: Optional[AllDateTypes]) -> Optional[datetime]:
++    """Utility helper that parses a datetime value provided in
++    JSON, string, int or other formats and returns a datetime.datetime
++    object.
++
++    Parameters
++    ----------
++    value : str, int
++        A value representing a date/time that may be presented in string,
++        int, deserialized or other format.
++
++    Returns
++    -------
++    datetime.datetime
++        A datetime object representing the datetime input value.
++
++    Notes
++    -----
++    Valid str, following formats work (from pydantic docs):
++
++    YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM]
++    """
++
++    if value is None:
++        return None
++
++    if isinstance(value, (int, float)):
++        # If epoch is given, we have to assume it's UTC. When using the
++        # regular fromtimestamp(), epoch will be interpreted as in the
++        # _local_ timezone.
++        dt = datetime.utcfromtimestamp(value)
++        return dt.replace(tzinfo=None)
++    elif isinstance(value, str):
++        try:
++            dt = parser.parse(value)
++            return dt.replace(tzinfo=None)
++        except ParserError:
++            # Maybe timestamp was passed as string, e.g '1714305600'?
++            try:
++                dt = datetime.utcfromtimestamp(float(value))
++                return dt.replace(tzinfo=None)
++            except ValueError:
++                LOGGER.error(f"Invalid datetime value: {value}")
++                raise
++    elif isinstance(value, datetime):
++        return value.replace(tzinfo=None)
++    else:
++        raise ValueError(f"Unsupported value type: {type(value)}")
++
++
+ def lazy_property(fn: Callable[[U], T]) -> Optional[T]:
+     """
+     Should be used to decorate the functions that return a lazily loaded
+@@ -127,20 +186,27 @@ def lazy_property(fn: Callable[[U], T]) -> Optional[T]:
+ # Custom validators for some edge cases:
+ 
+ 
++# This method checks a list of floats - ie a stream not just a single lat/lon
+ def check_valid_location(
+-    location: Optional[Union[list[float], str]]
++    location: Optional[Union[Sequence[float], str]]
+ ) -> Optional[list[float]]:
+     """
++    Validate a list of location xy values.
++
++    Converts a list of floating point values stored as strings to floats and
++    returns either a list of floats or None if no location data is found.
++    This function is used to validate LatLon object inputs
++
+     Parameters
+     ----------
+-    location : list of floats
+-        Either a list of x,y floating point values or strings or None
++    location : List of floats
++        Either a List of x,y floating point values or strings or None
+         (The legacy serialized format is str)
+ 
+     Returns
+     --------
+-    list or None
+-        Either returns a list of floating point values representing location
++    List or None
++        Either returns a List of floating point values representing location
+         x,y data or None if empty list is returned from the API.
+ 
+     Raises
+@@ -156,187 +222,173 @@ def check_valid_location(
+         try:
+             return [float(l) for l in location.split(",")]
+         except AttributeError:
+-            # Location for activities without GPS may be returned as empty list by
+-            # Strava
++            # Location for activities without GPS may be returned as empty list
+             return None
++    # Because this could be any Sequence type, explicitly return list
++    elif location:
++        return list(location)
+     else:
+-        return location if location else None
++        return None
+ 
+ 
+-# Create alias for this type so docs are more readable
+-AllDateTypes = Union[datetime, str, bytes, int, float]
++# Custom types:
+ 
++BaseType = TypeVar("BaseType")
++CustomType = TypeVar("CustomType")
+ 
+-def naive_datetime(value: Optional[AllDateTypes]) -> Optional[datetime]:
+-    """Utility helper that parses a datetime value provided in
+-    JSON, string, int or other formats and returns a datetime.datetime
+-    object
+ 
+-    Parameters
+-    ----------
+-    value : str, int
+-        A value representing a date/time that may be presented in string,
+-        int, deserialized or other format.
++class _CustomTypeAnnotation(Generic[BaseType, CustomType], ABC):
++    _type: Type[CustomType]
+ 
+-    Returns
+-    -------
+-    datetime.datetime
+-        A datetime object representing the datetime input value.
+-    """
+-    if value:
+-        dt = parse_datetime(value)
+-        return dt.replace(tzinfo=None)
+-    else:
+-        return None
++    @classmethod
++    @abstractmethod
++    def validate(cls, value: BaseType) -> CustomType: ...
+ 
++    @classmethod
++    @abstractmethod
++    def get_core_schema(cls) -> Mapping[str, Any]: ...
+ 
+-class DeprecatedSerializableMixin(BaseModel):
+-    """
+-    Provides backward compatibility with legacy BaseEntity
++    @classmethod
++    def __get_pydantic_core_schema__(
++        cls,
++        _source_type: BaseType,
++        _handler: GetCoreSchemaHandler,
++    ) -> core_schema.CoreSchema:
++        from_schema = core_schema.chain_schema(
++            [
++                cls.get_core_schema(),
++                core_schema.no_info_plain_validator_function(cls.validate),
++            ]
++        )
+ 
+-    Inherits from the `pydantic.BaseModel` class.
+-    """
++        return core_schema.json_or_python_schema(
++            json_schema=from_schema,
++            python_schema=core_schema.union_schema(
++                [core_schema.is_instance_schema(cls._type), from_schema]
++            ),
++            serialization=core_schema.plain_serializer_function_ser_schema(
++                lambda v: v
++            ),
++        )
+ 
+     @classmethod
+-    def deserialize(cls, attribute_value_mapping: dict[str, Any]) -> Self:
+-        """
+-        Creates and returns a new object based on serialized (dict) struct.
++    def __get_pydantic_json_schema__(
++        cls,
++        _core_schema: core_schema.CoreSchema,
++        handler: GetJsonSchemaHandler,
++    ) -> JsonSchemaValue:
++        return handler(cls.get_core_schema())
+ 
+-        Parameters
+-        ----------
+-        attribute_value_mapping : dict
+-            A dictionary representing the serialized data.
+ 
+-        Returns
+-        -------
+-        DeprecatedSerializableMixin
+-            A new instance of the class created from the serialized data.
++class _CustomIntAnnotation(_CustomTypeAnnotation[int, Any], ABC):
++    @classmethod
++    def get_core_schema(cls) -> Mapping[str, Any]:
++        return core_schema.int_schema()
+ 
+-        Deprecated
+-        ----------
+-        1.0.0
+-            The `deserialize()` method is deprecated in favor of `parse_obj()` method.
+-            For more details, refer to the Pydantic documentation:
+-            https://docs.pydantic.dev/usage/models/#helper-functions
+ 
++class _CustomFloatAnnotation(_CustomTypeAnnotation[float, Any], ABC):
++    @classmethod
++    def get_core_schema(cls) -> Mapping[str, Any]:
++        return core_schema.float_schema()
+ 
+-        """
+-        exc.warn_method_deprecation(
+-            cls,
+-            "deserialize()",
+-            "parse_obj()",
+-            "https://docs.pydantic.dev/usage/models/#helper-functions",
+-        )
+-        return cls.parse_obj(attribute_value_mapping)
+ 
+-    def from_dict(self, attribute_value_mapping: dict[str, Any]) -> None:
+-        """
+-        Deserializes v into self, resetting and/or overwriting existing
+-        fields.
++class _CustomStrAnnotation(_CustomTypeAnnotation[str, Any], ABC):
++    @classmethod
++    def get_core_schema(cls) -> Mapping[str, Any]:
++        return core_schema.str_schema()
+ 
+-        Parameters
+-        ----------
+-        attribute_value_mapping : dict
+-            A dictionary that will be deserialized into the parent object.
+ 
+-        Deprecated
+-        ----------
+-        1.0.0
+-            The `from_dict()` method is deprecated in favor of `parse_obj()` method.
+-            For more details, refer to the Pydantic documentation:
+-            https://docs.pydantic.dev/usage/models/#helper-functions
+-        """
++class Duration(int):
++    def timedelta(self) -> timedelta:
++        return timedelta(seconds=self)
+ 
+-        exc.warn_method_deprecation(
+-            self.__class__,
+-            "from_dict()",
+-            "parse_obj()",
+-            "https://docs.pydantic.dev/usage/models/#helper-functions",
+-        )
+-        # Ugly hack is necessary because parse_obj does not behave in-place but
+-        # returns a new object
+-        self.__init__(**self.parse_obj(attribute_value_mapping).dict())  # type: ignore[misc]
+ 
+-    def to_dict(self) -> dict[str, Any]:
+-        """
+-        Returns a dict representation of self
++class _DurationAnnotation(_CustomIntAnnotation):
++    _type = Duration
+ 
+-        Returns
+-        -------
+-        dict
+-            A dictionary containing the data from the instance.
++    @classmethod
++    def validate(cls, value: int) -> Duration:
++        return Duration(value)
++
++
++class Timezone(str):
++    def timezone(
++        self,
++    ) -> (
++        pytz._UTCclass
++        | pytz.tzinfo.StaticTzInfo
++        | pytz.tzinfo.DstTzInfo
++        | None
++    ):
++        if " " in self:
++            # (GMT-08:00) America/Los_Angeles
++            tzname = self.split(" ", 1)[1]
++        else:
++            # America/Los_Angeles
++            tzname = self
++        try:
++            return pytz.timezone(tzname)
++        except UnknownTimeZoneError as e:
++            LOGGER.warning(
++                f"Encountered unknown time zone {tzname}, returning None"
++            )
++            return None
+ 
+-        Deprecated
+-        ----------
+-            The `to_dict()` method is deprecated in favor of `dict()` method.
+-            For more details, refer to the Pydantic documentation:
+-            https://docs.pydantic.dev/1.10/usage/exporting_models/
+-        """
+-        exc.warn_method_deprecation(
+-            self.__class__,
+-            "to_dict()",
+-            "dict()",
+-            "https://docs.pydantic.dev/1.10/usage/exporting_models/",
+-        )
+-        return self.dict()
+ 
++class _TimezoneAnnotation(_CustomStrAnnotation):
++    _type = Timezone
+ 
+-class BackwardCompatibilityMixin:
+-    """
+-    Mixin that intercepts attribute lookup and raises warnings or modifies
+-    return values based on what is defined in the following class attributes:
++    @classmethod
++    def validate(cls, value: str) -> Timezone:
++        return Timezone(value)
++
++
++class Distance(_Quantity):
++    """A class that supports conversion of units to meters. This output can then be
++    converted to other units such as feet or meters using the stravalib.unit_helper module.
+ 
+-    * _field_conversions
+-    * _deprecated_fields (TODO)
+-    * _unsupported_fields (TODO)
++    Examples
++    ----------
++    Once you have distance in meters, you can then use the unit_helper module to
++    convert to other units such as feet
++
++    >>> from stravalib import unit_helper
++    >>> activity = client.get_activity(11416949675)
++    >>> activity.distance.quantity()
++    <Quantity(8055.9, 'meter')>
++    >>>  unit_helper.feet(activity.distance)
++    <Quantity(26430.1181, 'foot')>
++    >>> unit_helper.miles(activity.distance)
++    <Quantity(5.00570419, 'mile')>
+     """
+ 
+-    pass
++    unit = "meters"
+ 
+-    def __getattribute__(self, attr: str) -> Any:
+-        """A method to retrieve attributes from the object.
+ 
+-        Parameters
+-        ----------
+-        attr : str
+-            The name of the attribute to retrieve.
++class _DistanceAnnotation(_CustomFloatAnnotation):
++    _type = Distance
+ 
+-        Returns
+-        -------
+-        Any
+-            The value of the requested attribute.
++    @classmethod
++    def validate(cls, value: float) -> Distance:
++        return Distance(value)
+ 
+-        Notes
+-        -----
+-        This method is called whenever an attribute is accessed on the object.
+-        It is used to control attribute retrieval and perform additional
+-        actions.
+ 
+-        """
+-        value = object.__getattribute__(self, attr)
+-        if attr in ["_field_conversions", "bound_client"] or attr.startswith(
+-            "_"
+-        ):
+-            return value
+-        try:
+-            if attr in self._field_conversions:
+-                return self._field_conversions[attr](value)
+-        except AttributeError:
+-            # Current model class has no field conversions defined
+-            pass
+-        try:
+-            value.bound_client = self.bound_client
+-            return value
+-        except (AttributeError, ValueError):
+-            pass
+-        try:
+-            for v in value:
+-                v.bound_client = self.bound_client
+-            return value
+-        except (AttributeError, ValueError, TypeError):
+-            # TypeError if v is not iterable
+-            pass
+-        return value
++class Velocity(_Quantity):
++    unit = "meters/second"
++
++
++class _VelocityAnnotation(_CustomFloatAnnotation):
++    _type = Velocity
++
++    @classmethod
++    def validate(cls, value: float) -> Velocity:
++        return Velocity(value)
++
++
++DurationType = Annotated[Duration, _DurationAnnotation]
++DistanceType = Annotated[Distance, _DistanceAnnotation]
++VelocityType = Annotated[Velocity, _VelocityAnnotation]
++TimezoneType = Annotated[Timezone, _TimezoneAnnotation]
+ 
+ 
+ class BoundClientEntity(BaseModel):
+@@ -349,68 +401,99 @@ class BoundClientEntity(BaseModel):
+ 
+ 
+ class RelaxedActivityType(ActivityType):
+-    @root_validator(pre=True)
+-    def check_activity_type(cls, values: dict[str, Any]) -> dict[str, Any]:
+-        v = values["__root__"]
+-        if v not in get_args(ActivityType.__fields__["__root__"].type_):
++    @model_validator(mode="before")
++    def check_activity_type(cls, values: str) -> str:
++        """Pydantic validator that checks whether an activity type value is
++        valid prior to populating the model. If the available activity type
++        is not valid, it assigns the value to be "Workout".
++
++        Parameters
++        ----------
++        values : str
++            A dictionary containing an activity type key value pair.
++
++        Returns
++        -------
++        str
++            A dictionary with a validated activity type value assigned.
++        """
++
++        if values not in get_args(
++            ActivityType.model_fields["root"].annotation
++        ):
+             LOGGER.warning(
+-                f'Unexpected activity type. Given={v}, replacing by "Workout"'
++                f'Unexpected activity type. Given={values}, replacing by "Workout"'
+             )
+-            values["__root__"] = "Workout"
++            values = "Workout"
+         return values
+ 
+ 
+ class RelaxedSportType(SportType):
+-    @root_validator(pre=True)
+-    def check_sport_type(cls, values: dict[str, Any]) -> dict[str, Any]:
+-        v = values["__root__"]
+-        if v not in get_args(SportType.__fields__["__root__"].type_):
++    @model_validator(mode="before")
++    def check_sport_type(cls, values: str) -> str:
++        """Pydantic validator that checks whether a sport type value is
++        valid prior to populating the model. If the existing sport type
++        is not valid, it assigns the value to be "Workout".
++
++        Parameters
++        ----------
++        values : str
++            A dictionary containing an sport type key value pair.
++
++        Returns
++        -------
++        str
++            A str containing the validated sport type.
++        """
++
++        if values not in SportType.__annotations__["root"]:
+             LOGGER.warning(
+-                f'Unexpected sport type. Given={v}, replacing by "Workout"'
++                f'Unexpected sport type. Given={values}, replacing by "Workout"'
+             )
+-            values["__root__"] = "Workout"
++            values = "Workout"
+         return values
+ 
+ 
+-class LatLon(LatLng, BackwardCompatibilityMixin, DeprecatedSerializableMixin):
++class LatLon(LatLng):
+     """
+-    Enables backward compatibility for legacy namedtuple
++    Stores lat / lon values or None.
+     """
+ 
+-    # TODO: stravalib/model.py:377: error: Incompatible return value type (got "Optional[List[Optional[float]]]", expected "Optional[List[float]]")  [return-value]
+-    # this error doesn't make sense as the types are correct based on what the
+-    # error says it wants to see. so why is it throwing the error?
+-    @root_validator
+-    def check_valid_latlng(cls, values: list[float]) -> Optional[list[float]]:
++    @model_validator(mode="before")
++    def check_valid_latlng(cls, values: Sequence[float]) -> list[float] | None:
+         """Validate that Strava returned an actual lat/lon rather than an empty
+         list. If list is empty, return None
+ 
+         Parameters
+         ----------
+-        values: list
++        values: List
+             The list of lat/lon values returned by Strava. This list will be
+             empty if there was no GPS associated with the activity.
+ 
+         Returns
+         -------
+-        list or None
++        List or None
+             list of lat/lon values or None
+ 
+         """
++
+         # Strava sometimes returns empty list in case of activities without GPS
+-        return values if values else None
++        # Explicitly return a list to make mypy happy
++        if values:
++            return list(values)
++        else:
++            return None
+ 
+     @property
+     def lat(self) -> float:
+-        """
+-        The latitude value of an x,y coordinate.
++        """The latitude value of an x,y coordinate.
+ 
+         Returns
+         -------
+         float
+             The latitude value.
+         """
+-        return self.__root__[0]
++        return self.root[0]
+ 
+     @property
+     def lon(self) -> float:
+@@ -422,15 +505,14 @@ class LatLon(LatLng, BackwardCompatibilityMixin, DeprecatedSerializableMixin):
+         float
+             The longitude value.
+         """
+-        return self.__root__[1]
++        return self.root[1]
+ 
+ 
+-class Club(
+-    DetailedClub,
+-    DeprecatedSerializableMixin,
+-    BackwardCompatibilityMixin,
+-    BoundClientEntity,
+-):
++class MetaClub(strava_model.MetaClub, BoundClientEntity):
++    pass
++
++
++class SummaryClub(MetaClub, strava_model.SummaryClub):
+     """
+     Represents a single club with detailed information about the club including
+     club name, id, location, activity types, etc.
+@@ -438,12 +520,17 @@ class Club(
+     See Also
+     --------
+     DetailedClub : A class representing a club's detailed information.
+-    DeprecatedSerializableMixin : A mixin to provide backward compatibility
+-        with legacy BaseEntity.
+-    BackwardCompatibilityMixin : A mixin to provide backward compatibility with
+-        legacy BaseDetailedEntity.
+     BoundClientEntity : A mixin to bind the club with a Strava API client.
+ 
++    Notes
++    -----
++    Clubs are the only object that can have multiple valid
++    `activity_types`. Activities only have one.
++
++    Endpoint docs are found here:
++    https://developers.strava.com/docs/reference/#api-models-SummaryClub
++
++
+     """
+ 
+     # Undocumented attributes:
+@@ -451,23 +538,21 @@ class Club(
+     description: Optional[str] = None
+     club_type: Optional[str] = None
+ 
+-    _field_conversions = {"activity_types": enum_values}
+-
+     @lazy_property
+-    def members(self) -> BatchedResultsIterator[Athlete]:
++    def members(self) -> BatchedResultsIterator[strava_model.ClubAthlete]:
+         """
+         Lazy property to retrieve club members stored as Athlete objects.
+ 
+         Returns
+         -------
+-        list
++        List
+             A list of club members stored as Athlete objects.
+         """
+         assert self.bound_client is not None, "Bound client is not set."
+         return self.bound_client.get_club_members(self.id)
+ 
+     @lazy_property
+-    def activities(self) -> BatchedResultsIterator[Activity]:
++    def activities(self) -> BatchedResultsIterator[ClubActivity]:
+         """
+         Lazy property to retrieve club activities.
+ 
+@@ -480,51 +565,22 @@ class Club(
+         return self.bound_client.get_club_activities(self.id)
+ 
+ 
+-class Gear(
+-    DetailedGear, DeprecatedSerializableMixin, BackwardCompatibilityMixin
+-):
+-    """
+-    Represents a piece of gear (equipment) used in physical activities.
+-    """
+-
+-    _field_conversions = {"distance": uh.meters}
+-
+-
+-class Bike(Gear):
+-    """
+-    Represents a bike as a "type" / using the structure of
+-    `stravalib.model.Gear`.
+-    """
+-
++class DetailedClub(SummaryClub, strava_model.DetailedClub):
+     pass
+ 
+ 
+-class Shoe(Gear):
+-    """
+-    Represents a Shoes as a "type" / using the structure of
+-    `stravalib.model.Gear`.
+-    """
+-
+-    pass
+-
+-
+-class ActivityTotals(
+-    ActivityTotal, DeprecatedSerializableMixin, BackwardCompatibilityMixin
+-):
++class ActivityTotals(strava_model.ActivityTotal):
+     """An objecting containing a set of total values for an activity including
+     elapsed time, moving time, distance and elevation gain."""
+ 
+-    _field_conversions = {
+-        "distance": uh.meters,
+-        "elevation_gain": uh.meters,
+-    }
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-    moving_time: Optional[timedelta] = None  # type: ignore[assignment]
++    # Attribute overrides for custom types:
++    distance: Optional[DistanceType] = None
++    elevation_gain: Optional[DistanceType] = None
++    elapsed_time: Optional[DurationType] = None
++    moving_time: Optional[DurationType] = None
+ 
+ 
+-class AthleteStats(
+-    ActivityStats, DeprecatedSerializableMixin, BackwardCompatibilityMixin
+-):
++class AthleteStats(strava_model.ActivityStats):
+     """
+     Summary totals for rides, runs and swims, as shown in an athlete's public
+     profile. Non-public activities are not counted for these totals.
+@@ -540,34 +596,33 @@ class AthleteStats(
+     all_ride_totals: Optional[ActivityTotals] = None
+     all_run_totals: Optional[ActivityTotals] = None
+     all_swim_totals: Optional[ActivityTotals] = None
++    biggest_ride_distance: Optional[DistanceType] = None
++    biggest_climb_elevation_gain: Optional[DistanceType] = None
+ 
+-    _field_conversions = {
+-        "biggest_ride_distance": uh.meters,
+-        "biggest_climb_elevation_gain": uh.meters,
+-    }
+ 
++class MetaAthlete(strava_model.MetaAthlete, BoundClientEntity):
++    # Undocumented
++    resource_state: Optional[int] = None
+ 
+-class Athlete(
+-    DetailedAthlete,
+-    DeprecatedSerializableMixin,
+-    BackwardCompatibilityMixin,
+-    BoundClientEntity,
+-):
++
++class SummaryAthlete(MetaAthlete, strava_model.SummaryAthlete): ...
++
++
++class DetailedAthlete(SummaryAthlete, strava_model.DetailedAthlete):
+     """Represents high level athlete information including
+     their name, email, clubs they belong to, bikes, shoes, etc.
+ 
+     Notes
+     ------
+     Also provides access to detailed athlete stats upon request.
++    Many attributes in this object are undocumented by Strava and could be
++    modified at any time.
+     """
+ 
+     # Field overrides from superclass for type extensions:
+-    clubs: Optional[list[SummaryClub]] = None
+-    bikes: Optional[list[SummaryGear]] = None
+-    shoes: Optional[list[SummaryGear]] = None
++    clubs: Optional[Sequence[SummaryClub]] = None
+ 
+     # Undocumented attributes:
+-    is_authenticated: Optional[bool] = None
+     athlete_type: Optional[Literal["cyclist", "runner"]] = None
+     friend: Optional[str] = None
+     follower: Optional[str] = None
+@@ -603,9 +658,9 @@ class Athlete(
+     membership: Optional[str] = None
+     admin: Optional[bool] = None
+     owner: Optional[bool] = None
+-    subscription_permissions: Optional[list[bool]] = None
++    subscription_permissions: Optional[Sequence[bool]] = None
+ 
+-    @validator("athlete_type", pre=True)
++    @field_validator("athlete_type", mode="before")
+     def to_str_representation(
+         cls, raw_type: int
+     ) -> Optional[Literal["cyclist", "runner"]]:
+@@ -630,20 +685,6 @@ class Athlete(
+             LOGGER.warning(f"Unknown athlete type value: {raw_type}")
+             return None
+ 
+-    @lazy_property
+-    def authenticated_athlete(self) -> Athlete:
+-        """
+-        Returns an `Athlete` object containing Strava account data
+-        for the (authenticated) athlete.
+-
+-        Returns
+-        -------
+-        Athlete
+-            The detailed information of the authenticated athlete.
+-        """
+-        assert self.bound_client is not None, "Bound client is not set."
+-        return self.bound_client.get_athlete()
+-
+     @lazy_property
+     def stats(self) -> AthleteStats:
+         """
+@@ -658,71 +699,68 @@ class Athlete(
+         `stravalib.exc.NotAuthenticatedAthlete` exception if authentication is
+         missing.
+         """
+-        if not self.is_authenticated_athlete():
+-            raise exc.NotAuthenticatedAthlete(
+-                "Statistics are only available for the authenticated athlete"
+-            )
+-        assert self.bound_client is not None, "Bound client is not set."
+ 
++        assert self.bound_client is not None, "Bound client is not set."
+         return self.bound_client.get_athlete_stats(self.id)
+ 
+-    def is_authenticated_athlete(self) -> bool:
+-        """Check if the athlete is authenticated
+-
+-        Returns
+-        -------
+-        bool
+-            Whether the athlete is the authenticated athlete (or not).
+-        """
+-
+-        if self.is_authenticated is None:
+-            if self.resource_state == 3:
+-                # If the athlete is in detailed state it must be the authenticated athlete
+-                self.is_authenticated = True
+-            else:
+-                # We need to check this athlete's id matches the authenticated athlete's id
+-                authenticated_athlete = self.authenticated_athlete
+-                if authenticated_athlete is None:
+-                    return False
+ 
+-                self.is_authenticated = authenticated_athlete.id == self.id
+-
+-        return self.is_authenticated
+-
+-
+-# TODO: better description
+ class ActivityComment(Comment):
+-    """Field overrides the athlete attribute to be of type :class:`Athlete`
+-    rather than :class:`SummaryAthlete`
++    """
++    A class representing a comment on an activity.
++
++    Attributes
++    ----------
++    athlete : Athlete, optional
++        The athlete associated with the comment.
+     """
+ 
+-    athlete: Optional[Athlete] = None
++    athlete: Optional[SummaryAthlete] = None
+ 
+ 
+ class ActivityPhotoPrimary(Primary):
+-    """Represents the primary photo for an activity.
++    """
++    Represents the primary photo for an activity.
++
++    Attributes
++    ----------
++    use_primary_photo : bool, optional
++        Indicates whether the photo is used as the primary photo.
+ 
+     Notes
+     -----
+-    Attributes for activity photos are undocumented
++    Attributes for activity photos are currently undocumented.
+     """
+ 
+     use_primary_photo: Optional[bool] = None
+ 
+ 
+ class ActivityPhotoMeta(PhotosSummary):
+-    """The photos structure returned with the activity. Not to be confused with
+-    the full loaded photos for an activity.
++    """
++    Represents the metadata of photos returned with the activity.
++
++    Not to be confused with the fully loaded photos for an activity.
++
++    Attributes
++    ----------
++    primary : ActivityPhotoPrimary, optional
++        The primary photo for the activity.
++    use_primary_photo : bool, optional
++        Indicates whether the primary photo is used. Not currently documented
++        by Strava.
++
++    Notes
++    -----
++    Undocumented attributes could be changed by Strava at any time.
+     """
+ 
+     # Field overrides from superclass for type extensions:
+     primary: Optional[ActivityPhotoPrimary] = None
+ 
+-    # Undocumented attributes:
++    # Undocumented by strava
+     use_primary_photo: Optional[bool] = None
+ 
+ 
+-class ActivityPhoto(BackwardCompatibilityMixin, DeprecatedSerializableMixin):
++class ActivityPhoto(BaseModel):
+     """A full photo record attached to an activity.
+ 
+     Notes
+@@ -744,19 +782,22 @@ class ActivityPhoto(BackwardCompatibilityMixin, DeprecatedSerializableMixin):
+     created_at_local: Optional[datetime] = None
+     location: Optional[LatLon] = None
+     urls: Optional[dict[str, str]] = None
+-    sizes: Optional[dict[str, list[int]]] = None
++    sizes: Optional[dict[str, Sequence[int]]] = None
+     post_id: Optional[int] = None
+     default_photo: Optional[bool] = None
+     source: Optional[int] = None
+ 
+-    _naive_local = validator("created_at_local", allow_reuse=True)(
+-        naive_datetime
+-    )
+-    _check_latlng = validator("location", allow_reuse=True, pre=True)(
++    _naive_local = field_validator("created_at_local")(naive_datetime)
++    _check_latlng = field_validator("location", mode="before")(
+         check_valid_location
+     )
+ 
+     def __repr__(self) -> str:
++        """Return a string representation of the instance.
++
++        This representation varies according to the source of the photo (native,
++        from Instagram, or an unknown source. This representation includes the
++        class name, photo type, and a key identifier."""
+         if self.source == 1:
+             photo_type = "native"
+             idfield = "unique_id"
+@@ -768,7 +809,7 @@ class ActivityPhoto(BackwardCompatibilityMixin, DeprecatedSerializableMixin):
+         else:
+             photo_type = "(no type)"
+             idfield = "id"
+-            idval = self.id
++            idval = self.uid
+ 
+         return "<{clz} {type} {idfield}={id}>".format(
+             clz=self.__class__.__name__,
+@@ -778,27 +819,19 @@ class ActivityPhoto(BackwardCompatibilityMixin, DeprecatedSerializableMixin):
+         )
+ 
+ 
+-class ActivityKudos(Athlete):
+-    """
+-    Represents kudos an athlete received on an activity.
+-
+-    Notes
+-    -----
+-    Activity kudos are a subset of athlete properties.
+-    """
+-
+-    pass
+-
+-
+-class ActivityLap(
+-    Lap,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
++class Lap(
++    strava_model.Lap,
+     BoundClientEntity,
+ ):
+     # Field overrides from superclass for type extensions:
+-    activity: Optional[Activity] = None
+-    athlete: Optional[Athlete] = None
++    activity: Optional[MetaActivity] = None
++    athlete: Optional[MetaAthlete] = None
++    distance: Optional[DistanceType] = None
++    total_elevation_gain: Optional[DistanceType] = None
++    elapsed_time: Optional[DurationType] = None
++    moving_time: Optional[DurationType] = None
++    average_speed: Optional[VelocityType] = None
++    max_speed: Optional[VelocityType] = None
+ 
+     # Undocumented attributes:
+     average_watts: Optional[float] = None
+@@ -806,18 +839,7 @@ class ActivityLap(
+     max_heartrate: Optional[float] = None
+     device_watts: Optional[bool] = None
+ 
+-    _field_conversions = {
+-        "distance": uh.meters,
+-        "total_elevation_gain": uh.meters,
+-        "average_speed": uh.meters_per_second,
+-        "max_speed": uh.meters_per_second,
+-    }
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-    moving_time: Optional[timedelta] = None  # type: ignore[assignment]
+-
+-    _naive_local = validator("start_date_local", allow_reuse=True)(
+-        naive_datetime
+-    )
++    _naive_local = field_validator("start_date_local")(naive_datetime)
+ 
+ 
+ class Map(PolylineMap):
+@@ -828,32 +850,26 @@ class Map(PolylineMap):
+ 
+ class Split(
+     strava_model.Split,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+ ):
+     """
+     A split -- may be metric or standard units (which has no bearing
+     on the units used in this object, just the binning of values).
+     """
+ 
++    # Attribute overrides for type extensions:
++    distance: Optional[DistanceType] = None
++    elevation_difference: Optional[DistanceType] = None
++    elapsed_time: Optional[DurationType] = None
++    moving_time: Optional[DurationType] = None
++    average_speed: Optional[VelocityType] = None
++
+     # Undocumented attributes:
+     average_heartrate: Optional[float] = None
+-    average_grade_adjusted_speed: Optional[float] = None
+-
+-    _field_conversions = {
+-        "distance": uh.meters,
+-        "elevation_difference": uh.meters,
+-        "average_speed": uh.meters_per_second,
+-        "average_grade_adjusted_speed": uh.meters_per_second,
+-    }
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-    moving_time: Optional[timedelta] = None  # type: ignore[assignment]
++    average_grade_adjusted_speed: Optional[VelocityType] = None
+ 
+ 
+ class SegmentExplorerResult(
+     ExplorerSegment,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+     BoundClientEntity,
+ ):
+     """
+@@ -864,16 +880,16 @@ class SegmentExplorerResult(
+     """
+ 
+     # Field overrides from superclass for type extensions:
++    elev_difference: Optional[DistanceType] = None
++    distance: Optional[DistanceType] = None
+     start_latlng: Optional[LatLon] = None
+     end_latlng: Optional[LatLon] = None
+ 
+     # Undocumented attributes:
+     starred: Optional[bool] = None
+ 
+-    _field_conversions = {"elev_difference", uh.meters, "distance", uh.meters}
+-
+-    _check_latlng = validator(
+-        "start_latlng", "end_latlng", allow_reuse=True, pre=True
++    _check_latlng = field_validator(
++        "start_latlng", "end_latlng", mode="before"
+     )(check_valid_location)
+ 
+     @lazy_property
+@@ -893,73 +909,58 @@ class SegmentExplorerResult(
+         return self.bound_client.get_segment(self.id)
+ 
+ 
+-class AthleteSegmentStats(
+-    SummarySegmentEffort,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
++class AthletePrEffort(
++    strava_model.SummaryPRSegmentEffort,
+ ):
+-    """
+-    A structure being returned for segment stats for current athlete.
+-    """
+-
+-    # Undocumented attributes:
+-    effort_count: Optional[int] = None
+-    pr_elapsed_time: Optional[timedelta] = None
+-    pr_date: Optional[date] = None
+-
+-    _field_conversions = {
+-        "distance": uh.meters,
+-    }
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-
+-    _naive_local = validator("start_date_local", allow_reuse=True)(
+-        naive_datetime
++    # Override fields from superclass to match actual responses by Strava API:
++    activity_id: Optional[int] = Field(
++        validation_alias=AliasChoices("pr_activity_id", "activity_id"),
++        default=None,
++    )
++    elapsed_time: Optional[int] = Field(
++        validation_alias=AliasChoices("pr_elapsed_time", "elapsed_time"),
++        default=None,
+     )
+ 
++    # Attribute overrides for type extensions:
++    pr_elapsed_time: Optional[DurationType] = None
+ 
+-class AthletePrEffort(
+-    SummaryPRSegmentEffort,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+-):
+     # Undocumented attributes:
+-    distance: Optional[float] = None
++    distance: Optional[DistanceType] = None
+     start_date: Optional[datetime] = None
+     start_date_local: Optional[datetime] = None
+     is_kom: Optional[bool] = None
+ 
+-    _field_conversions = {
+-        "distance": uh.meters,
+-    }
+-    pr_elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
++    _naive_local = field_validator("start_date_local")(naive_datetime)
++
+ 
+-    _naive_local = validator("start_date_local", allow_reuse=True)(
+-        naive_datetime
++class SummarySegment(strava_model.SummarySegment, BoundClientEntity):
++    # Field overrides from superclass for type extensions:
++    start_latlng: Optional[LatLon] = None
++    end_latlng: Optional[LatLon] = None
++    athlete_pr_effort: Optional[AthletePrEffort] = None
++    # Ignore because the spec is incorrectly typed - Optional[Literal["Ride", "Run"]]
++    activity_type: Optional[RelaxedActivityType] = None  # type: ignore[assignment]
++    athlete_segment_stats: Optional[AthleteSegmentStats] = (
++        None  # Actually, this is only part of a (detailed) segment response
+     )
+ 
+-    @property
+-    def elapsed_time(self) -> Optional[timedelta]:
+-        # For backward compatibility
+-        return self.pr_elapsed_time
++    _latlng_check = field_validator(
++        "start_latlng", "end_latlng", mode="before"
++    )(check_valid_location)
+ 
+ 
+-class Segment(
+-    DetailedSegment,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+-    BoundClientEntity,
+-):
++class Segment(SummarySegment, strava_model.DetailedSegment):
+     """
+     Represents a single Strava segment.
+     """
+ 
+     # Field overrides from superclass for type extensions:
+-    start_latlng: Optional[LatLon] = None
+-    end_latlng: Optional[LatLon] = None
+     map: Optional[Map] = None
+-    athlete_segment_stats: Optional[AthleteSegmentStats] = None
+-    athlete_pr_effort: Optional[AthletePrEffort] = None
+-    activity_type: Optional[RelaxedActivityType] = None  # type: ignore[assignment]
++    distance: Optional[DistanceType] = None
++    elevation_high: Optional[DistanceType] = None
++    elevation_low: Optional[DistanceType] = None
++    total_elevation_gain: Optional[DistanceType] = None
+ 
+     # Undocumented attributes:
+     start_latitude: Optional[float] = None
+@@ -971,22 +972,14 @@ class Segment(
+     starred_date: Optional[datetime] = None
+     elevation_profile: Optional[str] = None
+ 
+-    _field_conversions = {
+-        "distance": uh.meters,
+-        "elevation_high": uh.meters,
+-        "elevation_low": uh.meters,
+-        "total_elevation_gain": uh.meters,
+-        "activity_type": enum_value,
+-    }
+-
+-    _latlng_check = validator(
+-        "start_latlng", "end_latlng", allow_reuse=True, pre=True
+-    )(check_valid_location)
+-
+ 
+ class SegmentEffortAchievement(BaseModel):
+     """
+     An undocumented structure being returned for segment efforts.
++
++    Notes
++    -----
++    Undocumented Strava elements can change at any time without notice.
+     """
+ 
+     rank: Optional[int] = None
+@@ -1007,30 +1000,35 @@ class SegmentEffortAchievement(BaseModel):
+     effort_count: Optional[int] = None
+ 
+ 
++class SummarySegmentEffort(strava_model.SummarySegmentEffort):
++    # Override superclass fields to match actual Strava API responses
++    activity_id: Optional[int] = Field(
++        validation_alias=AliasChoices("pr_activity_id", "activity_id"),
++        default=None,
++    )
++    elapsed_time: Optional[int] = Field(
++        validation_alias=AliasChoices("pr_elapsed_time", "elapsed_time"),
++        default=None,
++    )
++
++    _naive_local = field_validator("start_date_local")(naive_datetime)
++
++
+ class BaseEffort(
+-    DetailedSegmentEffort,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+-    BoundClientEntity,
++    SummarySegmentEffort,
++    strava_model.DetailedSegmentEffort,
+ ):
+     """
+     Base class for a best effort or segment effort.
+     """
+ 
+     # Field overrides from superclass for type extensions:
+-    segment: Optional[Segment] = None
+-    activity: Optional[Activity] = None
+-    athlete: Optional[Athlete] = None
+-
+-    _field_conversions = {
+-        "distance": uh.meters,
+-    }
+-    moving_time: Optional[timedelta] = None  # type: ignore[assignment]
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-
+-    _naive_local = validator("start_date_local", allow_reuse=True)(
+-        naive_datetime
+-    )
++    segment: Optional[SummarySegment] = None
++    activity: Optional[MetaActivity] = None
++    athlete: Optional[MetaAthlete] = None
++    elapsed_time: Optional[DurationType] = None
++    moving_time: Optional[DurationType] = None
++    distance: Optional[DistanceType] = None
+ 
+ 
+ class BestEffort(BaseEffort):
+@@ -1046,44 +1044,111 @@ class SegmentEffort(BaseEffort):
+     Class representing a best effort on a particular segment.
+     """
+ 
+-    achievements: Optional[list[SegmentEffortAchievement]] = None
++    achievements: Optional[Sequence[SegmentEffortAchievement]] = None
+ 
+ 
+-class Activity(
+-    DetailedActivity,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
+-    BoundClientEntity,
++class AthleteSegmentStats(
++    SummarySegmentEffort,
+ ):
+     """
+-    Represents an activity (ride, run, etc.).
++    A structure being returned for segment stats for current athlete.
+     """
+ 
++    # Attribute overrides for type extensions:
++    distance: Optional[DistanceType] = None
++    elapsed_time: Optional[DurationType] = None
++
++    # Undocumented attributes:
++    effort_count: Optional[int] = None
++    pr_date: Optional[date] = None
++
++
++class MetaActivity(strava_model.MetaActivity, BoundClientEntity):
++    @lazy_property
++    def comments(self) -> BatchedResultsIterator[ActivityComment]:
++        """Retrieves comments for a specific activity id."""
++        assert self.bound_client is not None
++        return self.bound_client.get_activity_comments(self.id)
++
++    @lazy_property
++    def zones(self) -> list[ActivityZone]:
++        """Retrieve a list of zones for an activity.
++
++        Returns
++        -------
++        py:class:`list`
++            A list of :class:`stravalib.model.ActivityZone` objects.
++        """
++
++        assert self.bound_client is not None
++        return self.bound_client.get_activity_zones(self.id)
++
++    @lazy_property
++    def kudos(self) -> BatchedResultsIterator[SummaryAthlete]:
++        """Retrieves the kudos provided for a specific activity."""
++        assert self.bound_client is not None
++        return self.bound_client.get_activity_kudos(self.id)
++
++    @lazy_property
++    def full_photos(self) -> BatchedResultsIterator[ActivityPhoto]:
++        """Retrieves activity photos for a specific activity by id."""
++        assert self.bound_client is not None
++        return self.bound_client.get_activity_photos(
++            self.id, only_instagram=False
++        )
++
++
++class SummaryActivity(MetaActivity, strava_model.SummaryActivity):
+     # field overrides from superclass for type extensions:
+-    athlete: Optional[Athlete] = None
++    athlete: Optional[MetaAthlete] = None
++    # These force validator to run on lat/lon
+     start_latlng: Optional[LatLon] = None
+     end_latlng: Optional[LatLon] = None
+     map: Optional[Map] = None
+-    gear: Optional[Gear] = None
+     type: Optional[RelaxedActivityType] = None
+     sport_type: Optional[RelaxedSportType] = None
+-    # Ignoring types here given there are overrides
+-    best_efforts: Optional[list[BestEffort]] = None  # type: ignore[assignment]
+-    segment_efforts: Optional[list[SegmentEffort]] = None  # type: ignore[assignment]
+-    splits_metric: Optional[list[Split]] = None  # type: ignore[assignment]
+-    splits_standard: Optional[list[Split]] = None  # type: ignore[assignment]
++
++    _latlng_check = field_validator(
++        "start_latlng", "end_latlng", mode="before"
++    )(check_valid_location)
++
++
++class DetailedActivity(
++    SummaryActivity,
++    strava_model.DetailedActivity,
++):
++    """
++    Represents an activity (ride, run, etc.).
++    """
++
++    # field overrides from superclass for type extensions:
++    distance: Optional[DistanceType] = None
++    total_elevation_gain: Optional[DistanceType] = None
++    gear: Optional[SummaryGear] = None
++    best_efforts: Optional[Sequence[BestEffort]] = None
++    # TODO: returning empty Sequence should be  DetailedSegmentEffort object
++    # TODO: test on activity with actual segments
++    segment_efforts: Optional[Sequence[SegmentEffort]] = None
++    # TODO: Returns Split object - check returns for that object
++    splits_metric: Optional[Sequence[Split]] = None
++    splits_standard: Optional[Sequence[Split]] = None
++    # TODO: should be PhotosSummary
+     photos: Optional[ActivityPhotoMeta] = None
+-    laps: Optional[list[Lap]] = None
++    laps: Optional[Sequence[Lap]] = None
++    elapsed_time: Optional[DurationType] = None
++    moving_time: Optional[DurationType] = None
++    average_speed: Optional[VelocityType] = None
++    max_speed: Optional[VelocityType] = None
++    timezone: Optional[TimezoneType] = None
+ 
+     # Added for backward compatibility
+     # TODO maybe deprecate?
+     TYPES: ClassVar[tuple[Any, ...]] = get_args(
+-        ActivityType.__fields__["__root__"].type_
++        ActivityType.model_fields["root"].annotation
+     )
+ 
+-    # TODO this and line 1055 above changed from str to Any
+     SPORT_TYPES: ClassVar[tuple[Any, ...]] = get_args(
+-        SportType.__fields__["__root__"].type_
++        SportType.model_fields["root"].annotation
+     )
+ 
+     # Undocumented attributes:
+@@ -1107,88 +1172,68 @@ class Activity(
+     from_accepted_tag: Optional[bool] = None
+     segment_leaderboard_opt_out: Optional[bool] = None
+     perceived_exertion: Optional[int] = None
++    prefer_perceived_exertion: Optional[bool] = None
++    visibility: Optional[str] = None
++    private_note: Optional[str] = None
+ 
+-    _field_conversions = {
+-        "timezone": timezone,
+-        "distance": uh.meters,
+-        "total_elevation_gain": uh.meters,
+-        "average_speed": uh.meters_per_second,
+-        "max_speed": uh.meters_per_second,
+-        "type": enum_value,
+-        "sport_type": enum_value,
+-    }
+-    moving_time: Optional[timedelta] = None  # type: ignore[assignment]
+-    elapsed_time: Optional[timedelta] = None  # type: ignore[assignment]
+-
+-    _latlng_check = validator(
+-        "start_latlng", "end_latlng", allow_reuse=True, pre=True
+-    )(check_valid_location)
+-    _naive_local = validator("start_date_local", allow_reuse=True)(
+-        naive_datetime
+-    )
+-
+-    @lazy_property
+-    def comments(self) -> BatchedResultsIterator[ActivityComment]:
+-        assert self.bound_client is not None
+-        return self.bound_client.get_activity_comments(self.id)
++    _naive_local = field_validator("start_date_local")(naive_datetime)
+ 
+-    @lazy_property
+-    def zones(self) -> list[BaseActivityZone]:
+-        """Retrieve a list of zones for an activity.
+ 
+-        Returns
+-        -------
+-        py:class:`list`
+-            A list of :class:`stravalib.model.BaseActivityZone` objects.
+-        """
++class ClubActivity(strava_model.ClubActivity):
++    """Represents an activity returned from a club.
+ 
+-        assert self.bound_client is not None
+-        return self.bound_client.get_activity_zones(self.id)
++    Notes
++    -----
++    The actual strava API specification suggests that this should
++    return a MetaAthlete Object for the activities' athlete information.
++    However, while that object should return the correct values, it is missing what is
++     actually returned, i.e., resource_state, first name and
++    last initial. So this object doesn't match the spec but does match the
++    actual return.
++    """
+ 
+-    @lazy_property
+-    def kudos(self) -> BatchedResultsIterator[ActivityKudos]:
+-        assert self.bound_client is not None
+-        return self.bound_client.get_activity_kudos(self.id)
++    # Intentional class override as spec returns metaAthlete object
++    # (which only contains id)
++    athlete: Optional[strava_model.ClubAthlete] = None  # type: ignore[assignment]
+ 
+-    @lazy_property
+-    def full_photos(self) -> BatchedResultsIterator[ActivityPhoto]:
+-        assert self.bound_client is not None
+-        return self.bound_client.get_activity_photos(
+-            self.id, only_instagram=False
+-        )
++    pass
+ 
+ 
+-class DistributionBucket(TimedZoneRange):
++class TimedZoneDistribution(strava_model.TimedZoneRange):
+     """
+     A single distribution bucket object, used for activity zones.
++
++    Notes
++    -----
++    Min/max value types are overridden. The
++    Strava API incorrectly types zones as being `int`. However it can
++    return `int` or `float` (floats are returned for pace, ints for heartrate
++    and power).
+     """
+ 
+-    _field_conversions = {"time": uh.seconds}
++    # Type overrides to support pace values returned as ints
++    min: float | None = None  # type: ignore[assignment]
++    max: float | None = None  # type: ignore[assignment]
+ 
+ 
+-class BaseActivityZone(
+-    ActivityZone,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
++class ActivityZone(
++    strava_model.ActivityZone,
+     BoundClientEntity,
+ ):
+     """
+     Base class for activity zones.
+ 
+-    A collection of :class:`stravalib.model.DistributionBucket` objects.
++    A collection of :class:`stravalib.strava_model.TimedZoneDistribution` objects.
+     """
+ 
+     # Field overrides from superclass for type extensions:
+-    # Using type that is currently mimicking legacy behavior...
+-    distribution_buckets: Optional[list[DistributionBucket]] = None  # type: ignore[assignment]
++    distribution_buckets: Optional[Sequence[TimedZoneDistribution]] = None  # type: ignore[assignment]
+ 
+-    # TODO: ignoring type given legacy support will be deprecated
++    # strava_model only contains heartrate and power (ints), but also returns pace (float)
+     type: Optional[Literal["heartrate", "power", "pace"]] = None  # type: ignore[assignment]
+ 
+ 
+-class Stream(
+-    BaseStream, BackwardCompatibilityMixin, DeprecatedSerializableMixin
+-):
++class Stream(BaseStream):
+     """
+     Stream of readings from the activity, effort or segment.
+     """
+@@ -1197,13 +1242,11 @@ class Stream(
+ 
+     # Not using the typed subclasses from the generated model
+     # for backward compatibility:
+-    data: Optional[list[Any]] = None
++    data: Optional[Sequence[Any]] = None
+ 
+ 
+ class Route(
+-    RouteStrava,
+-    BackwardCompatibilityMixin,
+-    DeprecatedSerializableMixin,
++    strava_model.Route,
+     BoundClientEntity,
+ ):
+     """
+@@ -1211,16 +1254,14 @@ class Route(
+     """
+ 
+     # Superclass field overrides for using extended types
+-    athlete: Optional[Athlete] = None
++    distance: Optional[DistanceType] = None
++    elevation_gain: Optional[DistanceType] = None
++    athlete: Optional[SummaryAthlete] = None
+     map: Optional[Map] = None
+-    segments: Optional[list[Segment]]  # type: ignore[assignment]
+-
+-    _field_conversions = {"distance": uh.meters, "elevation_gain": uh.meters}
++    segments: Optional[Sequence[SummarySegment]] = None
+ 
+ 
+-class Subscription(
+-    BackwardCompatibilityMixin, DeprecatedSerializableMixin, BoundClientEntity
+-):
++class Subscription(BaseModel):
+     """
+     Represents a Webhook Event Subscription.
+     """
+@@ -1238,9 +1279,7 @@ class Subscription(
+     updated_at: Optional[datetime] = None
+ 
+ 
+-class SubscriptionCallback(
+-    BackwardCompatibilityMixin, DeprecatedSerializableMixin
+-):
++class SubscriptionCallback(BaseModel):
+     """
+     Represents a Webhook Event Subscription Callback.
+     """
+@@ -1275,9 +1314,7 @@ class SubscriptionCallback(
+         assert self.hub_verify_token == verify_token
+ 
+ 
+-class SubscriptionUpdate(
+-    BackwardCompatibilityMixin, DeprecatedSerializableMixin, BoundClientEntity
+-):
++class SubscriptionUpdate(BaseModel):
+     """
+     Represents a Webhook Event Subscription Update.
+     """
+@@ -1289,8 +1326,3 @@ class SubscriptionUpdate(
+     aspect_type: Optional[str] = None
+     event_time: Optional[datetime] = None
+     updates: Optional[dict[str, Any]] = None
+-
+-
+-SegmentEffort.update_forward_refs()
+-ActivityLap.update_forward_refs()
+-BestEffort.update_forward_refs()
+diff --git a/src/stravalib/strava_model.py b/src/stravalib/strava_model.py
+index 8b38ad3..035561b 100644
+--- a/src/stravalib/strava_model.py
++++ b/src/stravalib/strava_model.py
+@@ -3,10 +3,10 @@
+ 
+ from __future__ import annotations
+ 
+-from datetime import datetime
++from collections.abc import Mapping, Sequence
+ from typing import Literal, Optional
+ 
+-from pydantic import BaseModel, Field
++from pydantic import AwareDatetime, BaseModel, Field, RootModel
+ 
+ 
+ class ActivityTotal(BaseModel):
+@@ -40,8 +40,50 @@ class ActivityTotal(BaseModel):
+     """
+ 
+ 
+-class ActivityType(BaseModel):
+-    __root__: Literal[
++class ActivityType(
++    RootModel[
++        Literal[
++            "AlpineSki",
++            "BackcountrySki",
++            "Canoeing",
++            "Crossfit",
++            "EBikeRide",
++            "Elliptical",
++            "Golf",
++            "Handcycle",
++            "Hike",
++            "IceSkate",
++            "InlineSkate",
++            "Kayaking",
++            "Kitesurf",
++            "NordicSki",
++            "Ride",
++            "RockClimbing",
++            "RollerSki",
++            "Rowing",
++            "Run",
++            "Sail",
++            "Skateboard",
++            "Snowboard",
++            "Snowshoe",
++            "Soccer",
++            "StairStepper",
++            "StandUpPaddling",
++            "Surfing",
++            "Swim",
++            "Velomobile",
++            "VirtualRide",
++            "VirtualRun",
++            "Walk",
++            "WeightTraining",
++            "Wheelchair",
++            "Windsurf",
++            "Workout",
++            "Yoga",
++        ]
++    ]
++):
++    root: Literal[
+         "AlpineSki",
+         "BackcountrySki",
+         "Canoeing",
+@@ -101,7 +143,7 @@ class BaseStream(BaseModel):
+ 
+ 
+ class CadenceStream(BaseStream):
+-    data: Optional[list[int]] = None
++    data: Optional[Sequence[int]] = None
+     """
+     The sequence of cadence values for this stream, in rotations per minute
+     """
+@@ -135,7 +177,7 @@ class ClubAthlete(BaseModel):
+ 
+ 
+ class DistanceStream(BaseStream):
+-    data: Optional[list[float]] = None
++    data: Optional[Sequence[float]] = None
+     """
+     The sequence of distance values for this stream, in meters
+     """
+@@ -161,7 +203,7 @@ class Fault(BaseModel):
+     Encapsulates the errors that may be returned from the API.
+     """
+ 
+-    errors: Optional[list[Error]] = None
++    errors: Optional[Sequence[Error]] = None
+     """
+     The set of specific errors associated with this fault, if any.
+     """
+@@ -172,25 +214,25 @@ class Fault(BaseModel):
+ 
+ 
+ class HeartrateStream(BaseStream):
+-    data: Optional[list[int]] = None
++    data: Optional[Sequence[int]] = None
+     """
+     The sequence of heart rate values for this stream, in beats per minute
+     """
+ 
+ 
+-class LatLng(BaseModel):
++class LatLng(RootModel[Sequence[float]]):
+     """
+     A pair of latitude/longitude coordinates, represented as an array of 2 floating point numbers.
+     """
+ 
+-    __root__: list[float] = Field(..., max_items=2, min_items=2)
++    root: Sequence[float] = Field(..., max_length=2, min_length=2)
+     """
+     A pair of latitude/longitude coordinates, represented as an array of 2 floating point numbers.
+     """
+ 
+ 
+ class LatLngStream(BaseStream):
+-    data: Optional[list[LatLng]] = None
++    data: Optional[Sequence[LatLng]] = None
+     """
+     The sequence of lat/long values for this stream
+     """
+@@ -241,7 +283,7 @@ class MetaClub(BaseModel):
+ 
+ 
+ class MovingStream(BaseStream):
+-    data: Optional[list[bool]] = None
++    data: Optional[Sequence[bool]] = None
+     """
+     The sequence of moving values for this stream, as boolean values
+     """
+@@ -251,7 +293,7 @@ class Primary(BaseModel):
+     id: Optional[int] = None
+     source: Optional[int] = None
+     unique_id: Optional[str] = None
+-    urls: Optional[dict[str, str]] = None
++    urls: Optional[Mapping[str, str]] = None
+ 
+ 
+ class PhotosSummary(BaseModel):
+@@ -278,21 +320,21 @@ class PolylineMap(BaseModel):
+ 
+ 
+ class PowerStream(BaseStream):
+-    data: Optional[list[int]] = None
++    data: Optional[Sequence[int]] = None
+     """
+     The sequence of power values for this stream, in watts
+     """
+ 
+ 
+ class SmoothGradeStream(BaseStream):
+-    data: Optional[list[float]] = None
++    data: Optional[Sequence[float]] = None
+     """
+     The sequence of grade values for this stream, as percents of a grade
+     """
+ 
+ 
+ class SmoothVelocityStream(BaseStream):
+-    data: Optional[list[float]] = None
++    data: Optional[Sequence[float]] = None
+     """
+     The sequence of velocity values for this stream, in meters per second
+     """
+@@ -329,8 +371,63 @@ class Split(BaseModel):
+     """
+ 
+ 
+-class SportType(BaseModel):
+-    __root__: Literal[
++class SportType(
++    RootModel[
++        Literal[
++            "AlpineSki",
++            "BackcountrySki",
++            "Badminton",
++            "Canoeing",
++            "Crossfit",
++            "EBikeRide",
++            "Elliptical",
++            "EMountainBikeRide",
++            "Golf",
++            "GravelRide",
++            "Handcycle",
++            "HighIntensityIntervalTraining",
++            "Hike",
++            "IceSkate",
++            "InlineSkate",
++            "Kayaking",
++            "Kitesurf",
++            "MountainBikeRide",
++            "NordicSki",
++            "Pickleball",
++            "Pilates",
++            "Racquetball",
++            "Ride",
++            "RockClimbing",
++            "RollerSki",
++            "Rowing",
++            "Run",
++            "Sail",
++            "Skateboard",
++            "Snowboard",
++            "Snowshoe",
++            "Soccer",
++            "Squash",
++            "StairStepper",
++            "StandUpPaddling",
++            "Surfing",
++            "Swim",
++            "TableTennis",
++            "Tennis",
++            "TrailRun",
++            "Velomobile",
++            "VirtualRide",
++            "VirtualRow",
++            "VirtualRun",
++            "Walk",
++            "WeightTraining",
++            "Wheelchair",
++            "Windsurf",
++            "Workout",
++            "Yoga",
++        ]
++    ]
++):
++    root: Literal[
+         "AlpineSki",
+         "BackcountrySki",
+         "Badminton",
+@@ -387,8 +484,24 @@ class SportType(BaseModel):
+     """
+ 
+ 
+-class StreamType(BaseModel):
+-    __root__: Literal[
++class StreamType(
++    RootModel[
++        Literal[
++            "time",
++            "distance",
++            "latlng",
++            "altitude",
++            "velocity_smooth",
++            "heartrate",
++            "cadence",
++            "watts",
++            "temp",
++            "moving",
++            "grade_smooth",
++        ]
++    ]
++):
++    root: Literal[
+         "time",
+         "distance",
+         "latlng",
+@@ -511,11 +624,11 @@ class SummaryActivity(MetaActivity):
+     Whether this activity is private
+     """
+     sport_type: Optional[SportType] = None
+-    start_date: Optional[datetime] = None
++    start_date: Optional[AwareDatetime] = None
+     """
+     The time at which the activity was started.
+     """
+-    start_date_local: Optional[datetime] = None
++    start_date_local: Optional[AwareDatetime] = None
+     """
+     The time at which the activity was started in the local timezone.
+     """
+@@ -567,7 +680,7 @@ class SummaryAthlete(MetaAthlete):
+     """
+     The athlete's country.
+     """
+-    created_at: Optional[datetime] = None
++    created_at: Optional[AwareDatetime] = None
+     """
+     The time at which the athlete was created.
+     """
+@@ -607,14 +720,14 @@ class SummaryAthlete(MetaAthlete):
+     """
+     Whether the athlete has any Summit subscription.
+     """
+-    updated_at: Optional[datetime] = None
++    updated_at: Optional[AwareDatetime] = None
+     """
+     The time at which the athlete was last updated.
+     """
+ 
+ 
+ class SummaryClub(MetaClub):
+-    activity_types: Optional[list[ActivityType]] = None
++    activity_types: Optional[Sequence[ActivityType]] = None
+     """
+     The activity types that count for a club. This takes precedence over sport_type.
+     """
+@@ -702,7 +815,7 @@ class SummaryPRSegmentEffort(BaseModel):
+     """
+     The unique identifier of the activity related to the PR effort.
+     """
+-    pr_date: Optional[datetime] = None
++    pr_date: Optional[AwareDatetime] = None
+     """
+     The time at which the PR effort was started.
+     """
+@@ -733,25 +846,25 @@ class SummarySegmentEffort(BaseModel):
+     """
+     Whether this effort is the current best on the leaderboard
+     """
+-    start_date: Optional[datetime] = None
++    start_date: Optional[AwareDatetime] = None
+     """
+     The time at which the effort was started.
+     """
+-    start_date_local: Optional[datetime] = None
++    start_date_local: Optional[AwareDatetime] = None
+     """
+     The time at which the effort was started in the local timezone.
+     """
+ 
+ 
+ class TemperatureStream(BaseStream):
+-    data: Optional[list[int]] = None
++    data: Optional[Sequence[int]] = None
+     """
+     The sequence of temperature values for this stream, in celsius degrees
+     """
+ 
+ 
+ class TimeStream(BaseStream):
+-    data: Optional[list[int]] = None
++    data: Optional[Sequence[int]] = None
+     """
+     The sequence of time values for this stream, in seconds
+     """
+@@ -817,7 +930,7 @@ class Upload(BaseModel):
+ 
+ 
+ class Waypoint(BaseModel):
+-    categories: Optional[list[str]] = Field(None, min_items=0)
++    categories: Optional[Sequence[str]] = Field(None, min_length=0)
+     """
+     Categories that the waypoint belongs to
+     """
+@@ -854,8 +967,8 @@ class ZoneRange(BaseModel):
+     """
+ 
+ 
+-class ZoneRanges(BaseModel):
+-    __root__: list[ZoneRange]
++class ZoneRanges(RootModel[Sequence[ZoneRange]]):
++    root: Sequence[ZoneRange]
+ 
+ 
+ class ActivityStats(BaseModel):
+@@ -910,7 +1023,7 @@ class ActivityStats(BaseModel):
+ 
+ 
+ class AltitudeStream(BaseStream):
+-    data: Optional[list[float]] = None
++    data: Optional[Sequence[float]] = None
+     """
+     The sequence of altitude values for this stream, in meters
+     """
+@@ -955,7 +1068,7 @@ class ClubAnnouncement(BaseModel):
+     """
+     The unique identifier of the club this announcements was made in.
+     """
+-    created_at: Optional[datetime] = None
++    created_at: Optional[AwareDatetime] = None
+     """
+     The time at which this announcement was created.
+     """
+@@ -975,7 +1088,7 @@ class Comment(BaseModel):
+     The identifier of the activity this comment is related to
+     """
+     athlete: Optional[SummaryAthlete] = None
+-    created_at: Optional[datetime] = None
++    created_at: Optional[AwareDatetime] = None
+     """
+     The time at which this comment was created.
+     """
+@@ -990,11 +1103,11 @@ class Comment(BaseModel):
+ 
+ 
+ class DetailedAthlete(SummaryAthlete):
+-    bikes: Optional[list[SummaryGear]] = None
++    bikes: Optional[Sequence[SummaryGear]] = None
+     """
+     The athlete's bikes.
+     """
+-    clubs: Optional[list[SummaryClub]] = None
++    clubs: Optional[Sequence[SummaryClub]] = None
+     """
+     The athlete's clubs.
+     """
+@@ -1014,7 +1127,7 @@ class DetailedAthlete(SummaryAthlete):
+     """
+     The athlete's preferred unit system.
+     """
+-    shoes: Optional[list[SummaryGear]] = None
++    shoes: Optional[Sequence[SummaryGear]] = None
+     """
+     The athlete's shoes.
+     """
+@@ -1157,11 +1270,11 @@ class Lap(BaseModel):
+     The athlete's pace zone during this lap
+     """
+     split: Optional[int] = None
+-    start_date: Optional[datetime] = None
++    start_date: Optional[AwareDatetime] = None
+     """
+     The time at which the lap was started.
+     """
+-    start_date_local: Optional[datetime] = None
++    start_date_local: Optional[AwareDatetime] = None
+     """
+     The time at which the lap was started in the local timezone.
+     """
+@@ -1270,7 +1383,7 @@ class DetailedSegment(SummarySegment):
+     """
+     The number of unique athletes who have an effort for this segment
+     """
+-    created_at: Optional[datetime] = None
++    created_at: Optional[AwareDatetime] = None
+     """
+     The time at which the segment was created.
+     """
+@@ -1291,7 +1404,7 @@ class DetailedSegment(SummarySegment):
+     """
+     The segment's total elevation gain.
+     """
+-    updated_at: Optional[datetime] = None
++    updated_at: Optional[AwareDatetime] = None
+     """
+     The time at which the segment was last updated.
+     """
+@@ -1352,7 +1465,7 @@ class DetailedSegmentEffort(SummarySegmentEffort):
+ 
+ 
+ class ExplorerResponse(BaseModel):
+-    segments: Optional[list[ExplorerSegment]] = None
++    segments: Optional[Sequence[ExplorerSegment]] = None
+     """
+     The set of segments matching an explorer request
+     """
+@@ -1360,7 +1473,7 @@ class ExplorerResponse(BaseModel):
+ 
+ class Route(BaseModel):
+     athlete: Optional[SummaryAthlete] = None
+-    created_at: Optional[datetime] = None
++    created_at: Optional[AwareDatetime] = None
+     """
+     The time at which the route was created
+     """
+@@ -1397,7 +1510,7 @@ class Route(BaseModel):
+     """
+     Whether this route is private
+     """
+-    segments: Optional[list[SummarySegment]] = None
++    segments: Optional[Sequence[SummarySegment]] = None
+     """
+     The segments traversed by this route
+     """
+@@ -1417,22 +1530,22 @@ class Route(BaseModel):
+     """
+     This route's type (1 for ride, 2 for runs)
+     """
+-    updated_at: Optional[datetime] = None
++    updated_at: Optional[AwareDatetime] = None
+     """
+     The time at which the route was last updated
+     """
+-    waypoints: Optional[list[Waypoint]] = Field(None, min_items=0)
++    waypoints: Optional[Sequence[Waypoint]] = Field(None, min_length=0)
+     """
+     The custom waypoints along this route
+     """
+ 
+ 
+-class TimedZoneDistribution(BaseModel):
++class TimedZoneDistribution(RootModel[Sequence[TimedZoneRange]]):
+     """
+     Stores the exclusive ranges representing zones and the time spent in each.
+     """
+ 
+-    __root__: list[TimedZoneRange]
++    root: Sequence[TimedZoneRange]
+     """
+     Stores the exclusive ranges representing zones and the time spent in each.
+     """
+@@ -1449,7 +1562,7 @@ class ActivityZone(BaseModel):
+ 
+ 
+ class DetailedActivity(SummaryActivity):
+-    best_efforts: Optional[list[DetailedSegmentEffort]] = None
++    best_efforts: Optional[Sequence[DetailedSegmentEffort]] = None
+     calories: Optional[float] = None
+     """
+     The number of kilocalories consumed during this activity
+@@ -1467,14 +1580,14 @@ class DetailedActivity(SummaryActivity):
+     The token used to embed a Strava activity
+     """
+     gear: Optional[SummaryGear] = None
+-    laps: Optional[list[Lap]] = None
++    laps: Optional[Sequence[Lap]] = None
+     photos: Optional[PhotosSummary] = None
+-    segment_efforts: Optional[list[DetailedSegmentEffort]] = None
+-    splits_metric: Optional[list[Split]] = None
++    segment_efforts: Optional[Sequence[DetailedSegmentEffort]] = None
++    splits_metric: Optional[Sequence[Split]] = None
+     """
+     The splits of this activity in metric units (for runs)
+     """
+-    splits_standard: Optional[list[Split]] = None
++    splits_standard: Optional[Sequence[Split]] = None
+     """
+     The splits of this activity in imperial units (for runs)
+     """
+diff --git a/src/stravalib/tests/integration/test_client.py b/src/stravalib/tests/integration/test_client.py
+index 3be0009..a0db8f9 100644
+--- a/src/stravalib/tests/integration/test_client.py
++++ b/src/stravalib/tests/integration/test_client.py
+@@ -7,12 +7,20 @@ import pytest
+ import responses
+ from responses import matchers
+ 
+-import stravalib.unithelper as uh
+ from stravalib.client import ActivityUploader
+ from stravalib.exc import AccessUnauthorized, ActivityPhotoUploadFailed
+-from stravalib.model import Athlete
++from stravalib.model import DetailedAthlete, SummaryAthlete, SummarySegment
++from stravalib.strava_model import SummaryActivity
+ from stravalib.tests import RESOURCES_DIR
+-from stravalib.unithelper import UnitConverter, meters, miles
++from stravalib.unit_helper import miles
++
++
++@pytest.fixture
++def zone_response():
++    file_path = os.path.join(RESOURCES_DIR, "example_zone_response.json")
++    with open(file_path, "r") as file:
++        data = json.load(file)
++    return data
+ 
+ 
+ @pytest.fixture
+@@ -44,6 +52,7 @@ def default_request_params():
+ def test_get_athlete(mock_strava_api, client):
+     mock_strava_api.get("/athlete", response_update={"id": 42})
+     athlete = client.get_athlete()
++    assert isinstance(athlete, DetailedAthlete)
+     assert athlete.id == 42
+     assert athlete.measurement_preference == "feet"
+ 
+@@ -148,7 +157,7 @@ def test_get_activity_laps(mock_strava_api, client):
+     )
+     laps = list(client.get_activity_laps(42))
+     assert len(laps) == 2
+-    assert laps[0].distance == meters(1000)
++    assert laps[0].distance == 1000
+ 
+ 
+ def test_get_club_activities(mock_strava_api, client):
+@@ -157,18 +166,40 @@ def test_get_club_activities(mock_strava_api, client):
+         response_update={"distance": 1000},
+         n_results=2,
+     )
++
+     activities = list(client.get_club_activities(42))
+     assert len(activities) == 2
+-    assert activities[0].distance == meters(1000)
++    assert activities[0].distance == 1000
+ 
+ 
+-def test_get_activity_zones(mock_strava_api, client):
+-    # Unfortunately, there is no example response for this endpoint in swagger.json
+-    with open(
+-        os.path.join(RESOURCES_DIR, "example_zone_response.json"), "r"
+-    ) as zone_response_fp:
+-        zone_response = json.load(zone_response_fp)
++def test_get_club_admins(mock_strava_api, client):
++    mock_strava_api.get(
++        "/clubs/{id}/admins",
++        response_update={"firstname": "Jane"},
++        n_results=2,
++    )
++
++    admins = list(client.get_club_admins(42))
++    assert isinstance(admins[0], SummaryAthlete)
++    assert len(admins) == 2
++    assert admins[0].firstname == "Jane"
++
++
++def test_get_activity_zones(mock_strava_api, client, zone_response):
++    """Returns an activities associated zone (related to heart rate and power)
++
++    Notes
++    -----
++    There is no example response for this endpoint in swagger.json so
++    we created a sample json file with the return that we are currently
++    seeing. Thus this method could break at any time if Strava changes
++    the response output.
++
++    """
++
+     mock_strava_api.get("/activities/{id}/zones", json=zone_response)
++
++    # https://developers.strava.com/docs/reference/#api-models-integer
+     activity_zones = client.get_activity_zones(42)
+     assert len(activity_zones) == 2
+     assert activity_zones[0].type == "heartrate"
+@@ -688,10 +719,11 @@ def test_get_starred_segments(
+         n_results=n_raw_results,
+     )
+     kwargs = {"limit": limit} if limit is not None else {}
+-    activity_list = list(client.get_starred_segments(**kwargs))
+-    assert len(activity_list) == expected_n_segments
++    segment_list = list(client.get_starred_segments(**kwargs))
++    assert len(segment_list) == expected_n_segments
+     if expected_n_segments > 0:
+-        assert activity_list[0].name == "test_segment"
++        assert isinstance(segment_list[0], SummarySegment)
++        assert segment_list[0].name == "test_segment"
+ 
+ 
+ def test_get_club(mock_strava_api, client):
+@@ -701,14 +733,19 @@ def test_get_club(mock_strava_api, client):
+ 
+ 
+ @pytest.mark.parametrize("n_clubs", (0, 2))
+-def test_get_athlete_clubs(mock_strava_api, client, n_clubs):
++def test_get_athlete_clubs_iterator(mock_strava_api, client, n_clubs):
++    """Test that athlete clubs returns the correct
++    number of clubs"""
++
++    # Create a mock instance with the club name update to my club
+     mock_strava_api.get(
+-        "/athlete/clubs", response_update={"name": "foo"}, n_results=n_clubs
++        "/athlete/clubs", response_update={"name": "myclub"}, n_results=n_clubs
+     )
+-    clubs = client.get_athlete_clubs()
++    # Convert iterator to list
++    clubs = list(client.get_athlete_clubs())
+     assert len(clubs) == n_clubs
+     if clubs:
+-        assert clubs[0].name == "foo"
++        assert clubs[0].name == "myclub"
+ 
+ 
+ @pytest.mark.parametrize("n_members", (0, 2))
+@@ -766,9 +803,7 @@ def test_get_athlete_stats(
+             client.get_athlete_stats(athlete_id)
+     else:
+         stats = client.get_athlete_stats(athlete_id)
+-        assert stats.biggest_ride_distance == UnitConverter("meters")(
+-            expected_biggest_ride_distance
+-        )
++        assert stats.biggest_ride_distance == expected_biggest_ride_distance
+ 
+ 
+ def test_get_gear(mock_strava_api, client):
+@@ -799,6 +834,7 @@ def test_get_activities(
+     activity_list = list(client.get_activities(**kwargs))
+     assert len(activity_list) == expected_n_activities
+     if expected_n_activities > 0:
++        assert isinstance(activity_list[0], SummaryActivity)
+         assert activity_list[0].name == "test_activity"
+ 
+ 
+@@ -809,10 +845,10 @@ def test_get_activities_quantity_addition(mock_strava_api, client):
+         n_results=2,
+     )
+     act_list = list(client.get_activities(limit=2))
+-    total_d = uh.meters(0)
++    total_d = 0
+     total_d += act_list[0].distance
+     total_d += act_list[1].distance
+-    assert total_d == uh.meters(2000.0)
++    assert total_d == 2000.0
+ 
+ 
+ def test_get_segment(mock_strava_api, client):
+@@ -975,30 +1011,6 @@ def test_get_activity_kudos(mock_strava_api, client):
+         n_results=2,
+     )
+     kudoer_list = list(client.get_activity_kudos(42))
++    assert isinstance(kudoer_list[0], SummaryAthlete)
+     assert len(kudoer_list) == 2
+     assert kudoer_list[0].lastname == "Doe"
+-
+-
+-class TestIsAuthenticatedAthlete:
+-    def test_default(self, mock_strava_api, client):
+-        mock_strava_api.get("/athlete", response_update={"id": 42})
+-        athlete = client.get_athlete()
+-        assert athlete.is_authenticated_athlete()
+-
+-    def test_caching(self):
+-        athlete = Athlete(is_authenticated=True)
+-        assert athlete.is_authenticated_athlete()
+-
+-    @pytest.mark.parametrize(
+-        "match_id,expected_result", ((False, False), (True, True))
+-    )
+-    def test_from_summary(
+-        self, mock_strava_api, client, match_id, expected_result
+-    ):
+-        mock_strava_api.get(
+-            "/clubs/{id}/members",
+-            response_update={"id": 42 if match_id else 21},
+-        )
+-        mock_strava_api.get("/athlete", response_update={"id": 42})
+-        club_members = list(client.get_club_members(99))
+-        assert club_members[0].is_authenticated_athlete() == expected_result
+diff --git a/src/stravalib/tests/unit/test_field_conversions.py b/src/stravalib/tests/unit/test_field_conversions.py
+deleted file mode 100644
+index 5171571..0000000
+--- a/src/stravalib/tests/unit/test_field_conversions.py
++++ /dev/null
+@@ -1,42 +0,0 @@
+-import pytest
+-import pytz
+-
+-from stravalib.field_conversions import (
+-    enum_value,
+-    enum_values,
+-    optional_input,
+-    timezone,
+-)
+-from stravalib.strava_model import ActivityType, SportType
+-
+-
+-def test_optional_input():
+-    @optional_input
+-    def foo(x):
+-        return x + 1
+-
+-    assert foo(1) == 2
+-    assert foo(None) is None
+-
+-
+-def test_enum_value():
+-    assert enum_value(ActivityType(__root__="Run")) == "Run"
+-
+-
+-def test_enum_values():
+-    assert enum_values(
+-        [ActivityType(__root__="Run"), SportType(__root__="Ride")]
+-    ) == ["Run", "Ride"]
+-
+-
+-@pytest.mark.parametrize(
+-    "arg,expected_value",
+-    (
+-        ("Factory", None),
+-        ("(GMT+00:00) Factory", None),
+-        ("Europe/Amsterdam", pytz.timezone("Europe/Amsterdam")),
+-        ("(GMT+01:00) Europe/Amsterdam", pytz.timezone("Europe/Amsterdam")),
+-    ),
+-)
+-def test_timezone(arg, expected_value):
+-    assert timezone(arg) == expected_value
+diff --git a/src/stravalib/tests/unit/test_model.py b/src/stravalib/tests/unit/test_model.py
+index 9b0f0bb..5509f94 100644
+--- a/src/stravalib/tests/unit/test_model.py
++++ b/src/stravalib/tests/unit/test_model.py
+@@ -1,91 +1,69 @@
+-from datetime import datetime, timedelta
+-from typing import List, Optional
++from datetime import datetime, timedelta, timezone
+ 
+-import pint
+ import pytest
+ import pytz
+-from pydantic import BaseModel
+ 
++import stravalib.unit_helper as uh
+ from stravalib import model
+-from stravalib import unithelper as uh
+ from stravalib.model import (
+-    Activity,
+-    ActivityLap,
+     ActivityPhoto,
+     ActivityTotals,
+-    BackwardCompatibilityMixin,
++    AthletePrEffort,
++    AthleteSegmentStats,
++    AthleteStats,
+     BaseEffort,
+-    BoundClientEntity,
+-    Club,
++    DetailedActivity,
++    Distance,
++    Duration,
++    Lap,
+     LatLon,
++    RelaxedActivityType,
++    RelaxedSportType,
++    Route,
+     Segment,
++    SegmentEffort,
+     SegmentExplorerResult,
++    Split,
+     SubscriptionCallback,
++    SummarySegmentEffort,
++    Timezone,
++    Velocity,
++    naive_datetime,
+ )
+-from stravalib.strava_model import LatLng
+ from stravalib.tests import TestBase
+-from stravalib.unithelper import Quantity, UnitConverter
+-
+-
+-@pytest.mark.parametrize("model_class,attr,value", ((Club, "name", "foo"),))
+-class TestLegacyModelSerialization:
+-
+-    def test_legacy_deserialize(self, model_class, attr, value):
+-        with pytest.warns(DeprecationWarning):
+-            model_obj = model_class.deserialize({attr: value})
+-            assert getattr(model_obj, attr) == value
+-
+-    def test_legacy_from_dict(self, model_class, attr, value):
+-        with pytest.warns(DeprecationWarning):
+-            model_obj = model_class()
+-            model_obj.from_dict({attr: value})
+-            assert getattr(model_obj, attr) == value
+-
+-    def test_legacy_to_dict(self, model_class, attr, value):
+-        with pytest.warns(DeprecationWarning):
+-            model_obj = model_class(**{attr: value})
+-            model_dict_legacy = model_obj.to_dict()
+-            model_dict_modern = model_obj.dict()
+-            assert model_dict_legacy == model_dict_modern
+ 
+ 
+ @pytest.mark.parametrize(
+     "model_class,raw,expected_value",
+     (
+-        (Club, {"name": "foo"}, "foo"),
+-        (ActivityTotals, {"elapsed_time": 100}, timedelta(seconds=100)),
+         (
+-            ActivityTotals,
+-            {"distance": 100.0},
+-            UnitConverter("meters")(100.0),
++            DetailedActivity,
++            {"start_latlng": []},
++            None,
+         ),
+         (
+-            Activity,
+-            {"timezone": "Europe/Amsterdam"},
+-            pytz.timezone("Europe/Amsterdam"),
++            DetailedActivity,
++            {"end_latlng": []},
++            None,
+         ),
+-        (Club, {"activity_types": ["Run", "Ride"]}, ["Run", "Ride"]),
+-        (Activity, {"sport_type": "Run"}, "Run"),
+-    ),
+-)
+-def test_backward_compatibility_mixin_field_conversions(
+-    model_class, raw, expected_value
+-):
+-    obj = model_class.parse_obj(raw)
+-    assert getattr(obj, list(raw.keys())[0]) == expected_value
+-
+-
+-@pytest.mark.parametrize(
+-    "model_class,raw,expected_value",
+-    (
+-        (Activity, {"start_latlng": "5.4,4.3"}, LatLon(__root__=[5.4, 4.3])),
+-        (Activity, {"start_latlng": []}, None),
++        (
++            DetailedActivity,
++            {"end_latlng": "5.4,4.3"},
++            LatLon([5.4, 4.3]),
++        ),
++        (
++            DetailedActivity,
++            {"start_latlng": "5.4,4.3"},
++            LatLon([5.4, 4.3]),
++        ),
++        (DetailedActivity, {"start_latlng": []}, None),
+         (Segment, {"start_latlng": []}, None),
+         (SegmentExplorerResult, {"start_latlng": []}, None),
+         (ActivityPhoto, {"location": []}, None),
+-        (Activity, {"timezone": "foobar"}, None),
++        # TODO re-add this Activity test when custom types are implemented
++        # (DetailedActivity, {"timezone": "foobar"}, None),
+         (
+-            Activity,
++            DetailedActivity,
+             {"start_date_local": "2023-01-17T11:06:07Z"},
+             datetime(2023, 1, 17, 11, 6, 7),
+         ),
+@@ -95,160 +73,213 @@ def test_backward_compatibility_mixin_field_conversions(
+             datetime(2023, 1, 17, 11, 6, 7),
+         ),
+         (
+-            ActivityLap,
++            Lap,
++            {"start_date_local": "2023-01-17T11:06:07Z"},
++            datetime(2023, 1, 17, 11, 6, 7),
++        ),
++        (
++            SummarySegmentEffort,
++            {"start_date_local": "2023-01-17T11:06:07Z"},
++            datetime(2023, 1, 17, 11, 6, 7),
++        ),
++        (
++            SegmentEffort,
+             {"start_date_local": "2023-01-17T11:06:07Z"},
+             datetime(2023, 1, 17, 11, 6, 7),
+         ),
+     ),
+ )
+ def test_deserialization_edge_cases(model_class, raw, expected_value):
+-    obj = model_class.parse_obj(raw)
++    obj = model_class.model_validate(raw)
+     assert getattr(obj, list(raw.keys())[0]) == expected_value
+ 
+ 
++@pytest.mark.parametrize(
++    "model_class,raw,parsed_attr,expected_parsed_attr_value",
++    (
++        (SummarySegmentEffort, {"pr_activity_id": 42}, "activity_id", 42),
++        (SummarySegmentEffort, {"activity_id": 42}, "activity_id", 42),
++        (
++            SummarySegmentEffort,
++            {"pr_elapsed_time": 42},
++            "elapsed_time",
++            42,
++        ),
++        (
++            SummarySegmentEffort,
++            {"elapsed_time": 42},
++            "elapsed_time",
++            42,
++        ),
++        (AthletePrEffort, {"pr_activity_id": 42}, "activity_id", 42),
++        (AthletePrEffort, {"activity_id": 42}, "activity_id", 42),
++        (
++            AthletePrEffort,
++            {"pr_elapsed_time": 42},
++            "elapsed_time",
++            42,
++        ),
++        (
++            AthletePrEffort,
++            {"elapsed_time": 42},
++            "elapsed_time",
++            42,
++        ),
++    ),
++)
++def test_strava_api_field_name_inconsistencies(
++    model_class, raw, parsed_attr, expected_parsed_attr_value
++):
++    obj = model_class.model_validate(raw)
++    assert getattr(obj, parsed_attr) == expected_parsed_attr_value
++
++
+ def test_subscription_callback_field_names():
+     sub_callback_raw = {
+         "hub.mode": "subscribe",
+         "hub.verify_token": "STRAVA",
+         "hub.challenge": "15f7d1a91c1f40f8a748fd134752feb3",
+     }
+-    sub_callback = SubscriptionCallback.parse_obj(sub_callback_raw)
++    sub_callback = SubscriptionCallback.model_validate(sub_callback_raw)
+     assert sub_callback.hub_mode == "subscribe"
+     assert sub_callback.hub_verify_token == "STRAVA"
+ 
+ 
+-# Below are some toy classes to test type extensions and attribute lookup:
+-class A(BaseModel, BackwardCompatibilityMixin):
+-    x: Optional[int] = None
+-
+-
+-class ConversionA(A, BackwardCompatibilityMixin):
+-    _field_conversions = {"x": uh.meters}
+-
+-
+-class BoundA(A, BoundClientEntity):
+-    pass
+-
+-
+-class B(BaseModel, BackwardCompatibilityMixin):
+-    a: Optional[A] = None
+-    bound_a: Optional[BoundA] = None
+-
+-
+-class BoundB(B, BoundClientEntity):
+-    pass
+-
+-
+-class C(BaseModel, BackwardCompatibilityMixin):
+-    a: Optional[List[A]] = None
+-    bound_a: Optional[List[BoundA]] = None
+-
+-
+-class BoundC(C, BoundClientEntity):
+-    pass
+-
+-
+-class D(BaseModel, BackwardCompatibilityMixin):
+-    a: Optional[LatLng] = None
+-
+-
+-class ExtA(A):
+-    def foo(self):
+-        return self.x
++# TODO: do we want to continue to support type?
++@pytest.mark.parametrize(
++    "klass,attr,given_type,expected_type",
++    (
++        (DetailedActivity, "sport_type", "Run", "Run"),
++        (DetailedActivity, "sport_type", "FooBar", "Workout"),
++        (DetailedActivity, "type", "Run", "Run"),
++        (DetailedActivity, "type", "FooBar", "Workout"),
++        (Segment, "activity_type", "Run", "Run"),
++        (Segment, "activity_type", "FooBar", "Workout"),
++    ),
++)
++def test_relaxed_activity_type_validation(
++    klass, attr, given_type, expected_type
++):
++    obj = getattr(klass(**{attr: given_type}), attr)
++    if attr == "sport_type":
++        assert obj == RelaxedSportType(root=expected_type)
++    else:
++        assert obj == RelaxedActivityType(root=expected_type)
+ 
+ 
+-class ExtLatLng(LatLng):
+-    def foo(self):
+-        return f"[{self[0], self[1]}]"
++@pytest.mark.parametrize(
++    "model_type,attr,expected_base_type,expected_extended_type",
++    (
++        (ActivityTotals, "distance", float, Distance),
++        (ActivityTotals, "elevation_gain", float, Distance),
++        (ActivityTotals, "elapsed_time", int, Duration),
++        (ActivityTotals, "moving_time", int, Duration),
++        (AthleteStats, "biggest_ride_distance", float, Distance),
++        (AthleteStats, "biggest_climb_elevation_gain", float, Distance),
++        (Lap, "distance", float, Distance),
++        (Lap, "total_elevation_gain", float, Distance),
++        (Lap, "average_speed", float, Velocity),
++        (Lap, "max_speed", float, Velocity),
++        (Lap, "elapsed_time", int, Duration),
++        (Lap, "moving_time", int, Duration),
++        (Split, "distance", float, Distance),
++        (Split, "elevation_difference", float, Distance),
++        (Split, "average_speed", float, Velocity),
++        (Split, "average_grade_adjusted_speed", float, Velocity),
++        (Split, "elapsed_time", int, Duration),
++        (Split, "moving_time", int, Duration),
++        (SegmentExplorerResult, "elev_difference", float, Distance),
++        (SegmentExplorerResult, "distance", float, Distance),
++        (AthleteSegmentStats, "distance", float, Distance),
++        (AthleteSegmentStats, "elapsed_time", int, Duration),
++        (AthletePrEffort, "distance", float, Distance),
++        (AthletePrEffort, "pr_elapsed_time", int, Duration),
++        (Segment, "distance", float, Distance),
++        (Segment, "elevation_high", float, Distance),
++        (Segment, "elevation_low", float, Distance),
++        (Segment, "total_elevation_gain", float, Distance),
++        (BaseEffort, "distance", float, Distance),
++        (BaseEffort, "elapsed_time", int, Duration),
++        (BaseEffort, "moving_time", int, Duration),
++        (DetailedActivity, "distance", float, Distance),
++        (DetailedActivity, "timezone", str, Timezone),
++        (DetailedActivity, "total_elevation_gain", float, Distance),
++        (DetailedActivity, "average_speed", float, Velocity),
++        (DetailedActivity, "max_speed", float, Velocity),
++        (DetailedActivity, "elapsed_time", int, Duration),
++        (DetailedActivity, "moving_time", int, Duration),
++        (Route, "distance", float, Distance),
++        (Route, "elevation_gain", float, Distance),
++    ),
++)
++def test_extended_types(
++    model_type, attr, expected_base_type, expected_extended_type
++):
++    test_value = "Europe/Amsterdam" if expected_base_type == str else 42
++    obj = model_type.model_validate(dict(**{attr: test_value}))
++    assert isinstance(getattr(obj, attr), expected_base_type)
++    assert isinstance(getattr(obj, attr), expected_extended_type)
+ 
+ 
+ @pytest.mark.parametrize(
+-    "lookup_expression,expected_result,expected_bound_client",
++    "model_type,attr,extended_attr,expected_base_value,expected_extended_value",
+     (
+-        (A().x, None, False),
+-        (B().a, None, False),
+-        (A(x=1).x, 1, False),
+-        (B(a=A(x=1)).a, A(x=1), False),
+-        (C(a=[A(x=1), A(x=2)]).a[1], A(x=2), False),
+-        (ConversionA(x=1).x, pint.Quantity("1 meter"), False),
+-        (BoundA(x=1).x, 1, False),
+-        (B(bound_a=BoundA(x=1)).bound_a, BoundA(x=1), None),
+-        (
+-            B(bound_a=BoundA(x=1, bound_client=1)).bound_a,
+-            BoundA(x=1, bound_client=1),
+-            True,
+-        ),
+-        (BoundB(a=A(x=1)).a, A(x=1), False),
+-        (BoundB(a=A(x=1), bound_client=1).a, A(x=1), False),
+-        (BoundB(bound_a=BoundA(x=1)).bound_a, BoundA(x=1), None),
+         (
+-            BoundB(bound_a=BoundA(x=1), bound_client=1).bound_a,
+-            BoundA(x=1, bound_client=1),
+-            True,
+-        ),
+-        (C(bound_a=[BoundA(x=1), BoundA(x=2)]).bound_a[1], BoundA(x=2), None),
+-        (
+-            C(
+-                bound_a=[
+-                    BoundA(x=1, bound_client=1),
+-                    BoundA(x=2, bound_client=1),
+-                ]
+-            ).bound_a[1],
+-            BoundA(x=2, bound_client=1),
+-            True,
+-        ),
+-        (BoundC(a=[A(x=1), A(x=2)]).a[1], A(x=2), False),
+-        (BoundC(a=[A(x=1), A(x=2)], bound_client=1).a[1], A(x=2), False),
+-        (
+-            BoundC(bound_a=[BoundA(x=1), BoundA(x=2)]).bound_a[1],
+-            BoundA(x=2),
+-            None,
+-        ),
+-        (
+-            BoundC(bound_a=[BoundA(x=1), BoundA(x=2)], bound_client=1).bound_a[
+-                1
+-            ],
+-            BoundA(x=2, bound_client=1),
+-            True,
++            ActivityTotals,
++            "elapsed_time",
++            "timedelta",
++            42,
++            timedelta(seconds=42),
+         ),
++        (ActivityTotals, "distance", "quantity", 42, uh.meters(42)),
++        (Lap, "average_speed", "quantity", 42, uh.meters_per_second(42)),
+     ),
+ )
+-def test_backward_compatible_attribute_lookup(
+-    lookup_expression, expected_result, expected_bound_client
++def test_extended_types_values(
++    model_type,
++    attr,
++    extended_attr,
++    expected_base_value,
++    expected_extended_value,
+ ):
+-    assert lookup_expression == expected_result
+-
+-    if expected_bound_client:
+-        assert lookup_expression.bound_client is not None
+-    elif expected_bound_client is None:
+-        assert lookup_expression.bound_client is None
+-    elif not expected_bound_client:
+-        assert not hasattr(lookup_expression, "bound_client")
++    obj = model_type.model_validate(dict(**{attr: 42}))
++    base_attr = getattr(obj, attr)
++    extended_attr = getattr(base_attr, extended_attr)()
++    assert base_attr == expected_base_value
++    assert extended_attr == expected_extended_value
+ 
+ 
+ @pytest.mark.parametrize(
+-    "klass,attr,given_type,expected_type",
++    "arg,expected_value",
+     (
+-        (Activity, "type", "Run", "Run"),
+-        (Activity, "sport_type", "Run", "Run"),
+-        (Activity, "type", "FooBar", "Workout"),
+-        (Activity, "sport_type", "FooBar", "Workout"),
+-        (Segment, "activity_type", "Run", "Run"),
+-        (Segment, "activity_type", "FooBar", "Workout"),
++        ("Factory", None),
++        ("(GMT+00:00) Factory", None),
++        ("Europe/Amsterdam", pytz.timezone("Europe/Amsterdam")),
++        ("(GMT+01:00) Europe/Amsterdam", pytz.timezone("Europe/Amsterdam")),
+     ),
+ )
+-def test_relaxed_activity_type_validation(
+-    klass, attr, given_type, expected_type
+-):
+-    assert getattr(klass(**{attr: given_type}), attr) == expected_type
++def test_timezone(arg, expected_value):
++    tz = Timezone(arg)
++    assert tz.timezone() == expected_value
+ 
+ 
+ class ModelTest(TestBase):
+     def setUp(self):
+         super(ModelTest, self).setUp()
+ 
+-    def test_entity_collections(self):
+-        a = model.Athlete()
++    def test_entity_collections(self) -> None:
++        """Test that club information parsed from the API in a dict format can
++        be correctly ingested into the Athlete model.
++
++        Notes
++        -----
++        In Pydantic 2.x we use `model_validate` instead of `parse_object`.
++        Model_Validate always returns a new model. In this test we
++        instantiate a new instance a when calling `model_validate` aligning with
++        Pydantic's immutability approach.
++
++        """
++
+         d = {
+             "clubs": [
+                 {"resource_state": 2, "id": 7, "name": "Team Roaring Mouse"},
+@@ -260,73 +291,11 @@ class ModelTest(TestBase):
+                 },
+             ]
+         }
+-        a.from_dict(d)
++        a = model.DetailedAthlete.model_validate(d)
+ 
+         self.assertEqual(3, len(a.clubs))
+         self.assertEqual("Team Roaring Mouse", a.clubs[0].name)
+ 
+-    def test_speed_units(self):
+-        a = model.Activity()
+-
+-        a.max_speed = 1000  # m/s
+-        a.average_speed = 1000  # m/s
+-        self.assertAlmostEqual(3600.0, float(uh.kph(a.max_speed)))
+-        self.assertAlmostEqual(3600.0, float(uh.kph(a.average_speed)))
+-
+-        a.max_speed = uh.mph(1.0)
+-        # print repr(a.max_speed)
+-
+-        self.assertAlmostEqual(1.61, float(uh.kph(a.max_speed)), places=2)
+-
+-    def test_time_intervals(self):
+-        segment = model.Segment()
+-        # s.pr_time = XXXX
+-
+-        split = model.Split()
+-        split.moving_time = 3.1
+-        split.elapsed_time = 5.73
+-
+-    def test_distance_units(self):
+-        # Gear
+-        g = model.Gear()
+-        g.distance = 1000
+-        self.assertEqual(1.0, float(uh.kilometers(g.distance)))
+-
+-        # Metric Split
+-        split = model.Split()
+-        split.distance = 1000  # meters
+-        split.elevation_difference = 1000  # meters
+-        self.assertIsInstance(split.distance, Quantity)
+-        self.assertIsInstance(split.elevation_difference, Quantity)
+-        self.assertEqual(1.0, float(uh.kilometers(split.distance)))
+-        self.assertEqual(1.0, float(uh.kilometers(split.elevation_difference)))
+-        split = None
+-
+-        # Segment
+-        s = model.Segment()
+-        s.distance = 1000
+-        s.elevation_high = 2000
+-        s.elevation_low = 1000
+-        self.assertIsInstance(s.distance, Quantity)
+-        self.assertIsInstance(s.elevation_high, Quantity)
+-        self.assertIsInstance(s.elevation_low, Quantity)
+-        self.assertEqual(1.0, float(uh.kilometers(s.distance)))
+-        self.assertEqual(2.0, float(uh.kilometers(s.elevation_high)))
+-        self.assertEqual(1.0, float(uh.kilometers(s.elevation_low)))
+-
+-        # Activity
+-        a = model.Activity()
+-        a.distance = 1000  # m
+-        a.total_elevation_gain = 1000  # m
+-        self.assertIsInstance(a.distance, Quantity)
+-        self.assertIsInstance(a.total_elevation_gain, Quantity)
+-        self.assertEqual(1.0, float(uh.kilometers(a.distance)))
+-        self.assertEqual(1.0, float(uh.kilometers(a.total_elevation_gain)))
+-
+-    def test_weight_units(self):
+-        """ """
+-        # PowerActivityZone
+-
+     def test_subscription_deser(self):
+         d = {
+             "id": 1,
+@@ -336,7 +305,7 @@ class ModelTest(TestBase):
+             "created_at": "2015-04-29T18:11:09.400558047-07:00",
+             "updated_at": "2015-04-29T18:11:09.400558047-07:00",
+         }
+-        sub = model.Subscription.parse_obj(d)
++        sub = model.Subscription.model_validate(d)
+         self.assertEqual(d["id"], sub.id)
+ 
+     def test_subscription_update_deser(self):
+@@ -348,8 +317,61 @@ class ModelTest(TestBase):
+             "aspect_type": "create",
+             "event_time": 1297286541,
+         }
+-        subupd = model.SubscriptionUpdate.deserialize(d)
++        subupd = model.SubscriptionUpdate.model_validate(d)
+         self.assertEqual(
+             "2011-02-09 21:22:21",
+             subupd.event_time.strftime("%Y-%m-%d %H:%M:%S"),
+         )
++
++
++# Test cases for the naive_datetime function
++@pytest.mark.parametrize(
++    "input_value, expected_output, exception",
++    [
++        (0, datetime(1970, 1, 1), None),
++        ("2024-04-28T12:00:00Z", datetime(2024, 4, 28, 12, 0), None),
++        (
++            int(datetime(2022, 4, 28, 12, 0, tzinfo=timezone.utc).timestamp()),
++            datetime(2022, 4, 28, 12, 0),
++            None,
++        ),
++        (
++            str(
++                int(
++                    datetime(
++                        2022, 4, 28, 12, 0, tzinfo=timezone.utc
++                    ).timestamp()
++                )
++            ),
++            datetime(2022, 4, 28, 12, 0),
++            None,
++        ),
++        (
++            datetime(2024, 4, 28, 12, 0, tzinfo=timezone.utc),
++            datetime(2024, 4, 28, 12, 0),
++            None,
++        ),
++        (
++            "April 28, 2024 12:00 PM UTC",
++            datetime(2024, 4, 28, 12, 0),
++            None,
++        ),
++        ("Foo", None, ValueError),
++        ({"foo": 42}, None, ValueError),
++        (None, None, None),
++    ],
++)
++def test_naive_datetime(input_value, expected_output, exception):
++    """Make sure our datetime parses properly reformats dates
++    in various formats. This test is important given the pydantic
++    `parse_datetime` method was removed in 2.x
++    # https://docs.pydantic.dev/1.10/usage/types/#datetime-types
++    Values
++    1. date time as a formatted string
++    2. datetime as a UNIX or POSIX format
++    """
++    if exception:
++        with pytest.raises(exception):
++            naive_datetime(input_value)
++    else:
++        assert naive_datetime(input_value) == expected_output
+diff --git a/src/stravalib/tests/unit/test_unithelper.py b/src/stravalib/tests/unit/test_unithelper.py
+index 0fc1339..ae5a926 100644
+--- a/src/stravalib/tests/unit/test_unithelper.py
++++ b/src/stravalib/tests/unit/test_unithelper.py
+@@ -1,77 +1,25 @@
+-from dataclasses import dataclass
+-
+-import pint
+ import pytest
+-from pint import Unit
+-
+-from stravalib import unithelper as uh
+-from stravalib.unithelper import UnitsQuantity
+-
+-
+-@dataclass
+-class UnitsLikeQuantity(UnitsQuantity):
+-    num: float
+-    unit: str
+ 
++from stravalib import unit_helper as uh
++from stravalib.unit_helper import _Quantity
+ 
+-@pytest.mark.parametrize(
+-    "from_unit,to_unit,expected_magnitude,expected_unit",
+-    (
+-        (None, "meter", 1, "meter"),
+-        ("meter", "meter", 1, "meter"),
+-        ("km", "meter", 1000, "meter"),
+-        ("m/s", "kph", 3.6, "kilometer / hour"),
+-    ),
+-)
+-class TestUnitConversion:
+-    def test_conversion_legacy(
+-        self, from_unit, to_unit, expected_magnitude, expected_unit
+-    ):
+-        quantity = UnitsLikeQuantity(1, from_unit) if from_unit else 1
+-        with pytest.warns(DeprecationWarning):
+-            converted_quantity = getattr(uh, to_unit)(quantity)
+-            assert converted_quantity.num == pytest.approx(
+-                expected_magnitude, 0.01
+-            )
+-            assert str(converted_quantity.unit) == expected_unit
+ 
+-    def test_conversion(
+-        self, from_unit, to_unit, expected_magnitude, expected_unit
+-    ):
+-        quantity = 1 * Unit(from_unit) if from_unit else 1
+-        converted_quantity = getattr(uh, to_unit)(quantity)
+-        assert converted_quantity.magnitude == pytest.approx(
+-            expected_magnitude, 0.01
+-        )
+-        assert str(converted_quantity.units) == expected_unit
++class DistanceQuantity(_Quantity):
++    unit = "feet"
+ 
+ 
+ @pytest.mark.parametrize(
+-    "obj,expected_result,expected_warning",
+-    (
+-        (pint.Quantity("m"), True, None),
+-        (uh.Quantity(pint.Quantity("m")), True, None),
+-        (uh.meters(1), True, None),
+-        (UnitsLikeQuantity(1, "meter"), True, DeprecationWarning),
+-        (42, False, None),
+-    ),
++    "expression,expected_unitless_result",
++    ((uh.ureg("feet") * 6, 1.83), (DistanceQuantity(6), 1.83), (2.0, 2.0)),
+ )
+-def test_is_quantity_type(obj, expected_result, expected_warning):
+-    if expected_warning:
+-        with pytest.warns(expected_warning):
+-            assert uh.is_quantity_type(obj) == expected_result
+-    else:
+-        assert uh.is_quantity_type(obj) == expected_result
+-
+-
+-def test_legacy_accessors():
+-    assert uh.meters(10).num == 10
+-    assert uh.meters(10).unit == "meter"
++def test_unit_converter(expression, expected_unitless_result):
++    converter = uh.UnitConverter("meters")
++    assert converter(expression).magnitude == pytest.approx(
++        expected_unitless_result, abs=0.01
++    )
+ 
+ 
+ def test_arithmetic_comparison_support():
+-    assert int(uh.meters(2.1)) == 2
+-    assert float(uh.meters(2.1)) == 2.1
+     assert uh.meters(2) == uh.meters(2)
+     assert uh.meters(2) > uh.meters(1)
+     assert uh.meters(2) + uh.meters(1) == uh.meters(3)
+diff --git a/src/stravalib/unit_helper.py b/src/stravalib/unit_helper.py
+new file mode 100644
+index 0000000..fb5bf23
+--- /dev/null
++++ b/src/stravalib/unit_helper.py
+@@ -0,0 +1,75 @@
++"""
++Unit Helper
++==============
++Helpers for converting Strava's units to something more practical.
++"""
++
++from typing import Any, Union
++
++import pint
++from pint.facets.plain import PlainQuantity
++
++from stravalib.unit_registry import ureg
++
++
++class _Quantity(float):
++    """
++    Subtype of float that can represent quantities by adding a unit
++    """
++
++    unit: str
++
++    def quantity(self) -> pint.Quantity:
++        return ureg.Quantity(self, self.unit)
++
++
++class UnitConverter:
++    """
++    Callable that converts quantities or unitless numbers to quantities of its unit
++    """
++
++    def __init__(self, unit: str) -> None:
++        self.unit = unit
++
++    def __call__(
++        self, q: Union[_Quantity, pint.Quantity, float]
++    ) -> PlainQuantity[Any]:
++        if isinstance(q, pint.Quantity):
++            return q.to(self.unit)
++        elif isinstance(q, _Quantity):
++            return q.quantity().to(self.unit)
++        else:
++            # unitless number: simply return a Quantity
++            return ureg.Quantity(q, self.unit)
++
++
++meter = meters = UnitConverter("m")
++second = seconds = UnitConverter("s")
++hour = hours = UnitConverter("hour")
++foot = feet = UnitConverter("ft")
++mile = miles = UnitConverter("mi")
++kilometer = kilometers = UnitConverter("km")
++
++meters_per_second = UnitConverter("m/s")
++miles_per_hour = mph = UnitConverter("mi/hour")
++kilometers_per_hour = kph = UnitConverter("km/hour")
++kilogram = kilograms = kg = kgs = UnitConverter("kg")
++pound = pounds = lb = lbs = UnitConverter("lb")
++
++
++def c2f(celsius: float) -> float:
++    """
++    Convert Celsius to Fahrenheit.
++
++    Parameters
++    ----------
++    celsius :
++        Temperature in Celsius.
++
++    Returns
++    -------
++    float
++        Temperature in Fahrenheit.
++
++    """
++    return (9.0 / 5.0) * celsius + 32
+diff --git a/src/stravalib/unithelper.py b/src/stravalib/unithelper.py
+deleted file mode 100644
+index a3d4e7e..0000000
+--- a/src/stravalib/unithelper.py
++++ /dev/null
+@@ -1,116 +0,0 @@
+-"""
+-Unit Helper
+-==============
+-Helpers for converting Strava's units to something more practical.
+-"""
+-
+-from numbers import Number
+-from typing import Any, Protocol, Union, cast, runtime_checkable
+-
+-import pint
+-
+-from stravalib.exc import warn_units_deprecated
+-from stravalib.unit_registry import Q_
+-
+-
+-@runtime_checkable
+-class UnitsQuantity(Protocol):
+-    """
+-    A type that represents the (deprecated) `units` Quantity. The `unit`
+-    attribute in the units library consists of other classes, so this
+-    representation may not be 100% backward compatible!
+-    """
+-
+-    num: float
+-    unit: str
+-
+-
+-class Quantity(Q_):  # type: ignore[valid-type, misc]
+-    """
+-    Extension of `pint.Quantity` for temporary backward compatibility with
+-    the legacy `units` package.
+-    """
+-
+-    @property
+-    def num(self) -> pint._typing.Magnitude:
+-        warn_units_deprecated()
+-        return self.magnitude
+-
+-    @property
+-    def unit(self) -> str:
+-        warn_units_deprecated()
+-        return str(self.units)
+-
+-    def __int__(self) -> int:
+-        return int(self.magnitude)
+-
+-    def __float__(self) -> float:
+-        return float(self.magnitude)
+-
+-
+-class UnitConverter:
+-    def __init__(self, unit: str) -> None:
+-        self.unit = unit
+-
+-    def __call__(
+-        self, q: Union[Number, pint.Quantity, UnitsQuantity]
+-    ) -> Quantity:
+-        if isinstance(q, Number):
+-            # provided quantity is unitless, so mimic legacy `units` behavior:
+-            converted_q = Quantity(q, self.unit)
+-        else:
+-            try:
+-                converted_q = Quantity(
+-                    cast(pint.Quantity, q).to(self.unit).magnitude, self.unit
+-                )
+-            except AttributeError:
+-                # unexpected type of quantity, maybe it's a legacy `units` Quantity
+-                warn_units_deprecated()
+-                computed_q = Quantity(q.num, q.unit)
+-                converted_q = Quantity(
+-                    computed_q.to(self.unit).magnitude, self.unit
+-                )
+-
+-        return converted_q
+-
+-
+-def is_quantity_type(obj: Any) -> bool:
+-    if isinstance(obj, (pint.Quantity, Quantity)):
+-        return True
+-    elif isinstance(obj, UnitsQuantity):  # check using Duck Typing
+-        warn_units_deprecated()
+-        return True
+-    else:
+-        return False
+-
+-
+-meter = meters = UnitConverter("m")
+-second = seconds = UnitConverter("s")
+-hour = hours = UnitConverter("hour")
+-foot = feet = UnitConverter("ft")
+-mile = miles = UnitConverter("mi")
+-kilometer = kilometers = UnitConverter("km")
+-
+-meters_per_second = UnitConverter("m/s")
+-miles_per_hour = mph = UnitConverter("mi/hour")
+-kilometers_per_hour = kph = UnitConverter("km/hour")
+-kilogram = kilograms = kg = kgs = UnitConverter("kg")
+-pound = pounds = lb = lbs = UnitConverter("lb")
+-
+-
+-def c2f(celsius: float) -> float:
+-    """
+-    Convert Celsius to Fahrenheit.
+-
+-    Parameters
+-    ----------
+-    celsius :
+-        Temperature in Celsius.
+-
+-    Returns
+-    -------
+-    float
+-        Temperature in Fahrenheit.
+-
+-    """
+-    return (9.0 / 5.0) * celsius + 32

@@ -1,0 +1,13 @@
+diff --git a/ui-gtk/UgtkSettingDialog.h b/ui-gtk/UgtkSettingDialog.h
+index 750949e..0e82638 100644
+--- a/ui-gtk/UgtkSettingDialog.h
++++ b/ui-gtk/UgtkSettingDialog.h
+@@ -75,7 +75,7 @@ struct UgtkSettingDialog
+ 	struct UgtkMediaWebsiteForm   media_website;
+ };
+ 
+-UgtkSettingDialog*  ugtk_setting_dialog_new ();
++UgtkSettingDialog*  ugtk_setting_dialog_new (const gchar* title, GtkWindow* parent);
+ void                ugtk_setting_dialog_free (UgtkSettingDialog* sdialog);
+ 
+ void  ugtk_setting_dialog_run (UgtkSettingDialog* dialog, UgtkApp* app);

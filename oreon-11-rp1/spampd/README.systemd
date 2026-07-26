@@ -1,0 +1,13 @@
+As of spampd-2.30-16, the software has been converted to systemd.
+
+The PID file is no longer created, because spampd does not background itself.
+
+To enable and start the service, use the usual:
+
+systemctl enable spampd.service
+systemctl start spampd.service
+
+The environment file, /etc/sysconfig/spampd, now has a slighly different
+format. Instead of using options, use SPAMPD_OPTIONS. For instance:
+
+SPAMPD_OPTIONS="--host=127.0.0.1:10026 --relayhost=127.0.0.1:10027"

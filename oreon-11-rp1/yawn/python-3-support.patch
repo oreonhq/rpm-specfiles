@@ -1,0 +1,60 @@
+diff -up yawn-20140318/pywbem_yawn/__init__.py.orig yawn-20140318/pywbem_yawn/__init__.py
+--- yawn-20140318/pywbem_yawn/__init__.py.orig	2019-05-13 12:21:52.984356124 +0200
++++ yawn-20140318/pywbem_yawn/__init__.py	2019-05-13 12:30:22.246973082 +0200
+@@ -478,10 +478,10 @@ class Yawn(object):
+                             namespace=namespaces[ins])
+                     interopns = namespaces[ins]
+                     nsclass = nsclasses[icls]
+-                except pywbem.CIMError, arg:
+-                    if arg[0] in [pywbem.CIM_ERR_INVALID_NAMESPACE,
+-                                  pywbem.CIM_ERR_NOT_SUPPORTED,
+-                                  pywbem.CIM_ERR_INVALID_CLASS]:
++                except pywbem.CIMError as arg:
++                    if arg.args[0] in [pywbem.CIM_ERR_INVALID_NAMESPACE,
++                                       pywbem.CIM_ERR_NOT_SUPPORTED,
++                                       pywbem.CIM_ERR_INVALID_CLASS]:
+                         continue
+                     else:
+                         raise
+diff -up yawn-20140318/pywbem_yawn/inputparse.py.orig3 yawn-20140318/pywbem_yawn/inputparse.py
+--- yawn-20140318/pywbem_yawn/inputparse.py.orig3	2013-04-26 09:45:08.000000000 +0200
++++ yawn-20140318/pywbem_yawn/inputparse.py	2019-05-13 13:23:25.449769078 +0200
+@@ -20,7 +20,7 @@ Utilities and functions for parsing user
+ """
+ 
+ import base64
+-import cPickle
++import pickle
+ import pywbem
+ import re
+ import zlib
+@@ -50,7 +50,7 @@ def decode_reference(encoded_text):
+     Decompress object path to python object.
+     """
+     try:
+-        return cPickle.loads(zlib.decompress(base64.urlsafe_b64decode(
++        return pickle.loads(zlib.decompress(base64.urlsafe_b64decode(
+             encoded_text)))
+     except Exception:
+         raise ReferenceDecodeError(path=encoded_text)
+diff -up yawn-20140318/pywbem_yawn/render.py.orig3 yawn-20140318/pywbem_yawn/render.py
+--- yawn-20140318/pywbem_yawn/render.py.orig3	2013-01-18 11:14:45.000000000 +0100
++++ yawn-20140318/pywbem_yawn/render.py	2019-05-13 13:22:57.113734091 +0200
+@@ -19,7 +19,7 @@
+ Utilities and functions for template rendering.
+ """
+ import base64
+-import cPickle
++import pickle
+ import datetime
+ from collections import defaultdict
+ import mako.lookup
+@@ -227,7 +227,7 @@ def encode_reference(obj):
+     @return compressed and encoded object.
+     """
+     return base64.urlsafe_b64encode(
+-            zlib.compress(cPickle.dumps(obj, cPickle.HIGHEST_PROTOCOL)))
++            zlib.compress(pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)))
+ 
+ def val2str(value):
+     """

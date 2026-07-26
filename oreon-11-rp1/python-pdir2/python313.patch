@@ -1,0 +1,66 @@
+diff -ru pdir2-1.1.0-orig/pdir/attr_category.py pdir2-1.1.0/pdir/attr_category.py
+--- pdir2-1.1.0-orig/pdir/attr_category.py	2023-10-21 20:31:46.103876800 +0200
++++ pdir2-1.1.0/pdir/attr_category.py	2024-10-06 11:05:29.443678557 +0200
+@@ -101,6 +101,8 @@
+     '__excepthook__': (AttrCategory.SPECIAL_ATTRIBUTE, AttrCategory.PROPERTY),
+     '__mro__': (AttrCategory.SPECIAL_ATTRIBUTE, AttrCategory.PROPERTY),
+     '__subclasses__': (AttrCategory.SPECIAL_ATTRIBUTE, AttrCategory.FUNCTION),
++    '__static_attributes__': (AttrCategory.SPECIAL_ATTRIBUTE, AttrCategory.PROPERTY),
++    '__firstlineno__': (AttrCategory.SPECIAL_ATTRIBUTE, AttrCategory.PROPERTY),
+     '__next__': (AttrCategory.ITER, AttrCategory.FUNCTION),
+     '__enter__': (AttrCategory.CONTEXT_MANAGER, AttrCategory.FUNCTION),
+     '__exit__': (AttrCategory.CONTEXT_MANAGER, AttrCategory.FUNCTION),
+Only in pdir2-1.1.0/pdir: __pycache__
+Only in pdir2-1.1.0: .pytest_cache
+Only in pdir2-1.1.0/tests: __pycache__
+diff -ru pdir2-1.1.0-orig/tests/test_filters.py pdir2-1.1.0/tests/test_filters.py
+--- pdir2-1.1.0-orig/tests/test_filters.py	2023-10-21 19:12:27.501261000 +0200
++++ pdir2-1.1.0/tests/test_filters.py	2024-10-06 11:10:19.769249461 +0200
+@@ -53,6 +53,8 @@
+             '__doc__',
+             '__module__',
+             '__weakref__',
++            '__static_attributes__',
++            '__firstlineno__',
+         ],
+     )
+ 
+@@ -115,6 +117,8 @@
+             'derived_instance_variable',
+             '__doc__',
+             '__module__',
++            '__static_attributes__',
++            '__firstlineno__',
+         ],
+     )
+ 
+diff -ru pdir2-1.1.0-orig/tests/test_pdir_format.py pdir2-1.1.0/tests/test_pdir_format.py
+--- pdir2-1.1.0-orig/tests/test_pdir_format.py	2023-10-21 20:42:15.492277600 +0200
++++ pdir2-1.1.0/tests/test_pdir_format.py	2024-10-06 11:11:40.588015724 +0200
+@@ -109,8 +109,10 @@
+             (
+                 '    \x1b[0;36m__class__\x1b[0m\x1b[1;30m, '
+                 '\x1b[0m\x1b[0;36m__doc__\x1b[0m\x1b[1;30m, '
++                '\x1b[0m\x1b[0;36m__firstlineno__\x1b[0m\x1b[1;30m, '
+                 '\x1b[0m\x1b[0;36m__module__\x1b[0m\x1b[1;30m, '
+-                '\x1b[0m\x1b[0;36m__slots__\x1b[0m'
++                '\x1b[0m\x1b[0;36m__slots__\x1b[0m\x1b[1;30m, '
++                '\x1b[0m\x1b[0;36m__static_attributes__\x1b[0m'
+             ),
+             '\x1b[0;33mabstract class:\x1b[0m',
+             '    \x1b[0;36m__subclasshook__\x1b[0m',
+diff -ru pdir2-1.1.0-orig/tests/test_search.py pdir2-1.1.0/tests/test_search.py
+--- pdir2-1.1.0-orig/tests/test_search.py	2023-07-06 03:11:13.430190000 +0200
++++ pdir2-1.1.0/tests/test_search.py	2024-10-06 11:16:51.751258765 +0200
+@@ -29,6 +29,10 @@
+     result3, result4 = pdir(T).s('Attr'), pdir(T).search('Attr')
+     expected = '\n'.join(
+         [
++            '\x1b[0;33mspecial attribute:\x1b[0m',
++            (
++                '    \x1b[0;36m__static_attributes__\x1b[0m'
++            ),
+             '\x1b[0;33mattribute access:\x1b[0m',
+             (
+                 '    \x1b[0;36m__delattr__\x1b[0m\x1b[1;30m, '
+Only in pdir2-1.1.0: venv

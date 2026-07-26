@@ -1,0 +1,17 @@
+Fedora defines own GCC defaults and -march=native may break them.
+
+Upstream-status: Fedora only
+
+diff --git a/setup.py b/setup.py
+index 48e12c5..4268bcf 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +39,7 @@ def create_config():
+     if sys.platform.startswith('linux'): # Linux systems
+         settings['openmp'] = {
+             'compiler': "g++",
+-            'flags': "-O3 -march=native",
++            'flags': "-O3",
+         }
+     elif sys.platform == "darwin":   # mac os
+         settings['openmp'] = {

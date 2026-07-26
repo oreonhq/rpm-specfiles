@@ -1,0 +1,110 @@
+
+	wgrib v1.2					Wesley Ebisuzaki
+        Portable Grib decoder for NMC Reanalysis
+
+   The program wgrib reads GRIB data and writes out data in the 
+following different formats: text, GRIB, IEEE and binary (native cpu format).
+The easiest of the formats to read is text followed by binary, IEEE and
+finally GRIB.  All except the GRIB format allows two flavors,
+with and without headers.  You may be wondering why wgrib supports
+IEEE and GRIB.  The IEEE was added so that the CRAY could produce
+`easy to read' binary files, and the GRIB option was added so that
+wgrib could extract and reorder records in a grib file.
+
+
+
+
+				Text Format
+
+
+(grid 1)	(nx) (ny)		grid dimensions
+		(grid value)
+		(grid value)
+		...
+		(grid value)		nx*ny values
+(grid 2)	(nx) (ny)		grid dimensions
+		(grid value)
+		(grid value)
+		...
+		(grid value)		nx*ny values
+		...
+
+
+			Binary and IEEE, no header
+
+(grid 1)	(binary float value)		grid value
+		(binary float value)
+		...
+		(binary float value)		nx*ny values
+
+(grid 2)	(binary float value)
+		(binary float value)
+		...
+		(binary float value)		nx*ny values
+		etc
+
+	The no-header format is not a recommended format to use.  
+The format does not indicate the size of the grid. If your program 
+makes a mistake on the grid dimension, you could get interesting results.  
+However, some fortran compilers require this format for binary files (Cray, 
+ABSoft under AmigaOS).  In addition, GrADs likes the binary/no-header
+format.
+
+
+
+			Binary and IEEE, with header
+
+
+(grid 1)	(binary integer)	nx*ny*sizeof(float)
+		(binary float value)
+		...
+		(binary float value)	nx*ny values
+		(binary integer)	nx*ny*sizeof(float)
+
+(grid 2)	(binary integer)	nx*ny*sizeof(float)
+		(binary float value)
+		...
+		(binary float value)	nx*ny values
+		(binary integer)	nx*ny*sizeof(float)
+
+
+    The binary-with-header format is commonly used by UNIX 
+fortrans for their binary files.  Some MS-DOS fortran compilers
+also support this format.  The CRAY fortran supports the IEEE
+format by the "assign -Ff77 -Nieee u:iunit" command.
+
+
+                            Spectral Data
+
+The format for spectral data is similar to the gridded data except
+nx = 2 * number of complex coefficients, and ny = 1.  As you would
+expect, the real part is followed by the imaginary part.  For more 
+details, consult the GRIB format specifications.
+
+			Organization of the Grid
+
+    Standard NMC practice is to store the grids in fortran order
+starting from the north and working southward, and on the 0E and
+working eastward.  No effort has been made in wgrib to implement
+the scan order option in GRIB.  For lat-long grids, the dimensions
+are 144 x 73.  The first point is 90N 0E, the second point is 
+90N 2.5E, and you can figure out the rest.  For Gaussian grids, the
+dimensions are 192 x 94.  The first grid point is at 88.542N 0E,
+the second grid point is at 88.542N 1.875E.  In theory, the Gaussian
+latitudes (for a Gaussian grid) are determined by the zeros of
+a long polynomial.  In practice, the Gaussian latitudes are almost
+equally spaced.  For plotting purposes, I assume that the Gaussian
+latitudes have a spacing of (88.542 - -88.542)/(94 - 1) degrees of 
+latitude.
+
+    The above description of the grid format only applies to this
+version of Reanalysis.  Future Reanalysis products may have different
+resolutions.  If you use wgrib for non-Reanalysis products, then
+you are on your own.  GRIB allows you to define specialized grids
+in different scanning orders.  wgrib may or may not correctly
+decode these GRIB files and definitely will not try to make sense
+of the scanning order.
+
+
+Note: undefined values are set to 9.999e20.
+(see UNDEFINED in bds.h and/or all.c)

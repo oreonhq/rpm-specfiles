@@ -1,0 +1,23 @@
+diff -up ./tests/CacheTest.php.php8 ./tests/CacheTest.php
+--- ./tests/CacheTest.php.php8	2021-03-23 16:04:28.360182642 +0100
++++ ./tests/CacheTest.php	2021-03-23 16:04:50.771096776 +0100
+@@ -76,6 +76,7 @@ class CacheTest extends PHPUnit\Framewor
+ {
+ 	/**
+ 	 * @expectedException Exception_Success
++	 * @requires PHP < 8
+ 	 */
+ 	public function testDirectOverrideLegacy()
+ 	{
+diff -up ./tests/EncodingTest.php.php8 ./tests/EncodingTest.php
+--- ./tests/EncodingTest.php.php8	2021-03-23 16:06:41.482672604 +0100
++++ ./tests/EncodingTest.php	2021-03-23 16:06:46.003655284 +0100
+@@ -182,7 +182,7 @@ class EncodingTest extends PHPUnit\Frame
+ 		$this->assertFalse(SimplePie_Misc::change_encoding('', 'TESTENC', 'UTF-8'));
+ 	}
+ 
+-	public static function assertEquals($expected, $actual, $message = '', $delta = 0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
++	public static function assertEquals($expected, $actual, string $message = '', float $delta = 0, int $maxDepth = 10, bool $canonicalize = false, bool $ignoreCase = false): void
+ 	{
+ 		if (is_string($expected))
+ 		{

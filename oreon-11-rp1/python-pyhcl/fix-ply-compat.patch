@@ -1,0 +1,41 @@
+From dbd16c61fb9b3b329cc02bf9bb5a5b76bf5d912d Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Mon, 12 Jan 2026 22:39:50 +0100
+Subject: [PATCH] Define local NullLogger for ply compatibility
+
+ply removed NullLogger from lex.py after version 3.11, breaking
+compatibility when using a debundled/system ply package.
+---
+ src/hcl/lexer.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/hcl/lexer.py b/src/hcl/lexer.py
+index 6a568e9..b1b9285 100644
+--- a/src/hcl/lexer.py
++++ b/src/hcl/lexer.py
+@@ -9,6 +9,13 @@ else:
+     text_type = str
+ 
+ 
++class _NullLogger(object):
++    def __getattribute__(self, name):
++        return self
++    def __call__(self, *args, **kwargs):
++        return self
++
++
+ def _raise_error(t, message=None):
+     lexpos = t.lexer.lexpos
+     lexdata = t.lexer.lexdata
+@@ -381,7 +388,7 @@ class Lexer(object):
+             module=self,
+             debug=False,
+             reflags=(re.UNICODE | re.MULTILINE),
+-            errorlog=lex.NullLogger(),
++            errorlog=_NullLogger(),
+         )
+ 
+     def input(self, s):
+-- 
+2.52.0
+

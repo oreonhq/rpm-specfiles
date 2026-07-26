@@ -1,0 +1,19 @@
+--- socklist.orig	2010-01-28 10:33:43.977683369 -0500
++++ socklist.pl	2010-01-28 10:33:25.757680751 -0500
+@@ -87,12 +87,15 @@
+            ($cmd) = ( $l=~/Name:\s*(\S+)/ );
+            close(CMD);
+ 	}
+-        printf "%s %6d %10d  %6d %6d %4d  %s\n",
++        printf "%-4s%6d %10d  %6d %6d %4d  %s\n",
+             $_[0], $a ,$F[9], $F[7], $pid, $fd, $cmd;
+     }
+     close(FILE);
+ }
+ 
+ scheck("tcp");
++scheck("tcp6");
+ scheck("udp");
++scheck("udp6");
+ scheck("raw");
++scheck("raw6");

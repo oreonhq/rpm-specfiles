@@ -1,0 +1,12 @@
+diff -Nurp zita-rev1-0.2.1.orig/COPYING zita-rev1-0.2.1/COPYING
+--- zita-rev1-0.2.1.orig/COPYING	2011-03-31 21:54:07.000000000 +0200
++++ zita-rev1-0.2.1/COPYING	2011-10-28 11:04:01.487770849 +0200
+@@ -2,7 +2,7 @@
+ 		       Version 2, June 1991
+ 
+  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 

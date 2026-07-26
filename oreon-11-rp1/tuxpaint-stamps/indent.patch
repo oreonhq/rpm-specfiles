@@ -1,0 +1,55 @@
+--- po/po2txt.py~	2020-02-26 12:38:37.000000000 -0600
++++ po/po2txt.py	2020-02-26 12:43:18.152771523 -0600
+@@ -14,7 +14,7 @@
+            searchText_unescaped = txtFile.readline()[:-1]
+            searchText = string.replace(searchText_unescaped, '"', '\\"')
+            fullsearchText = "msgid \"" + searchText + "\"\n"
+-	   print("  " + searchText_unescaped)
++           print("  " + searchText_unescaped)
+            if searchText in msgidsList:
+                # reopen txt file to write.
+                txtFile = open(os.path.join(dirname, fname), 'wb')
+--- po/po2txt.py~	2020-02-26 12:51:15.000000000 -0600
++++ po/po2txt.py	2020-02-26 12:52:12.563307347 -0600
+@@ -38,7 +38,7 @@
+                    # if matched, read the next line, will be translated description.
+                    line = localeFiles[locale].readline()
+                    if line[:6] == 'msgstr' and line[8:-2] != "" and noFuzzy:
+-		       translation_unescaped = string.replace(line[8:-2], '\\"', '"')
++                          translation_unescaped = string.replace(line[8:-2], '\\"', '"')
+                        txtFile.write("%s.utf8=%s\n" % (locale, translation_unescaped))
+            txtFile.close()
+ 
+--- po/po2txt.py~	2020-02-26 12:54:03.000000000 -0600
++++ po/po2txt.py	2020-02-26 12:54:41.153437957 -0600
+@@ -38,7 +38,7 @@
+                    # if matched, read the next line, will be translated description.
+                    line = localeFiles[locale].readline()
+                    if line[:6] == 'msgstr' and line[8:-2] != "" and noFuzzy:
+-                          translation_unescaped = string.replace(line[8:-2], '\\"', '"')
++                       translation_unescaped = string.replace(line[8:-2], '\\"', '"')
+                        txtFile.write("%s.utf8=%s\n" % (locale, translation_unescaped))
+            txtFile.close()
+ 
+--- po/po2txt.py~	2020-02-26 12:55:07.000000000 -0600
++++ po/po2txt.py	2020-02-26 12:57:08.457567414 -0600
+@@ -79,7 +79,7 @@
+    localeList.sort()
+ 
+    # walk around all .txt files.
+-   os.path.walk('../stamps/', lister, None)
++   os.walk('../stamps/', lister, None)
+ 
+    # close all po files.
+    for locale in localeList:
+--- po/txt2pot.py~	2020-02-26 12:55:07.000000000 -0600
++++ po/txt2pot.py	2020-02-26 12:57:18.577564693 -0600
+@@ -61,7 +61,7 @@
+     poFile = open('./tuxpaint-stamps.pot', 'wb')
+     print(">>", poFile.name)
+     poFile.write(poHeader)
+-    os.path.walk('../stamps/', lister, None)
++    os.walk('../stamps/', lister, None)
+     poFile.close()
+ #    for locale in localeList:
+ #        poFile = open('./tuxpaint-stamps-' + locale + '.po', 'wb')

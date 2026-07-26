@@ -1,0 +1,87 @@
+commit beeff5e57f880c9f7b8570420ec42f67e06a79de
+Author: Harald van Dijk <harald@gigawatt.nl>
+Date:   Mon Jul 17 22:14:49 2023 +0100
+
+    Fix various functions
+    
+    The gtk_window_get_position, gtk_window_get_frame_dimensions,
+    gtk_window_get_default_size, gtk_window_get_size,
+    gtk_list_store_reorder, and gtk_tree_view_get_path_at_pos functions were
+    declared with a signature that did not match their definition.
+
+diff --git a/gtk.defs b/gtk.defs
+index a627df5..650a827 100644
+--- a/gtk.defs
++++ b/gtk.defs
+@@ -1686,8 +1686,8 @@
+ (define-func gtk_window_get_position
+   none
+   ((GtkWindow window)
+-   (int x)
+-   (int y)))
++   ((ret int) x)
++   ((ret int) y)))
+ 
+ (define-func gtk_window_set_default
+   none
+@@ -1849,10 +1849,10 @@
+ (define-func gtk_window_get_frame_dimensions
+   none
+   ((GtkWindow window)
+-   (int left)
+-   (int top)
+-   (int right)
+-   (int bottom)))
++   ((ret int) left)
++   ((ret int) top)
++   ((ret int) right)
++   ((ret int) bottom)))
+ 
+ (define-func gtk_window_set_decorated
+   none
+@@ -2032,8 +2032,8 @@
+ (define-func gtk_window_get_default_size
+   none
+   ((GtkWindow window)
+-   (int width)
+-   (int height)))
++   ((ret int) width)
++   ((ret int) height)))
+ 
+ (define-func gtk_window_resize
+   none
+@@ -2044,8 +2044,8 @@
+ (define-func gtk_window_get_size
+   none
+   ((GtkWindow window)
+-   (int width)
+-   (int height)))
++   ((ret int) width)
++   ((ret int) height)))
+ 
+ (define-func gtk_window_move
+   none
+diff --git a/gtktree.defs b/gtktree.defs
+index 18c3518..1493fa1 100644
+--- a/gtktree.defs
++++ b/gtktree.defs
+@@ -845,7 +845,7 @@
+ (define-func gtk_list_store_reorder
+   none
+   ((GtkListStore store)
+-   (int order)))
++   ((fvec int -1 in) order)))
+ 
+ (define-func gtk_list_store_swap
+   none
+@@ -1103,8 +1103,8 @@
+    (int y)
+    (GtkTreePath path)
+    (GtkTreeViewColumn column)
+-   (int cell_x)
+-   (int cell_y)))
++   ((ret int) cell_x)
++   ((ret int) cell_y)))
+ 
+ (define-func gtk_tree_view_get_cell_area
+   none

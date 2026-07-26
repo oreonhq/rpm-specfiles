@@ -1,0 +1,34 @@
+diff -ur pipepanic-0.1.3-source/main.c pipepanic-0.1.3-source.new/main.c
+--- pipepanic-0.1.3-source/main.c	2006-05-16 22:11:29.000000000 +0200
++++ pipepanic-0.1.3-source.new/main.c	2007-05-01 22:04:36.000000000 +0200
+@@ -101,6 +101,7 @@
+ #endif
+ int main(int argc, char *argv[]) {
+ 	int count, count2;
++	SDL_Surface     *icon;
+ 	
+ 	/* Initialise the highscoreboard array because there may not yet
+ 	   be a saved highscore[board]/rc file */
+@@ -178,6 +179,13 @@
+ 	printf("Setting video mode %ix%i\n", xres, yres);
+ 	#endif
+ 	
++	icon = SDL_LoadBMP("/usr/share/pipepanic/icon.bmp");
++	if (icon) {
++		SDL_SetColorKey(icon, SDL_SRCCOLORKEY,
++			SDL_MapRGB(icon->format, 255, 0, 255));
++		SDL_WM_SetIcon(icon, NULL);
++	}
++	
+ 	/* Set SDL video mode */
+ 	screen = SDL_SetVideoMode(xres, yres, 16, SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_ANYFORMAT | sdl_fullscreen);
+ 	if(screen == NULL) {
+@@ -185,6 +193,8 @@
+ 		exit(1);
+ 	}
+ 	
++	SDL_WM_SetCaption("Pipepanic version " VERSION, "Pipepanic");
++	
+ 	#ifdef DEBUG	
+ 	printf ("Loading bitmaps\n");
+ 	#endif

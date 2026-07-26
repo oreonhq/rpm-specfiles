@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Raidem
+Comment=2d top-down shoot'em up
+Exec=raidem
+Icon=raidem
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;

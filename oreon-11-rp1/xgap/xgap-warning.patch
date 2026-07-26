@@ -1,0 +1,18 @@
+--- src.x11/gapgraph.c.orig	2024-02-07 16:26:14.000000000 -0700
++++ src.x11/gapgraph.c	2024-02-09 11:45:26.889608587 -0700
+@@ -121,6 +121,7 @@ static void GapGraphDestroy ( Widget w )
+ }
+ 
+ 
++#if 0
+ /****************************************************************************
+ **
+ *F  GapGraphResize( <w> ) . . . . . . . . . . . . . .  ignore resize requests
+@@ -132,6 +133,7 @@ static void GapGraphResize ( Widget w )
+     gap->core.width  = gap->gap_graphic.width;
+     gap->core.height = gap->gap_graphic.height;
+ }
++#endif
+ 
+ 
+ /****************************************************************************

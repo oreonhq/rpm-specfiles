@@ -1,0 +1,94 @@
+.TH UNU\-HISTAX "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-histax \- replace each scanline along an axis with its histogram
+.SH SYNOPSIS
+.B unu\ histax
+.BR \-a , \-\-axis
+.RI < axis >
+.BR \-b , \-\-bin
+.RI < bins >
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Replace each scanline along an axis with its histogram.
+.IP \(bu +2n
+Uses
+.B nrrdHistoAxis
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to histogram along
+.RI ( unsigned\ int )
+.TP
+.B \-b\fR\ <\fIbins\fR>\ ,\ \fB\-\-bin\fR\ <\fIbins\fR>
+# of bins in histogram
+.RI ( unsigned\ int )
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+output type; default:
+.RB \(lq uint \(rq
+.TP
+.B \-min\fR\ <\fIvalue\fR>\ ,\ \fB\-\-minimum\fR\ <\fIvalue\fR>
+The value to map to zero, given explicitly as a regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this minimum is specified in terms of the percentage of samples in
+input that are lower.
+.RB \(lq 0% \(rq
+means the lowest input value is used,
+.RB \(lq 1% \(rq
+means that the 1% of the lowest values are all mapped to zero.
+By default (not using this option), the lowest input value is used.
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-max\fR\ <\fIvalue\fR>\ ,\ \fB\-\-maximum\fR\ <\fIvalue\fR>
+The value to map to the highest unsigned integral value, given explicitly as a
+regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this maximum is specified in terms of the percentage of samples in
+input that are higher.
+.RB \(lq 0% \(rq
+means the highest input value is used, which is also the default behavior (same
+as not using this option).
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+Whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [-128,127] ).
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

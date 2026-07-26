@@ -1,0 +1,54 @@
+.TH SPEC2NII\-ANON "1" "July 2024" "" "User Commands"
+.B spec2nii\ anon
+\(en anonymise existing NIfTI-MRS file
+.SH SYNOPSIS
+.B spec2nii\ anon
+.RB [ \-h ]
+.RB [ \-r\ \fIKEY ]
+.RB [ \-f\ \fIFILEOUT ]
+.RB [ \-o\ \fIOUTDIR ]
+.RB [ \-v ]
+.I file
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I file
+File to anonymize.
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-r\ \fIKEY\fR,\ \fB\-\-remove\ \fIKEY
+Explicitly remove key.
+Argument may be repeated.
+.TP
+.B \-f\ \fIFILEOUT\fR,\ \fB\-\-fileout\ \fIFILEOUT
+Output file base name (default = input file name).
+.TP
+.B \-o\ \fIOUTDIR\fR,\ \fB\-\-outdir\ \fIOUTDIR
+Output location (default =
+.BR . ).
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+.SH "SEE\ ALSO"
+.BR spec2nii (1)
+.P
+.BR spec2nii\-auto (1),
+.BR spec2nii\-twix (1),
+.BR spec2nii\-dicom (1),
+.BR spec2nii\-rda (1),
+.BR spec2nii\-uih (1),
+.BR spec2nii\-philips (1),
+.BR spec2nii\-philips_dl (1),
+.BR spec2nii\-philips_dcm (1),
+.BR spec2nii\-ge (1),
+.BR spec2nii\-text (1),
+.BR spec2nii\-jmrui (1),
+.BR spec2nii\-raw (1),
+.BR spec2nii\-bruker (1),
+.BR spec2nii\-varian (1),
+.\" .BR spec2nii\-anon (1),
+.BR spec2nii\-dump (1),
+.BR spec2nii\-extract (1),
+.BR spec2nii\-insert (1)

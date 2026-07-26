@@ -1,0 +1,49 @@
+From 6804f9ff28f613b9d4312686f5e8b9be32401834 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 14:50:30 +0200
+Subject: [PATCH 3/4] Use AC_SYS_LARGEFILE for large file support check
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Previous code used a non-standard getconf variable. This should be
+more portable. Though one has to request with --enable-largefile
+explicitly now.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index d7c4c00..f94012c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -162,22 +162,8 @@ AC_ARG_ENABLE(gprof, AS_HELP_STRING([--enable-gprof],
+ AC_ARG_ENABLE(largefile, AS_HELP_STRING([--enable-largefile], 
+                          [Enable largefile (files >2GB) support.]))
+ 
+-AC_MSG_CHECKING([whether to enable largefile suport])
+-if test "${enable_largefile}" = "yes"; then
+-	largefile_cflags=`getconf LFS_CFLAGS 2>/dev/null`
+-	largefile_ldflags=`getconf LFS_LDFLAGS 2>/dev/null`
+-	largefile_libs=`getconf LFS_LIBS 2>/dev/null`
+-	if test "x$largefile_cflags" != "x"; then
+-		CFLAGS="${CFLAGS} $largefile_cflags"
+-		LDFLAGS="${LDFLAGS} $largefile_ldflags"
+-		LIBS="${LIBS} $largefile_libs"
+-		AC_MSG_RESULT([yes])
+-	else
+-		AC_MSG_RESULT([no])
+-	fi
+-else
+-	AC_MSG_RESULT([no]);
+-fi
++dnl Check for large file support
++AC_SYS_LARGEFILE
+ 
+ dnl Check for IPv6 function
+ AC_ARG_ENABLE(ipv6, AS_HELP_STRING([--disable-ipv6], [Do not use IPv6]))
+-- 
+1.8.3.1
+

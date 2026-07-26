@@ -1,0 +1,27 @@
+From 610b5dd9a6d2a772614d5826cf28d5f4acd22b20 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 5 Mar 2025 15:27:16 -0500
+Subject: [PATCH] Update minimum CMake version to 3.12; support CMake 4.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CMake 4.0 drops support for CMake <3.5, so minimum versions need to be
+adjusted for forward compatibility. As long as we are touching the
+minimum version, let’s advance to 3.12, which can be considered the
+oldest “modern” CMake release, and which is available in all known
+supported Linux distributions today.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 35bf430..8444333 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.11)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if(POLICY CMP0042)
+   cmake_policy(SET CMP0042 NEW)

@@ -1,0 +1,12 @@
+--- vdr-2.4.0/PLUGINS/src/dvbhddevice/dvbhdffdevice.h.orig	2018-10-10 11:56:49.181447499 +0200
++++ vdr-2.4.0/PLUGINS/src/dvbhddevice/dvbhdffdevice.h	2018-10-10 11:57:49.263760610 +0200
+@@ -4,6 +4,9 @@
+  * See the README file for copyright information and how to reach the author.
+  */
+ 
++#ifndef AUDIO_GET_PTS
++#define AUDIO_GET_PTS              _IOR('o', 19, __u64)
++#endif
+ #ifndef __DVBHDFFDEVICE_H
+ #define __DVBHDFFDEVICE_H
+ 

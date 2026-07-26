@@ -1,0 +1,11 @@
+--- stack-3.9.1/src/Stack/Setup.hs~	2026-01-04 21:04:25.000000000 +0800
++++ stack-3.9.1/src/Stack/Setup.hs	2026-01-28 02:05:33.123733069 +0800
+@@ -2183,6 +2183,8 @@
+     Platform Sparc                 Cabal.Linux   -> pure "linux-sparc"
+     Platform AArch64               Cabal.OSX     -> pure "macosx-aarch64"
+     Platform AArch64               Cabal.FreeBSD -> pure "freebsd-aarch64"
++    Platform PPC64                 Cabal.Linux   -> pure "linux-ppc64"
++    Platform S390X                 Cabal.Linux   -> pure "linux-s390x"
+     Platform arch os -> do
+       programsDir <- view $ configL . to (.localPrograms)
+       prettyThrowM $ UnsupportedSetupCombo os arch tool toolDir programsDir

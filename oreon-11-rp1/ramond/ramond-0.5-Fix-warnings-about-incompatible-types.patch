@@ -1,0 +1,44 @@
+From a416cf65f1f6e3816a6f92dbca91ad6d91523a6a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Mar 2018 14:52:07 +0100
+Subject: [PATCH 2/3] Fix warnings about incompatible types
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This patch fixes these warnigs:
+
+src/xmlparser.c:430:34: warning: pointer targets in passing argument 2 of ‘strcmp’ differ
+in signedness
+src/xmlparser.c:441:6: warning: pointer targets in passing argument 1 of ‘extractMacAddress’ differ in signedness
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/xmlparser.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/xmlparser.c b/src/xmlparser.c
+index 3a5052e..a4b4ec0 100644
+--- a/src/xmlparser.c
++++ b/src/xmlparser.c
+@@ -427,7 +427,7 @@ u08 extractMacList(xmlNode *xml_entry, struct maclist *this_maclist)
+ 		if(this_entry->type == XML_ELEMENT_NODE)
+ 		{
+ 			/* if the child element is an <entry/> ... */
+-			if(!strcmp("entry", this_entry->name))
++			if(!strcmp("entry", (const char *)this_entry->name))
+ 			{
+ 				u08 r = FALSE;
+ 				apr_hash_t *tmp_table = NULL;
+@@ -438,7 +438,7 @@ u08 extractMacList(xmlNode *xml_entry, struct maclist *this_maclist)
+ 
+ 				/* Try to parse the <entry/> contents as a mac address */
+ 				r = extractMacAddress(
+-					xmlNodeGetContent(this_entry),
++					(char *)xmlNodeGetContent(this_entry),
+ 					&tmp_table, tmp_pool);
+ 
+ 				/* If successful, merge this result with the root
+-- 
+2.13.6
+

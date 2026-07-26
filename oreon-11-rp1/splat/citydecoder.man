@@ -1,0 +1,31 @@
+.\" Man page for citydecoder
+.\" Created by copying text from utils/README  
+.TH man 1 "09 December 2007" "1.0" "citydecoder"
+.SH NAME
+citydecoder \- Generate city/site data files for use with SPLAT from U.S. Census Bureau files of Incorporated Places/Census
+Designated Places
+.SH SYNOPSIS
+.B citydecoder
+file
+.SH DESCRIPTION
+.B citydecoder
+is an utility that reads U.S. Census Bureau files of Incorporated Places/Census Designated Places, and generates city/site data files for use with SPLAT! software. Files for use with this utility are available for download free of charge from: http://www.census.gov/geo/www/cob/bdy_files.html.
+.P
+Please select the ARC/INFO Ungenerate (ASCII) Metadata Cartographic Boundary Files from this site and unzip them prior to importing them to citydecoder. U.S. Census files are cataloged by the two digit FIPS code for the region (state) they represent. citydecoder takes as an argument the two-letter file prefix plus the FIPS code of the region or state being processed.
+ 
+.SH EXAMPLES
+citydecoder pl34
+
+.SH FILES
+.P 
+.I /usr/bin/citydecoder
+.SH SEE ALSO
+.BR splat (1), 
+.SH BUGS
+No known bugs at this time. 
+.SH AUTHOR
+.nf
+Sindre Pedersen Bjordal (foolish@guezz.net)
+.fi
+.SH HISTORY
+2007 \- Text copyed from README

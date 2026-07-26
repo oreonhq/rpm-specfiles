@@ -1,0 +1,35 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 1 Sep 2024 20:58:02 +0200
+Subject: [PATCH] Adjust test for Pytest 7+
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/unit/test_client.py b/test/unit/test_client.py
+index 190faf9..ab73629 100644
+--- a/test/unit/test_client.py
++++ b/test/unit/test_client.py
+@@ -1,14 +1,15 @@
+ import pytest
++import warnings
+ 
+ import ipfshttpclient
+ 
+ 
+ def test_assert_version():
+-	with pytest.warns(None) as warnings:
++	with warnings.catch_warnings():
+ 		# Minimum required version
+ 		ipfshttpclient.assert_version("0.1.0", "0.1.0", "0.2.0", ["0.1.2"])
+ 
+-	assert len(warnings) == 0
++	warnings.simplefilter("error")
+ 
+ 	# Too high version
+ 	with pytest.warns(ipfshttpclient.exceptions.VersionMismatch):
+@@ -41,4 +42,4 @@ def test_client_session_context():
+ 	assert client._client._session is None
+ 	with client:
+ 		assert client._client._session is not None
+-	assert client._client._session is None
+\ No newline at end of file
++	assert client._client._session is None

@@ -1,0 +1,27 @@
+From 833aa607f03bad2eb3034153599b2acacd5ec93a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Fri, 5 Dec 2025 10:34:53 +0100
+Subject: [PATCH] Fix compatibility with cucumber-messages 25.
+
+This is roughly equivalent to:
+
+https://github.com/cucumber/gherkin/pull/259/commits/9741cbf0b91562c4a0fbaa5a12eacd8d843dbd2b
+---
+ ruby/lib/gherkin/parser.rb | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/ruby/lib/gherkin/parser.rb b/ruby/lib/gherkin/parser.rb
+index a6bf4068..89f35e74 100644
+--- a/ruby/lib/gherkin/parser.rb
++++ b/ruby/lib/gherkin/parser.rb
+@@ -4,6 +4,10 @@ require_relative 'token_matcher'
+ require_relative 'token_scanner'
+ require_relative 'errors'
+ 
++module Cucumber::Messages::IdGenerator
++  UUID = Cucumber::Messages::Helpers::IdGenerator::UUID unless defined? UUID
++end if defined? Cucumber::Messages::Helpers
++
+ module Gherkin
+ 
+   RULE_TYPE = [

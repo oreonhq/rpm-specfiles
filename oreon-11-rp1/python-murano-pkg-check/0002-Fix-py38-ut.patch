@@ -1,0 +1,30 @@
+From 2cc9188625ce78dc094d612978241bc7fa40ff39 Mon Sep 17 00:00:00 2001
+From: zhurong <aaronzhu1121@gmail.com>
+Date: Wed, 8 Jul 2020 16:13:39 +0800
+Subject: [PATCH 2/3] Fix py38 ut
+
+Change-Id: Ic02f32ec9d886a07d633c4512d0e55d996f76177
+Closes-Bug: #1885431
+(cherry picked from commit 27f82cb4298ebf895025b467637f65ba873c63a9)
+---
+ muranopkgcheck/error.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/muranopkgcheck/error.py b/muranopkgcheck/error.py
+index d5fa56f..6ee2532 100644
+--- a/muranopkgcheck/error.py
++++ b/muranopkgcheck/error.py
+@@ -63,8 +63,8 @@ class Report(object):
+                 kwargs['source'] = meta.get_snippet()
+                 kwargs['filename'] = filename or meta.name
+             return CheckError(code=code, message=message, **kwargs)
+-        if code not in self.errors:
+-            raise ValueError(_LE('Error {} was not registered').format(code))
++        if not code.startswith('_') and code not in self.errors:
++            raise ValueError('Error {} was not registered'.format(code))
+         return _report
+ 
+ 
+-- 
+2.35.3
+

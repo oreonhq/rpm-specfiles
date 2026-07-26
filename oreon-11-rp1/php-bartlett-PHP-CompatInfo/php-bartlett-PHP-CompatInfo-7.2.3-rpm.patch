@@ -1,0 +1,14 @@
+diff -up ./bin/phpcompatinfo.rpm ./bin/phpcompatinfo
+--- ./bin/phpcompatinfo.rpm	2025-05-04 07:31:28.259594805 +0200
++++ ./bin/phpcompatinfo	2025-05-04 07:32:09.736421056 +0200
+@@ -15,6 +15,10 @@ if (PHP_SAPI !== 'cli') {
+     return;
+ }
+ 
++if (!getenv("DATABASE_URL")) {
++     putenv("DATABASE_URL=sqlite:///" . dirname(__DIR__) . "/data/compatinfo-db.sqlite");
++}
++
+ gc_disable(); // performance boost
+ 
+ require_once dirname(__DIR__) . '/autoload.php';

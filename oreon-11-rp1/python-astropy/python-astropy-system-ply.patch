@@ -1,0 +1,92 @@
+diff -ur a/astropy/units/format/base.py b/astropy/units/format/base.py
+--- a/astropy/units/format/base.py	2025-12-23 00:29:38.179985148 +0100
++++ b/astropy/units/format/base.py	2025-12-23 00:33:29.893239203 +0100
+@@ -6,7 +6,7 @@
+ 
+ import numpy as np
+ 
+-from astropy.extern.ply.lex import LexToken
++from ply.lex import LexToken
+ from astropy.units.core import (
+     CompositeUnit,
+     NamedUnit,
+diff -ur a/astropy/units/format/cds.py b/astropy/units/format/cds.py
+--- a/astropy/units/format/cds.py	2025-12-23 00:29:38.180041365 +0100
++++ b/astropy/units/format/cds.py	2025-12-23 00:32:21.990679072 +0100
+@@ -15,7 +15,7 @@
+ import re
+ from typing import ClassVar, Literal
+ 
+-from astropy.extern.ply.lex import Lexer
++from ply.lex import Lexer
+ from astropy.units.core import CompositeUnit, Unit, UnitBase
+ from astropy.units.enums import DeprecatedUnitAction
+ from astropy.units.utils import is_effectively_unity
+diff -ur a/astropy/units/format/generic.py b/astropy/units/format/generic.py
+--- a/astropy/units/format/generic.py	2025-12-23 00:29:38.180231273 +0100
++++ b/astropy/units/format/generic.py	2025-12-23 00:32:38.310651608 +0100
+@@ -23,7 +23,7 @@
+ 
+ import numpy as np
+ 
+-from astropy.extern.ply.lex import Lexer
++from ply.lex import Lexer
+ from astropy.units.core import CompositeUnit, Unit, UnitBase, get_current_unit_registry
+ from astropy.units.enums import DeprecatedUnitAction
+ from astropy.units.errors import UnitsWarning
+diff -ur a/astropy/units/format/ogip.py b/astropy/units/format/ogip.py
+--- a/astropy/units/format/ogip.py	2025-12-23 00:29:38.180396189 +0100
++++ b/astropy/units/format/ogip.py	2025-12-23 00:32:54.743889518 +0100
+@@ -23,7 +23,7 @@
+ 
+ import numpy as np
+ 
+-from astropy.extern.ply.lex import Lexer
++from ply.lex import Lexer
+ from astropy.units.core import CompositeUnit, UnitBase
+ from astropy.units.enums import DeprecatedUnitAction
+ from astropy.units.errors import UnitParserWarning, UnitsWarning
+diff -ur a/astropy/units/format/vounit.py b/astropy/units/format/vounit.py
+--- a/astropy/units/format/vounit.py	2025-12-23 00:29:38.180551429 +0100
++++ b/astropy/units/format/vounit.py	2025-12-23 00:33:16.628397910 +0100
+@@ -10,7 +10,7 @@
+ 
+ import numpy as np
+ 
+-from astropy.extern.ply.lex import LexToken
++from ply.lex import LexToken
+ from astropy.units.core import (
+     CompositeUnit,
+     NamedUnit,
+diff -ur a/astropy/utils/parsing.py b/astropy/utils/parsing.py
+--- a/astropy/utils/parsing.py	2025-12-23 00:29:38.185581059 +0100
++++ b/astropy/utils/parsing.py	2025-12-23 00:32:02.409799898 +0100
+@@ -11,8 +11,8 @@
+ from pathlib import Path
+ from types import ModuleType
+ 
+-from astropy.extern.ply.lex import Lexer
+-from astropy.extern.ply.yacc import LRParser
++from ply.lex import Lexer
++from ply.yacc import LRParser
+ 
+ __all__ = ["ThreadSafeParser", "lex", "yacc"]
+ 
+@@ -84,7 +84,7 @@
+     reflags : int
+         Passed to ``ply.lex``.
+     """
+-    from astropy.extern.ply import lex
++    from ply import lex
+ 
+     caller_dir = Path(lex.get_caller_module_dict(2)["__file__"]).parent
+     with _LOCK, _patch_ply_module(lex, caller_dir / (lextab + ".py"), package):
+@@ -131,7 +131,7 @@
+         the output file. This is inserted into a comment in the generated
+         file.
+     """
+-    from astropy.extern.ply import yacc
++    from ply import yacc
+ 
+     caller_dir = Path(yacc.get_caller_module_dict(2)["__file__"]).parent
+     with _LOCK, _patch_ply_module(yacc, caller_dir / (tabmodule + ".py"), package):

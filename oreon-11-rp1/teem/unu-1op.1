@@ -1,0 +1,177 @@
+.TH UNU\-1OP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-1op \- unary operation on a
+.I nrrd
+.SH SYNOPSIS
+.B unu\ 1op
+.RI < operator >
+.RB [ \-s , \-\-seed
+.RI < seed >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Unary operation on a
+.IR nrrd .
+.IP \(bu +2n
+Uses
+.B nrrdArithUnaryOp
+.SH OPTIONS
+.TP
+.I operator
+Unary operator.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq \- \(rq:
+negative (multiply by
+.BR \-1.0 )
+.IP \(bu 2
+.RB \(lq r \(rq:
+reciprocal
+.RB ( 1.0 / \fIvalue )
+.IP \(bu 2
+.RB \(lq sin \(rq,
+.RB \(lq cos \(rq,
+.RB \(lq tan \(rq,
+.RB \(lq asin \(rq,
+.RB \(lq acos \(rq,
+.RB \(lq atan \(rq:
+same as in C
+.IP \(bu 2
+.RB \(lq exp \(rq,
+.RB \(lq log \(rq,
+.RB \(lq log10 \(rq:
+same as in C
+.IP \(bu 2
+.RB \(lq log1p \(rq,
+.RB \(lq expm1 \(rq:
+accurate
+.BI log( x +1)
+and
+.BI exp( x )\-1
+.IP \(bu 2
+.RB \(lq log2 \(rq:
+log base 2
+.IP \(bu 2
+.RB \(lq sqrt \(rq,
+.RB \(lq cbrt \(rq,
+.RB \(lq ceil \(rq,
+.RB \(lq floor \(rq:
+same as in C
+.IP \(bu 2
+.RB \(lq erf \(rq:
+error function (integral of Gaussian)
+.IP \(bu 2
+.RB \(lq rup \(rq,
+.RB \(lq rdn \(rq:
+round up or down to integral value
+.IP \(bu 2
+.RB \(lq abs \(rq:
+absolute value
+.IP \(bu 2
+.RB \(lq sgn \(rq:
+.BR \-1 ,
+.BR 0 ,
+.BR 1
+if value is
+.RB < 0 ,
+.RB == 0 ,
+or
+.RB > 0
+.IP \(bu 2
+.RB \(lq exists \(rq:
+.B 1
+iff not
+.B NaN
+or
+.BR + / \-Inf ,
+.B 0
+otherwise
+.IP \(bu 2
+.RB \(lq rand \(rq:
+random value in
+.BR [0.0,1.0) ,
+no relation to input
+.IP \(bu 2
+.RB \(lq nrand \(rq:
+random sample from normal distribution with mean
+.B 0.0
+and stdvi
+.BR 1.0 ,
+no relation to input
+.IP \(bu 2
+.RB \(lq if \(rq:
+if input is non-zero,
+.BR 1 ,
+else
+.B 0
+.IP \(bu 2
+.RB \(lq 0 \(rq:
+output always
+.B 0
+.IP \(bu 2
+.RB \(lq 1 \(rq:
+output always
+.B 1
+.RE
+.TP
+.B \-s\fR\ <\fIseed\fR>\ ,\ \fB\-\-seed\fR\ <\fIseed\fR>
+seed value for RNG for
+.B rand
+and
+.BR nrand ,
+so that you can get repeatable results between runs, or, by not using this
+option, the RNG seeding will be based on the current time
+.RI ( string )
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+convert input
+.I nrrd
+to this type prior to doing operation.
+Useful when desired output is
+.I float
+(e.g., with
+.BR log1p ),
+but input is integral.
+By default (not using this option), the types of the input
+.IR nrrd s
+are left unchanged.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)
+.P
+.BR abs (3),
+.BR acos (3),
+.BR asin (3),
+.BR atan (3),
+.BR cbrt (3),
+.BR ceil (3),
+.BR cos (3),
+.BR erf (3),
+.BR exp (3),
+.BR expm1 (3),
+.BR fabs (3),
+.BR floor (3),
+.BR isfinite (3),
+.BR log (3),
+.BR log10 (3),
+.BR log1p (3),
+.BR log2 (3),
+.BR rand (3),
+.BR sin (3),
+.BR sqrt (3),
+.BR tan (3)

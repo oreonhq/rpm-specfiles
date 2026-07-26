@@ -1,0 +1,32 @@
+diff -up ./bin/phpcbf.rpm ./bin/phpcbf
+--- ./bin/phpcbf.rpm	2025-09-15 14:51:59.780439106 +0200
++++ ./bin/phpcbf	2025-09-15 14:53:16.065234768 +0200
+@@ -21,10 +21,10 @@
+  */
+ 
+ // Check if the PHP version and extensions comply with the minimum requirements before anything else.
+-require_once dirname(__DIR__) . '/requirements.php';
++require_once '/usr/share/pear/PHP/CodeSniffer/requirements.php';
+ PHP_CodeSniffer\checkRequirements();
+ 
+-require_once dirname(__DIR__) . '/autoload.php';
++require_once '/usr/share/pear/PHP/CodeSniffer/autoload.php';
+ 
+ $runner   = new PHP_CodeSniffer\Runner();
+ $exitCode = $runner->runPHPCBF();
+diff -up ./bin/phpcs.rpm ./bin/phpcs
+--- ./bin/phpcs.rpm	2025-09-15 14:51:59.780522757 +0200
++++ ./bin/phpcs	2025-09-15 14:52:52.535306647 +0200
+@@ -21,10 +21,10 @@
+  */
+ 
+ // Check if the PHP version and extensions comply with the minimum requirements before anything else.
+-require_once dirname(__DIR__) . '/requirements.php';
++require_once '/usr/share/pear/PHP/CodeSniffer/requirements.php';
+ PHP_CodeSniffer\checkRequirements();
+ 
+-require_once dirname(__DIR__) . '/autoload.php';
++require_once '/usr/share/pear/PHP/CodeSniffer/autoload.php';
+ 
+ $runner   = new PHP_CodeSniffer\Runner();
+ $exitCode = $runner->runPHPCS();

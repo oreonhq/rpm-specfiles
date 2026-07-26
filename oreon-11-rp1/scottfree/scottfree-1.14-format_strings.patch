@@ -1,0 +1,14 @@
+Description: Avoid non-contant format strings
+Author: Stephen Kitt <skitt@debian.org>
+
+--- a/ScottCurses.c
++++ b/ScottCurses.c
+@@ -399,7 +399,7 @@
+ 			wclrtoeol(Bottom);
+ 			OutputPos=0;
+ 		}
+-		wprintw(Bottom,word);
++		wprintw(Bottom,"%s",word);
+ 		OutputPos+=strlen(word);
+ 		
+ 		if(*buffer==0)

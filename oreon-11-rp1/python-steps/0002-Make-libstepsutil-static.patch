@@ -1,0 +1,23 @@
+From 0a033a26a4864d9db932653658f71da7bf880660 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 28 Jun 2021 10:18:57 +0100
+Subject: [PATCH 2/2] Make libstepsutil static
+
+---
+ src/steps/util/CMakeLists.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/steps/util/CMakeLists.txt b/src/steps/util/CMakeLists.txt
+index ce649a0..f721392 100644
+--- a/src/steps/util/CMakeLists.txt
++++ b/src/steps/util/CMakeLists.txt
+@@ -1,5 +1,4 @@
+-add_library(
+-    stepsutil
++add_library(stepsutil STATIC
+     checkid.cpp
+     ../init.cpp
+     ../finish.cpp
+-- 
+2.31.1
+

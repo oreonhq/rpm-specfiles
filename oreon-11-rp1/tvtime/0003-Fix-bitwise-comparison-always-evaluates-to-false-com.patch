@@ -1,0 +1,27 @@
+From c792f32342ae0a3e3f81b4abdcc7d1d06edd167e Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 13 Aug 2018 17:40:20 +0200
+Subject: [PATCH tvtime 3/4] Fix: "bitwise comparison always evaluates to
+ false" compiler warning
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/vbidata.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/vbidata.c b/src/vbidata.c
+index c22a39d..19c68bf 100644
+--- a/src/vbidata.c
++++ b/src/vbidata.c
+@@ -656,7 +656,7 @@ int ProcessLine( vbidata_t *vbi, uint8_t *s, int bottom )
+             return 1;
+         }
+ 
+-        if( (b1 & 8) == 1 ) {
++        if( (b1 & 8) ) {
+             /* Midrow code */
+             if( !vbi->initialised ) return 0;
+ 
+-- 
+2.18.0
+

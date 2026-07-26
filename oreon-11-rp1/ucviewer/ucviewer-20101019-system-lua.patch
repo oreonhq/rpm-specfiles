@@ -1,0 +1,168 @@
+diff -up ucviewer-20101019/src/lua/LuaOutput.h.system ucviewer-20101019/src/lua/LuaOutput.h
+--- ucviewer-20101019/src/lua/LuaOutput.h.system	2010-10-19 15:35:53.069522001 -0400
++++ ucviewer-20101019/src/lua/LuaOutput.h	2010-10-19 15:36:00.830522001 -0400
+@@ -22,9 +22,9 @@
+ #define LUAOUTPUT_H_
+ 
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "lua/LuaWrapper.h"
+ #include "lua/Luna.h"
+diff -up ucviewer-20101019/src/lua/LuaSearch.h.system ucviewer-20101019/src/lua/LuaSearch.h
+--- ucviewer-20101019/src/lua/LuaSearch.h.system	2010-10-19 15:36:13.865522002 -0400
++++ ucviewer-20101019/src/lua/LuaSearch.h	2010-10-19 15:36:21.210522002 -0400
+@@ -21,9 +21,9 @@
+ #ifndef LUASEARCH_H_
+ #define LUASEARCH_H_
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "lua/Luna.h"
+ #include "controller/SearchController.h"
+diff -up ucviewer-20101019/src/lua/LuaSort.h.system ucviewer-20101019/src/lua/LuaSort.h
+--- ucviewer-20101019/src/lua/LuaSort.h.system	2010-10-19 15:36:28.770521998 -0400
++++ ucviewer-20101019/src/lua/LuaSort.h	2010-10-19 15:36:36.832522001 -0400
+@@ -21,9 +21,9 @@
+ #ifndef LUASORT_H_
+ #define LUASORT_H_
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "lua/Luna.h"
+ #include "controller/SortController.h"
+diff -up ucviewer-20101019/src/lua/LuaTable.h.system ucviewer-20101019/src/lua/LuaTable.h
+--- ucviewer-20101019/src/lua/LuaTable.h.system	2010-10-19 15:36:43.158522002 -0400
++++ ucviewer-20101019/src/lua/LuaTable.h	2010-10-19 15:36:51.894521997 -0400
+@@ -22,9 +22,9 @@
+ #define LUATABLE_H_
+ 
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "lua/Luna.h"
+ #include "controller/TableController.h"
+diff -up ucviewer-20101019/src/lua/LuaWrapper.h.system ucviewer-20101019/src/lua/LuaWrapper.h
+--- ucviewer-20101019/src/lua/LuaWrapper.h.system	2010-10-19 15:35:13.236522002 -0400
++++ ucviewer-20101019/src/lua/LuaWrapper.h	2010-10-19 15:35:36.524522006 -0400
+@@ -22,9 +22,9 @@
+ #define LUAWRAPPER_H_
+ 
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "controller/Controller.h"
+ #include <QString>
+diff -up ucviewer-20101019/UnicodeViewer.pro.system ucviewer-20101019/UnicodeViewer.pro
+--- ucviewer-20101019/UnicodeViewer.pro.system	2010-09-26 12:34:58.000000000 -0400
++++ ucviewer-20101019/UnicodeViewer.pro	2010-10-19 15:34:38.826522001 -0400
+@@ -27,29 +27,6 @@ HEADERS += src/tools/UCQExecuteLuaThread
+     src/lua/LuaSort.h \
+     src/controller/SortController.h \
+     src/controller/TableController.h \
+-    src/lua-5.1.4/src/lapi.h \
+-    src/lua-5.1.4/src/lauxlib.h \
+-    src/lua-5.1.4/src/lcode.h \
+-    src/lua-5.1.4/src/ldebug.h \
+-    src/lua-5.1.4/src/ldo.h \
+-    src/lua-5.1.4/src/lfunc.h \
+-    src/lua-5.1.4/src/lgc.h \
+-    src/lua-5.1.4/src/llex.h \
+-    src/lua-5.1.4/src/llimits.h \
+-    src/lua-5.1.4/src/lmem.h \
+-    src/lua-5.1.4/src/lobject.h \
+-    src/lua-5.1.4/src/lopcodes.h \
+-    src/lua-5.1.4/src/lparser.h \
+-    src/lua-5.1.4/src/lstate.h \
+-    src/lua-5.1.4/src/lstring.h \
+-    src/lua-5.1.4/src/ltable.h \
+-    src/lua-5.1.4/src/ltm.h \
+-    src/lua-5.1.4/src/lua.h \
+-    src/lua-5.1.4/src/luaconf.h \
+-    src/lua-5.1.4/src/lualib.h \
+-    src/lua-5.1.4/src/lundump.h \
+-    src/lua-5.1.4/src/lvm.h \
+-    src/lua-5.1.4/src/lzio.h \
+     src/tools/UCTools.h \
+     src/mainwindow/mainwindow.h \
+     src/controller/LuaController.h \
+@@ -80,38 +57,6 @@ SOURCES += src/tools/UCQExecuteLuaThread
+     src/lua/LuaSort.cpp \
+     src/controller/SortController.cpp \
+     src/controller/TableController.cpp \
+-    src/lua-5.1.4/src/lapi.c \
+-    src/lua-5.1.4/src/lauxlib.c \
+-    src/lua-5.1.4/src/lbaselib.c \
+-    src/lua-5.1.4/src/lcode.c \
+-    src/lua-5.1.4/src/ldblib.c \
+-    src/lua-5.1.4/src/ldebug.c \
+-    src/lua-5.1.4/src/ldo.c \
+-    src/lua-5.1.4/src/ldump.c \
+-    src/lua-5.1.4/src/lfunc.c \
+-    src/lua-5.1.4/src/lgc.c \
+-    src/lua-5.1.4/src/linit.c \
+-    src/lua-5.1.4/src/liolib.c \
+-    src/lua-5.1.4/src/llex.c \
+-    src/lua-5.1.4/src/lmathlib.c \
+-    src/lua-5.1.4/src/lmem.c \
+-    src/lua-5.1.4/src/loadlib.c \
+-    src/lua-5.1.4/src/lobject.c \
+-    src/lua-5.1.4/src/lopcodes.c \
+-    src/lua-5.1.4/src/loslib.c \
+-    src/lua-5.1.4/src/lparser.c \
+-    src/lua-5.1.4/src/lstate.c \
+-    src/lua-5.1.4/src/lstring.c \
+-    src/lua-5.1.4/src/lstrlib.c \
+-    src/lua-5.1.4/src/ltable.c \
+-    src/lua-5.1.4/src/ltablib.c \
+-    src/lua-5.1.4/src/ltm.c \
+-    src/lua-5.1.4/src/lua.c \
+-    src/lua-5.1.4/src/luac.c \
+-    src/lua-5.1.4/src/lundump.c \
+-    src/lua-5.1.4/src/lvm.c \
+-    src/lua-5.1.4/src/lzio.c \
+-    src/lua-5.1.4/src/print.c \
+     src/tools/UCTools.cpp \
+     src/mainwindow/mainwindow.cpp \
+     src/controller/LuaController.cpp \
+diff -up ucviewer-20101019/src/controller/LuaController.h.system ucviewer-20101019/src/controller/LuaController.h
+--- ucviewer-20101019/src/controller/LuaController.h.system	2010-10-19 16:06:44.837522001 -0400
++++ ucviewer-20101019/src/controller/LuaController.h	2010-10-19 16:07:07.446522002 -0400
+@@ -20,9 +20,9 @@
+ #ifndef LUACONTROLLER_H_
+ #define LUACONTROLLER_H_
+ extern "C" {
+-#include "lua-5.1.4/src/lua.h"
+-#include "lua-5.1.4/src/lualib.h"
+-#include "lua-5.1.4/src/lauxlib.h"
++#include <lua.h>
++#include <lualib.h>
++#include <lauxlib.h>
+ }
+ #include "lua/Luna.h"
+ #include "lua/LuaTable.h"

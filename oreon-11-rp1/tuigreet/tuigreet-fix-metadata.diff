@@ -1,0 +1,16 @@
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -15,11 +15,11 @@ crossterm = { version = "^0.27", feature
+ futures = "0.3"
+ getopts = "^0.2"
+ greetd_ipc = { version = "^0.10", features = ["tokio-codec"] }
+-i18n-embed = { version = "^0.14", features = [
++i18n-embed = { version = "^0.16", features = [
+   "desktop-requester",
+   "fluent-system",
+ ] }
+-i18n-embed-fl = "^0.8"
++i18n-embed-fl = "^0.10"
+ lazy_static = "^1.4"
+ nix = { version = "^0.28", features = ["feature"] }
+ tui = { package = "ratatui", version = "^0.26", default-features = false, features = [

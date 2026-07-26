@@ -1,0 +1,39 @@
+Fix implicit declaration of _exit in configure check import from
+gettext, to avoid failures with future compilers.  Fixed in gettext
+via:
+
+commit 7f23923bb0dd500b4fe911a6dbd38ee6a6f3a5cd
+Author: Bruno Haible <bruno@clisp.org>
+Date:   Sat Sep 14 13:30:24 2019 +0200
+
+    build: Avoid failing a configure test due to CFLAGS="-Werror".
+    
+    Reported by Florian Weimer <fweimer@redhat.com>.
+    
+    * gettext-runtime/m4/intdiv0.m4 (gt_INTDIV0): In the test program, include
+    <unistd.h>, for the declaration of _exit().
+
+diff --git a/configure b/configure
+index 3c836dd74123223c..391466f32b3be12d 100755
+--- a/configure
++++ b/configure
+@@ -6723,6 +6723,7 @@ else
+ 
+ #include <stdlib.h>
+ #include <signal.h>
++#include <unistd.h>
+ 
+ static void
+ sigfpe_handler (int sig)
+diff --git a/m4/intdiv0.m4 b/m4/intdiv0.m4
+index 744b99ea8da87ca1..f5cbd3e944362697 100644
+--- a/m4/intdiv0.m4
++++ b/m4/intdiv0.m4
+@@ -33,6 +33,7 @@ changequote([,])dnl
+           [AC_LANG_SOURCE([[
+ #include <stdlib.h>
+ #include <signal.h>
++#include <unistd.h>
+ 
+ static void
+ sigfpe_handler (int sig)

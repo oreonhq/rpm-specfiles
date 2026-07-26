@@ -1,0 +1,28 @@
+From 46108efe05030d2ff7773af32ef7f78b05ccff65 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 14 Jul 2023 10:38:41 -0400
+Subject: [PATCH] =?UTF-8?q?Add=20missing=20dependency=20on=20=E2=80=9Cmult?=
+ =?UTF-8?q?iprocess=E2=80=9D?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes #73.
+---
+ setup.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 0e57121..35d6e6b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -48,7 +48,8 @@ def get_version():
+         'numpy>=1.13.1',
+         'scikit-learn>=0.18.0',
+         'scipy>=0.19.0',
+-        'pandas>=0.20.3'
++        'pandas>=0.20.3',
++        'multiprocess',
+     ]
+ )
+ 

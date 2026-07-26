@@ -1,0 +1,42 @@
+diff -up ./bin/pie.rpm ./bin/pie
+--- ./bin/pie.rpm	2025-11-04 07:31:47.045861211 +0100
++++ ./bin/pie	2025-11-04 07:34:03.568067299 +0100
+@@ -28,13 +28,14 @@ use function error_reporting;
+ 
+ use const E_DEPRECATED;
+ 
+-require_once __DIR__ . '/../src/Util/PieVersion.php';
++require_once '/usr/share/pie/src/Util/PieVersion.php';
++
+ if (PieVersion::isPharBuild()) {
+     error_reporting(error_reporting() & ~E_DEPRECATED);
+ }
+ 
+ // phpcs:ignore Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+-include $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
++include $_composer_autoload_path ?? '/usr/share/pie/vendor/autoload.php';
+ 
+ $container = Container::factory();
+ 
+diff -up ./src/Command/SelfUpdateCommand.php.rpm ./src/Command/SelfUpdateCommand.php
+--- ./src/Command/SelfUpdateCommand.php.rpm	2025-11-04 07:31:47.045962420 +0100
++++ ./src/Command/SelfUpdateCommand.php	2025-11-04 07:34:56.202111078 +0100
+@@ -85,6 +85,7 @@ final class SelfUpdateCommand extends Co
+     {
+         if (! PieVersion::isPharBuild()) {
+             $this->io->writeError('<comment>Aborting! You are not running a PHAR, cannot self-update.</comment>');
++            $this->io->writeError('<comment>Update the pie RPM using the package manager (dnf).</comment>');
+ 
+             return Command::FAILURE;
+         }
+diff -up ./src/Command/SelfVerifyCommand.php.rpm ./src/Command/SelfVerifyCommand.php
+--- ./src/Command/SelfVerifyCommand.php.rpm	2025-11-04 07:31:47.046045232 +0100
++++ ./src/Command/SelfVerifyCommand.php	2025-11-04 07:35:34.439595840 +0100
+@@ -43,6 +43,7 @@ final class SelfVerifyCommand extends Co
+     {
+         if (! PieVersion::isPharBuild()) {
+             $this->io->writeError('<comment>Aborting! You are not running a PHAR, cannot self-verify.</comment>');
++            $this->io->writeError('<comment>Verify the pie RPM using the package manager (rpm).</comment>');
+ 
+             return Command::FAILURE;
+         }

@@ -1,0 +1,24 @@
+From ade278f7a1988c281a5ac8ec5529b1683b622c5c Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Thu, 27 Mar 2025 23:02:12 +0100
+Subject: [PATCH] Fix license information in pyproject.toml
+
+The shipped LICENSE file is for GPL-3.0-only (SPDX). The information
+in the project table should match that.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 890c78e..401a35b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10,7 +10,7 @@ readme = "README.md"
+ requires-python = ">=3.8"
+ classifiers = [
+     "Programming Language :: Python :: 3",
+-    "License :: OSI Approved :: MIT License",
++    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+     "Operating System :: OS Independent",
+ ]
+ 

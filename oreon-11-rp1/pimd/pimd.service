@@ -1,0 +1,13 @@
+[Unit]
+Description=PIM-SM multicast routing daemon
+After=syslog.target network.target
+ConditionPathExists=/etc/pimd.conf
+Documentation=man:pimd
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/pimd
+ExecStart=/usr/sbin/pimd -f -c /etc/pimd.conf
+
+[Install]
+WantedBy=multi-user.target

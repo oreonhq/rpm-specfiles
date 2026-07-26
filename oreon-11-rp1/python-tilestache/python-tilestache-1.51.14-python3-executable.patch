@@ -1,0 +1,24 @@
+From abd1da21a7d978d265d73fed1a081f82b71e84b0 Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Wed, 28 Aug 2019 14:26:56 -0700
+Subject: [PATCH] Don't assume the plain 'python' executable is correct
+
+Instead, use the same executable that was used to invoke the currently
+running python process.
+---
+ tests/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/utils.py b/tests/utils.py
+index 889ded4f..cd135428 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -67,7 +67,7 @@ def create_dummy_server(file_with_content, mimetype):
+     #start new process using our dummy-response-server.py script
+     dummy_server_file = os.path.join(current_script_dir, 'servers', 'dummy-response-server.py')
+     port = find_open_port()
+-    cmd = 'python %s %s "%s" "%s" ' % (dummy_server_file, str(port), file_with_content, mimetype)
++    cmd = '%s %s %s "%s" "%s" ' % (sys.executable, dummy_server_file, str(port), file_with_content, mimetype)
+ 
+     ON_POSIX = 'posix' in sys.builtin_module_names
+ 

@@ -1,0 +1,57 @@
+.TH EZDXF\-VIEW "1" "May 2024" "" "User Commands"
+.B ezdxf\ view
+PyQt DXF file viewer
+.SH SYNOPSIS
+.B ezdxf\ view
+.RB [ \-h ]
+.RB [ \-l\ \fILAYOUT ]
+.RB [ \-\-lwscale\ \fILWSCALE ]
+.RI [ FILE ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to view
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-l\ \fILAYOUT\fR, \fB\-\-layout\ \fILAYOUT
+select the layout to draw, default is
+.BR \(lq Model \(rq
+.TP
+.B \-\-lwscale\ \fILWSCALE
+set custom line weight scaling, default is
+.B 0
+to disable line weights at all
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH EXAMPLES
+.P
+View the DXF file
+.RB \(lq gear.dxf \(rq
+by the
+.I PyQt
+backend:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ view\ \ gear.dxf
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

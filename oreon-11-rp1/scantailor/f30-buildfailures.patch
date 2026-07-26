@@ -1,0 +1,14 @@
+diff -up scantailor-0.9.11.1/math/MatrixCalc.h.f30-buildfailures scantailor-0.9.11.1/math/MatrixCalc.h
+--- scantailor-0.9.11.1/math/MatrixCalc.h.f30-buildfailures	2019-04-29 16:30:51.787691552 +0200
++++ scantailor-0.9.11.1/math/MatrixCalc.h	2019-04-29 16:31:06.358733136 +0200
+@@ -103,9 +103,9 @@ public:
+ 	Mat operator-() const;
+ 
+ 	T const* rawData() const { return data; }
+-private:
+ 	Mat(AbstractAllocator<T>* alloc, T const* data, int rows, int cols)
+ 		: alloc(alloc), data(data), rows(rows), cols(cols) {}
++private:
+ 
+ 	AbstractAllocator<T>* alloc;
+ 	T const* data;

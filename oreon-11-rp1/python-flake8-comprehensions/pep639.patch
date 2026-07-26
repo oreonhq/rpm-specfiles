@@ -1,0 +1,39 @@
+From 5e497d1e1454e24c98878e988fad32654cdcdaf2 Mon Sep 17 00:00:00 2001
+From: Adam Johnson <me@adamj.eu>
+Date: Sun, 11 May 2025 23:21:02 +0100
+Subject: [PATCH] Use PEP 639 license declaration (#615)
+
+---
+ pyproject.toml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f14418d..c74c643 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ build-backend = "setuptools.build_meta"
+ requires = [
+-  "setuptools",
++  "setuptools>=77",
+ ]
+ 
+ [project]
+@@ -16,6 +16,8 @@ keywords = [
+   "list comprehension",
+   "set comprehension",
+ ]
++license = "MIT"
++license-files = [ "LICENSE" ]
+ authors = [
+   { name = "Adam Johnson", email = "me@adamj.eu" },
+ ]
+@@ -24,7 +26,6 @@ classifiers = [
+   "Development Status :: 5 - Production/Stable",
+   "Framework :: Flake8",
+   "Intended Audience :: Developers",
+-  "License :: OSI Approved :: MIT License",
+   "Natural Language :: English",
+   "Programming Language :: Python :: 3 :: Only",
+   "Programming Language :: Python :: 3.9",

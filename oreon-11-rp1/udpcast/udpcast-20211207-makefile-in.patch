@@ -1,0 +1,22 @@
+diff -uNr udpcast-20211207-orig/Makefile.in udpcast-20211207/Makefile.in
+--- udpcast-20211207-orig/Makefile.in	2025-02-04 15:56:20.527523976 +0100
++++ udpcast-20211207/Makefile.in	2025-02-04 15:57:07.007771048 +0100
+@@ -4,6 +4,7 @@
+ 
+ prefix      = @prefix@
+ bindir      = @bindir@
++sbindir      = @sbindir@
+ infodir     = @infodir@
+ mandir      = @mandir@
+ datarootdir = @datarootdir@
+@@ -54,8 +55,8 @@
+ 	rm -f Makefile config.status config.log config.h
+ 
+ install: udp-sender udp-receiver rateGovernor.h
+-	install -d $(DESTDIR)$(prefix)/sbin
+-	install -m 755 udp-sender udp-receiver $(DESTDIR)$(prefix)/sbin
++	install -d $(DESTDIR)$(sbindir)
++	install -m 755 udp-sender udp-receiver $(DESTDIR)$(sbindir)
+ 	install -d $(DESTDIR)$(mandir)/man1
+ 	install -m 644 udp-sender.1 udp-receiver.1 $(DESTDIR)$(mandir)/man1
+ 	install -d $(DESTDIR)$(prefix)/include/udpcast

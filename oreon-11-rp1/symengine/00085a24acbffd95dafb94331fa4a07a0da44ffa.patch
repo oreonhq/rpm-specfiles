@@ -1,0 +1,22 @@
+From 00085a24acbffd95dafb94331fa4a07a0da44ffa Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Mon, 17 Mar 2025 15:06:10 -0700
+Subject: [PATCH] make get_type_code pure virtual
+
+---
+ symengine/matrix.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/symengine/matrix.h b/symengine/matrix.h
+index 72d21f90b..9acd13b65 100644
+--- a/symengine/matrix.h
++++ b/symengine/matrix.h
+@@ -18,7 +18,7 @@ class MatrixBase
+ public:
+     virtual ~MatrixBase(){};
+ 
+-    virtual MatrixTypeID get_type_code() const;
++    virtual MatrixTypeID get_type_code() const = 0;
+ 
+     bool is_square() const
+     {

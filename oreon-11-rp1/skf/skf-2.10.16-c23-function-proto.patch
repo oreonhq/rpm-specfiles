@@ -1,0 +1,94 @@
+diff --git a/skf-2.10/dyn_table.c b/skf-2.10/dyn_table.c
+index f4fd2c4..e1b0bfb 100644
+--- a/skf-2.10/dyn_table.c
++++ b/skf-2.10/dyn_table.c
+@@ -102,9 +102,9 @@ void	emoticon_table_gen();
+ void	emoti_ntt_otbl_gen();
+ void	emoti_sb_otbl_gen();
+ void	emoti_au_otbl_gen();
+-void	emoticon_otbl_gen();
++void	emoticon_otbl_gen P_((int));
+ void	nyukan_otbl_gen();
+-void	set_out_table();
++void	set_out_table P_((long, long));
+ void	aribsjis_table_gen();
+ void	aribjis_table_gen();
+ void	aribaltmb_table_gen();
+@@ -117,7 +117,7 @@ void	aribbmp_table_gen();
+ void	tscii_tbl_gen();
+ #else
+ void	emoticon_table_gen();
+-void	emoticon_otbl_gen();
++void	emoticon_otbl_gen P_((int));
+ #endif
+ 
+ void	iso2022ms_table_gen();
+diff --git a/skf-2.10/skf.c b/skf-2.10/skf.c
+index 8315806..bea2666 100644
+--- a/skf-2.10/skf.c
++++ b/skf-2.10/skf.c
+@@ -237,7 +237,7 @@ int		**arib_macro_tbl = NULL; /* arib macro area	  */
+ 
+ /* converters */
+ static int	argeval P_((int,char **,int));
+-int		skf_in_converter();
++int		skf_in_converter P_((skfFILE *));
+ static int	skf_kanaconv_parser P_((int));
+ 
+ #ifndef SWIG_EXT
+diff --git a/skf-2.10/skf.h b/skf-2.10/skf.h
+index 5c2d3c0..a422c1a 100644
+--- a/skf-2.10/skf.h
++++ b/skf-2.10/skf.h
+@@ -2270,7 +2270,6 @@ extern skf_ucode	**arib_macro_tbl;
+ 
+ /* --- SWIG-EXTENSION related fixes ---------------------------- */
+ extern void	fold_value_setup();
+-extern int	skf_in_converter();
+ 
+ #ifdef SWIG_EXT
+ extern int	swig_state;
+diff --git a/skf-2.10/skf_convert.i b/skf-2.10/skf_convert.i
+index bc365bb..d8c68e6 100644
+--- a/skf-2.10/skf_convert.i
++++ b/skf-2.10/skf_convert.i
+@@ -1164,7 +1164,7 @@ static void r_skf_convert(struct Skf_localestring *lstr, long ibuflen,
+ 
+ /* --- conversion loop ------------------------------------------- */
+     if ((errc = setjmp(skf_errbuf)) == 0) {
+-	sy = skf_in_converter((FILE *)0);
++	sy = skf_in_converter(0);
+     } else {
+ #if defined(SKF_PYTHON3) && defined(SWIGPYTHON)
+ 	if (errc == 1) PyErr_NoMemory();
+diff --git a/skf-2.10/skf_fileio.h b/skf-2.10/skf_fileio.h
+index b551898..74dcc6c 100644
+--- a/skf-2.10/skf_fileio.h
++++ b/skf-2.10/skf_fileio.h
+@@ -53,8 +53,6 @@ extern  const char	*skf_outmode;
+ /* encoding controls						  */
+ /* -------------------------------------------------------------- */
+ 
+-extern int decode_hook();
+-
+ #define	sEOF	(-1)
+ #define sOCD	(-2)
+ #define sKAN	(-3)
+@@ -144,7 +142,7 @@ typedef int	skfFILE;  /* file type				  */
+ 
+ extern unsigned char     stdobuf[O_BUFSIZ]; /* output buffer	  */
+ 
+-extern int	skf_fillbuf();
++extern int	skf_fillbuf P_((int *));
+ extern /*@-retalias@*/ skfFILE	*skf_fopen P_((char *, const char *));
+ extern  size_t	skf_strlen P_((char *,int));
+ 
+@@ -253,6 +251,8 @@ extern skfoFILE *fout;
+ #endif
+ 
+ extern void skf_setvbuf P_ ((FILE *,char *,size_t));
++extern int	skf_in_converter P_((skfFILE *));
++extern int decode_hook P_((skfFILE*, int));
+ 
+ /* -------------------------------------------------------------- */
+ /* exception handling						  */

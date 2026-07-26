@@ -1,0 +1,47 @@
+--- ./vectors.c.orig	2016-03-23 20:54:26.760508868 +0100
++++ ./vectors.c	2016-03-23 20:55:12.788510622 +0100
+@@ -147,17 +147,12 @@
+   if(atom_flag == 1)
+     {
+       radius = atoms[si].cov_rad * get_atom_scale();
+-      
+-      if(radius > mod)
+-        {
+-          return;
+-        }
+     }
+   else
+     {
+       radius = 0.0;
+     }
+-  
++
+   /* Base of vector */
+ 
+   a[0] = atoms[si].x + (radius * vector[0] / mod);
+@@ -171,9 +166,9 @@
+ 
+   /* Tip of vector */
+ 
+-  b[0] = atoms[si].x + vector[0];
+-  b[1] = atoms[si].y + vector[1];
+-  b[2] = atoms[si].z + vector[2];
++  b[0] = a[0] + vector[0];
++  b[1] = a[1] + vector[1];
++  b[2] = a[2] + vector[2];
+   
+   convert_to_canvas_coords(b, xy_temp, 0);
+  
+@@ -184,9 +179,9 @@
+ 
+   vec_arrow_scale = get_vector_arrow_scale ();
+ 
+-  c[0] = atoms[si].x + (1.0 - vec_arrow_scale) * vector[0];
+-  c[1] = atoms[si].y + (1.0 - vec_arrow_scale) * vector[1];
+-  c[2] = atoms[si].z + (1.0 - vec_arrow_scale) * vector[2];
++  c[0] = a[0] + (1.0 - vec_arrow_scale) * vector[0];
++  c[1] = a[1] + (1.0 - vec_arrow_scale) * vector[1];
++  c[2] = a[2] + (1.0 - vec_arrow_scale) * vector[2];
+ 
+   convert_to_canvas_coords(c, xy_temp, 0);
+ 

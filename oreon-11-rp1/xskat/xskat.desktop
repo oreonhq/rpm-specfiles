@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=XSkat
+Comment=The card game Skat
+GenericName=Card game Skat
+Exec=xskat
+Icon=xskat
+Terminal=false
+Type=Application
+Categories=Game;CardGame;
+

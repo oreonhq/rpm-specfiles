@@ -1,0 +1,43 @@
+From 99f96d0e6d18996ad58d34998d08f022585ae77b Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Wed, 2 Oct 2024 14:39:51 +0100
+Subject: [PATCH 18/18] chore: remove ctest dashboard config
+
+---
+ CMakeLists.txt    | 4 ----
+ CTestConfig.cmake | 8 --------
+ 2 files changed, 12 deletions(-)
+ delete mode 100644 CTestConfig.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e1aa0390d4..810a1f4b21 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -322,10 +322,6 @@ configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
+ # For use in client projects that call UseVXL.cmake
+ set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
+ 
+-# Copy CTestCustom.cmake to top of build tree
+-configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
+-  ${VXL_BINARY_DIR}/CTestCustom.cmake COPYONLY )
+-
+ # This command must be the last command in this file
+ if(NOT VXL_NO_EXPORT)
+   include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/export/VXLCreateProject.cmake)
+diff --git a/CTestConfig.cmake b/CTestConfig.cmake
+deleted file mode 100644
+index f2620f7bf6..0000000000
+--- a/CTestConfig.cmake
++++ /dev/null
+@@ -1,8 +0,0 @@
+-# CTest Configuration for VXL
+-set(CTEST_PROJECT_NAME "VXL")
+-set(CTEST_NIGHTLY_START_TIME "22:00:00 EST")
+-
+-set(CTEST_DROP_METHOD "http")
+-set(CTEST_DROP_SITE "open.cdash.org")
+-set(CTEST_DROP_LOCATION "/submit.php?project=vxl")
+-set(CTEST_DROP_SITE_CDASH TRUE)
+-- 
+2.46.1
+

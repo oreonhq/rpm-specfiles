@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Luya Tshimbalanga <luya@fedoraproject.org> -->
+<component type="font">
+	<id>typetype-molot</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Molot</name>
+	<summary>Sans-serif display fonts</summary>
+	<description>
+		<p>A display sans-serif font created by Roman Ershov and Jovanny Lemonad</p>
+	</description>
+	<provides>
+​		<font file="Molot.otf">Molot Regular</font>
+	</provides>
+	<url type="homepage">http://www.typetype.ru</url>
+	<updatecontact>luya@fedoraproject.org</updatecontact>
+</component>

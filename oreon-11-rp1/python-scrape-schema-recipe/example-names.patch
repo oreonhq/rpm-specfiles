@@ -1,0 +1,12 @@
+diff -ruN scrape-schema-recipe-0.2.2/scrape_schema_recipe/example_output.py scrape-schema-recipe-0.2.2-mod/scrape_schema_recipe/example_output.py
+--- scrape-schema-recipe-0.2.2/scrape_schema_recipe/example_output.py	2023-09-26 22:04:43.000000000 +0300
++++ scrape-schema-recipe-0.2.2-mod/scrape_schema_recipe/example_output.py	2024-11-13 17:31:21.573750440 +0300
+@@ -22,7 +22,7 @@
+     "truffles": "sweetestkitchen-truffles.html",
+ }
+ 
+-example_names = tuple(_ex_name_filename.keys())
++example_names = tuple()
+ 
+ 
+ def example_output(name: str,

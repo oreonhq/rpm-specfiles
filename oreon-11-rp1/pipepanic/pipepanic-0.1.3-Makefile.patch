@@ -1,0 +1,11 @@
+--- Makefile.orig	2007-04-08 15:31:31.000000000 +0200
++++ Makefile	2007-04-08 15:32:57.000000000 +0200
+@@ -4,7 +4,7 @@
+ 
+ # Settings for x86.
+ CC=gcc
+-CFLAGS=-O2 -Wall -pedantic `sdl-config --cflags`
++CFLAGS+=`sdl-config --cflags`
+ LINK=gcc
+ LDFLAGS=
+ LIBS=`sdl-config --libs`

@@ -1,0 +1,67 @@
+From 826c154c423e158f0f80b6a1e7fc6cd128870b88 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 26 Sep 2021 22:40:49 -0400
+Subject: [PATCH 1/7] Increase test timeout for slower architectures
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ distributed/tests/test_worker_memory.py | 10 +++++-----
+ distributed/utils_test.py               |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/distributed/tests/test_worker_memory.py b/distributed/tests/test_worker_memory.py
+index 96589a16..4bc6ade6 100644
+--- a/distributed/tests/test_worker_memory.py
++++ b/distributed/tests/test_worker_memory.py
+@@ -1098,12 +1098,12 @@ async def test_pause_while_idle(s, a, b):
+     assert sa in s.running
+ 
+     a.monitor.get_process_memory = lambda: 2**40
+-    await async_poll_for(lambda: sa.status == Status.paused, timeout=5)
++    await async_poll_for(lambda: sa.status == Status.paused, timeout=20)
+     assert a.address not in s.idle
+     assert sa not in s.running
+ 
+     a.monitor.get_process_memory = lambda: 0
+-    await async_poll_for(lambda: sa.status == Status.running, timeout=5)
++    await async_poll_for(lambda: sa.status == Status.running, timeout=20)
+     assert a.address in s.idle
+     assert sa in s.running
+ 
+@@ -1113,17 +1113,17 @@ async def test_pause_while_saturated(c, s, a, b):
+     sa = s.workers[a.address]
+     ev = Event()
+     futs = c.map(lambda i, ev: ev.wait(), range(3), ev=ev, workers=[a.address])
+-    await async_poll_for(lambda: len(a.state.tasks) == 3, timeout=5)
++    await async_poll_for(lambda: len(a.state.tasks) == 3, timeout=20)
+     assert sa in s.saturated
+     assert sa in s.running
+ 
+     a.monitor.get_process_memory = lambda: 2**40
+-    await async_poll_for(lambda: sa.status == Status.paused, timeout=5)
++    await async_poll_for(lambda: sa.status == Status.paused, timeout=20)
+     assert sa not in s.saturated
+     assert sa not in s.running
+ 
+     a.monitor.get_process_memory = lambda: 0
+-    await async_poll_for(lambda: sa.status == Status.running, timeout=5)
++    await async_poll_for(lambda: sa.status == Status.running, timeout=20)
+     assert sa in s.saturated
+     assert sa in s.running
+ 
+diff --git a/distributed/utils_test.py b/distributed/utils_test.py
+index 99928a4e..0d308a54 100644
+--- a/distributed/utils_test.py
++++ b/distributed/utils_test.py
+@@ -108,7 +108,7 @@ logging_levels = {
+     if isinstance(logger, logging.Logger)
+ }
+ 
+-_TEST_TIMEOUT = 30
++_TEST_TIMEOUT = 30 * 10  # For slower architectures.
+ _offload_executor.submit(lambda: None).result()  # create thread during import
+ 
+ 
+-- 
+2.52.0
+

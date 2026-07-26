@@ -1,0 +1,16 @@
+Patching configure directly because this is output of an old autoconf version.
+
+diff -ur tkpng0.9.orig/configure tkpng0.9/configure
+--- tkpng0.9.orig/configure	2008-03-26 02:36:50.000000000 +0100
++++ tkpng0.9/configure	2022-11-18 12:14:37.970898463 +0100
+@@ -3461,8 +3461,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

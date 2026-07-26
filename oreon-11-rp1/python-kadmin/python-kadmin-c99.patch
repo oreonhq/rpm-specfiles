@@ -1,0 +1,37 @@
+Python 3 no longer uses tp_print in PyTypeObject
+
+The struct field in this position is now called tp_vectorcall_offset
+and is used for something else.
+
+Fixes a compilation error with compilers which refuse to convert
+function pointers to Py_ssize_t without a cast.
+
+Submitted upstream: <https://github.com/rjancewicz/python-kadmin/pull/72>
+
+diff --git a/src/PyKAdminPolicyObject.c b/src/PyKAdminPolicyObject.c
+index 0bf3ee8ce17b6e19..324536a61c29c5c7 100644
+--- a/src/PyKAdminPolicyObject.c
++++ b/src/PyKAdminPolicyObject.c
+@@ -67,13 +67,6 @@ Password failure count reset interval: 0 days 00:00:00
+ Password lockout duration: 0 days 00:00:00
+ */
+ 
+-static int KAdminPolicyObject_print(PyKAdminPolicyObject *self, FILE *file, int flags){
+-    // TODO
+-    
+-    return 0;
+-}
+-
+-
+ PyObject *PyKAdminPolicy_RichCompare(PyObject *o1, PyObject *o2, int opid) {
+ 
+     PyKAdminPolicyObject *a = (PyKAdminPolicyObject *)o1;
+@@ -120,7 +113,7 @@ PyTypeObject PyKAdminPolicyObject_Type = {
+     sizeof(PyKAdminPolicyObject),             /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     (destructor)PyKAdminPolicyObject_dealloc, /*tp_dealloc*/
+-    KAdminPolicyObject_print,                         /*tp_print*/
++    0,                         /*tp_vectorcall_offset*/
+     0,                         /*tp_getattr*/
+     0,                         /*tp_setattr*/
+     0,                         /*tp_compare*/

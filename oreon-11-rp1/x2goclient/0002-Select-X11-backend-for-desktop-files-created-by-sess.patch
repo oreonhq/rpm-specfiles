@@ -1,0 +1,26 @@
+From 929878883356610ecd42e98e6819cfd24f8ddb44 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Fri, 17 Apr 2020 20:49:22 -0600
+Subject: [PATCH 2/2] Select X11 backend for desktop files created by session
+ manager
+
+---
+ src/sessionexplorer.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sessionexplorer.cpp b/src/sessionexplorer.cpp
+index a6e33c6..aec15be 100644
+--- a/src/sessionexplorer.cpp
++++ b/src/sessionexplorer.cpp
+@@ -201,7 +201,7 @@ void SessionExplorer::slotCreateDesktopIcon ( SessionButton* bt )
+ 
+     QTextStream out ( &file );
+     out << "[Desktop Entry]\n"<<
+-        "Exec="<<cmd<<" "<<args.join (" ")<<"\n"<<
++        "Exec=env QT_QPA_PLATFORM=xcb "<<cmd<<" "<<args.join (" ")<<"\n"<<
+         "Icon="<<sessIcon<<"\n"<<
+         "Name="<<name<<"\n"<<
+         "StartupNotify=true\n"<<
+-- 
+1.8.3.1
+

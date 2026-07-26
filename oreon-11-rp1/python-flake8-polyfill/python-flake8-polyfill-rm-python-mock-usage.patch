@@ -1,0 +1,21 @@
+--- a/tests/test_options.py
++++ b/tests/test_options.py
+@@ -2,7 +2,7 @@
+ import optparse
+ import os
+ 
+-import mock
++from unittest import mock
+ import pytest
+ 
+ from flake8_polyfill import options
+--- a/tox.ini
++++ b/tox.ini
+@@ -15,7 +15,6 @@ deps =
+     flake8_2.6: flake8<2.7
+     pep8
+     pycodestyle
+-    mock
+     pytest
+ commands =
+     py.test {posargs}

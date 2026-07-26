@@ -1,0 +1,23 @@
+.TH pocommentclean 1 "Translate Toolkit 1.3.0" "" "Translate Toolkit 1.3.0"
+.SH NAME
+pocommentclean \- Remove all translator comments from PO files.
+.SH SYNOPSIS
+\fBpocommentclean\fR [\fB\-\-backup\fR] \fIpo-dir\fR
+
+where \fIpo-dir\fR is a directory of existing PO files that you want to
+clean.
+.SH DESCRIPTION
+pocommentclean will remove all translator comments from a directory of PO
+files.
+.SH OPTIONS
+.TP
+\fB\-\-backup\fR
+Create a backup file for each PO file converted, with the \fI.po.bak\fR
+extension.
+.SH OPERATION
+Using sed \fBpocommentclean\fR will delete all lines starting with # but which
+are not standard Gettext PO format lines. So it won't delete developer
+comments (#.), obsolete messages (#~), flags (#,) or locations (#:).
+.SH BUGS
+\fBpocommentclean\fR cannot clean individual PO files, it only cleans
+directories.

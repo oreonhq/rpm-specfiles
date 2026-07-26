@@ -1,0 +1,40 @@
+Date: Mon, 3 Jul 2006 10:11:40 +1200
+From: Stuart Norris <s.norris@auckland.ac.nz>
+Subject: Re: uread licence clarification
+To: Patrice Dumas <pertusus@free.fr>
+
+On Sun, 2 Jul 2006, Patrice Dumas wrote:
+
+GPL.
+
+>>uread doesn't really need a license. The GNU license would be longer
+>>than the code, and would be a sign that the lawyers have won.
+>
+>They have won, since the Bern Convention (1979) a piece of code without
+>licence notice is considered to have one. So the copyright/licence of your
+>code is currently along:
+>
+>  Copyright 1996 1998 S.E. Norris.
+>  All rights reserved.
+>
+>And your code is big enough to be subject to copyright.
+>
+>>ie: please include it in the distribution. modify or redistribute if you
+>>wish.
+>
+>I am sorry, but I can't do that unless you tell me under what licence you
+>authorize me to modify and redistribute it. You just have to say in the mail
+>that you authorize me to redistribute it under a given licence (whatever you
+>prefer, GPL, LGPL, BSD or anything else, as long as it is free software) and
+>it'll be right. You can even say that you allow me to redistribute uread
+>under
+>any licence I want, but you have to say something along that. Indeed when
+>you give me the right to modify or redistribute it you don't give this right
+>to others and I need that to be able to include it in a distribution based
+>on free software like fedora.
+>
+>Sorry to bother you with these licence issues...
+>
+>--
+>Pat
+

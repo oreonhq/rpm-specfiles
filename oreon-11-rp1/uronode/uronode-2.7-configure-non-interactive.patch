@@ -1,0 +1,25 @@
+diff --git a/configure b/configure
+index 923f672..f859cc6 100755
+--- a/configure
++++ b/configure
+@@ -1,9 +1,16 @@
+ #!/bin/sh
+ 
+-echo -n "Use interactive mode? [Y/n]: "; read answer
+-if [ "$answer" = "Y" -o "$answer" = "y" -o "$answer" = "" ]
+-   then NON_INTERACTIVE=0;
+-       else NON_INTERACTIVE=1;
++if [ "$NON_INTERACTIVE" = 1 ]
++then
++	echo "Using non-interactive installation, if you want interactive mode"
++	echo "unset NON_INTERACTIVE environment variable prior running configure"
++	echo "by e.g.: unset NON_INTERACTIVE"
++else
++	echo -n "Use interactive mode? [Y/n]: "; read answer
++	if [ "$answer" = "Y" -o "$answer" = "y" -o "$answer" = "" ]
++	then NON_INTERACTIVE=0;
++	else NON_INTERACTIVE=1;
++	fi
+ fi
+ 
+ _sleep()

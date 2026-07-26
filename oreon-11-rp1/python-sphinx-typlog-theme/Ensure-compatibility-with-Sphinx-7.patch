@@ -1,0 +1,28 @@
+From 1074284d6f32879112d62fa8f64e836405c777bf Mon Sep 17 00:00:00 2001
+From: Karolina Surma <ksurma@redhat.com>
+Date: Thu, 17 Aug 2023 11:01:34 +0200
+Subject: [PATCH] Ensure compatibility with Sphinx 7
+
+Key 'style' has been removed from Sphinx 7.
+
+Contributed upstream: https://github.com/typlog/sphinx-typlog-theme/pull/26
+---
+ sphinx_typlog_theme/layout.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sphinx_typlog_theme/layout.html b/sphinx_typlog_theme/layout.html
+index ba56f19..b74fccd 100644
+--- a/sphinx_typlog_theme/layout.html
++++ b/sphinx_typlog_theme/layout.html
+@@ -26,7 +26,7 @@
+     <link rel="search" type="application/opensearchdescription+xml" title="{% trans docstitle=docstitle|e %}Search within {{ docstitle }}{% endtrans %}" href="{{ pathto('_static/opensearch.xml', 1) }}"/>
+   {%- endif %}
+   {%- include "style.html" -%}
+-  <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}?v={{ theme_version }}" type="text/css" />
++  <link rel="stylesheet" href="{{ pathto('_static/' + styles[-1], 1) }}?v={{ theme_version }}" type="text/css" />
+   <link rel="stylesheet" href="{{ pathto('_static/theme.css', 1) }}?v={{ theme_version }}" type="text/css" />
+   {%- for cssfile in css_files -%}
+     <link rel="stylesheet" href="{{ pathto(cssfile, 1) }}" type="text/css" />
+-- 
+2.41.0
+

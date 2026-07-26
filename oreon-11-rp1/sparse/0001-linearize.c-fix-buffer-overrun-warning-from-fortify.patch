@@ -1,0 +1,30 @@
+From fee73b2b96860b577e826e76e1402433ae00cafe Mon Sep 17 00:00:00 2001
+From: Jeff Layton <jlayton@kernel.org>
+Date: Wed, 22 Feb 2023 10:35:36 -0500
+Subject: [PATCH] linearize.c: fix buffer overrun warning from fortify
+
+The resulting string from snprintf, won't be nearly 64 bytes, but "buf"
+is only 16 bytes long here. This causes FORTIFY_SOURCE to complain when
+given the right options.
+
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ linearize.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linearize.c b/linearize.c
+index d9aed61b361f..1db2d505a7d4 100644
+--- a/linearize.c
++++ b/linearize.c
+@@ -91,7 +91,7 @@ const char *show_label(struct basic_block *bb)
+ 
+ 	if (!bb)
+ 		return ".L???";
+-	snprintf(buf, 64, ".L%u", bb->nr);
++	snprintf(buf, 16, ".L%u", bb->nr);
+ 	return buf;
+ }
+ 
+-- 
+2.39.2
+

@@ -1,0 +1,91 @@
+From 394560512be3bed1d3ec3e8aa1bde47b9e9c7cd5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 1 Dec 2023 13:13:12 +0100
+Subject: [PATCH] Fix a return value of signal handlers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 14 will error if a value returned from a function does not match
+a function prototype. This can be reproduced with -Wreturn-mismatch
+option and is a problem compilers where a signal handler should return
+void:
+
+    daemon.c: In function ‘sigchld_handler’:
+    daemon.c:108:10: error: ‘return’ with a value, in function returning void
+      108 |   return 0;
+	  |          ^
+    daemon.c:92:1: note: declared here
+       92 | sigchld_handler(
+	  | ^~~~~~~~~~~~~~~
+    daemon.c: In function ‘sighup_handler’:
+    daemon.c:117:10: error: ‘return’ with a value, in function returning void
+      117 |   return 0;
+	  |          ^
+    daemon.c:112:1: note: declared here
+      112 | sighup_handler(
+	  | ^~~~~~~~~~~~~~
+    daemon.c: In function ‘exit_handler’:
+    daemon.c:127:10: error: ‘return’ with a value, in function returning void
+      127 |   return 0;
+	  |          ^
+
+This patch fixes it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ configure.ac    | 3 +++
+ server/daemon.c | 6 ++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index d2edb0e..e774a5f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -124,6 +124,9 @@ AC_CHECK_FUNCS(getcwd gethostname socket strftime uname flock lockf \
+ 	       setsid crypt memset memcpy usleep wait3 getaddrinfo vsnprintf)
+ AC_REPLACE_FUNCS(strerror)
+ 
++AS_IF([test "${ac_cv_type_signal}" = "int"],
++    AC_DEFINE([RETSIGTYPE_IS_INT], [1], [Define if RETSIGTYPE is int.])
++    )
+ 
+ dnl Optional software.
+ 
+diff --git a/server/daemon.c b/server/daemon.c
+index a5c638b..c943da9 100644
+--- a/server/daemon.c
++++ b/server/daemon.c
+@@ -105,7 +105,9 @@ sigchld_handler(
+   /* reset the signal handler -- some older systems remove the signal
+      handler upon use.  POSIX systems should not do this */
+   signal(SIGCHLD, (__sighandler_t)sigchld_handler);
++#ifdef RETSIGTYPE_IS_INT
+   return 0;
++#endif
+ }
+ 
+ static RETSIGTYPE
+@@ -114,7 +116,9 @@ sighup_handler(
+ {
+   hup_recvd = TRUE;
+   signal(SIGHUP, (__sighandler_t)sighup_handler);
++#ifdef RETSIGTYPE_IS_INT
+   return 0;
++#endif
+ }
+ 
+ static RETSIGTYPE
+@@ -124,7 +128,9 @@ exit_handler(
+   log(L_LOG_NOTICE, UNKNOWN, "Exiting");
+   delpid();
+   exit(0);
++#ifdef RETSIGTYPE_IS_INT
+   return 0;
++#endif
+ }
+ 
+ static void set_sighup (void)
+-- 
+2.43.0
+

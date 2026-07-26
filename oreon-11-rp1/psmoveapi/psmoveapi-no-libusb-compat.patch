@@ -1,0 +1,17 @@
+diff --git a/src/utils/CMakeLists.txt b/src/utils/CMakeLists.txt
+index 6ed9090..0ffdc65 100644
+--- a/src/utils/CMakeLists.txt
++++ b/src/utils/CMakeLists.txt
+@@ -19,12 +19,6 @@ if (PSMOVE_USE_SIXPAIR OR PSMOVE_BUILD_TRACKER)
+     include(${CMAKE_CURRENT_LIST_DIR}/libusb.cmake)
+     target_link_libraries(psmove ${LIBUSB_LIBRARIES})
+   else()
+-    # sixpair needs libusb
+-    find_package(PkgConfig REQUIRED)
+-    pkg_check_modules(LIBUSB REQUIRED libusb QUIET)
+-    include_directories(${LIBUSB_INCLUDE_DIRS})
+-    target_link_libraries(psmove ${LIBUSB_LIBRARIES})
+-
+     # ps4/ps5 cams need libusb-1.0
+     find_package(PkgConfig REQUIRED)
+     pkg_check_modules(LIBUSB REQUIRED libusb-1.0 QUIET)

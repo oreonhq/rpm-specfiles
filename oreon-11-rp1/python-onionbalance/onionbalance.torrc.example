@@ -1,0 +1,14 @@
+# Tor config for the onionbalance management server
+# ---
+# The management server must be able to access the Tor control port.
+# Alternatively the control port can be enabled on the system Tor process.
+
+# Seperate data directory as we run it as a multi-instance
+DataDirectory /var/lib/tor/onionbalance-data
+
+ControlPort 127.0.0.1:6666
+SocksPort 0
+
+# Make cookie file accessible to onionbalance
+CookieAuthFile /run/tor/onionbalance.control.authcookie
+CookieAuthFileGroupReadable 1

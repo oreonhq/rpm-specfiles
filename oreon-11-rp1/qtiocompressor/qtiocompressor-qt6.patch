@@ -1,0 +1,126 @@
+diff -Naur qtiocompressor-2.3_1-opensource/buildlib/buildlib.pro qtiocompressor-2.3_1-opensource-patched/buildlib/buildlib.pro
+--- qtiocompressor-2.3_1-opensource/buildlib/buildlib.pro	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/buildlib/buildlib.pro	2025-07-14 21:19:33.597617870 -0700
+@@ -1,5 +1,5 @@
+ TEMPLATE=lib
+-CONFIG += qt dll qtiocompressor-buildlib
++CONFIG += qt dll c++17 qtiocompressor-buildlib
+ mac:CONFIG += absolute_library_soname
+ win32|mac:!wince*:!win32-msvc:!macx-xcode:CONFIG += debug_and_release build_all
+ include(../src/qtiocompressor.pri)
+diff -Naur qtiocompressor-2.3_1-opensource/config.pri qtiocompressor-2.3_1-opensource-patched/config.pri
+--- qtiocompressor-2.3_1-opensource/config.pri	1969-12-31 16:00:00.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/config.pri	2025-07-14 21:22:43.903685076 -0700
+@@ -0,0 +1 @@
++# Stub for Qt6 build, no special config needed
+diff -Naur qtiocompressor-2.3_1-opensource/examples/gzip/gzip.pro qtiocompressor-2.3_1-opensource-patched/examples/gzip/gzip.pro
+--- qtiocompressor-2.3_1-opensource/examples/gzip/gzip.pro	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/gzip/gzip.pro	2025-07-14 21:36:26.257062419 -0700
+@@ -5,3 +5,5 @@
+ include (../../src/qtiocompressor.pri)
+ 
+ SOURCES += main.cpp
++LIBS += -lz
++
+diff -Naur qtiocompressor-2.3_1-opensource/examples/gzip/main.cpp qtiocompressor-2.3_1-opensource-patched/examples/gzip/main.cpp
+--- qtiocompressor-2.3_1-opensource/examples/gzip/main.cpp	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/gzip/main.cpp	2025-07-14 21:34:34.389328328 -0700
+@@ -47,6 +47,9 @@
+ #include <QtCore/QDebug>
+ #include <QtCore/QFile>
+ #include <qtiocompressor.h>
++#include <iostream>
++using std::endl;
++
+ 
+ // This examples demonstrates how to decompress a file created with the gzip utility.
+ int main()
+diff -Naur qtiocompressor-2.3_1-opensource/examples/simple/main.cpp qtiocompressor-2.3_1-opensource-patched/examples/simple/main.cpp
+--- qtiocompressor-2.3_1-opensource/examples/simple/main.cpp	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/simple/main.cpp	2025-07-14 21:29:24.871453250 -0700
+@@ -47,6 +47,9 @@
+ #include <QtCore/QDebug>
+ #include <QtCore/QFile>
+ #include <qtiocompressor.h>
++#include <iostream>
++using std::endl;
++
+ 
+ int main()
+ {
+diff -Naur qtiocompressor-2.3_1-opensource/examples/simple/simple.pro qtiocompressor-2.3_1-opensource-patched/examples/simple/simple.pro
+--- qtiocompressor-2.3_1-opensource/examples/simple/simple.pro	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/simple/simple.pro	2025-07-14 21:31:00.826634980 -0700
+@@ -5,3 +5,4 @@
+ include (../../src/qtiocompressor.pri)
+ 
+ SOURCES += main.cpp
++LIBS += -lz
+diff -Naur qtiocompressor-2.3_1-opensource/examples/xml/main.cpp qtiocompressor-2.3_1-opensource-patched/examples/xml/main.cpp
+--- qtiocompressor-2.3_1-opensource/examples/xml/main.cpp	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/xml/main.cpp	2025-07-14 21:34:59.599621338 -0700
+@@ -47,6 +47,9 @@
+ #include <QtXml>
+ #include <QtCore/QDebug>
+ #include <qtiocompressor.h>
++#include <iostream>
++using std::endl;
++
+ 
+ // This example demonstrates how to use the Qt Xml classes together with QtIOCompressor to store
+ // compressed xml data in a file. 
+diff -Naur qtiocompressor-2.3_1-opensource/examples/xml/xml.pro qtiocompressor-2.3_1-opensource-patched/examples/xml/xml.pro
+--- qtiocompressor-2.3_1-opensource/examples/xml/xml.pro	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/xml/xml.pro	2025-07-14 21:37:28.269432665 -0700
+@@ -6,3 +6,5 @@
+ include (../../src/qtiocompressor.pri)
+ 
+ SOURCES += main.cpp
++LIBS += -lz
++
+diff -Naur qtiocompressor-2.3_1-opensource/examples/ziplist/main.cpp qtiocompressor-2.3_1-opensource-patched/examples/ziplist/main.cpp
+--- qtiocompressor-2.3_1-opensource/examples/ziplist/main.cpp	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/ziplist/main.cpp	2025-07-14 21:48:55.450848344 -0700
+@@ -50,6 +50,7 @@
+ #include <QtCore/QDebug>
+ #include <qtiocompressor.h>
+ 
++
+ /*
+   This example demonstrates the use of QtIOCompressor's RawZipFormat
+   to read ZIP archive files. It implements a rudimentary parsing of
+@@ -83,8 +84,8 @@
+ 
+     QTextStream sout(stdout);
+     // Read all from file and print.
+-    sout << "Archive: " << argv[1] << endl;
+-    sout << "Item  Size Name" << endl;
++    sout << "Archive: " << argv[1] << Qt::endl;;
++    sout << "Item  Size Name" << Qt::endl;;
+     int item = 0;
+     forever {
+         // Zip format "local file header" fields:
+@@ -119,12 +120,12 @@
+ 
+         // unCompData now contains the uncompressed file from the zip archive
+         sout << QString("%1 %2 ").arg(1+item++, 3).arg(unCompData.size(), 6)
+-             << fileName << endl;
++             << fileName << Qt::endl;;
+ 
+         if (fileName.toLower().endsWith(".txt"))
+             sout << "   Preview: \""
+                  << unCompData.mid(0, unCompData.indexOf('\n')).replace('\r', "")
+-                 << "\"..." << endl;
++                 << "\"..." << Qt::endl;;
+     }
+ 
+     if (!item) {
+diff -Naur qtiocompressor-2.3_1-opensource/examples/ziplist/ziplist.pro qtiocompressor-2.3_1-opensource-patched/examples/ziplist/ziplist.pro
+--- qtiocompressor-2.3_1-opensource/examples/ziplist/ziplist.pro	2009-12-16 02:40:11.000000000 -0800
++++ qtiocompressor-2.3_1-opensource-patched/examples/ziplist/ziplist.pro	2025-07-14 21:37:57.040208609 -0700
+@@ -5,3 +5,5 @@
+ include (../../src/qtiocompressor.pri)
+ 
+ SOURCES += main.cpp
++LIBS += -lz
++

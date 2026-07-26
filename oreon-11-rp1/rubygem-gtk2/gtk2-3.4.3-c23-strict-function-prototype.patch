@@ -1,0 +1,22 @@
+diff --git a/ext/gtk2/rbgtkitemfactory.c b/ext/gtk2/rbgtkitemfactory.c
+index 681e56d..a79b69d 100644
+--- a/ext/gtk2/rbgtkitemfactory.c
++++ b/ext/gtk2/rbgtkitemfactory.c
+@@ -143,7 +143,7 @@ create_factory_entry(GtkItemFactoryEntry *entry, VALUE self, VALUE path, VALUE i
+         if (NIL_P(func)) {
+             entry->callback = NULL;
+         } else {
+-            entry->callback = items_exec_callback_wrap;
++            entry->callback = (GtkItemFactoryCallback)items_exec_callback_wrap;
+         }
+     }
+     action = rb_ary_new3(2, func, data);
+@@ -177,7 +177,7 @@ rg_create_item(int argc, VALUE *argv, VALUE self)
+     rb_scan_args(argc, argv, "14", &path, &type, &accel, &extdata, &data);
+ 
+     entry = ALLOC(GtkItemFactoryEntry);
+-    func = rb_rescue((VALUE(*)())rb_block_proc, 0, NULL, 0);
++    func = rb_rescue((VALUE(*)(VALUE))rb_block_proc, 0, NULL, 0);
+ 
+     create_factory_entry(entry, self, path, type, accel, extdata, func, data);
+ 

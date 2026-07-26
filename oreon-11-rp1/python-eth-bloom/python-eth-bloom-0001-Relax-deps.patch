@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 22 Apr 2025 11:02:24 +0200
+Subject: [PATCH] Relax deps
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/setup.py b/setup.py
+index d9c561f..2fbb445 100644
+--- a/setup.py
++++ b/setup.py
+@@ -44,7 +44,7 @@ setup(
+     url="https://github.com/ethereum/eth-bloom",
+     include_package_data=True,
+     install_requires=[
+-        "eth-hash[pycryptodome]>=0.4.0",
++        "eth-hash>=0.4.0",
+     ],
+     python_requires=">=3.8, <4",
+     extras_require=extras_require,

@@ -1,0 +1,15 @@
+diff -up tng-1.8.2/src/tests/md_openmp.f.gf12 tng-1.8.2/src/tests/md_openmp.f
+--- tng-1.8.2/src/tests/md_openmp.f.gf12	2018-03-28 12:39:54.000000000 +0200
++++ tng-1.8.2/src/tests/md_openmp.f	2022-02-01 23:38:00.496173821 +0100
+@@ -35,9 +35,9 @@ c  Parameters:
+ c
+ c    None
+ c
+-      implicit none
++      use omp_lib
+ 
+-      include 'omp_lib.h'
++      implicit none
+ 
+       integer nd
+       parameter ( nd = 3 )

@@ -1,0 +1,186 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for UnrealIRCd >= 6.0.3 which implements
+the same options like in the upstream 'unrealircd' shell script, which was before 6.0.2
+shipped by this downstream as compatibility shim called 'unrealircdctl' to avoid file name
+conflicts with the same-named ELF executable binary.
+
+--- unrealircd-6.0.3/src/unrealircdctl.c		2022-04-01 16:28:45.000000000 +0200
++++ unrealircd-6.0.3/src/unrealircdctl.c.unrealircd	2022-04-02 13:53:28.630301007 +0200
+@@ -24,6 +24,7 @@
+  * @brief UnrealIRCd Control
+  */
+ #include "unrealircd.h"
++#include <pwd.h>
+ 
+ #ifdef _WIN32
+  #define UNREALCMD "unrealircdctl"
+@@ -45,6 +46,8 @@
+ 	       "mkpasswd       - Hash a password\n"
+ 	       "gencloak       - Display 3 random cloak keys\n"
+ 	       "spkifp         - Display SPKI Fingerprint\n"
++	       "genlinkblock   - Generate link { } block for the other side\n"
++	       "configtest     - Test the configuration file\n"
+ 	       "\n", program_name);
+ 	exit(-1);
+ }
+@@ -195,7 +198,7 @@
+ 	{
+ 		printf("NOTE: This script uses the default certificate location (any set::tls settings\n"
+ 		       "are ignored). If this is not what you want then specify a certificate\n"
+-		       "explicitly like this: %s spkifp conf/tls/example.pem\n\n", UNREALCMD);
++		       "explicitly like this: %s spkifp /etc/unrealircd/tls/example.pem\n\n", UNREALCMD);
+ 		safe_strdup(file, "tls/server.cert.pem");
+ 		convert_to_absolute_path(&file, CONFDIR);
+ 	}
+@@ -203,7 +206,7 @@
+ 	if (!file_exists(file))
+ 	{
+ 		printf("Could not open certificate: %s\n"
+-		       "You can specify a certificate like this: %s spkifp conf/tls/example.pem\n",
++		       "You can specify a certificate like this: %s spkifp /etc/unrealircd/tls/example.pem\n",
+ 		       UNREALCMD, file);
+ 		exit(1);
+ 	}
+@@ -233,6 +236,117 @@
+ 	exit(0);
+ }
+ 
++void unrealircdctl_permdrop(void)
++{
++	struct passwd *pwd = calloc(1, sizeof(struct passwd));
++	size_t buffer_len = sysconf(_SC_GETPW_R_SIZE_MAX) * sizeof(char);
++	char *buffer = malloc(buffer_len), *username = "unrealircd";
++
++	if (getuid() != 0)
++	{
++		printf("ERROR: Functionality may not be used by unprivileged users!");
++		exit(1);
++	}
++
++	if (pwd == NULL)
++	{
++		printf("ERROR: Failed to allocate struct passwd for getpwnam_r()!\n");
++		exit(1);
++	}
++
++	if (buffer == NULL)
++	{
++		printf("ERROR: Failed to allocate buffer for getpwnam_r()!\n");
++		exit(1);
++	}
++
++	getpwnam_r(username, pwd, buffer, buffer_len, &pwd);
++
++	if (pwd == NULL)
++	{
++		printf("ERROR: System user '%s' does not exist!\n", username);
++		exit(1);
++	}
++
++	free(pwd);
++	free(buffer);
++
++	if (setgid(pwd->pw_gid) != 0)
++	{
++		printf("ERROR: Unable to drop group privileges using setgid()!\n");
++		exit(1);
++	}
++
++	if (setuid(pwd->pw_uid) != 0)
++	{
++		printf("ERROR: Unable to drop user privileges using setgid()!\n");
++		exit(1);
++	}
++}
++
++void unrealircdctl_configtest(void)
++{
++	char *cmd[] = { "/usr/bin/unrealircd", "-c", (char *) NULL };
++
++	if (execvp(cmd[0], cmd) == -1)
++	{
++		printf("ERROR: Running 'unrealircd -c' as system user 'unrealircd' failed!\n");
++		exit(1);
++	}
++
++	exit(0);
++}
++
++void unrealircdctl_genlinkblock(void)
++{
++	char *cmd[] = { "/usr/bin/unrealircd", "-L", (char *) NULL };
++
++	if (execvp(cmd[0], cmd) == -1)
++	{
++		printf("ERROR: Running 'unrealircd -L' as system user 'unrealircd' failed!\n");
++		exit(1);
++	}
++
++	exit(0);
++}
++
++void unrealircdctl_version(void)
++{
++	char *cmd[] = { "/usr/bin/unrealircd", "-v", (char *) NULL };
++
++	if (execvp(cmd[0], cmd) == -1)
++	{
++		printf("ERROR: Running 'unrealircd -v' as system user 'unrealircd' failed!\n");
++		exit(1);
++	}
++
++	exit(0);
++}
++
++void unrealircdctl_unavailable(int argc, char *argv[])
++{
++	struct stat sb;
++
++	if (!strcmp(argv[1], "module"))
++		printf("ERROR: UnrealIRCd was installed as RPM package, thus the module manager is unavailable!\n");
++	else if (!strcmp(argv[1], "backtrace"))
++		printf("ERROR: UnrealIRCd was installed as RPM package, thus the backtrace functionality is unavailable!\n");
++	else if (!strcmp(argv[1], "hot-patch") || !strcmp(argv[1], "cold-patch") || !strcmp(argv[1], "upgrade"))
++	{
++		printf("ERROR: UnrealIRCd was installed as RPM package, thus internal %s functionality is unavailable!\n", argv[1]);
++		if (stat("/usr/bin/dnf", &sb) == 0 && sb.st_mode & S_IXUSR)
++			printf("NOTICE: Please consider running 'dnf update unrealircd' instead to update UnrealIRCd properly!\n");
++		else
++			printf("NOTICE: Please consider running 'yum update unrealircd' instead to update UnrealIRCd properly!\n");
++	}
++	else if (!strcmp(argv[1], "start") || !strcmp(argv[1], "stop") || !strcmp(argv[1], "restart"))
++		printf("ERROR: UnrealIRCd is managed via systemd, use 'systemctl %s unrealircd.service' instead!\n", argv[1]);
++	else if (!strcmp(argv[1], "croncheck"))
++		printf("ERROR: UnrealIRCd is managed via systemd, use 'systemctl -q is-active unrealircd.service' instead!\n");
++
++	exit(1);
++}
++
+ int main(int argc, char *argv[])
+ {
+ #ifdef _WIN32
+@@ -260,6 +374,25 @@
+ 		unrealircdctl_gencloak(argc, argv);
+ 	else if (!strcmp(argv[1], "spkifp") || !strcmp(argv[1], "spki"))
+ 		unrealircdctl_spkifp(argc, argv);
++	else if (!strcmp(argv[1], "configtest"))
++	{
++		unrealircdctl_permdrop();
++		unrealircdctl_configtest();
++	}
++	else if (!strcmp(argv[1], "genlinkblock"))
++	{
++		unrealircdctl_permdrop();
++		unrealircdctl_genlinkblock();
++	}
++	else if (!strcmp(argv[1], "version"))
++	{
++		unrealircdctl_permdrop();
++		unrealircdctl_version();
++	}
++	else if (!strcmp(argv[1], "module") || !strcmp(argv[1], "backtrace") || !strcmp(argv[1], "hot-patch") ||
++		 !strcmp(argv[1], "cold-patch") || !strcmp(argv[1], "upgrade") || !strcmp(argv[1], "start") ||
++		 !strcmp(argv[1], "stop") || !strcmp(argv[1], "restart") || !strcmp(argv[1], "croncheck"))
++		unrealircdctl_unavailable(argc, argv);
+ 	else
+ 		unrealircdctl_usage(argv[0]);
+ 	exit(0);

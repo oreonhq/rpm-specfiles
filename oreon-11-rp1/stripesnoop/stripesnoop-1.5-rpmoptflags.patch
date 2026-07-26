@@ -1,0 +1,25 @@
+--- stripesnoop-1.5/Makefile.BAD	2005-08-04 13:23:14.000000000 -0500
++++ stripesnoop-1.5/Makefile	2005-08-04 13:24:07.000000000 -0500
+@@ -4,17 +4,17 @@
+ all: ss bitgen mod10
+ 
+ ss: ss.o parser.o
+-	$(CXX) ss.o parser.o -o ss
++	$(CXX) $(RPM_OPT_FLAGS) ss.o parser.o -o ss
+ ss.o: ss.cpp
+-	$(CXX) -c ss.cpp
++	$(CXX) $(RPM_OPT_FLAGS) -c ss.cpp
+ parser.o: parser.cpp parser.h
+-	$(CXX) -c parser.cpp
++	$(CXX) $(RPM_OPT_FLAGS) -c parser.cpp
+ 
+ bitgen: bitgen.c
+-	$(CC) -o bitgen bitgen.c
++	$(CC) $(RPM_OPT_FLAGS) -o bitgen bitgen.c
+ 
+ mod10: mod10.c
+-	$(CC) -o mod10 mod10.c
++	$(CC) $(RPM_OPT_FLAGS) -o mod10 mod10.c
+ 
+ clean:
+ 	rm -f *.o

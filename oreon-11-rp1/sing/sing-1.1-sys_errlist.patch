@@ -1,0 +1,173 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for sing >= 1.1, which replaces
+the usage of the deprecated 'sys_errlist' array by the 'strerror()' function.
+
+--- SING-1.1/device.c				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/device.c.sys_errlist		2020-08-02 20:02:09.084193019 +0200
+@@ -143,7 +143,7 @@
+        == -1 )
+   { 
+ #ifdef DEBUG
+-        fprintf(stderr, "setsockopt -> %s\n", sys_errlist[errno] );
++        fprintf(stderr, "setsockopt -> %s\n", strerror(errno) );
+ #endif
+      close(sock_rt);
+      return 1;
+@@ -153,7 +153,7 @@
+        == -1 )
+   {
+ #ifdef DEBUG
+-        fprintf(stderr,"connect -> %s\n", sys_errlist[errno] );
++        fprintf(stderr,"connect -> %s\n", strerror(errno) );
+ #endif
+      close(sock_rt);
+      return 1;
+@@ -163,7 +163,7 @@
+   if ( getsockname( sock_rt, (struct sockaddr *)&iface_out, &len ) == -1 )
+   {
+ #ifdef DEBUG
+-        fprintf(stderr,"getsockname -> %s\n", sys_errlist[errno] );
++        fprintf(stderr,"getsockname -> %s\n", strerror(errno) );
+ #endif
+      close(sock_rt);
+      return 1;
+@@ -204,7 +204,7 @@
+      if ( errno == EADDRNOTAVAIL || errno == EAFNOSUPPORT)
+         return 1;
+ #ifdef DEBUG
+-        fprintf(stderr,"SIOCGIFADDR -> %s\n", sys_errlist[errno]);
++        fprintf(stderr,"SIOCGIFADDR -> %s\n", strerror(errno));
+ #endif
+      return 1;
+   }
+@@ -217,7 +217,7 @@
+   {
+ #ifdef DEBUG
+      fprintf(stderr,"SIOCGIFMTU (%s) -> %s\n", mi_interfaz->name,
+-                 sys_errlist[errno]);
++                 strerror(errno));
+ #endif
+      return 1;
+   }
+@@ -234,7 +234,7 @@
+   {
+ #ifdef DEBUG
+      fprintf(stderr,"SIOCGIFFLAGS (%s) -> %s\n", mi_interfaz->name,
+-             sys_errlist[errno]);
++             strerror(errno));
+ #endif
+      return 1;
+   }
+@@ -269,7 +269,7 @@
+   
+   if ( (sock_disp = socket(AF_INET, SOCK_DGRAM, 0) ) < 0)
+   {
+-     fprintf(stderr, "socket -> %s\n", sys_errlist[errno]);
++     fprintf(stderr, "socket -> %s\n", strerror(errno));
+      return 1;
+   }
+   
+@@ -277,7 +277,7 @@
+   ifc.ifc_buf = buffer;
+   if (ioctl( sock_disp, SIOCGIFCONF, &ifc) < 0)
+   {
+-     fprintf(stderr, "SIOCGIFCONF -> %s\n", sys_errlist[errno]);
++     fprintf(stderr, "SIOCGIFCONF -> %s\n", strerror(errno));
+      close(sock_disp);
+      return 1;
+   }
+@@ -351,7 +351,7 @@
+   
+   if ( (sock_disp = socket(AF_INET, SOCK_DGRAM, 0) ) < 0)
+   {
+-     fprintf(stderr, "socket -> %s\n", sys_errlist[errno]);
++     fprintf(stderr, "socket -> %s\n", strerror(errno));
+      return 1;
+   }
+   
+@@ -359,7 +359,7 @@
+   ifc.ifc_buf = buffer;
+   if (ioctl( sock_disp, SIOCGIFCONF, &ifc) < 0)
+   {
+-     fprintf(stderr, "SIOCGIFCONF -> %s\n", sys_errlist[errno]);
++     fprintf(stderr, "SIOCGIFCONF -> %s\n", strerror(errno));
+      close(sock_disp);
+      return 1;
+   }
+--- SING-1.1/device.h				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/device.h.sys_errlist		2020-08-02 20:02:50.096548411 +0200
+@@ -13,10 +13,6 @@
+ 
+ #define MAX_IFCONF  20000
+ 
+-#ifdef SOLARIS
+-extern char *sys_errlist[];
+-#endif
+-
+ extern struct my_pack packet;
+ 
+ /****************************/
+--- SING-1.1/parser.c				2020-08-02 19:59:44.944935598 +0200
++++ SING-1.1/parser.c.sys_errlist		2020-08-02 20:02:35.244419830 +0200
+@@ -228,7 +228,7 @@
+                add_router( packet, router_addr, preference );
+             }
+             else
+-               fprintf(stderr, "strtok() error -> %s\n", sys_errlist[errno]);                     
++               fprintf(stderr, "strtok() error -> %s\n", strerror(errno));                     
+        break;
+        
+        case 10:
+--- SING-1.1/parser.h				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/parser.h.sys_errlist		2020-08-02 20:03:04.770675316 +0200
+@@ -9,10 +9,6 @@
+ #include "dev_struct.h"
+ #include "codes.h"
+ 
+-#ifdef SOLARIS
+-extern char *sys_errlist[];
+-#endif
+-
+ /************************/
+ /* Global variables ... */
+ /************************/
+--- SING-1.1/sing.c				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/sing.c.sys_errlist			2020-08-02 20:03:37.534958193 +0200
+@@ -239,14 +239,14 @@
+  == -1 )
+  {
+ #ifdef DEBUG
+-        fprintf(stderr,"%s: SO_BROADCAST -> %s\n", PACKAGE, sys_errlist[errno] );
++        fprintf(stderr,"%s: SO_BROADCAST -> %s\n", PACKAGE, strerror(errno) );
+ #endif
+ }
+   if (setsockopt( sock, SOL_SOCKET, SO_SNDBUF, (char *)&tam_sock_buf,
+                   sizeof(tam_sock_buf) ) == -1 )
+   {
+ #ifdef DEBUG  
+-        fprintf(stderr,"%s: SO_SNDBUF -> %s\n", PACKAGE, sys_errlist[errno] );
++        fprintf(stderr,"%s: SO_SNDBUF -> %s\n", PACKAGE, strerror(errno) );
+ #endif
+   }
+ }
+@@ -1757,7 +1757,7 @@
+ {
+   if (!Quiet)
+      fprintf(stderr,"%s: %s -> %s\n", PACKAGE, msg,
+-             sys_errlist[errno] );
++             strerror(errno) );
+   exit(num_err);
+ }
+ 
+--- SING-1.1/sing.h				2001-04-18 13:11:08.000000000 +0200
++++ SING-1.1/sing.h.sys_errlist			2020-08-02 20:03:47.892047477 +0200
+@@ -126,10 +126,6 @@
+ /* ... end global variables */
+ /****************************/
+ 
+-#ifdef SOLARIS
+-extern char *sys_errlist[];
+-#endif
+-
+ /***************************/
+ /* Functions prototypes... */
+ /***************************/

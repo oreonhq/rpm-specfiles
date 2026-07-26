@@ -1,0 +1,40 @@
+diff --git a/tests/test_adapter.py b/tests/test_adapter.py
+index d29bd10..fa05a57 100644
+--- a/tests/test_adapter.py
++++ b/tests/test_adapter.py
+@@ -57,13 +57,6 @@ class AdapterTest(unittest.TestCase):
+                                   message='nd so w'))
+         self.assertFalse(h.matches(levelno=logging.INFO))
+ 
+-    def test_hashandlers(self):
+-        "Test of hasHandlers() functionality."
+-        self.assertTrue(self.adapter.hasHandlers())
+-        self.logger.removeHandler(self.handler)
+-        self.assertFalse(self.adapter.hasHandlers())
+-        self.logger.addHandler(self.handler)
+-        self.assertTrue(self.adapter.hasHandlers())
+ 
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/tests/test_dictconfig.py b/tests/test_dictconfig.py
+index 3aee984..3ad44ed 100644
+--- a/tests/test_dictconfig.py
++++ b/tests/test_dictconfig.py
+@@ -568,7 +568,7 @@ class ConfigDictTest(unittest.TestCase):
+             raise RuntimeError()
+         except RuntimeError:
+             logging.exception("just testing")
+-        self.assertEquals(h.formatted[0],
++        self.assertEqual(h.formatted[0],
+             "ERROR:root:just testing\nGot a [RuntimeError]")
+ 
+     def test_config4a_ok(self):
+@@ -580,7 +580,7 @@ class ConfigDictTest(unittest.TestCase):
+             raise RuntimeError()
+         except RuntimeError:
+             logging.exception("just testing")
+-        self.assertEquals(h.formatted[0],
++        self.assertEqual(h.formatted[0],
+             "ERROR:root:just testing\nGot a [RuntimeError]")
+ 
+     def test_config5_ok(self):

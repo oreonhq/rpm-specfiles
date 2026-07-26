@@ -1,0 +1,14 @@
+Include <stdio.h> for the perror function.
+
+diff --git a/rwhod/daemon.c b/rwhod/daemon.c
+index 487808b4a2440790..4b46f9fa12e1434f 100644
+--- a/rwhod/daemon.c
++++ b/rwhod/daemon.c
+@@ -38,6 +38,7 @@
+ char daemon_rcsid[] = 
+   "$Id: daemon.c,v 1.2 1996/08/15 07:22:28 dholland Exp $";
+ 
++#include <stdio.h>
+ #include <fcntl.h>
+ #include <paths.h>
+ #include <unistd.h>

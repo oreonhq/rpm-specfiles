@@ -1,0 +1,43 @@
+diff --git a/main.c b/main.c
+index 66b99dd..ea91293 100644
+--- a/main.c
++++ b/main.c
+@@ -25,8 +25,8 @@ qiv_image main_img;
+ qiv_mgl   magnify_img; /* [lc] */
+ 
+ static int check_extension(const char *);
+-static void qiv_signal_usr1();
+-static void qiv_signal_usr2();
++static void qiv_signal_usr1(int);
++static void qiv_signal_usr2(int);
+ static gboolean qiv_handle_timer(gpointer);
+ static void qiv_timer_restart(gpointer);
+ 
+@@ -250,13 +250,13 @@ void qiv_exit(int code)
+  * functions for handling signals
+  */
+ 
+-static void qiv_signal_usr1()
++static void qiv_signal_usr1(int ignored)
+ {
+   next_image(1);
+   qiv_load_image(&main_img);
+ }
+ 
+-static void qiv_signal_usr2()
++static void qiv_signal_usr2(int ignored)
+ {
+   next_image(-1);
+   qiv_load_image(&main_img);
+diff --git a/qiv.h b/qiv.h
+index d71cd10..f35da1d 100644
+--- a/qiv.h
++++ b/qiv.h
+@@ -190,7 +190,6 @@ extern char *get_icc_profile(char *filename);
+ /* main.c */
+ 
+ extern void qiv_exit(int);
+-extern void qiv_load_image();
+ extern void filter_images(int *images, char **image_names);
+ 
+ /* image.c */

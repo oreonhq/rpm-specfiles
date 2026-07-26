@@ -1,0 +1,117 @@
+--- gtk2-3.4.3/ext/gtk2/rbgdkdragcontext.c.type2	2024-01-20 20:49:39.947199026 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkdragcontext.c	2024-01-20 21:29:16.012038466 +0900
+@@ -261,7 +261,7 @@ Init_gtk_gdk_dragcontext(VALUE mGdk)
+     VALUE RG_TARGET_NAMESPACE = G_DEF_CLASS(GDK_TYPE_DRAG_CONTEXT, "DragContext", mGdk);
+ 
+     RG_DEF_SMETHOD(get_protocol, -1);
+-    RG_DEF_SMETHOD(drag_begin, 1);
++    RG_DEF_SMETHOD(drag_begin, 2);
+ 
+     RG_DEF_METHOD(initialize, 0);
+     RG_DEF_METHOD(protocol, 0);
+@@ -278,7 +278,7 @@ Init_gtk_gdk_dragcontext(VALUE mGdk)
+     RG_DEF_METHOD(drag_abort, 1);
+     RG_DEF_METHOD(drop_reply, 2);
+     RG_DEF_METHOD(drag_drop, 1);
+-    RG_DEF_METHOD(find_window, 4);
++    RG_DEF_METHOD(find_window, -1);
+     RG_DEF_METHOD(drag_motion, 7);
+     RG_DEF_METHOD(drop_finish, 2);
+     RG_DEF_METHOD(drag_status, 2);
+--- gtk2-3.4.3/ext/gtk2/rbgdkevent.c.type2	2024-01-20 18:06:00.007633274 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkevent.c	2024-01-20 21:34:44.241165757 +0900
+@@ -1061,7 +1061,7 @@ Init_gtk_gdk_event(VALUE mGdk)
+     DEFINE_ACCESSOR(rb_cGdkEventMotion, motion, x);
+     DEFINE_ACCESSOR(rb_cGdkEventMotion, motion, y);
+     rb_define_method(rb_cGdkEventMotion, "axes", gdkeventmotion_axes, 0);
+-    rb_define_method(rb_cGdkEventMotion, "set_axes", gdkeventmotion_set_axes, 1);
++    rb_define_method(rb_cGdkEventMotion, "set_axes", gdkeventmotion_set_axes, 2);
+     DEFINE_ACCESSOR(rb_cGdkEventMotion, motion, state);
+     rb_define_method(rb_cGdkEventMotion, "hint?", gdkeventmotion_is_hint, 0);
+     rb_define_method(rb_cGdkEventMotion, "set_hint", gdkeventmotion_set_is_hint, 1);
+--- gtk2-3.4.3/ext/gtk2/rbgdkkeymap.c.type2	2024-01-20 18:06:00.008633273 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkkeymap.c	2024-01-20 21:35:33.543185888 +0900
+@@ -138,7 +138,7 @@ Init_gtk_gdk_keymap(VALUE mGdk)
+     VALUE RG_TARGET_NAMESPACE = G_DEF_CLASS(GDK_TYPE_KEYMAP, "Keymap", mGdk);
+ 
+     RG_DEF_SMETHOD(default, 0);
+-    RG_DEF_SMETHOD(for_display, 0);
++    RG_DEF_SMETHOD(for_display, 1);
+     RG_DEF_METHOD(lookup_key, 3);
+     RG_DEF_METHOD(translate_keyboard_state, 3);
+     RG_DEF_METHOD(get_entries_for_keyval, 1);
+--- gtk2-3.4.3/ext/gtk2/rbgdkrgb.c.type2	2024-01-20 18:06:00.008633273 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkrgb.c	2024-01-20 21:37:25.841231734 +0900
+@@ -186,7 +186,7 @@ Init_gtk_gdk_rgb(VALUE mGdk)
+     RG_DEF_MODFUNC(draw_rgb_32_image, -1);
+     RG_DEF_MODFUNC(find_color, 2);
+     RG_DEF_MODFUNC(set_install, 1);
+-    RG_DEF_MODFUNC(set_min_colors, 0);
++    RG_DEF_MODFUNC(set_min_colors, 1);
+     RG_DEF_MODFUNC(visual, 0);
+     RG_DEF_MODFUNC(colormap, 0);
+     RG_DEF_MODFUNC_P(ditherable, 0);
+--- gtk2-3.4.3/ext/gtk2/rbgdkscreen.c.type2	2024-01-20 18:06:00.008633273 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkscreen.c	2024-01-20 21:46:40.386458125 +0900
+@@ -411,7 +411,7 @@ Init_gtk_gdk_screen(VALUE mGdk)
+ 
+ #ifdef GDK_WINDOWING_X11
+     RG_DEF_METHOD(xnumber, 0);
+-    RG_DEF_METHOD_P(supports_net_wm_hint, 0);
++    RG_DEF_METHOD_P(supports_net_wm_hint, 1);
+     RG_DEF_METHOD(window_manager_name, 0);
+     RG_DEF_METHOD(screen_number, 0);
+ #endif
+--- gtk2-3.4.3/ext/gtk2/rbgtkprintsettings.c.type2	2024-01-20 20:58:50.719453788 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkprintsettings.c	2024-01-20 21:44:09.158396393 +0900
+@@ -712,7 +712,7 @@ Init_gtk_print_settings(VALUE mGtk)
+     RG_DEF_METHOD(set, -1);
+     RG_DEF_METHOD_OPERATOR("[]=", ps_set_generic_indexer, -1);
+ 
+-    RG_DEF_METHOD(unset, -1);
++    RG_DEF_METHOD(unset, 1);
+     RG_DEF_ALIAS("delete", "unset");
+ 
+     RG_DEF_METHOD(each, 0);
+--- gtk2-3.4.3/ext/gtk2/rbgtkselection.c.type2	2024-01-20 18:06:00.038633241 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkselection.c	2024-01-20 21:44:54.189414773 +0900
+@@ -157,7 +157,7 @@ Init_gtk_selection(VALUE mGtk)
+ {
+     VALUE RG_TARGET_NAMESPACE =  rb_define_module_under(mGtk, "Selection");
+ 
+-    RG_DEF_MODFUNC(owner_set, 3);
++    RG_DEF_MODFUNC(owner_set, -1);
+     RG_DEF_MODFUNC(add_target, 4);
+     RG_DEF_MODFUNC(add_targets, 3);
+     RG_DEF_MODFUNC(clear_targets, 2);
+--- gtk2-3.4.3/ext/gtk2/rbgtkstyle.c.type2	2024-01-20 18:06:00.041633238 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkstyle.c	2024-01-20 21:42:30.226356003 +0900
+@@ -571,7 +571,7 @@ Init_gtk_style(VALUE mGtk)
+     RG_DEF_METHOD(paint_box_gap, 13);
+     RG_DEF_METHOD(paint_check, 10);
+     RG_DEF_METHOD(paint_diamond, 10);
+-    RG_DEF_METHOD(paint_extension, 10);
++    RG_DEF_METHOD(paint_extension, 11);
+     RG_DEF_METHOD(paint_flat_box, 10);
+     RG_DEF_METHOD(paint_focus, 9);
+     RG_DEF_METHOD(paint_handle, 11);
+@@ -582,7 +582,7 @@ Init_gtk_style(VALUE mGtk)
+     RG_DEF_METHOD(paint_shadow_gap, 13);
+     RG_DEF_METHOD(paint_slider, 11);
+     RG_DEF_METHOD(paint_tab, 10);
+-    RG_DEF_METHOD(paint_vline, 9);
++    RG_DEF_METHOD(paint_vline, 8);
+     RG_DEF_METHOD(paint_expander, 8);
+     RG_DEF_METHOD(paint_layout, 9);
+     RG_DEF_METHOD(paint_resize_grip, 10);
+--- gtk2-3.4.3/ext/gtk2/rbgtkwidget.c.type2	2024-01-20 18:06:00.054633224 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkwidget.c	2024-01-20 21:40:23.123304108 +0900
+@@ -1138,7 +1138,7 @@ Init_gtk_widget(VALUE mGtk)
+     RG_DEF_METHOD(child_focus, 1);
+ #if GTK_CHECK_VERSION(2,12,0)
+     RG_DEF_METHOD(error_bell, 0);
+-    RG_DEF_METHOD(keynav_failed, 0);
++    RG_DEF_METHOD(keynav_failed, 1);
+ #endif
+     RG_DEF_METHOD(child_notify, 1);
+     RG_DEF_METHOD(freeze_child_notify, 0);

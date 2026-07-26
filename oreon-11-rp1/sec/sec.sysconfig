@@ -1,0 +1,19 @@
+# Command line options for SEC
+
+OPTIONS="--conf=/etc/sec/*.sec --input=/var/log/messages --log=/var/log/sec --intevents"
+
+# This is an example config if multiple instances of SEC should be started.
+# These settings should be used together with the systemd service file
+#     sec@.service
+# which allows to run multiple sec instances.
+#
+#
+# Below you find an example configuration of two instances named FOO and BAR.
+# The instances can be started via the commands
+#     systemctl start sec@FOO     and     systemctl start sec@BAR
+# For further configuration options, consult the systemd file:
+#     /lib/systemd/system/sec@.service
+
+#OPTIONS_FOO="--conf=/etc/sec/FOO/*.sec --input=/var/log/secure --log=/var/log/sec-FOO --intevents"
+
+#OPTIONS_BAR="--conf=/etc/sec/BAR/*.sec --input=/var/log/maillog --log=/var/log/sec-BAR --intevents"

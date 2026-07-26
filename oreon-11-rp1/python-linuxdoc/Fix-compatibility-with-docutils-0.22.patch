@@ -1,0 +1,49 @@
+From 91e0b5332a4bd6c2509c12110575917cc297f3ef Mon Sep 17 00:00:00 2001
+From: Karolina Surma <ksurma@redhat.com>
+Date: Fri, 21 Nov 2025 15:44:16 +0100
+Subject: [PATCH] Fix compatibility with docutils 0.22+
+
+error_reporting module has been removed, per its documentation:
+- SafeString() is to be replaced by the standard Python 3 str()
+- ErrorString() is to be replaced by docutils.io.error_string()
+---
+ linuxdoc/kernel_include.py | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/linuxdoc/kernel_include.py b/linuxdoc/kernel_include.py
+index 1798271..1905978 100755
+--- a/linuxdoc/kernel_include.py
++++ b/linuxdoc/kernel_include.py
+@@ -18,7 +18,6 @@ u"""
+ import os.path
+ 
+ from docutils import io, nodes, statemachine
+-from docutils.utils.error_reporting import SafeString, ErrorString
+ from docutils.parsers.rst import directives
+ from docutils.parsers.rst.directives.body import CodeBlock, NumberLines
+ from docutils.parsers.rst.directives.misc import Include
+@@ -90,10 +89,10 @@ class KernelInclude(Include):
+             raise self.severe('Problems with "%s" directive path:\n'
+                               'Cannot encode input file path "%s" '
+                               '(wrong locale?).' %
+-                              (self.name, SafeString(path)))
++                              (self.name, str(path)))
+         except IOError as error:
+             raise self.severe('Problems with "%s" directive path:\n%s.' %
+-                              (self.name, ErrorString(error)))
++                              (self.name, io.error_string(error)))
+         startline = self.options.get('start-line', None)
+         endline = self.options.get('end-line', None)
+         try:
+@@ -105,7 +104,7 @@ class KernelInclude(Include):
+                 rawtext = include_file.read()
+         except UnicodeError as error:
+             raise self.severe('Problem with "%s" directive:\n%s' %
+-                              (self.name, ErrorString(error)))
++                              (self.name, io.error_string(error)))
+         # start-after/end-before: no restrictions on newlines in match-text,
+         # and no restrictions on matching inside lines vs. line boundaries
+         after_text = self.options.get('start-after', None)
+-- 
+2.51.1
+

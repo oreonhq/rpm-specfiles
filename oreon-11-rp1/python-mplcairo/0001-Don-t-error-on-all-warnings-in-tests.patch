@@ -1,0 +1,25 @@
+From 899226738c54e32461bbc1fe204c13d866012015 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 11 Nov 2024 19:57:43 -0500
+Subject: [PATCH] Don't error on all warnings in tests
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ pyproject.toml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 53e8dfb..125c8b2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -38,7 +38,6 @@ source_pkgs = ["mplcairo"]
+ 
+ [tool.pytest.ini_options]
+ filterwarnings = [
+-    "error",
+     "ignore::DeprecationWarning",
+     "error::DeprecationWarning:mplcairo",
+ ]
+-- 
+2.47.0
+

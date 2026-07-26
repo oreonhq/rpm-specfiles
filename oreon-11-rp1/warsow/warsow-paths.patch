@@ -1,0 +1,13 @@
+--- warsow_21_sdk/source/source/qcommon/files.c.orig	2016-03-26 20:22:10.000000000 +0100
++++ warsow_21_sdk/source/source/qcommon/files.c	2016-06-07 22:18:50.945268984 +0200
+@@ -4329,8 +4329,8 @@
+ 	//
+ 	// set basepaths
+ 	//
+-	fs_cdpath = Cvar_Get( "fs_cdpath", "", CVAR_NOSET );
+-	fs_basepath = Cvar_Get( "fs_basepath", ".", CVAR_NOSET );
++	fs_cdpath = Cvar_Get( "fs_cdpath", "__PREFIX__/share/warsow", CVAR_NOSET );
++	fs_basepath = Cvar_Get( "fs_basepath", "__PREFIX__/lib/warsow", CVAR_NOSET );
+ 	homedir = Sys_FS_GetHomeDirectory();
+ 	if( homedir != NULL )
+ #ifdef PUBLIC_BUILD

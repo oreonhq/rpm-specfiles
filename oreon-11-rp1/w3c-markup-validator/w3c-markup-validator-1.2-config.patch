@@ -1,0 +1,21 @@
+diff -up validator-1.2/htdocs/config/validator.conf~ validator-1.2/htdocs/config/validator.conf
+--- validator-1.2/htdocs/config/validator.conf~	2011-02-14 17:39:25.000000000 +0200
++++ validator-1.2/htdocs/config/validator.conf	2011-03-09 22:11:51.347071492 +0200
+@@ -31,7 +31,7 @@
+   # are not cached at all if this option is empty or not set, except
+   # with mod_perl setups where this option has no effect and templates
+   # are always cached in memory.
+-  #Cache = validator
++  #Cache = w3c-markup-validator
+ 
+   # configuration file for HTML::Tidy Module, if available
+   TidyConf = $Base/htdocs/config/tidy.conf
+@@ -77,7 +77,7 @@ Max Recursion = 0
+ 
+ #
+ # Email address of the maintainer of this service.
+-Maintainer = www-validator@w3.org
++Maintainer = root@localhost
+ 
+ # Localization
+ # only English available for now

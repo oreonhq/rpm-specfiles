@@ -1,0 +1,74 @@
+diff -Naur Ularn/config.h.SH Ularn.new/config.h.SH
+--- Ularn/config.h.SH	2001-11-16 10:13:15.000000000 -0800
++++ Ularn.new/config.h.SH	2006-03-16 12:54:35.000000000 -0800
+@@ -136,6 +136,11 @@
+  */
+ #define LIBDIR "$libdir"          /**/
+ 
++/* SCOREBOARDDIR:
++ *     This symbol indicates the directory containing the scoreboard file.
++ */
++#define SCOREBOARDDIR "$scoredir"          /**/
++
+ /* COMPRESS
+  *  This symbol contains the command to do compression from stdin
+  *  to stdout.
+diff -Naur Ularn/data.c Ularn.new/data.c
+--- Ularn/data.c	2001-11-16 10:48:22.000000000 -0800
++++ Ularn.new/data.c	2006-03-16 13:00:30.000000000 -0800
+@@ -4,6 +4,7 @@
+ #include "itm.h"
+ 
+ char *libdir = LIBDIR;
++char *scoredir = SCOREBOARDDIR;
+ 
+ /* the game save filename   */
+ char savefilename[MAXPATHLEN];
+diff -Naur Ularn/extern.h Ularn.new/extern.h
+--- Ularn/extern.h	2006-03-16 07:58:03.000000000 -0800
++++ Ularn.new/extern.h	2006-03-16 13:14:37.000000000 -0800
+@@ -712,7 +712,7 @@
+ 
+ 	/************** extern decls for all data items **********/
+ 
+-extern char *tempfilename, *libdir;
++extern char *tempfilename, *libdir, *scoredir;
+ extern char bot1f,bot2f,bot3f;	/* in display.c */
+ extern char ckpfile[], monstnamelist[];
+ extern char larnlevels[],lastmonst[];
+diff -Naur Ularn/header.h Ularn.new/header.h
+--- Ularn/header.h	2006-03-16 07:58:03.000000000 -0800
++++ Ularn.new/header.h	2006-03-16 13:21:29.000000000 -0800
+@@ -47,7 +47,7 @@
+ 
+ 	/**************** File Names ****************/
+ 
+-#define SCORENAME   "Uscore"
++#define SCORENAME   "Ularn-scoreboard"
+ #define HELPNAME    "Uhelp"
+ #define LEVELSNAME  "Umaps"
+ #define FORTSNAME   "Ufortune"
+diff -Naur Ularn/main.c Ularn.new/main.c
+--- Ularn/main.c	2006-03-16 12:50:33.000000000 -0800
++++ Ularn.new/main.c	2006-03-16 13:17:19.000000000 -0800
+@@ -95,7 +95,7 @@
+ 	sprintf(buf, "%s/%s", ptr, ckpfile);	/* the checkpoint file */
+ 	strcpy(ckpfile, buf);
+ 
+-	sprintf(scorefile, "%s/%s", libdir, SCORENAME); /* the Ularn scoreboard filename */
++	sprintf(scorefile, "%s/%s", scoredir, SCORENAME); /* the Ularn scoreboard filename */
+ 
+ 	sprintf(helpfile, "%s/%s", libdir, HELPNAME); 	/* the Ularn on-line help file */
+ 
+@@ -118,8 +118,9 @@
+  */
+ 	if (access(scorefile,0) == -1) /* not there */
+ 		if (makeboard() == -1) {
+-			fprintf(stderr, "I can't create the scoreboard.\n");
+-			fprintf(stderr, "Check permissions on %s\n",libdir);
++			fprintf(stderr, "I can't create the scoreboard %s.\n",
++                                scorefile);
++			fprintf(stderr, "Check permissions on %s\n",scoredir);
+ 			exit(1);
+ 		}
+ 	

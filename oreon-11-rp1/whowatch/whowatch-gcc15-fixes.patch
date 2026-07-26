@@ -1,0 +1,35 @@
+diff -ur a/src/proctree.h b/src/proctree.h
+--- a/src/proctree.h	2018-04-11 07:10:50.000000000 +0100
++++ b/src/proctree.h	2025-01-25 18:55:39.018468480 +0000
+@@ -19,7 +19,6 @@
+ };
+ 
+ int update_tree(void del(void*));
+-int update_tree();
+ struct proc_t* find_by_pid(int pid);
+ struct proc_t* tree_start(int root, int start);
+ struct proc_t* tree_next();
+diff -ur a/src/whowatch.c b/src/whowatch.c
+--- a/src/whowatch.c	2018-04-11 07:10:50.000000000 +0100
++++ b/src/whowatch.c	2025-01-25 19:05:36.133313903 +0000
+@@ -222,7 +222,7 @@
+ 	size_changed = 0;
+ }
+ 
+-static void winch_handler()
++static void winch_handler(int i)
+ {
+ 	size_changed++;
+ }
+diff -ur a/src/whowatch.h b/src/whowatch.h
+--- a/src/whowatch.h	2018-04-11 07:10:50.000000000 +0100
++++ b/src/whowatch.h	2025-01-25 19:00:56.018861138 +0000
+@@ -164,7 +164,7 @@
+ void curses_end();
+ 
+ /* proctree.c */
+-int update_tree();
++int update_tree(void del(void*));
+ 
+ /* plist.c */
+ void delete_tree_line(void *line);

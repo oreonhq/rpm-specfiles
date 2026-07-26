@@ -1,0 +1,35 @@
+Index: vodovod.svn/njamfont.cpp
+===================================================================
+--- vodovod.svn/njamfont.cpp	(revision 23)
++++ vodovod.svn/njamfont.cpp	(working copy)
+@@ -46,7 +46,7 @@
+     if (!m_Font)
+     {
+         printf(_("FAILED.\n"));
+-        printf((const char *)TTF_GetError());
++        fputs((const char *)TTF_GetError(), stdout);
+         return;
+     }
+     printf(_("OK.\n"));
+@@ -115,8 +115,8 @@
+     SDL_Surface *stemp = TTF_RenderUTF8_Blended(m_Font, Text, m_Color);
+     if (!stemp)
+     {
+-        printf(_("Failed to create text image.\n"));
+-        printf((const char *)TTF_GetError());
++        puts(_("Failed to create text image."));
++        fputs((const char *)TTF_GetError(), stdout);
+         return false;
+     }
+     SDL_Rect dest;
+@@ -124,8 +124,8 @@
+ 
+     if (0 != SDL_BlitSurface(stemp, 0, Destination, &dest))
+     {
+-        printf(_("Failed to blit font character image.\n"));
+-        printf((const char *)SDL_GetError());
++        puts(_("Failed to blit font character image."));
++        fputs((const char *)SDL_GetError(), stdout);
+         SDL_FreeSurface(stemp);
+         return false;
+     }

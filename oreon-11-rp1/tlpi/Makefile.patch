@@ -1,0 +1,177 @@
+--- Makefile.inc~	2022-12-20 03:32:36.000000000 +0100
++++ Makefile.inc	2023-01-24 11:31:52.000000000 +0100
+@@ -40,7 +40,7 @@
+ 			-Wno-format-pedantic
+ endif
+ 
+-CFLAGS = ${IMPL_CFLAGS}
++CFLAGS += ${IMPL_CFLAGS}
+ 
+ IMPL_THREAD_FLAGS = -pthread
+ 
+--- Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ Makefile	2023-01-24 19:23:32.000000000 +0100
+@@ -33,6 +33,10 @@
+ # relatively recent kernel and userspace to build. Nevertheless, each of
+ # those directories contains a Makefile.
+ 
++# Since Fedora contains recent kernels, they can be included in the Fedora
++# packaging.
++DIRS += namespaces seccomp
++
+ BUILD_DIRS = ${DIRS}
+ 
+ 
+@@ -40,8 +44,8 @@
+ 
+ all:
+ 	@ echo ${BUILD_DIRS}
+-	@ for dir in ${BUILD_DIRS}; do (cd $${dir}; ${MAKE}) ; \
+-		if test $$? -ne 0; then break; fi; done
++	@ set -e; \
++	  for dir in ${BUILD_DIRS}; do ${MAKE} -C $${dir}; done
+ 
+ allgen:
+ 	@ for dir in ${BUILD_DIRS}; do (cd $${dir}; ${MAKE} allgen) ; done
+--- threads/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ threads/Makefile	2023-01-24 19:33:54.000000000 +0100
+@@ -16,7 +16,7 @@
+ 
+ allgen : ${GEN_EXE}
+ 
+-CFLAGS = ${IMPL_CFLAGS} ${IMPL_THREAD_FLAGS}
++CFLAGS += ${IMPL_THREAD_FLAGS}
+ LDLIBS = ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
+ 
+ strerror_test: strerror_test.o strerror.o
+--- altio/Makefile~     2023-05-22 10:20:02.000000000 +0200
++++ altio/Makefile      2023-05-23 11:01:01.000000000 +0200
+@@ -20,4 +20,4 @@
+ 
+ multithread_epoll_wait: multithread_epoll_wait.o
+ 	${CC} -o $@ multithread_epoll_wait.o \
+-		${CFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
++		${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
+--- cgroups/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ cgroups/Makefile	2023-01-24 20:15:53.000000000 +0100
+@@ -18,4 +18,4 @@
+ 
+ alloc_mem: alloc_mem.o
+ 	${CC} -o $@ alloc_mem.o \
+-		${CFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
++		${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
+--- filebuff/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ filebuff/Makefile	2023-01-24 20:17:07.000000000 +0100
+@@ -18,13 +18,13 @@
+ 	${RM} ${EXE} *.o
+ 
+ write_bytes_fdatasync : write_bytes.c
+-	${CC} -DUSE_FDATASYNC -o $@ write_bytes.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -DUSE_FDATASYNC -o $@ write_bytes.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ write_bytes_fsync : write_bytes.c
+-	${CC} -DUSE_FSYNC -o $@ write_bytes.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -DUSE_FSYNC -o $@ write_bytes.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ write_bytes_o_sync : write_bytes.c
+-	${CC} -DUSE_O_SYNC -o $@ write_bytes.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -DUSE_O_SYNC -o $@ write_bytes.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ showall :
+ 	@ echo ${EXE}
+--- procexec/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ procexec/Makefile	2023-01-24 20:17:41.000000000 +0100
+@@ -26,4 +26,4 @@
+ 
+ pdeath_signal: pdeath_signal.o
+ 	${CC} -o $@ pdeath_signal.o \
+-		${CFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
++		${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
+--- psem/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ psem/Makefile	2023-01-24 20:18:27.000000000 +0100
+@@ -11,13 +11,13 @@
+ 
+ allgen : ${GEN_EXE}
+ 
+-CFLAGS = ${IMPL_CFLAGS} ${IMPL_THREAD_FLAGS}
++CFLAGS += ${IMPL_THREAD_FLAGS}
+ LDLIBS = ${IMPL_LDLIBS} ${IMPL_THREAD_FLAGS}
+ 	# POSIX semaphores need the NPTL thread library on Linux
+ 
+ # psem_timedwait uses clock_gettime() which is in librt
+ psem_timedwait: psem_timedwait.o
+-	${CC} -o $@ psem_timedwait.o ${CFLAGS} ${LDLIBS} ${LINUX_LIBRT}
++	${CC} -o $@ psem_timedwait.o ${CFLAGS} ${LDFLAGS} ${LDLIBS} ${LINUX_LIBRT}
+ 
+ clean :
+ 	${RM} ${EXE} *.o
+--- seccomp/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ seccomp/Makefile	2023-01-24 20:19:37.000000000 +0100
+@@ -27,7 +27,7 @@
+ seccomp_unotify_openat : seccomp_unotify_openat.o seccomp_functions.o
+ 
+ libseccomp_demo : libseccomp_demo.c
+-	${CC} -o $@ libseccomp_demo.c ${CFLAGS} ${IMPL_LDLIBS} -lseccomp
++	${CC} -o $@ libseccomp_demo.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} -lseccomp
+ 
+ # See the seccomp_multiarch.c source code for information on the library
+ # that must be installed before building seccomp_multiarch_i386
+--- shlibs/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ shlibs/Makefile	2023-01-24 20:20:11.000000000 +0100
+@@ -11,7 +11,7 @@
+ allgen : ${GEN_EXE}
+ 
+ dynload : dynload.o
+-	${CC} -o $@ dynload.o ${CFLAGS} ${IMPL_LDLIBS} ${LINUX_LIBDL}
++	${CC} -o $@ dynload.o ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} ${LINUX_LIBDL}
+ 
+ clean :
+ 	${RM} ${EXE} *.o *.so.*
+--- signals/Makefile.orig	2022-12-20 03:32:36.000000000 +0100
++++ signals/Makefile	2023-02-06 18:20:58.000000000 +0100
+@@ -7,6 +7,9 @@
+ 	t_kill t_sigaltstack t_sigsuspend t_sigqueue t_sigwaitinfo
+ 
+ LINUX_EXE = signalfd_sigval
++ifdef INCLUDE_NONATOMIC_UINT64
++LINUX_EXE += nonatomic_uint64
++endif
+ 
+ EXE = ${GEN_EXE} ${LINUX_EXE}
+ 
+@@ -26,16 +29,16 @@
+ #
+ 
+ ouch : ouch.c
+-	${CC} -D_BSD_SOURCE -o $@ ouch.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -D_BSD_SOURCE -o $@ ouch.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ intquit : intquit.c
+-	${CC} -D_BSD_SOURCE -o $@ intquit.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -D_BSD_SOURCE -o $@ intquit.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ sig_receiver : sig_receiver.c
+-	${CC} -D_BSD_SOURCE -o $@ sig_receiver.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -D_BSD_SOURCE -o $@ sig_receiver.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ nonreentrant : nonreentrant.o
+-	${CC} -o $@ nonreentrant.o ${CFLAGS} ${IMPL_LDLIBS} ${LINUX_LIBCRYPT}
++	${CC} -o $@ nonreentrant.o ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS} ${LINUX_LIBCRYPT}
+ 
+ sigmask_siglongjmp.o : sigmask_longjmp.c
+ 	${CC} -o $@ -DUSE_SIGSETJMP -c sigmask_longjmp.c ${CFLAGS}
+--- vdso/Makefile~	2022-12-20 03:32:36.000000000 +0100
++++ vdso/Makefile	2023-01-24 20:23:10.000000000 +0100
+@@ -14,10 +14,10 @@
+ 	${RM} ${EXE} *.o
+ 
+ vdso_gettimeofday : gettimeofday.c
+-	${CC} -o $@ gettimeofday.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -o $@ gettimeofday.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ syscall_gettimeofday : gettimeofday.c
+-	${CC} -DUSE_SYSCALL -o $@ gettimeofday.c ${CFLAGS} ${IMPL_LDLIBS}
++	${CC} -DUSE_SYSCALL -o $@ gettimeofday.c ${CFLAGS} ${LDFLAGS} ${IMPL_LDLIBS}
+ 
+ showall :
+ 	@ echo ${EXE}

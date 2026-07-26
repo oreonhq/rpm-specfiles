@@ -1,0 +1,17 @@
+--- xfce4-session-4.20.0/scripts/startxfce4.in.orig	2024-12-21 15:32:06.924315101 -0600
++++ xfce4-session-4.20.0/scripts/startxfce4.in	2024-12-21 15:32:23.008373245 -0600
+@@ -142,11 +142,11 @@
+ fi
+ 
+ if [ -f $BASEDIR/xinitrc ]; then
+-  exec $prog $BASEDIR/xinitrc $CLIENTRC $SERVERRC
++  exec $prog $BASEDIR/xinitrc $CLIENTRC $SERVERRC vt${tty_num}
+ elif [ -f $HOME/.xfce4/xinitrc ]; then
+   mkdir -p $BASEDIR
+   cp $HOME/.xfce4/xinitrc $BASEDIR/
+-  exec $prog $BASEDIR/xinitrc $CLIENTRC $SERVERRC
++  exec $prog $BASEDIR/xinitrc $CLIENTRC $SERVERRC vt${tty_num}
+ else
+-  exec $prog @_sysconfdir_@/xdg/xfce4/xinitrc $CLIENTRC $SERVERRC
++  exec $prog @_sysconfdir_@/xdg/xfce4/xinitrc $CLIENTRC $SERVERRC vt${tty_num}
+ fi

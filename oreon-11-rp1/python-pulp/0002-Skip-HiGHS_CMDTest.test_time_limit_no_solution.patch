@@ -1,0 +1,28 @@
+From cbb8676ad4aa87a2d1b9ee80863e2b005700affb Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 20 Apr 2025 18:18:48 -0400
+Subject: [PATCH 2/4] Skip HiGHS_CMDTest.test_time_limit_no_solution
+
+A temporary downstream workaround for
+https://github.com/coin-or/pulp/issues/832.
+---
+ pulp/tests/test_pulp.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pulp/tests/test_pulp.py b/pulp/tests/test_pulp.py
+index ab72dfa..1b3e849 100644
+--- a/pulp/tests/test_pulp.py
++++ b/pulp/tests/test_pulp.py
+@@ -2342,6 +2342,9 @@ class HiGHS_PYTest(BaseSolverTest.PuLPTest):
+ 
+ class HiGHS_CMDTest(BaseSolverTest.PuLPTest):
+     solveInst = solvers.HiGHS_CMD
++    test_time_limit_no_solution = unittest.skip(
++        "https://github.com/coin-or/pulp/issues/832"
++    )(BaseSolverTest.PuLPTest.test_time_limit_no_solution)
+ 
+ 
+ class COPTTest(BaseSolverTest.PuLPTest):
+-- 
+2.52.0
+

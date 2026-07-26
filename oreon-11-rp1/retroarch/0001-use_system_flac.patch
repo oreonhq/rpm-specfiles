@@ -1,0 +1,13 @@
+diff --git a/Makefile.common b/Makefile.common
+index 57dabf5eac..b35e9a7afe 100644
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -2020,7 +1991,7 @@ ifeq ($(HAVE_BUILTINFLAC),1)
+    endif
+    OBJ += $(FLACOBJ)
+ else ifeq ($(HAVE_FLAC),1)
+-   DEFINES += -DHAVE_FLAC
++   DEFINES += -DHAVE_FLAC -DHAVE_DR_FLAC
+    LIBS    += $(FLAC_LIBS)
+ endif
+ 

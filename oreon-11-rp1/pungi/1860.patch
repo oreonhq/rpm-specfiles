@@ -1,0 +1,25 @@
+From 3bd28f97b2991cf4e3b4ce9ce34c80cba2bf21ab Mon Sep 17 00:00:00 2001
+From: Lubomír Sedlář <lsedlar@redhat.com>
+Date: Aug 08 2025 11:54:39 +0000
+Subject: repoclosure: Don't fail if cache doesn't exist
+
+
+Signed-off-by: Lubomír Sedlář <lsedlar@redhat.com>
+
+---
+
+diff --git a/pungi/phases/repoclosure.py b/pungi/phases/repoclosure.py
+index 1d3fad0..398802f 100644
+--- a/pungi/phases/repoclosure.py
++++ b/pungi/phases/repoclosure.py
+@@ -136,6 +136,9 @@ def _delete_repoclosure_cache_dirs(compose):
+         pass
+ 
+     for top_cache_dir in cache_dirs:
++        if not os.path.isdir(top_cache_dir):
++            # Skip if the cache doesn't exist.
++            continue
+         for name in os.listdir(top_cache_dir):
+             if name.startswith(compose.compose_id):
+                 cache_path = os.path.join(top_cache_dir, name)
+

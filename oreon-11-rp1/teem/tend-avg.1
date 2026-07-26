@@ -1,0 +1,32 @@
+.TH TEND\-AVG "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-avg \- average across tensor volumes
+.SH SYNOPSIS
+.B tend\ avg
+.B \-i
+.RI < nin1 \  nin2 \ ...>
+.RB [ \-t
+.RI < type >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Average across tensor volumes.
+The output is the same size as the any one of the inputs.
+The individual tensors may be averaged in various ways.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin1\fR\ \fInin2\fR\ ...>
+list of input diffusion tensor volumes (2 or more
+.IR nrrd s)
+.TP
+.B \-t\fR <\fItype\fR>
+averaging method; default:
+.RB \(lq linear \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

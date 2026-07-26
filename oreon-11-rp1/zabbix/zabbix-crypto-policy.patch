@@ -1,0 +1,44 @@
+diff --git a/src/go/pkg/tls/tls.go b/src/go/pkg/tls/tls.go
+index b7ddff4..063eb02 100644
+--- a/src/go/pkg/tls/tls.go
++++ b/src/go/pkg/tls/tls.go
+@@ -406,6 +406,8 @@ static void *tls_new_context(const char *ca_file, const char *crl_file, const ch
+ #endif
+ 	if (NULL != cipher)
+ 		ciphers = cipher;
++	else
++		ciphers = "PROFILE=SYSTEM";
+ 
+ 	if (1 != SSL_CTX_set_cipher_list(ctx, ciphers))
+ 		goto out;
+diff --git a/src/libs/zbxcomms/tls_openssl.c b/src/libs/zbxcomms/tls_openssl.c
+index 40394a3..b2eb0f0 100644
+--- a/src/libs/zbxcomms/tls_openssl.c
++++ b/src/libs/zbxcomms/tls_openssl.c
+@@ -1212,7 +1212,7 @@ void	zbx_tls_init_child(const zbx_config_tls_t *config_tls, zbx_get_program_type
+ 				goto out;
+ 			}
+ 		}
+-		else if (1 != SSL_CTX_set_cipher_list(ctx_cert, ciphers))
++		else if (1 != SSL_CTX_set_cipher_list(ctx_cert, "PROFILE=SYSTEM"))
+ 		{
+ 			zbx_snprintf_alloc(&error, &error_alloc, &error_offset, "cannot set list of certificate"
+ 					" ciphersuites:");
+@@ -1302,7 +1302,7 @@ void	zbx_tls_init_child(const zbx_config_tls_t *config_tls, zbx_get_program_type
+ 				goto out;
+ 			}
+ 		}
+-		else if (1 != SSL_CTX_set_cipher_list(ctx_psk, ciphers))
++		else if (1 != SSL_CTX_set_cipher_list(ctx_psk, "PROFILE=SYSTEM"))
+ 		{
+ 			zbx_snprintf_alloc(&error, &error_alloc, &error_offset, "cannot set list of PSK ciphersuites:");
+ 			goto out;
+@@ -1360,7 +1360,7 @@ void	zbx_tls_init_child(const zbx_config_tls_t *config_tls, zbx_get_program_type
+ 				goto out;
+ 			}
+ 		}
+-		else if (1 != SSL_CTX_set_cipher_list(ctx_all, ciphers))
++		else if (1 != SSL_CTX_set_cipher_list(ctx_all, "PROFILE=SYSTEM"))
+ 		{
+ 			zbx_snprintf_alloc(&error, &error_alloc, &error_offset, "cannot set list of all ciphersuites:");
+ 			goto out;

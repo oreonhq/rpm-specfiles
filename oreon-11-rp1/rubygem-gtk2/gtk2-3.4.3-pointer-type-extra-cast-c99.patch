@@ -1,0 +1,135 @@
+--- gtk2-3.4.3/ext/gtk2/rbgdkpixmap.c.type3	2024-01-20 18:05:58.427634936 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkpixmap.c	2024-01-21 00:33:45.537037028 +0900
+@@ -80,12 +80,12 @@ rg_s_create_from_xpm_d(G_GNUC_UNUSED VAL
+ {
+     GdkPixmap *result;
+     GdkBitmap *mask;
+-    const gchar **buf = RVAL2STRV(data);
++    gchar **buf = RVAL2STRV(data);
+ 
+     result = gdk_pixmap_create_from_xpm_d(GDK_WINDOW(RVAL2GOBJ(win)),
+                                           &mask,
+                                           RVAL2GDKCOLOR(tcolor),
+-                                          (gchar **)buf);
++                                          buf);
+ 
+     g_free(buf);
+ 
+@@ -114,13 +114,13 @@ rg_s_colormap_create_from_xpm_d(G_GNUC_U
+ {
+     GdkPixmap *result;
+     GdkBitmap *mask;
+-    const gchar **buf = RVAL2STRV(data);
++    gchar **buf = RVAL2STRV(data);
+ 
+     result = gdk_pixmap_colormap_create_from_xpm_d(NIL_P(win) ? NULL : GDK_WINDOW(RVAL2GOBJ(win)),
+                                                    GDK_COLORMAP(RVAL2GOBJ(colormap)),
+                                                    &mask,
+                                                    RVAL2GDKCOLOR(tcolor),
+-                                                   (gchar **)buf);
++                                                   buf);
+ 
+     return rb_assoc_new(GOBJ2RVAL(result), GOBJ2RVAL(mask));
+ }
+--- gtk2-3.4.3/ext/gtk2/rbgdkscreen.c.type3	2024-01-20 21:46:40.386458125 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgdkscreen.c	2024-01-21 00:34:32.830055838 +0900
+@@ -255,7 +255,7 @@ rg_window_stack(VALUE self)
+ static void
+ child_setup(gpointer func)
+ {
+-    if (! NIL_P(func)){
++    if (! NIL_P((VALUE)func)){
+         rb_funcall((VALUE)func, id_call, 0);
+     }
+ }
+--- gtk2-3.4.3/ext/gtk2/rbgtkcontainer.c.type3	2024-01-20 20:58:40.760451051 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkcontainer.c	2024-01-21 01:18:40.671949976 +0900
+@@ -641,7 +641,12 @@ rg_s_type_register(int argc, VALUE* argv
+     GType parent_type;
+     GTypeInfo* info;
+ 
+-    rb_scan_args(argc, argv, "03", &type_name, &info, &flags);
++     /* FIXME 
++        here info is written but its value is unused then overwritten below.
++        Also valuable type is wrong. 
++       */
++    VALUE unused;
++    rb_scan_args(argc, argv, "03", &type_name, /*&info*/&unused, &flags);
+ 
+     /* TODO: Replace this copy-paste job with the real thing in glib2. */
+     {
+--- gtk2-3.4.3/ext/gtk2/rbgtkdrag.c.type3	2024-01-20 20:58:50.718453787 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkdrag.c	2024-01-21 00:46:33.858333466 +0900
+@@ -358,7 +358,7 @@ static VALUE
+ rg_m_source_get_target_list(G_GNUC_UNUSED VALUE self, VALUE widget)
+ {
+     GtkTargetList* ret = gtk_drag_source_get_target_list(RVAL2WIDGET(widget));
+-    return NIL_P(ret) ? Qnil : BOXED2RVAL(ret, GTK_TYPE_TARGET_LIST);
++    return !ret ? Qnil : BOXED2RVAL(ret, GTK_TYPE_TARGET_LIST);
+ }
+ 
+ static VALUE
+--- gtk2-3.4.3/ext/gtk2/rbgtkicontheme.c.type3	2024-01-20 18:06:00.027633252 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkicontheme.c	2024-01-21 12:27:08.300282235 +0900
+@@ -58,7 +58,7 @@ rg_set_search_path(VALUE self, VALUE rbp
+ {
+     GtkIconTheme *theme = _SELF(self);
+     long n;
+-    const gchar **path = RVAL2STRS(rbpath, n);
++    const gchar **path = (const gchar **)RVAL2STRS(rbpath, n);
+ 
+     gtk_icon_theme_set_search_path(theme, path, n);
+ 
+@@ -200,7 +200,7 @@ rg_choose_icon(int argc, VALUE *argv, VA
+         icon_names[1] = NULL;
+     }
+     else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_icon_names, rb_cArray))) {
+-        icon_names = RVAL2STRV(rb_icon_names);
++        icon_names = (const gchar **)RVAL2STRV(rb_icon_names);
+     }
+     else {
+         rb_raise(rb_eArgError,
+--- gtk2-3.4.3/ext/gtk2/rbgtkliststore.c.type3	2024-01-20 18:06:00.030633249 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkliststore.c	2024-01-21 00:55:55.698532292 +0900
+@@ -92,8 +92,9 @@ typedef struct _ValuesInfo
+ } ValuesInfo;
+ 
+ static int
+-collect_value(VALUE key, VALUE value, ValuesInfo *info)
++collect_value(VALUE key, VALUE value, VALUE vinfo)
+ {
++    ValuesInfo *info = (ValuesInfo *)vinfo;
+     GType g_type;
+     gint column;
+ 
+--- gtk2-3.4.3/ext/gtk2/rbgtkrecentfilterinfo.c.type3	2024-01-20 18:06:00.037633242 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkrecentfilterinfo.c	2024-01-21 12:27:46.012237931 +0900
+@@ -116,7 +116,7 @@ rg_set_applications(VALUE self, VALUE ap
+     /* NOTE: This can't be right.  What guarantees that the entries in
+      * applications will be around?  It should be RVAL2STRV_DUP and use
+      * g_strfreev in free above. */
+-    _SELF(self)->applications = RVAL2STRV(applications);
++    _SELF(self)->applications = (const gchar **)RVAL2STRV(applications);
+ 
+     return self;
+ }
+@@ -138,7 +138,7 @@ rg_groups(VALUE self)
+ static VALUE
+ rg_set_groups(VALUE self, VALUE groups)
+ {
+-    _SELF(self)->groups = RVAL2STRV(groups);
++    _SELF(self)->groups = (const gchar **)RVAL2STRV(groups);
+ 
+     return self;
+ }
+--- gtk2-3.4.3/ext/gtk2/rbgtkscalebutton.c.type3	2024-01-21 00:59:09.380600839 +0900
++++ gtk2-3.4.3/ext/gtk2/rbgtkscalebutton.c	2024-01-21 12:28:29.689186616 +0900
+@@ -53,7 +53,7 @@ rg_initialize(int argc, VALUE *argv, VAL
+     RBGTK_INITIALIZE(self, widget);
+ 
+     if (!NIL_P(arg5)) {
+-        const gchar **icons = RVAL2STRV(arg5);
++        const gchar **icons = (const gchar **)RVAL2STRV(arg5);
+ 
+         gtk_scale_button_set_icons(_SELF(self), icons);
+ 

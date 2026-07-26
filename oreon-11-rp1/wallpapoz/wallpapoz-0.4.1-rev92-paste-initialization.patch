@@ -1,0 +1,22 @@
+--- wallpapoz-0.4.1-svn92_trunk/src/wallpapoz.paste_init	2010-02-08 04:32:34.000000000 +0900
++++ wallpapoz-0.4.1-svn92_trunk/src/wallpapoz	2010-02-08 04:21:17.000000000 +0900
+@@ -94,6 +94,9 @@
+     # create the pop up menu when we right click the treeview widget
+     self.set_up_popup_menu()
+ 
++    # initially no item is pasted
++    self.selected_iter = None
++
+     # our signal and who handle that signal
+     dic = { "on_wallpapoz_window_destroy" : self.destroy,
+             "on_treeview_cursor_changed" : self.treeview_selection_changed,
+@@ -903,6 +906,9 @@
+ 
+     if position_iter == None:
+       return
++    # At first self.selected_iter is None
++    if not self.selected_iter:
++      return
+ 
+     # check first. User can not cut all wallpapers in workspace. Every workspace must have at least one wallpaper
+     temp_iter_list = []

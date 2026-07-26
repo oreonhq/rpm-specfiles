@@ -1,0 +1,23 @@
+From 7661eba89a5786a1b0826dbb2f45f8827d9a5103 Mon Sep 17 00:00:00 2001
+From: sophia <scastellarin95@gmail.com>
+Date: Tue, 3 Jan 2023 12:23:37 -0800
+Subject: [PATCH] Environment home dir is also not accessible if EROFS error
+ occurs
+
+---
+ lib/vagrant/environment.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/vagrant/environment.rb b/lib/vagrant/environment.rb
+index de99cbf3ba5..8b2531182ca 100644
+--- a/lib/vagrant/environment.rb
++++ b/lib/vagrant/environment.rb
+@@ -846,7 +846,7 @@ def setup_home_path
+         begin
+           @logger.info("Creating: #{dir}")
+           FileUtils.mkdir_p(dir)
+-        rescue Errno::EACCES
++        rescue Errno::EACCES, Errno::EROFS
+           raise Errors::HomeDirectoryNotAccessible, home_path: @home_path.to_s
+         end
+       end

@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -49,7 +49,7 @@ docs = [
+ testing = [
+     "Django",
+     "django-configurations>=2.0",
+-    "pytest>=9",
++    "pytest",
+ ]
+ coverage = [
+     "coverage[toml]",

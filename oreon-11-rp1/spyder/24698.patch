@@ -1,0 +1,219 @@
+From e3d0d5afad6c6c2b04cf889c5b2087c63923e777 Mon Sep 17 00:00:00 2001
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Wed, 9 Jul 2025 22:39:00 -0400
+Subject: [PATCH] atomicwrites: remove dependency
+
+The package has been deprecated. Replace usage with open-coded
+replacement. Also copy the test suite for the function.
+
+Lifted from pimutils/khal#1393 (which I also authored).
+
+Fixes: #24689
+
+diff --git a/binder/environment.yml b/binder/environment.yml
+index 08af5a71a..ad87c8a29 100644
+--- a/binder/environment.yml
++++ b/binder/environment.yml
+@@ -11,7 +11,6 @@ dependencies:
+ # to requirements/main.yml, and copy it here.
+ - aiohttp >=3.11.2
+ - asyncssh >=2.14.0,<3.0.0
+-- atomicwrites >=1.2.0
+ - bcrypt >=4.3.0
+ - chardet >=2.0.0
+ - cloudpickle >=0.5.0
+diff --git a/requirements/main.yml b/requirements/main.yml
+index 0331a7b12..559e71e61 100644
+--- a/requirements/main.yml
++++ b/requirements/main.yml
+@@ -9,7 +9,6 @@ channels:
+ dependencies:
+   - aiohttp >=3.11.2
+   - asyncssh >=2.14.0,<3.0.0
+-  - atomicwrites >=1.2.0
+   - bcrypt >=4.3.0
+   - chardet >=2.0.0
+   - cloudpickle >=0.5.0
+diff --git a/setup.py b/setup.py
+index 687f27237..4dbb888c5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -270,7 +270,6 @@ def run(self):
+     'aiohttp>=3.11.2',
+     'applaunchservices>=0.3.0;platform_system=="Darwin"',
+     'asyncssh>=2.14.0,<3.0.0',
+-    'atomicwrites>=1.2.0',
+     'bcrypt>=4.3.0',
+     'chardet>=2.0.0',
+     'cloudpickle>=0.5.0',
+diff --git a/spyder/dependencies.py b/spyder/dependencies.py
+index a44c78354..745362008 100644
+--- a/spyder/dependencies.py
++++ b/spyder/dependencies.py
+@@ -33,7 +33,6 @@
+ AIOHTTP_REQVER = '>=3.11.2'
+ APPLAUNCHSERVICES_REQVER = '>=0.3.0'
+ ASYNCSSH_REQVER = '>=2.14.0,<3.0.0'
+-ATOMICWRITES_REQVER = '>=1.2.0'
+ BCRYPT_REQVER = ">=4.3.0"
+ CHARDET_REQVER = '>=2.0.0'
+ CLOUDPICKLE_REQVER = '>=0.5.0'
+@@ -109,10 +108,6 @@
+      'package_name': 'asyncssh',
+      'features': _('Connect to remote kernels through SSH'),
+      'required_version': ASYNCSSH_REQVER},
+-    {'modname': "atomicwrites",
+-     'package_name': "atomicwrites",
+-     'features': _("Atomic file writes in the Editor"),
+-     'required_version': ATOMICWRITES_REQVER},
+     {'modname': "bcrypt",
+      'package_name': "bcrypt",
+      'features': _("Decrypt passphrase of SSH key files"),
+diff --git a/spyder/tests/test_atomic_write.py b/spyder/tests/test_atomic_write.py
+new file mode 100644
+index 000000000..a1dc02d47
+--- /dev/null
++++ b/spyder/tests/test_atomic_write.py
+@@ -0,0 +1,93 @@
++# From https://github.com/untitaker/python-atomicwrites/blob/4183999d9b7e81af85dee070d5311299bdf5164c/tests/test_atomicwrites.py
++
++import errno
++import os
++
++from spyder.utils.encoding import atomic_write
++
++import pytest
++
++
++def test_atomic_write(tmpdir):
++    fname = tmpdir.join('ha')
++    for i in range(2):
++        with atomic_write(str(fname), overwrite=True, dir=tmpdir, mode='w') as f:
++            f.write('hoho')
++
++    with pytest.raises(OSError) as excinfo:
++        with atomic_write(str(fname), overwrite=False, dir=tmpdir, mode='w') as f:
++            f.write('haha')
++
++    assert excinfo.value.errno == errno.EEXIST
++
++    assert fname.read() == 'hoho'
++    assert len(tmpdir.listdir()) == 1
++
++
++def test_teardown(tmpdir):
++    fname = tmpdir.join('ha')
++    with pytest.raises(AssertionError):
++        with atomic_write(str(fname), overwrite=True, dir=tmpdir, mode='w'):
++            assert False
++
++    assert not tmpdir.listdir()
++
++
++def test_replace_simultaneously_created_file(tmpdir):
++    fname = tmpdir.join('ha')
++    with atomic_write(str(fname), overwrite=True, dir=tmpdir, mode='w') as f:
++        f.write('hoho')
++        fname.write('harhar')
++        assert fname.read() == 'harhar'
++    assert fname.read() == 'hoho'
++    assert len(tmpdir.listdir()) == 1
++
++
++def test_dont_remove_simultaneously_created_file(tmpdir):
++    fname = tmpdir.join('ha')
++    with pytest.raises(OSError) as excinfo:
++        with atomic_write(str(fname), overwrite=False, dir=tmpdir, mode='w') as f:
++            f.write('hoho')
++            fname.write('harhar')
++            assert fname.read() == 'harhar'
++
++    assert excinfo.value.errno == errno.EEXIST
++    assert fname.read() == 'harhar'
++    assert len(tmpdir.listdir()) == 1
++
++
++# Verify that nested exceptions during rollback do not overwrite the initial
++# exception that triggered a rollback.
++def test_open_reraise(tmpdir):
++    fname = tmpdir.join('ha')
++    with pytest.raises(AssertionError):
++        aw = atomic_write(str(fname), overwrite=False, dir=tmpdir, mode='w')
++        with aw:
++            # Mess with internals, so commit will trigger a ValueError. We're
++            # testing that the initial AssertionError triggered below is
++            # propagated up the stack, not the second exception triggered
++            # during commit.
++            aw.rollback = lambda: 1 / 0
++            # Now trigger our own exception.
++            assert False, "Intentional failure for testing purposes"
++
++
++def test_atomic_write_in_pwd(tmpdir):
++    orig_curdir = os.getcwd()
++    try:
++        os.chdir(str(tmpdir))
++        fname = 'ha'
++        for i in range(2):
++            with atomic_write(str(fname), overwrite=True, dir=tmpdir, mode='w') as f:
++                f.write('hoho')
++
++        with pytest.raises(OSError) as excinfo:
++            with atomic_write(str(fname), overwrite=False, dir=tmpdir, mode='w') as f:
++                f.write('haha')
++
++        assert excinfo.value.errno == errno.EEXIST
++
++        assert open(fname).read() == 'hoho'
++        assert len(tmpdir.listdir()) == 1
++    finally:
++        os.chdir(orig_curdir)
+diff --git a/spyder/utils/encoding.py b/spyder/utils/encoding.py
+index 97ef43d24..de5a45acd 100644
+--- a/spyder/utils/encoding.py
++++ b/spyder/utils/encoding.py
+@@ -13,6 +13,7 @@
+ 
+ # Standard library imports
+ from codecs import BOM_UTF8, BOM_UTF16, BOM_UTF32
++import contextlib
+ import tempfile
+ import locale
+ import re
+@@ -25,7 +26,6 @@
+ 
+ # Third-party imports
+ from chardet.universaldetector import UniversalDetector
+-from atomicwrites import atomic_write
+ 
+ # Local imports
+ from spyder.utils.external.binaryornot.check import is_binary
+@@ -245,6 +245,28 @@ def to_unicode(string):
+     return string
+ 
+ 
++@contextlib.contextmanager
++def atomic_write(dest, overwrite, dir, mode):
++    """Atomically write a file"""
++    fd, src = tempfile.mkstemp(prefix=os.path.basename(dest), dir=dir)
++    file = os.fdopen(fd, mode=mode)
++
++    try:
++        yield file
++    except Exception:
++        os.unlink(src)
++        raise
++    else:
++        file.flush()
++        file.close()
++
++        if overwrite:
++            os.rename(src, dest)
++        else:
++            os.link(src, dest)
++            os.unlink(src)
++
++
+ def write(text, filename, encoding='utf-8', mode='wb'):
+     """
+     Write 'text' to file ('filename') assuming 'encoding' in an atomic way

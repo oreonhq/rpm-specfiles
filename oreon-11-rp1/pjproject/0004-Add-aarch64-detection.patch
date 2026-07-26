@@ -1,0 +1,43 @@
+From a41bca8aee85bb069f726529ea9721b46a6ed4a4 Mon Sep 17 00:00:00 2001
+From: Peter Robinson <pbrobinson@gmail.com>
+Date: Wed, 4 Oct 2023 21:16:30 -0500
+Subject: [PATCH 4/7] Add aarch64 detection
+
+---
+ pjlib/include/pj/config.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/pjlib/include/pj/config.h b/pjlib/include/pj/config.h
+index 5a67f79e7..892d0dc5b 100644
+--- a/pjlib/include/pj/config.h
++++ b/pjlib/include/pj/config.h
+@@ -190,6 +190,26 @@
+ #   define PJ_IS_LITTLE_ENDIAN  1
+ #   define PJ_IS_BIG_ENDIAN     0
+ 
++#elif defined (PJ_M_AARCH64) || defined(__aarch64__)
++    /*
++     * 64bit ARMv8 processor
++     */
++#   undef PJ_M_AARCH64
++#   define PJ_M_AARCH64		1
++#   define PJ_M_NAME		"aarch64"
++#   define PJ_HAS_PENTIUM	0
++#   if !PJ_IS_LITTLE_ENDIAN && !PJ_IS_BIG_ENDIAN
++#      if (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
++#         define PJ_IS_LITTLE_ENDIAN	1
++#         define PJ_IS_BIG_ENDIAN	0
++#      elif (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
++#         define PJ_IS_LITTLE_ENDIAN	0
++#         define PJ_IS_BIG_ENDIAN	1
++#      else
++#         error Endianness must be declared for this processor
++#      endif
++#   endif
++
+ #elif defined(PJ_M_IA64) || defined(__ia64__) || defined(_IA64) || \
+         defined(__IA64__) || defined(   _M_IA64)
+     /*
+-- 
+2.41.0
+

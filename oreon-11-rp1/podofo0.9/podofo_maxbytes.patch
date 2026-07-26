@@ -1,0 +1,46 @@
+diff -rupN --no-dereference podofo-0.9.8/src/podofo/base/PdfParser.h podofo-0.9.8-new/src/podofo/base/PdfParser.h
+--- podofo-0.9.8/src/podofo/base/PdfParser.h	2022-03-12 17:08:42.000000000 +0100
++++ podofo-0.9.8-new/src/podofo/base/PdfParser.h	2025-07-17 23:07:22.237997396 +0200
+@@ -39,7 +39,7 @@
+ #include "PdfVecObjects.h"
+ 
+ #define W_ARRAY_SIZE 3
+-#define W_MAX_BYTES  4
++#define W_MAX_BYTES  8
+ 
+ namespace PoDoFo {
+ 
+diff -rupN --no-dereference podofo-0.9.8/src/podofo/base/PdfXRefStreamParserObject.cpp podofo-0.9.8-new/src/podofo/base/PdfXRefStreamParserObject.cpp
+--- podofo-0.9.8/src/podofo/base/PdfXRefStreamParserObject.cpp	2021-08-18 19:14:51.000000000 +0200
++++ podofo-0.9.8-new/src/podofo/base/PdfXRefStreamParserObject.cpp	2025-07-17 23:07:22.238290073 +0200
+@@ -237,7 +237,7 @@ void PdfXRefStreamParserObject::ReadXRef
+ {
+     int              i;
+     pdf_int64        z;
+-    unsigned long    nData[W_ARRAY_SIZE];
++    pdf_uint64       nData[W_ARRAY_SIZE];
+ 
+     for( i=0;i<W_ARRAY_SIZE;i++ )
+     {
+@@ -253,7 +253,8 @@ void PdfXRefStreamParserObject::ReadXRef
+         nData[i] = 0;
+         for( z=W_MAX_BYTES-lW[i];z<W_MAX_BYTES;z++ )
+         {
+-            nData[i] = (nData[i] << 8) + static_cast<unsigned char>(*pBuffer);
++            nData[i] <<= 8;
++            nData[i] += static_cast<unsigned char>(*pBuffer);
+             ++pBuffer;
+         }
+     }
+diff -rupN --no-dereference podofo-0.9.8/src/podofo/base/PdfXRefStreamParserObject.h podofo-0.9.8-new/src/podofo/base/PdfXRefStreamParserObject.h
+--- podofo-0.9.8/src/podofo/base/PdfXRefStreamParserObject.h	2021-08-18 19:14:51.000000000 +0200
++++ podofo-0.9.8-new/src/podofo/base/PdfXRefStreamParserObject.h	2025-07-17 23:07:22.238485035 +0200
+@@ -38,7 +38,7 @@
+ #include "PdfParserObject.h"
+ 
+ #define W_ARRAY_SIZE 3
+-#define W_MAX_BYTES  4
++#define W_MAX_BYTES  8
+ 
+ namespace PoDoFo {
+ 

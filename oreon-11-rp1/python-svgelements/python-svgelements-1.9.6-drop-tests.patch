@@ -1,0 +1,19 @@
+From aef57085cdd802a7580544f77420258946cd8f29 Mon Sep 17 00:00:00 2001
+From: jpirnay <jens@pirnay.com>
+Date: Thu, 17 Oct 2024 23:13:00 +0200
+Subject: [PATCH] Exclude test directory for pypi
+
+---
+ setup.cfg | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/setup.cfg b/setup.cfg
+index a6373e8..7209499 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -40,3 +40,5 @@ max-line-length=100
+ [bdist_wheel]
+ universal=1
+ 
++[options.packages.find]
++exclude = test

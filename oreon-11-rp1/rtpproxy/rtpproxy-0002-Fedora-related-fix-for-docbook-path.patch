@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 21 Nov 2012 14:30:12 +0400
+Subject: [PATCH] Fedora-related fix for docbook path
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/Makefile.am b/Makefile.am
+index dc89836f..c22b588a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -32,7 +32,7 @@ endif
+ 
+ if BUILD_DOCS
+ rtpproxy.8: doc/manpage.xml
+-	${XSLTPROC} ${XSLTPROC_FLAGS} http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl doc/manpage.xml
++	${XSLTPROC} ${XSLTPROC_FLAGS} /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl doc/manpage.xml
+ endif
+ 
+ update_autosrc:

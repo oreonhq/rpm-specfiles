@@ -1,0 +1,78 @@
+diff --git a/src_c/surface.c b/src_c/surface.c
+index 958ce43..2699bb9 100644
+--- a/src_c/surface.c
++++ b/src_c/surface.c
+@@ -1020,8 +1020,7 @@ surf_get_locks(PyObject *self, PyObject *_null)
+         return NULL;
+ 
+     for (i = 0; i < len; i++) {
+-        tmp = PyWeakref_GetObject(PyList_GetItem(surf->locklist, i));
+-        Py_INCREF(tmp);
++        PyWeakref_GetRef(PyList_GetItem(surf->locklist, i), &tmp);
+         PyTuple_SetItem(tuple, i, tmp);
+     }
+     return tuple;
+@@ -3443,11 +3442,12 @@ _release_buffer(Py_buffer *view_p)
+     internal = (pg_bufferinternal *)view_p->internal;
+     consumer_ref = internal->consumer_ref;
+     assert(consumer_ref && PyWeakref_CheckRef(consumer_ref));
+-    consumer = PyWeakref_GetObject(consumer_ref);
++    PyWeakref_GetRef(consumer_ref, &consumer);
+     if (consumer) {
+         if (!pgSurface_UnlockBy((pgSurfaceObject *)view_p->obj, consumer)) {
+             PyErr_Clear();
+         }
++        Py_DECREF(consumer);
+     }
+     Py_DECREF(consumer_ref);
+     PyMem_Free(internal);
+diff --git a/src_c/surflock.c b/src_c/surflock.c
+index 27e0a2b..4d0bfea 100644
+--- a/src_c/surflock.c
++++ b/src_c/surflock.c
+@@ -120,27 +120,32 @@ pgSurface_UnlockBy(pgSurfaceObject *surfobj, PyObject *lockobj)
+     int noerror = 1;
+ 
+     if (surf->locklist != NULL) {
++        int getref_stat;
+         PyObject *item, *ref;
+         Py_ssize_t len = PyList_Size(surf->locklist);
+         while (--len >= 0 && !found) {
+             item = PyList_GetItem(surf->locklist, len);
+-            ref = PyWeakref_GetObject(item);
++            getref_stat = PyWeakref_GetRef(item, &ref);
+             if (ref == lockobj) {
+                 if (PySequence_DelItem(surf->locklist, len) == -1) {
++                    Py_DECREF(ref);
+                     return 0;
+                 }
+                 else {
+                     found = 1;
+                 }
+             }
++            if (getref_stat > 0) {
++                Py_DECREF(ref);
++            }
+         }
+ 
+         /* Clear dead references */
+         len = PyList_Size(surf->locklist);
+         while (--len >= 0) {
+             item = PyList_GetItem(surf->locklist, len);
+-            ref = PyWeakref_GetObject(item);
+-            if (ref == Py_None) {
++            getref_stat = PyWeakref_GetRef(item, &ref);
++            if (ref == NULL) {
+                 if (PySequence_DelItem(surf->locklist, len) == -1) {
+                     noerror = 0;
+                 }
+@@ -148,6 +153,9 @@ pgSurface_UnlockBy(pgSurfaceObject *surfobj, PyObject *lockobj)
+                     found++;
+                 }
+             }
++            if (getref_stat > 0) {
++                Py_DECREF(ref);
++            }
+         }
+     }
+ 

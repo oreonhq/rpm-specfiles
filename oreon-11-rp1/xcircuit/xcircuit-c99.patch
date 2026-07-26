@@ -1,0 +1,19 @@
+Declare UDrawXAt in prototypes.h.  This avoids an implicit function
+declaration in functions.c for HAVE_CAIRO.  Future compilers will not
+accept such implicit function declarations by default, leading to a
+build failure.
+
+Submitted upstream: <https://github.com/RTimothyEdwards/XCircuit/pull/18>
+
+diff --git a/prototypes.h b/prototypes.h
+index d577c854c48eddf1..5ec4b272722fd658 100644
+--- a/prototypes.h
++++ b/prototypes.h
+@@ -431,6 +431,7 @@ extern void UDrawSimpleLine(XPoint *, XPoint *);
+ extern void UDrawLine(XPoint *, XPoint *);
+ extern void UDrawCircle(XPoint *, u_char);
+ extern void UDrawX(labelptr);
++extern void UDrawXAt(XPoint *);
+ extern void UDrawXDown(labelptr);
+ extern int  toplevelwidth(objinstptr, short *);
+ extern int  toplevelheight(objinstptr, short *);

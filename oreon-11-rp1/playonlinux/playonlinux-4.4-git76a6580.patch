@@ -1,0 +1,4803 @@
+From 9ff4b76168a7c64e4a2de7be5158618fbb1242a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Quentin=20P=C3=A2ris?= <github@playonlinux.com>
+Date: Sun, 17 May 2020 16:15:30 +0200
+Subject: [PATCH 01/33] Update CHANGELOG.md
+
+---
+ CHANGELOG.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a589625c3..cde2d82c4 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,6 @@
++# 4.4
++* Python 3 support 
++
+ # 4.3.4
+ * Fixed some bugs in the wineversion process
+ * Begining of code cleaning and refactoring
+
+From 788fad16eff4904193e4e9c52b23672535a23c33 Mon Sep 17 00:00:00 2001
+From: Gilles <gilles.wiber@gmail.com>
+Date: Sat, 30 May 2020 11:19:35 +0200
+Subject: [PATCH 02/33] Removing SetSpacing funtion
+
+---
+ python/configurewindow/ConfigureWindow.py         | 2 +-
+ python/configurewindow/ConfigureWindowNotebook.py | 2 +-
+ python/debug.py                                   | 2 +-
+ python/install/InstallWindow.py                   | 2 +-
+ python/mainwindow.py                              | 2 +-
+ python/options.py                                 | 2 +-
+ python/setupwindow/POL_SetupFrame.py              | 2 +-
+ python/wine_versions/WineVersionsNotebook.py      | 4 ++--
+ 8 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/python/configurewindow/ConfigureWindow.py b/python/configurewindow/ConfigureWindow.py
+index 30f779db1..a26321437 100755
+--- a/python/configurewindow/ConfigureWindow.py
++++ b/python/configurewindow/ConfigureWindow.py
+@@ -75,7 +75,7 @@ def __init__(self,parent,id,title,shortcut, isPrefix = False):
+         self.Bind(wx.EVT_BUTTON, self.DeletePrefix, id=1002)
+ 
+ 
+-        self.list_game.SetSpacing(0)
++        #self.list_game.SetSpacing(0)
+         self.list_game.SetImageList(self.images)
+ 
+ 
+diff --git a/python/configurewindow/ConfigureWindowNotebook.py b/python/configurewindow/ConfigureWindowNotebook.py
+index 8b4e387ea..973d9bbd3 100644
+--- a/python/configurewindow/ConfigureWindowNotebook.py
++++ b/python/configurewindow/ConfigureWindowNotebook.py
+@@ -269,7 +269,7 @@ def Packages(self, nom):
+ 
+         self.Menu = wx.TreeCtrl(self.panelPackages, 99, pos=(15, 75), size=(530, 260),
+                                 style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders)
+-        self.Menu.SetSpacing(0);
++        #self.Menu.SetSpacing(0);
+         self.Menu.SetImageList(self.imagePackages)
+         self.imagePackages.RemoveAll()
+ 
+diff --git a/python/debug.py b/python/debug.py
+index 0221e89c0..43e8cf021 100755
+--- a/python/debug.py
++++ b/python/debug.py
+@@ -60,7 +60,7 @@ def __init__(self,parent,id,title,logcheck="/dev/null",logtype=None):
+         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.analyseLog, id=900)
+ 
+ 
+-        self.list_game.SetSpacing(0);
++        #self.list_game.SetSpacing(0);
+         self.list_game.SetImageList(self.images)
+ 
+ 
+diff --git a/python/install/InstallWindow.py b/python/install/InstallWindow.py
+index 27a6b51a5..5b584774d 100755
+--- a/python/install/InstallWindow.py
++++ b/python/install/InstallWindow.py
+@@ -183,7 +183,7 @@ def _createAppNavigation(self):
+         self.appsList = wx.TreeCtrl(self.appNavigationPanel, 106,
+                                     style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders)
+         self.appsList.SetImageList(self.imagesapps)
+-        self.appsList.SetSpacing(0)
++        #self.appsList.SetSpacing(0)
+ 
+         self.appNavigationSizer.AddSpacer(10)
+         self.appNavigationSizer.Add(self.appsList, 4, wx.EXPAND, 5)
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index 7c21142df..8df1ff14b 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -240,7 +240,7 @@ def __init__(self, parent, id, title):
+ 
+         ## List game
+         self.list_game = wx.TreeCtrl(self, 105, style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT)
+-        self.list_game.SetSpacing(0)
++        #self.list_game.SetSpacing(0)
+         self.list_game.SetIndent(5)
+         self.list_game.SetImageList(self.images)
+         self.menu_gauche = wx.Panel(self, -1)
+diff --git a/python/options.py b/python/options.py
+index a54c11000..723073ce4 100755
+--- a/python/options.py
++++ b/python/options.py
+@@ -187,7 +187,7 @@ def Plugins(self, nom):
+         self.txtPlugin = wx.StaticText(self.panelPlugins, -1, _("Installed plugins"), size=wx.DefaultSize)
+         self.txtPlugin.SetFont(self.fontTitle)
+         self.pluginlist = wx.TreeCtrl(self.panelPlugins, 220, style=Variables.widget_borders|wx.TR_HIDE_ROOT|wx.TR_FULL_ROW_HIGHLIGHT)
+-        self.pluginlist.SetSpacing(0)
++        #self.pluginlist.SetSpacing(0)
+ 
+         self.pluginImgList = wx.ImageList(16,16)
+ 
+diff --git a/python/setupwindow/POL_SetupFrame.py b/python/setupwindow/POL_SetupFrame.py
+index 66bee8533..33d73d38a 100755
+--- a/python/setupwindow/POL_SetupFrame.py
++++ b/python/setupwindow/POL_SetupFrame.py
+@@ -212,7 +212,7 @@ def _createUI(self):
+                                      style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders,
+                                      pos=(25, 25), size=(460, 220))
+         self.MenuGames.SetImageList(self.images)
+-        self.MenuGames.SetSpacing(0)
++        #self.MenuGames.SetSpacing(0)
+ 
+         # Login
+         self.login = wx.StaticText(self.contentPanel, -1, _("Login: "), pos=(20, 40), size=(460, 20))
+diff --git a/python/wine_versions/WineVersionsNotebook.py b/python/wine_versions/WineVersionsNotebook.py
+index e088abeb2..ec5f12535 100644
+--- a/python/wine_versions/WineVersionsNotebook.py
++++ b/python/wine_versions/WineVersionsNotebook.py
+@@ -39,7 +39,7 @@ def _createInstalledWineVersionsPanel(self, arch):
+         self.installedWineVersionsTreeSelector[arch] = wx.TreeCtrl(installedWineVersionsPanel, 107 + self.calculateEventDelta(arch),
+                                                                    style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders)
+         self.installedWineVersionsTreeSelector[arch].SetImageList(self.imagesapps_i[arch])
+-        self.installedWineVersionsTreeSelector[arch].SetSpacing(0)
++        #self.installedWineVersionsTreeSelector[arch].SetSpacing(0)
+         installedWineVersionsSizer.Add(self.installedWineVersionsTreeSelector[arch], 1, wx.EXPAND)
+         installedWineVersionsSizer.AddSpacer(10)
+ 
+@@ -55,7 +55,7 @@ def _createAvailableWineVersionsPanel(self, arch):
+                                                                    style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders,
+                                                                    size=(320, 300), pos=(10, 35))
+         self.availableWineVersionsTreeSelector[arch].SetImageList(self.imagesapps[arch])
+-        self.availableWineVersionsTreeSelector[arch].SetSpacing(0)
++        #self.availableWineVersionsTreeSelector[arch].SetSpacing(0)
+         availableWineVersionsSizer.Add(self.availableWineVersionsTreeSelector[arch], 1, wx.EXPAND)
+         availableWineVersionsSizer.AddSpacer(10)
+ 
+
+From 77a3ca3be293ebcafa2400703a5dd4079a5f200b Mon Sep 17 00:00:00 2001
+From: Gilles <gilles.wiber@gmail.com>
+Date: Sat, 30 May 2020 11:32:13 +0200
+Subject: [PATCH 03/33] Solving pluging manager issue (extension management)
+
+---
+ python/options.py | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/python/options.py b/python/options.py
+index 723073ce4..f40f26a70 100755
+--- a/python/options.py
++++ b/python/options.py
+@@ -229,9 +229,9 @@ def generateExts(self):
+             line = line.replace("\n","")
+             line = line.split("=")
+             liner = "Line %s" % i
+-            self.list_ext.InsertStringItem(i, liner)
+-            self.list_ext.SetStringItem(i, 0, line[0])
+-            self.list_ext.SetStringItem(i, 1, line[1])
++            self.list_ext.InsertItem(i, liner)
++            self.list_ext.SetItem(i, 0, line[0])
++            self.list_ext.SetItem(i, 1, line[1])
+             i += 1
+         self.app_installed_text.Hide()
+         self.app_installed.Hide()
+@@ -249,8 +249,9 @@ def editExt(self, event):
+         self.app_installed.Show()
+         self.delete_ext.Show()
+ 
+-        self.app_selected = self.exts[event.m_itemIndex].split("=")[1]
+-        self.ext_selected = self.exts[event.m_itemIndex].split("=")[0]
++        ind = event.GetIndex()
++        self.app_selected = self.list_ext.GetItem(ind,1).GetText()
++        self.ext_selected = self.list_ext.GetItem(ind,0).GetText()
+ 
+         self.app_installed.SetValue(self.app_selected.replace("\n","").replace("\r",""))
+ 
+
+From a656f5b2bdd23375e3d9547a9c38ccf99e2dc670 Mon Sep 17 00:00:00 2001
+From: Gilles <gilles.wiber@gmail.com>
+Date: Sat, 30 May 2020 14:34:28 +0200
+Subject: [PATCH 04/33] Solving different issue on debug window
+
+---
+ python/debug.py         | 7 ++++---
+ python/lib/Variables.py | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/python/debug.py b/python/debug.py
+index 43e8cf021..1e344edc8 100755
+--- a/python/debug.py
++++ b/python/debug.py
+@@ -38,7 +38,7 @@ def __init__(self,parent,id,title,logcheck="/dev/null",logtype=None):
+ 
+         wx.Frame.__init__(self, parent, -1, title, size = (810, 600+Variables.windows_add_size), style = wx.CLOSE_BOX | wx.CAPTION | wx.MINIMIZE_BOX)
+         self.SetIcon(wx.Icon(Variables.playonlinux_env+"/etc/playonlinux.png", wx.BITMAP_TYPE_ANY))
+-        self.SetTitle(_('{0} debugger').format(os.environ["APPLICATION_TITLE"]))
++        self.SetTitle(title)
+         #self.panelFenp = wx.Panel(self, -1)
+ 
+         self.prefixes_item = {}
+@@ -79,7 +79,7 @@ def __init__(self,parent,id,title,logcheck="/dev/null",logtype=None):
+         self.log_reader = wx.TextCtrl(self.panelText, 100, "", size=wx.Size(590,500), pos=(2,2), style=Variables.widget_borders|wx.TE_RICH2|wx.TE_READONLY|wx.TE_MULTILINE)
+         self.log_reader.Bind(wx.EVT_SET_FOCUS, self.OnFocus)
+         self.openTextEdit = wx.Button(self.panelNotEmpty, 101, _("Locate this logfile"), size=(400,30), pos=(70,512))
+-        self.reportProblem = wx.Button(self.panelNotEmpty, 102, "", size=(400,30), pos=(70,552))
++        self.reportProblem = wx.Button(self.panelNotEmpty, 102, _("Bug report"), size=(400,30), pos=(70,552))
+ 
+         if(logcheck == "/dev/null"):
+             self.HideLogFile()
+@@ -95,7 +95,8 @@ def bugReport(self, event):
+         new_env = os.environ
+         new_env["LOGTITLE"] = self.logname
+         subprocess.Popen(["bash", Variables.playonlinux_env+"/bash/bug_report"], env=new_env)
+-        self.reportProblem.Enable(False)
++        # Doesn't work if cancel on POL Window : need to find another way ...
++        #self.reportProblem.Enable(False)
+ 
+     def locate(self, event):
+         if(self.logtype == 0):
+diff --git a/python/lib/Variables.py b/python/lib/Variables.py
+index 055fe17f9..8bed7601b 100755
+--- a/python/lib/Variables.py
++++ b/python/lib/Variables.py
+@@ -51,7 +51,7 @@
+         windows_add_size = 0
+         windows_add_playonmac = 0
+     else:
+-        windows_add_size = dpiFetcher().fetch_extra_pixel()
++        windows_add_size = dpiFetcher().fetch_extra_pixel()+60
+         windows_add_playonmac = 0
+ 
+     widget_borders = wx.RAISED_BORDER
+
+From 02beab05d4255802c26db20a18787349e9b15bbc Mon Sep 17 00:00:00 2001
+From: Gilles <gilles.wiber@gmail.com>
+Date: Sat, 30 May 2020 15:17:33 +0200
+Subject: [PATCH 05/33] Solving small bugs
+
+---
+ python/configurewindow/ConfigureWindowNotebook.py | 2 ++
+ python/install/InstallWindow.py                   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/python/configurewindow/ConfigureWindowNotebook.py b/python/configurewindow/ConfigureWindowNotebook.py
+index 973d9bbd3..296443e66 100644
+--- a/python/configurewindow/ConfigureWindowNotebook.py
++++ b/python/configurewindow/ConfigureWindowNotebook.py
+@@ -467,6 +467,8 @@ def misc_button(self, event):
+             self.FileDialog.ShowModal()
+             if (self.FileDialog.GetPath() != ""):
+                 filename = self.FileDialog.GetPath()
++                if not os.path.isfile(filename):
++                    return
+                 dirname = os.path.dirname(filename)
+                 if (self.s_isPrefix == True):
+                     subprocess.Popen(["bash", Variables.playonlinux_env + "/bash/POL_Command", "--prefix",
+diff --git a/python/install/InstallWindow.py b/python/install/InstallWindow.py
+index 5b584774d..2e49e4a18 100755
+--- a/python/install/InstallWindow.py
++++ b/python/install/InstallWindow.py
+@@ -333,7 +333,7 @@ def closeapp(self, event):
+ 
+     def manual(self, event):
+         self.live = 1
+-        self.installapp(self)
++        self.installapp(event)
+ 
+     def showStars(self, stars):
+         starWidth = 20
+
+From e3a924fcf4ff3409d31f0956d3802d6a65956ae2 Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 19:42:50 +1000
+Subject: [PATCH 06/33] Update README.md
+
+---
+ README.md | 49 ++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 34 insertions(+), 15 deletions(-)
+
+diff --git a/README.md b/README.md
+index 9b6ca31ca..97795c427 100644
+--- a/README.md
++++ b/README.md
+@@ -1,28 +1,47 @@
+-POL-POM-4
+-=========
++# PlayOnLinux and PlayOnMac 4 (POL-POM-4)
+ 
+-PlayOnLinux 4 repository
+-Note: PlayOnLinux 5 is currently under development. Please clone POL-POM-5 repository if you want to contribute
++Note: [Phoenicis PlayOnLinux and PlayOnMac 5](https://www.phoenicis.org/) is currently under development. Please clone [Phoenicis PlayOnLinux and PlayOnMac 5 repository](https://github.com/PhoenicisOrg/phoenicis) if you want to contribute.
+ 
+-What is PlayOnLinux?
+-=====================
++PlayOnLinux and PlayOnMac 4 allows you to install and use non-native applications on your favorite operating system.
++
++Supported operating systems:
++
++* Linux
++* Mac OSX
++
++Supported engines:
++
++* [Wine](https://www.winehq.org/)
++
++
++# What is PlayOnLinux?
+ 
+ PlayOnLinux is a piece of software which allows you to easily install and use numerous games and apps designed to run with Microsoft® Windows®.
++
+ Few games are compatible with GNU/Linux at the moment and it certainly is a factor preventing the migration to this system. PlayOnLinux brings a cost-free, accessible and efficient solution to this problem.
+ 
+ 
+-What are PlayOnLinux's features?
+-================================
++# What are PlayOnLinux's features?
+ 
+ Here is a non-exhaustive list of the interesting points to know:
++* You don't have to own a Windows license to use PlayOnLinux.
++* PlayOnLinux is based on [Wine](https://www.winehq.org/), and so profits from all its features yet it keeps the user from having to deal with its complexity.
++* PlayOnLinux is free software.
++* PlayOnLinux uses [Bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
+ 
+-You don't have to own a Windows license to use PlayOnLinux.
+-PlayOnLinux is based on Wine, and so profits from all its features yet it keeps the user from having to deal with its complexity.
+-PlayOnLinux is free software.
+-PlayOnLinux uses Bash and Python.
+ Nevertheless, PlayOnLinux has some bugs, as every piece of software:
+-
+-Occasional performance decrease (image may be less fluid and graphics less detailed).
+-Not all games are supported. Nevertheless, you can use our manual installation module.
++* Occasional performance decrease (image may be less fluid and graphics less detailed).
++* Not all games are supported. Nevertheless, you can use our manual installation module.
+ 
+ For more information, visit http://www.playonlinux.com
++
++
++## Translate
++PlayOnLinux/PlayOnMac 4 is localized using Launchpad: https://translations.launchpad.net/playonlinux
++If your language is not listed, please create an [issue](https://github.com/PlayOnLinux/POL-POM-4/issues).
++
++
++## Community
++* Issues or ideas: https://github.com/PhoenicisOrg/phoenicis/issues
++* Forums : http://www.playonlinux.com/en/forums.html
++* Slack : https://join.slack.com/phoenicis-org/shared_invite/MTkzMTMwMjM3MjcxLTE0OTY1MTQzNzktY2IzOTE2NmE3NA
+
+From 2fb13e328861264ee3a4f6d8979bb1ee018cea79 Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 19:44:16 +1000
+Subject: [PATCH 07/33] Update README.md
+
+---
+ README.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/README.md b/README.md
+index 97795c427..c1e9ed033 100644
+--- a/README.md
++++ b/README.md
+@@ -21,10 +21,10 @@ PlayOnLinux is a piece of software which allows you to easily install and use nu
+ Few games are compatible with GNU/Linux at the moment and it certainly is a factor preventing the migration to this system. PlayOnLinux brings a cost-free, accessible and efficient solution to this problem.
+ 
+ 
+-# What are PlayOnLinux's features?
++# What are PlayOnLinux’s features?
+ 
+ Here is a non-exhaustive list of the interesting points to know:
+-* You don't have to own a Windows license to use PlayOnLinux.
++* You don’t have to own a Windows license to use PlayOnLinux.
+ * PlayOnLinux is based on [Wine](https://www.winehq.org/), and so profits from all its features yet it keeps the user from having to deal with its complexity.
+ * PlayOnLinux is free software.
+ * PlayOnLinux uses [Bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
+
+From f4229ac83015a583d0c0e45445d28ee332321356 Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 19:45:11 +1000
+Subject: [PATCH 08/33] Update README.md
+
+---
+ README.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/README.md b/README.md
+index c1e9ed033..75fbc5fae 100644
+--- a/README.md
++++ b/README.md
+@@ -6,8 +6,9 @@ PlayOnLinux and PlayOnMac 4 allows you to install and use non-native application
+ 
+ Supported operating systems:
+ 
+-* Linux
+-* Mac OSX
++* GNU/Linux
++* Mac OS X
++* macOS
+ 
+ Supported engines:
+ 
+
+From 6480e694154f4f24c4bf31babc7e9271574e04ca Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 19:49:31 +1000
+Subject: [PATCH 09/33] Update README.md
+
+---
+ README.md | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/README.md b/README.md
+index 75fbc5fae..0d64a5962 100644
+--- a/README.md
++++ b/README.md
+@@ -6,9 +6,8 @@ PlayOnLinux and PlayOnMac 4 allows you to install and use non-native application
+ 
+ Supported operating systems:
+ 
+-* GNU/Linux
+-* Mac OS X
+-* macOS
++* [GNU/Linux](https://en.wikipedia.org/wiki/Linux)
++* [macOS](https://en.wikipedia.org/wiki/Apple_Macintosh_OS_X)
+ 
+ Supported engines:
+ 
+@@ -25,7 +24,7 @@ Few games are compatible with GNU/Linux at the moment and it certainly is a fact
+ # What are PlayOnLinux’s features?
+ 
+ Here is a non-exhaustive list of the interesting points to know:
+-* You don’t have to own a Windows license to use PlayOnLinux.
++* You don’t have to own a [Microsoft Windows](https://en.wikipedia.org/wiki/Microsoft_Windows) license to use PlayOnLinux.
+ * PlayOnLinux is based on [Wine](https://www.winehq.org/), and so profits from all its features yet it keeps the user from having to deal with its complexity.
+ * PlayOnLinux is free software.
+ * PlayOnLinux uses [Bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
+
+From c4669305f256c4c16bc68a353239cbc8c5dae7ba Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 19:50:31 +1000
+Subject: [PATCH 10/33] Update README.md
+
+---
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index 0d64a5962..57fadfbb6 100644
+--- a/README.md
++++ b/README.md
+@@ -26,7 +26,7 @@ Few games are compatible with GNU/Linux at the moment and it certainly is a fact
+ Here is a non-exhaustive list of the interesting points to know:
+ * You don’t have to own a [Microsoft Windows](https://en.wikipedia.org/wiki/Microsoft_Windows) license to use PlayOnLinux.
+ * PlayOnLinux is based on [Wine](https://www.winehq.org/), and so profits from all its features yet it keeps the user from having to deal with its complexity.
+-* PlayOnLinux is free software.
++* PlayOnLinux is [free software](https://en.wikipedia.org/wiki/Free_software).
+ * PlayOnLinux uses [Bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
+ 
+ Nevertheless, PlayOnLinux has some bugs, as every piece of software:
+
+From a6cc23d43375fca0e28e900a110d195be251ee20 Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Fri, 24 Jul 2020 20:12:36 +1000
+Subject: [PATCH 11/33] Update README.md
+
+---
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index 57fadfbb6..0fe79f3fa 100644
+--- a/README.md
++++ b/README.md
+@@ -7,7 +7,7 @@ PlayOnLinux and PlayOnMac 4 allows you to install and use non-native application
+ Supported operating systems:
+ 
+ * [GNU/Linux](https://en.wikipedia.org/wiki/Linux)
+-* [macOS](https://en.wikipedia.org/wiki/Apple_Macintosh_OS_X)
++* [macOS](https://en.wikipedia.org/wiki/MacOS)
+ 
+ Supported engines:
+ 
+
+From 08e87ed0a78b0c7743935cd39b355db303157354 Mon Sep 17 00:00:00 2001
+From: ovari <17465872+ovari@users.noreply.github.com>
+Date: Sat, 25 Jul 2020 18:31:10 +1000
+Subject: [PATCH 12/33] Update README.md
+
+---
+ README.md | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/README.md b/README.md
+index 0fe79f3fa..3d00e65c1 100644
+--- a/README.md
++++ b/README.md
+@@ -6,8 +6,8 @@ PlayOnLinux and PlayOnMac 4 allows you to install and use non-native application
+ 
+ Supported operating systems:
+ 
+-* [GNU/Linux](https://en.wikipedia.org/wiki/Linux)
+-* [macOS](https://en.wikipedia.org/wiki/MacOS)
++* GNU/Linux
++* macOS
+ 
+ Supported engines:
+ 
+@@ -24,10 +24,10 @@ Few games are compatible with GNU/Linux at the moment and it certainly is a fact
+ # What are PlayOnLinux’s features?
+ 
+ Here is a non-exhaustive list of the interesting points to know:
+-* You don’t have to own a [Microsoft Windows](https://en.wikipedia.org/wiki/Microsoft_Windows) license to use PlayOnLinux.
++* You don’t have to own a Microsoft Windows license to use PlayOnLinux.
+ * PlayOnLinux is based on [Wine](https://www.winehq.org/), and so profits from all its features yet it keeps the user from having to deal with its complexity.
+ * PlayOnLinux is [free software](https://en.wikipedia.org/wiki/Free_software).
+-* PlayOnLinux uses [Bash](https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and [Python](https://en.wikipedia.org/wiki/Python_(programming_language)).
++* PlayOnLinux uses Bash and Python.
+ 
+ Nevertheless, PlayOnLinux has some bugs, as every piece of software:
+ * Occasional performance decrease (image may be less fluid and graphics less detailed).
+
+From 2bf9ed2d321a26b48de83a13064f7b9f0db0dcd7 Mon Sep 17 00:00:00 2001
+From: rayderua <rayder.ua@gmail.com>
+Date: Mon, 5 Oct 2020 17:19:47 +0300
+Subject: [PATCH 13/33] fix split version to first 3 elements
+
+ValueError: invalid literal for int() with base 10: 'post2'
+
+Versions can contain not only digits (for example wx releases: 4.0.7, 4.0.7.post1, 4.0.7.post2, 4.1.0)
+---
+ python/lib/playonlinux.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/python/lib/playonlinux.py b/python/lib/playonlinux.py
+index 827db9202..3e87d90aa 100755
+--- a/python/lib/playonlinux.py
++++ b/python/lib/playonlinux.py
+@@ -278,11 +278,11 @@ def VersionLower(version1, version2):
+         else:
+             return False
+ 
+-    version1 = [ int(digit) for digit in version1[0].split(".") ]
++    version1 = [ int(digit) for digit in version1[0].split(".")[:3] ]
+     while len(version1) < 3:
+         version1.append(0)
+ 
+-    version2 = [ int(digit) for digit in version2[0].split(".") ]
++    version2 = [ int(digit) for digit in version2[0].split(".")[:3] ]
+     while len(version2) < 3:
+         version2.append(0)
+ 
+
+From 6a9bfaa1dc4f537f2ee03b9ac99adf6fe8f2f047 Mon Sep 17 00:00:00 2001
+From: ChrisB85 <krzysztof.blachowicz@gmail.com>
+Date: Tue, 20 Oct 2020 18:10:34 +0200
+Subject: [PATCH 14/33] Polish translations
+
+---
+ lang/po/pl.po | 109 +++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 67 insertions(+), 42 deletions(-)
+
+diff --git a/lang/po/pl.po b/lang/po/pl.po
+index ae69f497e..f047b5b44 100644
+--- a/lang/po/pl.po
++++ b/lang/po/pl.po
+@@ -11,22 +11,22 @@ msgstr ""
+ "Project-Id-Version: pol\n"
+ "Report-Msgid-Bugs-To: Tinou\n"
+ "POT-Creation-Date: 2015-08-31 19:00+0200\n"
+-"PO-Revision-Date: 2014-04-23 13:35+0000\n"
++"PO-Revision-Date: 2020-10-20 18:09+0200\n"
+ "Last-Translator: Adam Maćkowiak <Unknown>\n"
+ "Language-Team: pl_PL.UTF-8 <LL@li.org>\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ "X-Launchpad-Export-Date: 2015-09-01 05:12+0000\n"
+-"X-Generator: Launchpad (build 17690)\n"
++"X-Generator: Poedit 2.3\n"
++"Language: pl\n"
+ 
+ #: Capture plugin:2, Detour plugin:4
+ msgid "Which application do you want to apply the modification to?"
+ msgstr "Do jakiej aplikacji chcesz wykonać modyfikacje?"
+ 
+ #: Capture plugin:3
+-msgid ""
+-"This plugin wil allow you to capture you applications under PlayOnLinux"
++msgid "This plugin wil allow you to capture you applications under PlayOnLinux"
+ msgstr "Wtyczka umożliwia przechwytywanie obrazu z aplikacji pod PlayOnLinux"
+ 
+ #: Capture plugin:4
+@@ -56,8 +56,8 @@ msgid ""
+ "start automatically after 5 seconds.\\nOnly video will be captured."
+ msgstr ""
+ "Proszę wcisnąć Dalej, następnie kliknąć\\nw okno programu, które chcesz "
+-"przechwycić.\\nNagrywanie rozpocznie się automatycznie po 5 sekundach.\\"
+-"nNagrany zostanie wyłącznie obraz."
++"przechwycić.\\nNagrywanie rozpocznie się automatycznie po 5 sekundach."
++"\\nNagrany zostanie wyłącznie obraz."
+ 
+ #: Capture plugin:10
+ msgid "Capture will begin..."
+@@ -309,7 +309,7 @@ msgstr "Dokładny opis jest wymagany."
+ #: bash/bug_report:101
+ #, sh-format
+ msgid "Thank you !\\n\\nYour report has been sent."
+-msgstr ""
++msgstr "Dziękujemy !\\n\\nTwoje zgłoszenie zostało wysłane."
+ 
+ #: bash/create_prefix:26
+ #, sh-format
+@@ -458,6 +458,9 @@ msgid ""
+ "all the tools\\n\\nWarning: We are unable to guarantee that your application "
+ "will work perfectly."
+ msgstr ""
++"Witamy w kreatorze instalacji ręcznej $APPLICATION_TITLE.\\n\\nKreator ten "
++"pozwoli Ci zainstalować każdy program w $APPLICATION_TITLE\\n\\nUwaga: Nie "
++"możemy zagwarantować, że twoja aplikacja będzie działać poprawnie."
+ 
+ #: bash/manual_install:102
+ #, sh-format
+@@ -707,8 +710,8 @@ msgid ""
+ "tool ONLY if you CD-ROM is a hybride CD-ROM (Compatible with Windows and "
+ "MacOS), and if you are not able to see the Windows part"
+ msgstr ""
+-"Dzięki temu narzędzi twój Mac będzie w stanie przeczytać część CD-ROMu\\"
+-"nprzeznaczonego dla komputerów PC.\\n\\nUżyj tego narzędzia TYLKO jeżeli "
++"Dzięki temu narzędzi twój Mac będzie w stanie przeczytać część CD-ROMu"
++"\\nprzeznaczonego dla komputerów PC.\\n\\nUżyj tego narzędzia TYLKO jeżeli "
+ "posiadasz hybrydowy CD-ROM (kompatybilny z Windows i MacOS)\\ni tylko wtedy "
+ "gdy nie jesteś w stanie zobaczyć części dla Windowsa."
+ 
+@@ -762,16 +765,18 @@ msgid ""
+ "$PACKAGE crashed.\\nSelect its shortcut and click on \"Debug\" in the side "
+ "panel to get more details."
+ msgstr ""
++"$PACKAGE uległ awarii.\\nZaznacz jego skrót i kliknij \"Debuguj\" w panelu "
++"bocznym aby poznać szczegóły."
+ 
+ #: bash/run_app:120
+ #, sh-format
+ msgid "$PACKAGE crashed."
+-msgstr "$PACKAGE zawiesił się."
++msgstr "$PACKAGE uległ awarii."
+ 
+ #: bash/run_exe:33
+ #, sh-format
+ msgid "Waiting XQuartz to be installed"
+-msgstr ""
++msgstr "Oczekiwanie na instalację XQuartz"
+ 
+ #: bash/run_exe:70
+ #, sh-format
+@@ -815,12 +820,12 @@ msgstr "Instalacja zakończona"
+ #: bash/startup_after_server:38
+ #, sh-format
+ msgid "PlayOnMac needs to install XQuartz to work properly."
+-msgstr ""
++msgstr "PlayOnMac wymaga zainstalowania XQuartz do poprawnego działania."
+ 
+ #: bash/startup_after_server:39
+ #, sh-format
+ msgid "PlayOnMac will help you to simplify this step"
+-msgstr ""
++msgstr "PlayOnMac pomoże ci uprościć ten krok"
+ 
+ #: bash/startup_after_server:42
+ #, sh-format
+@@ -861,6 +866,8 @@ msgstr "XQuartz został zainstalowany."
+ #, sh-format
+ msgid "Unable to install XQuartz! You must install it to use wine properly."
+ msgstr ""
++"Nie udało się zainstalować XQuartz! Jest on wymagany do poprawnego działania "
++"Wine."
+ 
+ #: bash/uninstall:31 bash/uninstall:65 bash/uninstall:68 bash/uninstall:75
+ #: lib/wine.lib:867
+@@ -933,12 +940,12 @@ msgstr ""
+ #, sh-format
+ msgid ""
+ "$APPLICATION_TITLE has encountered an error. If the program you are "
+-"installing does not work correctly, it might be the cause of the problem.\\"
+-"nVisit www.$POL_DNS to get further information"
++"installing does not work correctly, it might be the cause of the problem."
++"\\nVisit www.$POL_DNS to get further information"
+ msgstr ""
+ "$APPLICATION_TITLE napotkał na błąd. Jeśli program, który jest instalowany "
+-"nie działa prawidłowo, to może być przyczyną problemu.\\n Odwiedź "
+-"www.$POL_DNS w celu uzyskania dalszych informacji"
++"nie działa prawidłowo, to może być przyczyną problemu.\\n Odwiedź www."
++"$POL_DNS w celu uzyskania dalszych informacji"
+ 
+ #: lib/debug.lib:155
+ #, sh-format
+@@ -980,9 +987,9 @@ msgid ""
+ "valid\\n\\nPlayOnLinux has not approved this script and will not be "
+ "responsible from it.\\nPlease ensure you know what you are doing !"
+ msgstr ""
+-"Ostrzeżenie!\\n\\nSygnatura tego skryptu NIE jest prawidłowa\\n\\"
+-"nPlayOnLinux nie zaakceptował tego skryptu nie będzie odpowiedzialny za jego "
+-"błędne działanie.\\nKontynuuj tylko jeśli wiesz co robisz."
++"Ostrzeżenie!\\n\\nSygnatura tego skryptu NIE jest prawidłowa\\n"
++"\\nPlayOnLinux nie zaakceptował tego skryptu nie będzie odpowiedzialny za "
++"jego błędne działanie.\\nKontynuuj tylko jeśli wiesz co robisz."
+ 
+ #: lib/playonlinux.lib:349 lib/playonlinux.lib:372
+ #, sh-format
+@@ -996,8 +1003,8 @@ msgid ""
+ "valid\\n\\n$APPLICATION_TITLE has not approved this script and will not be "
+ "responsible from it.\\nPlease ensure you know what you are doing!"
+ msgstr ""
+-"Ostrzeżenie!\\n\\nSygnatura tego skryptu NIE jest prawidłowa\\n\\"
+-"n$APPLICATION_TITLE nie zaakceptował tego skryptu nie będzie odpowiedzialny "
++"Ostrzeżenie!\\n\\nSygnatura tego skryptu NIE jest prawidłowa\\n\\n"
++"$APPLICATION_TITLE nie zaakceptował tego skryptu nie będzie odpowiedzialny "
+ "za jego błędne działanie.\\nKontynuuj tylko jeśli wiesz co robisz."
+ 
+ #: lib/playonlinux.lib:372
+@@ -1054,9 +1061,11 @@ msgstr ""
+ #: lib/playonlinux.lib:913
+ #, sh-format
+ msgid ""
+-"Your Linux kernel may not be configured to run Win16 programs under Wine\\"
+-"nSee $EXPLANATION_URL"
++"Your Linux kernel may not be configured to run Win16 programs under Wine"
++"\\nSee $EXPLANATION_URL"
+ msgstr ""
++"Jądro twojego linuksa może nie być skonfigurowane do uruchamiania programów "
++"Win16 w Wine\\nSee $EXPLANATION_URL"
+ 
+ #: lib/playonlinux.lib:916
+ #, sh-format
+@@ -1064,6 +1073,8 @@ msgid ""
+ "Your kernel may be incompatible with running Win16 programs under Wine\\nSee "
+ "$EXPLANATION_URL"
+ msgstr ""
++"Jądro twojego linuksa może być niekompatybilne z aplikacjami Win16 "
++"uruchamianymi w Wine\\nSee $EXPLANATION_URL"
+ 
+ #: lib/plugins.lib:63
+ #, sh-format
+@@ -1131,7 +1142,7 @@ msgstr ""
+ #: lib/scripts.lib:696 lib/scripts.lib:704
+ #, sh-format
+ msgid "Please wait while $APPLICATION_TITLE is handling archive..."
+-msgstr ""
++msgstr "Proszę czekać, $APPLICATION_TITLE wypakowuje archiwum..."
+ 
+ #: lib/scripts.lib:727
+ #, sh-format
+@@ -1169,11 +1180,11 @@ msgstr "Rozmiar pliku nie zgadza się!"
+ #: lib/scripts.lib:955
+ #, sh-format
+ msgid ""
+-"Sorry, $APPLICATION_TITLE $VERSION is too old to continue.\\"
+-"n$APPLICATION_TITLE $NEEDED is required."
++"Sorry, $APPLICATION_TITLE $VERSION is too old to continue.\\n"
++"$APPLICATION_TITLE $NEEDED is required."
+ msgstr ""
+-"$APPLICATION_TITLE $VERSION jest zbyt stary aby kontynuować.\\"
+-"n$APPLICATION_TITLE $NEEDED jest wymagany."
++"$APPLICATION_TITLE $VERSION jest zbyt stary aby kontynuować.\\n"
++"$APPLICATION_TITLE $NEEDED jest wymagany."
+ 
+ #: lib/scripts.lib:970
+ #, sh-format
+@@ -1285,7 +1296,7 @@ msgstr "Wyszukiwanie wirtualnego dysku twardego..."
+ #: lib/setupwindow.lib:582
+ #, sh-format
+ msgid "How much memory (in MB) does your graphics board have?"
+-msgstr ""
++msgstr "Ile pamięci (w MB) posiada twoja karta graficzna?"
+ 
+ #: lib/setupwindow.lib:591
+ #, sh-format
+@@ -1369,7 +1380,7 @@ msgstr "Przeglądaj"
+ #: lib/setupwindow.lib:763
+ #, sh-format
+ msgid "A shortcut by that name already exists, overwrite?"
+-msgstr ""
++msgstr "Skrót o tej nazwie już istnieje, zastąpić go?"
+ 
+ #: lib/website.lib:29
+ #, sh-format
+@@ -1403,6 +1414,8 @@ msgstr "Wybierz główną kartę graficzną którą wine ma zgłaszać grom"
+ msgid ""
+ "Starting 64-bit process $EXEFILE is not supported in 32-bit virtual drives"
+ msgstr ""
++"Uruchamianie procesów 64-bitowych $EXEFILE nie jest obsługiwane w 32-"
++"bitowych dyskach wirtualnych"
+ 
+ #: lib/wine.lib:579
+ #, sh-format
+@@ -1638,6 +1651,11 @@ msgid ""
+ "Wine version is changed.\n"
+ "Are you sure you want to continue?"
+ msgstr ""
++"Uwaga:\n"
++"\n"
++"Każda uruchomiona aplikacja znajdująca się na tym dysku wirtualnym zostanie "
++"zatrzymana przed zmianą wersji Wine.\n"
++"Czy chcesz kontynuować?"
+ 
+ #: python/configure.py:606
+ msgid ""
+@@ -1752,7 +1770,7 @@ msgstr "Zgadzam się"
+ 
+ #: python/guiv3.py:179
+ msgid "Don't remind me anymore"
+-msgstr ""
++msgstr "Nie przypominaj mi więcej"
+ 
+ #: python/guiv3.py:180
+ msgid "Show virtual drives"
+@@ -1875,7 +1893,7 @@ msgstr ""
+ 
+ #: python/install.py:577
+ msgid "Attention!"
+-msgstr ""
++msgstr "Uwaga!"
+ 
+ #: python/install.py:577
+ msgid ""
+@@ -1887,6 +1905,13 @@ msgid ""
+ "piracy and as such, we will not offer any support for issues resulting from "
+ "using this option."
+ msgstr ""
++"Włączając tę opcję, możesz instalować programy używające systemu zarządzania "
++"prawami cyfrowymi (DRM), ale nie są one wspierane przez {0} i mogą wymagać "
++"obejścia.\n"
++"\n"
++"Funkcja ta nie powinna być interpretowana jako ukryte lub domniemane "
++"przyzwolenie na piractwo i nie będziemy oferować żadnego wsparcia w "
++"kwestiach wynikających z korzystania z tej opcji."
+ 
+ #: python/install.py:580
+ msgid ""
+@@ -1976,23 +2001,23 @@ msgstr "Menedżer wtyczek"
+ 
+ #: python/mainwindow.py:294
+ msgid "Supported software"
+-msgstr ""
++msgstr "Obsługiwane oprogramowanie"
+ 
+ #: python/mainwindow.py:295
+ msgid "News"
+-msgstr ""
++msgstr "Aktualności"
+ 
+ #: python/mainwindow.py:296
+ msgid "Documentation"
+-msgstr ""
++msgstr "Dokumentacja"
+ 
+ #: python/mainwindow.py:297
+ msgid "Forums"
+-msgstr ""
++msgstr "Fora dyskusyjne"
+ 
+ #: python/mainwindow.py:298
+ msgid "Bugs"
+-msgstr ""
++msgstr "Błędy"
+ 
+ #: python/mainwindow.py:300
+ msgid "Twitter"
+@@ -2028,7 +2053,7 @@ msgstr "Wtyczki"
+ 
+ #: python/mainwindow.py:369
+ msgid "Support"
+-msgstr ""
++msgstr "Wsparcie"
+ 
+ #: python/mainwindow.py:381 python/mainwindow.py:777
+ msgid "Close"
+@@ -2080,7 +2105,7 @@ msgstr "Debuguj"
+ 
+ #: python/mainwindow.py:785
+ msgid "Send a feedback"
+-msgstr ""
++msgstr "Wyślij zgłoszenie"
+ 
+ #: python/mainwindow.py:790
+ msgid "Create a shortcut"
+@@ -2117,7 +2142,7 @@ msgstr "Wirtualny dysk twardy związany z {0} ({1}) nie istnieje."
+ 
+ #: python/mainwindow.py:1102
+ msgid "Are you sure you want to close all {0} windows?"
+-msgstr ""
++msgstr "Czy na pewno chcesz zamknąć wszystkie {0} okna?"
+ 
+ #: python/mainwindow.py:1124
+ msgid "Run your Windows programs on "
+@@ -2342,7 +2367,7 @@ msgstr "Jesteś pewien ze chcesz usunąć Wine {0}?"
+ 
+ #: python/wine_versions.py:334
+ msgid "This version is CURRENTLY IN USE"
+-msgstr ""
++msgstr "Ta wersja jest obecnie w użyciu"
+ 
+ #: python/wrapper.py:135
+ msgid "{0} is not able to start POL_SetupWindow_server."
+
+From 8f082632c30c85461c76f0f95ac747675bc0af97 Mon Sep 17 00:00:00 2001
+From: Quentin PARIS <git@quentin.paris>
+Date: Sun, 24 Jan 2021 15:21:54 +0100
+Subject: [PATCH 15/33] Reafctoring wine version manager code
+
+---
+ bash/startup                                 |    8 +
+ lib/variables                                |    1 +
+ lib/wine.lib                                 | 2159 +++++++++---------
+ python/lib/Variables.py                      |    9 +-
+ python/mainwindow.py                         |    2 +-
+ python/wine_versions/WineVersionsFetcher.py  |  139 +-
+ python/wine_versions/WineVersionsNotebook.py |  139 +-
+ python/wine_versions/WineVersionsTools.py    |   24 +-
+ python/wine_versions/WineVersionsWindow.py   |  260 +--
+ 9 files changed, 1315 insertions(+), 1426 deletions(-)
+
+diff --git a/bash/startup b/bash/startup
+index ab0b5dcb5..fb62e7a8b 100755
+--- a/bash/startup
++++ b/bash/startup
+@@ -31,6 +31,14 @@ build_user_state_directory
+ # Cleaning tmp directory
+ clean_tmp
+ 
++# Mac OS Catalina: Remove legacy wine versions
++if [[ "$OSX_VERSION" -ge 19 ]]; then
++    if [[ ! -e "$POL_USER_ROOT/wine/darwin-x86-legacy" ]]; then
++        [[ -e "$POL_USER_ROOT/wine/darwin-x86" ]] && mv "$POL_USER_ROOT/wine/darwin-x86" "$POL_USER_ROOT/wine/darwin-x86-legacy"
++        mkdir -p "$POL_USER_ROOT/wine/darwin-x86-legacy"
++    fi
++fi
++
+ ### Operations below are background asynchronous tasks
+ 
+ (
+diff --git a/lib/variables b/lib/variables
+index 3df4b6708..9c16fe1a7 100755
+--- a/lib/variables
++++ b/lib/variables
+@@ -21,6 +21,7 @@
+ ## Hack for El Capitain
+ [ ! "$WRITE_LD" = "" ] && export LD_LIBRARY_PATH="$WRITE_LD"
+ [ ! "$WRITE_DYLD" = "" ] && export DYLD_LIBRARY_PATH="$WRITE_DYLD"
++[ ! "$WRITE_DYLD_FALLBACK_LIBRARY_PATH" = "" ] && export DYLD_FALLBACK_LIBRARY_PATH="$WRITE_DYLD_FALLBACK_LIBRARY_PATH"
+ 
+ # This is just a copy of function in playonlinux, but we need it earlier
+ [ "$POL_OS" = "Mac" ] && export LANG="$RLANG"
+diff --git a/lib/wine.lib b/lib/wine.lib
+index 77179d137..d27de1509 100755
+--- a/lib/wine.lib
++++ b/lib/wine.lib
+@@ -22,82 +22,83 @@
+ #
+ # This lib contains wine's api
+ 
+-POL_Wine_GetRegValue()
+-{
+-	# Get a value in registry
+-	# Example : POL_Wine_GetReg_Value Multisampling
+-	#
+-	# Read http://wiki.winehq.org/UsefulRegistryKeys
+-
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-	local value
+-	# tr -d '\0' is a workaround for Wine bug #37575
+-	[ -e "$WINEPREFIX/user.reg" ] && value="$(grep "^\"$1\"=" "$WINEPREFIX/user.reg" | head -n 1 | tr -d '"' | cut -d= -f2- | tr -d '\0')"
+-	POL_Debug_Message "Getting registry value $1. Return: $value"
+-	echo -n "${value:-default}"
++POL_Wine_GetRegValue() {
++  # Get a value in registry
++  # Example : POL_Wine_GetReg_Value Multisampling
++  #
++  # Read http://wiki.winehq.org/UsefulRegistryKeys
++
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  local value
++  # tr -d '\0' is a workaround for Wine bug #37575
++  [ -e "$WINEPREFIX/user.reg" ] && value="$(grep "^\"$1\"=" "$WINEPREFIX/user.reg" | head -n 1 | tr -d '"' | cut -d= -f2- | tr -d '\0')"
++  POL_Debug_Message "Getting registry value $1. Return: $value"
++  echo -n "${value:-default}"
+ }
+ 
+-POL_Wine_UpdateRegistry ()
+-{
+-	# Usage: POL_Wine_UpdateRegistry regbasename
+-	# registry file must be provided thru stdin
+-	# File signature ("REGEDIT4") in appended automatically
+-
+-	(echo "REGEDIT4"; echo ""; cat) > "$POL_USER_ROOT/tmp/$1.reg"
+-	POL_Wine regedit "$POL_USER_ROOT/tmp/$1.reg" &&
+-	rm "$POL_USER_ROOT/tmp/$1.reg"
++POL_Wine_UpdateRegistry() {
++  # Usage: POL_Wine_UpdateRegistry regbasename
++  # registry file must be provided thru stdin
++  # File signature ("REGEDIT4") in appended automatically
++
++  (
++    echo "REGEDIT4"
++    echo ""
++    cat
++  ) >"$POL_USER_ROOT/tmp/$1.reg"
++  POL_Wine regedit "$POL_USER_ROOT/tmp/$1.reg" &&
++    rm "$POL_USER_ROOT/tmp/$1.reg"
+ }
+ 
+-POL_Wine_UpdateRegistryPair ()
+-{
+-	# Usage: POL_Wine_UpdateRegistryPair key name [--sz|--binary|--dword|--multisz] data
+-	# data="default": remove the name
+-        local key="$1"
+-        local subkey="$2"
+-        shift 2
+-        local value
+-        case "$1" in
+-          --sz|--SZ)
+-            shift
+-            # backslash \s and "s?
+-            value="\"$1\""
+-            ;;
+-          --binary|--BINARY)
+-            shift
+-            value="hex:$1"
+-            ;;
+-          --dword|--DWORD)
+-            shift
+-            value="dword:$1"
+-            ;;
+-          --multisz|--MULTISZ)
+-            shift
+-            value="hex(7):$1"
+-            ;;
+-          --*)
+-            POL_Debug_Fatal "Unrecognized value type: $1, supported are --sz --binary --dword --multisz"
+-            ;;
+-          default)
+-            value="-"
+-            ;;
+-          *)
+-            # backslash \s and "s?
+-            value="\"$1\""
+-        esac
+-
+-		POL_Wine_UpdateRegistry regkey <<- _EOFINI_
++POL_Wine_UpdateRegistryPair() {
++  # Usage: POL_Wine_UpdateRegistryPair key name [--sz|--binary|--dword|--multisz] data
++  # data="default": remove the name
++  local key="$1"
++  local subkey="$2"
++  shift 2
++  local value
++  case "$1" in
++  --sz | --SZ)
++    shift
++    # backslash \s and "s?
++    value="\"$1\""
++    ;;
++  --binary | --BINARY)
++    shift
++    value="hex:$1"
++    ;;
++  --dword | --DWORD)
++    shift
++    value="dword:$1"
++    ;;
++  --multisz | --MULTISZ)
++    shift
++    value="hex(7):$1"
++    ;;
++  --*)
++    POL_Debug_Fatal "Unrecognized value type: $1, supported are --sz --binary --dword --multisz"
++    ;;
++  default)
++    value="-"
++    ;;
++  *)
++    # backslash \s and "s?
++    value="\"$1\""
++    ;;
++  esac
++
++  POL_Wine_UpdateRegistry regkey <<-_EOFINI_
+ 		[$key]
+ 		"$subkey"=$value
+ 		_EOFINI_
+ }
+ 
+-POL_Wine_UpdateRegistryWinePair ()
+-{
+-	# Usage: POL_Wine_UpdateRegistryPair subkey name [--sz|--binary|--dword|--multisz] data
+-	# data="default": remove the name
++POL_Wine_UpdateRegistryWinePair() {
++  # Usage: POL_Wine_UpdateRegistryPair subkey name [--sz|--binary|--dword|--multisz] data
++  # data="default": remove the name
+ 
+-	# Put a "\" before $1 if it's not empty
+-	POL_Wine_UpdateRegistryPair "HKEY_CURRENT_USER\\Software\\Wine${1:+\\$1}" "$2" "$3" "$4"
++  # Put a "\" before $1 if it's not empty
++  POL_Wine_UpdateRegistryPair "HKEY_CURRENT_USER\\Software\\Wine${1:+\\$1}" "$2" "$3" "$4"
+ }
+ 
+ # For all functions below, that can be called from the control panel:
+@@ -105,361 +106,344 @@ POL_Wine_UpdateRegistryWinePair ()
+ #   changed Wine version out of our control;
+ # - Kill wineserver after regedit so change takes effect immediately
+ 
+-POL_Wine_Direct3D ()
+-{
+-	# Change a Direct3D value in registry
+-	# Usage POL_Wine_Direct3D Key  [--sz|--binary|--dword|--multisz] Value
++POL_Wine_Direct3D() {
++  # Change a Direct3D value in registry
++  # Usage POL_Wine_Direct3D Key  [--sz|--binary|--dword|--multisz] Value
+ 
+-	# Example :: POL_Wine_Direct3D UseGLSL [default / enabled / disabled]
+-	# default: remove the key
+-	POL_Debug_Message "Setting wine Direct3D $WINEPREFIX $1 $2 $3"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  # Example :: POL_Wine_Direct3D UseGLSL [default / enabled / disabled]
++  # default: remove the key
++  POL_Debug_Message "Setting wine Direct3D $WINEPREFIX $1 $2 $3"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Wine_AutoSetVersionEnv
+-	wineserver -k
+-	POL_Wine_UpdateRegistryWinePair 'Direct3D' "$1" "$2" "$3"
+-	wineserver -k
++  POL_Wine_AutoSetVersionEnv
++  wineserver -k
++  POL_Wine_UpdateRegistryWinePair 'Direct3D' "$1" "$2" "$3"
++  wineserver -k
+ }
+ 
+-POL_Wine_X11Drv ()
+-{
+-	# Change a X11Drv value in registry
+-	# Usage POL_Wine_X11Drv Key [--sz|--binary|--dword|--multisz] Value
++POL_Wine_X11Drv() {
++  # Change a X11Drv value in registry
++  # Usage POL_Wine_X11Drv Key [--sz|--binary|--dword|--multisz] Value
+ 
+-	# Example :: POL_Wine_X11Drv UseGLSL [default / enabled / disabled]
+-	# default: remove the key
+-	POL_Debug_Message "Setting wine X11Drv $WINEPREFIX $1 $2 $3"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  # Example :: POL_Wine_X11Drv UseGLSL [default / enabled / disabled]
++  # default: remove the key
++  POL_Debug_Message "Setting wine X11Drv $WINEPREFIX $1 $2 $3"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Wine_AutoSetVersionEnv
+-	wineserver -k
+-	POL_Wine_UpdateRegistryWinePair 'X11 Driver' "$1" "$2" "$3"
+-	wineserver -k
++  POL_Wine_AutoSetVersionEnv
++  wineserver -k
++  POL_Wine_UpdateRegistryWinePair 'X11 Driver' "$1" "$2" "$3"
++  wineserver -k
+ }
+ 
+-POL_Wine_DirectSound ()
+-{
+-	# Same that POL_Wine_Direct3D, but for DirectSound
+-	POL_Debug_Message "Setting wine DirectSound $WINEPREFIX $1 $2 $3"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++POL_Wine_DirectSound() {
++  # Same that POL_Wine_Direct3D, but for DirectSound
++  POL_Debug_Message "Setting wine DirectSound $WINEPREFIX $1 $2 $3"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Wine_AutoSetVersionEnv
+-	wineserver -k
+-	POL_Wine_UpdateRegistryWinePair 'DirectSound' "$1" "$2" "$3"
+-	wineserver -k
++  POL_Wine_AutoSetVersionEnv
++  wineserver -k
++  POL_Wine_UpdateRegistryWinePair 'DirectSound' "$1" "$2" "$3"
++  wineserver -k
+ }
+ 
+-POL_Wine_DirectInput ()
+-{
+-	# Same that POL_Wine_Direct3D, but for DirectInput
+-	POL_Debug_Message "Setting wine DirectInput $WINEPREFIX $1 $2 $3"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++POL_Wine_DirectInput() {
++  # Same that POL_Wine_Direct3D, but for DirectInput
++  POL_Debug_Message "Setting wine DirectInput $WINEPREFIX $1 $2 $3"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Wine_AutoSetVersionEnv
+-	wineserver -k
+-	POL_Wine_UpdateRegistryWinePair 'DirectInput' "$1" "$2" "$3"
+-	wineserver -k
++  POL_Wine_AutoSetVersionEnv
++  wineserver -k
++  POL_Wine_UpdateRegistryWinePair 'DirectInput' "$1" "$2" "$3"
++  wineserver -k
+ }
+ 
+-Set_OS ()
+-{
+-	# Set fake windows OS
+-	# Usage: Set_OS [1] [2]
+-	#
+-	# 1: Possible values: win7, win2008, vista, win2003, winxp, win2000, nt40, winnt351, winme, win98, win95, win31, win30, win20
+-	# 2: Service Pack: sp1, sp2, sp3, sp4, sp5
+-	POL_Debug_Message "Setting Windows OS to $1 $2"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ -n "$1" ]; then
+-		POL_Wine_UpdateRegistryWinePair '' 'Version' "$1"
+-	fi
+-
+-	if [ -n "$2" ]; then # Need more testing
+-		local n
+-		[ "$2" = "sp1" ] && n=1
+-		[ "$2" = "sp2" ] && n=2
+-		[ "$2" = "sp3" ] && n=3
+-		[ "$2" = "sp4" ] && n=4
+-		[ "$2" = "sp5" ] && n=5
+-
+-		POL_Wine_UpdateRegistry setos <<- _EOFINI_
++Set_OS() {
++  # Set fake windows OS
++  # Usage: Set_OS [1] [2]
++  #
++  # 1: Possible values: win7, win2008, vista, win2003, winxp, win2000, nt40, winnt351, winme, win98, win95, win31, win30, win20
++  # 2: Service Pack: sp1, sp2, sp3, sp4, sp5
++  POL_Debug_Message "Setting Windows OS to $1 $2"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ -n "$1" ]; then
++    POL_Wine_UpdateRegistryWinePair '' 'Version' "$1"
++  fi
++
++  if [ -n "$2" ]; then # Need more testing
++    local n
++    [ "$2" = "sp1" ] && n=1
++    [ "$2" = "sp2" ] && n=2
++    [ "$2" = "sp3" ] && n=3
++    [ "$2" = "sp4" ] && n=4
++    [ "$2" = "sp5" ] && n=5
++
++    POL_Wine_UpdateRegistry setos <<-_EOFINI_
+ 		[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion]
+ 		"CSDVersion"="Service Pack $n"
+ 		[HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Windows]
+ 		"CSDVersion"=dword:00000${n}00
+ 		_EOFINI_
+-	fi
++  fi
+ }
+ 
+-Set_Managed ()
+-{
+-	# Let the windows manager to control wine
+-	# Usage: Set_Managed (On|Off)
+-
+-	POL_Debug_Message "Setting wine managed: $1"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	local n
+-	[ "$1" = "On" ] && n="Y"
+-	[ "$1" = "Off" ] && n="N"
+-	if [ -n "$n" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'X11 Driver' "Managed" "$n"
+-	else
+-		POL_Debug_Warning "Unrecognized flag '$1'"
+-	fi
++Set_Managed() {
++  # Let the windows manager to control wine
++  # Usage: Set_Managed (On|Off)
++
++  POL_Debug_Message "Setting wine managed: $1"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  local n
++  [ "$1" = "On" ] && n="Y"
++  [ "$1" = "Off" ] && n="N"
++  if [ -n "$n" ]; then
++    POL_Wine_UpdateRegistryWinePair 'X11 Driver' "Managed" "$n"
++  else
++    POL_Debug_Warning "Unrecognized flag '$1'"
++  fi
+ }
+ 
+-Set_SoundDriver ()
+-{
+-	# Set the sound driver
+-	# Usage: Set_SoundDriver [Driver]
+-	# Use an empty string parameter to disable sound
+-	# Disabled in Mac OS
+-	POL_Debug_Message "Setting wine SoundDriver $@"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ "$POL_OS" = "Linux" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'Drivers' 'Audio' "$1"
+-	else
+-		POL_Debug_Message "Set_SoundDriver disabled on $POL_OS"
+-	fi
++Set_SoundDriver() {
++  # Set the sound driver
++  # Usage: Set_SoundDriver [Driver]
++  # Use an empty string parameter to disable sound
++  # Disabled in Mac OS
++  POL_Debug_Message "Setting wine SoundDriver $@"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ "$POL_OS" = "Linux" ]; then
++    POL_Wine_UpdateRegistryWinePair 'Drivers' 'Audio' "$1"
++  else
++    POL_Debug_Message "Set_SoundDriver disabled on $POL_OS"
++  fi
+ }
+ 
+-Set_DXGrab ()
+-{
+-	# Enable or disable DXGrab
+-	# Usage: Set_DXGrab (On|Off)
+-	# On ou Off
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	local n
+-	[ "$1" = "On" ] && n="Y" && POL_Debug_Message "Setting DXGrab"
+-	[ "$1" = "Off" ] && n="N" && POL_Debug_Message "Unsetting DXGrab"
+-	if [ -n "$n" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'DXGrab' "$n"
+-	else
+-		POL_Debug_Warning "Set_DXGrab: unrecognized flag '$1'"
+-	fi
++Set_DXGrab() {
++  # Enable or disable DXGrab
++  # Usage: Set_DXGrab (On|Off)
++  # On ou Off
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  local n
++  [ "$1" = "On" ] && n="Y" && POL_Debug_Message "Setting DXGrab"
++  [ "$1" = "Off" ] && n="N" && POL_Debug_Message "Unsetting DXGrab"
++  if [ -n "$n" ]; then
++    POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'DXGrab' "$n"
++  else
++    POL_Debug_Warning "Set_DXGrab: unrecognized flag '$1'"
++  fi
+ }
+ 
+-Set_Iexplore ()
+-{
+-	# Make a fake IE6 installation
+-	# Usage: Set_Iexplore
+-	POL_Debug_Message "Faking ie6 installation"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++Set_Iexplore() {
++  # Make a fake IE6 installation
++  # Usage: Set_Iexplore
++  POL_Debug_Message "Faking ie6 installation"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Wine_UpdateRegistry ie <<- _EOFINI_
++  POL_Wine_UpdateRegistry ie <<-_EOFINI_
+ 	[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer]
+ 	"Version"="6.0.2900.2180"
+ 	_EOFINI_
+ }
+ 
+-Set_Desktop ()
+-{
+-	# Set a desktop environment
+-	# Usage: Set_Desktop (on|off) [width] [height]
+-
+-	POL_Debug_Message "Setting Desktop : $1 $2 $3"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ "$1" = "Off" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'Desktop' "-1"
+-		# Remove key
+-		POL_Wine_UpdateRegistryWinePair 'Explorer' 'Desktop' 'default'
+-	elif [ "$1" = "On" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'Desktop' "$2x$3"
+-		POL_Wine_UpdateRegistryWinePair "Explorer\\Desktops" 'Default' "$2x$3"
+-		POL_Wine_UpdateRegistryWinePair 'Explorer' 'Desktop' 'Default'
+-	else
+-		POL_Debug_Warning "Unrecognized flag '$1'"
+-	fi
++Set_Desktop() {
++  # Set a desktop environment
++  # Usage: Set_Desktop (on|off) [width] [height]
++
++  POL_Debug_Message "Setting Desktop : $1 $2 $3"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ "$1" = "Off" ]; then
++    POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'Desktop' "-1"
++    # Remove key
++    POL_Wine_UpdateRegistryWinePair 'Explorer' 'Desktop' 'default'
++  elif [ "$1" = "On" ]; then
++    POL_Wine_UpdateRegistryWinePair 'X11 Driver' 'Desktop' "$2x$3"
++    POL_Wine_UpdateRegistryWinePair "Explorer\\Desktops" 'Default' "$2x$3"
++    POL_Wine_UpdateRegistryWinePair 'Explorer' 'Desktop' 'Default'
++  else
++    POL_Debug_Warning "Unrecognized flag '$1'"
++  fi
+ }
+ 
+-Set_SoundSampleRate ()
+-{
+-	# Set Sound sample rate
+-	# Usage: Set_SoundSampleRate [value]
+-	# values can be: 48000, 44100, 22050, 16000, 11025, 8000
+-	POL_Debug_Message "Setting SoundSampleRate to $1"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ -n "$1" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'DirectSound' 'DefaultSampleRate' "$1"
+-	else
+-		# FIXME: should we drop the name instead?
+-		POL_Debug_Warning "Sample rate missing, skipped"
+-	fi
++Set_SoundSampleRate() {
++  # Set Sound sample rate
++  # Usage: Set_SoundSampleRate [value]
++  # values can be: 48000, 44100, 22050, 16000, 11025, 8000
++  POL_Debug_Message "Setting SoundSampleRate to $1"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ -n "$1" ]; then
++    POL_Wine_UpdateRegistryWinePair 'DirectSound' 'DefaultSampleRate' "$1"
++  else
++    # FIXME: should we drop the name instead?
++    POL_Debug_Warning "Sample rate missing, skipped"
++  fi
+ }
+ 
+-Set_SoundBitsPerSample ()
+-{
+-	# Set Sound bits per sample rate
+-	# Usage: Set_SoundBitsPerSaple [value]
+-	# values: 8, 16
+-	POL_Debug_Message "Setting sound DefaultsBitsPerSample to $1"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ -n "$1" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'DirectSound' 'DefaultBitsPerSample' "$1"
+-	else
+-		# FIXME: should we drop the name instead?
+-		POL_Debug_Warning "BitsPerSample missing, skipped"
+-	fi
++Set_SoundBitsPerSample() {
++  # Set Sound bits per sample rate
++  # Usage: Set_SoundBitsPerSaple [value]
++  # values: 8, 16
++  POL_Debug_Message "Setting sound DefaultsBitsPerSample to $1"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ -n "$1" ]; then
++    POL_Wine_UpdateRegistryWinePair 'DirectSound' 'DefaultBitsPerSample' "$1"
++  else
++    # FIXME: should we drop the name instead?
++    POL_Debug_Warning "BitsPerSample missing, skipped"
++  fi
+ }
+ 
+-POL_Wine_InstallFonts()
+-{
+-	# Install microsoft fonts
+-	# Usage: POL_Wine_InstallFonts
+-	pushd .
+-	POL_Call POL_Install_corefonts
+-        popd
++POL_Wine_InstallFonts() {
++  # Install microsoft fonts
++  # Usage: POL_Wine_InstallFonts
++  pushd .
++  POL_Call POL_Install_corefonts
++  popd
+ }
+ 
+-Set_SoundHardwareAcceleration ()
+-{
+-	# Set sound driver hardware acceleration
+-	# Values : Full, Standard, Basic, Emulation
+-	POL_Debug_Message "Setting Sound HardwareAcceleration to $1"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ -n "$1" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'DirectSound' 'HardwareAcceleration' "$1"
+-	else
+-		# FIXME: should we drop the name instead?
+-		POL_Debug_Warning "Hardware acceleration mode missing, skipped"
+-	fi
++Set_SoundHardwareAcceleration() {
++  # Set sound driver hardware acceleration
++  # Values : Full, Standard, Basic, Emulation
++  POL_Debug_Message "Setting Sound HardwareAcceleration to $1"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ -n "$1" ]; then
++    POL_Wine_UpdateRegistryWinePair 'DirectSound' 'HardwareAcceleration' "$1"
++  else
++    # FIXME: should we drop the name instead?
++    POL_Debug_Warning "Hardware acceleration mode missing, skipped"
++  fi
+ }
+ 
+-Set_SoundEmulDriver ()
+-{
+-	# Set sound emul driver
+-	# Usage: Set_SoundEmulDriver(Y|N)
+-	POL_Debug_Message "Setting Sound EmulDriver to $1"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	if [ -n "$1" ]; then
+-		POL_Wine_UpdateRegistryWinePair 'DirectSound' 'EmulDriver' "$1"
+-	else
+-		# FIXME: should we drop the name instead?
+-		POL_Debug_Warning "Sound emulation mode missing, skipped"
+-	fi
++Set_SoundEmulDriver() {
++  # Set sound emul driver
++  # Usage: Set_SoundEmulDriver(Y|N)
++  POL_Debug_Message "Setting Sound EmulDriver to $1"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  if [ -n "$1" ]; then
++    POL_Wine_UpdateRegistryWinePair 'DirectSound' 'EmulDriver' "$1"
++  else
++    # FIXME: should we drop the name instead?
++    POL_Debug_Warning "Sound emulation mode missing, skipped"
++  fi
+ }
+ 
+-POL_LoadVar_PROGRAMFILES()
+-{
+-	# Get Program Files folder name and store it to PROGRAMFILES variable
+-	# Usage: POL_LoadVar_PROGRAMFILES
+-	POL_Debug_Message "Getting Program Files name"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-
+-	PROGRAMFILES=`POL_Wine cmd /c echo "%ProgramFiles%" |tr -d '\015\012'`
+-	if [ "${PROGRAMFILES}" = "%ProgramFiles%" ]
+-	then # Var is not defined by wine
+-		export PROGRAMFILES="Program Files"
+-	else
+-		export PROGRAMFILES="${PROGRAMFILES:3}"
+-	fi
++POL_LoadVar_PROGRAMFILES() {
++  # Get Program Files folder name and store it to PROGRAMFILES variable
++  # Usage: POL_LoadVar_PROGRAMFILES
++  POL_Debug_Message "Getting Program Files name"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++
++  PROGRAMFILES=$(POL_Wine cmd /c echo "%ProgramFiles%" | tr -d '\015\012')
++  if [ "${PROGRAMFILES}" = "%ProgramFiles%" ]; then # Var is not defined by wine
++    export PROGRAMFILES="Program Files"
++  else
++    export PROGRAMFILES="${PROGRAMFILES:3}"
++  fi
+ }
+ 
+-Set_WineWindowTitle ()
+-{
+-	#name of windowed title:$1
+-	POL_Debug_Message "Setting window title"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++Set_WineWindowTitle() {
++  #name of windowed title:$1
++  POL_Debug_Message "Setting window title"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+ 
+-	POL_Debug_Warning "Set_WineWindowTitle has been deprecated (#5118)"
++  POL_Debug_Warning "Set_WineWindowTitle has been deprecated (#5118)"
+ }
+ 
+-POL_LoadVar_Device ()
+-{
+-	# Get GPU device id and vendor id
+-	# Usage: POL_LoadVar_Device [--non-interactive]
+-	# Results are stored in VendorID and DeviceID variables
+-
+-	local INTERACTIVE=1
+-	if [ "$1" = "--non-interactive" ]; then
+-		INTERACTIVE=''
+-		shift
+-	fi
+-
+-	[ "$INTERACTIVE" ] && POL_SetupWindow_wait "$(eval_gettext 'Please wait while $APPLICATION_TITLE is scanning your hardware')" "$TITLE"
+-	VGA_DEVICES="$(POL_DetectVideoCards)"
+-	# More than one card available?
+-	if grep -q '~' <<<"$VGA_DEVICES"; then
+-		if [ "$INTERACTIVE" ]; then
+-			local OLD_APP_ANSWER="$APP_ANSWER"
+-			POL_SetupWindow_menu "$(eval_gettext 'Select the main videocard to report:')" "$TITLE" "$VGA_DEVICES" "~"
+-			VGA_DEVICES="$APP_ANSWER"
+-			APP_ANSWER="$OLD_APP_ANSWER"
+-		else
+-			# Can't ask user, pick first
+-			VGA_DEVICES="${VGA_DEVICES%%~*}"
+-		fi
+-	fi
+-	export VendorID=`cut -d'|' -f2 <<<"$VGA_DEVICES"`
+-	export DeviceID=`cut -d'|' -f3 <<<"$VGA_DEVICES"`
+-	POL_Debug_Message "VendorID : $VendorID"
+-	POL_Debug_Message "DeviceID : $DeviceID"
++POL_LoadVar_Device() {
++  # Get GPU device id and vendor id
++  # Usage: POL_LoadVar_Device [--non-interactive]
++  # Results are stored in VendorID and DeviceID variables
++
++  local INTERACTIVE=1
++  if [ "$1" = "--non-interactive" ]; then
++    INTERACTIVE=''
++    shift
++  fi
++
++  [ "$INTERACTIVE" ] && POL_SetupWindow_wait "$(eval_gettext 'Please wait while $APPLICATION_TITLE is scanning your hardware')" "$TITLE"
++  VGA_DEVICES="$(POL_DetectVideoCards)"
++  # More than one card available?
++  if grep -q '~' <<<"$VGA_DEVICES"; then
++    if [ "$INTERACTIVE" ]; then
++      local OLD_APP_ANSWER="$APP_ANSWER"
++      POL_SetupWindow_menu "$(eval_gettext 'Select the main videocard to report:')" "$TITLE" "$VGA_DEVICES" "~"
++      VGA_DEVICES="$APP_ANSWER"
++      APP_ANSWER="$OLD_APP_ANSWER"
++    else
++      # Can't ask user, pick first
++      VGA_DEVICES="${VGA_DEVICES%%~*}"
++    fi
++  fi
++  export VendorID=$(cut -d'|' -f2 <<<"$VGA_DEVICES")
++  export DeviceID=$(cut -d'|' -f3 <<<"$VGA_DEVICES")
++  POL_Debug_Message "VendorID : $VendorID"
++  POL_Debug_Message "DeviceID : $DeviceID"
+ }
+ 
+-POL_DetectVideoCards () {
+-	# Detect known videocards
+-	POL_Debug_Message "Gettings GPU informations"
+-        case "$POL_OS" in
+-            Linux|FreeBSD)
+-		[ -x /usr/sbin/lspci ] && LSPCI=/usr/sbin/lspci || LSPCI=lspci
+-		# Device Name|Vendor ID|Device ID\n...
+-                # [0300] = VGA compatible controller, [0302] = 3D controller
+-		VGA_DEVICES=`$LSPCI -nn | perl -ne 'if (/\[030[02]\]/) { s/.*\]: (.*) \[([0-9a-f]{4}):([0-9a-f]{4})\].*/\1|\2|\3/; print }'`
+-                ;;
+-            Mac)
+-		# Device Name|Vendor ID|Device ID\n...
+-		VGA_DEVICES=`system_profiler SPDisplaysDataType | perl -ne 's/^\s+//; if(/Chipset Model:/) { chomp; s/^[^:]*: //; print "$_|" } elsif(/Vendor:/) { chomp; s/.*\(0x(.*)\)/\1/; print "$1|" } elsif (/Device ID:/) { s/^[^:]*: 0x//; print }'`
+-                ;;
+-            *)
+-                POL_Debug_Fatal "Unsupposed operating system: $POL_OS"
+-        esac
+-	# More than one card available?
+-	if [ $(wc -l <<<"$VGA_DEVICES") -gt 1 ]; then
+-		# Try to put what's probably the main card first
+-		VGA_DEVICES=`grep -iE 'nvidia|ati|amd' <<<"$VGA_DEVICES"; grep -iEv 'nvidia|ati|amd' <<<"$VGA_DEVICES"`
+-	fi
+-	# Device Name|Vendor ID|Device ID~...
+-	echo -n "$VGA_DEVICES"|tr "\n" "~"
++POL_DetectVideoCards() {
++  # Detect known videocards
++  POL_Debug_Message "Gettings GPU informations"
++  case "$POL_OS" in
++  Linux | FreeBSD)
++    [ -x /usr/sbin/lspci ] && LSPCI=/usr/sbin/lspci || LSPCI=lspci
++    # Device Name|Vendor ID|Device ID\n...
++    # [0300] = VGA compatible controller, [0302] = 3D controller
++    VGA_DEVICES=$($LSPCI -nn | perl -ne 'if (/\[030[02]\]/) { s/.*\]: (.*) \[([0-9a-f]{4}):([0-9a-f]{4})\].*/\1|\2|\3/; print }')
++    ;;
++  Mac)
++    # Device Name|Vendor ID|Device ID\n...
++    VGA_DEVICES=$(system_profiler SPDisplaysDataType | perl -ne 's/^\s+//; if(/Chipset Model:/) { chomp; s/^[^:]*: //; print "$_|" } elsif(/Vendor:/) { chomp; s/.*\(0x(.*)\)/\1/; print "$1|" } elsif (/Device ID:/) { s/^[^:]*: 0x//; print }')
++    ;;
++  *)
++    POL_Debug_Fatal "Unsupposed operating system: $POL_OS"
++    ;;
++  esac
++  # More than one card available?
++  if [ $(wc -l <<<"$VGA_DEVICES") -gt 1 ]; then
++    # Try to put what's probably the main card first
++    VGA_DEVICES=$(
++      grep -iE 'nvidia|ati|amd' <<<"$VGA_DEVICES"
++      grep -iEv 'nvidia|ati|amd' <<<"$VGA_DEVICES"
++    )
++  fi
++  # Device Name|Vendor ID|Device ID~...
++  echo -n "$VGA_DEVICES" | tr "\n" "~"
+ }
+ 
+-POL_LoadVar_ScreenResolution ()
+-{
+-	if [ "$POL_OS" = "Linux" ] || [ "$POL_OS" = "FreeBSD" ]; then
+-		local RESOLUTION="$(xdpyinfo | grep dimensions | awk '{print $2}')"
+-		export ScreenWidth="$(echo $RESOLUTION | cut -dx -f1)"
+-		export ScreenHeight="$(echo $RESOLUTION | cut -dx -f2)"
+-	fi
+-	if [ "$POL_OS" = "Mac" ]; then
+-		export ScreenWidth="$(/usr/sbin/system_profiler SPDisplaysDataType | grep Resolution| awk '{print $2}')"
+-		export ScreenHeight="$(/usr/sbin/system_profiler SPDisplaysDataType | grep Resolution| awk '{print $4}')"
+-	fi
+-	POL_Debug_Message "Screen width: $ScreenWidth"
+-	POL_Debug_Message "Screen height: $ScreenHeight"
++POL_LoadVar_ScreenResolution() {
++  if [ "$POL_OS" = "Linux" ] || [ "$POL_OS" = "FreeBSD" ]; then
++    local RESOLUTION="$(xdpyinfo | grep dimensions | awk '{print $2}')"
++    export ScreenWidth="$(echo $RESOLUTION | cut -dx -f1)"
++    export ScreenHeight="$(echo $RESOLUTION | cut -dx -f2)"
++  fi
++  if [ "$POL_OS" = "Mac" ]; then
++    export ScreenWidth="$(/usr/sbin/system_profiler SPDisplaysDataType | grep Resolution | awk '{print $2}')"
++    export ScreenHeight="$(/usr/sbin/system_profiler SPDisplaysDataType | grep Resolution | awk '{print $4}')"
++  fi
++  POL_Debug_Message "Screen width: $ScreenWidth"
++  POL_Debug_Message "Screen height: $ScreenHeight"
+ }
+ 
+-POL_Wine_SetVideoDriver()
+-{
+-	# Set wine video driver
+-	# Usage POL_Wine_SetVideoDriver
+-	POL_Debug_Message "Set wine video driver"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-	POL_LoadVar_Device
+-	DRVID="vga.dll"
+-	[ "$VendorID" = "10de" ] && DRVID="nv4_disp.dll"
+-	[ "$VendorID" = "1002" ] && DRVID="ati2dvag.dll"
+-	[ "$VendorID" = "8086" ] && DRVID="ig4icd32.dll"
+-	POL_Debug_Message "Detected video driver: $DRVID"
+-
+-	POL_Wine_UpdateRegistry VGA_ID_fix <<- _EOFINI_
++POL_Wine_SetVideoDriver() {
++  # Set wine video driver
++  # Usage POL_Wine_SetVideoDriver
++  POL_Debug_Message "Set wine video driver"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  POL_LoadVar_Device
++  DRVID="vga.dll"
++  [ "$VendorID" = "10de" ] && DRVID="nv4_disp.dll"
++  [ "$VendorID" = "1002" ] && DRVID="ati2dvag.dll"
++  [ "$VendorID" = "8086" ] && DRVID="ig4icd32.dll"
++  POL_Debug_Message "Detected video driver: $DRVID"
++
++  POL_Wine_UpdateRegistry VGA_ID_fix <<-_EOFINI_
+ 	[HKEY_CURRENT_USER\\Software\\Wine\\Direct3D]
+ 	"VideoPCIVendorID"=dword:0000$VendorID
+ 	"VideoPCIDeviceID"=dword:0000$DeviceID
+@@ -467,800 +451,777 @@ POL_Wine_SetVideoDriver()
+ 	_EOFINI_
+ }
+ 
+-POL_Wine_DetectCard()
+-{
+-	# Set wine video driver
+-	# Usage POL_Wine_DetectCard
+-	POL_Debug_Message "Detecting video card"
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+-	POL_LoadVar_Device
+-	DRVID="OTHER"
+-	[ "$VendorID" = "10de" ] && DRVID="NVIDIA"
+-	[ "$VendorID" = "1002" ] && DRVID="ATI"
+-	[ "$VendorID" = "8086" ] && DRVID="INTEL"
+-	POL_Debug_Message "Detected video card: $DRVID"
+-
+-	echo $DRVID
++POL_Wine_DetectCard() {
++  # Set wine video driver
++  # Usage POL_Wine_DetectCard
++  POL_Debug_Message "Detecting video card"
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  POL_LoadVar_Device
++  DRVID="OTHER"
++  [ "$VendorID" = "10de" ] && DRVID="NVIDIA"
++  [ "$VendorID" = "1002" ] && DRVID="ATI"
++  [ "$VendorID" = "8086" ] && DRVID="INTEL"
++  POL_Debug_Message "Detected video card: $DRVID"
++
++  echo $DRVID
+ }
+ 
+-
+-
+-POL_AutoWine ()
+-{
+-	# Detect if the file is a .exe or a .msi file and run it with POL_Wine
+-	# Same usage than "wine"
+-	SETUP_PATH="$@"
+-	# remove everything up to the last dot
+-	extension="${SETUP_PATH##*.}"
+-	if [ "$extension" = "msi" ]
+-	then
+-		POL_Wine msiexec /i "$SETUP_PATH"
+-	else
+-		# FIXME /unix?
+-		POL_Wine "$SETUP_PATH"
+-	fi
++POL_AutoWine() {
++  # Detect if the file is a .exe or a .msi file and run it with POL_Wine
++  # Same usage than "wine"
++  SETUP_PATH="$@"
++  # remove everything up to the last dot
++  extension="${SETUP_PATH##*.}"
++  if [ "$extension" = "msi" ]; then
++    POL_Wine msiexec /i "$SETUP_PATH"
++  else
++    # FIXME /unix?
++    POL_Wine "$SETUP_PATH"
++  fi
+ }
+ 
+-POL_Wine ()
+-{
+-	# Run the good wineversion and store the result to a logfile
+-	# Same usage than "wine"
+-	mkdir -p "$WINEPREFIX"
+-	touch "$WINEPREFIX/playonlinux.log"
+-	local NoErrors
+-	if [ "$1" = "--ignore-errors" ]; then
+-		NoErrors="True"
+-		shift
+-	fi
+-
+-	if [ ! "$(POL_Config_Read NO_FSCHECK)" = "TRUE" ]; then
+-		if [ "$1" = "start" ]; then
+-			if [ "$2" = "/unix" ]; then
+-				POL_System_CheckFS "$3"
+-			else
+-				POL_System_CheckFS "$2"
+-			fi
+-		else
+-			POL_System_CheckFS "$1"
+-		fi
+-	else
+-		POL_Debug_Message "** Filesystem checks disabled **"
+-	fi
+-
+-	POL_Wine_AutoSetVersionEnv
+-	POL_Debug_Message "Running wine-$POL_WINEVERSION "$@" (Working directory : $PWD)"
+-	POL_Debug_LogToPrefix "Running wine-$POL_WINEVERSION "$@" (Working directory : $PWD)"
+-
+-        # Either that or monitor "err:process:create_process starting 64-bit process L"xxx" not supported in 32-bit wineprefix\nwine: Bad EXE format for xxx." in logs
+-        if [ "$POL_ARCH" = "x86" -a -e "$1" ]; then
+-            local EXEFILE="$1"
+-            if POL_System_is64bit "$EXEFILE"; then
+-                NOBUGREPORT="TRUE" # user mistake
+-                POL_Debug_Fatal "$(eval_gettext 'Starting 64-bit process $EXEFILE is not supported in 32-bit virtual drives')"
+-            fi
+-        fi
+-
+-        if [ ! "$WINEMENUBUILDER_ALERT" ]; then
+-		POL_Debug_Message "Notice: PlayOnLinux deliberately disables winemenubuilder. See http://www.playonlinux.com/fr/page-26-Winemenubuilder.html"
+-		WINEMENUBUILDER_ALERT="Done"
+-	fi
+-	if [ "$1" = "regedit" -a ! "$2" = "" ]; then
+-		if [ -e "$2" ]; then
+-			POL_Debug_LogToPrefix "Content of $2"
+-			(echo '-----------'
+-			 cat "$2"
+-			 echo '-----------') >> "$WINEPREFIX/playonlinux.log"
+-		else
+-			POL_Debug_LogToPrefix "regedit parameter '$2' is not a file, not dumped to log"
+-		fi
+-	elif [ "$1" = "regedit" ]; then
+-		POL_Debug_LogToPrefix "User modified something in the registry manually"
+-	fi
+-
+-
+-	if [ "$POL_OS" = "Linux" ] || [ "$POL_OS" = "Mac" ];
+-	then
+-		if [ "$LOGFILE" = "/dev/null" ]; then
+-			$BEFORE_WINE $(POL_Config_Read BEFORE_WINE) wine "$@"  2> >(grep -v menubuilder --line-buffered | tee -a "$WINEPREFIX/playonlinux.log" >&2) > >(tee -a "$WINEPREFIX/playonlinux.log")
+-			errors=$?
+-		else
+-			$BEFORE_WINE $(POL_Config_Read BEFORE_WINE) wine "$@" 2> >(grep -v menubuilder --line-buffered | tee -a "$LOGFILE" "$WINEPREFIX/playonlinux.log" >&2) > >(tee -a "$LOGFILE" "$WINEPREFIX/playonlinux.log")
+-			errors=$?
+-		fi
+-	else
+-		# FIXME
+-		$BEFORE_WINE $(POL_Config_Read BEFORE_WINE) wine "$@"  2> "$WINEPREFIX/playonlinux.log" > "$WINEPREFIX/playonlinux.log"
+-		errors=$?
+-	fi
+-
+-	if [ "$errors" != 0 -a "$NoErrors" != "True" -a "$POL_IgnoreWineErrors" != "True" ]; then
+-		POL_Debug_Error "$(eval_gettext 'Wine seems to have crashed\n\nIf your program is running, just ignore this message')"
+-	fi
+-	POL_Debug_Message "Wine return: $errors"
+-	return $errors
++POL_Wine() {
++  # Run the good wineversion and store the result to a logfile
++  # Same usage than "wine"
++  mkdir -p "$WINEPREFIX"
++  touch "$WINEPREFIX/playonlinux.log"
++  local NoErrors
++  if [ "$1" = "--ignore-errors" ]; then
++    NoErrors="True"
++    shift
++  fi
++
++  if [ ! "$(POL_Config_Read NO_FSCHECK)" = "TRUE" ]; then
++    if [ "$1" = "start" ]; then
++      if [ "$2" = "/unix" ]; then
++        POL_System_CheckFS "$3"
++      else
++        POL_System_CheckFS "$2"
++      fi
++    else
++      POL_System_CheckFS "$1"
++    fi
++  else
++    POL_Debug_Message "** Filesystem checks disabled **"
++  fi
++
++  POL_Wine_AutoSetVersionEnv
++  POL_Debug_Message "Running wine-$POL_WINEVERSION "$@" (Working directory : $PWD)"
++  POL_Debug_LogToPrefix "Running wine-$POL_WINEVERSION "$@" (Working directory : $PWD)"
++
++  # Either that or monitor "err:process:create_process starting 64-bit process L"xxx" not supported in 32-bit wineprefix\nwine: Bad EXE format for xxx." in logs
++  if [ "$POL_ARCH" = "x86" -a -e "$1" ]; then
++    local EXEFILE="$1"
++    if POL_System_is64bit "$EXEFILE"; then
++      NOBUGREPORT="TRUE" # user mistake
++      POL_Debug_Fatal "$(eval_gettext 'Starting 64-bit process $EXEFILE is not supported in 32-bit virtual drives')"
++    fi
++  fi
++
++  if [ ! "$WINEMENUBUILDER_ALERT" ]; then
++    POL_Debug_Message "Notice: PlayOnLinux deliberately disables winemenubuilder. See http://www.playonlinux.com/fr/page-26-Winemenubuilder.html"
++    WINEMENUBUILDER_ALERT="Done"
++  fi
++  if [ "$1" = "regedit" -a ! "$2" = "" ]; then
++    if [ -e "$2" ]; then
++      POL_Debug_LogToPrefix "Content of $2"
++      (
++        echo '-----------'
++        cat "$2"
++        echo '-----------'
++      ) >>"$WINEPREFIX/playonlinux.log"
++    else
++      POL_Debug_LogToPrefix "regedit parameter '$2' is not a file, not dumped to log"
++    fi
++  elif [ "$1" = "regedit" ]; then
++    POL_Debug_LogToPrefix "User modified something in the registry manually"
++  fi
++
++  [[ $OSX_VERSION -ge 19 ]] && WINECMD="wine32on64" || WINECMD="wine"
++  [[ $OSX_VERSION -ge 19 ]] && [[ -e "$1" ]] && xattr -d com.apple.quarantine "$1"
++  if [ "$POL_OS" = "Linux" ] || [ "$POL_OS" = "Mac" ]; then
++    if [ "$LOGFILE" = "/dev/null" ]; then
++      $BEFORE_WINE $(POL_Config_Read BEFORE_WINE) $WINECMD "$@" 2> >(grep -v menubuilder --line-buffered | tee -a "$WINEPREFIX/playonlinux.log" >&2) > >(tee -a "$WINEPREFIX/playonlinux.log")
++      errors=$?
++    else
++      $BEFORE_WINE $(POL_Config_Read BEFORE_WINE) $WINECMD "$@" 2> >(grep -v menubuilder --line-buffered | tee -a "$LOGFILE" "$WINEPREFIX/playonlinux.log" >&2) > >(tee -a "$LOGFILE" "$WINEPREFIX/playonlinux.log")
++      errors=$?
++    fi
++  else
++    # FIXME
++    $BEFORE_WINE $(POL_Config_Read BEFORE_WINE) $WINECMD "$@" 2>"$WINEPREFIX/playonlinux.log" >"$WINEPREFIX/playonlinux.log"
++    errors=$?
++  fi
++
++  if [ "$errors" != 0 -a "$NoErrors" != "True" -a "$POL_IgnoreWineErrors" != "True" ]; then
++    POL_Debug_Error "$(eval_gettext 'Wine seems to have crashed\n\nIf your program is running, just ignore this message')"
++  fi
++  POL_Debug_Message "Wine return: $errors"
++  return $errors
+ }
+ 
+-POL_Wine_SelectPrefix()
+-{
+-	# Select a wineprefix and remove unexpected chars
+-	# Usage: POL_Wine_SelectPrefix [prefixname]
+-	PREFNAME=`printf "$1"| tr -c [[a-zA-Z0-9]\.] '_'`
+-	POL_Debug_Message "Selecting prefix: $PREFNAME"
+-        # Empty name is dangerous
+-        [ -z "$PREFNAME" ] && POL_Debug_Fatal "Bad or empty virtual drive name selected"
+-	export WINEPREFIX="$POL_USER_ROOT/wineprefix/$PREFNAME"
+-	export DOSPREFIX="$WINEPREFIX"
+-	if [ -e "$WINEPREFIX/playonlinux.cfg" ]; then
+-		export POL_WINEVERSION="$(POL_Config_PrefixRead VERSION)"
+-		POL_System_SetArch "$(POL_Config_PrefixRead ARCH)" "detected"
+-	else
+-		touch "$WINEPREFIX/playonlinux.cfg" 2> /dev/null
+-	fi
+-
+-	## In fact it's a bad idea
+-	#if [ "$(POL_Config_PrefixRead ARCH)" = "x86" ]; then ## Comme ca, pas de conflits
+-	#	export WINEARCH=win32
+-	#fi
++POL_Wine_SelectPrefix() {
++  # Select a wineprefix and remove unexpected chars
++  # Usage: POL_Wine_SelectPrefix [prefixname]
++  PREFNAME=$(printf "$1" | tr -c [[a-zA-Z0-9]\.] '_')
++  POL_Debug_Message "Selecting prefix: $PREFNAME"
++  # Empty name is dangerous
++  [ -z "$PREFNAME" ] && POL_Debug_Fatal "Bad or empty virtual drive name selected"
++  export WINEPREFIX="$POL_USER_ROOT/wineprefix/$PREFNAME"
++  export DOSPREFIX="$WINEPREFIX"
++  if [ -e "$WINEPREFIX/playonlinux.cfg" ]; then
++    export POL_WINEVERSION="$(POL_Config_PrefixRead VERSION)"
++    POL_System_SetArch "$(POL_Config_PrefixRead ARCH)" "detected"
++  else
++    touch "$WINEPREFIX/playonlinux.cfg" 2>/dev/null
++  fi
++
++  ## In fact it's a bad idea
++  #if [ "$(POL_Config_PrefixRead ARCH)" = "x86" ]; then ## Comme ca, pas de conflits
++  #	export WINEARCH=win32
++  #fi
+ }
+-POL_Wine_PrefixExists()
+-{
+-	# Checks if a prefix exists
+-	# Usage: POL_Wine_PrefixExists
+-	# Return True or False
+-	PREFNAME=`printf "$1"| tr -c [[a-zA-Z0-9]\.] '_'`
+-	[ -d "$POL_USER_ROOT/wineprefix/$PREFNAME/drive_c" ] && echo "True" || echo "False"
++POL_Wine_PrefixExists() {
++  # Checks if a prefix exists
++  # Usage: POL_Wine_PrefixExists
++  # Return True or False
++  PREFNAME=$(printf "$1" | tr -c [[a-zA-Z0-9]\.] '_')
++  [ -d "$POL_USER_ROOT/wineprefix/$PREFNAME/drive_c" ] && echo "True" || echo "False"
+ }
+-POL_Wine_CheckPrefixExists()
+-{
+-	# Checks if a prefix exists
+-	# Usage: POL_Wine_CheckPrefixExists [PREFIX] [TITLE_REQUIRED]
+-	# Return a message if not and quit
+-	PREFIX=$1
+-	TITLE_REQUIRED="$2"
+-	if [ "$(POL_Wine_PrefixExists "$PREFIX")" = "False" ]; then
+-		POL_Debug_Warning "The prefix '$PREFIX' does not exist"
+-		POL_SetupWindow_message "$(eval_gettext 'This is an installer for an update or an addon;\nPlease install $TITLE_REQUIRED first')" "$TITLE"
+-		POL_SetupWindow_Close
+-		exit 1
+-	fi
++POL_Wine_CheckPrefixExists() {
++  # Checks if a prefix exists
++  # Usage: POL_Wine_CheckPrefixExists [PREFIX] [TITLE_REQUIRED]
++  # Return a message if not and quit
++  PREFIX=$1
++  TITLE_REQUIRED="$2"
++  if [ "$(POL_Wine_PrefixExists "$PREFIX")" = "False" ]; then
++    POL_Debug_Warning "The prefix '$PREFIX' does not exist"
++    POL_SetupWindow_message "$(eval_gettext 'This is an installer for an update or an addon;\nPlease install $TITLE_REQUIRED first')" "$TITLE"
++    POL_SetupWindow_Close
++    exit 1
++  fi
+ }
+-POL_Wine_VersionSignature()
+-{
+-	# Return the signature of a Wine package
+-	# Usage: POL_Wine_VersionSignature [DIR]
+-
+-	# On Linux, result should match the one of
+-	# cd $DIR; find * -type f|sort|xargs md5sum|md5sum -|cut -c1-32
+-
+-	local WINEPKGPATH="$1"
+-	[ -d "$WINEPKGPATH" ] || return
+-	# [ -e "$WINEPKGPATH/bin/wine" ] || return
+-
+-	local CURRSIGVER="$WINEPKGPATH/.signature.v1" # cache version
+-	local WINESIG
+-	[ -e "$CURRSIGVER" ] && read WINESIG < "$CURRSIGVER"
+-	if [ -z "$WINESIG" ]; then
+-		local MANIFESTFILE="$POL_USER_ROOT/tmp/POL_Wine_VersionSignature_manifest$$"
+-		(cd "$WINEPKGPATH" && find * -type f |\
+-		  sort |\
+-		  while read sigfilename; do
+-		    echo "$(POL_MD5_file "$sigfilename")  $sigfilename"
+-		  done) > "$MANIFESTFILE"
+-		WINESIG="$(POL_MD5_file "$MANIFESTFILE")"
+-		rm -f "$MANIFESTFILE"
+-		echo "$WINESIG" > "$CURRSIGVER"
+-	fi
+-	echo "$WINESIG"
++POL_Wine_VersionSignature() {
++  # Return the signature of a Wine package
++  # Usage: POL_Wine_VersionSignature [DIR]
++
++  # On Linux, result should match the one of
++  # cd $DIR; find * -type f|sort|xargs md5sum|md5sum -|cut -c1-32
++
++  local WINEPKGPATH="$1"
++  [ -d "$WINEPKGPATH" ] || return
++  # [ -e "$WINEPKGPATH/bin/wine" ] || return
++
++  local CURRSIGVER="$WINEPKGPATH/.signature.v1" # cache version
++  local WINESIG
++  [ -e "$CURRSIGVER" ] && read WINESIG <"$CURRSIGVER"
++  if [ -z "$WINESIG" ]; then
++    local MANIFESTFILE="$POL_USER_ROOT/tmp/POL_Wine_VersionSignature_manifest$$"
++    (cd "$WINEPKGPATH" && find * -type f |
++      sort |
++      while read sigfilename; do
++        echo "$(POL_MD5_file "$sigfilename")  $sigfilename"
++      done) >"$MANIFESTFILE"
++    WINESIG="$(POL_MD5_file "$MANIFESTFILE")"
++    rm -f "$MANIFESTFILE"
++    echo "$WINESIG" >"$CURRSIGVER"
++  fi
++  echo "$WINESIG"
+ }
+-POL_Wine_InstallVersion()
+-{
+-	# Install a wineversion
+-	# Usage: POL_Wine_InstallVersion [VERSION]
+-	[ ! "$1" = "" ] && export POL_WINEVERSION="$1"
+-	[ ! "$2" = "" ] && export POL_WINEDISTRIBUTION="$2" || export POL_WINEDISTRIBUTION="upstream"
+-
+-	if [[ "$POL_WINEVERSION" == *"-staging"* ]]; then
+-	    local pol_wineversion="${POL_WINEVERSION/-staging/}"
+-			POL_WINEDISTRIBUTION="staging"
+-	else
+-			local pol_wineversion_install="$POL_WINEVERSION"
+-			local pol_wineversion="$POL_WINEVERSION"
+-	fi
+-
+-	if [ "$POL_WINEDISTRIBUTION" == "staging" ]; then
+-		local pol_wineversion_install="$pol_wineversion-staging"
+-	fi
+-
+-	[ "$pol_wineversion" = "" ] && POL_Debug_Fatal "No POL_WINEVERSION set"
+-	[ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
+-	POL_Debug_Message "Installing wine version path: $pol_wineversion_install, $POL_ARCH"
+-	[ "$POL_OS" = "Mac" ] && ARCH_PREFIX="darwin"
+-	[ "$POL_OS" = "FreeBSD" ] && ARCH_PREFIX="freebsd"
+-	[ "$POL_OS" = "Linux" ] && ARCH_PREFIX="linux"
+-	OLDPATH="$PWD"
+-	WINE_SECTION="$ARCH_PREFIX-$POL_ARCH"
+-	WINEDIR="$POL_USER_ROOT/wine/$WINE_SECTION"
+-	touch "$WINEDIR/installing"
+-	if [ ! -e "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install" ]
+-	then
+-		POL_Debug_Message "Wine site: $WINE_SITE"
+-		echo $POL_WGET "$WINE_SITE" -O-
+-		WINEDATA="$($POL_WGET "$WINE_SITE" -O- |jq -r ".[] | select(.name==\"$POL_WINEDISTRIBUTION-$ARCH_PREFIX-$POL_ARCH\") | .packages | .[] | select(.version==\"$pol_wineversion\")")"
+-		POL_Debug_Message "Winebuild data: $WINEDATA"
+-
+-		WINE_ADDRESS="$(echo "$WINEDATA" | jq '.url' -r)"
+-		POL_Debug_Message "Wine address found: $WINE_ADDRESS"
+-		#WINE_ADDRESS=$($POL_WGET "$WINE_SITE/$WINE_SECTION.lst" -O- | grep ";$pol_wineversion;" | tail -n 1 | cut -d ";" -f1)
+-
+-		if [ "$WINE_ADDRESS" = "" ] && [ "$POL_ARCH" = "amd64" ]
+-		then
+-			POL_Debug_Warning "Wine $1 amd64 does not exist. Switching to x86"
+-			POL_System_SetArch "x86"
+-			POL_Wine_InstallVersion "$1"
+-		else
+-			if [ "$WINE_ADDRESS" = "" ]
+-			then
+-				POL_Debug_Error "$(eval_gettext "Unable to find version: ")$pol_wineversion"
+-				POL_SetupWindow_Close
+-				exit
+-			fi
+-
+-			cd "$POL_USER_ROOT/tmp"
+-			filename="$PWD/PlayOnLinux-wine-$pol_wineversion-$POL_WINEDISTRIBUTION-$ARCH_PREFIX-$POL_ARCH.tar.gz"
+-			POL_SetupWindow_download "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE" "$WINE_ADDRESS"
+-			POL_SetupWindow_wait_next_signal "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE"
+-			sleep 1
+-			sha1="$(echo "$WINEDATA" | jq '.sha1sum' -r)"
+-			sha1_file=$(shasum "$filename" | awk '{print $1}')
+-			echo "Server sha1 : $sha1"
+-			echo "Client sha1 : $sha1_file"
+-
+-			if [ ! "$sha1" = "$sha1_file" ]
+-			then
+-				POL_SetupWindow_message "$(eval_gettext 'The download seems to have failed.')" "$TITLE"
+-			else
+-				POL_SetupWindow_wait "$(eval_gettext 'Extracting Wine...')" "$TITLE"
+-				mkdir -p "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install"
+-				cd "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install"
+-				tar -xvf "$filename"
+-			fi
+-			rm "$filename"
+-			# POL_Wine_Install_resources gecko "$pol_wineversion" "$POL_ARCH"
+-			# POL_Wine_Install_resources mono "$pol_wineversion" "$POL_ARCH"
+-		fi
+-	fi
+-	rm "$WINEDIR/installing"
++POL_Wine_InstallVersion() {
++  # Install a wineversion
++  # Usage: POL_Wine_InstallVersion [VERSION]
++  [ ! "$1" = "" ] && export POL_WINEVERSION="$1"
++  [ ! "$2" = "" ] && export POL_WINEDISTRIBUTION="$2" || export POL_WINEDISTRIBUTION="upstream"
++
++  if [[ "$POL_WINEVERSION" == *"-staging"* ]]; then
++    local pol_wineversion="${POL_WINEVERSION/-staging/}"
++    POL_WINEDISTRIBUTION="staging"
++  elif [[ "$POL_WINEVERSION" == *"-cx"* ]]; then
++    local pol_wineversion="${POL_WINEVERSION/-cx/}"
++    POL_WINEDISTRIBUTION="cx"
++  else
++    local pol_wineversion_install="$POL_WINEVERSION"
++    local pol_wineversion="$POL_WINEVERSION"
++  fi
++
++  if [ "$POL_WINEDISTRIBUTION" == "staging" ]; then
++    local pol_wineversion_install="$pol_wineversion-staging"
++  fi
++
++  if [ "$POL_WINEDISTRIBUTION" == "cx" ]; then
++    local pol_wineversion_install="$pol_wineversion-cx"
++  fi
++
++  [ "$pol_wineversion" = "" ] && POL_Debug_Fatal "No POL_WINEVERSION set"
++  [ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
++  POL_Debug_Message "Installing wine version path: $pol_wineversion_install, $POL_ARCH"
++  [ "$POL_OS" = "Mac" ] && ARCH_PREFIX="darwin"
++  [ "$POL_OS" = "FreeBSD" ] && ARCH_PREFIX="freebsd"
++  [ "$POL_OS" = "Linux" ] && ARCH_PREFIX="linux"
++  OLDPATH="$PWD"
++  WINE_SECTION="$ARCH_PREFIX-$POL_ARCH"
++  WINEDIR="$POL_USER_ROOT/wine/$WINE_SECTION"
++  touch "$WINEDIR/installing"
++  if [ ! -e "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install" ]; then
++    POL_Debug_Message "Wine site: $WINE_SITE"
++    POL_Debug_Message "wget list command: $POL_WGET $WINE_SITE -O-"
++    POL_Debug_Message "POL_ARCH: $POL_ARCH"
++
++    if [ "$POL_ARCH" = "x86" ]; then
++      [[ "$OSX_VERSION" -ge 19 ]] && site_arch="x86on64" || site_arch="x86"
++    else
++      site_arch="$POL_ARCH"
++    fi
++    WINEDATA="$($POL_WGET "$WINE_SITE" -O- | jq -r ".[] | select(.name==\"$POL_WINEDISTRIBUTION-$ARCH_PREFIX-$site_arch\") | .packages | .[] | select(.version==\"$pol_wineversion\")")"
++    POL_Debug_Message "Winebuild data: $WINEDATA"
++
++    WINE_ADDRESS="$(echo "$WINEDATA" | jq '.url' -r)"
++    POL_Debug_Message "Wine address found: $WINE_ADDRESS"
++    #WINE_ADDRESS=$($POL_WGET "$WINE_SITE/$WINE_SECTION.lst" -O- | grep ";$pol_wineversion;" | tail -n 1 | cut -d ";" -f1)
++
++    if [ "$WINE_ADDRESS" = "" ] && [ "$POL_ARCH" = "amd64" ]; then
++      POL_Debug_Warning "Wine $1 amd64 does not exist. Switching to x86"
++      POL_System_SetArch "x86"
++      POL_Wine_InstallVersion "$1"
++    else
++      if [ "$WINE_ADDRESS" = "" ]; then
++        if [[ $OSX_VERSION -ge 19 ]]; then
++          POL_SetupWindow_message "$(eval_gettext "macOS Catalina user: 32bits wine version are no longer available.\nWe are going to use the system wine version instead")"
++          return 2
++        else
++          POL_Debug_Error "$(eval_gettext "Unable to find version: ")$pol_wineversion"
++          POL_SetupWindow_Close
++          exit
++        fi
++      fi
++
++      cd "$POL_USER_ROOT/tmp"
++      filename="$PWD/PlayOnLinux-wine-$pol_wineversion-$POL_WINEDISTRIBUTION-$ARCH_PREFIX-$site_arch.tar.gz"
++      POL_SetupWindow_download "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE" "$WINE_ADDRESS"
++      POL_SetupWindow_wait_next_signal "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE"
++      sleep 1
++      sha1="$(echo "$WINEDATA" | jq '.sha1sum' -r)"
++      sha1_file=$(shasum "$filename" | awk '{print $1}')
++      echo "Server sha1 : $sha1"
++      echo "Client sha1 : $sha1_file"
++
++      if [ ! "$sha1" = "$sha1_file" ] && [[ $OSX_VERSION -lt 19 ]]; then
++        POL_SetupWindow_message "$(eval_gettext 'The download seems to have failed.')" "$TITLE"
++      else
++        POL_SetupWindow_wait "$(eval_gettext 'Extracting Wine...')" "$TITLE"
++        mkdir -p "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install"
++        cd "$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH/$pol_wineversion_install"
++        tar -xvf "$filename"
++      fi
++      rm "$filename"
++      # POL_Wine_Install_resources gecko "$pol_wineversion" "$POL_ARCH"
++      # POL_Wine_Install_resources mono "$pol_wineversion" "$POL_ARCH"
++    fi
++  fi
++  rm "$WINEDIR/installing"
+ 
+ }
+ 
+-POL_Wine_InstallCDROM()
+-{
+-	POL_Wine_InstallCDROMCustom "$1" "$CDROM"
++POL_Wine_InstallCDROM() {
++  POL_Wine_InstallCDROMCustom "$1" "$CDROM"
+ }
+-POL_Wine_InstallCDROMCustom()
+-{
+-	if [ "$1" ]; then
+-		letter="$1:"
+-	else
+-		letter="p:"
+-	fi
+-	if [ "$CDROM" ]; then
+-		cd "$WINEPREFIX/dosdevices"
+-		rm "$letter" 2> /dev/null
+-		ln -s "$2" "$letter"
+-	fi
++POL_Wine_InstallCDROMCustom() {
++  if [ "$1" ]; then
++    letter="$1:"
++  else
++    letter="p:"
++  fi
++  if [ "$CDROM" ]; then
++    cd "$WINEPREFIX/dosdevices"
++    rm "$letter" 2>/dev/null
++    ln -s "$2" "$letter"
++  fi
+ }
+-POL_Wine_Install_resources()
+-{
+-	# Install gecko or mono for selected wine version
+-	# Usage : POL_Wine_Install_resources (gecko|mono) [ Version ] ( Arch )
+-	[ -z "$1" ] && return 1
+-	[ "$1" = "mono" ] && resource="$1" || resource="gecko"
+-	wine_version="$2"
+-	unpatched_version=`POL_Wine_GetBaseName "$2"`
+-	[ "$3" = "amd64" ] && arch="$3" || arch="x86"
+-
+-	POL_Debug_Message "Installing $resource for wine $unpatched_version $arch"
+-	resource_dir="$POL_USER_ROOT/wine/$resource"
+-	resource_file="$POL_USER_ROOT/configurations/listes/$resource.lst"
+-	found="$(grep "^${unpatched_version//./\.};" "$resource_file")"
+-	[ "$POL_OS" = "Linux" ] && wos="linux"
+-	[ "$POL_OS" = "FreeBSD" ] && wos="freebsd"
+-	[ "$POL_OS" = "Mac" ] && wos="darwin"
+-
+-	if [ ! -L "$POL_USER_ROOT/wine/$wos-$arch/$wine_version/share/wine/$resource" ]
+-	then
+-		POL_Debug_Message "Linking $resource"
+-		ln -s "$POL_USER_ROOT/wine/$resource/" "$POL_USER_ROOT/wine/$wos-$arch/$wine_version/share/wine/$resource"
+-	fi
+-	if [ "$found" ]; then
+-		resourcex86="$(cut -d ';' -f2 <<< $found)"
+-		resourceamd64="$(cut -d ';' -f3 <<< $found)"
+-		md5x86="$(cut -d ';' -f4 <<< $found)"
+-		md5amd64="$(cut -d ';' -f5 <<< $found)"
+-
+-		cd "$resource_dir"
+-		if [ "$resourcex86" ]; then
+-			if [ -e "$resourcex86" ]; then
+-				POL_Debug_Message "$resourcex86 already installed. Skipping"
+-			else
+-				POL_Debug_Message "Installing $resourcex86"
+-				POL_Download "$(resource_download_url $resource x86 $resourcex86)" "$md5x86"
+-			fi
+-		fi
+-
+-		if [ "$arch" = "amd64" ]; then
+-			if [ "$resourceamd64" ]; then
+-				if [ -e "$resourceamd64" ]; then
+-					POL_Debug_Message "$resourceamd64 already installed. Skipping"
+-				else
+-					POL_Debug_Message "Installing $resourceamd64"
+-					POL_Download "$(resource_download_url $resource amd64 $resourceamd64)" "$md5amd64"
+-				fi
+-			fi
+-		fi
+-	fi
++POL_Wine_Install_resources() {
++  # Install gecko or mono for selected wine version
++  # Usage : POL_Wine_Install_resources (gecko|mono) [ Version ] ( Arch )
++  [ -z "$1" ] && return 1
++  [ "$1" = "mono" ] && resource="$1" || resource="gecko"
++  wine_version="$2"
++  unpatched_version=$(POL_Wine_GetBaseName "$2")
++  [ "$3" = "amd64" ] && arch="$3" || arch="x86"
++
++  POL_Debug_Message "Installing $resource for wine $unpatched_version $arch"
++  resource_dir="$POL_USER_ROOT/wine/$resource"
++  resource_file="$POL_USER_ROOT/configurations/listes/$resource.lst"
++  found="$(grep "^${unpatched_version//./\.};" "$resource_file")"
++  [ "$POL_OS" = "Linux" ] && wos="linux"
++  [ "$POL_OS" = "FreeBSD" ] && wos="freebsd"
++  [ "$POL_OS" = "Mac" ] && wos="darwin"
++
++  if [ ! -L "$POL_USER_ROOT/wine/$wos-$arch/$wine_version/share/wine/$resource" ]; then
++    POL_Debug_Message "Linking $resource"
++    ln -s "$POL_USER_ROOT/wine/$resource/" "$POL_USER_ROOT/wine/$wos-$arch/$wine_version/share/wine/$resource"
++  fi
++  if [ "$found" ]; then
++    resourcex86="$(cut -d ';' -f2 <<<$found)"
++    resourceamd64="$(cut -d ';' -f3 <<<$found)"
++    md5x86="$(cut -d ';' -f4 <<<$found)"
++    md5amd64="$(cut -d ';' -f5 <<<$found)"
++
++    cd "$resource_dir"
++    if [ "$resourcex86" ]; then
++      if [ -e "$resourcex86" ]; then
++        POL_Debug_Message "$resourcex86 already installed. Skipping"
++      else
++        POL_Debug_Message "Installing $resourcex86"
++        POL_Download "$(resource_download_url $resource x86 $resourcex86)" "$md5x86"
++      fi
++    fi
++
++    if [ "$arch" = "amd64" ]; then
++      if [ "$resourceamd64" ]; then
++        if [ -e "$resourceamd64" ]; then
++          POL_Debug_Message "$resourceamd64 already installed. Skipping"
++        else
++          POL_Debug_Message "Installing $resourceamd64"
++          POL_Download "$(resource_download_url $resource amd64 $resourceamd64)" "$md5amd64"
++        fi
++      fi
++    fi
++  fi
+ }
+-resource_download_url()
+-{
+-	# resource_download_url (gecko|mono) [ Arch ] [ Filename ]
+-	if [ "$1" = "gecko" ]; then
+-		echo "$GECKO_SITE/$2/$3"
+-	fi
+-	if [ "$1" = "mono" ]; then
+-#		local version="${3%.msi}"
+-#		version="${version#wine-mono-}"
+-#		echo "http://source.winehq.org/winemono.php?v=${version}"
+-#		echo "http://downloads.sourceforge.net/wine/$3"
+-#		echo "$MONO_SITE/$2/$3"
+-		echo "$MONO_SITE/$3"
+-	fi
++resource_download_url() {
++  # resource_download_url (gecko|mono) [ Arch ] [ Filename ]
++  if [ "$1" = "gecko" ]; then
++    echo "$GECKO_SITE/$2/$3"
++  fi
++  if [ "$1" = "mono" ]; then
++    #		local version="${3%.msi}"
++    #		version="${version#wine-mono-}"
++    #		echo "http://source.winehq.org/winemono.php?v=${version}"
++    #		echo "http://downloads.sourceforge.net/wine/$3"
++    #		echo "$MONO_SITE/$2/$3"
++    echo "$MONO_SITE/$3"
++  fi
+ }
+-POL_Wine_AutoSetVersionEnv()
+-{
+-	# Get the current prefix's version and set PATH environment variable
+-	# Usage: POL_Wine_AutoSetVersionEnv
+-	[ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
+-	POL_WINEVERSION="$(POL_Config_PrefixRead "VERSION")"
+-	POL_ARCH="$(POL_Config_PrefixRead "ARCH")"
+-	[ "$POL_WINEVERSION" = "" ] || POL_Wine_SetVersionEnv
++POL_Wine_AutoSetVersionEnv() {
++  # Get the current prefix's version and set PATH environment variable
++  # Usage: POL_Wine_AutoSetVersionEnv
++  [ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
++  POL_WINEVERSION="$(POL_Config_PrefixRead "VERSION")"
++  POL_ARCH="$(POL_Config_PrefixRead "ARCH")"
++  [ "$POL_WINEVERSION" = "" ] || POL_Wine_SetVersionEnv
+ }
+-POL_Wine_SetVersionEnv()
+-{
+-	# Usage: POL_Wine_SetWineVersion [VERSION]
+-	# Get first argument's wine version and set PATH environment variable
+-	[ ! "$1" = "" ] && export POL_WINEVERSION="$1"
+-	[ "$POL_WINEVERSION" = "" ] && POL_Debug_Warning "No POL_WINEVERSION set, assuming it is reset"
+-	[ "$POL_WINEVERSION" = "" ] && export POL_WINEVERSION="--reset"
+-	if [ ! "$POL_WINEVERSION" = "" ]
+-	then
+-		[ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
+-		#POL_Debug_Message "Setting wine version path: $POL_WINEVERSION, $POL_ARCH"
+-		[ "$POL_OS" = "Mac" ] && ARCH_PREFIX="darwin"
+-		[ "$POL_OS" = "FreeBSD" ] && ARCH_PREFIX="freebsd"
+-		[ "$POL_OS" = "Linux" ] && ARCH_PREFIX="linux"
+-		OLDPATH="$PWD"
+-		WINEDIR="$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH"
+-		mkdir -p "$WINEDIR"
+-		cd "$WINEDIR"
+-
+-		if [ "$POL_WINEVERSION" = "--reset" ]
+-		then
+-			export PATH="$PATH_ORIGIN"
+-			export LD_LIBRARY_PATH="$LD_PATH_ORIGIN"
+-			[ "$POL_OS" = "FreeBSD" ] && export LD_32_LIBRARY_PATH="$LD_32_PATH_ORIGIN"
+-			export POL_WINEVERSION=""
+-		else
+-			if [ ! -e "$WINEDIR/$POL_WINEVERSION" ]
+-			then
+-				POL_Debug_Message "Wine $POL_WINEVERSION not installed. Installing it"
+-		 		POL_Wine_InstallVersion "$POL_WINEVERSION"
+-			fi
+-			export PATH="$WINEDIR/$POL_WINEVERSION/bin/:$PATH"
+-			[ "$POL_OS" = "Mac" ] && export DYLD_FALLBACK_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/"
+-			export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
+-			export LD_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/:$WINEDIR/$POL_WINEVERSION/lib64/:$LD_LIBRARY_PATH"
+-			[ "$POL_OS" = "FreeBSD" ] && export LD_32_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/:$LD_32_LIBRARY_PATH"
+-		fi
+-	else
+-		if [ "$POL_OS" = "Mac" ]; then
+-			[ "$DYLD_FALLBACK_LIBRARY_PATH" = "" ] && export DYLD_FALLBACK_LIBRARY_PATH="$RESOURCEPATH/unix/wine/lib/"
+-		fi
+-	fi
+-	cd "$OLDPATH"
++POL_Wine_SetVersionEnv() {
++  # Usage: POL_Wine_SetWineVersion [VERSION]
++  # Get first argument's wine version and set PATH environment variable
++  [ ! "$1" = "" ] && export POL_WINEVERSION="$1"
++  [ "$POL_WINEVERSION" = "" ] && POL_Debug_Warning "No POL_WINEVERSION set, assuming it is reset"
++  [ "$POL_WINEVERSION" = "" ] && export POL_WINEVERSION="--reset"
++  if [ ! "$POL_WINEVERSION" = "" ]; then
++    [ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
++    #POL_Debug_Message "Setting wine version path: $POL_WINEVERSION, $POL_ARCH"
++    [ "$POL_OS" = "Mac" ] && ARCH_PREFIX="darwin"
++    [ "$POL_OS" = "FreeBSD" ] && ARCH_PREFIX="freebsd"
++    [ "$POL_OS" = "Linux" ] && ARCH_PREFIX="linux"
++    OLDPATH="$PWD"
++    WINEDIR="$POL_USER_ROOT/wine/$ARCH_PREFIX-$POL_ARCH"
++    mkdir -p "$WINEDIR"
++    cd "$WINEDIR"
++
++    if [ "$POL_WINEVERSION" = "--reset" ]; then
++      export PATH="$PATH_ORIGIN"
++      export LD_LIBRARY_PATH="$LD_PATH_ORIGIN"
++      [ "$POL_OS" = "FreeBSD" ] && export LD_32_LIBRARY_PATH="$LD_32_PATH_ORIGIN"
++      export POL_WINEVERSION=""
++    else
++      if [ ! -e "$WINEDIR/$POL_WINEVERSION" ]; then
++        POL_Debug_Message "Wine $POL_WINEVERSION not installed. Installing it"
++        POL_Wine_InstallVersion "$POL_WINEVERSION"
++        [[ "$?" == 2 ]] && return 0
++      fi
++      echo "Setting paths..."
++      export PATH="$WINEDIR/$POL_WINEVERSION/bin/:$PATH"
++      [ "$POL_OS" = "Mac" ] && export DYLD_FALLBACK_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/"
++      export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
++      export LD_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/:$WINEDIR/$POL_WINEVERSION/lib64/:$LD_LIBRARY_PATH"
++      [ "$POL_OS" = "FreeBSD" ] && export LD_32_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/:$LD_32_LIBRARY_PATH"
++    fi
++  else
++    if [ "$POL_OS" = "Mac" ]; then
++      [ "$DYLD_FALLBACK_LIBRARY_PATH" = "" ] && export DYLD_FALLBACK_LIBRARY_PATH="$RESOURCEPATH/unix/wine/lib/"
++    fi
++  fi
++  cd "$OLDPATH"
+ }
+-POL_Wine_SetVersionPrefix()
+-{
+-	# Usage: POL_Wine_SetVersionPrefix [VERSION]
+-	# Change a prefix wine version
+-	[ ! "$1" = "" ] && export POL_WINEVERSION="$1"
+-	[ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
+-
+-	POL_Config_PrefixWrite "VERSION" "$POL_WINEVERSION"
++POL_Wine_SetVersionPrefix() {
++  # Usage: POL_Wine_SetVersionPrefix [VERSION]
++  # Change a prefix wine version
++  [ ! "$1" = "" ] && export POL_WINEVERSION="$1"
++  [ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
++
++  POL_Config_PrefixWrite "VERSION" "$POL_WINEVERSION"
+ }
+-POL_Wine_PrefixDelete()
+-{
+-	[ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
+- 	local wineprefix="$WINEPREFIX"
+-	wineprefix=${wineprefix//"//"/"/"}
+-	local shortcuts=()
+-	local OLDIFS="$IFS"
+-	IFS=$'\n'
+-	cd "$POL_USER_ROOT/shortcuts/" &&
+-	for shortcut in *
+-	do
+-		[ "$(detect_wineprefix "$shortcut")" = "$wineprefix" ] && shortcuts+=("$shortcut")
+-	done
+-	IFS="$OLDIFS"
+-
+-	# cf MainWindow.DeletePrefix()
+-	POL_SetupWindow_wait_next_signal "$(eval_gettext 'Uninstalling...')" "$(eval_gettext '$APPLICATION_TITLE Uninstaller')"
+-	if [ "${#shortcuts[@]}" -gt 0 ]; then
+- 		POL_Debug_Warning "$wineprefix is still in use by ${#shortcuts[@]} shortcuts, removing them first"
+-		for shortcut in "${shortcuts[@]}"; do
+-			POL_Debug_Message "Removing shortcut $shortcut..."
+-			bash "$PLAYONLINUX/bash/uninstall" --non-interactive "$shortcut"
+-		done
+-	fi
+-
+-        clean_wineprefix --non-interactive "$WINEPREFIX"
++POL_Wine_PrefixDelete() {
++  [ -z "$WINEPREFIX" ] && POL_Debug_Fatal "WINEPREFIX not set"
++  local wineprefix="$WINEPREFIX"
++  wineprefix=${wineprefix//"//"/"/"}
++  local shortcuts=()
++  local OLDIFS="$IFS"
++  IFS=$'\n'
++  cd "$POL_USER_ROOT/shortcuts/" &&
++    for shortcut in *; do
++      [ "$(detect_wineprefix "$shortcut")" = "$wineprefix" ] && shortcuts+=("$shortcut")
++    done
++  IFS="$OLDIFS"
++
++  # cf MainWindow.DeletePrefix()
++  POL_SetupWindow_wait_next_signal "$(eval_gettext 'Uninstalling...')" "$(eval_gettext '$APPLICATION_TITLE Uninstaller')"
++  if [ "${#shortcuts[@]}" -gt 0 ]; then
++    POL_Debug_Warning "$wineprefix is still in use by ${#shortcuts[@]} shortcuts, removing them first"
++    for shortcut in "${shortcuts[@]}"; do
++      POL_Debug_Message "Removing shortcut $shortcut..."
++      bash "$PLAYONLINUX/bash/uninstall" --non-interactive "$shortcut"
++    done
++  fi
++
++  clean_wineprefix --non-interactive "$WINEPREFIX"
+ }
+-POL_Wine_PrefixCreate()
+-{
+-	# Create a wineprefix
+-	# Usage: POL_Wine_PrefixCreate [VERSION]
+-	if [ ! "$1" = "" ]; then
+-		POL_Debug_Message "Setting POL_WINEVERSION to $1"
+-		export POL_WINEVERSION="$1"
+-	elif [ "$POL_WINEVERSION" ]; then
+-		POL_Debug_Message "POL_WINEVERSION is already set to $POL_WINEVERSION. Using it"
+-	else
+-		POL_Debug_Message "No version specified. Using system version ($(wine --version))"
+-	fi
+-
+-	POL_Debug_Message "Creating prefix ($POL_WINEVERSION)..."
+-	[ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
+-	[ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
+-
+-	if [ -e "$WINEPREFIX" ]; then
+-		POL_Debug_Message "Prefix already exists"
+-		LNG_OVERWRITE="$(eval_gettext 'Overwrite (usually works, no guarantee)')"
+-		LNG_ERASE="$(eval_gettext 'Erase (virtual drive content will be lost)')"
+-		LNG_ABORT="$(eval_gettext 'Abort installation')"
+-
+-		OLD_ARCH=""
+-		[ -e "$WINEPREFIX/playonlinux.cfg" ] && OLD_ARCH=$(POL_Config_PrefixRead "ARCH")
+-		if [ "$OLD_ARCH" = "$POL_USER_ARCH" ]; then
+-			PREFIX_CHOICES="$LNG_OVERWRITE~$LNG_ERASE~$LNG_ABORT"
+-		else
+-			# Settings are not compatible, overwriting is not an option
+-			PREFIX_CHOICES="$LNG_ERASE~$LNG_ABORT"
+-		fi
+-
+-		OLD_APP_ANWSER="$APP_ANSWER"
+-		PREFNAME="$(basename $WINEPREFIX)"
+-		POL_SetupWindow_menu "$(eval_gettext 'The target virtual drive $PREFNAME already exists:')" "$TITLE" "$PREFIX_CHOICES" "~"
+-		case "$APP_ANSWER" in
+-			"$LNG_OVERWRITE")
+-				# Prefix content is not reproducible, it's tempting to disallow reports
+-				# NOBUGREPORT="TRUE"
+-				POL_Debug_Message "Overwrite Prefix"
+-				# Should we revert what has been autodetected by SelectPrefix here too?
+-				;;
+-			"$LNG_ERASE")
+-				POL_Debug_Message "Erase Prefix"
+-				POL_Wine_PrefixDelete
+-				# Revert what could have been autodetected with SelectPrefix
+-				POL_ARCH="$POL_USER_ARCH"
+-				;;
+-			*)
+-				NOBUGREPORT="TRUE"
+-				POL_Debug_Fatal "$(eval_gettext 'User abort')"
+-				;;
+-		esac
+-		APP_ANSWER="$OLD_APP_ANWSER"
+-	fi
+-
+-	POL_SetupWindow_wait "$(eval_gettext 'Please wait while the virtual drive is being created...')" "$TITLE"
+-	if [ -e "$WINEPREFIX" ]; then
+-		touch "$WINEPREFIX/playonlinux.cfg"
+-		if [ ! "$POL_WINEVERSION" = "" ]; then
+-			POL_Debug_Message "Setting version to $POL_WINEVERSION"
+-			POL_Wine_SetVersionPrefix "$POL_WINEVERSION"
+-			POL_Wine_SetVersionEnv
+-		fi
+-	else	# Prefix does not exit, let's create it
+-		if [ "$POL_WINEVERSION" = "" ]; then
+-			# System wineversion
+-			## Really bad idea
+-			## export WINEARCH=win32
+-			if [ ! "$POL_ARCH" = "" ]; then
+-				if [ "$POL_ARCH" = "x86" ]; then
+-					export WINEARCH=win32
+-				else
+-					export WINEARCH=win64
+-				fi
+-				POL_Debug_Message "Setting WINEARCH to $WINEARCH"
+-			fi
+-
+-			wine wineboot
+-			POL_Debug_InitPrefix
+-
+-			if [ -e "$WINEPREFIX/drive_c/windows/syswow64" ] # It is a 64 bits prefix
+-			then
+-				POL_Config_PrefixWrite "ARCH" "amd64"
+-				POL_Debug_LogToPrefix "This is a 64bits prefix!"
+-				POL_Config_Write WINE_SYSTEM_ARCH amd64
+-			else
+-				POL_Config_PrefixWrite "ARCH" "x86"
+-				POL_Debug_LogToPrefix "This is a 32bits prefix!"
+-				POL_Config_Write WINE_SYSTEM_ARCH x86
+-			fi
+-		else
+-			mkdir -p "$WINEPREFIX"
+-			POL_Debug_Message "Using wine $POL_WINEVERSION"
+-			POL_Wine_InstallVersion "$POL_WINEVERSION"
+-			POL_SetupWindow_wait "$(eval_gettext 'Please wait while the virtual drive is being created...')" "$TITLE"
+-			POL_Config_PrefixWrite "ARCH" "$POL_ARCH"
+-			POL_Config_PrefixWrite "VERSION" "$POL_WINEVERSION"
+-			POL_Wine_AutoSetVersionEnv
+-
+-			POL_Debug_InitPrefix
+-
+-			which wineprefixcreate && [ "$(POL_MD5_file "$(which wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(which wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
+-			wine wineboot
+-		fi
+-	fi
+-
+-	# Make sure that .reg files are created
+-	if which wineserver; then
+-		wineserver -w
+-	else
+-		POL_Debug_Message "Warning, wineserver not found"
+-		sleep 4
+-	fi
+-	POL_LoadVar_PROGRAMFILES
+-	[ -e "$POL_USER_ROOT/configurations/post_prefixcreate" ] && \
+-	    source "$POL_USER_ROOT/configurations/post_prefixcreate"
++POL_Wine_PrefixCreate() {
++  # Create a wineprefix
++  # Usage: POL_Wine_PrefixCreate [VERSION]
++  if [ ! "$1" = "" ]; then
++    POL_Debug_Message "Setting POL_WINEVERSION to $1"
++    export POL_WINEVERSION="$1"
++  elif [ "$POL_WINEVERSION" ]; then
++    POL_Debug_Message "POL_WINEVERSION is already set to $POL_WINEVERSION. Using it"
++  else
++    POL_Debug_Message "No version specified. Using system version ($(wine --version))"
++  fi
++
++  POL_Debug_Message "Creating prefix ($POL_WINEVERSION)..."
++  [ "$POL_ARCH" = "" ] && POL_System_SetArch "auto"
++  [ "$WINEPREFIX" = "" ] && POL_Debug_Fatal "WINEPREFIX is not set!"
++
++  if [ -e "$WINEPREFIX" ]; then
++    POL_Debug_Message "Prefix already exists"
++    LNG_OVERWRITE="$(eval_gettext 'Overwrite (usually works, no guarantee)')"
++    LNG_ERASE="$(eval_gettext 'Erase (virtual drive content will be lost)')"
++    LNG_ABORT="$(eval_gettext 'Abort installation')"
++
++    OLD_ARCH=""
++    [ -e "$WINEPREFIX/playonlinux.cfg" ] && OLD_ARCH=$(POL_Config_PrefixRead "ARCH")
++    if [ "$OLD_ARCH" = "$POL_USER_ARCH" ]; then
++      PREFIX_CHOICES="$LNG_OVERWRITE~$LNG_ERASE~$LNG_ABORT"
++    else
++      # Settings are not compatible, overwriting is not an option
++      PREFIX_CHOICES="$LNG_ERASE~$LNG_ABORT"
++    fi
++
++    OLD_APP_ANWSER="$APP_ANSWER"
++    PREFNAME="$(basename $WINEPREFIX)"
++    POL_SetupWindow_menu "$(eval_gettext 'The target virtual drive $PREFNAME already exists:')" "$TITLE" "$PREFIX_CHOICES" "~"
++    case "$APP_ANSWER" in
++    "$LNG_OVERWRITE")
++      # Prefix content is not reproducible, it's tempting to disallow reports
++      # NOBUGREPORT="TRUE"
++      POL_Debug_Message "Overwrite Prefix"
++      # Should we revert what has been autodetected by SelectPrefix here too?
++      ;;
++    "$LNG_ERASE")
++      POL_Debug_Message "Erase Prefix"
++      POL_Wine_PrefixDelete
++      # Revert what could have been autodetected with SelectPrefix
++      POL_ARCH="$POL_USER_ARCH"
++      ;;
++    *)
++      NOBUGREPORT="TRUE"
++      POL_Debug_Fatal "$(eval_gettext 'User abort')"
++      ;;
++    esac
++    APP_ANSWER="$OLD_APP_ANWSER"
++  fi
++
++  POL_SetupWindow_wait "$(eval_gettext 'Please wait while the virtual drive is being created...')" "$TITLE"
++  if [ -e "$WINEPREFIX" ]; then
++    touch "$WINEPREFIX/playonlinux.cfg"
++    if [ ! "$POL_WINEVERSION" = "" ]; then
++      POL_Debug_Message "Setting version to $POL_WINEVERSION"
++      POL_Wine_SetVersionPrefix "$POL_WINEVERSION"
++      POL_Wine_SetVersionEnv
++    fi
++  else # Prefix does not exit, let's create it
++    if [ "$POL_WINEVERSION" = "" ]; then
++      # System wineversion
++      ## Really bad idea
++      ## export WINEARCH=win32
++      if [ ! "$POL_ARCH" = "" ]; then
++        if [ "$POL_ARCH" = "x86" ]; then
++          export WINEARCH=win32
++        else
++          export WINEARCH=win64
++        fi
++        POL_Debug_Message "Setting WINEARCH to $WINEARCH"
++      fi
++
++      wine wineboot
++      POL_Debug_InitPrefix
++
++      if [ -e "$WINEPREFIX/drive_c/windows/syswow64" ]; then # It is a 64 bits prefix
++        POL_Config_PrefixWrite "ARCH" "amd64"
++        POL_Debug_LogToPrefix "This is a 64bits prefix!"
++        POL_Config_Write WINE_SYSTEM_ARCH amd64
++      else
++        POL_Config_PrefixWrite "ARCH" "x86"
++        POL_Debug_LogToPrefix "This is a 32bits prefix!"
++        POL_Config_Write WINE_SYSTEM_ARCH x86
++      fi
++    else
++      mkdir -p "$WINEPREFIX"
++      POL_Debug_Message "Using wine $POL_WINEVERSION"
++      POL_Wine_InstallVersion "$POL_WINEVERSION"
++      exitCode="$?"
++      POL_SetupWindow_wait "$(eval_gettext 'Please wait while the virtual drive is being created...')" "$TITLE"
++
++      if [[ ! "$exitCode" == "2" ]]; then ## Wine version is actually found
++        POL_Config_PrefixWrite "ARCH" "$POL_ARCH"
++        POL_Config_PrefixWrite "VERSION" "$POL_WINEVERSION"
++      fi
++
++      POL_Wine_AutoSetVersionEnv
++
++      POL_Debug_InitPrefix
++
++      which wineprefixcreate && [ "$(POL_MD5_file "$(which wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(which wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
++      wine wineboot
++    fi
++  fi
++
++  # Make sure that .reg files are created
++  if which wineserver; then
++    wineserver -w
++  else
++    POL_Debug_Message "Warning, wineserver not found"
++    sleep 4
++  fi
++  POL_LoadVar_PROGRAMFILES
++  [ -e "$POL_USER_ROOT/configurations/post_prefixcreate" ] &&
++    source "$POL_USER_ROOT/configurations/post_prefixcreate"
+ }
+-POL_Wine_OverrideDLL()
+-{
+-	# Override DLLs
+-	MODE=$1
+-	[ "$MODE" = "disabled" ] && unset MODE
+-	shift
+-
+-	(cat << 'EOF'
++POL_Wine_OverrideDLL() {
++  # Override DLLs
++  MODE=$1
++  [ "$MODE" = "disabled" ] && unset MODE
++  shift
++
++  (
++    cat <<'EOF'
+ REGEDIT4
+ 
+ [HKEY_CURRENT_USER\Software\Wine\DllOverrides]
+ EOF
+ 
+-	for DLL in "$@"
+-	do
+-		echo "\"*$DLL\"=\"$MODE\""
+-	done) > "$POL_USER_ROOT/tmp/override-dll.reg"
++    for DLL in "$@"; do
++      echo "\"*$DLL\"=\"$MODE\""
++    done
++  ) >"$POL_USER_ROOT/tmp/override-dll.reg"
+ 
+-	POL_Debug_Message "Overriding DLLs"
+-	POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait...')" "$TITLE"
+-	POL_Wine regedit "$POL_USER_ROOT/tmp/override-dll.reg"
+-	rm "$POL_USER_ROOT/tmp/override-dll.reg"
++  POL_Debug_Message "Overriding DLLs"
++  POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait...')" "$TITLE"
++  POL_Wine regedit "$POL_USER_ROOT/tmp/override-dll.reg"
++  rm "$POL_USER_ROOT/tmp/override-dll.reg"
+ }
+-POL_Wine_DelOverrideDLL()
+-{
+-	# Delete override DLLs
+-	(cat << 'EOF'
++POL_Wine_DelOverrideDLL() {
++  # Delete override DLLs
++  (
++    cat <<'EOF'
+ REGEDIT4
+ 
+ [HKEY_CURRENT_USER\Software\Wine\DllOverrides]
+ EOF
+ 
+-	for DLL in "$@"
+-	do
+-		echo "\"$DLL\"=-"
+-		echo "\"*$DLL\"=-"
+-	done) > "$POL_USER_ROOT/tmp/del-override-dll.reg"
+-	POL_Debug_Message "Deleting overrides DLLs"
+-	POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait...')" "$TITLE"
+-	POL_Wine regedit "$POL_USER_ROOT/tmp/del-override-dll.reg"
+-	rm "$POL_USER_ROOT/tmp/del-override-dll.reg"
++    for DLL in "$@"; do
++      echo "\"$DLL\"=-"
++      echo "\"*$DLL\"=-"
++    done
++  ) >"$POL_USER_ROOT/tmp/del-override-dll.reg"
++  POL_Debug_Message "Deleting overrides DLLs"
++  POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait...')" "$TITLE"
++  POL_Wine regedit "$POL_USER_ROOT/tmp/del-override-dll.reg"
++  rm "$POL_USER_ROOT/tmp/del-override-dll.reg"
+ }
+-POL_Wine_OverrideDLL_App()
+-{
+-	# App-specific DLL overrides
+-	APP="$1"
+-	MODE="$2"
+-	[ "$MODE" = "disabled" ] && unset MODE
+-	shift 2
+-
+-	(cat << EOF
++POL_Wine_OverrideDLL_App() {
++  # App-specific DLL overrides
++  APP="$1"
++  MODE="$2"
++  [ "$MODE" = "disabled" ] && unset MODE
++  shift 2
++
++  (
++    cat <<EOF
+ REGEDIT4
+ 
+ [HKEY_CURRENT_USER\\Software\\Wine\\AppDefaults\\$APP\\DllOverrides]
+ EOF
+-	for DLL in "$@"
+-	do
+-		# Who knows what this hack is for?
+-		if [ "$DLL" = "comctl32" ]; then
+-			rm -rf "$WINEPREFIX/winsxs/manifests/x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.2600.2982_none_deadbeef.manifest"
+-		fi
+-		echo "\"*$DLL\"=\"$MODE\""
+-	done) > "$POL_USER_ROOT/tmp/app-dll-override.reg"
+-	POL_Wine regedit "$POL_USER_ROOT/tmp/app-dll-override.reg"
+-	rm "$POL_USER_ROOT/tmp/app-dll-override.reg"
++    for DLL in "$@"; do
++      # Who knows what this hack is for?
++      if [ "$DLL" = "comctl32" ]; then
++        rm -rf "$WINEPREFIX/winsxs/manifests/x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.2600.2982_none_deadbeef.manifest"
++      fi
++      echo "\"*$DLL\"=\"$MODE\""
++    done
++  ) >"$POL_USER_ROOT/tmp/app-dll-override.reg"
++  POL_Wine regedit "$POL_USER_ROOT/tmp/app-dll-override.reg"
++  rm "$POL_USER_ROOT/tmp/app-dll-override.reg"
+ }
+-POL_Wine_DelOverrideDLL_App()
+-{
+-	# Delete app-specific DLL overrides
+-	APP="$1"
+-	shift
++POL_Wine_DelOverrideDLL_App() {
++  # Delete app-specific DLL overrides
++  APP="$1"
++  shift
+ 
+-	(cat << EOF
++  (
++    cat <<EOF
+ REGEDIT4
+ 
+ [HKEY_CURRENT_USER\\Software\\Wine\\AppDefaults\\$APP\\DllOverrides]
+ EOF
+-	for DLL in "$@"
+-	do
+-		echo "\"$DLL\"=-"
+-		echo "\"*$DLL\"=-"
+-	done) > "$POL_USER_ROOT/tmp/del-app-dll-override.reg"
+-	POL_Wine regedit "$POL_USER_ROOT/tmp/del-app-dll-override.reg"
+-	rm "$POL_USER_ROOT/tmp/del-app-dll-override.reg"
++    for DLL in "$@"; do
++      echo "\"$DLL\"=-"
++      echo "\"*$DLL\"=-"
++    done
++  ) >"$POL_USER_ROOT/tmp/del-app-dll-override.reg"
++  POL_Wine regedit "$POL_USER_ROOT/tmp/del-app-dll-override.reg"
++  rm "$POL_USER_ROOT/tmp/del-app-dll-override.reg"
+ }
+-POL_Wine_RedirectDLL()
+-{
+-    # Redirect DLLs wine-staging feature
+-    # https://github.com/wine-compholio/wine-staging/wiki/DLL-Redirects
+-    local SOURCE="$1"
+-    local TARGET="$2"
+-    POL_Wine_UpdateRegistryWinePair 'DllRedirects' "$SOURCE" "$TARGET"
++POL_Wine_RedirectDLL() {
++  # Redirect DLLs wine-staging feature
++  # https://github.com/wine-compholio/wine-staging/wiki/DLL-Redirects
++  local SOURCE="$1"
++  local TARGET="$2"
++  POL_Wine_UpdateRegistryWinePair 'DllRedirects' "$SOURCE" "$TARGET"
+ }
+-POL_Wine_DelRedirectDLL()
+-{
+-    local SOURCE="$1"
+-    POL_Wine_UpdateRegistryWinePair 'DllRedirects' "$SOURCE" 'default'
++POL_Wine_DelRedirectDLL() {
++  local SOURCE="$1"
++  POL_Wine_UpdateRegistryWinePair 'DllRedirects' "$SOURCE" 'default'
+ }
+-POL_Wine_RedirectDLL_App()
+-{
+-    # App-specific DLL redirect
+-    local APP="$1"
+-    local SOURCE="$2"
+-    local TARGET="$3"
+-    POL_Wine_UpdateRegistryWinePair "AppDefaults\\$APP\\DllRedirects" "$SOURCE" "$TARGET"
++POL_Wine_RedirectDLL_App() {
++  # App-specific DLL redirect
++  local APP="$1"
++  local SOURCE="$2"
++  local TARGET="$3"
++  POL_Wine_UpdateRegistryWinePair "AppDefaults\\$APP\\DllRedirects" "$SOURCE" "$TARGET"
+ }
+-POL_Wine_DelRedirectDLL_App()
+-{
+-    # App-specific DLL redirect
+-    local APP="$1"
+-    local SOURCE="$2"
+-    POL_Wine_UpdateRegistryWinePair "AppDefaults\\$APP\\DllRedirects" "$SOURCE" 'default'
++POL_Wine_DelRedirectDLL_App() {
++  # App-specific DLL redirect
++  local APP="$1"
++  local SOURCE="$2"
++  POL_Wine_UpdateRegistryWinePair "AppDefaults\\$APP\\DllRedirects" "$SOURCE" 'default'
+ }
+-POL_Wine_WaitBefore ()
+-{
+-	# Lock bash commands until wine is exited
+-	# Usage : POL_Wine_WaitBefore [Program title] (--allow-kill)
+-	SOFTNAME="$1"
+-	if [ "$2" = "--allow-kill" ]
+-	then
+-		allowKill="true"
+-	else
+-		allowKill="false"
+-	fi
+-
+-	[ "$1" = "" ] && message="$(eval_gettext "Please wait...")" || message="$(eval_gettext 'Please wait while $SOFTNAME is installed...')"
+-
+-	if [ "$allowKill" = "true" ]
+-	then
+-		POL_SetupWindow_wait_button "$message" "$TITLE" "$(eval_gettext 'Install is done')" "wineserver -k" "$(eval_gettext 'Be careful! This will kill install process. If it is not finished, you will have to reinstall $SOFTNAME')"
+-	else
+-		POL_SetupWindow_wait "$message" "$TITLE"
+-	fi
++POL_Wine_WaitBefore() {
++  # Lock bash commands until wine is exited
++  # Usage : POL_Wine_WaitBefore [Program title] (--allow-kill)
++  SOFTNAME="$1"
++  if [ "$2" = "--allow-kill" ]; then
++    allowKill="true"
++  else
++    allowKill="false"
++  fi
++
++  [ "$1" = "" ] && message="$(eval_gettext "Please wait...")" || message="$(eval_gettext 'Please wait while $SOFTNAME is installed...')"
++
++  if [ "$allowKill" = "true" ]; then
++    POL_SetupWindow_wait_button "$message" "$TITLE" "$(eval_gettext 'Install is done')" "wineserver -k" "$(eval_gettext 'Be careful! This will kill install process. If it is not finished, you will have to reinstall $SOFTNAME')"
++  else
++    POL_SetupWindow_wait "$message" "$TITLE"
++  fi
+ 
+ }
+-POL_Wine_WaitExit ()
+-{
+-	# Lock bash commands until wine is exited
+-	# Usage : POL_Wine_WaitExit (--force-input) [Program title] (--allow-kill)
+-	if [ "$1" = "--force-input" ]
+-	then
+-		forceInput="true"
+-		shift
+-	else
+-		forceInput="false"
+-	fi
+-
+-	SOFTNAME="$1"
+-	if [ "$2" = "--allow-kill" ]
+-	then
+-		allowKill="true"
+-	else
+-		allowKill="false"
+-	fi
+-
+-	[ "$1" = "" ] && message="$(eval_gettext "Please wait...")" || message="$(eval_gettext 'Please wait while $SOFTNAME is installed...')"
+-	if [ "$allowKill" = "true" ]
+-	then
+-		POL_SetupWindow_wait_button "$message" "$TITLE" "$(eval_gettext 'Install is done')" "wineserver -k" "$(eval_gettext 'Be careful! This will kill install process. If it is not finished, you will have to reinstall $SOFTNAME')"
+-	else
+-		POL_SetupWindow_wait "$message" "$TITLE"
+-	fi
+-	wineserver -w || POL_SetupWindow_message "$(eval_gettext 'Press next only when the installation process is finished')" "$TITLE"
+-	[ "$forceInput" = "true" ] && POL_SetupWindow_message "$(eval_gettext 'Press next only when the installation process is finished')" "$TITLE"
++POL_Wine_WaitExit() {
++  # Lock bash commands until wine is exited
++  # Usage : POL_Wine_WaitExit (--force-input) [Program title] (--allow-kill)
++  if [ "$1" = "--force-input" ]; then
++    forceInput="true"
++    shift
++  else
++    forceInput="false"
++  fi
++
++  SOFTNAME="$1"
++  if [ "$2" = "--allow-kill" ]; then
++    allowKill="true"
++  else
++    allowKill="false"
++  fi
++
++  [ "$1" = "" ] && message="$(eval_gettext "Please wait...")" || message="$(eval_gettext 'Please wait while $SOFTNAME is installed...')"
++  if [ "$allowKill" = "true" ]; then
++    POL_SetupWindow_wait_button "$message" "$TITLE" "$(eval_gettext 'Install is done')" "wineserver -k" "$(eval_gettext 'Be careful! This will kill install process. If it is not finished, you will have to reinstall $SOFTNAME')"
++  else
++    POL_SetupWindow_wait "$message" "$TITLE"
++  fi
++  wineserver -w || POL_SetupWindow_message "$(eval_gettext 'Press next only when the installation process is finished')" "$TITLE"
++  [ "$forceInput" = "true" ] && POL_SetupWindow_message "$(eval_gettext 'Press next only when the installation process is finished')" "$TITLE"
+ }
+ 
+-
+-
+-POL_Wine_reboot ()
+-{
+-	# Simulate windows reboot
+-	POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait while $APPLICATION_TITLE is simulating a reboot')" "$TITLE"
+-	POL_Wine wineboot
++POL_Wine_reboot() {
++  # Simulate windows reboot
++  POL_SetupWindow_wait_next_signal "$(eval_gettext 'Please wait while $APPLICATION_TITLE is simulating a reboot')" "$TITLE"
++  POL_Wine wineboot
+ }
+-POL_Wine_GetPrefixFromPath ()
+-{
+-	# Return wineprefix from path
+-	# Usage POL_Wine_GetPrefixFromPath [Exe file]
+-	local p="$1"
+-	p="${p#*/wineprefix/}"
+-	p="${p%%/*}"
+-	echo "$p"
++POL_Wine_GetPrefixFromPath() {
++  # Return wineprefix from path
++  # Usage POL_Wine_GetPrefixFromPath [Exe file]
++  local p="$1"
++  p="${p#*/wineprefix/}"
++  p="${p%%/*}"
++  echo "$p"
+ }
+-POL_Wine_GetBaseName()
+-{
+-	perl -e '$release=$ARGV[0]; $release =~ s/^([0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?)-?.*$/$1/; print "$release\n"' "$1"
++POL_Wine_GetBaseName() {
++  perl -e '$release=$ARGV[0]; $release =~ s/^([0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?)-?.*$/$1/; print "$release\n"' "$1"
+ }
+-POL_Wine_GetPatchName()
+-{
+-	perl -e '$release=$ARGV[0]; $release =~ s/^[0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?-?//; print "$release\n"' "$1"
++POL_Wine_GetPatchName() {
++  perl -e '$release=$ARGV[0]; $release =~ s/^[0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?-?//; print "$release\n"' "$1"
+ }
+-POL_Lnk_Read()
+-{
+-	drive_c_found="false"
+-	export ANSWER_PATH=""
+-	export ANSWER_PREFIX=""
+-	export ANSWER_NAME="$1"
+-	ANSWER_NAME="${ANSWER_NAME/.lnk/}"
+-	while read line; do
+-		if [ "$drive_c_found" = "true" ]; then
+-			if [ "${line:1:1}" = ":" ]; then
+-				break
+-			fi
+-			if [ "$ANSWER_PATH" = "" ]; then
+-				ANSWER_PATH="$line"
+-			else
+-				ANSWER_PATH="$ANSWER_PATH/$line"
+-			fi
+-		fi
+-		if [ "$line" = "drive_c" ]; then
+-			drive_c_found="true"
+-			ANSWER_PREFIX="$lastline"
+-		fi
+-		lastline="$line"
+-	done < <(strings "$1")
++POL_Lnk_Read() {
++  drive_c_found="false"
++  export ANSWER_PATH=""
++  export ANSWER_PREFIX=""
++  export ANSWER_NAME="$1"
++  ANSWER_NAME="${ANSWER_NAME/.lnk/}"
++  while read line; do
++    if [ "$drive_c_found" = "true" ]; then
++      if [ "${line:1:1}" = ":" ]; then
++        break
++      fi
++      if [ "$ANSWER_PATH" = "" ]; then
++        ANSWER_PATH="$line"
++      else
++        ANSWER_PATH="$ANSWER_PATH/$line"
++      fi
++    fi
++    if [ "$line" = "drive_c" ]; then
++      drive_c_found="true"
++      ANSWER_PREFIX="$lastline"
++    fi
++    lastline="$line"
++  done < <(strings "$1")
+ }
+ 
+-POL_Wine_exename()
+-{
+-	EXENAME="$1"
+-	while [ "$1" ]; do
+-		[ "$(grep '.exe' <<< "$1")" ] && echo "$1" && return 0
+-		shift
+-	done
+-	echo "$EXENAME"
+-	return 0
++POL_Wine_exename() {
++  EXENAME="$1"
++  while [ "$1" ]; do
++    [ "$(grep '.exe' <<<"$1")" ] && echo "$1" && return 0
++    shift
++  done
++  echo "$EXENAME"
++  return 0
+ }
+-POL_Wine_CommonName()
+-{
+-	cname="$(POL_Wine_exename "$@")"
+-	[ "$cname" = "winecfg" ] && cname="Configure wine"
+-	[ "$cname" = "regedit" ] && cname="Registry Editor"
+-	[ "$cname" = "wineboot" ] && cname="Virtual drive creation"
+-	echo "$cname"
++POL_Wine_CommonName() {
++  cname="$(POL_Wine_exename "$@")"
++  [ "$cname" = "winecfg" ] && cname="Configure wine"
++  [ "$cname" = "regedit" ] && cname="Registry Editor"
++  [ "$cname" = "wineboot" ] && cname="Virtual drive creation"
++  echo "$cname"
+ }
+-POL_Wine_EnableOSXNativeDock()
+-{
+-	if [ "$POL_OS" = "Mac" -a "$(POL_Config_Read "OSX_NATIVE_MODE")" = "TRUE" ]; then
+-		export FORCE_OSX_DOCK="TRUE"
+-	fi
++POL_Wine_EnableOSXNativeDock() {
++  if [ "$POL_OS" = "Mac" -a "$(POL_Config_Read "OSX_NATIVE_MODE")" = "TRUE" ]; then
++    export FORCE_OSX_DOCK="TRUE"
++  fi
+ }
+diff --git a/python/lib/Variables.py b/python/lib/Variables.py
+index 8bed7601b..dbe2ab719 100755
+--- a/python/lib/Variables.py
++++ b/python/lib/Variables.py
+@@ -17,7 +17,7 @@
+ os.environ["POL_PORT"] = "0"
+ os.environ["PLAYONLINUX"] = os.path.realpath(os.path.realpath(__file__)+"/../../../")
+ os.environ["SITE"] = "http://repository.playonlinux.com"
+-os.environ["VERSION"] = "4.4"
++os.environ["VERSION"] = "4.4.1"
+ os.environ["POL_ID"] = str(random.randint(1, 100000000))
+ os.environ["GECKO_SITE"] = "http://wine.playonlinux.com/gecko"
+ os.environ["MONO_SITE"] = "http://wine.playonlinux.com/mono"
+@@ -119,11 +119,12 @@
+ 
+     os.environ["PATH"] = os.environ["PLAYONLINUX"]+"/../unix/wine/bin:" + os.environ["PLAYONLINUX"]+"/../unix/image_magick/bin:" + os.environ["PLAYONLINUX"]+"/../unix/tools/bin/:" + os.environ["PATH"]
+ 
+-    os.environ["WRITE_LD"] =  os.environ["PLAYONLINUX"]+"/../unix/image_magick/lib:"+ os.environ["PLAYONLINUX"]+"/../unix/tools/lib/ld:/opt/X11/lib/:" + os.environ["LD_LIBRARY_PATH"]
+-    os.environ["DYLD_FALLBACK_LIBRARY_PATH"] =  os.environ["PLAYONLINUX"]+"/../wine/lib"
++    os.environ["WRITE_LD"] = os.environ["LD_LIBRARY_PATH"]
++    os.environ["DYLD_FALLBACK_LIBRARY_PATH"] =  os.environ["PLAYONLINUX"]+"/../unix/wine/lib"
++    os.environ["WRITE_DYLD_FALLBACK_LIBRARY_PATH"] =  os.environ["PLAYONLINUX"]+"/../unix/wine/lib"
+     os.environ["FREETYPE_PROPERTIES"]="truetype:interpreter-version=35"
+ 
+-    os.environ["WRITE_DYLD"] = os.environ["PLAYONLINUX"]+"/../unix/tools/lib/dyld:" + os.environ["PLAYONLINUX"]+"/../unix/image_magick/lib:"+ os.environ["DYLD_LIBRARY_PATH"]
++    os.environ["WRITE_DYLD"] = os.environ["DYLD_LIBRARY_PATH"]
+ else:
+     # Debian maintainer decided for some reason not to let wineserver binary into PATH...
+     for winepath in ('/usr/lib/i386-linux-gnu/wine/bin', '/usr/lib/i386-linux-gnu/wine-unstable/bin',
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index 8df1ff14b..c8fe11160 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -254,7 +254,7 @@ def __init__(self, parent, id, title):
+         self.filemenu = wx.Menu()
+         ### On MacOS X, preference is always on the main menu
+         if (os.environ["POL_OS"] == "Mac"):
+-            prefItem = self.filemenu.Append(wx.ID_PREFERENCES, text="&Preferences")
++            prefItem = self.filemenu.Append(wx.ID_PREFERENCES, _("&Preferences"))
+             self.Bind(wx.EVT_MENU, self.Options, prefItem)
+ 
+         ### File menu
+diff --git a/python/wine_versions/WineVersionsFetcher.py b/python/wine_versions/WineVersionsFetcher.py
+index 0fdc76e38..fd758798e 100644
+--- a/python/wine_versions/WineVersionsFetcher.py
++++ b/python/wine_versions/WineVersionsFetcher.py
+@@ -1,67 +1,88 @@
+ import json
+ import os
+ import threading
+-import time
++import traceback
+ import urllib.request
+-import natsort
+ 
+ from lib import Variables
+-from wine_versions.WineVersionsTools import fetchUserOS
+-
+-class WineVersionFetcher(threading.Thread):
+-    def __init__(self, arch="x86"):
+-        threading.Thread.__init__(self)
+-        self.thread_message = "#WAIT#"
+-        self.versions = []
+-        self.architecture = arch
+-        self.start()
+-
+-    def download(self, game):
+-        self.getDescription = game
+-
+-    def run(self):
+-        self.thread_running = True
+-        while(self.thread_running):
+-            if(self.thread_message == "get"):
+-                try :
+-                    url = os.environ["WINE_SITE"]
+-                    wfolder = "-".join([fetchUserOS(), self.architecture])
+-
+-
+-                    req = urllib.request.Request(url, None, {'User-Agent': Variables.userAgent})
+-                    handle = urllib.request.urlopen(req, timeout = 5)
+-                    time.sleep(1)
+-                    available_distributions = json.loads(handle.read())
+-                    self.versions_ = []
+-                    for distribution in available_distributions:
+-                        if(distribution["name"] == "-".join(["upstream", fetchUserOS(), self.architecture])):
+-                            for package in distribution["packages"]:
+-                                version = package["version"]
+-                                packageUrl = package["url"]
+-                                sha1sum = package["sha1sum"]
+-                                if(not os.path.exists(Variables.playonlinux_rep+"/wine/"+wfolder+"/"+version)):
+-                                    self.versions_.append(version)
+-                                else:
+-                                    print("Directory: %s exists" % (Variables.playonlinux_rep+"/wine/"+wfolder+"/"+version))
+-                        elif(distribution["name"] == "-".join(["staging", fetchUserOS(), self.architecture])):
+-                            for package in distribution["packages"]:
+-                                version = package["version"]
+-                                if(not os.path.exists(Variables.playonlinux_rep+"/wine/"+wfolder+"/"+version+"-staging")):
+-                                    self.versions_.append(version+"-staging")
+-                                else:
+-                                    print("Directory: %s exists" % (Variables.playonlinux_rep+"/wine/"+wfolder+"/"+version+"-staging"))
+-                        else:
+-                            print(distribution["name"] + " does not match")
+-
+-                    self.versions_.sort(key=natsort.natsort_keygen())
+-                    self.versions_.reverse()
+-                    self.versions = self.versions_[:]
+-                    self.thread_message = "Ok"
+-                except Exception as e:
+-                    print(e)
+-                    time.sleep(1)
+-                    self.thread_message = "Err"
+-                    self.versions = ["Wine packages website is unavailable"]
++from wine_versions.WineVersionsTools import fetchUserOS, fetch_supported_archs
+ 
++
++class WineVersionFetcher():
++    def __init__(self, operating_system):
++        self.operating_system = operating_system
++
++    def fetch_all_available_wine_version(self, callback, error):
++        thread = threading.Thread(target=self._sync_fetch_all_available_wine_versions, args=(callback, error))
++        thread.start()
++
++    def _sync_fetch_all_available_wine_versions(self, callback, error):
++        wine_version_url = "https://phoenicis.playonlinux.com/index.php/wine?os=%s" % self.operating_system
++        print("Donwloading %s " % wine_version_url)
++        try:
++            request = urllib.request.Request(wine_version_url, None, {'User-Agent': Variables.userAgent})
++            handle = urllib.request.urlopen(request, timeout=5)
++            callback(self._convert_phoenicis_wine_versions_to_v4(json.load(handle)))
++        except Exception as e:
++            error(traceback.format_exc())
++
++    def _sync_fetch_all_installed_wine_version(self):
++        architectures = {}
++        for architecture in fetch_supported_archs():
++            wine_folder = fetchUserOS() + "-" + architecture
++
++            if os.path.exists(Variables.playonlinux_rep + "/wine/" + wine_folder):
++                available_versions = [{
++                    "name": version,
++                } for version in os.listdir(Variables.playonlinux_rep + "/wine/" + wine_folder) if
++                    version != "installing"]
+             else:
+-                time.sleep(0.2)
++                available_versions = []
++
++            if architecture not in architectures:
++                architectures[architecture] = []
++
++            architectures[architecture] += available_versions
++        return architectures
++
++    def fetch_all_installed_wine_version(self, callback, error):
++        try:
++            architectures = self._sync_fetch_all_installed_wine_version()
++
++            callback(architectures)
++        except Exception as e:
++            error(traceback.format_exc())
++
++    def _convert_phoenicis_wine_versions_to_v4(self, wine_distributions):
++        """
++        Converts versions from phoenicis format into a format that POL/POM 4 can handle
++        """
++        architectures = {}
++        for wine_distribution in wine_distributions:
++            name = wine_distribution["name"]
++            architecture = name.split("-")[2]
++            distribution = name.split("-")[0]
++
++            if architecture not in architectures:
++                architectures[architecture] = []
++
++            for package in wine_distribution["packages"]:
++                if distribution == "upstream":
++                    package_name = package["version"]
++                else:
++                    package_name = package["version"] + "-" + distribution
++
++                architectures[architecture] += [{
++                    "name": package_name,
++                    "architecture": architecture,
++                    "sha1sum": package["sha1sum"],
++                    "url": package["url"]
++                }]
++
++
++        return architectures
++
++    def calculate_installed_hash(self):
++        return hash(json.dumps((self._sync_fetch_all_installed_wine_version())))
++
++
+diff --git a/python/wine_versions/WineVersionsNotebook.py b/python/wine_versions/WineVersionsNotebook.py
+index ec5f12535..b43c25dc9 100644
+--- a/python/wine_versions/WineVersionsNotebook.py
++++ b/python/wine_versions/WineVersionsNotebook.py
+@@ -2,89 +2,106 @@
+ 
+ from lib import Variables
+ 
+-
+ ## FIXME: Refactor this code later
++from wine_versions.WineVersionsTools import fetch_supported_archs
++
++
+ class WineVersionsNotebook(wx.Notebook):
+     def __init__(self, parent):
+         self.notebook = wx.Notebook.__init__(self, parent, -1)
+         self.images_onglets = wx.ImageList(16, 16)
+         self.images_onglets.Add(wx.Bitmap(Variables.playonlinux_env + "/etc/onglet/wine.png"))
++
+         self.SetImageList(self.images_onglets)
+ 
+         self.sizers = {}
+-        self.imagesapps = {}
+-        self.imagesapps_i = {}
+-        self.availableWineVersionsTreeSelector = {}
++        self.image_list = self._create_image_list()
++        self.available_wine_versions_tree_selector = {}
+         self.waitPanel = {}
+-        self.installedWineVersionsTreeSelector = {}
+-        self.button_rm = {}
+-        self.button_in = {}
++        self.installed_wine_versions_tree_selector = {}
++        self.button_uninstall = {}
++        self.button_install = {}
+         self.boxSizers = {}
+         self.panels = {}
+-
+-    def calculateEventDelta(self, arch):
+-        if (arch == "amd64"):
+-            return 100
+-        else:
+-            return 0
+-
+-    def _createInstalledWineVersionsPanel(self, arch):
+-        installedWineVersionsPanel = wx.Panel(self.panels[arch], -1)
++        self.available_wine_version_roots = {}
++        self.installed_wine_version_roots = {}
++        self.number_of_available_versions = {}
++        self.number_of_installed_versions = {}
++        self.on_install_handler = None
++        self.on_remove_handler = None
++
++    def _create_image_list(self):
++        image_list = wx.ImageList(22, 22)
++        image_list.Add(wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-packages.png"))
++        image_list.Add(wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-in-use.png"))
++        return image_list
++
++    def _calculate_event_number(self, event_id, arch):
++        return event_id + list(fetch_supported_archs()).index(arch) * 100
++
++    def _createInstalledWineVersionsPanel(self, architecture):
++        installedWineVersionsPanel = wx.Panel(self.panels[architecture], -1)
+         installedWineVersionsSizer = wx.BoxSizer(wx.VERTICAL)
+         installedWineVersionsPanel.SetSizer(installedWineVersionsSizer)
+-        self.boxSizers[arch].Add(installedWineVersionsPanel, 3, wx.EXPAND)
++        self.boxSizers[architecture].Add(installedWineVersionsPanel, 3, wx.EXPAND)
+         installedWineVersionsSizer.AddSpacer(10)
+         installedWineVersionsSizer.Add(wx.StaticText(installedWineVersionsPanel, -1, _("Installed Wine versions: ")), 0)
+         installedWineVersionsSizer.AddSpacer(10)
+-        self.installedWineVersionsTreeSelector[arch] = wx.TreeCtrl(installedWineVersionsPanel, 107 + self.calculateEventDelta(arch),
+-                                                                   style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders)
+-        self.installedWineVersionsTreeSelector[arch].SetImageList(self.imagesapps_i[arch])
+-        #self.installedWineVersionsTreeSelector[arch].SetSpacing(0)
+-        installedWineVersionsSizer.Add(self.installedWineVersionsTreeSelector[arch], 1, wx.EXPAND)
++        self.installed_wine_versions_tree_selector[architecture] = wx.TreeCtrl(installedWineVersionsPanel,
++                                                                               self._calculate_event_number(107, architecture),
++                                                                               style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders)
++        self.installed_wine_versions_tree_selector[architecture].SetImageList(self.image_list)
++        self.Bind(wx.EVT_TREE_SEL_CHANGED, lambda evt: self._on_select_installed_wine_version(architecture), id=self._calculate_event_number(107, architecture))
++
++        installedWineVersionsSizer.Add(self.installed_wine_versions_tree_selector[architecture], 1, wx.EXPAND)
+         installedWineVersionsSizer.AddSpacer(10)
+ 
+-    def _createAvailableWineVersionsPanel(self, arch):
+-        availableWineVersionsPanel = wx.Panel(self.panels[arch] , -1)
++    def _createAvailableWineVersionsPanel(self, architecture):
++        availableWineVersionsPanel = wx.Panel(self.panels[architecture], -1)
+         availableWineVersionsSizer = wx.BoxSizer(wx.VERTICAL)
+         availableWineVersionsPanel.SetSizer(availableWineVersionsSizer)
+-        self.boxSizers[arch].Add(availableWineVersionsPanel, 3, wx.EXPAND)
++        self.boxSizers[architecture].Add(availableWineVersionsPanel, 3, wx.EXPAND)
+         availableWineVersionsSizer.AddSpacer(10)
+         availableWineVersionsSizer.Add(wx.StaticText(availableWineVersionsPanel, -1, _("Available Wine versions: "), (5, 10)), 0)
+         availableWineVersionsSizer.AddSpacer(10)
+-        self.availableWineVersionsTreeSelector[arch] = wx.TreeCtrl(availableWineVersionsPanel, 106 + self.calculateEventDelta(arch),
+-                                                                   style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders,
+-                                                                   size=(320, 300), pos=(10, 35))
+-        self.availableWineVersionsTreeSelector[arch].SetImageList(self.imagesapps[arch])
+-        #self.availableWineVersionsTreeSelector[arch].SetSpacing(0)
+-        availableWineVersionsSizer.Add(self.availableWineVersionsTreeSelector[arch], 1, wx.EXPAND)
++        self.available_wine_versions_tree_selector[architecture] = wx.TreeCtrl(availableWineVersionsPanel,
++                                                                               self._calculate_event_number(106, architecture),
++                                                                               style=wx.TR_HIDE_ROOT | wx.TR_FULL_ROW_HIGHLIGHT | Variables.widget_borders,
++                                                                               size=(320, 300), pos=(10, 35))
++        self.available_wine_versions_tree_selector[architecture].SetImageList(self.image_list)
++        self.Bind(wx.EVT_TREE_SEL_CHANGED, lambda evt: self._on_select_available_wine_version(architecture), id=self._calculate_event_number(106, architecture))
++
++        availableWineVersionsSizer.Add(self.available_wine_versions_tree_selector[architecture], 1, wx.EXPAND)
+         availableWineVersionsSizer.AddSpacer(10)
+ 
+-    def _createButtonPanel(self, arch):
+-        buttonsPanel = wx.Panel(self.panels[arch] , -1)
++    def _createButtonPanel(self, architecture):
++        buttonsPanel = wx.Panel(self.panels[architecture], -1)
+         buttonsSizer = wx.BoxSizer(wx.VERTICAL)
+         buttonsPanel.SetSizer(buttonsSizer)
+ 
+-        self.button_rm[arch] = wx.Button(buttonsPanel, 108 + self.calculateEventDelta(arch), "<")
+-        self.button_in[arch] = wx.Button(buttonsPanel, 109 + self.calculateEventDelta(arch), ">")
++        self.button_uninstall[architecture] = wx.Button(buttonsPanel, self._calculate_event_number(108, architecture), "<")
++        self.button_install[architecture] = wx.Button(buttonsPanel, self._calculate_event_number(109, architecture), ">")
+ 
+         buttonsSizer.AddStretchSpacer()
+-        buttonsSizer.Add(self.button_rm[arch], 0, wx.CENTER)
++        buttonsSizer.Add(self.button_uninstall[architecture], 0, wx.CENTER)
+         buttonsSizer.AddSpacer(10)
+-        buttonsSizer.Add(self.button_in[arch], 0, wx.CENTER)
++        buttonsSizer.Add(self.button_install[architecture], 0, wx.CENTER)
+         buttonsSizer.AddStretchSpacer()
+ 
+-        self.button_rm[arch].Enable(False)
+-        self.button_in[arch].Enable(False)
++        self.button_uninstall[architecture].Enable(False)
++        self.button_install[architecture].Enable(False)
++
++        self.Bind(wx.EVT_BUTTON, lambda evt: self._on_delete(architecture), id=self._calculate_event_number(108, architecture))
++        self.Bind(wx.EVT_BUTTON, lambda evt: self._on_install(architecture), id=self._calculate_event_number(109, architecture))
+ 
+-        self.boxSizers[arch].Add(buttonsPanel, 1, wx.EXPAND)
+ 
+-    def liste_versions(self, arch="x86"):
++        self.boxSizers[architecture].Add(buttonsPanel, 1, wx.EXPAND)
++
++    def add_architecture_tab(self, arch="x86"):
+         self.panels[arch] = wx.Panel(self, -1)
+ 
+         self.boxSizers[arch] = wx.BoxSizer(wx.HORIZONTAL)
+         self.panels[arch].SetSizer(self.boxSizers[arch])
+-        self.imagesapps[arch] = wx.ImageList(22, 22)
+-        self.imagesapps_i[arch] = wx.ImageList(22, 22)
+ 
+         self.boxSizers[arch].AddSpacer(10)
+         self._createAvailableWineVersionsPanel(arch)
+@@ -93,3 +110,39 @@ def liste_versions(self, arch="x86"):
+         self.boxSizers[arch].AddSpacer(10)
+ 
+         self.AddPage(self.panels[arch], _("Wine versions") + " (" + arch + ")", imageId=0)
++
++    def clean_version_of_architecture(self, arch):
++        self.available_wine_versions_tree_selector[arch].DeleteAllItems()
++        self.installed_wine_versions_tree_selector[arch].DeleteAllItems()
++        self.available_wine_version_roots[arch] = self.available_wine_versions_tree_selector[arch].AddRoot("")
++        self.installed_wine_version_roots[arch] = self.installed_wine_versions_tree_selector[arch].AddRoot("")
++        self.number_of_available_versions[arch] = 0
++        self.number_of_installed_versions[arch] = 0
++
++    def add_available_version(self, arch, version):
++        self.number_of_available_versions[arch] += 1
++        self.available_wine_versions_tree_selector[arch].AppendItem(self.available_wine_version_roots[arch], version, 0)
++
++    def add_installed_version(self, arch, version):
++        self.number_of_installed_versions[arch] += 1
++        self.installed_wine_versions_tree_selector[arch].AppendItem(self.installed_wine_version_roots[arch], version, 0)
++
++    def _on_select_installed_wine_version(self, architecture):
++        self.available_wine_versions_tree_selector[architecture].UnselectAll()
++        self.button_uninstall[architecture].Enable(True)
++        self.button_install[architecture].Enable(False)
++
++    def _on_select_available_wine_version(self, architecture):
++        self.installed_wine_versions_tree_selector[architecture].UnselectAll()
++        self.button_uninstall[architecture].Enable(False)
++        self.button_install[architecture].Enable(True)
++
++    def _on_install(self, architecture):
++        selected_version = self.available_wine_versions_tree_selector[architecture].GetItemText(self.available_wine_versions_tree_selector[architecture].GetSelection())
++        if self.on_install_handler is not None:
++            self.on_install_handler(architecture, selected_version)
++
++    def _on_delete(self, architecture):
++        selected_version = self.installed_wine_versions_tree_selector[architecture].GetItemText(self.installed_wine_versions_tree_selector[architecture].GetSelection())
++        if self.on_remove_handler is not None:
++            self.on_remove_handler(architecture, selected_version)
+diff --git a/python/wine_versions/WineVersionsTools.py b/python/wine_versions/WineVersionsTools.py
+index 06fb401e6..69d4cf2b2 100644
+--- a/python/wine_versions/WineVersionsTools.py
++++ b/python/wine_versions/WineVersionsTools.py
+@@ -10,22 +10,10 @@ def fetchUserOS():
+     else:
+         return "freebsd"
+ 
+-def GetWineVersion(game):
+-    cfile = Variables.playonlinux_rep + "shortcuts/" + game
+-    fichier = open(cfile, "r").readlines()
+-    i = 0
+-    line = ""
+-    while (i < len(fichier)):
+-        fichier[i] = fichier[i].replace("\n", "")
+-        if ("PATH=" in fichier[i] and "WineVersions" in fichier[i]):
+-            line = fichier[i].replace("//", "/")
+-        i += 1
++def architecture_is_supported(architecture_name):
++    return True ## FIXME
+ 
+-    if line == "":
+-        version = "System"
+-    else:
+-        version = line.replace("PATH=", "").replace("\"", "").replace(Variables.playonlinux_rep, "").replace("//", "/")
+-        version = version.split("/")
+-        version = version[1]
+-
+-    return version
++def fetch_supported_archs():
++    for available_arch in ["x86", "x86on64", "amd64"]:
++        if architecture_is_supported(available_arch):
++            yield available_arch
+diff --git a/python/wine_versions/WineVersionsWindow.py b/python/wine_versions/WineVersionsWindow.py
+index e3b8b4160..b76db0b25 100755
+--- a/python/wine_versions/WineVersionsWindow.py
++++ b/python/wine_versions/WineVersionsWindow.py
+@@ -30,183 +30,95 @@
+ import lib.playonlinux as playonlinux
+ from wine_versions.WineVersionsFetcher import WineVersionFetcher
+ from wine_versions.WineVersionsNotebook import WineVersionsNotebook
+-from wine_versions.WineVersionsTools import fetchUserOS
++from wine_versions.WineVersionsTools import fetchUserOS, fetch_supported_archs
+ 
+ lib.lng.Lang()
+ 
+ 
+-def SetWineVersion(game, version):
+-    cfile = Variables.playonlinux_rep + "shortcuts/" + game
+-    fichier = open(cfile, "r").readlines()
+-    i = 0
+-    line = []
+-    while (i < len(fichier)):  # On retire l'eventuel
+-        fichier[i] = fichier[i].replace("\n", "")
+-        if ("PATH=" not in fichier[i] or "WineVersions" not in fichier[i]):
+-            line.append(fichier[i])
+-        i += 1
+-
+-    fichier_write = open(cfile, "w")
++class WineVersionsWindow(wx.Frame):
++    def on_available_wine_versions_downloaded(self, versions_per_architecture):
++        for architecture in versions_per_architecture:
++            available_versions = []
++            for version in versions_per_architecture[architecture]:
++                available_versions.append(version["name"])
+ 
+-    if (version != "System"):  # On insere
+-        if os.environ["POL_OS"] == "Mac":
+-            line.insert(1, "PATH=\"" + Variables.playonlinux_rep + "WineVersions/" + version + "/bin/:$PATH\"")
+-            line.insert(1,
+-                        "LD_LIBRARY_PATH=\"" + Variables.playonlinux_rep + "WineVersions/" + version + "/lib/:$LD_LIBRARY_PATH\"")
+-        else:
+-            line.insert(1, "PATH=\"" + Variables.playonlinux_rep + "WineVersions/" + version + "/usr/bin/:$PATH\"")
+-            line.insert(1,
+-                        "LD_LIBRARY_PATH=\"" + Variables.playonlinux_rep + "WineVersions/" + version + "/usr/lib/:$LD_LIBRARY_PATH\"")
++            available_versions.sort(key=natsort.natsort_keygen())
++            available_versions.reverse()
++            available_versions = available_versions[:]
+ 
+-    i = 0
+-    while (i < len(line)):  # On ecrit
+-        fichier_write.write(line[i] + "\n")
+-        i += 1
++            for version in available_versions:
++                wx.CallAfter(self.notebook.add_available_version, architecture, version)
+ 
++    def on_installed_wine_versions_downloaded(self, versions_per_architecture):
++        for architecture in versions_per_architecture:
++            installed_versions = []
++            for version in versions_per_architecture[architecture]:
++                installed_versions.append(version["name"])
+ 
++            installed_versions.sort(key=natsort.natsort_keygen())
++            installed_versions.reverse()
++            installed_versions = installed_versions[:]
+ 
++            for version in installed_versions:
++                wx.CallAfter(self.notebook.add_installed_version, architecture, version)
+ 
++    def handle_error(self, error):
++        print(error)
+ 
+-class WineVersionsWindow(wx.Frame):
+     def __init__(self, parent, id, title):
+-        self.download32 = WineVersionFetcher("x86")
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            self.download64 = WineVersionFetcher("amd64")
+-
+-        wx.Frame.__init__(self, parent, -1, title, size=(750, 400 + Variables.windows_add_size),
++        wx.Frame.__init__(self,
++                          parent,
++                          -1,
++                          title,
++                          size=(750, 400 + Variables.windows_add_size),
+                           style=wx.CLOSE_BOX | wx.CAPTION | wx.MINIMIZE_BOX)
+         self.timer = wx.Timer(self, 1)
+         self.SetIcon(wx.Icon(Variables.playonlinux_env + "/etc/playonlinux.png", wx.BITMAP_TYPE_ANY))
+-        # self.panel = wx.Panel(self, -1)
+-
+-        self.onglets = WineVersionsNotebook(self)
+-        # self.sizer = wx.BoxSizer(wx.VERTICAL)
+-        # self.sizer.Add(self.onglets, 15, wx.EXPAND|wx.ALL, 2)
++        self.wine_version_fetcher = WineVersionFetcher(fetchUserOS())
+ 
+-        self.getVersions("x86")
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            self.getVersions("amd64")
+-        # self.panel.SetSizer(self.sizer)
+-        # self.panel.SetAutoLayout(True)
+-
+-        self.onglets.liste_versions()
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            self.onglets.liste_versions("amd64")
+-        self.oldreload32 = ""
++        self.notebook = WineVersionsNotebook(self)
++        self.sizer = wx.BoxSizer(wx.VERTICAL)
++        self.sizer.Add(self.notebook, 15, wx.EXPAND | wx.ALL, 2)
+ 
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            self.oldreload64 = ""
++        for available_arch in fetch_supported_archs():
++            self.notebook.add_architecture_tab(available_arch)
+ 
+-        self.oldversions32 = []
++        self.last_checksum = None
++        self.notebook.on_install_handler = self.install_wine_version
++        self.notebook.on_remove_handler = self.remove_wine_version
+ 
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            self.oldversions64 = []
++        self.Bind(wx.EVT_TIMER, self.detect_changes, self.timer)
++        self.timer.Start(1000)
+ 
+-        # self.button = wx.Button(self.panels_buttons, wx.ID_CLOSE, _("Close"), pos=(510, 5), size=wx.DefaultSize)
++    def refresh(self):
++        for available_arch in fetch_supported_archs():
++            self.notebook.clean_version_of_architecture(available_arch)
+ 
+-        self.Bind(wx.EVT_BUTTON, self.closeapp, id=wx.ID_CLOSE)
+-        self.Bind(wx.EVT_CLOSE, self.closeapp)
+-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.unselect32, id=106)
+-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.unselect32, id=107)
+-        self.Bind(wx.EVT_BUTTON, self.delete32, id=108)
+-        self.Bind(wx.EVT_BUTTON, self.install32, id=109)
++        self.wine_version_fetcher.fetch_all_available_wine_version(self.on_available_wine_versions_downloaded, self.handle_error)
++        self.wine_version_fetcher.fetch_all_installed_wine_version(self.on_installed_wine_versions_downloaded, self.handle_error)
+ 
+-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.unselect64, id=206)
+-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.unselect64, id=207)
+-        self.Bind(wx.EVT_BUTTON, self.delete64, id=208)
+-        self.Bind(wx.EVT_BUTTON, self.install64, id=209)
++    def detect_changes(self, event):
++        checksum = self.wine_version_fetcher.calculate_installed_hash()
+ 
+-        self.Bind(wx.EVT_TIMER, self.AutoReload, self.timer)
+-        self.timer.Start(200)
++        if self.last_checksum != checksum:
++            self.last_checksum = checksum
++            self.refresh()
+ 
+-    def AutoReload(self, event):
+-        reload32 = os.listdir(Variables.playonlinux_rep + "/wine/" + fetchUserOS() + "-x86")
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            reload64 = os.listdir(Variables.playonlinux_rep + "/wine/" + fetchUserOS() + "-amd64")
+-        if (self.download32.thread_message == "Ok" or self.download32.thread_message == "Err"):
+-            self.WriteVersion()
+-            self.download32.thread_message = "Wait"
+ 
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            if (self.download64.thread_message == "Ok" or self.download64.thread_message == "Err"):
+-                self.WriteVersion("amd64")
+-                self.download64.thread_message = "Wait"
+-
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            if (reload64 != self.oldreload64):
+-                self.getVersions("amd64")
+-                self.oldreload64 = reload64
+-
+-        if (reload32 != self.oldreload32):
+-            self.getVersions()
+-            self.oldreload32 = reload32
+-
+-        if (self.download32.versions != self.oldversions32):
+-            self.oldversions32 = self.download32.versions[:]
+-
+-        if (os.environ["AMD64_COMPATIBLE"] == "True"):
+-            if (self.download64.versions != self.oldversions64):
+-                self.oldversions64 = self.download64.versions[:]
+-
+-    def sizedirectory(self, path):
+-        size = 0
+-        for root, dirs, files in os.walk(path):
+-            for fic in files:
+-                size += os.path.getsize(os.path.join(root, fic))
+-        return size
+-
+-    def unselect32(self, event):
+-        if (event.GetId() == 106):
+-            self.onglets.installedWineVersionsTreeSelector["x86"].UnselectAll()
+-            self.onglets.button_rm["x86"].Enable(False)
+-            self.onglets.button_in["x86"].Enable(True)
+-        if (event.GetId() == 107):
+-            self.onglets.availableWineVersionsTreeSelector["x86"].UnselectAll()
+-            self.onglets.button_rm["x86"].Enable(True)
+-            self.onglets.button_in["x86"].Enable(False)
+-
+-    def delete32(self, event):
+-        self.delete_common(event, "x86")
+-
+-    def delete_common(self, event, arch):
+-        version = self.onglets.installedWineVersionsTreeSelector[arch].GetItemText(
+-            self.onglets.installedWineVersionsTreeSelector[arch].GetSelection())
+-        used_version = self.checkVersionUse(arch)  # Get the set of wine version used by wineprefix
++    def remove_wine_version(self, architecture, version):
++        used_version = self.checkVersionUse(architecture)  # Get the set of wine version used by wineprefix
+         message = _('Are you sure you want to delete wine {0}?').format(version)
+         if version in used_version:
+             message += "\n" + _('This version is CURRENTLY IN USE')
+         if (wx.YES == wx.MessageBox(message, os.environ["APPLICATION_TITLE"],
+                                     style=wx.YES_NO | wx.ICON_QUESTION)):
+-            shutil.rmtree(Variables.playonlinux_rep + "/wine/" + fetchUserOS() + "-" + arch + "/" + version)
+-
+-    def install32(self, event):
+-        self.install_common(event, "x86")
+-
+-    def install_common(self, event, arch):
+-        install = self.onglets.availableWineVersionsTreeSelector[arch].GetItemText(self.onglets.availableWineVersionsTreeSelector[arch].GetSelection())
+-        subprocess.Popen(["bash", Variables.playonlinux_env + "/bash/install_wver", install, arch])
++            shutil.rmtree(Variables.playonlinux_rep + "/wine/" + fetchUserOS() + "-" + architecture + "/" + version)
+ 
+-    def unselect64(self, event):
+-        if (event.GetId() == 206):
+-            self.onglets.installedWineVersionsTreeSelector["amd64"].UnselectAll()
+-            self.onglets.button_rm["amd64"].Enable(False)
+-            self.onglets.button_in["amd64"].Enable(True)
+-        if (event.GetId() == 207):
+-            self.onglets.availableWineVersionsTreeSelector["amd64"].UnselectAll()
+-            self.onglets.button_rm["amd64"].Enable(True)
+-            self.onglets.button_in["amd64"].Enable(False)
+ 
+-    def delete64(self, event):
+-        self.delete_common(event, "amd64")
++    def install_wine_version(self, architecture, version):
++        print("%s of architecture %s will be installed " % (version, architecture))
++        subprocess.Popen(["bash", Variables.playonlinux_env + "/bash/install_wver", version, architecture])
+ 
+-    def install64(self, event):
+-        self.install_common(event, "amd64")
+-
+-    def getVersions(self, arch="x86"):
+-        if (arch == "x86"):
+-            self.download32.thread_message = "get"
+-        if (arch == "amd64"):
+-            self.download64.thread_message = "get"
+ 
+     def checkVersionUse(self, arch):  # Check the wine version use by wineprefix
+         used_versions = set([])
+@@ -218,64 +130,8 @@ def checkVersionUse(self, arch):  # Check the wine version use by wineprefix
+                 used_versions.add(wine_version)
+         return (used_versions)
+ 
+-    def WriteVersion(self, arch="x86"):
+-        self.onglets.imagesapps[arch].RemoveAll()
+-        self.onglets.imagesapps_i[arch].RemoveAll()
+-        self.onglets.availableWineVersionsTreeSelector[arch].DeleteAllItems()
+-        self.onglets.installedWineVersionsTreeSelector[arch].DeleteAllItems()
+-
+-        root = self.onglets.availableWineVersionsTreeSelector[arch].AddRoot("")
+-        self.i = 0
+-        if (arch == "x86"):
+-            while (self.i < len(self.download32.versions)):
+-                self.onglets.imagesapps[arch].Add(
+-                    wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-packages.png"))
+-                self.onglets.availableWineVersionsTreeSelector[arch].AppendItem(root, self.download32.versions[self.i], self.i)
+-                self.i += 1
+-        if (arch == "amd64"):
+-            while (self.i < len(self.download64.versions)):
+-                self.onglets.imagesapps[arch].Add(
+-                    wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-packages.png"))
+-                self.onglets.availableWineVersionsTreeSelector[arch].AppendItem(root, self.download64.versions[self.i], self.i)
+-                self.i += 1
+-
+-        root2 = self.onglets.installedWineVersionsTreeSelector[arch].AddRoot("")
+-        wfolder = fetchUserOS() + "-" + arch
+-
+-        used_version = self.checkVersionUse(arch)  # Get the set of wine version used by wineprefix
+-
+-        installed_versions = os.listdir(Variables.playonlinux_rep + "/wine/" + wfolder)
+-        installed_versions.sort(key=natsort.natsort_keygen())
+-        installed_versions.reverse()
+-        self.i = 0
+-        self.j = 0
+-        boldFont = self.GetFont()
+-        boldFont.SetWeight(wx.BOLD)
+-        while (self.i < len(installed_versions)):
+-            if (os.path.isdir(Variables.playonlinux_rep + "/wine/" + wfolder + "/" + installed_versions[self.i])):
+-                itemId = self.onglets.installedWineVersionsTreeSelector[arch].AppendItem(root2, installed_versions[self.i], self.j)
+-                if (len(os.listdir(
+-                        Variables.playonlinux_rep + "/wine/" + wfolder + "/" + installed_versions[self.i])) == 0):
+-                    self.onglets.imagesapps_i[arch].Add(
+-                        wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-warning.png"))
+-                elif installed_versions[self.i] not in used_version:
+-                    self.onglets.imagesapps_i[arch].Add(wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine.png"))
+-                else:  # Clearly show the wine version in use
+-                    self.onglets.imagesapps_i[arch].Add(
+-                        wx.Bitmap(Variables.playonlinux_env + "/etc/install/wine-in-use.png"))
+-                    self.onglets.installedWineVersionsTreeSelector[arch].SetItemFont(itemId, boldFont)
+-                self.j += 1
+-            self.i += 1
+-        try:
+-            if (versions[0] == "Wine packages website is unavailable"):
+-                self.onglets.availableWineVersionsTreeSelector[arch].Enable(False)
+-                self.onglets.imagesapps[arch].RemoveAll()
+-        except:
+-            pass
+-        self.onglets.button_rm[arch].Enable(False)
+-        self.onglets.button_in[arch].Enable(False)
+-
+-    def closeapp(self, event):
++
++    def close(self, event):
+         self.download32.thread_running = False
+         if (os.environ["AMD64_COMPATIBLE"] == "True"):
+             self.download64.thread_running = False
+
+From 970425921a4934ad58423e61c799f4785fcde8c2 Mon Sep 17 00:00:00 2001
+From: Quentin PARIS <git@quentin.paris>
+Date: Sun, 24 Jan 2021 15:41:32 +0100
+Subject: [PATCH 16/33] Reafctoring wine version manager code
+
+---
+ lib/scripts.lib                            | 19 +++++++++---
+ lib/wine.lib                               |  6 ++--
+ python/wine_versions/WineVersionsTools.py  | 10 ++++++-
+ python/wine_versions/WineVersionsWindow.py | 34 ++++++++++++----------
+ 4 files changed, 45 insertions(+), 24 deletions(-)
+
+diff --git a/lib/scripts.lib b/lib/scripts.lib
+index fbd3634c4..4fd3fb5c5 100755
+--- a/lib/scripts.lib
++++ b/lib/scripts.lib
+@@ -77,17 +77,28 @@ POL_System_SetArch()
+ 	# Usage: POL_System_SetArch (auto|x86|amd64)
+ 	# If amd64 is specified and not supported, the script will end
+ 
+-	# $1 = Auto, x86, amd64
++	# $1 = Auto, x86, amd64, x86on64
+ 	# $2 = detected, if the result of an automatic selection
+ 
+-	if [ ! "$1" == "x86" ] && [ ! "$1" == "amd64" ]
++	if [ ! "$1" == "x86" ] && [ ! "$1" == "amd64" ] && [ ! "$1" == "x86on64" ]
+ 	then
+-		[ "$AMD64_COMPATIBLE" == "True" ] && export POL_ARCH="amd64" || export POL_ARCH="x86"
++	  if [[ "$OSX_VERSION" -ge 19 ]]; then
++	    export POL_ARCH="x86on64"
++	  else
++  		[ "$AMD64_COMPATIBLE" == "True" ] && export POL_ARCH="amd64" || export POL_ARCH="x86"
++  	fi
+ 	fi
++
+ 	if [ "$1" == "x86" ]
+ 	then
+-		export POL_ARCH="x86"
++		[[ "$OSX_VERSION" -ge 19 ]] && export POL_ARCH="x86on64" || export POL_ARCH="x86"
+ 	fi
++
++	if [ "$1" == "x86on64" ]
++	then
++		[[ "$OSX_VERSION" -ge 19 ]] && export POL_ARCH="x86on64" || POL_Debug_Fatal "x86on64 is not supported by your system"
++	fi
++
+ 	if [ "$1" == "amd64" ]
+ 	then
+ 		[ "$AMD64_COMPATIBLE" == "True" ] && export POL_ARCH="amd64" || POL_Debug_Fatal "amd64 is not supported by your system"
+diff --git a/lib/wine.lib b/lib/wine.lib
+index d27de1509..43475f310 100755
+--- a/lib/wine.lib
++++ b/lib/wine.lib
+@@ -678,7 +678,6 @@ POL_Wine_InstallVersion() {
+ 
+     WINE_ADDRESS="$(echo "$WINEDATA" | jq '.url' -r)"
+     POL_Debug_Message "Wine address found: $WINE_ADDRESS"
+-    #WINE_ADDRESS=$($POL_WGET "$WINE_SITE/$WINE_SECTION.lst" -O- | grep ";$pol_wineversion;" | tail -n 1 | cut -d ";" -f1)
+ 
+     if [ "$WINE_ADDRESS" = "" ] && [ "$POL_ARCH" = "amd64" ]; then
+       POL_Debug_Warning "Wine $1 amd64 does not exist. Switching to x86"
+@@ -697,7 +696,8 @@ POL_Wine_InstallVersion() {
+       fi
+ 
+       cd "$POL_USER_ROOT/tmp"
+-      filename="$PWD/PlayOnLinux-wine-$pol_wineversion-$POL_WINEDISTRIBUTION-$ARCH_PREFIX-$site_arch.tar.gz"
++      filename="$PWD/$(basename "$WINE_ADDRESS")"
++      echo "Local file name: $filename"
+       POL_SetupWindow_download "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE" "$WINE_ADDRESS"
+       POL_SetupWindow_wait_next_signal "$(eval_gettext "Downloading Wine: ")$pol_wineversion" "$TITLE"
+       sleep 1
+@@ -706,7 +706,7 @@ POL_Wine_InstallVersion() {
+       echo "Server sha1 : $sha1"
+       echo "Client sha1 : $sha1_file"
+ 
+-      if [ ! "$sha1" = "$sha1_file" ] && [[ $OSX_VERSION -lt 19 ]]; then
++      if [ ! "$sha1" = "$sha1_file" ]; then
+         POL_SetupWindow_message "$(eval_gettext 'The download seems to have failed.')" "$TITLE"
+       else
+         POL_SetupWindow_wait "$(eval_gettext 'Extracting Wine...')" "$TITLE"
+diff --git a/python/wine_versions/WineVersionsTools.py b/python/wine_versions/WineVersionsTools.py
+index 69d4cf2b2..35935599b 100644
+--- a/python/wine_versions/WineVersionsTools.py
++++ b/python/wine_versions/WineVersionsTools.py
+@@ -1,6 +1,5 @@
+ import os
+ 
+-from lib import Variables
+ 
+ def fetchUserOS():
+     if (os.environ["POL_OS"] == "Mac"):
+@@ -10,7 +9,16 @@ def fetchUserOS():
+     else:
+         return "freebsd"
+ 
++
+ def architecture_is_supported(architecture_name):
++    if fetchUserOS() == "linux":
++        return architecture_name in ["x86", "amd64"]
++
++    if fetchUserOS() == "darwin":
++        if int(os.environ.get("OSX_VERSION", 0)) >= 19:
++            return architecture_name in ["x86on64", "amd64"]
++        else:
++            return architecture_name in ["x86", "amd64"]
+     return True ## FIXME
+ 
+ def fetch_supported_archs():
+diff --git a/python/wine_versions/WineVersionsWindow.py b/python/wine_versions/WineVersionsWindow.py
+index b76db0b25..2ecac3f55 100755
+--- a/python/wine_versions/WineVersionsWindow.py
++++ b/python/wine_versions/WineVersionsWindow.py
+@@ -38,29 +38,31 @@
+ class WineVersionsWindow(wx.Frame):
+     def on_available_wine_versions_downloaded(self, versions_per_architecture):
+         for architecture in versions_per_architecture:
+-            available_versions = []
+-            for version in versions_per_architecture[architecture]:
+-                available_versions.append(version["name"])
++            if architecture in fetch_supported_archs():
++                available_versions = []
++                for version in versions_per_architecture[architecture]:
++                    available_versions.append(version["name"])
+ 
+-            available_versions.sort(key=natsort.natsort_keygen())
+-            available_versions.reverse()
+-            available_versions = available_versions[:]
++                available_versions.sort(key=natsort.natsort_keygen())
++                available_versions.reverse()
++                available_versions = available_versions[:]
+ 
+-            for version in available_versions:
+-                wx.CallAfter(self.notebook.add_available_version, architecture, version)
++                for version in available_versions:
++                    wx.CallAfter(self.notebook.add_available_version, architecture, version)
+ 
+     def on_installed_wine_versions_downloaded(self, versions_per_architecture):
+         for architecture in versions_per_architecture:
+-            installed_versions = []
+-            for version in versions_per_architecture[architecture]:
+-                installed_versions.append(version["name"])
++            if architecture in fetch_supported_archs():
++                installed_versions = []
++                for version in versions_per_architecture[architecture]:
++                    installed_versions.append(version["name"])
+ 
+-            installed_versions.sort(key=natsort.natsort_keygen())
+-            installed_versions.reverse()
+-            installed_versions = installed_versions[:]
++                installed_versions.sort(key=natsort.natsort_keygen())
++                installed_versions.reverse()
++                installed_versions = installed_versions[:]
+ 
+-            for version in installed_versions:
+-                wx.CallAfter(self.notebook.add_installed_version, architecture, version)
++                for version in installed_versions:
++                    wx.CallAfter(self.notebook.add_installed_version, architecture, version)
+ 
+     def handle_error(self, error):
+         print(error)
+
+From 749917b0d0c6d439f71004fdd9bc56992bb91f14 Mon Sep 17 00:00:00 2001
+From: Quentin PARIS <git@quentin.paris>
+Date: Sun, 24 Jan 2021 15:46:44 +0100
+Subject: [PATCH 17/33] Reafctoring wine version manager code
+
+---
+ CHANGELOG.md | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index cde2d82c4..735f6114a 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -1,3 +1,6 @@
++# 4.4.2 
++* Refactored wine version window 
++
+ # 4.4
+ * Python 3 support 
+ 
+
+From c59d03b5717143b4102b70159a0d21850422ce64 Mon Sep 17 00:00:00 2001
+From: Sm0k3r <11558499+5m0k3r@users.noreply.github.com>
+Date: Thu, 3 Feb 2022 22:41:09 -0300
+Subject: [PATCH 18/33] Update playonlinux.py
+
+Avoid strings in version1 and version2 variables with isnumeric() function, and handling error with try-except block.
+---
+ python/lib/playonlinux.py | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/python/lib/playonlinux.py b/python/lib/playonlinux.py
+index 3e87d90aa..960707d91 100755
+--- a/python/lib/playonlinux.py
++++ b/python/lib/playonlinux.py
+@@ -278,11 +278,17 @@ def VersionLower(version1, version2):
+         else:
+             return False
+ 
+-    version1 = [ int(digit) for digit in version1[0].split(".")[:3] ]
++    try:
++        version1 = [ int(digit) for digit in version1[0].split(".") ]
++    except ValueError:
++        version1 = [ int(digit) for digit in version1[0].split(".") if digit.isnumeric() ]
+     while len(version1) < 3:
+         version1.append(0)
+ 
+-    version2 = [ int(digit) for digit in version2[0].split(".")[:3] ]
++    try:
++        version2 = [ int(digit) for digit in version2[0].split(".") ]
++    except ValueError:
++        version2 = [ int(digit) for digit in version2[0].split(".") if digit.isnumeric() ]
+     while len(version2) < 3:
+         version2.append(0)
+ 
+
+From 216c4489ad41546c615fcd5732d6c9c5c8f31530 Mon Sep 17 00:00:00 2001
+From: Sm0k3r <11558499+5m0k3r@users.noreply.github.com>
+Date: Thu, 3 Feb 2022 22:47:54 -0300
+Subject: [PATCH 19/33] Update playonlinux.py
+
+Workaround for non-numeric characters in list version1 and version2 without error handling to keep simple.
+---
+ python/lib/playonlinux.py | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/python/lib/playonlinux.py b/python/lib/playonlinux.py
+index 960707d91..fa9b90fb9 100755
+--- a/python/lib/playonlinux.py
++++ b/python/lib/playonlinux.py
+@@ -278,17 +278,11 @@ def VersionLower(version1, version2):
+         else:
+             return False
+ 
+-    try:
+-        version1 = [ int(digit) for digit in version1[0].split(".") ]
+-    except ValueError:
+-        version1 = [ int(digit) for digit in version1[0].split(".") if digit.isnumeric() ]
++    version1 = [ int(digit) for digit in version1[0].split(".") if digit.isnumeric() ]
+     while len(version1) < 3:
+         version1.append(0)
+ 
+-    try:
+-        version2 = [ int(digit) for digit in version2[0].split(".") ]
+-    except ValueError:
+-        version2 = [ int(digit) for digit in version2[0].split(".") if digit.isnumeric() ]
++    version2 = [ int(digit) for digit in version2[0].split(".") if digit.isnumeric() ]
+     while len(version2) < 3:
+         version2.append(0)
+ 
+
+From 4e3235a5bb9b2df61f287f9326856545f9e535a5 Mon Sep 17 00:00:00 2001
+From: Eduardo Mozart de Oliveira
+ <2974895+eduardomozart@users.noreply.github.com>
+Date: Thu, 12 May 2022 09:15:59 -0300
+Subject: [PATCH 20/33] Fix XQuartz URL
+
+XQuartz fails to install into macOS
+---
+ bash/startup_after_server | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bash/startup_after_server b/bash/startup_after_server
+index aa07a4ee9..e7486339c 100755
+--- a/bash/startup_after_server
++++ b/bash/startup_after_server
+@@ -30,7 +30,7 @@ export XQUARTZ_VERSION="2.7.11"
+ install_x11()
+ {
+ 
+-	XQuartzUrl="http://dl.bintray.com/xquartz/downloads/XQuartz-$XQUARTZ_VERSION.dmg"
++	XQuartzUrl="https://github.com/XQuartz/XQuartz/releases/download/XQuartz-$XQUARTZ_VERSION/XQuartz-$XQUARTZ_VERSION.dmg"
+ 	FilePrefix="XQuartz"
+ 
+ 	STEP_TITLE="XQuartz"
+
+From 8ff01f341925a3673d4a1de8512d9e2372a4d9e2 Mon Sep 17 00:00:00 2001
+From: Eduardo Mozart de Oliveira
+ <2974895+eduardomozart@users.noreply.github.com>
+Date: Thu, 12 May 2022 09:53:09 -0300
+Subject: [PATCH 21/33] Update lng.py
+
+Fix playonlinux-bash exec on macOS Monterey
+---
+ python/lib/lng.py | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/python/lib/lng.py b/python/lib/lng.py
+index a390d920b..5fb161c3c 100755
+--- a/python/lib/lng.py
++++ b/python/lib/lng.py
+@@ -18,12 +18,15 @@ def __init__(self):
+             languages = os.listdir(Variables.playonlinux_env+'/lang/locale')
+ 
+         if(os.environ["POL_OS"] == "Mac"):
+-            wxLocale = wx.Locale().FindLanguageInfo(os.environ["RLANG"])
+-
+-            if wxLocale is not None:
+-                langid = wx.Locale().FindLanguageInfo(os.environ["RLANG"]).Language
+-            else:
+-                langid = wx.LANGUAGE_DEFAULT
++            try:
++                wxLocale = wx.Locale().FindLanguageInfo(os.environ["RLANG"])
++
++                if wxLocale is not None:
++                    langid = wx.Locale().FindLanguageInfo(os.environ["RLANG"]).Language
++                else:
++                    langid = wx.LANGUAGE_DEFAULT
++            except:
++                langid = wx.LANGUAGE_DEFAULT 
+         else:
+             langid = wx.LANGUAGE_DEFAULT
+ 
+
+From 9a27c8f4f1c1458388ae0468ccdbd758169a8ee6 Mon Sep 17 00:00:00 2001
+From: Eduardo Mozart de Oliveira
+ <2974895+eduardomozart@users.noreply.github.com>
+Date: Thu, 12 May 2022 15:53:54 -0300
+Subject: [PATCH 22/33] Update Makefile to macOS
+
+Now macOS can also run the make command
+---
+ Makefile | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index a8d81b892..115d2698c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -20,9 +20,18 @@
+ # DESTDIR -- Where you want to install
+ #
+ 
+-CFLAGS ?= -O2
++ifeq ($(shell uname -s),Darwin)
++    CFLAGS ?= -O2 -I/opt/X11/include
++    LFLAGS ?= -L/opt/X11/lib -lGL -lX11
++    PYTHON = python2.7 -m py_compile
++    SED = sed -i '' -e
++else
++    CFLAGS ?= -O2 
++    CFLAGS ?= -lGL -lX11
++    PYTHON = python2 -m py_compile
++    SED = sed -i
++endif
+ CC = gcc $(CFLAGS)
+-PYTHON = python2 -m py_compile
+ GZIP = gzip
+ SHELL := /bin/bash
+ 
+@@ -45,14 +54,14 @@ clean:
+ 	$(RM) ./ChangeLog
+ 
+ build:
+-	$(CC) ./src/check_direct_rendering.c -o ./bin/playonlinux-check_dd -lGL -lX11
++	$(CC) ./src/check_direct_rendering.c -o ./bin/playonlinux-check_dd $(LFLAGS)
+ 	$(PYTHON) ./python/*.py
+ 	$(PYTHON) ./python/lib/*.py
+ 	echo -e '#!/bin/bash\nGDK_BACKEND=x11 ${sharedir}/playonlinux/playonlinux "$$@"\nexit 0' > ./bin/playonlinux
+ 	echo -e '#!/bin/bash\n${sharedir}/playonlinux/playonlinux-pkg "$$@"\nexit 0' > ./bin/playonlinux-pkg
+ 	chmod +x ./bin/playonlinux
+ 	chmod +x ./bin/playonlinux-pkg
+-	sed -i 's/\(\["DEBIAN_PACKAGE"\]\s*=\s*\)"FALSE"/\1"TRUE"/' \
++	$(SED) 's/\(\["DEBIAN_PACKAGE"\]\s*=\s*\)"FALSE"/\1"TRUE"/' \
+ 		./python/lib/Variables.py
+ 
+ install:
+@@ -81,3 +90,4 @@ changelog:
+ 	(GIT_DIR=.git git log > .changelog.tmp && mv .changelog.tmp ChangeLog; rm -f .changelog.tmp) || (touch ChangeLog; echo 'git directory not found: installing possibly empty changelog.' >&2)
+ 
+ .PHONY: all clean build install changelog
++
+
+From 5c73ed1ee23ba2e51701094e366f5cbced1febb5 Mon Sep 17 00:00:00 2001
+From: Mathieu Parent <math.parent@gmail.com>
+Date: Tue, 20 Dec 2022 10:20:25 +0100
+Subject: [PATCH 23/33] Use more powerful discrete GPU if available
+
+See https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+---
+ etc/PlayOnLinux.desktop | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/etc/PlayOnLinux.desktop b/etc/PlayOnLinux.desktop
+index 490108c11..53cd42f94 100644
+--- a/etc/PlayOnLinux.desktop
++++ b/etc/PlayOnLinux.desktop
+@@ -6,3 +6,4 @@ Type=Application
+ Exec=playonlinux %F
+ Icon=playonlinux
+ Categories=Utility;Emulator;
++PrefersNonDefaultGPU=true
+
+From 73ff1df924c1b7bdc4e93a5a328b287097d8ccc4 Mon Sep 17 00:00:00 2001
+From: andrey <32988305+vostok01@users.noreply.github.com>
+Date: Sat, 31 Dec 2022 23:16:18 +0300
+Subject: [PATCH 24/33] BUG FIX: CFLAGS renamed to LFLAGS in Makefile.
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 115d2698c..4c08a96fe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,7 +27,7 @@ ifeq ($(shell uname -s),Darwin)
+     SED = sed -i '' -e
+ else
+     CFLAGS ?= -O2 
+-    CFLAGS ?= -lGL -lX11
++    LFLAGS ?= -lGL -lX11
+     PYTHON = python2 -m py_compile
+     SED = sed -i
+ endif
+
+From d6cd7ff69228da88ad90743c7d65228194938036 Mon Sep 17 00:00:00 2001
+From: Nrezinorn <nrezinorn@gmail.com>
+Date: Mon, 19 Jun 2023 07:49:23 -0700
+Subject: [PATCH 25/33] Fix Mac WINE VersionFetcher and bump versioning to
+ 4.4.3
+
+---
+ python/lib/Variables.py                     | 5 +++--
+ python/wine_versions/WineVersionsFetcher.py | 7 +++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/python/lib/Variables.py b/python/lib/Variables.py
+index dbe2ab719..26e234a53 100755
+--- a/python/lib/Variables.py
++++ b/python/lib/Variables.py
+@@ -17,7 +17,7 @@
+ os.environ["POL_PORT"] = "0"
+ os.environ["PLAYONLINUX"] = os.path.realpath(os.path.realpath(__file__)+"/../../../")
+ os.environ["SITE"] = "http://repository.playonlinux.com"
+-os.environ["VERSION"] = "4.4.1"
++os.environ["VERSION"] = "4.4.3"
+ os.environ["POL_ID"] = str(random.randint(1, 100000000))
+ os.environ["GECKO_SITE"] = "http://wine.playonlinux.com/gecko"
+ os.environ["MONO_SITE"] = "http://wine.playonlinux.com/mono"
+@@ -39,6 +39,7 @@
+     windows_add_playonmac = 1
+     widget_borders = wx.SIMPLE_BORDER
+     os_name = "darwin"
++    ca_file = '../../lib/python3.8/certifi/cacert.pem' 
+     os.environ["POL_WGET"] = "wget --prefer-family=IPv4 -q --no-check-certificate"
+ 
+ # Variables PlayOnLinux
+@@ -119,7 +120,7 @@
+ 
+     os.environ["PATH"] = os.environ["PLAYONLINUX"]+"/../unix/wine/bin:" + os.environ["PLAYONLINUX"]+"/../unix/image_magick/bin:" + os.environ["PLAYONLINUX"]+"/../unix/tools/bin/:" + os.environ["PATH"]
+ 
+-    os.environ["WRITE_LD"] = os.environ["LD_LIBRARY_PATH"]
++    os.environ["WRITE_LD"] = os.environ["LD_LIBRARY_PATH"] + ":" + os.environ["PLAYONLINUX"]+"/../unix/wine/lib"
+     os.environ["DYLD_FALLBACK_LIBRARY_PATH"] =  os.environ["PLAYONLINUX"]+"/../unix/wine/lib"
+     os.environ["WRITE_DYLD_FALLBACK_LIBRARY_PATH"] =  os.environ["PLAYONLINUX"]+"/../unix/wine/lib"
+     os.environ["FREETYPE_PROPERTIES"]="truetype:interpreter-version=35"
+diff --git a/python/wine_versions/WineVersionsFetcher.py b/python/wine_versions/WineVersionsFetcher.py
+index fd758798e..61605227c 100644
+--- a/python/wine_versions/WineVersionsFetcher.py
++++ b/python/wine_versions/WineVersionsFetcher.py
+@@ -18,10 +18,13 @@ def fetch_all_available_wine_version(self, callback, error):
+ 
+     def _sync_fetch_all_available_wine_versions(self, callback, error):
+         wine_version_url = "https://phoenicis.playonlinux.com/index.php/wine?os=%s" % self.operating_system
+-        print("Donwloading %s " % wine_version_url)
++        print("Downloading %s " % wine_version_url)
+         try:
+             request = urllib.request.Request(wine_version_url, None, {'User-Agent': Variables.userAgent})
+-            handle = urllib.request.urlopen(request, timeout=5)
++            if self.operating_system == 'darwin':
++                handle = urllib.request.urlopen(request, cafile='../../lib/python3.8/certifi/cacert.pem', timeout=5)
++            else:
++                handle = urllib.request.urlopen(request, timeout=5)
+             callback(self._convert_phoenicis_wine_versions_to_v4(json.load(handle)))
+         except Exception as e:
+             error(traceback.format_exc())
+
+From d32c012ac74b6b05df815dac5da948b648d09908 Mon Sep 17 00:00:00 2001
+From: "Dr. Nick" <das-intensity@users.noreply.github.com>
+Date: Sun, 2 Jul 2023 17:31:26 -0400
+Subject: [PATCH 26/33] Fixed debug message in POL_Wine_SetVersionEnv to log
+ using POL_Debug_Message
+
+---
+ lib/wine.lib | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/wine.lib b/lib/wine.lib
+index 43475f310..3bf118765 100755
+--- a/lib/wine.lib
++++ b/lib/wine.lib
+@@ -837,7 +837,7 @@ POL_Wine_SetVersionEnv() {
+         POL_Wine_InstallVersion "$POL_WINEVERSION"
+         [[ "$?" == 2 ]] && return 0
+       fi
+-      echo "Setting paths..."
++      POL_Debug_Message "Setting paths..."
+       export PATH="$WINEDIR/$POL_WINEVERSION/bin/:$PATH"
+       [ "$POL_OS" = "Mac" ] && export DYLD_FALLBACK_LIBRARY_PATH="$WINEDIR/$POL_WINEVERSION/lib/"
+       export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
+
+From fb88137286798d492691a95ea0c36b3148fd0290 Mon Sep 17 00:00:00 2001
+From: Ji-Ho Lee <search5@gmail.com>
+Date: Thu, 10 Aug 2023 17:29:19 +0900
+Subject: [PATCH 27/33] Patch function execution error caused by the deletion
+ of the which command in Debian 12
+
+---
+ bash/find_python     | 2 +-
+ lib/playonlinux.lib  | 8 ++++----
+ lib/scripts.lib      | 2 +-
+ lib/variables        | 6 +++---
+ lib/wine.lib         | 4 ++--
+ python/mainwindow.py | 3 ++-
+ 6 files changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/bash/find_python b/bash/find_python
+index 811b6c044..5ccf19125 100755
+--- a/bash/find_python
++++ b/bash/find_python
+@@ -26,7 +26,7 @@ search_python () {
+ 		fi                   
+ 	
+ 		echo -n "Looking for $POL_PYTHON... " 1>&2
+-		if [ "$(which $POL_PYTHON)" ]; then
++		if [ "$(command -v $POL_PYTHON)" ]; then
+ 			local Version=$($POL_PYTHON --version 2>&1 |tail -n 1|sed -e 's/^Python //')
+ 			echo -n "$Version - " 1>&2
+ 			case "$Version" in
+diff --git a/lib/playonlinux.lib b/lib/playonlinux.lib
+index 10be6b488..d28466f8e 100755
+--- a/lib/playonlinux.lib
++++ b/lib/playonlinux.lib
+@@ -916,16 +916,16 @@ POL_Sudo()
+ 		fi
+ 		if [ "$POL_OS" = "Linux" ]; then
+ 			# Now, we detect what sudo to use
+-			if which gksudo; then
++			if command -v gksudo; then
+ 				SUDO_COMMAND="gksudo --"
+ 				unset gksudo
+-			elif which gksu; then
++			elif command -v gksu; then
+ 				SUDO_COMMAND="gksu --"
+ 				unset gksu
+-			elif which kdesu; then
++			elif command -v kdesu; then
+ 				SUDO_COMMAND="kdesu --"
+ 				unset kdesu
+-			elif which sudo; then
++			elif command -v sudo; then
+ 				SUDO_COMMAND="$POL_TERM -e sudo"
+ 				unset sudo
+ 			else
+diff --git a/lib/scripts.lib b/lib/scripts.lib
+index 4fd3fb5c5..23c576613 100755
+--- a/lib/scripts.lib
++++ b/lib/scripts.lib
+@@ -737,7 +737,7 @@ POL_System_ExtractSingleFile ()
+     local archivename=`basename "$archive"`
+     local filename=`basename "$file"`
+     local szpid
+-    local szip=`which 7z`
++    local szip=`command -v 7z`
+ 
+     POL_Debug_Message "Extracting single file : \"$archive\", \"$file\", \"$dest\""
+ 
+diff --git a/lib/variables b/lib/variables
+index 9c16fe1a7..130acc856 100755
+--- a/lib/variables
++++ b/lib/variables
+@@ -31,7 +31,7 @@ POL_Config_pRead (){ cat "$POL_USER_ROOT/playonlinux.cfg" 2> /dev/null | grep "^
+ alias find="find -H"
+ 
+ ### Security feature
+-[ "$(which sudo)" ] && sudo -k 2> /dev/null
++[ "$(command -v sudo)" ] && sudo -k 2> /dev/null
+ 
+ ### Terminal
+ # User override, must support -T to set title and -e to run a command
+@@ -53,7 +53,7 @@ fi
+ export POL_TERM
+ 
+ ### Desktop
+-[ "$(which xdg-user-dir)" ] && export DESKTOP="$(xdg-user-dir DESKTOP)" || export DESKTOP="$HOME/Desktop"
++[ "$(command -v xdg-user-dir)" ] && export DESKTOP="$(xdg-user-dir DESKTOP)" || export DESKTOP="$HOME/Desktop"
+ 
+ ### Override ~/.wgetrc
+ export WGETRC="$POL_USER_ROOT/configurations/wgetrc"
+@@ -70,7 +70,7 @@ else
+ 	eval_gettext() { printf "$@"; }
+ fi
+ 
+-which shasum > /dev/null 2> /dev/null || shasum () { sha1sum "$@"; }
++command -v shasum > /dev/null 2> /dev/null || shasum () { sha1sum "$@"; }
+ 
+ 
+ if [ "$POL_OS" == "Linux" ]
+diff --git a/lib/wine.lib b/lib/wine.lib
+index 3bf118765..8756cdcd3 100755
+--- a/lib/wine.lib
++++ b/lib/wine.lib
+@@ -989,13 +989,13 @@ POL_Wine_PrefixCreate() {
+ 
+       POL_Debug_InitPrefix
+ 
+-      which wineprefixcreate && [ "$(POL_MD5_file "$(which wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(which wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
++      command -v wineprefixcreate && [ "$(POL_MD5_file "$(which wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(which wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
+       wine wineboot
+     fi
+   fi
+ 
+   # Make sure that .reg files are created
+-  if which wineserver; then
++  if command -v wineserver; then
+     wineserver -w
+   else
+     POL_Debug_Message "Warning, wineserver not found"
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index c8fe11160..c379d2ae5 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -1216,7 +1216,8 @@ def OnInit(self):
+     def _executableFound(self, executable):
+         devnull = open('/dev/null', 'wb')
+         try:
+-            returncode = subprocess.call(["which", executable], stdout=devnull)
++            executable_path = shutil.which(executable)
++            returncode = subprocess.call(executable_path, stdout=devnull)
+             return (returncode == 0)
+         except:
+             return False
+
+From 5a2921ee19d352dfe25a8c0c210cdc2404fbf017 Mon Sep 17 00:00:00 2001
+From: Jiho Persy Lee <search5@gmail.com>
+Date: Thu, 10 Aug 2023 17:55:53 +0900
+Subject: [PATCH 28/33] Update mainwindow.py
+
+missing import add
+---
+ python/mainwindow.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index c379d2ae5..cbb76dda1 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -27,6 +27,7 @@
+ import time
+ import urllib.parse
+ import webbrowser
++import shtil
+ 
+ try:
+     os.environ["POL_OS"]
+
+From 5c263bf0c32b999cdb636555d0de84af6657396e Mon Sep 17 00:00:00 2001
+From: Jiho Persy Lee <search5@gmail.com>
+Date: Thu, 10 Aug 2023 17:56:54 +0900
+Subject: [PATCH 29/33] Update mainwindow.py
+
+missing module import and import name fix.
+---
+ python/mainwindow.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index cbb76dda1..7bc695a98 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -27,7 +27,7 @@
+ import time
+ import urllib.parse
+ import webbrowser
+-import shtil
++import shutil
+ 
+ try:
+     os.environ["POL_OS"]
+
+From 399ff28da15936c44ddc1290577b847d05cb71b2 Mon Sep 17 00:00:00 2001
+From: Jiho Persy Lee <search5@gmail.com>
+Date: Tue, 15 Aug 2023 15:04:46 +0900
+Subject: [PATCH 30/33] Update wine.lib
+
+fix missing which command
+---
+ lib/wine.lib | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/wine.lib b/lib/wine.lib
+index 8756cdcd3..3ae916b17 100755
+--- a/lib/wine.lib
++++ b/lib/wine.lib
+@@ -989,7 +989,7 @@ POL_Wine_PrefixCreate() {
+ 
+       POL_Debug_InitPrefix
+ 
+-      command -v wineprefixcreate && [ "$(POL_MD5_file "$(which wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(which wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
++      command -v wineprefixcreate && [ "$(POL_MD5_file "$(command -v wineprefixcreate)")" != "5c0ee90682746e811698a53415b4765d" ] && [ ! "$(command -v wineprefixcreate | grep $APPLICATION_TITLE)" = "" ] && wine wineprefixcreate
+       wine wineboot
+     fi
+   fi
+
+From 79c513fa8a1938e55be0a239121176f1415049fc Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert-scheck@users.noreply.github.com>
+Date: Sun, 26 May 2024 20:32:53 +0200
+Subject: [PATCH 31/33] Remove unused import of deprecated Python
+ asyncore.dispatcher
+
+---
+ python/options.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/python/options.py b/python/options.py
+index f40f26a70..e18ddb32b 100755
+--- a/python/options.py
++++ b/python/options.py
+@@ -18,7 +18,6 @@
+ # with this program; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ 
+-from asyncore import dispatcher
+ import os, subprocess, getopt, sys, urllib.request, signal, socket
+ import wx, time, re
+ import webbrowser, shutil
+
+From 2295948b356f8461c5642cf96dbb43d03c629210 Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert-scheck@users.noreply.github.com>
+Date: Sun, 26 May 2024 21:53:34 +0200
+Subject: [PATCH 32/33] Return based on shutil.which() instead of
+ subprocess.call()
+
+---
+ python/mainwindow.py | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/python/mainwindow.py b/python/mainwindow.py
+index 7bc695a98..331297f78 100755
+--- a/python/mainwindow.py
++++ b/python/mainwindow.py
+@@ -1215,11 +1215,8 @@ def OnInit(self):
+         return True
+ 
+     def _executableFound(self, executable):
+-        devnull = open('/dev/null', 'wb')
+         try:
+-            executable_path = shutil.which(executable)
+-            returncode = subprocess.call(executable_path, stdout=devnull)
+-            return (returncode == 0)
++            return (shutil.which(executable) is not None)
+         except:
+             return False
+ 
+
+From 10f7853c84f456f19289c22fe19a9a99f94d9dda Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert@fedoraproject.org>
+Date: Mon, 14 Oct 2024 00:00:52 +0200
+Subject: [PATCH 33/33] Replace pipes.quote() from deprecated Python pipes
+
+---
+ python/lib/playonlinux.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/python/lib/playonlinux.py b/python/lib/playonlinux.py
+index fa9b90fb9..b39f8a9a9 100755
+--- a/python/lib/playonlinux.py
++++ b/python/lib/playonlinux.py
+@@ -5,7 +5,7 @@
+ 
+ from . import Variables
+ import os
+-import subprocess, shlex, pipes, wx
++import subprocess, shlex, wx
+ import natsort
+ 
+ def winpath(script, path):
+@@ -373,7 +373,7 @@ def getArgs(shortcut): # Get prefix name from shortcut
+     try:
+         args = shlex.split(fichier[i])[2:-1]
+         #print args
+-        args = " ".join([ pipes.quote(x) for x in args])
++        args = " ".join([ shlex.quote(x) for x in args])
+         #print args
+     except:
+         args = ""
+@@ -432,7 +432,7 @@ def writeArgs(game, args):
+                 old_string = shlex.split(fichier[i])
+                 new_string = shlex.split(str(args))
+                 new_string = old_string[0:2] + new_string
+-                new_string = " ".join([ pipes.quote(x) for x in new_string])
++                new_string = " ".join([ shlex.quote(x) for x in new_string])
+ 
+                 new_string = new_string+' "$@"'
+                 line.append(new_string)

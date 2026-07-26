@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>valeronoi.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Valeronoi</name>
+  <summary> A WiFi mapping companion app for Valetudo</summary>
+  <description>
+    <p>
+      Valeronoi (Valetudo + Voronoi) is a companion for Valetudo for generating
+      WiFi signal strength maps. It visualizes them using a Voronoi diagram.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/ccoors/Valeronoi/main/assets/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/ccoors/Valeronoi</url>
+  <content_rating type="oars-1.1" />
+</component>

@@ -1,0 +1,343 @@
+diff --git a/.gitmodules b/.gitmodules
+index 1bb4d48..5dd42f2 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -1,3 +1,3 @@
+ [submodule "support"]
+ 	path = support
+-	url = git@github.com:Pulse-Eight/libcec-support.git
++	url = https://github.com/Pulse-Eight/libcec-support.git
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7144b0b..f5b2ff8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,7 +13,7 @@ set(p8-platform_NAME p8-platform)
+ set(p8-platform_DESCRIPTION "Pulse-Eight platform support library")
+ set(p8-platform_VERSION_MAJOR 2)
+ set(p8-platform_VERSION_MINOR 1)
+-set(p8-platform_VERSION_PATCH 0)
++set(p8-platform_VERSION_PATCH 1)
+ 
+ set(CMAKE_POSITION_INDEPENDENT_CODE on)
+ 
+@@ -23,9 +23,9 @@ if(WIN32)
+ endif()
+ 
+ set(p8-platform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/p8-platform")
+-IF(WIN32)
++if(WIN32)
+   LIST(APPEND p8-platform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/p8-platform/windows")
+-ENDIF(WIN32)
++endif(WIN32)
+ set(p8-platform_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+ 
+ if(NOT ${CORE_SYSTEM_NAME} STREQUAL "")
+@@ -38,23 +38,47 @@ set(SOURCES src/util/StringUtils.cpp)
+ 
+ add_library(p8-platform ${SOURCES} ${PLAT_SOURCES})
+ target_link_libraries(p8-platform ${p8-platform_LIBRARIES})
+-set_target_properties(p8-platform PROPERTIES VERSION ${p8-platform_VERSION_MAJOR}.${p8-platform_VERSION_MINOR}.${p8-platform_VERSION_PATCH}
+-                                              SOVERSION ${p8-platform_VERSION_MAJOR})
++set_target_properties(p8-platform
++    PROPERTIES
++    VERSION ${p8-platform_VERSION_MAJOR}.${p8-platform_VERSION_MINOR}.${p8-platform_VERSION_PATCH}
++    SOVERSION ${p8-platform_VERSION_MAJOR})
++
++if(WIN32)
++  if (MSVC)
++    # generate pdb in release mode too
++    set_target_properties(p8-platform
++        PROPERTIES
++        COMPILE_PDB_NAME_DEBUG p8-platform${CMAKE_DEBUG_POSTFIX}
++        COMPILE_PDB_NAME_RELEASE p8-platform
++        COMPILE_PDB_NAME_MINSIZEREL p8-platform
++        COMPILE_PDB_NAME_RELWITHDEBINFO p8-platform)
++
++    if (${WIN64})
++      # default setting that got removed in recent vs versions, generates a warning if set
++      string(REPLACE "/arch:SSE2" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
++    endif(${WIN64})
++
++  endif(MSVC)
++
++  if (NOT ${WIN64})
++    add_definitions(-D_USE_32BIT_TIME_T)
++  endif(NOT ${WIN64})
++endif(WIN32)
+ 
+ install(TARGETS p8-platform DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ install(FILES src/os.h DESTINATION include/p8-platform)
+-IF(WIN32)
+-  INSTALL(FILES src/windows/dlfcn-win32.h
++if(WIN32)
++  install(FILES src/windows/dlfcn-win32.h
+                 src/windows/os-socket.h
+                 src/windows/os-threads.h
+                 src/windows/os-types.h
+           DESTINATION include/p8-platform/windows)
+-ELSE(WIN32)
++else(WIN32)
+   install(FILES src/posix/os-socket.h
+                 src/posix/os-threads.h
+                 src/posix/os-types.h
+           DESTINATION include/p8-platform/posix)
+-ENDIF(WIN32)
++endif(WIN32)
+ install(FILES src/sockets/cdevsocket.h
+               src/sockets/socket.h
+               src/sockets/tcp.h
+@@ -71,11 +95,17 @@ install(FILES src/util/atomic.h
+               src/util/util.h
+         DESTINATION include/p8-platform/util)
+ 
+-IF(NOT WIN32)
++if(MSVC)
++  # install generated pdb
++  install(FILES $<TARGET_FILE_DIR:p8-platform>/p8-platform.pdb
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++endif(MSVC)
++
++if(NOT WIN32)
+   configure_file(p8-platform.pc.in p8-platform.pc @ONLY)
+   install(FILES ${CMAKE_BINARY_DIR}/p8-platform.pc
+           DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+-ENDIF(NOT WIN32)
++endif(NOT WIN32)
+ 
+ # config mode
+ configure_file (p8-platform-config.cmake.in
+diff --git a/README.md b/README.md
+index 02de9cd..25af515 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,38 @@
+-# platform
+-Platform support library used by libCEC and binary add-ons for Kodi
++![Pulse-Eight logo](https://pulseeight.files.wordpress.com/2016/02/pulse-eight-logo-white-on-green.png?w=200)
+ 
++# About
++This library provides platform specific support for other libraries, and is used by libCEC and binary add-ons for Kodi
++
++# Supported platforms
++
++## Linux, BSD & Apple OS X
++To compile this library on Linux, you'll need the following dependencies:
++* [cmake 2.6 or better] (http://www.cmake.org/)
++* a supported C++ 11 compiler
++
++Follow these instructions to compile and install the library:
++```
++apt-get update
++apt-get install cmake build-essential
++git clone https://github.com/Pulse-Eight/platform.git
++mkdir platform/build
++cd platform/build
++cmake ..
++make -j4
++sudo make install
++sudo ldconfig
++```
++
++## Microsoft Windows
++To compile this library on Windows, you'll need the following dependencies:
++* [cmake 2.6 or better] (http://www.cmake.org/)
++* [Visual Studio 2013 (v120) or 2015 (v140)] (https://www.visualstudio.com/)
++
++Follow these instructions to compile and install the library:
++```
++git clone https://github.com/Pulse-Eight/platform.git
++cd platform
++git submodule update --init --recursive
++cd 
++build.cmd
++```
+diff --git a/p8-platform-config.cmake.in b/p8-platform-config.cmake.in
+index 47f30f1..f59418d 100644
+--- a/p8-platform-config.cmake.in
++++ b/p8-platform-config.cmake.in
+@@ -10,7 +10,7 @@
+ #
+ # propagate these properties from one build system to the other
+ set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR@.@p8-platform_VERSION_MINOR@")
+-set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
++find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
+ set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
+ set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
+ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
+@@ -19,7 +19,7 @@ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
+ if(WIN32)
+   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
+ else(WIN32)
+-  set (p8-platform_LIBRARY "-L@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
++  find_library (p8-platform_LIBRARY p8-platform)
+ endif(WIN32)
+ set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
+ mark_as_advanced (p8-platform_LIBRARY)
+diff --git a/src/threads/mutex.h b/src/threads/mutex.h
+index 8dbbffd..1ae0ef0 100644
+--- a/src/threads/mutex.h
++++ b/src/threads/mutex.h
+@@ -351,7 +351,8 @@ namespace P8PLATFORM
+     {
+       CLockObject lock(m_mutex);
+       bool bReturn(m_bSignaled);
+-      if (bReturn && (--m_iWaitingThreads == 0 || !m_bBroadcast) && m_bAutoReset)
++      --m_iWaitingThreads;
++      if (bReturn && (m_iWaitingThreads == 0 || !m_bBroadcast) && m_bAutoReset)
+         m_bSignaled = false;
+       return bReturn;
+     }
+diff --git a/src/util/StringUtils.cpp b/src/util/StringUtils.cpp
+index 510e2d5..e8effd5 100644
+--- a/src/util/StringUtils.cpp
++++ b/src/util/StringUtils.cpp
+@@ -453,7 +453,7 @@ static int isspace_c(char c)
+ 
+ std::string& StringUtils::TrimLeft(std::string &str)
+ {
+-  str.erase(str.begin(), ::find_if(str.begin(), str.end(), ::not1(::ptr_fun(isspace_c))));
++  str.erase(str.begin(), ::find_if(str.begin(), str.end(), [](char s) { return isspace_c(s) == 0; }));
+   return str;
+ }
+ 
+@@ -466,7 +466,7 @@ std::string& StringUtils::TrimLeft(std::string &str, const char* const chars)
+ 
+ std::string& StringUtils::TrimRight(std::string &str)
+ {
+-  str.erase(::find_if(str.rbegin(), str.rend(), ::not1(::ptr_fun(isspace_c))).base(), str.end());
++  str.erase(::find_if(str.rbegin(), str.rend(), [](char s) { return isspace_c(s) == 0; }).base(), str.end());
+   return str;
+ }
+ 
+@@ -668,7 +668,7 @@ vector<string> StringUtils::Split(const std::string& input, const std::string& d
+   size_t sizeS2 = delimiter.size();
+   size_t isize = input.size();
+ 
+-  vector<unsigned int> positions;
++  vector<size_t> positions;
+ 
+   newPos = input.find(delimiter, 0);
+ 
+@@ -687,11 +687,11 @@ vector<string> StringUtils::Split(const std::string& input, const std::string& d
+ 
+   // numFound is the number of delimiters which is one less
+   // than the number of substrings
+-  unsigned int numFound = positions.size();
++  size_t numFound = positions.size();
+   if (iMaxStrings > 0 && numFound >= iMaxStrings)
+     numFound = iMaxStrings - 1;
+ 
+-  for ( unsigned int i = 0; i <= numFound; i++ )
++  for ( size_t i = 0; i <= numFound; i++ )
+   {
+     string s;
+     if ( i == 0 )
+@@ -1058,7 +1058,7 @@ std::string StringUtils::CreateUUID()
+   if (!m_uuidInitialized)
+   {
+     /* use current time as the seed for rand()*/
+-    srand(time(NULL));
++    srand((unsigned int)time(NULL));
+     m_uuidInitialized = true;
+   }
+ 
+diff --git a/src/util/timeutils.h b/src/util/timeutils.h
+index f22184f..1196504 100644
+--- a/src/util/timeutils.h
++++ b/src/util/timeutils.h
+@@ -44,7 +44,7 @@
+ 
+ namespace P8PLATFORM
+ {
+-  #if defined(__WINDOWS__)
++  #if defined(__WINDOWS__) && !defined(SWIGPYTHON)
+   struct timezone
+   {
+     int	tz_minuteswest;
+@@ -68,12 +68,12 @@ namespace P8PLATFORM
+     pcur_time->tv_usec = current.millitm * 1000L;
+     if (tz)
+     {
+-      tz->tz_minuteswest = current.timezone;	/* minutes west of Greenwich  */
++      tz->tz_minuteswest = current.timezone;  /* minutes west of Greenwich  */
+       tz->tz_dsttime = current.dstflag;	      /* type of dst correction  */
+     }
+     return 0;
+   }
+-  #endif
++  #endif // defined(__WINDOWS__) && !defined(SWIGPYTHON)
+ 
+   inline int64_t GetTimeMs()
+   {
+diff --git a/windows/build-lib.cmd b/windows/build-lib.cmd
+index 5d5bf1a..fe985a7 100644
+--- a/windows/build-lib.cmd
++++ b/windows/build-lib.cmd
+@@ -11,14 +11,36 @@ SET VSVERSION=%3
+ SET INSTALLPATH=%4
+ IF [%4] == [] GOTO missingparams
+ 
++SET INSTALLPATH=%INSTALLPATH:"=%
+ SET BUILDTARGET=%INSTALLPATH%\cmake\%BUILDARCH%
+ SET TARGET=%INSTALLPATH%\%BUILDARCH%
+ 
+-call %MYDIR%..\support\windows\cmake\generate.cmd %BUILDARCH% nmake %MYDIR%..\ %BUILDTARGET% %TARGET% %BUILDTYPE% %VSVERSION% static
+-call %MYDIR%..\support\windows\cmake\build.cmd %BUILDARCH% %BUILDTARGET% %VSVERSION%
+-goto exit
++rem Check support submodule
++IF NOT EXIST "%MYDIR%..\support\windows\cmake\build.cmd" (
++  rem Try to init the git submodules
++  cd "%MYDIR%.."
++  git submodule update --init -r >nul 2>&1
++
++  IF NOT EXIST "%MYDIR%..\support\windows\cmake\build.cmd" (
++    ECHO.*** support git submodule has not been checked out ***
++    ECHO.
++    ECHO.See docs\README.windows.md
++    EXIT /b 2
++  )
++)
++
++CALL "%MYDIR%..\support\windows\cmake\generate.cmd" %BUILDARCH% nmake "%MYDIR%..\" "%BUILDTARGET%" "%TARGET%" %BUILDTYPE% %VSVERSION% static
++CALL "%MYDIR%..\support\windows\cmake\build.cmd" %BUILDARCH% "%BUILDTARGET%" %VSVERSION%
++GOTO exit
+ 
+ :missingparams
+-echo "build-lib.cmd requires 4 parameters"
++ECHO.%~dp0 requires 4 parameters
++ECHO.  %~dp0 [architecture] [type] [version] [install path]
++ECHO.
++ECHO. architecture:    amd64 x86
++ECHO. type:            Release Debug
++ECHO. version:         Visual Studio version (2019)
++ECHO. install path:    installation path without quotes
++exit /b 99
+ 
+-:exit
+\ No newline at end of file
++:exit
+diff --git a/windows/build.cmd b/windows/build.cmd
+index 1f796a6..9bf76fb 100644
+--- a/windows/build.cmd
++++ b/windows/build.cmd
+@@ -6,13 +6,15 @@ SETLOCAL
+ 
+ SET MYDIR=%~dp0
+ SET BUILDTYPE=Release
+-SET VSVERSION=12
++SET VSVERSION=2019
+ SET INSTALLPATH=%MYDIR%..\build
+ 
+-rmdir %MYDIR%..\build /s /q
++IF EXIST "%MYDIR%..\build" (
++  RMDIR /s /q "%MYDIR%..\build"
++)
+ 
+-for %%T in (amd64 x86) do (
+-  call %MYDIR%\build-lib.cmd %%T %BUILDTYPE% %VSVERSION% %INSTALLPATH%
++FOR %%T IN (amd64 x86) DO (
++  CALL "%MYDIR%\build-lib.cmd" %%T %BUILDTYPE% %VSVERSION% "%INSTALLPATH%"
+ )
+ 
+-rmdir %MYDIR%..\build\cmake /s /q
++RMDIR /s /q "%MYDIR%..\build\cmake"

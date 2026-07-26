@@ -1,0 +1,11 @@
+--- stripesnoop-1.5/ss.cpp.BAD	2005-08-04 16:46:51.000000000 -0500
++++ stripesnoop-1.5/ss.cpp	2005-08-04 16:46:57.000000000 -0500
+@@ -61,7 +61,7 @@
+ #endif
+ 
+ #ifdef LINUX
+- #include <sys/io.h>
++ #include <asm/io.h>
+  #include <unistd.h>
+  #define Inp32 inb
+ #endif

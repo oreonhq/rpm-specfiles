@@ -1,0 +1,43 @@
+diff -urp '--exclude=*~' rb-readline-0.5.5.orig/lib/rbreadline.rb rb-readline-0.5.5/lib/rbreadline.rb
+--- rb-readline-0.5.5.orig/lib/rbreadline.rb	2025-12-27 11:40:05.074141028 +0900
++++ rb-readline-0.5.5/lib/rbreadline.rb	2025-12-27 12:11:43.820874972 +0900
+@@ -1126,6 +1126,7 @@ module RbReadline
+         @directory = nil
+       end
+ 
++      text = text.dup
+       text.delete!(0.chr)
+       if text.length == 0
+         @dirname = "."
+@@ -2396,7 +2397,7 @@ module RbReadline
+     require 'strscan'
+ 
+     ss = StringScanner.new(seq)
+-    new_seq = ''
++    new_seq = +''
+ 
+     until ss.eos?
+       char = ss.getch
+@@ -7003,7 +7004,7 @@ module RbReadline
+ 
+     # First, the basic settings to put us into character-at-a-time, no-echo
+     #   input mode.
+-    setting = " -echo -icrnl cbreak"
++    setting = +" -echo -icrnl cbreak"
+ 
+     # If this terminal doesn't care how the 8th bit is used, then we can
+     #   use it for the meta-key.  If only one of even or odd parity is
+diff -urp '--exclude=*~' rb-readline-0.5.5.orig/test/test_rbreadline.rb rb-readline-0.5.5/test/test_rbreadline.rb
+--- rb-readline-0.5.5.orig/test/test_rbreadline.rb	2025-12-27 11:40:05.077775703 +0900
++++ rb-readline-0.5.5/test/test_rbreadline.rb	2025-12-27 12:13:52.426883044 +0900
+@@ -11,8 +11,8 @@ class TestRbReadline < Minitest::Test
+     encoding_name = RbReadline.instance_variable_get(:@encoding_name)
+     RbReadline.instance_variable_set(:@encoding_name, Encoding.find('UTF-8'))
+ 
+-    assert_equal(0, RbReadline._rl_adjust_point("a".force_encoding('ASCII-8BIT'), 0))
+-    assert_equal(0, RbReadline._rl_adjust_point("a".force_encoding('ASCII-8BIT'), 1))
++    assert_equal(0, RbReadline._rl_adjust_point("a".dup.force_encoding('ASCII-8BIT'), 0))
++    assert_equal(0, RbReadline._rl_adjust_point("a".dup.force_encoding('ASCII-8BIT'), 1))
+     assert_equal(0, RbReadline._rl_adjust_point(("a" * 40).force_encoding('ASCII-8BIT'), 0))
+     assert_equal(0, RbReadline._rl_adjust_point(("a" * 40).force_encoding('ASCII-8BIT'), 40))
+     assert_equal(2, RbReadline._rl_adjust_point(("\u3042" * 10).force_encoding('ASCII-8BIT'), 1))

@@ -1,0 +1,309 @@
+--- rarpd/Makefile.jj	Sat Nov  7 15:29:54 1998
++++ rarpd/Makefile	Fri Apr  7 10:40:29 2000
+@@ -1,7 +1,7 @@
+ CC=gcc
+ CFLAGS=-O2 -Wall -g $(DEFINES)
+ 
+-OBJ=rarpd.o ethernet.o
++OBJ=rarpd.o
+ 
+ all: rarpd
+ 
+--- rarpd/rarpd.8.jj	Thu Jan  1 01:00:00 1970
++++ rarpd/rarpd.8	Fri Apr  7 10:47:16 2000
+@@ -0,0 +1,69 @@
++.TH RARP 8 "7 April 2000" "rarpd" "Linux Programmer's Manual"
++.SH NAME
++rarpd \- Reverse Address Resolution Protocol (RARP) daemon
++.SH SYNOPSIS
++.B "rarpd [-aAvde] [-b bootdir ] [ interface ]"
++.SH DESCRIPTION
++.B Rarpd
++is a daemon which responds to RARP requests.
++RARP is used by some machines at boot time to discover their IP address.
++They provide their Ethernet address and
++.B rarpd
++responds with their IP address if it finds it in the ethers database
++(either
++.I /etc/ethers
++file or NIS+ lookup) and using DNS lookup if ethers database
++contains a hostname and not an IP address.
++By default
++.B rarpd
++also checks if a bootable image with a name starting with the IP address
++in hexadecimal uppercase letters is present in the TFTP boot directory
++(usually
++.I /tftpboot
++) before it decides to respond to the RARP request.
++.SH OPTIONS
++.TP
++.B \-a
++Do not bind to the interface.
++.TP
++.B \-A
++Respond to ARP as well as RARP requests.
++.TP
++.B \-v
++Tell the user what is going on by being verbose.
++.TP
++.B \-d
++Debugging mode. Do not detach from the tty.
++.TP
++.B \-e
++Skip the check for bootable image in the TFTP boot directory. If not
++present, then even if the Ethernet address is present in
++the ethers database but the bootable image for the resolved IP does not exist,
++.B rarpd
++will not respond to the request.
++.TP
++.B "\-b bootdir"
++Use
++.I bootdir
++instead of the default
++.I /tftpboot
++as the TFTP boot directory for bootable image checks.
++.SH OBSOLETES
++This
++.B rarpd
++obsoletes kernel
++.B rarp
++daemon present in Linux kernels up to 2.2 which was controlled by the
++rarp(8) command.
++.SH FILES
++.I /etc/ethers,
++.br
++.I /etc/nsswitch.conf,
++.br
++.I /tftpboot
++.SH SEE ALSO
++ethers(5)
++.SH AUTHORS
++Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
++.br
++Jakub Jelinek, <jakub@redhat.com>
+--- rarpd/rarpd.c.jj	Sat Nov  7 15:48:40 1998
++++ rarpd/rarpd.c	Fri Apr  7 15:35:44 2000
+@@ -7,6 +7,7 @@
+  *		2 of the License, or (at your option) any later version.
+  *
+  * Authors:	Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
++ *		Jakub Jelinek, <jakub@redhat.com>
+  */
+ 
+ #include <stdio.h>
+@@ -26,6 +27,8 @@
+ #include <net/if.h>
+ #include <net/if_arp.h>
+ #include <netinet/in.h>
++#include <netinet/ether.h>
++#include <asm/types.h>
+ #include <linux/if_packet.h>
+ #include <linux/filter.h>
+ 
+@@ -39,27 +42,26 @@
+ int all_ifaces;
+ int listen_arp;
+ char *ifname;
+-char *tftp_dir = "/etc/tftpboot";
++char *tftp_dir = "/tftpboot";
+ 
+-extern int ether_ntohost(char *name, unsigned char *ea);
+ void usage(void) __attribute__((noreturn));
+ 
+-struct iflink
++struct rarpiflink
+ {
+-	struct iflink	*next;
+-	int	       	index;
+-	int		hatype;
+-	unsigned char	lladdr[16];
+-	unsigned char	name[IFNAMSIZ];
+-	struct ifaddr 	*ifa_list;
++	struct rarpiflink	*next;
++	int	       		index;
++	int			hatype;
++	unsigned char		lladdr[16];
++	unsigned char		name[IFNAMSIZ];
++	struct rarpifaddr 	*ifa_list;
+ } *ifl_list;
+ 
+-struct ifaddr
++struct rarpifaddr
+ {
+-	struct ifaddr 	*next;
+-	__u32		prefix;
+-	__u32		mask;
+-	__u32		local;
++	struct rarpifaddr 	*next;
++	__u32			prefix;
++	__u32			mask;
++	__u32			local;
+ };
+ 
+ struct rarp_map
+@@ -87,8 +89,8 @@
+ {
+ 	int fd;
+ 	struct ifreq *ifrp, *ifend;
+-	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct rarpiflink *ifl;
++	struct rarpifaddr *ifa;
+ 	struct ifconf ifc;
+ 	struct ifreq ibuf[256];
+ 
+@@ -144,7 +146,7 @@
+ 				continue;
+ 			}
+ 
+-			ifl = (struct iflink*)malloc(sizeof(*ifl));
++			ifl = (struct rarpiflink*)malloc(sizeof(*ifl));
+ 			if (ifl == NULL)
+ 				continue;
+ 			memset(ifl, 0, sizeof(*ifl));
+@@ -154,6 +156,7 @@
+ 			ifl->hatype = ifrp->ifr_hwaddr.sa_family;
+ 			memcpy(ifl->lladdr, ifrp->ifr_hwaddr.sa_data, 14);
+ 			strncpy(ifl->name, ifrp->ifr_name, IFNAMSIZ);
++			ifl->name[IFNAMSIZ-1] = 0;
+ 			p = strchr(ifl->name, ':');
+ 			if (p)
+ 				*p = 0;
+@@ -179,7 +182,7 @@
+ 		if (ifa == NULL) {
+ 			if (mask == 0 || prefix == 0)
+ 				continue;
+-			ifa = (struct ifaddr*)malloc(sizeof(*ifa));
++			ifa = (struct rarpifaddr*)malloc(sizeof(*ifa));
+ 			memset(ifa, 0, sizeof(*ifa));
+ 			ifa->local = addr;
+ 			ifa->prefix = prefix;
+@@ -235,10 +238,10 @@
+ 	return dent != NULL;
+ }
+ 
+-struct ifaddr *select_ipaddr(int ifindex, __u32 *sel_addr, __u32 **alist)
++struct rarpifaddr *select_ipaddr(int ifindex, __u32 *sel_addr, __u32 **alist)
+ {
+-	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct rarpiflink *ifl;
++	struct rarpifaddr *ifa;
+ 	int retry = 0;
+ 	int i;
+ 
+@@ -294,7 +297,7 @@
+ 
+ 	if (r == NULL) {
+ 		if (hatype == ARPHRD_ETHER && halen == 6) {
+-			struct ifaddr *ifa;
++			struct rarpifaddr *ifa;
+ 			struct hostent *hp;
+ 			char ename[256];
+ 			static struct rarp_map emap = {
+@@ -304,7 +307,7 @@
+ 				6,
+ 			};
+ 
+-			if (ether_ntohost(ename, lladdr) != 0 ||
++			if (ether_ntohost(ename, (struct ether_addr *)lladdr) != 0 ||
+ 			    (hp = gethostbyname(ename)) == NULL) {
+ 				if (verbose)
+ 					syslog(LOG_INFO, "not found in /etc/ethers");
+@@ -345,7 +348,7 @@
+ 
+ int put_mylladdr(unsigned char **ptr_p, int ifindex, int alen)
+ {
+-	struct iflink *ifl;
++	struct rarpiflink *ifl;
+ 
+ 	for (ifl=ifl_list; ifl; ifl = ifl->next)
+ 		if (ifl->index == ifindex)
+@@ -362,8 +365,8 @@
+ int put_myipaddr(unsigned char **ptr_p, int ifindex, __u32 hisipaddr)
+ {
+ 	__u32 laddr = 0;
+-	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct rarpiflink *ifl;
++	struct rarpifaddr *ifa;
+ 
+ 	for (ifl=ifl_list; ifl; ifl = ifl->next)
+ 		if (ifl->index == ifindex)
+@@ -388,7 +391,7 @@
+ 	int fd;
+ 	struct arpreq req;
+ 	struct sockaddr_in *sin;
+-	struct iflink *ifl;
++	struct rarpiflink *ifl;
+ 
+ 	for (ifl=ifl_list; ifl; ifl = ifl->next)
+ 		if (ifl->index == ifindex)
+@@ -421,6 +424,10 @@
+ 	struct rarp_map *rmap;
+ 	unsigned char *ptr;
+ 	int n;
++	int i;
++	char tmpbuf[16*3];
++	char tmpname[IFNAMSIZ];
++	struct rarpiflink *ifl;
+ 
+ 	n = recvfrom(fd, buf, sizeof(buf), MSG_DONTWAIT, (struct sockaddr*)&sll, &sll_len);
+ 	if (n<0) {
+@@ -447,20 +454,25 @@
+ 	if (a->ar_op != htons(ARPOP_RREQUEST))
+ 		return;
+ 
+-	if (verbose) {
+-		int i;
+-		char tmpbuf[16*3];
+-		char *ptr = tmpbuf;
+-		for (i=0; i<sll.sll_halen; i++) {
+-			if (i) {
+-				sprintf(ptr, ":%02x", sll.sll_addr[i]);
+-				ptr++;
+-			} else
+-				sprintf(ptr, "%02x", sll.sll_addr[i]);
+-			ptr += 2;
+-		}
+-		syslog(LOG_INFO, "RARP request from %s on if%d", tmpbuf, sll.sll_ifindex);
++	ptr = tmpbuf;
++	for (i=0; i<sll.sll_halen; i++) {
++		if (i) {
++			sprintf(ptr, ":%02x", sll.sll_addr[i]);
++			ptr++;
++		} else
++			sprintf(ptr, "%02x", sll.sll_addr[i]);
++		ptr += 2;
+ 	}
++	
++	for (ifl=ifl_list; ifl; ifl = ifl->next)
++		if (ifl->index == sll.sll_ifindex)
++			break;
++	if (ifl) {
++		strncpy(tmpname, ifl->name, IFNAMSIZ);
++		tmpname[IFNAMSIZ-1] = 0;
++	} else
++		sprintf(tmpname, "if%d", sll.sll_ifindex);
++	syslog(LOG_INFO, "RARP request from %s on %s", tmpbuf, tmpname);
+ 
+ 	/* Sanity checks */
+ 
+@@ -526,6 +538,8 @@
+ 	ptr += rmap->lladdr_len;
+ 	memcpy(ptr, &rmap->ipaddr, 4);
+ 	ptr += 4;
++	syslog(LOG_INFO, "RARP response to %s %s on %s", tmpbuf,
++	       inet_ntoa(*(struct in_addr *)&rmap->ipaddr), tmpname);
+ 
+ 	/* Update our ARP cache. Probably, this guy
+ 	   will not able to make ARP (if it is broken)
+@@ -613,7 +627,7 @@
+         if (ifname) {
+ 		struct ifreq ifr;
+ 		memset(&ifr, 0, sizeof(ifr));
+-		strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
++		strncpy(ifr.ifr_name, ifname, IFNAMSIZ-1);
+ 		if (ioctl(pset[0].fd, SIOCGIFINDEX, &ifr)) {
+ 			perror("ioctl(SIOCGIFINDEX)");
+ 			usage();

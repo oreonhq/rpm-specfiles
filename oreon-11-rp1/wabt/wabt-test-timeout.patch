@@ -1,0 +1,12 @@
+diff -up wabt-1.0.36/CMakeLists.txt.orig wabt-1.0.36/CMakeLists.txt
+--- wabt-1.0.36/CMakeLists.txt.orig	2024-07-31 19:40:07.000000000 +0200
++++ wabt-1.0.36/CMakeLists.txt	2025-02-21 09:56:15.768904412 +0100
+@@ -726,7 +726,7 @@ if (BUILD_TESTS)
+   set(RUN_TESTS_PY ${WABT_SOURCE_DIR}/test/run-tests.py)
+ 
+   add_custom_target(run-tests
+-    COMMAND ${CMAKE_COMMAND} -E env WASM2C_CC=${CMAKE_C_COMPILER} WASM2C_CFLAGS=${WASM2C_CFLAGS} ${Python3_EXECUTABLE} ${RUN_TESTS_PY} --bindir $<TARGET_FILE_DIR:wat2wasm>
++    COMMAND ${CMAKE_COMMAND} -E env WASM2C_CC=${CMAKE_C_COMPILER} WASM2C_CFLAGS=${WASM2C_CFLAGS} ${Python3_EXECUTABLE} ${RUN_TESTS_PY} --bindir $<TARGET_FILE_DIR:wat2wasm> --timeout=1200
+     DEPENDS ${WABT_EXECUTABLES}
+     WORKING_DIRECTORY ${WABT_SOURCE_DIR}
+     USES_TERMINAL

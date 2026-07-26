@@ -1,0 +1,44 @@
+From 7d18fdd2f37c1278e26d4878c35773cfd13017b5 Mon Sep 17 00:00:00 2001
+From: Julio Faracco <jcfaracco@gmail.com>
+Date: Tue, 14 Oct 2025 13:28:21 -0300
+Subject: [PATCH 4/4] cmake: Include install section for procdump and its
+ manpage
+
+Both binary file and the manpage are missing an install section inside
+CMakeLists.txt file. It is benefitial for cmake internal subcommands
+during the generation process.
+
+For further reference the PR is #224
+
+Signed-off-by: Julio Faracco <jcfaracco@gmail.com>
+---
+ CMakeLists.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a8395f3..d6cce25 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,6 +71,10 @@ else()
+                     )
+ endif()
+ 
++install(FILES ${PROJECT_BINARY_DIR}/${PROCDUMP_COMPRESS_MAN}
++        DESTINATION "/usr/share/man/man1/"
++        )
++
+ #
+ # Change log
+ #
+@@ -416,4 +420,8 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+   )
+ 
+   add_dependencies(procdump_ebpf ${libbpf_LINK})
++
++  install(TARGETS procdump
++          DESTINATION ${CMAKE_INSTALL_BINDIR}
++          )
+ endif()
+-- 
+2.50.1
+

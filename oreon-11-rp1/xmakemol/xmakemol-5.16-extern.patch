@@ -1,0 +1,13 @@
+diff -up xmakemol-5.16/bbox.h.orig xmakemol-5.16/bbox.h
+--- xmakemol-5.16/bbox.h.orig	2020-02-01 07:47:44.183396509 +0100
++++ xmakemol-5.16/bbox.h	2020-02-01 07:47:57.198837889 +0100
+@@ -26,7 +26,7 @@ enum bbox_type {AUTOMATIC, FROM_FILE};
+ 
+ #ifdef __BBOX_C__
+ 
+-bounding_box bbox;
++extern bounding_box bbox;
+ enum bbox_type bbox_type = AUTOMATIC;
+ Widget bbox_dialog = NULL;  /* wjq */
+ Widget bbMin[4], bbMax[4];  /* 0:     The whole entry line for Min, Max values,
+diff -up xmakemol-5.16/Makefile.orig xmakemol-5.16/Makefile

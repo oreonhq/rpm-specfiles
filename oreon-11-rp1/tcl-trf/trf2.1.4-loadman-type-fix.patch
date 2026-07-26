@@ -1,0 +1,24 @@
+diff -up trf2.1.4/generic/loadman.c.fix trf2.1.4/generic/loadman.c
+--- trf2.1.4/generic/loadman.c.fix	2024-02-10 13:33:45.112809878 -0500
++++ trf2.1.4/generic/loadman.c	2024-02-10 13:33:16.074372426 -0500
+@@ -192,7 +192,7 @@ TrfLoadMD5 (interp)
+   md5f.loaded = 1;
+   md5f.init   = md5_init_ctx;
+   md5f.update = md5_update;
+-  md5f.final  = md5_final;
++  md5f.final  = (void *) md5_final;
+   md5f.crypt  = md5_crypt;
+   return TCL_OK;
+ #else
+diff -up trf2.1.4/generic/loadman.h.fix trf2.1.4/generic/loadman.h
+--- trf2.1.4/generic/loadman.h.fix	2024-02-10 13:33:53.598937726 -0500
++++ trf2.1.4/generic/loadman.h	2024-02-10 13:33:16.075372441 -0500
+@@ -114,7 +114,7 @@ typedef struct Md5Functions {
+ 				unsigned long length));
+   void* (* final)  __P ((unsigned char* digest, MD5_CTX* c));
+ 
+-  const char* (* crypt) _ANSI_ARGS_ ((const char* key, const char* salt));
++  char* (* crypt) _ANSI_ARGS_ ((const char* key, const char* salt));
+ 
+ } md5Functions;
+ 

@@ -1,0 +1,14 @@
+.TH posplit 1 "Translate Toolkit 1.3.0" "" "Translate Toolkit 1.3.0"
+.SH NAME
+posplit \- Split a PO file into a translated, fuzzy, and untranslated PO
+file.
+.SH SYNOPSIS
+\fBposplit\fR \fI./file.po\fR
+.P
+Where \fIfile.po\fR is an existing PO file or PO compendium.
+.SH DESCRIPTION
+Takes an existing PO file and splits it into three components: translated,
+untranslated and fuzzy. This is useful for reviewing translations or for
+extracting good translations from a compendium file.
+.SH BUGS
+Some relative path bugs thus the need for ./ before file.po

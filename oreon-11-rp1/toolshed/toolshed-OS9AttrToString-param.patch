@@ -1,0 +1,12 @@
+diff -up ./libmisc/libmisccococonv.c.orig ./libmisc/libmisccococonv.c
+--- ./libmisc/libmisccococonv.c.orig	2022-02-04 15:43:37.730514311 -0500
++++ ./libmisc/libmisccococonv.c	2022-02-04 15:43:51.202566302 -0500
+@@ -545,7 +545,7 @@ void DECBToNative(char *buffer, u_int si
+  *
+  * Returns textual representation of file attributes to standard output
+  */
+-void OS9AttrToString(int attr_byte, char string[9])
++void OS9AttrToString(int attr_byte, char *string)
+ {
+ 	int i;
+ 	char *attrs = "dsewrewr";

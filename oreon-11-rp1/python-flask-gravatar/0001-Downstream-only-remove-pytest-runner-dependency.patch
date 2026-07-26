@@ -1,0 +1,24 @@
+From 2b7b3938ac78a70518e41856ea696648285f91e4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 14 Feb 2025 11:14:51 -0500
+Subject: [PATCH] Downstream-only: remove pytest-runner dependency
+
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 3a51605..bea872c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +39,6 @@ for reqs in extras_require.values():
+     extras_require['all'].extend(reqs)
+ 
+ setup_requires = [
+-    'pytest-runner>=2.6.2',
+ ]
+ 
+ install_requires = [
+-- 
+2.48.1
+

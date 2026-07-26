@@ -1,0 +1,32 @@
+From af49033c54692480d31caef6320f4d8c4a2d1c00 Mon Sep 17 00:00:00 2001
+From: Felipe Guedes <TheZoc@users.noreply.github.com>
+Date: Wed, 1 Nov 2023 14:42:35 +0000
+Subject: [PATCH] - Replaced deprecated werkzeug.urls.url_quote() with
+ urllib.parse.quote()
+
+---
+ flask_openid.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/flask_openid.py b/flask_openid.py
+index 13ad344..f14c0a9 100644
+--- a/flask_openid.py
++++ b/flask_openid.py
+@@ -20,7 +20,7 @@
+ import base64
+ 
+ from flask import request, session, redirect, current_app, url_for
+-from werkzeug.urls import url_quote
++import urllib
+ 
+ from openid.store.filestore import FileOpenIDStore
+ from openid.extensions import ax
+@@ -437,7 +437,7 @@ def check_safe_root(self, url):
+ 
+     def get_current_url(self):
+         """the current URL + next."""
+-        return request.base_url + '?next=' + url_quote(self.get_next_url())
++        return request.base_url + '?next=' + urllib.parse.quote(self.get_next_url())
+ 
+     def get_success_url(self):
+         """Return the internal success URL.

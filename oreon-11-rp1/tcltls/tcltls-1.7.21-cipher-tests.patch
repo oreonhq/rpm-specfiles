@@ -1,0 +1,15 @@
+Downstream-specific hack by Sergei Golovan (Debian) to disable tests which list available
+SSL/TLS ciphers, because upstream's expected ciphers are weak and not available in common
+Fedora and/or RHEL/CentOS builds of OpenSSL anymore.
+
+--- tcltls-1.7.21/tests/ciphers.test			2020-05-04 17:12:10.000000000 +0200
++++ tcltls-1.7.21/tests/ciphers.test.ciphers-test	2020-06-24 22:39:30.534467434 +0200
+@@ -23,7 +23,7 @@
+ # tls was compiled against. (RSA BSAFE SSL-C or OpenSSL).
+ #
+ set ::tcltest::testConstraints(rsabsafe) 0
+-set ::tcltest::testConstraints(openssl) [string match "OpenSSL*" [tls::version]]
++set ::tcltest::testConstraints(openssl) 0
+ 
+ set ::EXPECTEDCIPHERS(rsabsafe) {
+     EDH-DSS-RC4-SHA

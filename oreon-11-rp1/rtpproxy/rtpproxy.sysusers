@@ -1,0 +1,2 @@
+#Type Name      ID  GECOS               Home directory     Shell
+u     rtpproxy  -   "RTPProxy service"  /var/lib/rtpproxy  -

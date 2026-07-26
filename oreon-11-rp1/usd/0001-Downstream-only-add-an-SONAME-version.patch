@@ -1,0 +1,87 @@
+From 949707d0bd8ac077fac9763b3b590a016ff4eb6f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 27 Oct 2023 12:56:58 -0400
+Subject: [PATCH] Downstream-only: add an SONAME version
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream was asked about .so versioning and setting SONAME properly and
+seemed unprepared to handle the request:
+https://github.com/PixarAnimationStudios/USD/issues/1259#issuecomment-657120216
+
+A patch was offered:
+https://github.com/PixarAnimationStudios/USD/issues/1387
+but it was not sufficient for the general case, since (1) it only handled the
+monolithic build, and (2) it derived the .so version from PXR_MAJOR_VERSION,
+which is *not* reliably bumped on API or ABI changes, and currently is still
+zero.
+
+We will therefore probably need to keep doing downstream .so versioning for
+the foreseeable future. Currently we are assuming that the ABI is likely to
+change on every release (an appropriate assumption for a large C++ project
+with no ABI stability policy), so we build the .so version from the project
+version. Note that the “hidden” major version is zero, so this complies with
+the “0.” prefix recommended in the packaging guidelines.
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/#_downstream_so_name_versioning
+
+A known defect of this patch is that it causes the hdTiny.so example plugin
+to be versioned as well, which is undesired. This is not a serious problem
+because we do not want to package the built plugin anyway. (It should not be
+built with -DPXR_BUILD_EXAMPLES=OFF, but it is.)
+---
+ cmake/defaults/Version.cmake | 6 ++++++
+ cmake/macros/Private.cmake   | 1 +
+ cmake/macros/Public.cmake    | 2 ++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/cmake/defaults/Version.cmake b/cmake/defaults/Version.cmake
+index 1cc7fa64a..ebe531ec4 100644
+--- a/cmake/defaults/Version.cmake
++++ b/cmake/defaults/Version.cmake
+@@ -10,3 +10,9 @@ set(PXR_MINOR_VERSION "26")
+ set(PXR_PATCH_VERSION "3") # NOTE: Must not have leading 0 for single digits
+ 
+ math(EXPR PXR_VERSION "${PXR_MAJOR_VERSION} * 10000 + ${PXR_MINOR_VERSION} * 100 + ${PXR_PATCH_VERSION}")
++
++set(PXR_DOWNSTREAM_SOVERSION "${PXR_MAJOR_VERSION}.${PXR_MINOR_VERSION}.${PXR_PATCH_VERSION}"
++    CACHE
++    STRING
++    "Downstream shared object version"
++)
+diff --git a/cmake/macros/Private.cmake b/cmake/macros/Private.cmake
+index e2dccb075..5f6913e22 100644
+--- a/cmake/macros/Private.cmake
++++ b/cmake/macros/Private.cmake
+@@ -1346,6 +1346,7 @@ function(_pxr_library NAME)
+             FOLDER "${folder}"
+             POSITION_INDEPENDENT_CODE ON
+             IMPORT_PREFIX "${args_PREFIX}"            
++            SOVERSION ${PXR_DOWNSTREAM_SOVERSION}
+             PREFIX "${args_PREFIX}"
+             SUFFIX "${args_SUFFIX}"
+     )
+diff --git a/cmake/macros/Public.cmake b/cmake/macros/Public.cmake
+index b51789f4a..af2f2a805 100644
+--- a/cmake/macros/Public.cmake
++++ b/cmake/macros/Public.cmake
+@@ -414,6 +414,7 @@ function(pxr_library NAME)
+         TYPE "${args_TYPE}"
+         PREFIX "${prefix}"
+         SUFFIX "${suffix}"
++        SOVERSION ${PXR_DOWNSTREAM_SOVERSION}
+         SUBDIR "${subdir}"
+         CPPFILES "${args_CPPFILES};${${NAME}_CPPFILES}"
+         PUBLIC_HEADERS "${args_PUBLIC_HEADERS};${${NAME}_PUBLIC_HEADERS}"
+@@ -1195,6 +1196,7 @@ function(pxr_toplevel_prologue)
+                     PREFIX "${libPrefix}"
+                     IMPORT_PREFIX "${libPrefix}"
+                     OUTPUT_NAME ${libName}
++                    SOVERSION ${PXR_DOWNSTREAM_SOVERSION}
+             )
+             _get_install_dir("lib" libInstallPrefix)
+             install(
+-- 
+2.53.0
+

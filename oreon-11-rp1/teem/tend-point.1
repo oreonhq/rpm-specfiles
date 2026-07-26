@@ -1,0 +1,27 @@
+.TH TEND\-POINT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-point \- describe everything about one sample in a DT volume
+.SH SYNOPSIS
+.B tend\ point
+.B \-p
+.RI < x \  y \  z >
+.RB [ \-i
+.RI < nin >]
+.SH OPTIONS
+.TP
+.TP
+.B \-p\fR <\fIx\fR\ \fIy\fR\ \fIz\fR>
+coordinates of sample to be described (3
+.IR int s)
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output array
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

@@ -1,0 +1,40 @@
+From 2ed58c65bb9e9fa293cc3435b5b2df142aeaf02b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Tue, 18 Jan 2022 09:48:40 +0100
+Subject: [PATCH] Fix building with GCC 12
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There was a typo in a check for a document file name when saving
+a document into a local file. Because of the typo, the check could not
+spot an empty document file name (""). GCC 12 started to warn that the
+check condition is always true:
+
+shigofumi.c:3556:44: error: the comparison will always evaluate as 'true' for the address of 'dmFileDescr' will never be NULL [-Werror=address]
+ 3556 |     if (!filename && document->dmFileDescr && &document->dmFileDescr) {
+      |                                            ^~
+
+This patch fixes it.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ src/shigofumi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/shigofumi.c b/src/shigofumi.c
+index 6fcdbae..4e85678 100644
+--- a/src/shigofumi.c
++++ b/src/shigofumi.c
+@@ -3553,7 +3553,7 @@ static int shi_save_document(int argc, const char **argv) {
+             }
+         }
+     }
+-    if (!filename && document->dmFileDescr && &document->dmFileDescr) {
++    if (!filename && document->dmFileDescr && *document->dmFileDescr) {
+         filename = utf82locale(document->dmFileDescr);
+         if (!filename) {
+             fprintf(stderr, _("Not enough memory\n"));
+-- 
+2.34.1
+

@@ -1,0 +1,12 @@
+diff -up ./vendor/composer/ca-bundle/src/CaBundle.php.rpm ./vendor/composer/ca-bundle/src/CaBundle.php
+--- ./vendor/composer/ca-bundle/src/CaBundle.php.rpm	2024-09-25 09:49:53.000000000 +0200
++++ ./vendor/composer/ca-bundle/src/CaBundle.php	2024-10-03 07:11:10.752092401 +0200
+@@ -122,7 +122,7 @@ class CaBundle
+      */
+     public static function getBundledCaBundlePath()
+     {
+-        $caBundleFile = __DIR__.'/../res/cacert.pem';
++        $caBundleFile = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'; // System CA, always
+ 
+         // cURL does not understand 'phar://' paths
+         // see https://github.com/composer/ca-bundle/issues/10

@@ -1,0 +1,11 @@
+--- data/com.github.artemanufrij.regextester.appdata.xml.in~	2021-03-24 07:24:30.000000000 -0500
++++ data/com.github.artemanufrij.regextester.appdata.xml.in	2023-02-28 08:55:47.368322783 -0600
+@@ -84,8 +84,6 @@
+                 Small UX changes
+             </description>
+         </release>
+-    </releases>
+-    <releases>
+         <release version="0.1.5" date="2017-11-10">
+             <description>
+                 <p>New:</p>

@@ -1,0 +1,35 @@
+--- zidrav4unix-1.2.0/Makefile.r	2005-05-19 22:13:43.000000000 +0200
++++ zidrav4unix-1.2.0/Makefile	2006-09-21 23:11:01.000000000 +0200
+@@ -1,12 +1,29 @@
++CXXFLAGS=-O2 -Wall
++BINDIR=/usr/bin
++MANDIR=/usr/share/man
++ARCH=$(shell arch)
++ifeq ($(ARCH),ppc)
++CXXFLAGS+= -DCPU_BIGENDIAN
++endif
++
++all: zidrav
++
+ zidrav: zidrav.cpp flayer.o core.o flayer.h
+-	g++ -O2 -Wall -o zidrav zidrav.cpp flayer.o core.o
++	g++ $(CXXFLAGS) -o zidrav zidrav.cpp flayer.o core.o
+ 	
+ flayer.o: flayer.cpp core.h
+-	g++ -O2 -Wall -c flayer.cpp
++	g++ $(CXXFLAGS) -c flayer.cpp
+ 
+ core.o: core.cpp core.h
+-	g++ -O2 -Wall -c core.cpp
++	g++ $(CXXFLAGS) -c core.cpp
+ 
+ .PHONY:
+ clean:
+ 	-rm *.o zidrav
++
++install:
++	mkdir -p $(DESTDIR)$(BINDIR)
++	mkdir -p $(DESTDIR)$(MANDIR)/man1
++	install -m755 zidrav $(DESTDIR)$(BINDIR)
++	install -m644 zidrav.1 $(DESTDIR)$(MANDIR)/man1
++

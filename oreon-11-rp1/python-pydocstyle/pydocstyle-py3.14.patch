@@ -1,0 +1,12 @@
+diff -rupN pydocstyle-6.3.0/src/tests/test_integration.py pydocstyle-6.3.0-new/src/tests/test_integration.py
+--- pydocstyle-6.3.0/src/tests/test_integration.py	2023-01-17 21:27:44.000000000 +0100
++++ pydocstyle-6.3.0-new/src/tests/test_integration.py	2025-06-13 16:55:57.924146186 +0200
+@@ -814,7 +814,7 @@ def test_overload_nested_function_valid(
+         from typing import overload
+ 
+         def function_with_nesting():
+-            """Adding a docstring to a function."""
++            """Add a docstring to a function."""
+             @overload
+             def overloaded_func(a: int) -> str:
+                 ...

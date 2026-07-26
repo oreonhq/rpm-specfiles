@@ -1,0 +1,150 @@
+.TH UNU\-SAVE
+.SH NAME
+unu\-save \- write
+.I nrrd
+with specific format, encoding, or endianness
+.SH SYNOPSIS
+.B unu\ save
+.BR \-f , \-\-format
+.RI < form >
+.RB [ \-e , \-\-encoding
+.RI < enc >]
+.RB [ \-en , \-\-endian
+.RI < end >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.RB [ \-od , \-\-ouputdata
+.RI < name >]
+.SH DESCRIPTION
+Write
+.I nrrd
+with specific format, encoding, or endianness.
+Use
+.in +4n
+.EX
+.B unu\ save\ \-f\ pnm\ |\ xv\ \-
+.EE
+.in
+to view PPM- or PGM-compatible
+.IR nrrd s on unix.
+EPS output is a EPSF\-3.0 file with
+.B BoundingBox
+and
+.B HiResBoundingBox
+DSC comments, and is suitable for inclusion into other PostScript documents.
+As a stand-alone file, the image is conveniently centered on an 8.5x11 inch
+page, with 0.5 inch margins.
+.IP \(bu +2n
+Uses various fields in the
+.B NrrdIOState
+passed to
+.B nrrdSave
+.SH OPTIONS
+.TP
+.B \-f\fR\ <\fIform\fR>\ ,\ \fB\-\-format\fR\ <\fIform\fR>
+output file format.
+Possibilities include:
+.RS +7n
+.IP \(bu +2n
+.RB \(lq nrrd \(rq:
+standard
+.I nrrd
+format
+.IP \(bu +2n
+.RB \(lq pnm \(rq:
+PNM image; PPM for color, PGM for grayscale
+.IP \(bu +2n
+.RB \(lq text \(rq:
+plain ASCII text for 1\-D and 2\-D data
+.IP \(bu +2n
+.RB \(lq vtk \(rq:
+VTK
+.RB \(lq STRUCTURED_POINTS \(rq
+dataset
+.IP \(bu +2n
+.RB \(lq png \(rq:
+PNG image
+.IP \(bu +2n
+.RB \(lq eps \(rq:
+EPS file
+.RE
+.TP
+.B \-e\fR\ <\fIenc\fR>\ ,\ \fB\-\-encoding\fR\ <\fIenc\fR>
+encoding of data in file.
+Not all encodings are supported in a given format.
+Possibilities include:
+.RS +7n
+.IP \(bu +2n
+.RB \(lq raw \(rq:
+raw encoding
+.IP \(bu +2n
+.RB \(lq ascii \(rq:
+print data in ascii
+.IP \(bu +2n
+.RB \(lq hex \(rq:
+two hex digits per byte
+.IP \(bu +2n
+.RB \(lq gzip \(rq,\ \(lq gz \(rq:
+gzip compressed raw data
+.IP \(bu +2n
+.RB \(lq bzip2 \(rq,\ \(lq bz2 \(rq:
+bzip2 compressed raw data
+.P
+The specifiers for compressions may be followed by a colon
+.RB \(lq : \(rq,
+followed by an optional digit giving compression \(lqlevel\(rq (for
+.BR gzip )
+or \(lqblock size\(rq (for
+.BR bzip2 ).
+For
+.BR gzip ,
+this can be followed by an optional character for a compression strategy:
+.IP \(bu +2n
+.RB \(lq d \(rq:
+default, Huffman with string match
+.IP \(bu +2n
+.RB \(lq h \(rq:
+Huffman alone
+.IP \(bu +2n
+.RB \(lq f \(rq:
+specialized for filtered data
+.P
+For example,
+.RB \(lq gz \(rq,
+.RB \(lq gz:9 \(rq,
+.RB \(lq gz:9f \(rq
+are all valid
+.RE
+.TP
+.B \-en\fR\ <\fIend\fR>\ ,\ \fB\-\-endian\fR\ <\fIend\fR>
+Endianness to save data out as;
+.RB \(lq little \(rq
+for Intel and friends;
+.RB \(lq big \(rq
+for everyone else.
+Defaults to endianness of this machine
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-od\fR\ <\fIname\fR>\ ,\ \fB\-\-ouputdata\fR\ <\fIname\fR>
+when saving to a
+.RB \(lq .nhdr \(rq
+file, this option allows you to explicitly name the data file, instead of (by
+default, not using this option) having it be the same filename base as the
+header file.
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR unu (1)
+.P
+http://www.trilon.com/xv/

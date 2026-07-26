@@ -1,0 +1,18 @@
+diff -rupN --no-dereference pgadmin4-9.10/web/pgadmin/misc/cloud/azure/__init__.py pgadmin4-9.10-new/web/pgadmin/misc/cloud/azure/__init__.py
+--- pgadmin4-9.10/web/pgadmin/misc/cloud/azure/__init__.py	2025-11-10 10:21:16.000000000 +0100
++++ pgadmin4-9.10-new/web/pgadmin/misc/cloud/azure/__init__.py	2025-11-16 17:35:07.987985444 +0100
+@@ -30,8 +30,12 @@ from azure.identity import AzureCliCrede
+     AuthenticationRecord
+ from azure.mgmt.resource import ResourceManagementClient
+ from azure.mgmt.subscription import SubscriptionClient
+-from azure.mgmt.rdbms.postgresql_flexibleservers.models import \
+-    NameAvailabilityRequest
++try:
++    from azure.mgmt.rdbms.postgresql.models import \
++        NameAvailabilityRequest
++except:
++    from azure.mgmt.rdbms.postgresql_flexibleservers.models import \
++        NameAvailabilityRequest
+ 
+ MODULE_NAME = 'azure'
+ 

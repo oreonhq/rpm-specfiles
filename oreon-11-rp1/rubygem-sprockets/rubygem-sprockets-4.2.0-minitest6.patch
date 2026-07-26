@@ -1,0 +1,10 @@
+diff -urp '--exclude=*~' sprockets-4.2.0.orig/test/test_path_utils.rb sprockets-4.2.0/test/test_path_utils.rb
+--- sprockets-4.2.0.orig/test/test_path_utils.rb	2025-12-27 20:57:41.687659309 +0900
++++ sprockets-4.2.0/test/test_path_utils.rb	2025-12-27 21:20:49.712625223 +0900
+@@ -1,5 +1,6 @@
+ # frozen_string_literal: true
+ require 'minitest/autorun'
++require 'minitest/mock'
+ require 'sprockets/path_utils'
+ 
+ class TestPathUtils < Minitest::Test

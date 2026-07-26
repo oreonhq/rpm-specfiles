@@ -1,0 +1,13 @@
+diff --git a/trantor/net/inner/tlsprovider/OpenSSLProvider.cc b/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
+index e0cd6e2..f28b4ba 100644
+--- a/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
++++ b/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
+@@ -909,7 +909,7 @@ SSLContextPtr trantor::newSSLContext(const TLSPolicy &policy, bool isServer)
+ 
+     // Disable weak ciphers. Weak hash and ciphers can die in a fire.
+     int status = SSL_CTX_set_cipher_list(ctx->ctx(),
+-                                         "MEDIUM:HIGH:!aNULL:!MD5:!RC4:!3DES");
++                                         "PROFILE=SYSTEM");
+     if (status != 1)
+         throw std::runtime_error("Failed to select secure ciphers");
+ 

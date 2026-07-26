@@ -1,0 +1,12 @@
+diff -up trf2.1.4/generic/rs-ecc/rslib.c.c23 trf2.1.4/generic/rs-ecc/rslib.c
+--- trf2.1.4/generic/rs-ecc/rslib.c.c23	2025-02-25 14:31:25.560312988 -0500
++++ trf2.1.4/generic/rs-ecc/rslib.c	2025-02-25 14:32:40.531907100 -0500
+@@ -31,7 +31,7 @@
+ 
+ /* aku: forward declaration of routines used before definition */
+ void
+-polysolve ();
++polysolve (unsigned char *, unsigned char *, int *);
+ 
+ 
+ 

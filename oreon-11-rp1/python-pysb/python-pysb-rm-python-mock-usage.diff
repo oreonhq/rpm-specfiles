@@ -1,0 +1,22 @@
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -13,7 +13,7 @@
+ 
+ import sys, os
+ import re
+-import mock
++from unittest import mock
+ 
+ # If extensions (or modules to document with autodoc) are in another directory,
+ # add these directories to sys.path here. If the directory is relative to the
+--- a/pysb/tests/test_importers.py
++++ b/pysb/tests/test_importers.py
+@@ -6,7 +6,7 @@ from pysb.importers.sbml import model_fr
+ import numpy
+ from nose.tools import assert_raises_regex, raises
+ import warnings
+-import mock
++from unittest import mock
+ import tempfile
+ import shutil
+ from pysb.logging import get_logger

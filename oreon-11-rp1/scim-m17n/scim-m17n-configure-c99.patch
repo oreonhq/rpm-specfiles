@@ -1,0 +1,44 @@
+diff --git a/aclocal.m4 b/aclocal.m4
+index ce5cac7cd6dae638..848f04a0706318ef 100644
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -995,7 +995,7 @@ int main ()
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff --git a/configure b/configure
+index 4cb819a2ac997719..e7e6abc95097dd42 100755
+--- a/configure
++++ b/configure
+@@ -10409,7 +10409,7 @@ int main ()
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -10509,7 +10509,7 @@ int main ()
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -21243,7 +21243,7 @@ int main ()
+   else
+     puts (dlerror ());
+ 
+-    exit (status);
++    status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5

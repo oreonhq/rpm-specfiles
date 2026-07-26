@@ -1,0 +1,48 @@
+From b22f8e196d8640d28f22fe7e429c70f56804e3c4 Mon Sep 17 00:00:00 2001
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Date: Wed, 12 Apr 2023 12:08:31 +0100
+Subject: tvtime: support drivers that always select a pixfmt in S_FMT
+
+Drivers can either reject an unsupported pixelformat in VIDIOC_S_FMT,
+or replace it with a supported one. Either option is allowed.
+
+tvtime assumes that it is rejected, but instead it should check if it
+chose something else, and then retry with UYVY.
+
+Link: https://lore.kernel.org/linux-media/a5dff340-ab8a-46e0-1f0c-25ceaf9fe5ca@xs4all.nl
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ src/videoinput.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/src/videoinput.c b/src/videoinput.c
+index 5c147c8..237f684 100644
+--- a/src/videoinput.c
++++ b/src/videoinput.c
+@@ -516,13 +516,19 @@ retry:
+     memset( &(imgformat.fmt.pix), 0, sizeof( struct v4l2_pix_format ) );
+     imgformat.fmt.pix.width = capwidth;
+     imgformat.fmt.pix.height = vidin->height;
+-    imgformat.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
+     imgformat.fmt.pix.field = V4L2_FIELD_INTERLACED;
++    imgformat.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
+ 
+-    if( ioctl( vidin->grab_fd, VIDIOC_S_FMT, &imgformat ) < 0 ) {
++    if( ioctl( vidin->grab_fd, VIDIOC_S_FMT, &imgformat ) < 0 ||
++	imgformat.fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV ) {
+ 	/* Try for UYVY instead. */
++	memset( &(imgformat.fmt.pix), 0, sizeof( struct v4l2_pix_format ) );
++	imgformat.fmt.pix.width = capwidth;
++	imgformat.fmt.pix.height = vidin->height;
++	imgformat.fmt.pix.field = V4L2_FIELD_INTERLACED;
+ 	imgformat.fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY;
+-	if( ioctl( vidin->grab_fd, VIDIOC_S_FMT, &imgformat ) < 0 ) {
++	if( ioctl( vidin->grab_fd, VIDIOC_S_FMT, &imgformat ) < 0 ||
++	    imgformat.fmt.pix.pixelformat != V4L2_PIX_FMT_UYVY ) {
+ 
+ 	    fprintf( stderr, "\n"
+      "    Your capture card driver: %s\n"
+-- 
+cgit v1.2.3
+

@@ -1,0 +1,24 @@
+diff -up taxipilot-0.9.2/taxipilot/cdp.cpp~ taxipilot-0.9.2/taxipilot/cdp.cpp
+--- taxipilot-0.9.2/taxipilot/cdp.cpp~	2007-05-27 19:53:17.000000000 +0200
++++ taxipilot-0.9.2/taxipilot/cdp.cpp	2010-09-10 10:01:47.570574002 +0200
+@@ -572,7 +572,7 @@ CachablePixmapArray * Cdp::createTextPix
+ 		do {
+ 			fnt.setPointSize(point_size - i);
+ 			i++;
+-		} while ( (((point_size - i) / (float) point_size) > 0.5) && (!QFontInfo::QFontInfo(fnt).exactMatch()));		// don't go below half the optimal point size
++		} while ( (((point_size - i) / (float) point_size) > 0.5) && (!QFontInfo(fnt).exactMatch()));		// don't go below half the optimal point size
+ 		if ( ((point_size - i) / (float) point_size) >= 0.5) {		// if we found something reasonable, use that
+ 			point_size -= i;
+ 		}
+diff -up taxipilot-0.9.2/taxipilot/taxipilot.cpp~ taxipilot-0.9.2/taxipilot/taxipilot.cpp
+--- taxipilot-0.9.2/taxipilot/taxipilot.cpp~	2007-05-27 16:53:29.000000000 +0200
++++ taxipilot-0.9.2/taxipilot/taxipilot.cpp	2010-09-10 10:02:17.568574001 +0200
+@@ -98,7 +98,7 @@ Taxipilot::Taxipilot (TaxipilotApp * par
+ 
+ 	fader = new QCanvasRectangle(canvas);
+ 	fader->setPen(NoPen);
+-	fader->setBrush(QBrush::QBrush(Dense4Pattern));
++	fader->setBrush(QBrush(Dense4Pattern));
+ 	fader->setZ(FADER_Z);		// second topmost
+ 
+ 	mainvbox->addWidget(view);

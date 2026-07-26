@@ -1,0 +1,12 @@
+diff -up snack2.2.10/generic/jkSoundFile.c.format-security snack2.2.10/generic/jkSoundFile.c
+--- snack2.2.10/generic/jkSoundFile.c.format-security	2013-12-09 16:24:39.287083799 -0500
++++ snack2.2.10/generic/jkSoundFile.c	2013-12-09 16:26:03.693939137 -0500
+@@ -2380,7 +2380,7 @@ PutCslHeader(Sound *s, Tcl_Interp *inter
+   sprintf(&buf[12], "HEDR");
+   PutLELong(buf, 16, 32);
+   Tcl_GlobalEvalObj(s->interp, Tcl_NewStringObj(CSL_DATECOMMAND, -1));
+-  sprintf(&buf[20], Tcl_GetStringResult(s->interp));
++  sprintf(&buf[20], "%s", Tcl_GetStringResult(s->interp));
+   
+   PutLELong(buf, 40, s->samprate);
+   PutLELong(buf, 44, s->length);

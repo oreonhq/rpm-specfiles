@@ -1,0 +1,117 @@
+From 9c3f56fcc86fa6e25576043263af3e3cad2c6de9 Mon Sep 17 00:00:00 2001
+From: Sergio Pascual <sergiopr@fis.ucm.es>
+Date: Wed, 21 Aug 2024 23:13:53 +0200
+Subject: [PATCH] Remove calls to catch_warnings
+
+---
+ .../density_estimation/tests/test_bayesian_blocks.py | 12 ++++++------
+ .../density_estimation/tests/test_hist_binwidth.py   | 10 +++++-----
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/astroML/density_estimation/tests/test_bayesian_blocks.py b/astroML/density_estimation/tests/test_bayesian_blocks.py
+index bf709360..3c985090 100644
+--- a/astroML/density_estimation/tests/test_bayesian_blocks.py
++++ b/astroML/density_estimation/tests/test_bayesian_blocks.py
+@@ -1,7 +1,7 @@
+ import numpy as np
+ from numpy.testing import assert_allclose, assert_
+ 
+-from astropy.tests.helper import catch_warnings
++import pytest
+ 
+ from astroML.density_estimation import bayesian_blocks
+ from astroML.utils.exceptions import AstroMLDeprecationWarning
+@@ -12,7 +12,7 @@ def test_single_change_point():
+     x = np.concatenate([np.random.random(100),
+                         1 + np.random.random(200)])
+ 
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         bins = bayesian_blocks(x)
+ 
+     assert_(len(bins) == 3)
+@@ -26,7 +26,7 @@ def test_duplicate_events():
+     x = np.ones_like(t)
+     x[:20] += 1
+ 
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         bins1 = bayesian_blocks(t)
+         bins2 = bayesian_blocks(t[:80], x[:80])
+ 
+@@ -40,7 +40,7 @@ def test_measures_fitness_homoscedastic():
+     sigma = 0.05
+     x = np.random.normal(x, sigma)
+ 
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         bins = bayesian_blocks(t, x, sigma, fitness='measures')
+ 
+     assert_allclose(bins, [0, 0.45, 0.55, 1])
+@@ -53,7 +53,7 @@ def test_measures_fitness_heteroscedastic():
+     sigma = 0.02 + 0.02 * np.random.random(len(x))
+     x = np.random.normal(x, sigma)
+ 
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         bins = bayesian_blocks(t, x, sigma, fitness='measures')
+ 
+     assert_allclose(bins, [0, 0.45, 0.55, 1])
+@@ -66,7 +66,7 @@ def test_regular_events():
+                             np.unique(np.random.randint(500, 1000, 200))])
+     t = dt * steps
+ 
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         bins = bayesian_blocks(t, fitness='regular_events', dt=dt)
+ 
+     assert_(len(bins) == 3)
+diff --git a/astroML/density_estimation/tests/test_hist_binwidth.py b/astroML/density_estimation/tests/test_hist_binwidth.py
+index 0b32b522..c01d6417 100644
+--- a/astroML/density_estimation/tests/test_hist_binwidth.py
++++ b/astroML/density_estimation/tests/test_hist_binwidth.py
+@@ -1,7 +1,7 @@
+ import numpy as np
+ from numpy.testing import assert_allclose, assert_
+ 
+-from astropy.tests.helper import catch_warnings
++import pytest
+ 
+ from astroML.density_estimation import \
+     scotts_bin_width, freedman_bin_width, knuth_bin_width, histogram
+@@ -11,7 +11,7 @@
+ def test_scotts_bin_width(N=10000, rseed=0):
+     np.random.seed(rseed)
+     X = np.random.normal(size=N)
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         delta = scotts_bin_width(X)
+ 
+     assert_allclose(delta, 3.5 * np.std(X) / N ** (1. / 3))
+@@ -20,7 +20,7 @@ def test_scotts_bin_width(N=10000, rseed=0):
+ def test_freedman_bin_width(N=10000, rseed=0):
+     np.random.seed(rseed)
+     X = np.random.normal(size=N)
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         delta = freedman_bin_width(X)
+ 
+     v25, v75 = np.percentile(X, [25, 75])
+@@ -31,7 +31,7 @@ def test_freedman_bin_width(N=10000, rseed=0):
+ def test_knuth_bin_width(N=10000, rseed=0):
+     np.random.seed(0)
+     X = np.random.normal(size=N)
+-    with catch_warnings(AstroMLDeprecationWarning):
++    with pytest.warns(AstroMLDeprecationWarning):
+         dx, bins = knuth_bin_width(X, return_bins=True)
+     assert_allclose(len(bins), 59)
+ 
+@@ -42,7 +42,7 @@ def test_histogram(N=1000, rseed=0):
+ 
+     for bins in [30, np.linspace(-5, 5, 31),
+                  'knuth', 'scotts', 'freedman']:
+-        with catch_warnings(AstroMLDeprecationWarning):
++        with pytest.warns(AstroMLDeprecationWarning):
+             counts, bins = histogram(x, bins)
+         assert_(counts.sum() == len(x))
+         assert_(len(counts) == len(bins) - 1)

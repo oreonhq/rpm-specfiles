@@ -1,0 +1,12 @@
+diff -uNr widelands-1.3.orig/CMakeLists.txt widelands-1.3/CMakeLists.txt
+--- widelands-1.3.orig/CMakeLists.txt	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/CMakeLists.txt	2025-12-21 13:08:24.503000000 +0100
+@@ -292,7 +292,7 @@
+     wl_add_flag(WL_COMPILE_DIAGNOSTICS "-Wno-disabled-macro-expansion")
+   endif()
+ elseif(MSVC)
+-  wl_add_flag(WL_GENERIC_CXX_FLAGS "/std:c++17")
++  wl_add_flag(WL_GENERIC_CXX_FLAGS "/std:gnu++17")
+   wl_add_flag(WL_GENERIC_C_LIBRARY_FLAGS "/std:c11")
+   # https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/
+   # Disabled warnings that are overly verbose right now or just do not make sense.

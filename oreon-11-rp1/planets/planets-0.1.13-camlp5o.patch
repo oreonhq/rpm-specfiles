@@ -1,0 +1,11 @@
+--- planets-0.1.13/Makefile~	2007-06-19 21:20:50.000000000 -0500
++++ planets-0.1.13/Makefile	2019-08-01 13:44:01.227147147 -0500
+@@ -5,7 +5,7 @@
+ 	OCAMLOPT=ocamlopt
+ endif
+ ifndef CAMLP4O
+-	CAMLP4O=camlp4o
++	CAMLP4O=camlp5o
+ endif
+ ifndef PREFIX
+ 	PREFIX=/usr/local

@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' tzinfo-2.0.6.orig/test/test_utils.rb tzinfo-2.0.6/test/test_utils.rb
+--- tzinfo-2.0.6.orig/test/test_utils.rb	2025-12-27 15:08:31.125437423 +0900
++++ tzinfo-2.0.6/test/test_utils.rb	2025-12-27 18:00:03.786998789 +0900
+@@ -70,6 +70,7 @@ def nil.freeze
+ end
+ 
+ require 'minitest/autorun'
++require "minitest/mock"
+ require 'tzinfo'
+ require 'date'
+ require 'fileutils'

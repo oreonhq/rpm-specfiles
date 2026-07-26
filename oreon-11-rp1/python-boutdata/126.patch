@@ -1,0 +1,139 @@
+From bdec9a6b47eed9af0b0a83a769c803b3e47acded Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Tue, 17 Jun 2025 12:13:14 +0200
+Subject: [PATCH 1/4] Ensure multithreading works
+
+Needed for python 3.14
+---
+ src/boutdata/data.py | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/src/boutdata/data.py b/src/boutdata/data.py
+index 247dc3d..24f5ec4 100644
+--- a/src/boutdata/data.py
++++ b/src/boutdata/data.py
+@@ -1242,9 +1242,10 @@ def _init_parallel(self):
+             proc_list = tuple(p for p in range(filenum, filenum + files_per_proc[i]))
+             filenum = filenum + files_per_proc[i]
+             worker = Process(
+-                target=self._worker_function,
++                target=self._clean_for_mp()._worker_function,
+                 args=(child_connection, proc_list, self._shared_buffer_raw),
+             )
++
+             worker.start()
+             self._workers.append((worker, parent_connection))
+ 
+@@ -1628,6 +1629,14 @@ def _collect_parallel(self, varname):
+             self._shared_buffer[global_slices].copy(), attributes=var_attributes
+         )
+ 
++    def _clean_for_mp(self):
++        new = object.__new__(BoutOutputs)
++        new.__dict__ = self.__dict__.copy()
++        new._file0 = None
++        new._root_file = None
++        new._workers = None
++        return new
++
+     def _worker_function(self, connection, proc_list, shared_buffer_raw):
+         data_files = [DataFile(self._file_list[i]) for i in proc_list]
+         dim_sizes = tuple(self.grid_info["sizes"][d] for d in ("t", "x", "y", "z"))
+
+From afb90a5d567c5e7e68433450107f65e8cec32b75 Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Wed, 18 Jun 2025 11:30:08 +0200
+Subject: [PATCH 2/4] Revert "Ensure multithreading works"
+
+This reverts commit bdec9a6b47eed9af0b0a83a769c803b3e47acded.
+---
+ src/boutdata/data.py | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/src/boutdata/data.py b/src/boutdata/data.py
+index 24f5ec4..247dc3d 100644
+--- a/src/boutdata/data.py
++++ b/src/boutdata/data.py
+@@ -1242,10 +1242,9 @@ def _init_parallel(self):
+             proc_list = tuple(p for p in range(filenum, filenum + files_per_proc[i]))
+             filenum = filenum + files_per_proc[i]
+             worker = Process(
+-                target=self._clean_for_mp()._worker_function,
++                target=self._worker_function,
+                 args=(child_connection, proc_list, self._shared_buffer_raw),
+             )
+-
+             worker.start()
+             self._workers.append((worker, parent_connection))
+ 
+@@ -1629,14 +1628,6 @@ def _collect_parallel(self, varname):
+             self._shared_buffer[global_slices].copy(), attributes=var_attributes
+         )
+ 
+-    def _clean_for_mp(self):
+-        new = object.__new__(BoutOutputs)
+-        new.__dict__ = self.__dict__.copy()
+-        new._file0 = None
+-        new._root_file = None
+-        new._workers = None
+-        return new
+-
+     def _worker_function(self, connection, proc_list, shared_buffer_raw):
+         data_files = [DataFile(self._file_list[i]) for i in proc_list]
+         dim_sizes = tuple(self.grid_info["sizes"][d] for d in ("t", "x", "y", "z"))
+
+From c71c25c29fda78efdf73e5970d0e3125af90f92a Mon Sep 17 00:00:00 2001
+From: David Bold <dave@ipp.mpg.de>
+Date: Wed, 18 Jun 2025 11:31:03 +0200
+Subject: [PATCH 3/4] Allow pickling of BoutOutputs
+
+This is needed so that multithreading works with python 3.14.
+---
+ src/boutdata/data.py | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/boutdata/data.py b/src/boutdata/data.py
+index 247dc3d..7a8a2e1 100644
+--- a/src/boutdata/data.py
++++ b/src/boutdata/data.py
+@@ -1628,6 +1628,13 @@ def _collect_parallel(self, varname):
+             self._shared_buffer[global_slices].copy(), attributes=var_attributes
+         )
+ 
++    def __getstate__(self):
++        new = self.__dict__.copy()
++        new.pop('_file0')
++        new.pop('_root_file')
++        new.pop('_workers')
++        return new
++
+     def _worker_function(self, connection, proc_list, shared_buffer_raw):
+         data_files = [DataFile(self._file_list[i]) for i in proc_list]
+         dim_sizes = tuple(self.grid_info["sizes"][d] for d in ("t", "x", "y", "z"))
+
+From 5d9e1f1ef340bcae3ab65fd3a14b435c0d5866e4 Mon Sep 17 00:00:00 2001
+From: dschwoerer <dschwoerer@users.noreply.github.com>
+Date: Wed, 18 Jun 2025 09:32:19 +0000
+Subject: [PATCH 4/4] Apply ruff changes
+
+---
+ src/boutdata/data.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/boutdata/data.py b/src/boutdata/data.py
+index 7a8a2e1..222cf26 100644
+--- a/src/boutdata/data.py
++++ b/src/boutdata/data.py
+@@ -1630,9 +1630,9 @@ def _collect_parallel(self, varname):
+ 
+     def __getstate__(self):
+         new = self.__dict__.copy()
+-        new.pop('_file0')
+-        new.pop('_root_file')
+-        new.pop('_workers')
++        new.pop("_file0")
++        new.pop("_root_file")
++        new.pop("_workers")
+         return new
+ 
+     def _worker_function(self, connection, proc_list, shared_buffer_raw):

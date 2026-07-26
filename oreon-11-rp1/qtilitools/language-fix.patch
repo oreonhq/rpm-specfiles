@@ -1,0 +1,22 @@
+From 678b28d7e7dd4e2522ddf06b520780ca716b9e5a Mon Sep 17 00:00:00 2001
+From: farchord <farchord@gmail.com>
+Date: Wed, 31 Jul 2024 05:54:50 -0400
+Subject: [PATCH] CMakeLists: Declare that there is no compilation
+
+As there is no compilation going on in this project, declaring so would be a good idea for some distros' tooling.
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bf15479..210b9cb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ cmake_minimum_required(VERSION 3.15)
+ project(Qtilitools
+     VERSION 0.1.1
++    LANGUAGES NONE
+ )
+ string(TOLOWER ${PROJECT_NAME} PROJECT_ID)
+ 

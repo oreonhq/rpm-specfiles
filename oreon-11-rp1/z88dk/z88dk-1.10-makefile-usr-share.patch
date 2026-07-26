@@ -1,0 +1,40 @@
+diff -ur z88dk/Makefile z88dk-makefile-usr-share/Makefile
+--- z88dk/Makefile	2015-02-05 17:11:42.000000000 +0100
++++ z88dk-makefile-usr-share/Makefile	2015-02-22 03:04:49.000000000 +0100
+@@ -7,7 +7,7 @@
+ 
+ # ---> Configurable parameters are below his point
+ 
+-prefix = /usr/local
++prefix = /usr
+ prefix_share = $(prefix)/share
+ 
+ # The default machine, the lib/config/DEFAULT.cfg file is copied to zcc.cfg
+@@ -18,7 +18,7 @@
+ all: setup appmake copt zcpp sccz80 z80asm zcc zpragma zx7 z80nm ticks z80svg config
+ 
+ setup:
+-	echo '#define PREFIX "${prefix}$"/lib/z88dk"' > src/config.h
++	echo '#define PREFIX "'$(prefix_share)'/z88dk"' > src/config.h
+ 	echo '#define UNIX 1' >> src/config.h
+ 
+ appmake:
+@@ -73,12 +73,12 @@
+ 	cd libsrc ; $(MAKE) install
+ 
+ install-libs:
+-	mkdir -p $(prefix)/lib/z88dk/lib/config
+-	cp -R lib/config/* $(prefix)/lib/z88dk/lib/config/
+-	find $(prefix)/lib/z88dk/lib/config -type f | xargs chmod 644
+-	mkdir -p $(prefix)/lib/z88dk/lib/clibs
+-	cp -R lib/clibs/* $(prefix)/lib/z88dk/lib/clibs/
+-	find $(prefix)/lib/z88dk/lib/clibs -type f | xargs chmod 644
++	mkdir -p $(DESTDIR)/$(prefix_share)/z88dk/lib/config
++	cp -R lib/config/* $(DESTDIR)/$(prefix_share)/z88dk/lib/config/
++	find $(DESTDIR)/$(prefix_share)/z88dk/lib/config -type f | xargs chmod 644
++	mkdir -p $(DESTDIR)/$(prefix_share)/z88dk/lib/clibs
++	cp -R lib/clibs/* $(DESTDIR)/$(prefix_share)/z88dk/lib/clibs/
++	find $(DESTDIR)/$(prefix_share)/z88dk/lib/clibs -type f | xargs chmod 644
+ 
+ install:
+ 	mkdir -p -m 755 $(DESTDIR)/$(prefix)/bin $(DESTDIR)/$(prefix_share)/z88dk

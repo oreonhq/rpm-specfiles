@@ -1,0 +1,27 @@
+From c34f4375079ed8d89a9abf638892655ad21fdc13 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Tue, 9 Jan 2018 13:34:48 +0100
+Subject: [PATCH] Use Psych.load_stream instead of deprecated
+ Psych.load_documents
+
+https://github.com/ruby/psych/pull/312
+---
+ lib/log4r/yamlconfigurator.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/log4r/yamlconfigurator.rb b/lib/log4r/yamlconfigurator.rb
+index 2801e8c..c82192e 100644
+--- a/lib/log4r/yamlconfigurator.rb
++++ b/lib/log4r/yamlconfigurator.rb
+@@ -53,7 +53,7 @@ module Log4r
+ 
+     def self.actual_load( yaml_docs)
+       log4r_config = nil
+-      YAML.load_documents( yaml_docs){ |doc|
++      YAML.load_stream( yaml_docs){ |doc|
+         doc.has_key?( 'log4r_config') and log4r_config = doc['log4r_config'] and break
+       }
+       if log4r_config.nil?
+-- 
+2.15.1
+

@@ -1,0 +1,48 @@
+From f3d053430a47b2ac472f8d1603d62b715922a70a Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Tue, 10 Apr 2018 22:41:56 -0400
+Subject: [PATCH] Do not override compile args.
+
+Fedora 32-bit systems do not always support SSE2.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ setup.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index b0f2750..5241a70 100755
+--- a/setup.py
++++ b/setup.py
+@@ -1,20 +1,14 @@
+ #!/usr/bin/env python
+ 
+ import os
+-import platform
+ import sys
+ 
+ from setuptools import Extension, setup
+ 
+ if os.name == "nt":
+     libdep = []
+-    extra_compile_args = []
+ else:
+     libdep = ["m", "pthread"]
+-    if platform.processor() == "i386":
+-        extra_compile_args = ['-msse2', '-mfpmath=sse']
+-    else:
+-        extra_compile_args = []
+ 
+ try:
+     with open("src/pillowfight/_version.h", "r") as file_descriptor:
+@@ -81,7 +75,6 @@ setup(
+             ],
+             include_dirs=["include"],
+             libraries=libdep,
+-            extra_compile_args=extra_compile_args,
+             undef_macros=['NDEBUG'],
+         ),
+     ],
+-- 
+2.21.0
+

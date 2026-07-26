@@ -1,0 +1,20 @@
+--- state.c.orig	2007-10-13 11:29:51.000000000 -0700
++++ state.c	2010-04-25 00:01:15.000000000 -0700
+@@ -291,8 +291,6 @@
+     for(i = 0; i < max; i++)
+         if (str == master[i])
+             rs_write_int(savef, i);
+-
+-    rs_write_int(savef,-1);
+ }
+ 
+ void
+@@ -448,8 +446,6 @@
+     for(i = 0; i < max; i++)
+         if (str == master[i].st_name)
+             rs_write_int(savef,i);
+-
+-    rs_write_int(savef,-1);
+ }
+ 
+ void

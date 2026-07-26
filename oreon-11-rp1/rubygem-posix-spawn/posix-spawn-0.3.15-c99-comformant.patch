@@ -1,0 +1,15 @@
+--- posix-spawn-0.3.15/ext/posix-spawn.c.orig	2024-05-24 15:26:34.438879359 +0900
++++ posix-spawn-0.3.15/ext/posix-spawn.c	2024-05-24 15:30:34.317796103 +0900
+@@ -196,10 +196,11 @@ posixspawn_file_actions_addopen(VALUE ke
+  * if not.
+  */
+ static int
+-posixspawn_file_actions_operations_iter(VALUE key, VALUE val, posix_spawn_file_actions_t *fops)
++posixspawn_file_actions_operations_iter(VALUE key, VALUE val, VALUE ops)
+ {
+ 	int act;
+ 
++	posix_spawn_file_actions_t *fops = (posix_spawn_file_actions_t *)ops;
+ 	act = posixspawn_file_actions_addclose(key, val, fops);
+ 	if (act != ST_CONTINUE) return act;
+ 

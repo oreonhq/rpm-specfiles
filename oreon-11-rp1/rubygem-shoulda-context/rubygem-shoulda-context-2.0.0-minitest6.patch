@@ -1,0 +1,18 @@
+Only in shoulda-context-2.0.0: 000-execute-test.sh
+diff -urp '--exclude=*~' shoulda-context-2.0.0.orig/test/shoulda/context_test.rb shoulda-context-2.0.0/test/shoulda/context_test.rb
+--- shoulda-context-2.0.0.orig/test/shoulda/context_test.rb	2025-12-31 14:48:58.583535372 +0900
++++ shoulda-context-2.0.0/test/shoulda/context_test.rb	2025-12-31 15:12:42.080418564 +0900
+@@ -369,7 +369,12 @@ class ShouldMatcherTest < PARENT_TEST_CA
+     end
+ 
+     def run
+-      @test_case_class.run(@reporter)
++      case Minitest::VERSION
++      when /^6/
++        @test_case_class.run_suite(@reporter)
++      else
++        @test_case_class.run(@reporter)
++      end
+     end
+ 
+     def failure_messages

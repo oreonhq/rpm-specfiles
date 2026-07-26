@@ -1,0 +1,35 @@
+.TH TEND\-EVALADD "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-evaladd \- modify shape by adding a constant to all eigenvalues
+.SH SYNOPSIS
+.B tend\ evaladd
+.B \-v
+.RI < value >
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Modify shape by adding a constant to all eigenvalues.
+The orientation of the tensor is unchanged.
+Note that unlike
+.BR tend\-anscale (1),
+this operation can completely change the shape of the tensor.
+.SH OPTIONS
+.TP
+.B \-v\fR <\fIvalue\fR>
+Value to add to all eigenvalues
+.RI ( float )
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-anscale (1)

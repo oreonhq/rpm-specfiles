@@ -1,0 +1,87 @@
+From 080786fb620f30a2f22e7c8dd01ce2ae3818bf5f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marcus=20M=C3=BCller?= <mmueller@gnuradio.org>
+Date: Sat, 9 Aug 2025 14:58:16 +0200
+Subject: [PATCH] rotator2: disable SSE 4.1 kernels, wildly incorrect results
+ in ctest
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+see https://github.com/gnuradio/volk/issues/794
+
+Signed-off-by: Marcus Müller <mmueller@gnuradio.org>
+---
+ kernels/volk/volk_32fc_s32fc_rotator2puppet_32fc.h | 4 ++--
+ kernels/volk/volk_32fc_s32fc_x2_rotator2_32fc.h    | 4 ++--
+ kernels/volk/volk_32fc_s32fc_x2_rotator_32fc.h     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/kernels/volk/volk_32fc_s32fc_rotator2puppet_32fc.h b/kernels/volk/volk_32fc_s32fc_rotator2puppet_32fc.h
+index 1ae8ad9..9213065 100644
+--- a/kernels/volk/volk_32fc_s32fc_rotator2puppet_32fc.h
++++ b/kernels/volk/volk_32fc_s32fc_rotator2puppet_32fc.h
+@@ -55,7 +55,7 @@ static inline void volk_32fc_s32fc_rotator2puppet_32fc_neon(lv_32fc_t* outVector
+ #endif /* LV_HAVE_NEON */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ #include <smmintrin.h>
+ 
+ static inline void
+@@ -75,7 +75,7 @@ volk_32fc_s32fc_rotator2puppet_32fc_a_sse4_1(lv_32fc_t* outVector,
+ #endif /* LV_HAVE_SSE4_1 */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ #include <smmintrin.h>
+ static inline void
+ volk_32fc_s32fc_rotator2puppet_32fc_u_sse4_1(lv_32fc_t* outVector,
+diff --git a/kernels/volk/volk_32fc_s32fc_x2_rotator2_32fc.h b/kernels/volk/volk_32fc_s32fc_x2_rotator2_32fc.h
+index e668e3c..0f63673 100644
+--- a/kernels/volk/volk_32fc_s32fc_x2_rotator2_32fc.h
++++ b/kernels/volk/volk_32fc_s32fc_x2_rotator2_32fc.h
+@@ -204,7 +204,7 @@ static inline void volk_32fc_s32fc_x2_rotator2_32fc_neon(lv_32fc_t* outVector,
+ #endif /* LV_HAVE_NEON */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ #include <smmintrin.h>
+ 
+ static inline void volk_32fc_s32fc_x2_rotator2_32fc_a_sse4_1(lv_32fc_t* outVector,
+@@ -307,7 +307,7 @@ static inline void volk_32fc_s32fc_x2_rotator2_32fc_a_sse4_1(lv_32fc_t* outVecto
+ #endif /* LV_HAVE_SSE4_1 for aligned */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ #include <smmintrin.h>
+ 
+ static inline void volk_32fc_s32fc_x2_rotator2_32fc_u_sse4_1(lv_32fc_t* outVector,
+diff --git a/kernels/volk/volk_32fc_s32fc_x2_rotator_32fc.h b/kernels/volk/volk_32fc_s32fc_x2_rotator_32fc.h
+index c0def35..4603ecc 100644
+--- a/kernels/volk/volk_32fc_s32fc_x2_rotator_32fc.h
++++ b/kernels/volk/volk_32fc_s32fc_x2_rotator_32fc.h
+@@ -113,7 +113,7 @@ static inline void volk_32fc_s32fc_x2_rotator_32fc_neon(lv_32fc_t* outVector,
+ #endif /* LV_HAVE_NEON */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ 
+ static inline void volk_32fc_s32fc_x2_rotator_32fc_a_sse4_1(lv_32fc_t* outVector,
+                                                             const lv_32fc_t* inVector,
+@@ -128,7 +128,7 @@ static inline void volk_32fc_s32fc_x2_rotator_32fc_a_sse4_1(lv_32fc_t* outVector
+ #endif /* LV_HAVE_SSE4_1 for aligned */
+ 
+ 
+-#ifdef LV_HAVE_SSE4_1
++#ifdef LV_HAVE_SSE4_1__DISABLED
+ 
+ static inline void volk_32fc_s32fc_x2_rotator_32fc_u_sse4_1(lv_32fc_t* outVector,
+                                                             const lv_32fc_t* inVector,
+-- 
+2.50.1
+

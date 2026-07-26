@@ -1,0 +1,65 @@
+--- src/main/java/org/junit/contrib/java/lang/system/internal/NoExitSecurityManager.java
++++ src/main/java/org/junit/contrib/java/lang/system/internal/NoExitSecurityManager.java
+@@ -36,10 +36,9 @@
+ 				"checkExit(int) has not been called.");
+ 	}
+ 
+-	@Override
++
+ 	public boolean getInCheck() {
+-		return (originalSecurityManager != null)
+-			&& originalSecurityManager.getInCheck();
++                throw new RuntimeException("getInCheck no longer exists");
+ 	}
+ 
+ 	@Override
+@@ -174,10 +173,9 @@
+ 			originalSecurityManager.checkPropertyAccess(key);
+ 	}
+ 
+-	@Override
++
+ 	public boolean checkTopLevelWindow(Object window) {
+-		return (originalSecurityManager == null) ? super.checkTopLevelWindow(window)
+-			: originalSecurityManager.checkTopLevelWindow(window);
++                throw new RuntimeException("checkTopLevelWindow no longer exists");
+ 	}
+ 
+ 	@Override
+@@ -186,16 +184,14 @@
+ 			originalSecurityManager.checkPrintJobAccess();
+ 	}
+ 
+-	@Override
++
+ 	public void checkSystemClipboardAccess() {
+-		if (originalSecurityManager != null)
+-			originalSecurityManager.checkSystemClipboardAccess();
+-	}
+-
+-	@Override
++                throw new RuntimeException("checkSystemClipboardAccess no longer exists");
++	}
++
++
+ 	public void checkAwtEventQueueAccess() {
+-		if (originalSecurityManager != null)
+-			originalSecurityManager.checkAwtEventQueueAccess();
++                throw new RuntimeException("checkAwtEventQueueAccess no longer exists");
+ 	}
+ 
+ 	@Override
+@@ -216,10 +212,9 @@
+ 			originalSecurityManager.checkSetFactory();
+ 	}
+ 
+-	@Override
++
+ 	public void checkMemberAccess(Class<?> clazz, int which) {
+-		if (originalSecurityManager != null)
+-			originalSecurityManager.checkMemberAccess(clazz, which);
++                throw new RuntimeException("checkMemberAccess no longer exists");
+ 	}
+ 
+ 	@Override
+

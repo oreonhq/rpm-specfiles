@@ -1,0 +1,10 @@
+diff -U 3 -dHrN a/Cargo.toml b/Cargo.toml
+--- a/Cargo.toml	1970-01-01 01:00:00.000000000 +0100
++++ b/Cargo.toml	2025-11-07 08:39:31.248238209 +0100
+@@ -15,5 +15,5 @@
+ 
+ [dependencies]
+ ammonia = "4.1.2"
+-pyo3 = { version = "0.27.1", features = ["abi3-py38", "generate-import-lib"] }
++pyo3 = { version = "0.27.1", features = ["abi3-py38"] }
+ ouroboros = "0.18"

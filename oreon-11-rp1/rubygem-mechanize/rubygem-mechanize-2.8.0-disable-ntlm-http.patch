@@ -1,0 +1,26 @@
+--- ./lib/mechanize/http/agent.rb.nontlm	1970-01-01 09:00:00.000000000 +0900
++++ ./lib/mechanize/http/agent.rb	2013-10-17 14:07:07.107322560 +0900
+@@ -1,6 +1,6 @@
+ # frozen_string_literal: true
+ require 'tempfile'
+-require 'net/ntlm'
++#require 'net/ntlm'
+ require 'webrobots'
+ 
+ ##
+@@ -738,6 +738,7 @@
+ 
+       existing_realms << realm
+       @digest_challenges[realm] = challenge
++=begin
+     elsif challenge = challenges.find { |c| c.scheme == 'NTLM' } then
+       existing_realms = @authenticate_methods[uri + '/'][:ntlm]
+ 
+@@ -762,6 +763,7 @@
+         type_1 = Net::NTLM::Message::Type1.new.encode64
+         headers['Authorization'] = "NTLM #{type_1}"
+       end
++=end
+     elsif challenge = challenges.find { |c| c.scheme == 'Basic' } then
+       realm = challenge.realm uri
+ 

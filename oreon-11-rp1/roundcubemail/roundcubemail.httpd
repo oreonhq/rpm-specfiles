@@ -1,0 +1,20 @@
+#
+# Round Cube Webmail is a browser-based multilingual IMAP client
+#
+
+Alias /roundcubemail /usr/share/roundcubemail/public_html
+
+# Define who can access the Webmail
+# You can enlarge permissions once configured
+
+<Directory /usr/share/roundcubemail/>
+        Require local
+</Directory>
+
+# Define who can access the installer
+# keep this secured once configured
+
+<Location /roundcubemail/installer.php>
+        Require local
+</Location>
+

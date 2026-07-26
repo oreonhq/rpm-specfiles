@@ -1,0 +1,210 @@
+From b62f2d591937b766cd3d0a0d5731d2481ac33807 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Wed, 22 Jan 2025 15:50:22 +0100
+Subject: [PATCH] Fix incomplete function prototypes
+
+---
+ php_zmq_pollset.h |  6 +++---
+ php_zmq_private.h | 20 ++++++++++----------
+ zmq.c             |  4 ++--
+ zmq_clock.c       |  2 +-
+ zmq_helpers.c     |  4 ++--
+ zmq_pollset.c     |  2 +-
+ zmq_shared_ctx.c  | 10 +++++-----
+ 7 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/php_zmq_pollset.h b/php_zmq_pollset.h
+index 1df9c3a..9bb0af4 100644
+--- a/php_zmq_pollset.h
++++ b/php_zmq_pollset.h
+@@ -40,9 +40,9 @@
+ #define PHP_ZMQ_POLLSET_ERR_INVALID_TYPE -7
+ 
+ 
+-/** {{{ php_zmq_pollset *php_zmq_pollset_init();
++/** {{{ php_zmq_pollset *php_zmq_pollset_init(void);
+ */
+-php_zmq_pollset *php_zmq_pollset_init();
++php_zmq_pollset *php_zmq_pollset_init(void);
+ /* }}} */
+ 
+ /** {{{ zend_bool php_zmq_pollset_items(php_zmq_pollset *set, zval *return_value);
+@@ -83,7 +83,7 @@ size_t php_zmq_pollset_num_items(php_zmq_pollset *set);
+ 
+ /** {{{ void php_zmq_pollset_delete_all(php_zmq_pollset *set);
+ */
+-zval *php_zmq_pollset_errors();
++zval *php_zmq_pollset_errors(php_zmq_pollset *set);
+ /* }}} */
+ 
+ /** {{{ void php_zmq_pollset_deinit(php_zmq_pollset **set);
+diff --git a/php_zmq_private.h b/php_zmq_private.h
+index 2e5cd3b..7c86376 100644
+--- a/php_zmq_private.h
++++ b/php_zmq_private.h
+@@ -190,8 +190,8 @@ PHP_METHOD(zmqsocket, getsockopt);
+ PHP_METHOD(zmqsocket, setsockopt);
+ zend_bool php_zmq_device(php_zmq_device_object *intern);
+ 
+-zend_class_entry *php_zmq_socket_exception_sc_entry_get ();
+-zend_class_entry *php_zmq_device_exception_sc_entry_get ();
++zend_class_entry *php_zmq_socket_exception_sc_entry_get (void);
++zend_class_entry *php_zmq_device_exception_sc_entry_get (void);
+ 
+ php_stream *php_zmq_create_zmq_fd(zval *obj);
+ 
+@@ -199,30 +199,30 @@ void php_zmq_register_sockopt_constants (zend_class_entry *ce);
+ 
+ typedef struct _php_zmq_clock_ctx_t php_zmq_clock_ctx_t;
+ 
+-php_zmq_clock_ctx_t *php_zmq_clock_init ();
++php_zmq_clock_ctx_t *php_zmq_clock_init (void);
+ 
+ uint64_t php_zmq_clock (php_zmq_clock_ctx_t *clock_ctx);
+ 
+ void php_zmq_clock_destroy (php_zmq_clock_ctx_t **clock_ctx);
+ 
+-char *php_zmq_get_libzmq_version();
++char *php_zmq_get_libzmq_version(void);
+ 
+-zend_long php_zmq_get_libzmq_version_id();
++zend_long php_zmq_get_libzmq_version_id(void);
+ 
+ char *php_zmq_printable_func (zend_fcall_info *fci, zend_fcall_info_cache *fci_cache);
+ 
+ 
+-zend_bool php_zmq_shared_ctx_init();
++zend_bool php_zmq_shared_ctx_init(void);
+ 
+ void php_zmq_shared_ctx_assign_to(php_zmq_context *context);
+ 
+-void php_zmq_shared_ctx_destroy();
++void php_zmq_shared_ctx_destroy(void);
+ 
+-int php_zmq_shared_ctx_socket_count();
++int php_zmq_shared_ctx_socket_count(void);
+ 
+-void php_zmq_shared_ctx_socket_count_incr();
++void php_zmq_shared_ctx_socket_count_incr(void);
+ 
+-void php_zmq_shared_ctx_socket_count_decr();
++void php_zmq_shared_ctx_socket_count_decr(void);
+ 
+ 
+ 
+diff --git a/zmq.c b/zmq.c
+index bd2401d..1fd9736 100644
+--- a/zmq.c
++++ b/zmq.c
+@@ -71,12 +71,12 @@ zend_class_entry *php_zmq_context_exception_sc_entry_get ()
+ 	return php_zmq_context_exception_sc_entry;
+ }
+ 
+-zend_class_entry *php_zmq_socket_exception_sc_entry_get ()
++zend_class_entry *php_zmq_socket_exception_sc_entry_get (void)
+ {
+ 	return php_zmq_socket_exception_sc_entry;
+ }
+ 
+-zend_class_entry *php_zmq_device_exception_sc_entry_get ()
++zend_class_entry *php_zmq_device_exception_sc_entry_get (void)
+ {
+ 	return php_zmq_device_exception_sc_entry;
+ }
+diff --git a/zmq_clock.c b/zmq_clock.c
+index 6533297..8e6950a 100644
+--- a/zmq_clock.c
++++ b/zmq_clock.c
+@@ -73,7 +73,7 @@ uint64_t s_backup_clock ()
+ 
+ struct _php_zmq_clock_ctx_t {};
+ 
+-php_zmq_clock_ctx_t *php_zmq_clock_init ()
++php_zmq_clock_ctx_t *php_zmq_clock_init (void)
+ {
+ 	return
+ 		malloc (sizeof (php_zmq_clock_ctx_t));
+diff --git a/zmq_helpers.c b/zmq_helpers.c
+index dfae5a6..30c3eaa 100644
+--- a/zmq_helpers.c
++++ b/zmq_helpers.c
+@@ -33,7 +33,7 @@
+ 
+ /** {{{ char *php_zmq_libzmq_version()
+ */
+-char *php_zmq_get_libzmq_version() 
++char *php_zmq_get_libzmq_version(void)
+ {
+ 	char *buffer = NULL;
+ 
+@@ -47,7 +47,7 @@ char *php_zmq_get_libzmq_version()
+ 
+ /** {{{ zend_long php_zmq_libzmq_version_id()
+ */
+-zend_long php_zmq_get_libzmq_version_id() 
++zend_long php_zmq_get_libzmq_version_id(void)
+ {
+ 	int major = 0, minor = 0, patch = 0;
+ 
+diff --git a/zmq_pollset.c b/zmq_pollset.c
+index 0bf1098..2aeb96c 100644
+--- a/zmq_pollset.c
++++ b/zmq_pollset.c
+@@ -184,7 +184,7 @@ zend_string *s_create_key(zval *entry)
+ 	}
+ }
+ 
+-php_zmq_pollset *php_zmq_pollset_init()
++php_zmq_pollset *php_zmq_pollset_init(void)
+ {
+ 	php_zmq_pollset *set = ecalloc (1, sizeof(php_zmq_pollset));
+ 
+diff --git a/zmq_shared_ctx.c b/zmq_shared_ctx.c
+index 2d86d91..0672ecb 100644
+--- a/zmq_shared_ctx.c
++++ b/zmq_shared_ctx.c
+@@ -136,7 +136,7 @@ void s_shared_ctx_destroy()
+ }
+ #endif
+ 
+-zend_bool php_zmq_shared_ctx_init()
++zend_bool php_zmq_shared_ctx_init(void)
+ {
+ 	return
+ 		s_shared_ctx_init();
+@@ -150,7 +150,7 @@ void php_zmq_shared_ctx_assign_to(php_zmq_context *context)
+ 	}
+ }
+ 
+-void php_zmq_shared_ctx_destroy()
++void php_zmq_shared_ctx_destroy(void)
+ {
+ 	if (php_zmq_shared_ctx_socket_count() > 0) {
+ 		php_error_docref(NULL, E_WARNING, "php_zmq_shared_ctx_socket_count() > 0, please report a bug");
+@@ -158,7 +158,7 @@ void php_zmq_shared_ctx_destroy()
+ 	s_shared_ctx_destroy();
+ }
+ 
+-int php_zmq_shared_ctx_socket_count()
++int php_zmq_shared_ctx_socket_count(void)
+ {
+ 	int value = 0;
+ 
+@@ -169,7 +169,7 @@ int php_zmq_shared_ctx_socket_count()
+ 	return value;
+ }
+ 
+-void php_zmq_shared_ctx_socket_count_incr()
++void php_zmq_shared_ctx_socket_count_incr(void)
+ {
+ 	if (s_shared_ctx_lock()) {
+ 		s_ctx_socket_count++;
+@@ -177,7 +177,7 @@ void php_zmq_shared_ctx_socket_count_incr()
+ 	}
+ }
+ 
+-void php_zmq_shared_ctx_socket_count_decr()
++void php_zmq_shared_ctx_socket_count_decr(void)
+ {
+ 	if (s_shared_ctx_lock()) {
+ 		s_ctx_socket_count--;

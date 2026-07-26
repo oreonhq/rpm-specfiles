@@ -1,0 +1,103 @@
+Description: Fix GnuTLS send/recv when returning a lower value than expected
+ gnutls_record_send() / gnutls_record_recv() may be interrupted after some data
+ transmission but before the message was completely read/written.  When this
+ happen, the value returned by the function is positive but lower that the size
+ of the read/write.  In this case, we should not return an error, but rather
+ loop to recv/send the missing data.
+Author: Romain Tartière <romain@blogreen.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2023-06-08
+
+--- riemann-c-client-1.10.4.orig/lib/riemann/client/tls-gnutls.c
++++ riemann-c-client-1.10.4/lib/riemann/client/tls-gnutls.c
+@@ -202,13 +202,18 @@ _riemann_client_send_message_tls (rieman
+   if (!buffer)
+     return -errno;
+ 
+-  do {
+-    sent = gnutls_record_send (client->tls.session, buffer, len);
+-  } while (sent == GNUTLS_E_AGAIN || sent == GNUTLS_E_INTERRUPTED);
+-  if (sent < 0 || (size_t)sent != len)
++  size_t left = len;
++  while (left > 0)
+     {
+-      free (buffer);
+-      return -EPROTO;
++      do {
++        sent = gnutls_record_send (client->tls.session, buffer + len - left, left);
++      } while (sent == GNUTLS_E_AGAIN || sent == GNUTLS_E_INTERRUPTED);
++      if (sent < 0)
++        {
++          free (buffer);
++          return -EPROTO;
++        }
++      left -= sent;
+     }
+   free (buffer);
+   return 0;
+@@ -220,28 +225,41 @@ _riemann_client_recv_message_tls (rieman
+   uint32_t header, len;
+   uint8_t *buffer;
+   ssize_t received;
++  size_t left;
+   riemann_message_t *message;
+ 
+-  do {
+-    received = gnutls_record_recv (client->tls.session, &header, sizeof (header));
+-  } while (received == GNUTLS_E_AGAIN || received == GNUTLS_E_INTERRUPTED);
+-  if (received != sizeof (header))
++  len = sizeof (header);
++  left = len;
++  while (left > 0)
+     {
+-      errno = EPROTO;
+-      return NULL;
++      do {
++        received = gnutls_record_recv (client->tls.session, &header + len - left, left);
++      } while (received == GNUTLS_E_AGAIN || received == GNUTLS_E_INTERRUPTED);
++      if (received <= 0)
++        {
++          errno = EPROTO;
++          return NULL;
++        }
++      left -= received;
+     }
++
+   len = ntohl (header);
+ 
+   buffer = (uint8_t *) malloc (len);
+ 
+-  do {
+-    received = gnutls_record_recv (client->tls.session, buffer, len);
+-  } while (received == GNUTLS_E_AGAIN || received == GNUTLS_E_INTERRUPTED);
+-  if (received != len)
++  left = len;
++  while (left > 0)
+     {
+-      free (buffer);
+-      errno = EPROTO;
+-      return NULL;
++      do {
++	received = gnutls_record_recv (client->tls.session, buffer + len - left, left);
++      } while (received == GNUTLS_E_AGAIN || received == GNUTLS_E_INTERRUPTED);
++      if (received <= 0)
++        {
++          free (buffer);
++          errno = EPROTO;
++          return NULL;
++        }
++        left -= received;
+     }
+ 
+   message = riemann_message_from_buffer (buffer, len);

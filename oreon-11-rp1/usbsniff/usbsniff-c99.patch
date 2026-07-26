@@ -1,0 +1,42 @@
+Make available more function prototypes, to avoid implicit function
+declarations.  This improves compatibility with future compilers.
+
+Submitted upstream: <https://github.com/vdudouyt/usbsniff/pull/3>
+
+diff --git a/usb_replay.c b/usb_replay.c
+index 32e9cf14fd854f66..3ae7bf8e740ad90c 100644
+--- a/usb_replay.c
++++ b/usb_replay.c
+@@ -18,6 +18,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <assert.h>
++#include <unistd.h>
+ #include <libusb.h>
+ #include "common.h"
+ #include "usb_replay.h"
+diff --git a/usb_replay.h b/usb_replay.h
+index 3dd098085336f5fa..b28c6c88985fbe42 100644
+--- a/usb_replay.h
++++ b/usb_replay.h
+@@ -34,4 +34,8 @@ typedef struct urb_s {
+ 	uint16_t wLength;
+ } urb_t;
+ 
++void usb_init(unsigned int vid, unsigned int pid);
++void perform_transfer(urb_t *urb);
++void print_help_and_exit(char **argv);
++
+ #endif
+diff --git a/usb_replay.y b/usb_replay.y
+index fc7c4a23406da350..1efaf08f621d5f03 100644
+--- a/usb_replay.y
++++ b/usb_replay.y
+@@ -2,6 +2,7 @@
+     #include <stdio.h>
+     #include <stdlib.h>
+     #include <string.h>
++    #include "common.h"
+     #include "usb_replay.h"
+     #include "error.h"
+     int yylex(void);

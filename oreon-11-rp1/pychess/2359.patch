@@ -1,0 +1,53 @@
+From beccc10e4ae5d0c6a1a7a3de0592f5913f646761 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Mon, 21 Jul 2025 15:05:18 -0700
+Subject: [PATCH] Fix GHA workflow so test failure is properly caught
+
+The current GHA "Run the test suite" workflow will virtually
+never fail, because run_tests.py never exits anything but 0. It
+effectively runs the tests, but ignores the results. The tests
+have actually been failing for months - likely since 983e138 -
+but nobody noticed because of this problem.
+
+This changes run_tests.py so it exits 1 if the tests fail, and
+tweaks run-tests.yml so we will still kill xvfb before exiting
+if the tests fail.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ .github/workflows/run-tests.yml | 4 +++-
+ testing/run_tests.py            | 6 +++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/.github/workflows/run-tests.yml b/.github/workflows/run-tests.yml
+index bd9739c39..e19697013 100644
+--- a/.github/workflows/run-tests.yml
++++ b/.github/workflows/run-tests.yml
+@@ -77,6 +77,8 @@ jobs:
+         xvfb_pid=$!
+ 
+         cd testing
+-        ./run3 run_tests.py
++        ./run3 run_tests.py || touch FAILED
+ 
+         kill -s SIGTERM "${xvfb_pid}"
++        [ -f FAILED ] && exit 1
++        exit 0
+diff --git a/testing/run_tests.py b/testing/run_tests.py
+index 4a288d439..1f693daeb 100755
+--- a/testing/run_tests.py
++++ b/testing/run_tests.py
+@@ -1,3 +1,4 @@
++import sys
+ import unittest
+ 
+ modules_to_test = (
+@@ -45,4 +46,7 @@ def suite():
+ 
+ 
+ if __name__ == "__main__":
+-    unittest.TextTestRunner(verbosity=2).run(suite())
++    ret = unittest.TextTestRunner(verbosity=2).run(suite())
++    if ret.wasSuccessful():
++        sys.exit(0)
++    sys.exit(1)

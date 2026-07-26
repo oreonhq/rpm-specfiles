@@ -1,0 +1,36 @@
+diff -up scorched3d-44/scorched/src/common/lua/LUAS3DLib.cpp~ scorched3d-44/scorched/src/common/lua/LUAS3DLib.cpp
+--- a/src/common/lua/LUAS3DLib.cpp~	2020-08-11 15:07:12.000000000 +0200
++++ b/src/common/lua/LUAS3DLib.cpp	2020-08-11 15:22:07.159970299 +0200
+@@ -349,7 +349,14 @@ static const luaL_Reg s3dlib[] = {
+ };
+ 
+ LUALIB_API int luaopen_s3d (lua_State *L) {
++#if LUA_VERSION_NUM > 501
++	lua_newtable(L);
++	luaL_setfuncs(L, s3dlib, 0);
++	lua_pushvalue(L, -1);
++	lua_setglobal(L, LUA_S3DLIBNAME);
++#else
+ 	luaL_register(L, LUA_S3DLIBNAME, s3dlib);
++#endif
+ 	return 1;
+ }
+ 
+diff -up scorched3d-44/scorched/src/common/lua/LUAS3DWeaponLib.cpp~ scorched3d-44/scorched/src/common/lua/LUAS3DWeaponLib.cpp
+--- a/src/common/lua/LUAS3DWeaponLib.cpp~	2020-08-11 15:32:25.000000000 +0200
++++ b/src/common/lua/LUAS3DWeaponLib.cpp	2020-08-11 15:35:49.886946546 +0200
+@@ -156,7 +156,14 @@ static const luaL_Reg s3dweaponlib[] = {
+ };
+ 
+ LUALIB_API int luaopen_s3dweapon (lua_State *L) {
++#if LUA_VERSION_NUM > 501
++	lua_newtable(L);
++	luaL_setfuncs(L, s3dweaponlib, 0);
++	lua_pushvalue(L, -1);
++	lua_setglobal(L, LUA_S3DWEAPONLIBNAME);
++#else
+ 	luaL_register(L, LUA_S3DWEAPONLIBNAME, s3dweaponlib);
++#endif
+ 	return 1;
+ }
+ 

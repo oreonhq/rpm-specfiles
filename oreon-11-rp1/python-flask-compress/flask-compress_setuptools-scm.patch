@@ -1,0 +1,10 @@
+diff -rupN --no-dereference flask-compress-1.23/pyproject.toml flask-compress-1.23-new/pyproject.toml
+--- flask-compress-1.23/pyproject.toml	2025-11-06 09:57:31.000000000 +0100
++++ flask-compress-1.23-new/pyproject.toml	2025-11-07 14:20:49.963135717 +0100
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]<8"]
++requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]"]
+ build-backend = "setuptools.build_meta"
+ 
+ [tool.setuptools_scm]

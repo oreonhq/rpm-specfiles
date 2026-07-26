@@ -1,0 +1,27 @@
+diff --git a/src/libs_3rdparty/qtscript/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h b/src/libs_3rdparty/qtscript/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
+index a4695a261..ec063f1ee 100644
+--- a/src/libs_3rdparty/qtscript/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
++++ b/src/libs_3rdparty/qtscript/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
+@@ -407,6 +407,13 @@
+ #define WTF_CPU_RISCV32 1
+ #endif
+ 
++/* CPU(IBM z system) */
++#if defined(__s390x__) || defined(__s390__)
++#define WTF_CPU_S390X 1
++#define WTF_CPU_BIG_ENDIAN 1
++#endif
++
++
+ /* ==== OS() - underlying operating system; only to be used for mandated low-level services like 
+    virtual memory, not to choose a GUI toolkit ==== */
+ 
+@@ -960,6 +967,8 @@
+ #if !defined(WTF_USE_JSVALUE64) && !defined(WTF_USE_JSVALUE32) && !defined(WTF_USE_JSVALUE32_64)
+ #if (CPU(X86_64) && !CPU(X32) && (OS(UNIX) || OS(WINDOWS) || OS(SOLARIS) || OS(HPUX))) || (CPU(IA64) && !CPU(IA64_32)) || CPU(ALPHA) || CPU(AIX64) || CPU(SPARC64) || CPU(MIPS64) || CPU(AARCH64) || CPU(RISCV64)
+ #define WTF_USE_JSVALUE64 1
++#elif (CPU(S390X))
++#define WTF_USE_JSVALUE64 1
+ #elif CPU(ARM) || CPU(PPC64) || CPU(RISCV32)
+ #define WTF_USE_JSVALUE32 1
+ #elif OS(WINDOWS) && COMPILER(MINGW)

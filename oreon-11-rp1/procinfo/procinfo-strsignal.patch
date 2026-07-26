@@ -1,0 +1,13 @@
+diff --git a/routines.c b/routines.c
+index 15dcb50..35b2c1d 100644
+--- a/routines.c
++++ b/routines.c
+@@ -146,7 +146,7 @@ quit (int i)
+ 	exit (0);
+     } else {
+ 	printf ("%s%s%s", ve, se, tgoto (cm, 0, li));
+-	printf ("[%s]\n", sys_siglist[i]);
++	printf ("[%s]\n", strsignal(i));
+ 	exit (128 + i);
+     }
+ }

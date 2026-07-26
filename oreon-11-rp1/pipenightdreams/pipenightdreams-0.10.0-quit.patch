@@ -1,0 +1,13 @@
+--- pipenightdreams-0.10.0/src/pipenightdreams.cpp~	2006-05-07 13:10:55.000000000 +0200
++++ pipenightdreams-0.10.0/src/pipenightdreams.cpp	2006-05-07 13:10:55.000000000 +0200
+@@ -356,7 +356,9 @@
+   do{
+     event_manager->pumpEvents(true);
+     event=sys->get();
+-  }while (event!=GO);
++  }while (event!=GO && event!=BACK);
++  if (event == BACK)
++    sys->put(SDLK_ESCAPE);
+ }
+ 
+ void PipeNightDreams::showFinal(){

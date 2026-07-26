@@ -1,0 +1,12 @@
+diff -up volpack-1.0c7/examples/rendervolume.c.fix-casts volpack-1.0c7/examples/rendervolume.c
+--- volpack-1.0c7/examples/rendervolume.c.fix-casts	2024-02-03 09:26:03.308261471 -0500
++++ volpack-1.0c7/examples/rendervolume.c	2024-02-03 09:26:09.395311653 -0500
+@@ -207,7 +207,7 @@ char **argv;
+ 	    strcpy(filename, "brainsmall.ppm");
+ 	else
+ 	    sprintf(filename, "brainsmall_%d.ppm", n + 1000);
+-	StorePGM(image, IMAGE_WIDTH, IMAGE_HEIGHT, filename);
++	StorePGM((char *)image, IMAGE_WIDTH, IMAGE_HEIGHT, filename);
+ 
+ 	/* rotate by 5 degrees for next image */
+ 	vpRotate(vpc, VP_Y_AXIS, 5.0);

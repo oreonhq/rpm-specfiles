@@ -1,0 +1,46 @@
+Additional prototypes for C99 compatibility: Declare fopen_datafile
+unconditionally because it is used throughout the sources.  Add
+a missing prototype for read_test_file_colormap.
+
+Also avoid an implicit int in the definition of aborttech.
+
+Submitted upstream: <https://sourceforge.net/p/slashem/bugs/964/>
+
+diff --git a/include/extern.h b/include/extern.h
+index 55a9829cb0f05659..bb5254eeac5fdf08 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -681,9 +681,7 @@ E void NDECL(makerogueghost);
+ E char *FDECL(fname_encode, (const char *, CHAR_P, char *, char *, int));
+ E char *FDECL(fname_decode, (CHAR_P, char *, char *, int));
+ E const char *FDECL(fqname, (const char *, int, int));
+-#ifndef FILE_AREAS
+ E FILE *FDECL(fopen_datafile, (const char *,const char *,int));
+-#endif
+ E boolean FDECL(uptodate, (int,const char *));
+ E void FDECL(store_version, (int));
+ #ifdef MFLOPPY
+diff --git a/src/tech.c b/src/tech.c
+index fd6fe46b2478ee40..c25d5808ebcb2280 100644
+--- a/src/tech.c
++++ b/src/tech.c
+@@ -238,6 +238,7 @@ tech_known(tech)
+ /* Called to prematurely stop a technique */
+ void
+ aborttech(tech)
++int tech;
+ {
+ 	int i;
+ 
+diff --git a/win/share/tile_t.h b/win/share/tile_t.h
+index c28f8dd37624a91d..01bdfe71ae7e97ed 100644
+--- a/win/share/tile_t.h
++++ b/win/share/tile_t.h
+@@ -39,6 +39,7 @@ extern int tile_x, tile_y;
+ 
+ #define pixel_equal(x,y) ((x.r == y.r) && (x.g == y.g) && (x.b == y.b))
+ 
++extern boolean FDECL(read_text_file_colormap, (const char *filename));
+ extern boolean FDECL(fopen_text_file, (const char *, const char *));
+ extern boolean FDECL(fopen_virtual_text_file, (const char *base_name,
+ 		const char *overlay_name, const char *type));

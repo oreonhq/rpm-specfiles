@@ -1,0 +1,32 @@
+diff -up pgbadger-13.0/Makefile.PL.orig pgbadger-13.0/Makefile.PL
+--- pgbadger-13.0/Makefile.PL.orig	2025-02-06 15:41:45.771517384 +0100
++++ pgbadger-13.0/Makefile.PL	2025-02-06 16:27:14.594196359 +0100
+@@ -4,17 +4,17 @@ use ExtUtils::MakeMaker;
+ 
+ use strict;
+ 
+-my @ALLOWED_ARGS = ('INSTALLDIRS','DESTDIR');
+-
+-# Parse command line arguments and store them as environment variables
+-while ($_ = shift) {
+-	my ($k,$v) = split(/=/, $_, 2);
+-	if (grep(/^$k$/, @ALLOWED_ARGS)) {
+-		$ENV{$k} = $v;
+-	}
+-}
+-$ENV{DESTDIR} =~ s/\/$//;
+-
++#my @ALLOWED_ARGS = ('INSTALLDIRS','DESTDIR');
++#
++## Parse command line arguments and store them as environment variables
++#while ($_ = shift) {
++#	my ($k,$v) = split(/=/, $_, 2);
++#	if (grep(/^$k$/, @ALLOWED_ARGS)) {
++#		$ENV{$k} = $v;
++#	}
++#}
++#$ENV{DESTDIR} =~ s/\/$//;
++#
+ # Default install path
+ my $DESTDIR = $ENV{DESTDIR} || '';
+ my $INSTALLDIRS = $ENV{INSTALLDIRS} || 'site';

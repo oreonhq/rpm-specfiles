@@ -1,0 +1,41 @@
+diff -ru memfs-1.0.0-orig/lib/memfs.rb memfs-1.0.0/lib/memfs.rb
+--- memfs-1.0.0-orig/lib/memfs.rb	2020-05-03 15:06:27.797503428 +0200
++++ memfs-1.0.0/lib/memfs.rb	2020-05-03 15:25:12.074263769 +0200
+@@ -25,6 +25,14 @@
+   # Keeps track of the original Ruby IO class.
+   OriginalIO = ::IO
+ 
++  def self.ruby_version_gte?(version) # :nodoc:
++    Gem::Version.new(RUBY_VERSION) >= Gem::Version.new(version)
++  end
++
++  def self.windows?
++    /mswin|bccwin|mingw/ =~ RUBY_PLATFORM
++  end
++
+   require 'memfs/file_system'
+   require 'memfs/dir'
+   require 'memfs/file'
+diff -ru memfs-1.0.0-orig/spec/memfs/file_spec.rb memfs-1.0.0/spec/memfs/file_spec.rb
+--- memfs-1.0.0-orig/spec/memfs/file_spec.rb	2020-05-03 15:06:27.805503547 +0200
++++ memfs-1.0.0/spec/memfs/file_spec.rb	2020-05-03 15:12:12.441641256 +0200
+@@ -500,9 +500,16 @@
+       end
+ 
+       context 'when the period is the last character in path' do
+-        it 'returns an empty string' do
+-          extname = described_class.extname('test-subject.')
+-          expect(extname).to eq ''
++        if MemFs.ruby_version_gte?('2.7') && !MemFs.windows?
++          it 'returns a period' do
++            extname = described_class.extname('test-subject.')
++            expect(extname).to eq '.'
++          end
++        else
++          it 'returns an empty string' do
++            extname = described_class.extname('test-subject.')
++            expect(extname).to eq ''
++          end
+         end
+       end
+     end

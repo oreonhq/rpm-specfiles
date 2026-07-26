@@ -1,0 +1,20 @@
+--- xyzsh-1.5.8/src/cmd_curses.c.format	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/cmd_curses.c	2022-07-24 22:36:42.036148159 +0900
+@@ -105,7 +105,7 @@
+             if(p_view) {
+                 mvprintw(y, 0, "%s", line);
+             } else {
+-                mvprintw(y, 0, head);
++                mvprintw(y, 0, "%s", head);
+                 printw("%s", line);
+             }
+             y++;
+--- xyzsh-1.5.8/src/curses.c.format	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/curses.c	2022-07-24 22:35:59.720121616 +0900
+@@ -243,5 +243,5 @@
+     space[x] = 0;
+ 
+     attron(0);
+-    mvprintw(y, 0, space);
++    mvprintw(y, 0, "%s", space);
+ }

@@ -1,0 +1,23 @@
+diff -ruN mf2py-2.0.1/pyproject.toml mf2py-2.0.1-mod/pyproject.toml
+--- mf2py-2.0.1/pyproject.toml	2023-12-08 06:53:58.000000000 +0300
++++ mf2py-2.0.1-mod/pyproject.toml	2024-10-30 20:34:33.089388764 +0300
+@@ -20,7 +20,6 @@
+ 
+ [tool.poetry.group.dev.dependencies]
+ lxml = "^4.9.2"
+-mock = "^5.0.1"
+ pytest = "^7.2.1"
+ black = "^23.3.0"
+ isort = "^5.12.0"
+diff -ruN mf2py-2.0.1/test/test_parser.py mf2py-2.0.1-mod/test/test_parser.py
+--- mf2py-2.0.1/test/test_parser.py	2023-12-08 06:53:58.000000000 +0300
++++ mf2py-2.0.1-mod/test/test_parser.py	2024-10-30 20:35:40.526256598 +0300
+@@ -4,7 +4,7 @@
+ from unittest import TestCase
+ 
+ import bs4
+-import mock
++from unittest import mock
+ from bs4 import BeautifulSoup
+ 
+ from mf2py import Parser

@@ -1,0 +1,53 @@
+Fix an int-conversion issue (NULL instead the integer constant 0).
+Fix incompatible pointer types by adding explicit casts to the
+expected types.
+
+diff -ur netkit-rsh-0.17.orig/rexecd/rexecd.c netkit-rsh-0.17/rexecd/rexecd.c
+--- netkit-rsh-0.17.orig/rexecd/rexecd.c	2023-12-20 13:52:56.259400879 +0100
++++ netkit-rsh-0.17/rexecd/rexecd.c	2023-12-21 10:56:31.838691420 +0100
+@@ -192,7 +192,7 @@
+ 		int r;
+ 		char remote_hostname[NI_MAXHOST] = {};
+ 
+-		r = getnameinfo((struct sockaddr *) &from, sizeof(struct sockaddr_storage), remote_hostname, NI_MAXHOST, NULL, NULL, 0);
++		r = getnameinfo((struct sockaddr *) &from, sizeof(struct sockaddr_storage), remote_hostname, NI_MAXHOST, NULL, 0, 0);
+ 
+ 		if (r) {
+ 			fprintf(stderr, "rexecd: getnameinfo: %s\n", gai_strerror(r));
+diff -ur netkit-rsh-0.17.orig/rlogind/auth.c netkit-rsh-0.17/rlogind/auth.c
+--- netkit-rsh-0.17.orig/rlogind/auth.c	2023-12-20 13:52:56.243401041 +0100
++++ netkit-rsh-0.17/rlogind/auth.c	2023-12-21 10:55:35.644285484 +0100
+@@ -147,7 +147,7 @@
+ 	return -1;
+     }
+ 
+-    pam_get_item(pamh, PAM_USER, &ln);
++    pam_get_item(pamh, PAM_USER, (const void **) &ln);
+     if (!ln || !*ln) {
+ 	/*
+ 	 * Authentication wasn't adequate for requirements.
+diff -ur netkit-rsh-0.17.orig/rshd/rshd.c netkit-rsh-0.17/rshd/rshd.c
+--- netkit-rsh-0.17.orig/rshd/rshd.c	2023-12-20 13:52:56.259400879 +0100
++++ netkit-rsh-0.17/rshd/rshd.c	2023-12-21 10:58:04.627707239 +0100
+@@ -315,8 +315,8 @@
+ 
+ 	if (! inet_ntop(fromp->sa_family,
+ 		(( fromp->sa_family == AF_INET6 )
+-		? ( &((struct sockaddr_in6 *)fromp)->sin6_addr )
+-		: ( &((struct sockaddr_in *)fromp)->sin_addr )),
++		? ((void *) &((struct sockaddr_in6 *)fromp)->sin6_addr )
++		: ((void *) &((struct sockaddr_in *)fromp)->sin_addr )),
+ 		remote_address, sizeof(remote_address))) {
+ 	    syslog(LOG_NOTICE|LOG_AUTH,
+ 	    	"Failed to retrieve the socket remote address");
+@@ -364,8 +364,8 @@
+ 
+ 	    if (inet_ntop(sa->sa_family,
+ 		(( sa->sa_family == AF_INET6 )
+-		? ( &((struct sockaddr_in6 *)sa)->sin6_addr )
+-		: ( &((struct sockaddr_in *)sa)->sin_addr )),
++		? ((void *) &((struct sockaddr_in6 *)sa)->sin6_addr )
++		: ((void *) &((struct sockaddr_in *)sa)->sin_addr )),
+ 		res_address, sizeof(res_address))
+ 		&& strcmp(remote_address, res_address) == 0) {
+ 		    freeaddrinfo(res0);

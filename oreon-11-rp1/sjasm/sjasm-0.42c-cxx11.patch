@@ -1,0 +1,47 @@
+From 4c91083fe1c713e15ea215eefe9b617ed6b5a805 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 22 Nov 2022 04:18:20 +0100
+Subject: [PATCH 2/3] Stick to C++11
+
+C++17 introduced std::byte that collides with our typedef:
+
+  In file included from sjasm.h:90,
+                   from datastructures.cpp:29:
+  datastructures.h:50:12: error: expected ‘)’ before ‘*’ token
+     50 |   Data(byte *n_data,int n_size) : _data(0), _size(n_size), _maxsize(n_size) { _resize(n_size); memcpy(_data,n_data,n_size); }
+        |       ~    ^~
+        |            )
+  datastructures.h:52:16: error: reference to ‘byte’ is ambiguous
+     52 |   void setdata(byte *buffer, int size) { _data=new byte[size]; memcpy(_data,buffer,size); _size=_maxsize=size; }
+        |                ^~~~
+  In file included from /usr/include/c++/12/bits/stl_algobase.h:61,
+                   from /usr/include/c++/12/list:60,
+                   from sjasm.h:64:
+  /usr/include/c++/12/bits/cpp_type_traits.h:406:30: note: candidates are: ‘enum class std::byte’
+    406 |   enum class byte : unsigned char;
+        |                              ^~~~
+  datastructures.h:36:23: note:                 ‘typedef unsigned char byte’
+     36 | typedef unsigned char byte;
+        |                       ^~~~
+  datastructures.h:52:16: error: ‘byte’ has not been declared
+     52 |   void setdata(byte *buffer, int size) { _data=new byte[size]; memcpy(_data,buffer,size); _size=_maxsize=size; }
+        |                ^~~~
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/sjasmsrc42c/Makefile b/sjasmsrc42c/Makefile
+index db5f0bb..b9d14f3 100644
+--- a/sjasmsrc42c/Makefile
++++ b/sjasmsrc42c/Makefile
+@@ -12,6 +12,7 @@ BINDIR   = /usr/bin
+ DESTDIR  = 
+ 
+ CXXFLAGS = -O2
++override CXXFLAGS += -std=c++11 -Wno-write-strings
+ LDFLAGS  = 
+ 
+ DEPDIR = .deps
+-- 
+2.38.1
+

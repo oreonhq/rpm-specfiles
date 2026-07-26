@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id type="desktop">qcas.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary>Qt GUI application for Giac</summary>
+  <name>QCAS</name>
+  <project_license>GPL-3.0+</project_license>
+  <categories>
+   <category>Education</category>
+   <category>Math</category>
+  </categories>
+  <description>
+    <p>
+      Minimal Qt interface for Giac.
+    </p>
+  </description>
+  <url type="homepage">http://webusers.imj-prg.fr/~frederic.han/qcas/</url>
+  <screenshots>
+    <screenshot type="default">
+     <image>https://sagitter.fedorapeople.org/qcas/qcas_texte-poncelet-sol.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/qcas/qcas_texte-poncelet-graph.png</image>
+    </screenshot>
+  </screenshots>
+  <updatecontact>sagitter_at_fedoraproject.org</updatecontact>
+</component>

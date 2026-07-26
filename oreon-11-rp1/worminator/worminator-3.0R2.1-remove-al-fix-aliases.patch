@@ -1,0 +1,70 @@
+Remove the use of / need for -DALLEGRO_FIX_ALIASES
+
+Starting with gcc 15 the default C-level is -std=gnu23 this enables
+the fsub, fadd, fcos, etc function protypes in math.h causing
+a conflict with the use of ALLEGRO_FIX_ALIASES which adds aliased
+for allegro's fixed math functions back to the old allegro names
+which conflict with the math.h prototypes.
+
+Since worminator only uses fsin, this can be fixed by dropping the use of
+ALLEGRO_FIX_ALIASES, combined with s/fsin/fixsin/
+
+diff -up worminator-3.0R2.1/Worminator.c~ worminator-3.0R2.1/Worminator.c
+--- worminator-3.0R2.1/Worminator.c~	2026-01-24 11:21:39.000000000 +0100
++++ worminator-3.0R2.1/Worminator.c	2026-01-24 11:30:30.547339822 +0100
+@@ -2064,7 +2064,7 @@ if (player.direction == 0) {
+ 	sx = ((int)(screen_width * .8) / 2) + 32;
+ 	if (x2 - (player.x_position_in_pixels + 37) < ((int)(screen_width * .8) / 2) + 32) sx = x2 - (player.x_position_in_pixels + 37);
+ 	for (y = 0; y < sx; y++) {
+-		x1 = fixtof(fsin(itofix(y * 12))) * 4;
++		x1 = fixtof(fixsin(itofix(y * 12))) * 4;
+ 		if (rand() % 64 < 32) spawn_stardust(player.x_position_in_pixels + 37 + y, player.y_position_in_pixels + 13 + x1, 0, 0, 217 + (float)((rand() % 20) - 10.00) / 10.00, 212 + (float)((rand() % 20) - 10.00) / 10.00, 1, 1);
+ 		else spawn_stardust(player.x_position_in_pixels + 37 + y, player.y_position_in_pixels + 13 + x1, (float)((rand() % 20) - 10.00) / 80.00, (float)((rand() % 20) - 10.00) / 80.00, 217 - 64 + (float)((rand() % 20) - 10.00) / 10.00, 212 - 64 + (float)((rand() % 20) - 10.00) / 10.00, 1, 1);
+ 		}
+@@ -2104,7 +2104,7 @@ else {
+ 	sx = ((int)(screen_width * .8) / 2) + 32;
+ 	if (player.x_position_in_pixels - 6 - x2 < ((int)(screen_width * .8) / 2) + 32) sx = player.x_position_in_pixels - 6 - x2;
+ 	for (y = 0; y < sx; y++) {
+-		x1 = fixtof(fsin(itofix(y * 12))) * 4;
++		x1 = fixtof(fixsin(itofix(y * 12))) * 4;
+ 		if (rand() % 64 < 32) spawn_stardust(player.x_position_in_pixels - 6 - y, player.y_position_in_pixels + 13 + x1, (float)((rand() % 20) - 10.00) / 80.00, (float)((rand() % 20) - 10.00) / 80.00, 217 + (float)((rand() % 20) - 10.00) / 10.00, 212 + (float)((rand() % 20) - 10.00) / 10.00, 1, 1);
+ 		else spawn_stardust(player.x_position_in_pixels - 6 - y, player.y_position_in_pixels + 13 + x1, 0, 0, 217 - 64 + (float)((rand() % 20) - 10.00) / 10.00, 212 - 64 + (float)((rand() % 20) - 10.00) / 10.00, 1, 1);
+ 		}
+diff -up worminator-3.0R2.1/particle_ai.h~ worminator-3.0R2.1/particle_ai.h
+--- worminator-3.0R2.1/particle_ai.h~	2026-01-24 11:21:39.000000000 +0100
++++ worminator-3.0R2.1/particle_ai.h	2026-01-24 11:30:21.932393870 +0100
+@@ -175,12 +175,12 @@ else if (sprites[sprite_number].action_s
+ 	sprites[sprite_number].y_acceleration = (float)((rand() % 20) - 10.00) / 10.00;
+ 	}
+ else if (sprites[sprite_number].action_state == 5) {
+-	sprites[sprite_number].x_acceleration = fixtof(fsin(itofix(sprites[sprite_number].direction)));
++	sprites[sprite_number].x_acceleration = fixtof(fixsin(itofix(sprites[sprite_number].direction)));
+ 	if (sprites[sprite_number].direction == -1) sprites[sprite_number].direction = 0;
+ 	else sprites[sprite_number].direction += 8;
+ 	}
+ else if (sprites[sprite_number].action_state == 6) {
+-	sprites[sprite_number].y_acceleration = fixtof(fsin(itofix(sprites[sprite_number].direction)));
++	sprites[sprite_number].y_acceleration = fixtof(fixsin(itofix(sprites[sprite_number].direction)));
+ 	if (sprites[sprite_number].direction == -1) sprites[sprite_number].direction = 0;
+ 	else sprites[sprite_number].direction += 8;
+ 	}
+diff -up worminator-3.0R2.1/projectile_ai.h~ worminator-3.0R2.1/projectile_ai.h
+--- worminator-3.0R2.1/projectile_ai.h~	2006-02-02 21:33:38.000000000 +0100
++++ worminator-3.0R2.1/projectile_ai.h	2026-01-24 11:30:35.155310910 +0100
+@@ -586,14 +586,14 @@ if (sprite_hit >= 0) {
+ // The following updates are based on the type of spikestar (red - sine, blue - negative sine, yellow - straight)
+ if (sprites[sprite_number].frame == WORMINATOR_SPIKESTAR_RED_FLY) {
+ 	// Adjust the spikestar's y velocity to conform to a sine wave path
+-	sprites[sprite_number].y_acceleration = fixtof(fsin(itofix(sprites[sprite_number].rotate_factor)));
++	sprites[sprite_number].y_acceleration = fixtof(fixsin(itofix(sprites[sprite_number].rotate_factor)));
+ 
+ 	// Stardust smoke trail
+ 	if (out_of_player_range(sprite_number) == FALSE) spawn_stardust((sprites[sprite_number].x_position_in_pixels + sprites[sprite_number].width / 2), (sprites[sprite_number].y_position_in_pixels + sprites[sprite_number].height / 2), 0, .05, 77, 66, 2, 1);
+ 	}
+ else if (sprites[sprite_number].frame == WORMINATOR_SPIKESTAR_BLUE_FLY) {
+ 	// Adjust the spikestar's y velocity to conform to an inverse sine wave path
+-	sprites[sprite_number].y_acceleration = -fixtof(fsin(itofix(sprites[sprite_number].rotate_factor)));
++	sprites[sprite_number].y_acceleration = -fixtof(fixsin(itofix(sprites[sprite_number].rotate_factor)));
+ 
+ 	// Stardust smoke trail
+ 	if (out_of_player_range(sprite_number) == FALSE) spawn_stardust((sprites[sprite_number].x_position_in_pixels + sprites[sprite_number].width / 2), (sprites[sprite_number].y_position_in_pixels + sprites[sprite_number].height / 2), 0, -.05, 157, 146, 2, 1);

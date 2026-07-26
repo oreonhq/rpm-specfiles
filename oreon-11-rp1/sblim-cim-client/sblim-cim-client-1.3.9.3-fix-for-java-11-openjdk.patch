@@ -1,0 +1,12 @@
+diff -up cim-client/build.xml.orig cim-client/build.xml
+--- cim-client/build.xml.orig	2011-10-31 16:56:42.000000000 +0100
++++ cim-client/build.xml	2020-07-27 12:03:38.596090548 +0200
+@@ -87,7 +87,7 @@
+         <mkdir dir="${builddir}/build"/>
+     	<mkdir dir="${basedir}/lib"/>
+ 
+-        <javac srcdir="${basedir}" destdir="${builddir}/build" listfiles="true" debug="on" encoding="utf-8" source="1.4" target="1.4">
++        <javac srcdir="${basedir}" destdir="${builddir}/build" listfiles="true" debug="on" encoding="utf-8" source="1.8" target="1.8">
+             <classpath refid="project.classpath"/>
+         </javac>
+     </target>

@@ -1,0 +1,205 @@
+diff --git a/cmds.c b/cmds.c
+index 90f1efd..4a9dc2f 100644
+--- a/cmds.c
++++ b/cmds.c
+@@ -324,7 +324,7 @@ deleterow(register int arg)
+ 	rs = rs > 0 ? rs : 0;
+ 	(void) sprintf(buf, "Can't delete %d row%s %d row%s left", arg,
+ 		(arg != 1 ? "s," : ","), rs, (rs != 1 ? "s" : ""));
+-	error(buf);
++	error("%s", buf);
+ 	return;
+     }
+     if (fr) {
+@@ -486,7 +486,7 @@ yankrow(int arg)
+ 	rs = rs > 0 ? rs : 0;
+ 	(void) sprintf(buf, "Can't yank %d row%s %d row%s left", arg,
+ 		(arg != 1 ? "s," : ","), rs, (rs != 1 ? "s" : ""));
+-	error(buf);
++	error("%s", buf);
+ 	return;
+     }
+     sync_refs();
+@@ -541,7 +541,7 @@ yankcol(int arg)
+     	cs = cs > 0 ? cs : 0;
+ 	(void) sprintf(buf, "Can't yank %d column%s %d column%s left", arg,
+ 		(arg != 1 ? "s," : ","), cs, (cs != 1 ? "s" : ""));
+-	error(buf);
++	error("%s", buf);
+ 	return;
+     }
+     sync_refs();
+@@ -1212,7 +1212,7 @@ closecol(int arg)
+     	cs = cs > 0 ? cs : 0;
+ 	(void) sprintf(buf, "Can't delete %d column%s %d column%s left", arg,
+ 		(arg != 1 ? "s," : ","), cs, (cs != 1 ? "s" : ""));
+-	error(buf);
++	error("%s", buf);
+ 	return;
+     }
+     if (any_locked_cells(0, curcol, maxrow, curcol + arg - 1)) {
+diff --git a/gram.y b/gram.y
+index c44daf4..5e969c3 100644
+--- a/gram.y
++++ b/gram.y
+@@ -979,7 +979,7 @@ command:	S_LET var_or_range '=' e
+ 	|	S_QUERY			{ doquery(NULL, NULL, macrofd); }
+ 	|	S_QUERY '|' NUMBER	{ doquery(NULL, NULL, $3); }
+ 	|	S_GETKEY		{ dogetkey(); }
+-	|	S_ERROR STRING		{ error($2); }
++	|	S_ERROR STRING		{ error("%s", $2); }
+ 	|	S_STATUS			{ dostat(macrofd); }
+ 	|	S_STATUS '|' NUMBER	{ dostat($3); }
+ 	|	S_RECALC		{ EvalAll();
+@@ -1010,7 +1010,7 @@ command:	S_LET var_or_range '=' e
+ 	|	S_PLUGOUT STRING '=' STRING
+ 					{ addplugin($2, $4, 'w'); } 
+ 	|       PLUGIN			{ *line = '|';
+-					  sprintf(line + 1, $1);
++					  sprintf(line + 1, "%s", $1);
+ 					  readfile(line, 0);
+ 					  scxfree($1); }
+ 	|	/* nothing */
+diff --git a/interp.c b/interp.c
+index 0be8b0d..a0a1f6a 100644
+--- a/interp.c
++++ b/interp.c
+@@ -1986,7 +1986,7 @@ str_search(char *s, int firstrow, int firstcol, int lastrow, int lastcol,
+ 	scxfree(s);
+ 	tmp = scxmalloc((size_t)160);
+ 	regerror(errcode, &preg, tmp, sizeof(tmp));
+-	error(tmp);
++	error("%s", tmp);
+ 	scxfree(tmp);
+ 	return;
+     }
+@@ -1994,7 +1994,7 @@ str_search(char *s, int firstrow, int firstcol, int lastrow, int lastcol,
+ #if defined(RE_COMP)
+     if ((tmp = re_comp(s)) != NULL) {
+ 	scxfree(s);
+-	error(tmp);
++	error("%s", tmp);
+ 	return;
+     }
+ #endif
+diff --git a/sc.c b/sc.c
+index de8a8c6..53aa266 100644
+--- a/sc.c
++++ b/sc.c
+@@ -511,7 +511,7 @@ main (int argc, char  **argv)
+ 		    break;
+ 	    }
+ 	}
+-	if (redraw) printf(redraw);
++	if (redraw) printf("%s", redraw);
+ 	exit (0);
+     }
+ 
+diff --git a/sc.h b/sc.h
+index 67cec67..0a2981c 100644
+--- a/sc.h
++++ b/sc.h
+@@ -41,9 +41,9 @@
+ #define COLFORMATS	 10	/* Number of custom column formats */
+ #define DELBUFSIZE	 40	/* Number of named buffers + 4 */
+ #ifdef PSC
+-# define error(msg)	fprintf(stderr, msg);
++# define error(format, msg...) fprintf(stderr, format, ## msg);
+ #else
+-# define error isatty(fileno(stdout)) && !move(1,0) && !clrtoeol() && printw
++# define error(format, msg...) (void)(isatty(fileno(stdout)) && !move(1,0) && !clrtoeol() && printw(format, ## msg))
+ #endif
+ #define	FBUFLEN	1024	/* buffer size for a single field */
+ #define	PATHLEN	1024	/* maximum path length */
+diff --git a/screen.c b/screen.c
+index 89a1421..58a7156 100644
+--- a/screen.c
++++ b/screen.c
+@@ -1034,7 +1034,7 @@ update(int anychanged)		/* did any cell really change in value? */
+     if (revmsg[0]) {
+ 	(void) move(0, 0);
+ 	(void) clrtoeol();	/* get rid of topline display */
+-	(void) printw(revmsg);
++	(void) printw("%s", revmsg);
+ 	*revmsg = '\0';		/* don't show it again */
+ 	if (braille)
+ 	    if (message)
+@@ -1055,7 +1055,7 @@ update(int anychanged)		/* did any cell really change in value? */
+     if (revmsg[0]) {
+ 	(void) move(0, 0);
+ 	(void) clrtoeol();	/* get rid of topline display */
+-	(void) printw(revmsg);
++	(void) printw("%s", revmsg);
+ 	*revmsg = '\0';		/* don't show it again */
+ 	if (braille)
+ 	    if (message)
+diff --git a/vi.c b/vi.c
+index 2d6fedc..a06a956 100644
+--- a/vi.c
++++ b/vi.c
+@@ -1527,14 +1527,14 @@ search_hist()
+     if ((errcode = regcomp(last_search, line, REG_EXTENDED))) {
+ 	char *tmp = scxmalloc((size_t)160);
+ 	regerror(errcode, last_search, tmp, sizeof(tmp));
+-	error(tmp);
++	error("%s", tmp);
+ 	scxfree(tmp);
+ 	return;
+     }
+ #else
+ #ifdef RE_COMP
+     if ((tmp = re_comp(line)) != NULL) {
+-	error(tmp);
++	error("%s", tmp);
+ 	return;
+     }
+ #else
+@@ -2031,7 +2031,7 @@ query(char *s, char *data)
+     	*line = '\0';
+ 	linelim = 0;
+     }
+-    if (s != NULL) error(s);
++    if (s != NULL) error("%s", s);
+ 
+     while (linelim >= 0) {
+ 	update(0);
+diff --git a/vmtbl.c b/vmtbl.c
+index 6b556a3..52c26da 100644
+--- a/vmtbl.c
++++ b/vmtbl.c
+@@ -56,7 +56,7 @@ checkbounds(int *rowp, int *colp)
+     newptr = (type *)scxrealloc((char *)oldptr, \
+ 	    (unsigned)(nelem * sizeof(type))); \
+     if (newptr == (type *)NULL) { \
+-	error(msg); \
++	error("%s", msg); \
+ 	return (FALSE); \
+     } \
+     oldptr = newptr /* wait incase we can't alloc */
+@@ -118,7 +118,7 @@ growtbl(int rowcol, int toprow, int topcol)
+     if ((rowcol == GROWCOL) || (rowcol == GROWBOTH)) {
+ 	if ((rowcol == GROWCOL) && ((maxcols == ABSMAXCOLS) ||
+ 		(topcol >= ABSMAXCOLS))) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return (FALSE);
+ 	}
+ 
+@@ -173,7 +173,7 @@ growtbl(int rowcol, int toprow, int topcol)
+ 	for (i = 0; i < maxrows; i++) {
+ 	    if ((tbl[i] = (struct ent **)scxrealloc((char *)tbl[i],
+ 		(unsigned)(newcols * sizeof(struct ent **)))) == (struct ent **)0) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return(FALSE);
+ 	    }
+ 	for (nullit = ATBL(tbl, i, maxcols), cnt = 0;
+@@ -191,7 +191,7 @@ growtbl(int rowcol, int toprow, int topcol)
+     for (; i < newrows; i++) {
+ 	if ((tbl[i] = (struct ent **)scxmalloc((unsigned)(newcols *
+ 		sizeof(struct ent **)))) == (struct ent **)0) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return(FALSE);
+ 	}
+ 	for (nullit = tbl[i], cnt = 0; cnt < newcols; cnt++, nullit++)

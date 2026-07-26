@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=tempest
+Comment=tempest screensaver
+TryExec=tempest
+Exec=tempest -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=GNOME;Screensaver;
+

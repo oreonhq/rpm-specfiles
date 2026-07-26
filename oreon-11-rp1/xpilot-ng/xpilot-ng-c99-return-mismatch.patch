@@ -1,0 +1,13 @@
+diff --git a/src/server/suibotdef.c b/src/server/suibotdef.c
+index d5202e3c323f0a8f..494f73f531848817 100644
+--- a/src/server/suibotdef.c
++++ b/src/server/suibotdef.c
+@@ -405,7 +405,7 @@ static bool Get_object_proximity(player_t *pl, object_t *shot, double sqmaxdist,
+   /* ignore if there is enough time to deal with this object  later */
+   if((time_until_closest < 0) || (time_until_closest > maxtime))
+     /*option instead of fixed value: options.dodgetime))*/
+-    return;
++    return false;
+ 
+   /* get the square of the distance */
+   sqdistance =

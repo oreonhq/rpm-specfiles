@@ -1,0 +1,40 @@
+--- wallpapoz-0.6.1/src/wallpapoz.anime	2011-12-30 14:53:04.000000000 +0900
++++ wallpapoz-0.6.1/src/wallpapoz	2011-12-30 15:02:40.000000000 +0900
+@@ -1228,15 +1228,32 @@
+     filename = self.store.get_value(position_iter, 1)
+ 
+     # display image properly
++    from glib import GError as glib_GError
+     try:
+-      im = Image.open(filename)
+-      # keep image proportions
+-      if im.size[0] > im.size[1]:
+-        self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, 400, int((float(im.size[1])/im.size[0]) * 400)))
++      anime = gtk.gdk.PixbufAnimation(filename)
++
++      if anime.is_static_image() :
++        im = Image.open(filename)
++        # keep image proportions
++        if im.size[0] > im.size[1]:
++          self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, 400, int((float(im.size[1])/im.size[0]) * 400)))
++        else:
++          self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, int(float(im.size[1])/im.size[0] * 300), 300))
++
+       else:
+-        self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, int(float(im.size[1])/im.size[0] * 300), 300))
++        width = anime.get_width()
++        height = anime.get_height()
++        static_im = anime.get_static_image()
++        if width > height:
++          self.image_widget.set_from_pixbuf(static_im.scale_simple(400, int((float(height)/width)*400),gtk.gdk.INTERP_BILINEAR))
++        else:
++          self.image_widget.set_from_pixbuf(static_im.scale_simple(int((float(width)/height)*300),300,gtk.gdk.INTERP_BILINEAR))
++
+     except IOError:
+       self.image_widget.clear()
++    except glib_GError, (msg):
++      print msg
++      self.image_widget.clear()
+ 
+     # display image filename
+     self.wallpaper_filename.set_markup("<b>" + os.path.basename(filename) + "</b>")

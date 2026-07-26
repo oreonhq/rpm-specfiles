@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=yoshimi
+Comment=High-performance real-time software synthesizer
+GenericName=Polyphonic Multitimbral Software Synthesizer
+Icon=yoshimi
+Type=Application
+Exec=yoshimi
+Terminal=false
+Categories=AudioVideo;Audio;Midi;Music;X-Synthesis;X-Jack;

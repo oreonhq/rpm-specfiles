@@ -1,0 +1,10 @@
+--- include/tsutil/Regex.h	2026-02-09 02:20:16.441449612 +0000
++++ include/tsutil/Regex.h	2026-02-09 02:20:43.974279317 +0000
+@@ -27,6 +27,7 @@
+ #include <string>
+ #include <vector>
+ #include <memory>
++#include <cstdint>
+ 
+ /// @brief Match flags for regular expression evaluation.
+ ///

@@ -1,0 +1,18 @@
+--- stp-2.3.3/lib/CMakeLists.txt.orig	2019-03-02 07:26:01.000000000 -0700
++++ stp-2.3.3/lib/CMakeLists.txt	2021-07-14 09:03:32.415946180 -0600
+@@ -139,9 +139,15 @@ if (USE_RISS)
+         ${stp_link_libs} -lriss-coprocessor)
+ endif()
+ 
++if (STATICCOMPILE)
+ target_link_libraries(stp
+     LINK_PUBLIC ${stp_link_libs}
+ )
++else()
++target_link_libraries(stp
++    LINK_PRIVATE ${stp_link_libs}
++)
++endif()
+ 
+ install(TARGETS stp
+     EXPORT ${STP_EXPORT_NAME}

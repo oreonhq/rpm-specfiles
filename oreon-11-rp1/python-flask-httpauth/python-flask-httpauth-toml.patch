@@ -1,0 +1,97 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 30ef682..10dd512 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -1,3 +1,5 @@
+-include README.md LICENSE
+-recursive-include tests *.py
++include README.md LICENSE tox.ini
+ recursive-include docs *
++recursive-exclude docs/_build *
++recursive-include tests *
++exclude **/*.pyc
+diff --git a/README.md b/README.md
+index ba4db99..b36a0f3 100644
+--- a/README.md
++++ b/README.md
+@@ -3,7 +3,7 @@ Flask-HTTPAuth
+ 
+ [![Build status](https://github.com/miguelgrinberg/Flask-HTTPAuth/workflows/build/badge.svg)](https://github.com/miguelgrinberg/Flask-HTTPAuth/actions) [![codecov](https://codecov.io/gh/miguelgrinberg/Flask-HTTPAuth/branch/master/graph/badge.svg?token=KeU2002DHo)](https://codecov.io/gh/miguelgrinberg/Flask-HTTPAuth)
+ 
+-Simple extension that provides Basic and Digest HTTP authentication for Flask routes.
++Simple extension that provides Basic, Digest and Token HTTP authentication for Flask routes.
+ 
+ Installation
+ ------------
+@@ -43,7 +43,7 @@ if __name__ == '__main__':
+     app.run()
+ ```
+ 
+-Note: See the [documentation](http://pythonhosted.org/Flask-HTTPAuth) for more complex examples that involve password hashing and custom verification callbacks.
++Note: See the [documentation](https://flask-httpauth.readthedocs.io/) for more complex examples that involve password hashing and custom verification callbacks.
+ 
+ Digest authentication example
+ -----------------------------
+diff --git a/pyproject.toml b/pyproject.toml
+index 374b58c..f242ac6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,47 @@
++[project]
++name = "Flask-HTTPAuth"
++version = "4.8.0"
++authors = [
++    { name = "Miguel Grinberg", email = "miguel.grinberg@gmail.com" },
++]
++description = "HTTP authentication for Flask routes"
++classifiers = [
++    "Environment :: Web Environment",
++    "Intended Audience :: Developers",
++    "Programming Language :: Python :: 3",
++    "Programming Language :: Python :: Implementation :: MicroPython",
++    "License :: OSI Approved :: MIT License",
++    "Operating System :: OS Independent",
++]
++dependencies = [
++    "flask",
++]
++
++[project.readme]
++file = "README.md"
++content-type = "text/markdown"
++
++[project.urls]
++Homepage = "https://github.com/miguelgrinberg/flask-httpauth"
++"Bug Tracker" = "https://github.com/miguelgrinberg/flask-httpauth/issues"
++
++[project.optional-dependencies]
++docs = [
++    "sphinx",
++]
++
++[tool.setuptools]
++zip-safe = false
++include-package-data = true
++py-modules = [
++    "flask_httpauth",
++]
++
++[tool.setuptools.package-dir]
++"" = "src"
++
+ [build-system]
+ requires = [
+-    "setuptools>=42",
+-    "wheel"
++    "setuptools",
+ ]
+ build-backend = "setuptools.build_meta"
+diff --git a/setup.py b/setup.py
+deleted file mode 100755
+index b908cbe..0000000
+--- a/setup.py
++++ /dev/null
+@@ -1,3 +0,0 @@
+-import setuptools
+-
+-setuptools.setup()

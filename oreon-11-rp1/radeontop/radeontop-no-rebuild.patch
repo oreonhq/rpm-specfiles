@@ -1,0 +1,12 @@
+diff -up radeontop-1.4/Makefile.f radeontop-1.4/Makefile
+--- radeontop-1.4/Makefile.f	2021-07-23 09:24:04.000000000 +0200
++++ radeontop-1.4/Makefile	2021-11-26 15:23:08.431344202 +0100
+@@ -109,7 +109,7 @@ clean:
+ 
+ .git:
+ 
+-$(verh): .git
++$(verh):
+ 	./getver.sh
+ 
+ trans:

@@ -1,0 +1,22 @@
+--- src/Methods.c~	2006-05-26 03:57:25.000000000 -0500
++++ src/Methods.c	2024-02-05 14:31:58.138011816 -0600
+@@ -1688,7 +1688,7 @@
+                                          * The event must have occurred in a legal position
+                                          * otherwise control wouldn't have made it here
+                                          */
+-                                        xbaeEventToRowColumn(mw, event, &r, &c, &x, &y);
++                                        xbaeEventToRowColumn((Widget)mw, event, &r, &c, &x, &y);
+                                         x -= mw->matrix.cell_shadow_thickness;
+                                         y -= mw->matrix.cell_shadow_thickness;
+                                         position = XmTextXYToPos(TextField(mw), x, y);
+--- examples/tests/leak2.c~	2003-06-21 04:38:46.000000000 -0500
++++ examples/tests/leak2.c	2024-02-05 14:45:03.587744588 -0600
+@@ -20,7 +20,7 @@
+ 
+ XtResource	resources[] = {
+ 	{ "numIter", "NumIter", XtRInt, sizeof(int),
+-		XtOffsetOf(AppRes, numIter), XtRImmediate, 1000 },
++		XtOffsetOf(AppRes, numIter), XtRImmediate, (void *)1000 },
+ };
+ 
+ int

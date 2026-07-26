@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Servus
+Comment=Servus browser
+Exec=servusBrowser
+Terminal=false
+Type=Application
+Categories=Network;Engineering
+StartupNotify=false

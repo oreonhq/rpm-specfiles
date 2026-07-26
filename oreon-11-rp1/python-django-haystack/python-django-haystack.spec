@@ -1,0 +1,97 @@
+%global source0_hash e3ceed6b8000625da14d409eb4dac69894905e2ac8ac18f9bfdb59323ca02eab
+
+# tests require running a solr server
+%bcond_with tests
+
+Name:           python-django-haystack
+Version:        3.3.0
+Release:        %autorelease
+Summary:        Pluggable search for Django
+
+License:        BSD-3-Clause
+URL:            http://haystacksearch.org/
+Source:         %{pypi_source django_haystack}
+
+BuildArch:      noarch
+
+%global _description %{expand:
+Haystack provides modular search for Django. It features a unified, familiar
+API that allows you to plug in different search backends (such as Solr,
+Elasticsearch, Whoosh, Xapian, etc.) without having to modify your code.
+
+Haystack is BSD licensed, plays nicely with third-party app without needing to
+modify the source and supports advanced features like faceting, More Like This,
+highlighting, spatial search and spelling suggestions.
+
+You can find more information at http://haystacksearch.org/.}
+
+%description %_description
+
+%package -n python3-django-haystack
+Summary:        Haystack provides modular search for Django - Python 3 version
+
+BuildRequires:  python3-devel
+
+%description -n python3-django-haystack %_description
+
+This package provides Python 3 build of django-haystack.
+
+%package docs
+Summary: Documentation for Django Haystack pluggable search
+# Not requiring the main package, as users may wish to install
+# the documentation separately.
+
+BuildRequires:  make
+BuildRequires:  python3dist(sphinx)
+# Those two sphinxcontrib dependencies are pulled by default by upstream Sphinx,
+# but in preparation for their separation, we explicitly list them to build
+# htmlhelp, json and pickle docs.
+# Upstream's tox.ini is not a good place for those, becasue it only builds html.
+BuildRequires:  python3dist(sphinxcontrib-htmlhelp)
+BuildRequires:  python3dist(sphinxcontrib-serializinghtml)
+
+%description docs
+Documentation for Django Haystack pluggable search
+
+%_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n django_haystack-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires %{?with_tests:-t}
+
+%build
+%pyproject_wheel
+
+# Re-generate documentation
+# Docs cannot be built in parallel
+# We cannot build 'linkcheck' because it requires network access
+
+pushd docs
+make clean html htmlhelp latex json pickle changes
+popd
+
+%install
+%pyproject_install
+%pyproject_save_files -l haystack
+
+%check
+# currently does not work: can't find test_haystack
+# export DJANGO_SETTINGS_MODULE=test_haystack.settings
+# export PYTHONPATH="%{buildroot}%{python3_sitelib}:$PWD"
+# pyproject_check_import
+%if %{with tests}
+%tox
+%endif
+
+%files -n python3-django-haystack -f %{pyproject_files}
+%doc PKG-INFO README.rst
+
+%files docs
+%doc docs/
+
+%changelog
+%autochangelog

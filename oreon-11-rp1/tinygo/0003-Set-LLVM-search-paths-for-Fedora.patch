@@ -1,0 +1,126 @@
+From d516beb86673a9b80ca75c41e8fb7cba7e3f126f Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 27 Oct 2024 23:33:18 -0400
+Subject: [PATCH 3/5] Set LLVM search paths for Fedora
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ cgo/libclang_config_llvm15.go | 4 ++--
+ cgo/libclang_config_llvm16.go | 4 ++--
+ cgo/libclang_config_llvm17.go | 4 ++--
+ cgo/libclang_config_llvm18.go | 4 ++--
+ cgo/libclang_config_llvm19.go | 4 ++--
+ cgo/libclang_config_llvm20.go | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/cgo/libclang_config_llvm15.go b/cgo/libclang_config_llvm15.go
+index edb1128d..0dc87193 100644
+--- a/cgo/libclang_config_llvm15.go
++++ b/cgo/libclang_config_llvm15.go
+@@ -3,11 +3,11 @@
+ package cgo
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/lib/llvm-15/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm15/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@15/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@15/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm15/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-15/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm15/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@15/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@15/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm15/lib -lclang
+diff --git a/cgo/libclang_config_llvm16.go b/cgo/libclang_config_llvm16.go
+index ee354e21..4c338678 100644
+--- a/cgo/libclang_config_llvm16.go
++++ b/cgo/libclang_config_llvm16.go
+@@ -9,11 +9,11 @@ package cgo
+ //   ln -sf ../../x86_64-linux-gnu/libclang-16.so.1 /usr/lib/llvm-16/lib/libclang.so
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/lib/llvm-16/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm16/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@16/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@16/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm16/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-16/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm16/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@16/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@16/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm16/lib -lclang
+diff --git a/cgo/libclang_config_llvm17.go b/cgo/libclang_config_llvm17.go
+index 6395d8a3..609b0758 100644
+--- a/cgo/libclang_config_llvm17.go
++++ b/cgo/libclang_config_llvm17.go
+@@ -3,11 +3,11 @@
+ package cgo
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/include/llvm-17 -I/usr/include/llvm-c-17 -I/usr/lib/llvm-17/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm17/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@17/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@17/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm17/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-17/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm17/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@17/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@17/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm17/lib -lclang
+diff --git a/cgo/libclang_config_llvm18.go b/cgo/libclang_config_llvm18.go
+index da181291..76f23129 100644
+--- a/cgo/libclang_config_llvm18.go
++++ b/cgo/libclang_config_llvm18.go
+@@ -3,11 +3,11 @@
+ package cgo
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/include/llvm-18 -I/usr/include/llvm-c-18 -I/usr/lib/llvm-18/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm18/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@18/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@18/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm18/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-18/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm18/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@18/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@18/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm18/lib -lclang
+diff --git a/cgo/libclang_config_llvm19.go b/cgo/libclang_config_llvm19.go
+index 11a64e72..94c95bcb 100644
+--- a/cgo/libclang_config_llvm19.go
++++ b/cgo/libclang_config_llvm19.go
+@@ -3,11 +3,11 @@
+ package cgo
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/include/llvm-19 -I/usr/include/llvm-c-19 -I/usr/lib/llvm-19/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm19/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@19/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@19/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm19/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-19/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm19/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@19/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@19/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm19/lib -lclang
+diff --git a/cgo/libclang_config_llvm20.go b/cgo/libclang_config_llvm20.go
+index faa2e54d..947558d6 100644
+--- a/cgo/libclang_config_llvm20.go
++++ b/cgo/libclang_config_llvm20.go
+@@ -3,11 +3,11 @@
+ package cgo
+ 
+ /*
+-#cgo linux        CFLAGS:  -I/usr/include/llvm-20 -I/usr/include/llvm-c-20 -I/usr/lib/llvm-20/include
++#cgo linux        CFLAGS:  -I/usr/lib64/llvm20/include
+ #cgo darwin,amd64 CFLAGS:  -I/usr/local/opt/llvm@20/include
+ #cgo darwin,arm64 CFLAGS:  -I/opt/homebrew/opt/llvm@20/include
+ #cgo freebsd      CFLAGS:  -I/usr/local/llvm20/include
+-#cgo linux        LDFLAGS: -L/usr/lib/llvm-20/lib -lclang
++#cgo linux        LDFLAGS: -L/usr/lib64/llvm20/lib -lclang
+ #cgo darwin,amd64 LDFLAGS: -L/usr/local/opt/llvm@20/lib -lclang
+ #cgo darwin,arm64 LDFLAGS: -L/opt/homebrew/opt/llvm@20/lib -lclang
+ #cgo freebsd      LDFLAGS: -L/usr/local/llvm20/lib -lclang
+-- 
+2.50.0
+

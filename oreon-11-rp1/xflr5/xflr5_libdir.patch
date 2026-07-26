@@ -1,0 +1,23 @@
+diff -rupN xflr5/xflr5-engine/xflr5-engine.pro xflr5-new/xflr5-engine/xflr5-engine.pro
+--- xflr5/xflr5-engine/xflr5-engine.pro	2019-07-05 15:01:38.000000000 +0200
++++ xflr5-new/xflr5-engine/xflr5-engine.pro	2019-07-08 14:36:19.734643988 +0200
+@@ -115,6 +115,6 @@ unix{
+     isEmpty(PREFIX){
+         PREFIX = /usr/local
+     }
+-    target.path = $$PREFIX/lib
++    target.path = $$PREFIX/$$(LIBDIR)
+     INSTALLS += target
+ }
+diff -rupN xflr5/XFoil-lib/XFoil-lib.pro xflr5-new/XFoil-lib/XFoil-lib.pro
+--- xflr5/XFoil-lib/XFoil-lib.pro	2019-07-05 15:01:38.000000000 +0200
++++ xflr5-new/XFoil-lib/XFoil-lib.pro	2019-07-08 13:57:19.377343600 +0200
+@@ -52,7 +52,7 @@ linux-g++{
+     isEmpty(PREFIX){
+         PREFIX = /usr/local
+     }
+-    target.path = $$PREFIX/lib
++    target.path = $$PREFIX/$$(LIBDIR)
+     INSTALLS += target
+ }
+ 

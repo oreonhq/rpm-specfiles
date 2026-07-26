@@ -1,0 +1,12 @@
+diff -Naur pyvat-1.3.19-orig/pyvat/vat_rules.py pyvat-1.3.19/pyvat/vat_rules.py
+--- pyvat-1.3.19-orig/pyvat/vat_rules.py	2024-01-25 04:08:54.000000000 -0500
++++ pyvat-1.3.19/pyvat/vat_rules.py	2024-09-13 14:38:55.542783527 -0400
+@@ -356,7 +356,7 @@
+     'EL': ElVatRules(),
+     'GR': ElVatRules(),  # Synonymous country code for Greece
+     'ES': EsVatRules(),
+-    'FI': FiVatRules(24),
++    'FI': FiVatRules(25.5),
+     'FR': FrVatRules(),
+     'HR': HrVatRules(25),
+     'HU': ConstantEuVatRateRules(27),

@@ -1,0 +1,14 @@
+diff -uNr widelands-1.3.orig/cmake/WlFunctions.cmake widelands-1.3/cmake/WlFunctions.cmake
+--- widelands-1.3.orig/cmake/WlFunctions.cmake	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/cmake/WlFunctions.cmake	2025-12-21 13:32:50.138000000 +0100
+@@ -93,7 +93,9 @@
+     wl_include_directories(${NAME} ${CMAKE_SOURCE_DIR}/src)
+     wl_include_directories(${NAME} ${CMAKE_BINARY_DIR}/src)
+     if(MINIZIP_STATIC_LIBRARIES)
+-      wl_include_directories(${NAME} ${MINIZIP_INCLUDE_DIRS})
++      if (MINIZIP_INCLUDE_DIRS)
++        wl_include_directories(${NAME} ${MINIZIP_INCLUDE_DIRS})
++      endif()
+       target_compile_options(${NAME} PUBLIC ${MINIZIP_CFLAGS})
+       if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+         include(CheckCXXCompilerFlag)

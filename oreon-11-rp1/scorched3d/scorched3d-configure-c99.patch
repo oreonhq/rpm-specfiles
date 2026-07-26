@@ -1,0 +1,12 @@
+diff -ur scorched3d-44.orig/scorched/configure-al.m4 scorched3d-44/scorched/configure-al.m4
+--- scorched3d-44.orig/scorched/configure-al.m4	2014-08-01 18:47:31.000000000 +0200
++++ scorched3d-44/scorched/configure-al.m4	2023-12-19 12:05:21.918456484 +0100
+@@ -91,7 +91,7 @@
+ 
+ 		int main(int argc, char *argv[])
+ 		{
+-			alutInit(argc, argv);
++			alutInit(&argc, argv);
+ 			return 0;
+ 		}
+ #undef  main

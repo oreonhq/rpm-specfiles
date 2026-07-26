@@ -1,0 +1,13 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 17c1b29d..0fdca8e4 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -247,7 +247,7 @@ set (BuildOptions_X86_64Core2
+ )
+ 
+ set (BuildOptions_NEON
+-    "-march=armv7-a -mfloat-abi=hard -mfpu=neon -mcpu=cortex-a9 -mtune=cortex-a9 -pipe -mvectorize-with-neon-quad -funsafe-loop-optimizations"
++    "-march=armv7-a -mfloat-abi=hard -mfpu=neon -mtune=cortex-a9 -pipe -mvectorize-with-neon-quad -funsafe-loop-optimizations"
+   CACHE STRING "Cortex_a9 compiler options"
+ )
+ 

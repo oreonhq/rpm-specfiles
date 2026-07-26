@@ -1,0 +1,12 @@
+# sysuser for ser2net
+# Group memberships:
+# - `dialout` for access to serial devices
+# - `lock` for ability to write UUCP lockfiles to /run/lock/lockdev
+
+# We explicitly set up the user first, then add to groups.
+# RPM uses the %add_sysuser RPM macro to compute the correct Provides, which
+# does not support implicitly created users in `m` lines of sysusers files.
+
+u ser2net - "Serial to network proxy"
+m ser2net dialout
+m ser2net lock

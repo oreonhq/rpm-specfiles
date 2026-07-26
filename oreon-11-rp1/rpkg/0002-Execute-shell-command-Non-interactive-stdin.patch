@@ -1,0 +1,138 @@
+From 0123ce42d214968defe74b8a05ba7d9c7ecfa6c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Mon, 6 Oct 2025 00:23:26 +0200
+Subject: [PATCH] Execute shell command: Non-interactive stdin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+During the `push` command on non-interactive environment, rhpkg hangs.
+
+JIRA: RHELBLD-17387
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ pyrpkg/__init__.py     |  9 ++++++++-
+ tests/test_commands.py | 23 +++++++++++++++--------
+ 2 files changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index 57b273d..4d453ca 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -1302,6 +1302,7 @@ class Commands(object):
+                 # stderr, so....
+                 parent_proc = subprocess.Popen(
+                     command, env=environ, shell=shell, cwd=cwd,  # nosec
++                    stdin=subprocess.DEVNULL,
+                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+ 
+                 proc = subprocess.Popen(
+@@ -1309,9 +1310,11 @@ class Commands(object):
+                     stdin=parent_proc.stdout,
+                     stdout=proc_stdout, stderr=proc_stderr,
+                     universal_newlines=return_text)
++                parent_proc.stdout.close()
+             else:
+                 proc = subprocess.Popen(
+                     command, env=environ, shell=shell, cwd=cwd,  # nosec
++                    stdin=subprocess.DEVNULL,
+                     stdout=proc_stdout, stderr=proc_stderr,
+                     universal_newlines=return_text)
+         except KeyboardInterrupt:
+@@ -1319,7 +1322,11 @@ class Commands(object):
+         except Exception as e:
+             raise rpkgError(e)
+ 
+-        exit_code = proc.wait()
++        try:
++            exit_code = proc.wait(timeout=3600)
++        except subprocess.TimeoutExpired:
++            proc.kill()
++            raise rpkgError('Command timed out.')
+         if exit_code > 0 and not return_stderr:
+             raise rpkgError('Failed to execute command.')
+ 
+diff --git a/tests/test_commands.py b/tests/test_commands.py
+index 732d79f..b0b18a3 100644
+--- a/tests/test_commands.py
++++ b/tests/test_commands.py
+@@ -1118,7 +1118,8 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, None), result)
+         Popen.assert_called_once_with(
+             'rpmbuild', env=os.environ, shell=True, cwd=None,  # nosec
+-            stdout=None, stderr=None, universal_newlines=False)
++            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
++            universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_run_command_without_shell(self, Popen):
+@@ -1129,7 +1130,8 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, None), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdout=None, stderr=None, universal_newlines=False)
++            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
++            universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_return_stdout(self, Popen):
+@@ -1142,7 +1144,8 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, 'output', None), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdout=subprocess.PIPE, stderr=None, universal_newlines=False)
++            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=None,
++            universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_return_stderr(self, Popen):
+@@ -1155,7 +1158,8 @@ class TestRunCommand(CommandTestCase):
+         self.assertEqual((0, None, 'output'), result)
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdout=None, stderr=subprocess.PIPE, universal_newlines=False)
++            stdin=subprocess.DEVNULL, stdout=None, stderr=subprocess.PIPE,
++            universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+     def test_pipe(self, Popen):
+@@ -1174,7 +1178,7 @@ class TestRunCommand(CommandTestCase):
+         Popen.assert_has_calls([
+             call(['rpmbuild'],
+                  env=os.environ, shell=False, cwd=None,
+-                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
++                 stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
+             call(['grep', 'src.rpm'],
+                  env=os.environ, shell=False, cwd=None,
+                  stdin=first_proc.stdout, stdout=None, stderr=None,
+@@ -1215,7 +1219,8 @@ class TestRunCommand(CommandTestCase):
+             self.assertEqual((0, None, None), result)
+             Popen.assert_called_once_with(
+                 ['rpmbuild'], env={'myvar': 'test'},
+-                shell=False, cwd=None, stdout=None, stderr=None,
++                shell=False, cwd=None,
++                stdin=subprocess.DEVNULL, stdout=None, stderr=None,
+                 universal_newlines=False)
+ 
+     @patch('subprocess.Popen')
+@@ -1227,7 +1232,8 @@ class TestRunCommand(CommandTestCase):
+ 
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=tempdir,
+-            stdout=None, stderr=None, universal_newlines=False)
++            stdin=subprocess.DEVNULL, stdout=None, stderr=None,
++            universal_newlines=False)
+ 
+         shutil.rmtree(tempdir)
+ 
+@@ -1240,4 +1246,5 @@ class TestRunCommand(CommandTestCase):
+ 
+         Popen.assert_called_once_with(
+             ['rpmbuild'], env=os.environ, shell=False, cwd=None,
+-            stdout=subprocess.PIPE, stderr=None, universal_newlines=True)
++            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=None,
++            universal_newlines=True)
+-- 
+2.51.1
+

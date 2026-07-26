@@ -1,0 +1,107 @@
+%global source0_hash 70098f1f30cb5af6bca24f5d09042811942192eb420206650f5360c33311fa56
+
+Name:           python-pyftpdlib
+Version:        2.2.0
+Release:        %autorelease
+Summary:        Very fast asynchronous FTP server library
+
+%global distprefix %{nil}
+%global forgeurl https://github.com/giampaolo/pyftpdlib
+%global tag release-%{version}
+%forgemeta
+
+License:        MIT
+URL:            %forgeurl
+Source:         %forgesource
+
+BuildArch:      noarch
+
+BuildRequires:  help2man
+BuildRequires:  tomcli
+
+%global desc %{expand: \
+Python FTP server library provides a high-level portable interface to
+easily write very efficient, scalable and asynchronous FTP servers with
+Python. It is the most complete RFC-959 FTP server implementation
+available for Python programming language.
+
+** Features **
+
+- Extremely lightweight, fast and scalable
+- Uses sendfile(2) system call for uploads
+- Uses epoll() / kqueue() / select() to handle concurrency asynchronously
+- Can optionally skip to a multiple thread / process model (as in:
+  you’ll be free to block or use slow filesystems)
+- Portable: entirely written in pure Python; works with Python 2.7 and
+  3.x using a single code base
+- Supports FTPS (RFC-4217), IPv6 (RFC-2428),
+  Unicode file names (RFC-2640), MLSD/MLST commands (RFC-3659)
+- Support for virtual users and virtual filesystem
+- Flexible system of "authorizers" able to manage both "virtual" and
+  "real" users on both UNIX and Windows
+
+** Performance **
+
+Despite being written in an interpreted language, pyftpdlib has
+transfer rates comparable or superior to common UNIX FTP servers
+written in C. It usually tends to scale better because whereas vsftpd
+and proftpd use multiple processes to achieve concurrency, pyftpdlib
+only uses one.}
+
+%description %{desc}
+
+%package -n python3-pyftpdlib
+Summary:        %{summary}
+Provides:       ftpbench = %{?epoch:%{epoch}:}%{version}-%{release}
+# Package falls back to not supporting SSL if not installed
+Recommends:     python3dist(pyftpdlib[ssl])
+# Optional dependency for `ftpbench`
+Suggests:       python3dist(psutil)
+
+%description -n python3-pyftpdlib %{desc}
+
+%pyproject_extras_subpkg -n python3-pyftpdlib ssl
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%forgeautosetup -p1
+
+# Don't use pytest-instafail (not in Fedora)
+tomcli set pyproject.toml lists delitem project.optional-dependencies.test \
+    'pytest-instafail\b.*'
+sed -r -i 's/(--instafail|-p instafail)//' pyproject.toml
+
+%generate_buildrequires
+%pyproject_buildrequires -x ssl,test
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l pyftpdlib
+
+mkdir -p %{buildroot}%{_mandir}/man1
+%{py3_test_envvars} \
+  help2man --no-info --version-string 'ftpbench %{version}' \
+  -o %{buildroot}%{_mandir}/man1/ftpbench.1 --no-discard-stderr \
+  %{buildroot}%{_bindir}/ftpbench
+
+%check
+%pyproject_check_import
+
+# Tests fail in Koji, but not in Copr or with mock
+k="${k-}${k+ and }not test_mlst"
+k="${k-}${k+ and }not test_nlst"
+
+%pytest -v -n auto --dist loadgroup \
+        ${k+-k }"${k-}"
+
+%files -n python3-pyftpdlib -f %{pyproject_files}
+%doc HISTORY.rst README.rst
+%{_bindir}/ftpbench
+%{_mandir}/man1/ftpbench.1*
+
+%changelog
+%autochangelog

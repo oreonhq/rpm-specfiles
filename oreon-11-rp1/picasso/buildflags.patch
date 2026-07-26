@@ -1,0 +1,18 @@
+diff -ruN picasso-2.8.0-mod3/build/configs.cmake picasso-2.8.0-mod4/build/configs.cmake
+--- picasso-2.8.0-mod3/build/configs.cmake	2025-04-02 09:27:43.892043499 +0300
++++ picasso-2.8.0-mod4/build/configs.cmake	2025-04-02 15:03:55.636262181 +0300
+@@ -9,10 +9,10 @@
+     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /WX /Ot /GF /Gm- /GR- /Gy /GL /Zc:wchar_t-")
+     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /WX /Ot /GF /Gm- /GR- /Gy /GL /Zc:wchar_t-")
+ elseif (UNIX AND NOT APPLE)
+-    set(CMAKE_C_FLAGS_DEBUG "-D_DEBUG -O0 -Wall -g -Wno-unused-result")
+-    set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG -O0 -Wall -g -std=c++11 -fno-rtti -fno-exceptions -Wno-unused-result -Wno-register -Wno-attributes")
+-    set(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O3 -Wall -Wno-unused-result")
+-    set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3 -Wall -std=c++11 -fno-rtti -fno-exceptions -Wno-unused-result -Wno-register -Wno-attributes")
++    set(CMAKE_C_FLAGS_DEBUG "-fPIC")
++    set(CMAKE_CXX_FLAGS_DEBUG "-std=c++11 -fPIC")
++    set(CMAKE_C_FLAGS_RELEASE "-fPIC")
++    set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC")
+ elseif (APPLE)
+     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
+     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")

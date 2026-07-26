@@ -1,0 +1,12 @@
+--- SimCoupe/SDL/Makefile.orig	2006-03-21 22:46:44.000000000 +0000
++++ SimCoupe/SDL/Makefile	2006-08-06 01:55:00.000000000 +0100
+@@ -30,7 +30,8 @@
+ 
+ .SUFFIXES: .cpp .c
+ 
+-CFLAGS=-O2 -D__STRICT_ANSI__ -pedantic -I${SDL} -I${BASE} -I${EXTERN} $(shell sdl-config --cflags)
++CFLAGSRPM=
++CFLAGS=${CFLAGSRPM} -D__STRICT_ANSI__ -pedantic -I${SDL} -I${BASE} -I${EXTERN} $(shell sdl-config --cflags)
+ CXXFLAGS=${CFLAGS} -Wall
+ LIBS=-L. -lm $(shell sdl-config --libs --cflags)
+ 

@@ -1,0 +1,26 @@
+From 1f7e763e224ab1030e8d6319c092923dc44fb19f Mon Sep 17 00:00:00 2001
+From: Tzu-ping Chung <uranusjr@gmail.com>
+Date: Tue, 26 Jan 2021 16:21:10 +0800
+Subject: [PATCH] Use setuptools instead of distutils
+
+This allows the project to make use of modern Python packaging
+features such as wheels, isolated builds, and more.
+
+The change is also going to be necessary soon; distutils will soon
+be deprecated in 3.10, and removed from the standard library in 3.12.
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 9e16ec8ab..8ac671511 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+ 
+-from distutils.core import setup
++from setuptools import setup
+ import re
+ 
+ long_description = """

@@ -1,0 +1,36 @@
+From a0e2c341873cd2b9a51f65a1d9d0fd94d83ae1ce Mon Sep 17 00:00:00 2001
+From: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+Date: Sat, 27 Dec 2025 15:06:17 +0200
+Subject: [PATCH] Make tests compatible with Python 3.15
+
+Python 3.15 changes `strptime` behavior such that empty string is
+allowed for `%z` [1]. However, in `test_timestamp.py` there is
+an assertion that explicitly tests that a timestamp that is otherwise
+valid but uses an empty string for `%z` is rejected.
+
+Make the test suite pass for both Python 3.15 and older Pythons by
+simply removing that assertion. As the test cases for success are not
+modified, specification for valid input is not modified. Just one case
+that turns out to be valid in new Python versions is removed from the
+set of explictly rejected cases.
+
+This issue case up when Fedora test build for Python 3.15 failed due to
+this issue [2].
+
+[1]: https://github.com/python/cpython/issues/122781
+[2]: https://bugzilla.redhat.com/show_bug.cgi?id=2424323
+---
+ tests/unit/test_timestamp.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tests/unit/test_timestamp.py b/tests/unit/test_timestamp.py
+index 83b953a..8431ffc 100644
+--- a/tests/unit/test_timestamp.py
++++ b/tests/unit/test_timestamp.py
+@@ -33,6 +33,5 @@ def test_timestamp_strip():
+ 
+ def test_invalid_timestamp():
+     assert parse_areena_timestamp('xxx2018-01-02T18:30:00+02:00') is None
+-    assert parse_areena_timestamp('2018-01-02T18:30:00') is None
+     assert parse_areena_timestamp('2018-01-999999T18:30:00+02:00') is None
+     assert parse_areena_timestamp('2018-01-999999T22222') is None

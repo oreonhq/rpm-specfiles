@@ -1,0 +1,10 @@
+--- a/setup.py	2014-05-10 11:51:40.000000000 -0700
++++ b/setup.py	2014-09-28 22:16:52.659180505 -0700
+@@ -39,6 +39,5 @@
+                 'TileStache.Goodies.Providers',
+                 'TileStache.Goodies.VecTiles'],
+       scripts=['scripts/tilestache-compose.py', 'scripts/tilestache-seed.py', 'scripts/tilestache-clean.py', 'scripts/tilestache-server.py', 'scripts/tilestache-render.py', 'scripts/tilestache-list.py'],
+-      data_files=[('share/tilestache', ['TileStache/Goodies/Providers/DejaVuSansMono-alphanumeric.ttf'])],
+-      package_data={'TileStache': ['VERSION', '../doc/*.html']},
++      package_data={'TileStache': ['VERSION']},
+       license='BSD')

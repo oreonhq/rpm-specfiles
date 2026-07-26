@@ -1,0 +1,494 @@
+Bring xtrace-1.3.1 up to git HEAD (commit 3ae9cf2f457b0ddf0ecc6405e7073c966f8fab06).
+---
+ ChangeLog      |    8 +++
+ NEWS           |    3 +
+ atoms.c        |    2 
+ configure.ac   |    4 +
+ parse.c        |   29 ++++++++++++-
+ parse.h        |    2 
+ requests.proto |   25 ++++++++++-
+ translate.c    |   17 ++++++-
+ xinput.proto   |   40 +++++++++++++++--
+ xkb.proto      |  127 +++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 10 files changed, 239 insertions(+), 18 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 97a398a..07b4aca 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,11 @@
++2013-05-26
++	* xinput: improve ValuatorClass (previously AxisClass),
++	          add ScrollClass, TouchClass
++	* mark some font properties as atoms
++2013-05-21
++	* xkb: add partial support for GetMap, GetNames and GetNamedIndicator
++2013-05-21
++	* Add handling of GetAtomName
+ 2012-06-01
+ 	* fix parsing of unusual QueryExtension requests
+ 2012-01-09
+diff --git a/NEWS b/NEWS
+index b3c5f92..ae68c6c 100644
+--- a/NEWS
++++ b/NEWS
+@@ -1,3 +1,6 @@
++new after 1.3.1:
++- also remember atoms seen by GetAtomName
++- partial improvements to xkb, xinput, fontprops
+ new after 1.3.0:
+ - fix query extension parsing
+ new after 1.2.0:
+diff --git a/atoms.c b/atoms.c
+index e9b871f..9baf1cc 100644
+--- a/atoms.c
++++ b/atoms.c
+@@ -87,7 +87,6 @@ const char *getAtom(struct connection *c UNUSED, uint32_t atom) {
+ }
+ void internAtom(struct connection *c UNUSED, uint32_t atom, struct atom *data) {
+ 	struct atom **p;
+-	uint32_t lastmask;
+ 
+ 	if( atom <= CONSTANT_ATOMS ) {
+ 		free(data);
+@@ -98,7 +97,6 @@ void internAtom(struct connection *c UNUSED, uint32_t atom, struct atom *data) {
+ 	data->atom = atom;
+ 
+ 	p = &atom_root;
+-	lastmask = 0;
+ 	while( *p != NULL ) {
+ 		uint32_t k;
+ 		k = (*p)->atom;
+diff --git a/configure.ac b/configure.ac
+index 4787d59..1c32aa6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,10 +37,12 @@ AC_CACHE_CHECK([Checking for _POSIX_TIMERS and _POSIX_MONOTONIC_CLOCK],[ac_cv_mo
+ 
+ if test $ac_cv_monotonic_clock = yes ; then
+ 	AC_DEFINE([HAVE_MONOTONIC_CLOCK], 1, [Define if clock_gettime(CLOCK_MONOTONIC) should work])
++	AC_CHECK_FUNC([clock_gettime],[],[
+ 	AC_CHECK_LIB(rt, clock_gettime, [], [AC_MSG_ERROR([_POSIX_TIMERS suggests clock_gettime should work but it seems not to work, though])])
++	])
+ fi
+ 
+-AC_CHECK_FUNCS([strndup asprintf socket])
++AC_CHECK_FUNCS([strndup asprintf socket tdestroy])
+ if test $ac_cv_func_socket = no; then
+ 	AC_CHECK_LIB(socket, socket, [AC_DEFINE(HAVE_SOCKET)
+ LIBS="$LIBS -lsocket -lnsl"; break],[AC_MSG_ERROR([Could not find socket library function])])
+diff --git a/parse.c b/parse.c
+index c79e56a..d3125f9 100644
+--- a/parse.c
++++ b/parse.c
+@@ -174,12 +174,14 @@ struct expectedreply {
+ 		dt_UNKNOWN_EXTENSION, /* uextension used */
+ 		dt_EXTENSION, /* extension used */
+ 		dt_ATOM, /* atom used */
++		dt_CARD32, /* card32 used */
+ 	} data_type;
+ 	union {
+ 		void *data;
+ 		struct atom *atom;
+ 		const struct extension *extension;
+ 		struct unknownextension *uextension;
++		uint32_t card32;
+ 	} data;
+ 	unsigned long values[];
+ };
+@@ -1505,6 +1507,20 @@ bool requestInternAtom(struct connection *c, bool pre, bool bigrequest UNUSED, s
+ 	return false;
+ }
+ 
++bool requestGetAtomName(struct connection *c, bool pre, bool bigrequest UNUSED, struct expectedreply *reply) {
++	uint32_t atom;
++	if( pre )
++		return false;
++	if( reply == NULL)
++		return false;
++	if( c->clientignore < 8 )
++		return false;
++	atom = clientCARD32(4);
++	reply->data_type = dt_CARD32;
++	reply->data.card32 = atom;
++	return false;
++}
++
+ /* Reactions to some replies */
+ 
+ void replyListFontsWithInfo(struct connection *c, bool *ignore, bool *dontremove, struct expectedreply *dummy UNUSED) {
+@@ -1562,6 +1578,16 @@ void replyInternAtom(struct connection *c, bool *ignore UNUSED, bool *dontremove
+ 	internAtom(c, atom, d->data.atom);
+ }
+ 
++void replyGetAtomName(struct connection *c, bool *ignore UNUSED, bool *dontremove UNUSED, struct expectedreply *d) {
++	struct atom *atom;
++	uint16_t len;
++	if( d->data_type != dt_CARD32 || d->data.card32 == 0 )
++		return;
++	len = serverCARD16(8);
++	atom = newAtom((const char *)c->serverbuffer+32, len);
++	internAtom(c, d->data.card32, atom);
++}
++
+ #define ft_COUNT8 ft_STORE8
+ #define ft_COUNT16 ft_STORE16
+ #define ft_COUNT32 ft_STORE32
+@@ -1794,7 +1820,7 @@ static inline void print_server_event(struct connection *c) {
+ 
+ 
+ static inline void print_server_reply(struct connection *c) {
+-	unsigned int cmd,seq;
++	unsigned int seq;
+ 	struct expectedreply *replyto,**lastp;
+ 	size_t len;
+ 	unsigned long stackvalues[30];
+@@ -1808,7 +1834,6 @@ static inline void print_server_reply(struct connection *c) {
+ 	if( len > c->servercount )
+ 		len = c->servercount;
+ 
+-	cmd = serverCARD8(1);
+ 	seq = serverCARD16(2);
+ 	for( lastp = &c->expectedreplies ;
+ 			(replyto=*lastp) != NULL ; lastp=&replyto->next){
+diff --git a/parse.h b/parse.h
+index e7dcdb6..e3c8a88 100644
+--- a/parse.h
++++ b/parse.h
+@@ -167,8 +167,10 @@ extern const struct parameter *setup_parameters;
+ /* special handlers, for the SPECIAL requests/events */
+ extern request_func requestQueryExtension;
+ extern request_func requestInternAtom;
++extern request_func requestGetAtomName;
+ extern reply_func replyListFontsWithInfo;
+ extern reply_func replyQueryExtension;
+ extern reply_func replyInternAtom;
++extern reply_func replyGetAtomName;
+ 
+ #endif
+diff --git a/requests.proto b/requests.proto
+index dc74386..57466fa 100644
+--- a/requests.proto
++++ b/requests.proto
+@@ -111,7 +111,7 @@ CirculateWindow
+ GetGeometry RESPONDS
+ QueryTree RESPONDS
+ InternAtom RESPONDS SPECIAL
+-GetAtomName RESPONDS
++GetAtomName RESPONDS SPECIAL
+ ChangeProperty
+ DeleteProperty
+ GetProperty RESPONDS /* 20*/
+@@ -1023,6 +1023,29 @@ TYPE 32bits CARD32
+ 
+ LIST FONTPROP length 8
+ 0	name	ATOM
++IF 0 ATOM "FONT"
++4	value	ATOM
++ELSEIF 0 ATOM "FAMILY_NAME"
++4	value	ATOM
++ELSEIF 0 ATOM "FOUNDRY"
++4	value	ATOM
++ELSEIF 0 ATOM "FACE_NAME"
++4	value	ATOM
++ELSEIF 0 ATOM "COPYRIGHT"
++4	value	ATOM
++ELSEIF 0 ATOM "NOTICE"
++4	value	ATOM
++ELSEIF 0 ATOM "CHARSET_REGISTRY"
++4	value	ATOM
++ELSEIF 0 ATOM "CHARSET_ENCODING"
++4	value	ATOM
++ELSEIF 0 ATOM "FONT_TYPE"
++4	value	ATOM
++ELSEIF 0 ATOM "SLANT"
++4	value	ATOM
++ELSEIF 0 ATOM "FULL_NAME"
++4	value	ATOM
++ELSE
+ 4	value	32bits
+ END
+ 
+diff --git a/translate.c b/translate.c
+index 134cf40..05dae42 100644
+--- a/translate.c
++++ b/translate.c
+@@ -1141,7 +1141,7 @@ static bool parse_parameters(struct parser *parser, struct variable *variable, b
+ 		}
+ 		if( strcmp(position, "SIZE") == 0 ) {
+ 			const char *v;
+-			unsigned long t = 1;
++			//unsigned long t = 1;
+ 
+ 			v = get_const_token(parser, false);
+ 			if( v == NULL )
+@@ -1180,8 +1180,8 @@ static bool parse_parameters(struct parser *parser, struct variable *variable, b
+ 				}
+ 				error(parser, "'TIMES' not yet supported!");
+ 				continue;
+-				v = get_const_token(parser, false);
+-				t = parse_number(parser, v);
++				//v = get_const_token(parser, false);
++				//t = parse_number(parser, v);
+ 			}
+ 			no_more_arguments(parser);
+ 			state->sizemarker_set = true;
+@@ -2183,11 +2183,13 @@ bool translate(struct parser *parser, const char *name) {
+ 	return false;
+ }
+ 
++#ifdef HAVE_TDESTROY
+ static void free_varname(void *nodep) {
+ 	struct varname *vn = nodep;
+ 	variable_unref(vn->variable);
+ 	free(vn);
+ }
++#endif
+ 
+ bool parser_free(struct parser *parser) {
+ 	bool success = !parser->error;
+@@ -2198,12 +2200,18 @@ bool parser_free(struct parser *parser) {
+ 		struct namespace *ns = parser->namespaces;
+ 		parser->namespaces = ns->next;
+ 		int i;
++#ifdef HAVE_TDESTROY
+ 		enum variable_type vt;
++#endif
+ 
+ 		assert( ns->refcount == 0 );
++#ifdef HAVE_TDESTROY
+ 		for( vt = 0 ; vt < vt_COUNT ; vt ++ ) {
+ 			tdestroy(ns->variables[vt], free_varname);
+ 		}
++#else
++#warning Not freeing some memory as your libc lacks tdestroy
++#endif
+ 		free(ns->name);
+ 		free(ns->extension);
+ 		for( i = 0 ; i < ns->num_requests ; i++ ) {
+@@ -2456,6 +2464,9 @@ static const struct request *finalize_requests(struct parser *parser, struct nam
+ 		} else if( strcmp(rs[i].name, "ListFontsWithInfo") == 0 ) {
+ 			/* this should be changed to a general approach */
+ 			rs[i].reply_func = replyListFontsWithInfo;
++		} else if( strcmp(rs[i].name, "GetAtomName") == 0) {
++			rs[i].request_func = requestGetAtomName;
++			rs[i].reply_func = replyGetAtomName;
+ 		} else {
+ 			fprintf(stderr, "No specials available for '%s::%s'!\n",
+ 					ns->name, rs[i].name);
+diff --git a/xinput.proto b/xinput.proto
+index 73ddad7..3d9d596 100644
+--- a/xinput.proto
++++ b/xinput.proto
+@@ -1015,9 +1015,27 @@ TYPE SETofBUTTONMASK CARD32
+ CONSTANTS class
+ 0	KeyClass
+ 1	ButtonClass
+-2	AxisClass
++2	ValuatorClass
++3	ScrollClass
++8	TouchClass
+ END
+ 
++CONSTANTS scrolltype
++1 vertical
++2 horizontal
++END
++TYPE ScrollType ENUM32 scrolltype
++BITMASK scrollflag
++1<<0	NoEmulation
++1<<1	Preferred
++END
++TYPE ScrollFlag BITMASK32 scrollflag
++CONSTANTS touchmode
++1 DirectTouch
++2 DependentTouch
++END
++TYPE TouchMode ENUM8 touchmode
++
+ LIST CLASS variable min-length 8
+ 0	type	ENUM16	class
+ 2	length	COUNT16
+@@ -1029,15 +1047,25 @@ ELSEIF 0 CARD16 $class:ButtonClass
+ 6	num_buttons	COUNT16
+ 8	state	SETofBUTTONMASK
+ 12	labels	LISTofATOM
+-ELSEIF 0 CARD16 $class:AxisClass
+-6	axisnumber	COUNT16
++ELSEIF 0 CARD16 $class:ValuatorClass
++6	number	UINT16
+ 8	label	ATOM
+-12	min	FRACTION32_32
+-20	max	FRACTION32_32
+-28	value	FRACTION32_32
++12	min	FP3232
++20	max	FP3232
++28	value	FP3232
+ 36	resolution	UINT32
+ 40	mode	CARD8
+ NEXT	44
++ELSEIF 0 CARD16 $class:ScrollClass
++6	number	UINT16
++8	type	ScrollType
++12	flags	ScrollFlag
++16	increment	FP3232
++NEXT	24
++ELSEIF 0 CARD16 $class:TouchClass
++6	mode	TouchMode
++7	touch_max	UINT8
++NEXT	8
+ ELSE
+ 0	pad	LISTofCARD32
+ END
+diff --git a/xkb.proto b/xkb.proto
+index c747133..a88b78a 100644
+--- a/xkb.proto
++++ b/xkb.proto
+@@ -11,16 +11,16 @@ GetState RESPONDS UNSUPPORTED /* 4 */
+ LatchLockState UNSUPPORTED /* 5 */
+ GetControls RESPONDS UNSUPPORTED /* 6 */
+ SetControls UNSUPPORTED /* 7 */
+-GetMap RESPONDS UNSUPPORTED /* 8 */
++GetMap RESPONDS /* 8 */
+ SetMap UNSUPPORTED /* 9 */
+ GetCompatMap RESPONDS UNSUPPORTED /* 10 */
+ SetCompatMap UNSUPPORTED /* 11 */
+ GetIndicatorState RESPONDS UNSUPPORTED /* 12 */
+ GetIndicatorMap RESPONDS UNSUPPORTED /* 13 */
+ SetIndicatorMap UNSUPPORTED /* 14 */
+-GetNamedIndicator RESPONDS UNSUPPORTED /* 15 */
++GetNamedIndicator RESPONDS /* 15 */
+ SetNamedIndicator UNSUPPORTED /* 16 */
+-GetNames RESPONDS UNSUPPORTED /* 17 */
++GetNames RESPONDS /* 17 */
+ SetNames UNSUPPORTED /* 18 */
+ GetGeometry RESPONDS UNSUPPORTED /* 19 */
+ SetGeometry UNSUPPORTED /* 20 */
+@@ -82,6 +82,127 @@ REQUEST Bell
+ 24 window WINDOW
+ END
+ 
++TYPE KEYCODE UINT8
++
++REQUEST GetMap
++ 4 deviceSpec DEVICESPEC
++ 6 full UINT16
++ 8 partial UINT16
++10 firstType UINT8
++11 nTypes UINT8
++12 firstKeySym KEYCODE
++13 nKeySyms UINT8
++14 firstKeyAct KEYCODE
++15 nKeyActs UINT8
++16 firstKeyBehavior KEYCODE
++17 nKeyBehaviors UINT8
++18 virtualMods UINT16
++END
++
++RESPONSE GetMap
++ 2	deviceID	UINT8
++10	minKeyCode	KEYCODE
++11	maxKeyCode	KEYCODE
++12	present		UINT16
++14	firstType	UINT8
++15	nTypes		UINT8
++16	totalTypes	UINT8
++17	firstKeySym	KEYCODE
++18	totalSyms	UINT16
++20	nKeySyms	UINT8
++21	firstKeyAct	KEYCODE
++22	totalActs	UINT16
++24	nKeyActs	UINT8
++25	firstKeyBehavior	KEYCODE
++26	nKeyBehaviors	UINT8
++27	totalKeyBehaviors	UINT8
++28	firstKeyExplicit	KEYCODE
++29	nKeyExplicit	UINT8
++30	totalKeyExplicit	UINT8
++31	firstModMapKey	KEYCODE
++32	nModMapKeys	UINT8
++33	totalModMapKeys	UINT8
++34	firstVModMapKey	KEYCODE
++35	nVModMapKeys	UINT8
++36	totalVModMapKeys	UINT8
++38	virtualMods	UINT16
++# TODO
++40	not-yet-supported	LISTofCARD8
++END
++
++BITMASK namedetailmask
++   1	keycodes
++   2	geometry
++   4	symbols
++   8	phys_symbols
++  16	type
++  32	compat
++  64	key_type_names
++ 128	key_type_level_names
++ 256	indicators
++ 512	key_names
++1024	key_aliases
++2048	vmods
++4096	groups
++8192	radio_groups
++END
++
++REQUEST GetNames
++ 4	deviceSpec	DEVICESPEC
++ 8	which		BITMASK32 namedetailmask
++END
++
++RESPONSE GetNames
++ 1	deviceID	UINT8
++ 8	which		BITMASK32 namedetailmask
++12	minKeyCode	KEYCODE
++13	maxKeyCode	KEYCODE
++14	nTypes		UINT8
++15	groupNames	UINT8
++16	virtualMods	UINT16
++18	firstKey	KEYCODE
++19	nKeys		UINT8
++20	indicators	CARD32
++24	nRadioGroups	UINT8
++25	nKeyAliases	UINT8
++26	nKTLevels	UINT16
++# TODO
++32	valueList	LISTofCARD8
++END
++
++CONSTANTS LEDCLASSSPEC
++0	KbdFeedbackClass
++4	LedFeedbackClass
++0x0300	DfltXIClass
++0x0500	AllXIClasses
++0xff00	XINone
++END
++
++REQUEST GetNamedIndicator
++ 4	deviceSpec	DEVICESPEC
++ 6	ledClass	ENUM16 LEDCLASSSPEC
++ 8	ledID		IDSPEC
++12	indicator	ATOM
++END
++
++RESPONSE GetNamedIndicator
++ 1	deviceID	UINT8
++ 8	indicator	ATOM
++12	found		BOOL
++13	on		BOOL
++14	realIndicator	BOOL
++15	ndx		UINT8
++16	flags		CARD8
++17	whichGroups	CARD8
++18	groups		CARD8
++19	whichMods	CARD8
++20	mods		CARD8
++21	realMods	CARD8
++22	virtualMods	CARD16
++24	ctrls		CARD32
++28	supported	BOOL
++END
++
+ EVENT XkbEvent
+ # all events packaged into one? WTF?
+  1	type	UINT8

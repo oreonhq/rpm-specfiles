@@ -1,0 +1,91 @@
+
+Decoding GRIB Data                                7/97 
+
+                    (Conversion to IEEE by wgrib)
+
+           
+GRIB is a format used to store binary data.  While there are several other 
+competing formats (IEEE, CDF, Net-CDF, etc), GRIB has been endorsed by 
+the WMO and is the primary format at the operational centers (ECMWF, 
+NCEP).  GRIB has the advantages of being both an international standard 
+and more space efficient than its main competing formats. 
+
+
+A simple-to-use grib decoder can be obtained from wesley.ncep.noaa.gov
+	/pub/wgrib/wgrib.c   (source code)
+
+(for NCEP users) The latest compiled versions can be found at
+
+     /wd5/wd51/rl51we/bin/wgrib                   (Cray YMP)
+     ~wd51we/bin.sun/wgrib                        (Sun workstation)
+     ~wd51we/bin.sgi/wgrib                        (SGI workstation)
+     ~wd51we/bin.hp/wgrib                         (HP workstation)
+     ~wd51we/bin.linux/wgrib                      (x86 linux)
+     /wd2/cpc/cdrom/PROGRAMS/WGRIB/WGRIB.EXE (PC version, on Cray YMP)
+
+Documentation and directions for compiling wgrib can be found at
+ftp://wesley.ncep.noaa.gov/pub/wgrib.
+
+
+The first step in decoding GRIB data is a file inventory.  The simplest 
+method is to type
+     % wgrib -s grib_file               -s is for the simple output format
+
+     Output format (-s option)
+     field 1: record number
+     field 2: position of record within the file
+     field 3: time (yymmddhh)
+     field 4: variable (see /wd2/ln/map/data/grib1.kpds5.vsn21 on the Cray YMP)
+     field 5: level/layer
+     following fields: description of record
+          ex. mean, variance, forecast, analysis, etc
+
+Now suppose we want to extract the 50 mb zonal winds for all dates.  The 
+following commands extract the data on a UNIX computer as f77 IEEE data.  
+Note that zonal winds have the name "UGRD" in the file inventory.
+
+     % wgrib -s grib_file | grep ":UGRD:" | grep ':50 mb:' | wgrib -i -s -ieee -h grib_file
+
+To understand the previous command, you need to consider all the steps.
+     wgrib -s grib_file
+          creates a simple file inventory
+          in this example '-s' is optional
+     grep ":UGRD:"
+          selects only the records with ":UGRD:" in the record description
+     grep ':50 mb:'
+          selects only the records with ":50 mb:" in the record description
+          note that ":50 mb:" was used rather than "50 mb" as the latter
+          would also match the 850 mb level.
+     wgrib -i -s -ieee -h grib_file
+          -i ... read a file inventory
+          -s ... short description of records written
+          -ieee ... IEEE format numbers
+          -h ... f77-style headers (default), -nh for no headers
+          by default,  the output format is binary with headers.  On 
+          workstations, this is usually the "f77 IEEE" format which is 
+          often compatible with UNIX fortran programs.
+
+
+To convert all the records to a binary format with f77 style headers:
+     % wgrib -s grib_file | wgrib -s -i grib_file
+
+To determine the dimension and type of grid used in record N, type,
+
+     %wgrib -V -o /dev/null  -d N grib_file
+
+            -V ... verbose output
+            -o /dev/null ... write output (dump file) to bottomless pit
+            -d N ... dump record N
+
+NCEP's convention for fields produced by the MRF (operational forecasts, 
+Reanalysis) is for the fields to be on a lat-long or Gaussian grid.  The 
+fields start at the northern most latitude and at the Greenwich meridian 
+and go eastward.  The data is stored in the fortran scanning order.  
+This can be verified by using the -V option of wgrib which will tell you 
+the dimension of the fields and how it is arranged.
+
+A quick summary of the wgrib's options can be obtained by executing wgrib 
+with no arguments.  The undefined value is 9.999e20 (version 1.6.0) and 
+more documentation can be found at ftp://wesley.ncep.noaa.gov/pub/wgrib.
+on the Cray-YMP at /wd2/cpc/cdrom/PROGRAMS/WGRIB/.  
+

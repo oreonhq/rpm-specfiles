@@ -1,0 +1,39 @@
+diff -up winpdb-reborn-2.0.0.1/rpdb2.py.no-imp winpdb-reborn-2.0.0.1/rpdb2.py
+--- winpdb-reborn-2.0.0.1/rpdb2.py.no-imp	2025-03-12 14:27:38.797538630 -0400
++++ winpdb-reborn-2.0.0.1/rpdb2.py	2025-03-12 14:29:17.837196358 -0400
+@@ -72,7 +72,8 @@ import time
+ import copy
+ import sys
+ import cmd
+-import imp
++import importlib.util
++import importlib.machinery
+ import os
+ 
+ if sys.version_info[:2] < (3,2):
+@@ -84,6 +85,16 @@ import _thread as thread
+ import numbers
+ 
+ 
++def load_source(modname, filename):
++    loader = importlib.machinery.SourceFileLoader(modname, filename)
++    spec = importlib.util.spec_from_file_location(modname, filename, loader=loader)
++    module = importlib.util.module_from_spec(spec)
++    # The module is always executed and not cached in sys.modules.
++    # Uncomment the following line to cache the module.
++    # sys.modules[module.__name__] = module
++    loader.exec_module(module)
++    return module
++
+ #
+ #-------------------------------- Design Notes -------------------------------
+ #
+@@ -6768,7 +6779,7 @@ def StartServer(args, fchdir, _rpdb2_pwd
+     # there was a problem loading the debugged script.
+     #
+ 
+-    imp.load_source('__main__', _path)
++    load_source('__main__', _path)
+ 
+ 
+ 

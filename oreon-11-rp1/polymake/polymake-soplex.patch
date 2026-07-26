@@ -1,0 +1,44 @@
+--- bundled/soplex/support/configure.pl.orig	2024-09-24 08:56:59.518812265 -0600
++++ bundled/soplex/support/configure.pl	2024-09-24 09:00:57.399635228 -0600
+@@ -37,14 +37,6 @@ sub proceed {
+    if (defined($options->{soplex})){
+       $path = $options->{soplex};
+    }
+-   if (defined($Polymake::Bundled::scip::INCLUDEDIR)){
+-      if(defined($path)){
+-         print "Warning: Discarding --with-soplex path, reading soplex configuration from SCIP.";
+-      }
+-      print "\n";
+-      $path = $Polymake::Bundled::scip::INCLUDEDIR;
+-      $hasSCIP = 1;
+-   }
+ 
+    if (defined ($path)) {
+       if (my $soplex_h=`find $path -type f -name soplex.h`) {
+@@ -114,7 +106,7 @@ int main() {
+ }
+ ---
+ RETRY:
+-   my $error=Polymake::Configure::build_test_program($testcode, LIBS => "$LIBS -lmpfr -lgmp", CXXFLAGS => "$CXXFLAGS", LDFLAGS => "$LDFLAGS");
++   my $error=Polymake::Configure::build_test_program($testcode, LIBS => "$LIBS -lclusol -ltbb -lmpfr -lgmp", CXXFLAGS => "$CXXFLAGS", LDFLAGS => "$LDFLAGS");
+    if ($?==0) {
+       my $output=Polymake::Configure::run_test_program();
+       if ($?) {
+@@ -125,7 +117,7 @@ RETRY:
+          if ($LIBS !~ /-lsoplex-pic/) {
+             # if using libsoplex try to build a shared library as well to check
+             # for relocation problems, i.e. whether it was built with -fPIC
+-            $error = Polymake::Configure::build_test_program($testcode, LIBS => "$LIBS -lmpfr -lgmp", CXXFLAGS => "$Polymake::Configure::CsharedFLAGS $CXXFLAGS", LDFLAGS => "$Polymake::Configure::LDsharedFLAGS $LDFLAGS");
++            $error = Polymake::Configure::build_test_program($testcode, LIBS => "$LIBS -lclusol -ltbb -lmpfr -lgmp", CXXFLAGS => "$Polymake::Configure::CsharedFLAGS $CXXFLAGS", LDFLAGS => "$Polymake::Configure::LDsharedFLAGS $LDFLAGS");
+             goto FAILED if ($?);
+          }
+ 
+@@ -144,7 +136,7 @@ RETRY:
+       if(!$hasSCIP){
+          if ($LIBS =~ /-lsoplex-pic/) {
+             # retry for GNU make with SHARED=true
+-            $LIBS="-lsoplex -lz";
++            $LIBS="-lsoplex -lclusol -ltbb -lmpfr -lgmp -lz-ng";
+             goto RETRY;
+          }
+       }

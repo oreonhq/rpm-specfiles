@@ -1,0 +1,22 @@
+--- protobuf-3.1.4/pyproject.toml~	2025-08-14 10:33:20.437704353 -0500
++++ protobuf-3.1.4/pyproject.toml	2025-08-14 10:41:33.741176236 -0500
+@@ -67,7 +67,7 @@
+ vcs = "git"
+ pattern = "default-unprefixed"
+ style = "pep440"
+-strict = true
++strict = false
+ latest-tag = true
+ 
+ [tool.mypy]
+--- protobuf-3.1.4/pyproject.toml~	2025-08-18 14:22:52.747425272 -0500
++++ protobuf-3.1.4/pyproject.toml	2025-08-18 14:24:25.363615308 -0500
+@@ -63,7 +63,7 @@
+ "Issues" = "https://github.com/eigenein/protobuf/issues"
+ 
+ [tool.poetry-dynamic-versioning]
+-enable = true
++enable = false
+ vcs = "git"
+ pattern = "default-unprefixed"
+ style = "pep440"

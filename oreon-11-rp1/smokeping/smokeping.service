@@ -1,0 +1,24 @@
+[Unit]
+Description=Latency Logging and Graphing System
+After=syslog.target network-online.target
+
+[Service]
+ExecStart=/usr/sbin/smokeping --nodaemon
+# Execute pre script as root
+PermissionsStartOnly=true
+# Fix owner of files and dirs
+ExecStartPre=/usr/libexec/smokeping-fix-ownership
+ExecReload=/bin/kill -HUP $MAINPID
+User=smokeping
+Group=apache
+Restart=always
+RestartSec=1
+Nice=19
+IOSchedulingClass=3
+PrivateTmp=true
+CapabilityBoundingSet=CAP_CHOWN CAP_SETGID CAP_SETUID CAP_DAC_OVERRIDE CAP_KILL CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_CHROOT
+ReadOnlyDirectories=/etc
+ReadOnlyDirectories=/usr
+
+[Install]
+WantedBy=multi-user.target

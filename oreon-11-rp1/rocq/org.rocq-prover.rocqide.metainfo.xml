@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.rocq-prover.rocqide</id>
+  <metadata_license>LGPL-2.1-only</metadata_license>
+  <project_license>LGPL-2.1-only</project_license>
+  <name>rocqide</name>
+  <summary>Rocq graphical interface</summary>
+  <description>
+    <p>
+      The Rocq Prover is an interactive theorem prover, or proof assistant.
+      It provides a formal language to write mathematical definitions,
+      executable algorithms and theorems together with an environment for
+      semi-interactive development of machine-checked proofs.
+    </p>
+    <p>
+      Typical applications include the certification of properties of
+      programming languages (e.g. the CompCert compiler certification project,
+      or the Bedrock verified low-level programming library), the
+      formalization of mathematics (e.g. the full formalization of the
+      Feit-Thompson theorem or homotopy type theory) and teaching.
+    </p>
+    <p>
+      This package provides RocqIDE, a lightweight IDE for Rocq.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.rocq-prover.rocqide.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://rocq-prover.org/doc/V9.0.0/refman/_images/rocqide.png</image>
+      <caption>RocqIDE: step through a proof</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://rocq-prover.org/doc/V9.0.0/refman/_images/async-mode.png</image>
+      <caption>RocqIDE: edit a proof</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://rocq-prover.org/doc/V9.0.0/refman/_images/rocqide-queries.png</image>
+      <caption>RocqIDE: query example</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://rocq-prover.org/doc/V9.0.0/refman/_images/rocqide-preferences-editor.png</image>
+      <caption>RocqIDE: preferences editor</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://rocq-prover.org/doc/V9.0.0/refman/_images/debugger.png</image>
+      <caption>RocqIDE: debug a tactic</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>rocq-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">https://rocq-prover.org/</url>
+  <url type="bugtracker">https://github.com/rocq-prover/rocq/issues</url>
+  <url type="help">https://rocq-prover.org/docs</url>
+  <url type="donation">https://rocq-prover.org/consortium/donation</url>
+  <content_rating type="oars-1.1"></content_rating>
+  <provides>
+    <binary>rocqide</binary>
+  </provides>
+</component>

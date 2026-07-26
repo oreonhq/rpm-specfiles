@@ -1,0 +1,26 @@
+Description: build shared library
+Author: Jonas Smedegaard <dr@jones.dk>
+License: BSD-3-clause
+Last-Update: 2019-12-02
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -172,7 +172,7 @@
+ 
+ set(RANDOMX_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/src" CACHE STRING "RandomX Include path")
+ 
+-add_library(randomx ${randomx_sources})
++add_library(randomx SHARED ${randomx_sources})
+ 
+ if(TARGET generate-asm)
+   add_dependencies(randomx generate-asm)
+@@ -182,6 +182,8 @@
+ set_property(TARGET randomx PROPERTY CXX_STANDARD 11)
+ set_property(TARGET randomx PROPERTY CXX_STANDARD_REQUIRED ON)
+ set_property(TARGET randomx PROPERTY PUBLIC_HEADER src/randomx.h)
++set_property(TARGET randomx PROPERTY VERSION 0.0.0)
++set_property(TARGET randomx PROPERTY SOVERSION 0)
+ 
+ include(GNUInstallDirs)
+ install(TARGETS randomx

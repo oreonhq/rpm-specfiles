@@ -1,0 +1,13 @@
+#!/bin/sh
+HOST_NAME=`uname -n`
+if [ ! -e @vardir@/lib/tripwire/${HOST_NAME}.twd ] ; then
+	echo "****    Error: Tripwire database for ${HOST_NAME} not found.    ****"
+	echo "**** Run \"@sysconfdir@/tripwire/twinstall.sh\" and/or \"tripwire --init\". ****"
+elif [ -f @sysconfdir@/tripwire/tw.cfg ]; then
+	# if GLOBALEMAIL is configured, use it rather than cron mail
+	if [ -n "`@sbindir@/twadmin -m f | sed -n 's/^GLOBALEMAIL\W*=//p'`" ]; then
+		@sbindir@/tripwire --check --email-report --silent --no-tty-output
+	else
+		@sbindir@/tripwire --check
+	fi
+fi

@@ -1,0 +1,74 @@
+diff --git a/spec/admonition_spec.rb b/spec/admonition_spec.rb
+index 0131a097..771a3825 100644
+--- a/spec/admonition_spec.rb
++++ b/spec/admonition_spec.rb
+@@ -709,7 +709,7 @@
+         label_text = pdf.find_unique_text 'TIP'
+         (expect label_text).not_to be_nil
+         (expect label_text[:font_name]).to include 'Bold'
+-      end).to log_message severity: :WARN, message: %(~could not embed admonition icon image: #{fixture_file 'broken.svg'}; Missing end tag for 'rect')
++      end).to log_message severity: :WARN, message: %(~could not embed admonition icon image: #{fixture_file 'broken.svg'}; The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+     end
+ 
+     it 'should resize fallback admonition label to fit in available space if icon fails to embed' do
+@@ -726,7 +726,7 @@
+         label_text = pdf.find_unique_text 'WARNING'
+         (expect label_text).not_to be_nil
+         (expect label_text[:font_size]).to be < 10.5
+-      end).to log_message severity: :WARN, message: %(~could not embed admonition icon image: #{fixture_file 'broken.svg'}; Missing end tag for 'rect')
++      end).to log_message severity: :WARN, message: %(~could not embed admonition icon image: #{fixture_file 'broken.svg'}; The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+     end
+ 
+     # NOTE: this test also verifies the text transform is applied as requested by theme
+diff --git a/spec/cover_page_spec.rb b/spec/cover_page_spec.rb
+index bd487eb1..4e1a088b 100644
+--- a/spec/cover_page_spec.rb
++++ b/spec/cover_page_spec.rb
+@@ -75,7 +75,7 @@
+ 
+       (expect pdf.pages).to have_size 1
+       (expect pdf.lines pdf.find_text page_number: 1).to eql ['content page']
+-    end).to log_message severity: :WARN, message: %(~could not embed front cover image: #{fixture_file 'broken.svg'}; Missing end tag for 'rect')
++    end).to log_message severity: :WARN, message: %(~could not embed front cover image: #{fixture_file 'broken.svg'}; The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+   end
+ 
+   it 'should not add cover page if value is ~' do
+diff --git a/spec/image_spec.rb b/spec/image_spec.rb
+index 0e630ddd..f0e22c1e 100644
+--- a/spec/image_spec.rb
++++ b/spec/image_spec.rb
+@@ -1084,7 +1084,7 @@ def traverse node
+         (expect do
+           pdf = to_pdf %(image#{macro_delim}broken.svg[Broken SVG]), analyze: true
+           (expect pdf.lines).to eql [alt_text]
+-        end).to log_message severity: :WARN, message: %(~could not embed image: #{fixture_file 'broken.svg'}; Missing end tag for 'rect')
++        end).to log_message severity: :WARN, message: %(~could not embed image: #{fixture_file 'broken.svg'}; The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+       end
+     end
+ 
+diff --git a/spec/page_spec.rb b/spec/page_spec.rb
+index a68b0bf0..2bc9f336 100644
+--- a/spec/page_spec.rb
++++ b/spec/page_spec.rb
+@@ -1698,7 +1698,7 @@
+         content
+         EOS
+         (expect pdf.images).to be_empty
+-      end).to log_message severity: :WARN, message: %(~Missing end tag for 'rect')
++      end).to log_message severity: :WARN, message: %(~The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+     end
+ 
+     it 'should only warn once if background image cannot be loaded' do
+diff --git a/spec/running_content_spec.rb b/spec/running_content_spec.rb
+index 41496594..9d03e173 100644
+--- a/spec/running_content_spec.rb
++++ b/spec/running_content_spec.rb
+@@ -3058,7 +3058,7 @@
+         pdf = to_pdf 'body', analyze: true, pdf_theme: pdf_theme, enable_footer: true
+         footer_text = pdf.find_unique_text font_color: '0000FF'
+         (expect footer_text[:string]).to eql '[no worky]'
+-      end).to log_message severity: :WARN, message: %(~could not embed image in running content: #{fixture_file 'broken.svg'}; Missing end tag for 'rect')
++      end).to log_message severity: :WARN, message: %(~could not embed image in running content: #{fixture_file 'broken.svg'}; The data supplied is not a valid SVG document.\nMissing end tag for 'rect')
+     end
+ 
+     it 'should resolve attribute references in target of inline image' do

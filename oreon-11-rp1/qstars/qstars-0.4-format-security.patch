@@ -1,0 +1,31 @@
+--- qstars-0.4/main.cpp.format	2005-02-13 04:17:53.000000000 +0900
++++ qstars-0.4/main.cpp	2014-06-09 13:15:59.069975521 +0900
+@@ -33,6 +33,8 @@
+ 
+     if(mode == "-help")
+     {
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wformat-security"
+ 	qWarning("Usage: " +QString(app.argv()[0])+ " [options]\n"
+ 		 "QStars Screensaver\n"
+ 		 "Options:\n"
+@@ -41,6 +43,7 @@
+ 		 "  -window-id wid   Run in the specified XWindow.\n"
+ 		 "  -root            Run in the root XWindow.\n"
+ 		 "  -demo            Start screen saver in demo mode. [default]\n");
++#pragma GCC diagnostic pop
+     }
+     else if(mode == "-setup")
+     {
+@@ -122,8 +125,11 @@
+     }
+     else
+     {
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wformat-security"
+ 	qWarning("Unknown option: " + mode +
+ 		 "\nUse -help to get a list of available command line options.\n");
++#pragma GCC diagnostic pop
+     }
+     return 0;
+ }

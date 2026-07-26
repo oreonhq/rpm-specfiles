@@ -1,0 +1,50 @@
+From fdd5322026e4b7b2e7fe6a80628b7239b4c4eb99 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Tue, 15 Dec 2020 05:06:04 -0500
+Subject: [PATCH 1/5] Skip WASI tests.
+
+We do not have wasmtime available.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ main_test.go | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/main_test.go b/main_test.go
+index b07d6aaa..ae0a4482 100644
+--- a/main_test.go
++++ b/main_test.go
+@@ -188,22 +188,6 @@ func TestBuild(t *testing.T) {
+ 				runTest("gc.go", optionsBoehm, t, nil, nil)
+ 			})
+ 		})
+-		t.Run("WASIp1", func(t *testing.T) {
+-			t.Parallel()
+-			runPlatTests(optionsFromTarget("wasip1", sema), tests, t)
+-
+-			// Test with -gc=boehm.
+-			t.Run("gc.go-boehm", func(t *testing.T) {
+-				t.Parallel()
+-				optionsBoehm := optionsFromTarget("wasip1", sema)
+-				optionsBoehm.GC = "boehm"
+-				runTest("gc.go", optionsBoehm, t, nil, nil)
+-			})
+-		})
+-		t.Run("WASIp2", func(t *testing.T) {
+-			t.Parallel()
+-			runPlatTests(optionsFromTarget("wasip2", sema), tests, t)
+-		})
+ 	}
+ 
+ 	if runtime.GOOS == "linux" {
+@@ -925,7 +909,6 @@ func TestTest(t *testing.T) {
+ 
+ 			// Node/Wasmtime
+ 			targ{"WASM", optionsFromTarget("wasm", sema)},
+-			targ{"WASI", optionsFromTarget("wasip1", sema)},
+ 		)
+ 	}
+ 	for _, targ := range targs {
+-- 
+2.50.0
+

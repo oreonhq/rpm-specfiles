@@ -1,0 +1,36 @@
+From 7fcae5a3a462c33922499ddf7f2ae6008b1d0da8 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 22 Oct 2025 12:04:35 +0100
+Subject: [PATCH] Fix a small typo in the package description
+
+---
+ README.rst | 2 +-
+ setup.py   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/README.rst b/README.rst
+index b5f07a4..2be9b99 100644
+--- a/README.rst
++++ b/README.rst
+@@ -24,7 +24,7 @@ setuptools-git-versioning
+     :target: https://results.pre-commit.ci/latest/github/dolfinus/setuptools-git-versioning/master
+ 
+ Use git repo data (latest tag, current commit hash, etc) for building a
+-version number according :pep:`440`.
++version number according to :pep:`440`.
+ 
+ **Features:**
+ 
+diff --git a/setup.py b/setup.py
+index e38da86..2a655a3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,7 @@ def parse_requirements(file: Path) -> list[str]:
+     version=version_from_git(root=here, dev_template="{tag}.post{ccount}"),
+     author="dolfinus",
+     author_email="martinov.m.s.8@gmail.com",
+-    description="Use git repo data for building a version number according PEP-440",
++    description="Use git repo data for building a version number according to PEP-440",
+     license="MIT",
+     long_description=long_description,
+     long_description_content_type="text/x-rst",

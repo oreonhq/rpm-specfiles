@@ -1,0 +1,8 @@
+#!/bin/bash
+. /usr/share/java-utils/java-functions
+
+MAIN_CLASS=com.strobel.decompiler.DecompilerDriver
+
+set_classpath procyon-decompiler procyon-compilertools procyon-core  beust-jcommander
+run ${@}
+

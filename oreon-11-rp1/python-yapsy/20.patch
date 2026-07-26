@@ -1,0 +1,59 @@
+From f77b6df767365b853fdff80ce400ea92ba81d5ee Mon Sep 17 00:00:00 2001
+From: Ameya Vikram Singh <ameya.v.singh@gmail.com>
+Date: Tue, 19 Mar 2024 09:10:06 +0530
+Subject: [PATCH 1/5] Add Python 3.12 in GitHub Workflows
+
+---
+ .github/workflows/automatic-tests.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/setup.py b/package/setup.py
+index 58705e1..b654b79 100644
+--- a/package/setup.py
++++ b/package/setup.py
+@@ -62,6 +62,9 @@
+ 					 'Programming Language :: Python :: 3',
+ 					 'Topic :: Software Development :: Libraries :: Python Modules'],
+ 		platforms='All',
++		install_requires = [
++			"packaging"
++			]
+ 		)
+ 	
+ finally:
+diff --git a/package/yapsy/PluginManager.py b/package/yapsy/PluginManager.py
+index 55ec649..c861e93 100644
+--- a/package/yapsy/PluginManager.py
++++ b/package/yapsy/PluginManager.py
+@@ -128,7 +128,7 @@
+ 
+ import sys
+ import os
+-import importlib
++import importlib.util
+ 
+ from yapsy import log
+ from yapsy import NormalizePluginNameForModuleName
+
+From d4fdd34ed985e876b40bf72df60c0f592478e121 Mon Sep 17 00:00:00 2001
+From: Ameya Vikram Singh <ameya.v.singh@gmail.com>
+Date: Thu, 21 Mar 2024 17:12:50 +0530
+Subject: [PATCH 5/5] Add trailing comma in-case of other dependencies
+
+---
+ package/setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/setup.py b/package/setup.py
+index b654b79..0044f58 100644
+--- a/package/setup.py
++++ b/package/setup.py
+@@ -63,7 +63,7 @@
+ 					 'Topic :: Software Development :: Libraries :: Python Modules'],
+ 		platforms='All',
+ 		install_requires = [
+-			"packaging"
++			"packaging",
+ 			]
+ 		)
+ 	

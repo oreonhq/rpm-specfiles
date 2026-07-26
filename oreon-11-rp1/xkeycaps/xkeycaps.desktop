@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=xkeycaps
+GenericName=xkeycaps
+Comment=Graphical front-end to xmodmap
+Exec=xkeycaps
+Icon=xkeycaps.png
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=X-Fedora;System

@@ -1,0 +1,24 @@
+From 283d96ea53f45eedf09a31bef739575df96e87df Mon Sep 17 00:00:00 2001
+From: zzak <zzak@hey.com>
+Date: Sun, 5 Oct 2025 10:31:09 +0900
+Subject: [PATCH] Always pass default precision to BigDecimal when parsing
+ Float in XmlMini
+
+https://github.com/ruby/bigdecimal/blob/cb2458bde33bf90a8364b58d53e8948a7ba555ea/ext/bigdecimal/bigdecimal.c#L2747-L2749
+---
+ activesupport/lib/active_support/xml_mini.rb | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/activesupport/lib/active_support/xml_mini.rb b/activesupport/lib/active_support/xml_mini.rb
+index 2c2b8185b1b80..c6d7ce5b7c251 100644
+--- a/activesupport/lib/active_support/xml_mini.rb
++++ b/activesupport/lib/active_support/xml_mini.rb
+@@ -74,6 +74,8 @@ def content_type
+         "decimal"      => Proc.new do |number|
+           if String === number
+             number.to_d
++          elsif Float === number
++            BigDecimal(number, 0)
+           else
+             BigDecimal(number)
+           end

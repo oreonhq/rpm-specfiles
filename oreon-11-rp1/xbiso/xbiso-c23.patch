@@ -1,0 +1,36 @@
+diff -up xbiso-0.6.1/xbiso.c.c23 xbiso-0.6.1/xbiso.c
+--- xbiso-0.6.1/xbiso.c.c23	2025-02-24 16:53:04.512018181 -0500
++++ xbiso-0.6.1/xbiso.c	2025-02-24 16:56:34.622066472 -0500
+@@ -116,8 +116,8 @@ int main(int argc, char *argv[]) {
+   xbfseek = fseeko;
+   xbftell = ftello;
+ #else
+-  int (*xbfseek)();
+-  OFFT (*xbftell)();
++  int (*xbfseek)(FILE *, __off64_t, int);
++  OFFT (*xbftell)(FILE *);
+   xbfseek = fseeko64;
+   xbftell = ftello64;
+ #endif
+@@ -285,8 +285,8 @@ handlefile(OFFT offset, int dtable) {
+   xbfseek = fseeko;
+   xbftell = ftello;
+ #else
+-  int (*xbfseek)();
+-  OFFT (*xbftell)();
++  int (*xbfseek)(FILE *, __off64_t, int);
++  OFFT (*xbftell)(FILE *);
+   xbfseek = fseeko64;
+   xbftell = ftello64;
+ #endif
+@@ -455,8 +455,8 @@ void extract(TABLE *dirent) {
+   xbfseek = fseeko;
+   xbftell = ftello;
+ #else
+-  int (*xbfseek)();
+-  off64_t (*xbftell)();
++  int (*xbfseek)(FILE *, __off64_t, int);
++  off64_t (*xbftell)(FILE *);
+   xbfseek = fseeko64;
+   xbftell = ftello64;
+ 

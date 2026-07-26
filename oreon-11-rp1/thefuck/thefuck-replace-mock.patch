@@ -1,0 +1,136 @@
+From 8804e5e0b82887348166eec168cc10aa382082d1 Mon Sep 17 00:00:00 2001
+From: Dominik Heidler <dheidler@suse.de>
+Date: Wed, 28 Feb 2024 13:14:33 +0100
+Subject: [PATCH] Update tests: mock is now part of unittest
+
+---
+ tests/entrypoints/test_alias.py          | 2 +-
+ tests/entrypoints/test_fix_command.py    | 2 +-
+ tests/entrypoints/test_not_configured.py | 2 +-
+ tests/output_readers/test_rerun.py       | 2 +-
+ tests/rules/test_has_exists_script.py    | 2 +-
+ tests/rules/test_pacman.py               | 2 +-
+ tests/rules/test_pacman_not_found.py     | 2 +-
+ tests/test_conf.py                       | 2 +-
+ tests/test_types.py                      | 2 +-
+ tests/test_utils.py                      | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/tests/entrypoints/test_alias.py b/tests/entrypoints/test_alias.py
+index ddb13e1f5..26e74bf13 100644
+--- a/tests/entrypoints/test_alias.py
++++ b/tests/entrypoints/test_alias.py
+@@ -1,4 +1,4 @@
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ from thefuck.entrypoints.alias import _get_alias, print_alias
+ 
+diff --git a/tests/entrypoints/test_fix_command.py b/tests/entrypoints/test_fix_command.py
+index 3012bb4f8..e1ad2a86a 100644
+--- a/tests/entrypoints/test_fix_command.py
++++ b/tests/entrypoints/test_fix_command.py
+@@ -1,5 +1,5 @@
+ import pytest
+-from mock import Mock
++from unittest.mock import Mock
+ from thefuck.entrypoints.fix_command import _get_raw_command
+ 
+ 
+diff --git a/tests/entrypoints/test_not_configured.py b/tests/entrypoints/test_not_configured.py
+index 79ed29f51..f4c225a26 100644
+--- a/tests/entrypoints/test_not_configured.py
++++ b/tests/entrypoints/test_not_configured.py
+@@ -1,7 +1,7 @@
+ import pytest
+ import json
+ from six import StringIO
+-from mock import MagicMock
++from unittest.mock import MagicMock
+ from thefuck.shells.generic import ShellConfiguration
+ from thefuck.entrypoints.not_configured import main
+ 
+diff --git a/tests/output_readers/test_rerun.py b/tests/output_readers/test_rerun.py
+index adae9024d..92a8cdb03 100644
+--- a/tests/output_readers/test_rerun.py
++++ b/tests/output_readers/test_rerun.py
+@@ -2,7 +2,7 @@
+ 
+ import pytest
+ import sys
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from psutil import AccessDenied, TimeoutExpired
+ 
+ from thefuck.output_readers import rerun
+diff --git a/tests/rules/test_has_exists_script.py b/tests/rules/test_has_exists_script.py
+index 7814a7535..9f292e47d 100644
+--- a/tests/rules/test_has_exists_script.py
++++ b/tests/rules/test_has_exists_script.py
+@@ -1,4 +1,4 @@
+-from mock import patch
++from unittest.mock import patch
+ from thefuck.rules.has_exists_script import match, get_new_command
+ from thefuck.types import Command
+ 
+diff --git a/tests/rules/test_pacman.py b/tests/rules/test_pacman.py
+index 985b8b899..ffbf526be 100644
+--- a/tests/rules/test_pacman.py
++++ b/tests/rules/test_pacman.py
+@@ -1,5 +1,5 @@
+ import pytest
+-from mock import patch
++from unittest.mock import patch
+ from thefuck.rules import pacman
+ from thefuck.rules.pacman import match, get_new_command
+ from thefuck.types import Command
+diff --git a/tests/rules/test_pacman_not_found.py b/tests/rules/test_pacman_not_found.py
+index 22c0609bc..1c98f0aff 100644
+--- a/tests/rules/test_pacman_not_found.py
++++ b/tests/rules/test_pacman_not_found.py
+@@ -1,5 +1,5 @@
+ import pytest
+-from mock import patch
++from unittest.mock import patch
+ from thefuck.rules import pacman_not_found
+ from thefuck.rules.pacman_not_found import match, get_new_command
+ from thefuck.types import Command
+diff --git a/tests/test_conf.py b/tests/test_conf.py
+index e03473ab5..72d7d7e36 100644
+--- a/tests/test_conf.py
++++ b/tests/test_conf.py
+@@ -1,7 +1,7 @@
+ import pytest
+ import six
+ import os
+-from mock import Mock
++from unittest.mock import Mock
+ from thefuck import const
+ 
+ 
+diff --git a/tests/test_types.py b/tests/test_types.py
+index a322d21e8..5d4455e19 100644
+--- a/tests/test_types.py
++++ b/tests/test_types.py
+@@ -2,7 +2,7 @@
+ 
+ import os
+ from subprocess import PIPE, STDOUT
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ from tests.utils import CorrectedCommand, Rule
+ from thefuck import const
+diff --git a/tests/test_utils.py b/tests/test_utils.py
+index 95f92bcba..78d468abf 100644
+--- a/tests/test_utils.py
++++ b/tests/test_utils.py
+@@ -2,7 +2,7 @@
+ 
+ import pytest
+ import warnings
+-from mock import Mock, call, patch
++from unittest.mock import Mock, call, patch
+ from thefuck.utils import default_settings, \
+     memoize, get_closest, get_all_executables, replace_argument, \
+     get_all_matched_commands, is_app, for_app, cache, \

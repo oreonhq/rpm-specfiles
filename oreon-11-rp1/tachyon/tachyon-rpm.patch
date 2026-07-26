@@ -1,0 +1,110 @@
+diff -up tachyon/unix/Make-arch.r tachyon/unix/Make-arch
+--- tachyon/unix/Make-arch.r	2022-04-23 09:09:58.000000000 +0200
++++ tachyon/unix/Make-arch	2025-01-17 21:53:37.669713365 +0100
+@@ -11,7 +11,7 @@ RANLIB= touch
+ 
+ MISCDEFS=$(USEJPEG) $(USEPNG) $(FLT) $(MBOX)
+ MISCINC=$(JPEGINC) $(PNGINC) $(SPACEBALLINC)
+-MISCFLAGS=$(MISCDEFS) $(MISCINC)
++MISCFLAGS=$(MISCDEFS) $(MISCINC) $(OPTFLAGS)
+ MISCLIB=$(JPEGLIB) $(PNGLIB) $(SPACEBALLLIB)
+ 
+ default:
+@@ -1273,10 +1273,10 @@ linux-64-thr:
+ 	$(MAKE) all \
+ 	"ARCH = linux-64-thr" \
+ 	"CC = cc" \
+-	"CFLAGS = -m64 -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux  $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS)" \
++	"CFLAGS = -m64 -Wall -O2 -DLinux  $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+-	"STRIP = strip" \
++	"STRIP = touch" \
+ 	"RANLIB = ranlib" \
+ 	"LIBS = -L. -ltachyon $(MISCLIB) -lm -lpthread"
+ 
+@@ -1455,10 +1455,10 @@ linux-thr:
+ 	$(MAKE) all \
+ 	"ARCH = linux-thr" \
+ 	"CC = cc" \
+-	"CFLAGS = -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS)" \
++	"CFLAGS = -Wall -O2 -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+-	"STRIP = strip" \
++	"STRIP = touch" \
+ 	"RANLIB = ranlib" \
+ 	"LIBS = -L. -ltachyon $(MISCLIB) -lm -lpthread"
+ 
+@@ -1467,7 +1467,7 @@ linux-thr-ogl:
+ 	$(MAKE) all \
+ 	"ARCH = linux-thr-ogl" \
+ 	"CC = cc" \
+-	"CFLAGS = -m32 -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS) -DUSEOPENGL $(LINUX_GLX_INCS)" \
++	"CFLAGS = -m32 -Wall -O2 -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS) -DUSEOPENGL $(LINUX_GLX_INCS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+ 	"STRIP = touch" \
+@@ -1478,7 +1478,7 @@ linux-64-thr-ogl:
+ 	$(MAKE) all \
+ 	"ARCH = linux-64-thr-ogl" \
+ 	"CC = cc" \
+-	"CFLAGS = -m64 -Wall -O3 -fomit-frame-pointer -ffast-math -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS) -DUSEOPENGL $(LINUX_GLX_INCS)" \
++	"CFLAGS = -m64 -Wall -O2 -DLinux $(THREADSFLAGS) -D_REENTRANT $(MISCFLAGS) -DUSEOPENGL $(LINUX_GLX_INCS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+ 	"STRIP = touch" \
+diff -up tachyon/unix/Make-config.r tachyon/unix/Make-config
+--- tachyon/unix/Make-config.r	2022-04-23 08:19:13.000000000 +0200
++++ tachyon/unix/Make-config	2025-01-17 21:49:43.843908775 +0100
+@@ -111,7 +111,7 @@ THREADSFLAGS=-DTHR -DUSEATOMICBARRIERS -
+ ##########################################################################
+ # Customize MPI directories and includes as-needed.
+ # A typical MPICH installation location:
+-MPIDIR=/usr/local/mpi
++MPIDIR=/usr
+ MPIINC=$(MPIDIR)/include
+ MPILIB=$(MPIDIR)/lib
+ 
+@@ -201,14 +201,14 @@ MBOX=
+ #   http://www.ijg.org/files/
+ ##########################################################################
+ # Uncomment the following lines to disable JPEG support
+-USEJPEG=
+-JPEGINC=
+-JPEGLIB=
++#USEJPEG=
++#JPEGINC=
++#JPEGLIB=
+ 
+ # Uncomment the following lines to enable JPEG support
+-#USEJPEG= -DUSEJPEG
+-#JPEGINC= -I/usr/local/include
+-#JPEGLIB= -L/usr/local/lib -ljpeg
++USEJPEG= -DUSEJPEG
++JPEGINC= 
++JPEGLIB= -ljpeg
+ 
+ 
+ ##########################################################################
+@@ -221,14 +221,14 @@ JPEGLIB=
+ #   http://www.libpng.org/
+ ##########################################################################
+ # Uncomment the following lines to disable PNG support
+-USEPNG=
+-PNGINC=
+-PNGLIB=
++#USEPNG=
++#PNGINC=
++#PNGLIB=
+ 
+ # Uncomment the following lines to enable PNG support
+-#USEPNG= -DUSEPNG
+-#PNGINC= -I/usr/local/include
+-#PNGLIB= -L/usr/local/lib -lpng -lz
++USEPNG= -DUSEPNG
++PNGINC= `pkg-config --cflags libpng`
++PNGLIB= `pkg-config --libs libpng`
+ 
+ 
+ ##########################################################################

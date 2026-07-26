@@ -1,0 +1,64 @@
+.TH EZDXF\-STRIP "1" "May 2024" "" "User Commands"
+.B ezdxf\ strip
+\(en strip comments and \fBTHUMBNAILIMAGE\fR section from DXF files
+.SH SYNOPSIS
+.B ezdxf\ strip
+.RB [ \-h ]
+.RB [ \-b ]
+.RB [ \-t ]
+.RB [ \-\-handles ]
+.RB [ \-v ]
+.RI [ FILE ]
+.RI [ FILE ...]
+.SH DESCRIPTION
+Strip comment tags (group code 999) from ASCII DXF files
+and can remove the
+.B THUMBNAILIMAGE
+section.
+Binary DXF files are not supported.
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to process, wildcards
+.B *
+and
+.B ?
+are supported
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-b\fR,\ \fB\-\-backup
+make a backup copy with extension
+.B .bak
+from the DXF file, overwrites existing backup files
+.TP
+.B \-t\fR,\ \fB\-\-thumbnail
+strip
+.B THUMBNAILIMAGE
+section
+.TP
+.B \-\-handles
+remove handles from DXF R12 or older files
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+give more output
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

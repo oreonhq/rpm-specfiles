@@ -1,0 +1,39 @@
+From acca6c92bb28e7be2bcb56fd4b6431bb849963a7 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Thu, 17 Jul 2025 15:02:29 -0500
+Subject: [PATCH] CMake 4 compatibility
+
+CMake 4 drops compatibility with CMake older than 3.5, and now returns
+this error:
+
+    CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+      Compatibility with CMake < 3.5 has been removed from CMake.
+
+      Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+      to tell CMake that the project requires at least <min> but has been updated
+      to work with policies introduced by <max> or earlier.
+
+      Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+
+To allow building with CMake 2.8 through 4, update
+cmake_minimum_required to the min...max syntax.
+
+https://cmake.org/cmake/help/latest/release/4.0.html#deprecated-and-removed-features
+https://fedoraproject.org/wiki/Changes/CMake4.0#Migration
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8ae2192..4b8551e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...4.0)
+ project(usbtop)
+ 
+ set (VERSION_MAJOR 0)
+-- 
+2.50.1
+

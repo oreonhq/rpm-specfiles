@@ -1,0 +1,29 @@
+--- skf-2.10.16/skf_convert.i.rubyptr	2024-01-05 10:20:35.562486946 +0900
++++ skf-2.10.16/skf_convert.i	2024-01-05 11:17:18.687481582 +0900
+@@ -1238,7 +1238,7 @@ SKFSTRINGS *convert(SKFSTRINGS *optstr,
+ 
+ #if	defined(SWIGRUBY) && (defined(SKF_RUBY19) || defined(SKF_RUBY2) || defined(SKF_RUBY3))
+     lwlstr = cstr;
+-    ibuflen = get_rstr_len(cstr);
++    ibuflen = lwlstr->length;
+ #elif	defined(SWIGPYTHON) 
+     lwlstr = skf_pystring2skfstring(cstr,1);
+     ibuflen = lwlstr->length;
+@@ -1365,7 +1365,7 @@ SKFSTRINGS *quickconvert(SKFSTRINGS *opt
+ 
+ #if	defined(SWIGRUBY) && (defined(SKF_RUBY19) || defined(SKF_RUBY2) || defined(SKF_RUBY3))
+     lwlstr = cstr;
+-    ibuflen = get_rstr_len(cstr);
++    ibuflen = lwlstr->length;
+ #elif	defined(SWIGPYTHON) && defined(SKF_PYTHON3)
+     lwlstr = skf_pystring2skfstring(cstr,1);
+     ibuflen = lwlstr->length;
+@@ -1468,7 +1468,7 @@ SKFSTRINGS *guess(SKFSTRINGS *optstr, SK
+ 
+ #if	defined(SKF_RUBY19) || defined(SKF_RUBY2) || defined(SKF_RUBY3)
+     lwlstr = cstr;
+-    ibuflen = get_rstr_len(cstr);
++    ibuflen = lwlstr->length;
+ #elif	defined(SWIGPYTHON) && defined(SKF_PYTHON3)
+     lwlstr = skf_pystring2skfstring(cstr,1);
+     ibuflen = lwlstr->length;

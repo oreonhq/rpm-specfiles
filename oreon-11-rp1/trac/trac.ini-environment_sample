@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+
+[inherit]
+file = /etc/trac/trac.ini
+
+[project]
+descr = ##TEXT_OF_PROJECT_DESCRIPTION##
+name = ##TEXT_OF_PROJECT_FULL_NAME##
+footer =##TEXT_OF_FOOTER##
+icon = ##URL_FOR_ICON_IMAGE##
+url = ##URL_FOR_PROJECT_SITE##
+
+[header_logo]
+alt = ##TEXT_OF_PROJECT_FULL_NAME##
+height = -1
+link = ##URL_FOR_PROJECT_SITE##
+src = ##URL_FOR_HEADER_IMAGE##
+width = -1
+
+[trac]
+authz_module_name = ##TEXT_OF_PROJECT_SHORTNAME##
+repository_dir = /path/of/svn/parent/dir/##TEXT_OF_PROJECT_SHORTNAME##
+

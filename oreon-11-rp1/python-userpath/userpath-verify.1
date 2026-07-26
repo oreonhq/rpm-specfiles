@@ -1,0 +1,39 @@
+.TH USERPATH\-VERIFY "1" "Feburary 2022" "" "User Commands"
+.SH NAME
+.B userpath\ verify
+\(en Checks if locations are in the user \fBPATH\fR
+.SH SYNOPSIS
+.B userpath\ verify
+.RI [ OPTIONS ]
+.IR LOCATIONS ...
+.SH OPTIONS
+.TP
+.B \-s\fR, \fB\-\-shell\fR\ [\fBbash\fR|\fBfish\fR|\fBsh\fR|\fBxonsh\fR|\fBzsh\fR]
+The shell in which
+.B PATH
+will be modified.
+This can be selected multiple times and has no effect on Windows.
+The default shells are:
+.BR bash ,
+.B sh
+.TP
+.B \-a\fR, \fB\-\-all\-shells
+Update
+.B PATH
+of all supported shells.
+This has no effect on Windows as environment settings are already global.
+.TP
+.B \-\-home\ \fITEXT
+Explicitly set the home directory.
+.TP
+.B \-q\fR, \fB\-\-quiet
+Suppress output for successful invocations.
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit.
+.SH "SEE ALSO"
+.BR userpath (1)
+.P
+.BR userpath\-append (1),
+.BR userpath\-prepend (1)
+.\" .BR userpath\-verify (1)

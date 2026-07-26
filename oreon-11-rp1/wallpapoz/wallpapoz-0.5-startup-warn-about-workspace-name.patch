@@ -1,0 +1,32 @@
+--- wallpapoz-0.5/src/wallpapoz.startupwarn	2011-05-06 00:21:06.000000000 +0900
++++ wallpapoz-0.5/src/wallpapoz	2011-05-06 15:41:58.000000000 +0900
+@@ -1296,9 +1296,14 @@
+ 
+     filename = self.store.get_value(position_iter, 1)
+ 
+-    # display image properly
+-    from glib import GError as glib_GError
+-    try:
++    # display image properly, when cursor actually points to the contents of
++    # files' list (i.e. not pointing to desktop name)
++    if ( (type(self.store) == gtk.TreeStore) and
++	( parent == None ) ):
++	self.image_widget.clear()
++    else:
++     from glib import GError as glib_GError
++     try:
+       anime = gtk.gdk.PixbufAnimation(filename)
+ 
+       if anime.is_static_image() :
+@@ -1318,9 +1323,9 @@
+         else:
+           self.image_widget.set_from_pixbuf(static_im.scale_simple(int((float(width)/height)*300),300,gtk.gdk.INTERP_BILINEAR))
+ 
+-    except IOError:
++     except IOError:
+       self.image_widget.clear()
+-    except glib_GError, (msg):
++     except glib_GError, (msg):
+       print msg
+       self.image_widget.clear()
+ 

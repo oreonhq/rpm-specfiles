@@ -1,0 +1,36 @@
+--- ugene-40.1/src/plugins_3rdparty/hmm2/src/u_search/HMMSearchDialogController.cpp.sse	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/plugins_3rdparty/hmm2/src/u_search/HMMSearchDialogController.cpp	2021-11-09 01:34:30.052988784 +0900
+@@ -81,7 +81,9 @@
+     QWidget* w = createController->getWidget();
+     auto l = qobject_cast<QVBoxLayout*>(layout());
+     l->insertWidget(1, w);
++#if defined (__SSE2__)
+     algoCombo->addItem(tr("SSE optimized"), HMMSearchAlgo_SSEOptimized);
++#endif
+     algoCombo->addItem(tr("Conservative"), HMMSearchAlgo_Conservative);
+ 
+     okButton = buttonBox->button(QDialogButtonBox::Ok);
+--- ugene-42.0/src/plugins_3rdparty/hmm2/src/u_search/uhmmsearch_sse.cpp.sse	2022-03-09 15:37:14.586340751 +0900
++++ ugene-42.0/src/plugins_3rdparty/hmm2/src/u_search/uhmmsearch_sse.cpp	2022-03-09 15:47:23.559077800 +0900
+@@ -1,4 +1,5 @@
+ #include <assert.h>
++#if defined (__SSE2__)
+ #include <emmintrin.h>
+ #include <hmmer2/funcs.h>
+ 
+@@ -488,3 +489,4 @@ QList<float> sseScoring(unsigned char* d
+ 
+     return results;
+ }
++#endif
+--- ugene-40.1/src/plugins_3rdparty/hmm2/src/u_search/uhmmsearch_sse.h.sse	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/plugins_3rdparty/hmm2/src/u_search/uhmmsearch_sse.h	2021-11-09 01:34:30.052988784 +0900
+@@ -1,6 +1,8 @@
+ #ifndef __HMMSEARCH_SSE_H__
+ #define __HMMSEARCH_SSE_H__
+ 
++#if defined(__SSE2__)
+ QList<float> sseScoring(unsigned char* dsq, int seqlen, plan7_s* hmm, HMMSeqGranulation* gr, U2::TaskStateInfo& ti);
++#endif
+ 
+ #endif  // __HMMSEARCH_SSE_H__

@@ -1,0 +1,60 @@
+diff -up ./src/memcache_ascii_protocol.c.pr118 ./src/memcache_ascii_protocol.c
+--- ./src/memcache_ascii_protocol.c.pr118	2023-04-30 13:27:52.000000000 +0200
++++ ./src/memcache_ascii_protocol.c	2025-07-30 12:47:45.473426080 +0200
+@@ -24,7 +24,7 @@
+ #endif
+ 
+ #include "memcache_pool.h"
+-#include "ext/standard/php_smart_string.h"
++#include "Zend/zend_smart_string.h"
+ 
+ typedef struct mmc_ascii_request {
+ 	mmc_request_t	base;							/* enable cast to mmc_request_t */
+diff -up ./src/memcache_binary_protocol.c.pr118 ./src/memcache_binary_protocol.c
+--- ./src/memcache_binary_protocol.c.pr118	2025-07-30 12:47:45.473570193 +0200
++++ ./src/memcache_binary_protocol.c	2025-07-30 12:49:24.587245680 +0200
+@@ -34,7 +34,7 @@
+ #include <netinet/in.h>
+ #endif
+ #include "memcache_pool.h"
+-#include "ext/standard/php_smart_string.h"
++#include "Zend/zend_smart_string.h"
+ 
+ #ifdef htonll
+ #undef htonll
+diff -up ./src/memcache_pool.c.pr118 ./src/memcache_pool.c
+--- ./src/memcache_pool.c.pr118	2023-04-30 13:27:52.000000000 +0200
++++ ./src/memcache_pool.c	2025-07-30 12:47:45.473729843 +0200
+@@ -35,7 +35,7 @@
+ #include "ext/standard/crc32.h"
+ #include "ext/standard/php_var.h"
+ #include "ext/standard/php_string.h"
+-#include "ext/standard/php_smart_string.h"
++#include "Zend/zend_smart_string.h"
+ #include "zend_smart_str.h"
+ #include "memcache_pool.h"
+ 
+diff -up ./src/memcache_pool.h.pr118 ./src/memcache_pool.h
+--- ./src/memcache_pool.h.pr118	2023-04-30 13:27:52.000000000 +0200
++++ ./src/memcache_pool.h	2025-07-30 12:47:45.473847580 +0200
+@@ -42,7 +42,7 @@
+ #include <string.h>
+ 
+ #include "php.h"
+-#include "ext/standard/php_smart_string_public.h"
++#include "Zend/zend_smart_string.h"
+ #include "memcache_queue.h"
+ 
+ /*
+diff -up ./src/memcache_session.c.pr118 ./src/memcache_session.c
+--- ./src/memcache_session.c.pr118	2023-04-30 13:27:52.000000000 +0200
++++ ./src/memcache_session.c	2025-07-30 12:47:45.473927007 +0200
+@@ -29,7 +29,7 @@
+ #include "php_variables.h"
+ 
+ #include "SAPI.h"
+-#include "ext/standard/php_smart_string.h"
++#include "Zend/zend_smart_string.h"
+ #include "ext/standard/url.h"
+ #include "ext/session/php_session.h"
+ #ifdef PHP_WIN32

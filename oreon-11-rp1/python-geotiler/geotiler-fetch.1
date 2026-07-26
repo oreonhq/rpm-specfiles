@@ -1,0 +1,57 @@
+.TH GEOTILER\-FETCH "1" "November 2021" "" "User Commands"
+.SH NAME
+.B geotiler\-fetch
+\(en request map of specified coverage on range of zoom levels
+and save map tiles in cache
+.SH SYNOPSIS
+.B geotiler\-fetch
+.RB [ \-h ]
+.RB [ \-v ]
+.RB [ \-p\  {}]
+.RB [ \-\-cache\  { redis }]
+.RB [ \-x\ \fIMIN_ZOOM ]
+.RB [ \-z\ \fIMAX_ZOOM ]
+.RB [ \-f\ \fIFILE ]
+.I extent
+.I extent
+.I extent
+.I extent
+.SH DESCRIPTION
+Request map of specified coverage on range of zoom levels
+and save map tiles in cache.
+Optionally save map image for each zoom level to a file.
+.SH OPTIONS
+.SS "POSITIONAL ARGUMENTS"
+.TP
+.I extent
+geographical map extent
+.SS "OPTIONAL ARGUMENTS"
+.TP
+.BR \-h ,\  \-\-help
+show a help message and exit
+.TP
+.BR \-v ,\  \-\-verbose
+explain what is being done
+.TP
+.BR \-p\  {},\  \-\-provider\  {}
+map provider id
+.TP
+.BR \-\-cache\  { redis }
+specify caching strategy
+.TP
+.BI \-x\  MIN_ZOOM\fR, \ \-\-min\-zoom\  MIN_ZOOM
+minimal zoom value
+.TP
+.BI \-z\  MAX_ZOOM\fR, \ \-\-max\-zoom\  MAX_ZOOM
+maximum zoom value
+.TP
+.BI \-f\  FILE\fR, \ \-\-file\  FILE
+map image file name format, e.g.
+.in +7n
+.EX
+.B map\-image\-{:02d}.png
+.EE
+.in
+.SH "SEE ALSO"
+.BR geotiler\-lint (1),
+.BR geotiler\-route (1)

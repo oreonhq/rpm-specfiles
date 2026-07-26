@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 2 Sep 2024 16:09:32 +0200
+Subject: [PATCH] Customize CMake defaults
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index cf00c91..fce47ba 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -74,7 +74,7 @@ wheel.packages = []
+ [tool.scikit-build.cmake.define]
+ CMAKE_BUILD_TYPE = "Release"
+ # Coincurve build options - This may be better extracted from the ENV by the CMake directly?
+-PROJECT_IGNORE_SYSTEM_LIB = { env = "COINCURVE_IGNORE_SYSTEM_LIB", default = "ON" }
++PROJECT_IGNORE_SYSTEM_LIB = { env = "COINCURVE_IGNORE_SYSTEM_LIB", default = "OFF" }
+ PROJECT_CROSS_COMPILE_TARGET = { env = "COINCURVE_CROSS_HOST", default = "" }
+ # Vendored library: SECP256K1
+ VENDORED_LIBRARY_CMAKE_TARGET = "secp256k1"

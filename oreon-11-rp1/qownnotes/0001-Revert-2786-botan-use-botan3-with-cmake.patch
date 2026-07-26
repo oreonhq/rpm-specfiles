@@ -1,0 +1,395 @@
+From e15f28b5b7748b62dfed54f537ca06418bf7d03d Mon Sep 17 00:00:00 2001
+From: Artem Polishchuk <ego.cordatus@gmail.com>
+Date: Sat, 17 Jan 2026 21:28:16 +0300
+Subject: [PATCH] Revert "#2786 botan: use botan3 with cmake"
+
+This reverts commit 1b2f21777c4fac7c4cca7736737a2b179d813adf.
+---
+ default.nix                          | 100 -----------------
+ src/cmake/FindBotan3.cmake           |  21 ----
+ src/libraries/botan/CMakeLists.txt   |   8 +-
+ src/libraries/botan/botan.h          |   2 +-
+ src/libraries/botan/botan.pri        |   2 +-
+ src/libraries/botan/botanwrapper.cpp | 158 +++++++++------------------
+ 6 files changed, 60 insertions(+), 231 deletions(-)
+ delete mode 100644 default.nix
+ delete mode 100644 src/cmake/FindBotan3.cmake
+
+diff --git a/default.nix b/default.nix
+deleted file mode 100644
+index 188dc629f..000000000
+--- a/default.nix
++++ /dev/null
+@@ -1,100 +0,0 @@
+-{
+-  lib,
+-  stdenv,
+-  qt6Packages,
+-  cmake,
+-  makeWrapper,
+-  botan3,
+-  libgit2,
+-  pkg-config,
+-  xvfb-run,
+-  installShellFiles,
+-  aspell,
+-}:
+-
+-let
+-  pname = "qownnotes";
+-  appname = "QOwnNotes";
+-  versionMatch = builtins.match ".*#define VERSION \"([0-9.]+)\".*" (
+-    builtins.readFile ./src/version.h
+-  );
+-  version = if versionMatch != null then builtins.head versionMatch else "unknown";
+-in
+-stdenv.mkDerivation (finalAttrs: {
+-  inherit pname appname version;
+-
+-  src = builtins.path {
+-    path = ./src;
+-    name = "qownnotes";
+-  };
+-
+-  nativeBuildInputs = [
+-    cmake
+-    qt6Packages.qttools
+-    qt6Packages.wrapQtAppsHook
+-    pkg-config
+-    installShellFiles
+-  ]
+-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
+-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+-
+-  buildInputs = [
+-    qt6Packages.qtbase
+-    qt6Packages.qtdeclarative
+-    qt6Packages.qtsvg
+-    qt6Packages.qtwebsockets
+-    botan3
+-    libgit2
+-    aspell
+-  ]
+-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
+-
+-  cmakeFlags = [
+-    "-DQON_QT6_BUILD=ON"
+-    "-DBUILD_WITH_SYSTEM_BOTAN=ON"
+-    "-DBUILD_WITH_LIBGIT2=ON"
+-    "-DBUILD_WITH_ASPELL=ON"
+-  ];
+-
+-  # Install shell completion on Linux (with xvfb-run)
+-  postInstall =
+-    lib.optionalString stdenv.hostPlatform.isLinux ''
+-      installShellCompletion --cmd ${finalAttrs.appname} \
+-        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+-        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
+-      installShellCompletion --cmd ${finalAttrs.pname} \
+-        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+-        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
+-    ''
+-    # Install shell completion on macOS
+-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+-      installShellCompletion --cmd ${finalAttrs.pname} \
+-        --bash <($out/bin/${finalAttrs.appname} --completion bash) \
+-        --fish <($out/bin/${finalAttrs.appname} --completion fish)
+-    ''
+-    # Create a lowercase symlink for Linux
+-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+-      ln -s $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}
+-    ''
+-    # Rename application for macOS as lowercase binary
+-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+-      # Prevent "same file" error
+-      mv $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}.bin
+-      mv $out/bin/${finalAttrs.pname}.bin $out/bin/${finalAttrs.pname}
+-    '';
+-
+-  meta = {
+-    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
+-    homepage = "https://www.qownnotes.org/";
+-    changelog = "https://www.qownnotes.org/changelog.html";
+-    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${finalAttrs.version}";
+-    license = lib.licenses.gpl2Only;
+-    maintainers = with lib.maintainers; [
+-      pbek
+-      totoroot
+-      matthiasbeyer
+-    ];
+-    platforms = lib.platforms.unix;
+-    mainProgram = "qownnotes";
+-  };
+-})
+diff --git a/src/cmake/FindBotan3.cmake b/src/cmake/FindBotan3.cmake
+deleted file mode 100644
+index be64f3821..000000000
+--- a/src/cmake/FindBotan3.cmake
++++ /dev/null
+@@ -1,21 +0,0 @@
+-#[[
+-FindBotan
+----------
+-
+-Searching system installed Botan 3 library using PkgConfig
+-#]]
+-
+-if(MSVC OR MINGW)
+-  message(FATAL_ERROR "Using system Botan 3 library in Window not supported")
+-endif()
+-
+-if(TARGET Botan3::Botan3)
+-  message(STATUS "Target Botan::Botan already exists. Skipping searching")
+-  return()
+-endif()
+-
+-find_package(PkgConfig REQUIRED QUIET)
+-
+-pkg_check_modules(Botan3 REQUIRED IMPORTED_TARGET botan-3)
+-
+-add_library(Botan3::Botan3 ALIAS PkgConfig::Botan3)
+diff --git a/src/libraries/botan/CMakeLists.txt b/src/libraries/botan/CMakeLists.txt
+index d8bf17839..31cff71bf 100644
+--- a/src/libraries/botan/CMakeLists.txt
++++ b/src/libraries/botan/CMakeLists.txt
+@@ -16,12 +16,12 @@ target_link_libraries(botan PUBLIC Qt${QT_VERSION_MAJOR}::Core)
+ target_include_directories(botan PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+ 
+ if(BUILD_WITH_SYSTEM_BOTAN)
+-  find_package(Botan3 REQUIRED)
+-  if(NOT TARGET Botan3::Botan3)
+-    message(FATAL_ERROR "Could not find system Botan 3 library using PkgConfig")
++  find_package(Botan2 REQUIRED)
++  if(NOT TARGET Botan2::Botan2)
++    message(FATAL_ERROR "Could not find system Botan 2 library using PkgConfig")
+   endif()
+ 
+-  target_link_libraries(botan PUBLIC Botan3::Botan3)
++  target_link_libraries(botan PUBLIC Botan2::Botan2)
+ 
+   target_compile_definitions(botan PUBLIC USE_SYSTEM_BOTAN)
+ 
+diff --git a/src/libraries/botan/botan.h b/src/libraries/botan/botan.h
+index b102b4425..0cb2441ad 100644
+--- a/src/libraries/botan/botan.h
++++ b/src/libraries/botan/botan.h
+@@ -59,7 +59,7 @@
+ #define BOTAN_MP_WORD_BITS 64
+ 
+ #define BOTAN_INSTALL_PREFIX R"(/usr/local)"
+-#define BOTAN_INSTALL_HEADER_DIR "include/botan-3"
++#define BOTAN_INSTALL_HEADER_DIR "include/botan-2"
+ #define BOTAN_INSTALL_LIB_DIR "/usr/local/lib"
+ #define BOTAN_LIB_LINK ""
+ #define BOTAN_LINK_FLAGS "-fstack-protector -m64 -pthread"
+diff --git a/src/libraries/botan/botan.pri b/src/libraries/botan/botan.pri
+index 43c2f4e1b..355572297 100644
+--- a/src/libraries/botan/botan.pri
++++ b/src/libraries/botan/botan.pri
+@@ -6,7 +6,7 @@ HEADERS += $$PWD/botan.h \
+ equals(USE_SYSTEM_BOTAN, 1) {
+     DEFINES += USE_SYSTEM_BOTAN
+     CONFIG += link_pkgconfig
+-    PKGCONFIG += botan-3
++    PKGCONFIG += botan-2
+ } else {
+ 
+ SOURCES += $$PWD/botan.cpp
+diff --git a/src/libraries/botan/botanwrapper.cpp b/src/libraries/botan/botanwrapper.cpp
+index 8d2f15bc2..1abbaf864 100644
+--- a/src/libraries/botan/botanwrapper.cpp
++++ b/src/libraries/botan/botanwrapper.cpp
+@@ -5,11 +5,14 @@
+ #ifdef USE_SYSTEM_BOTAN
+ #include <botan/base64.h>
+ #include <botan/cipher_mode.h>
+-#include <botan/hash.h>
++#include <botan/filters.h>
++#include <botan/hmac.h>
+ #include <botan/kdf.h>
+-#include <botan/pbkdf.h>
++#include <botan/pbkdf2.h>
++#include <botan/pipe.h>
+ #include <botan/secmem.h>
+-#include <botan/system_rng.h>
++#include <botan/sha160.h>
++#include <botan/types.h>
+ #else
+ #include "botan.h"
+ #endif
+@@ -29,124 +32,71 @@ BotanWrapper::BotanWrapper() {
+ 
+ QString BotanWrapper::Hash(const QString &Data) {
+     try {
+-        auto hash = Botan::HashFunction::create("SHA-1");
+-        if (!hash) {
+-            qWarning() << "[Botan Error] Failed to create SHA-1 hash function";
+-            return {};
+-        }
+-
+-        std::string input = Data.toStdString();
+-        hash->update(input);
+-        Botan::secure_vector<uint8_t> result = hash->final();
+-
+-        std::string output(result.begin(), result.end());
+-        return QString::fromStdString(output);
+-    } catch (const Botan::Exception &e) {
++        Botan::Pipe pipe(new Botan::Hash_Filter("SHA-1"));
++        pipe.process_msg(Data.toStdString());
++        QString Value = QString::fromStdString(pipe.read_all_as_string(0));
++        return Value;
++    } catch (Botan::Exception &e) {
+         qWarning() << "[Botan Error] " << e.what();
+-        return {};
++        return QString();
+     }
+ }
+ 
+ QString BotanWrapper::Encrypt(const QString &Data) {
+     try {
+-        // Setup PBKDF2
+-        auto pbkdf = Botan::PBKDF::create("PBKDF2(HMAC(SHA-1))");
+-        if (!pbkdf) {
+-            qWarning() << "[Botan Error] Failed to create PBKDF2";
+-            return {};
+-        }
+-
++        // Setup the key derive functions
++        Botan::PKCS5_PBKDF2 pbkdf2(new Botan::HMAC(new Botan::SHA_160));
+         const uint32_t PBKDF2_ITERATIONS = 8192;
+ 
+-        // Create the master key using PBKDF2
+-        auto master_key = pbkdf->pbkdf_iterations(48, mPassword.toStdString(), mSalt.data(),
+-                                                  mSalt.size(), PBKDF2_ITERATIONS);
+-
+-        // Create KDF for key and IV derivation
+-        auto kdf = Botan::KDF::create("KDF2(SHA-1)");
+-        if (!kdf) {
+-            qWarning() << "[Botan Error] Failed to create KDF2";
+-            return {};
+-        }
+-
+-        // Derive key and IV
+-        auto key = kdf->derive_key(32, master_key, "salt1");
+-        auto iv = kdf->derive_key(16, master_key, "salt2");
+-
+-        // Create cipher
+-        auto cipher =
+-            Botan::Cipher_Mode::create("AES-256/CBC/PKCS7", Botan::Cipher_Dir::ENCRYPTION);
+-        if (!cipher) {
+-            qWarning() << "[Botan Error] Failed to create AES-256/CBC/PKCS7 cipher";
+-            return {};
+-        }
+-
+-        cipher->set_key(key);
+-        cipher->start(iv);
+-
+-        // Encrypt the data
+-        std::string input = Data.toStdString();
+-        Botan::secure_vector<uint8_t> buffer(input.begin(), input.end());
+-        cipher->finish(buffer);
+-
+-        // Base64 encode the result
+-        std::string encoded = Botan::base64_encode(buffer);
+-        return QString::fromStdString(encoded);
+-
+-    } catch (const Botan::Exception &e) {
++        // Create the KEY and IV
++        Botan::KDF *kdf = Botan::get_kdf("KDF2(SHA-1)");
++
++        mSalt.data();
++
++        // Create the master key
++        Botan::SecureVector<Botan::byte> mMaster =
++            pbkdf2
++                .derive_key(48, mPassword.toStdString(), &mSalt[0], mSalt.size(), PBKDF2_ITERATIONS)
++                .bits_of();
++        Botan::SymmetricKey mKey = kdf->derive_key(32, mMaster, "salt1");
++        Botan::InitializationVector mIV = kdf->derive_key(16, mMaster, "salt2");
++
++        Botan::Pipe pipe(get_cipher("AES-256/CBC/PKCS7", mKey, mIV, Botan::ENCRYPTION),
++                         new Botan::Base64_Encoder);
++        pipe.process_msg(Data.toStdString());
++        QString Value = QString::fromStdString(pipe.read_all_as_string(0));
++        return Value;
++    } catch (Botan::Exception &e) {
+         qWarning() << "[Botan Error] " << e.what();
+-        return {};
++        return QString();
+     }
+ }
+ 
+ QString BotanWrapper::Decrypt(const QString &Data) {
+     try {
+-        // Setup PBKDF2
+-        auto pbkdf = Botan::PBKDF::create("PBKDF2(HMAC(SHA-1))");
+-        if (!pbkdf) {
+-            qWarning() << "[Botan Error] Failed to create PBKDF2";
+-            return {};
+-        }
+-
++        // Setup the key derive functions
++        Botan::PKCS5_PBKDF2 pbkdf2(new Botan::HMAC(new Botan::SHA_160));
+         const uint32_t PBKDF2_ITERATIONS = 8192;
+ 
+-        // Create the master key using PBKDF2
+-        auto master_key = pbkdf->pbkdf_iterations(48, mPassword.toStdString(), mSalt.data(),
+-                                                  mSalt.size(), PBKDF2_ITERATIONS);
+-
+-        // Create KDF for key and IV derivation
+-        auto kdf = Botan::KDF::create("KDF2(SHA-1)");
+-        if (!kdf) {
+-            qWarning() << "[Botan Error] Failed to create KDF2";
+-            return {};
+-        }
+-
+-        // Derive key and IV
+-        auto key = kdf->derive_key(32, master_key, "salt1");
+-        auto iv = kdf->derive_key(16, master_key, "salt2");
+-
+-        // Base64 decode the input
+-        Botan::secure_vector<uint8_t> buffer = Botan::base64_decode(Data.toStdString());
+-
+-        // Create cipher
+-        auto cipher =
+-            Botan::Cipher_Mode::create("AES-256/CBC/PKCS7", Botan::Cipher_Dir::DECRYPTION);
+-        if (!cipher) {
+-            qWarning() << "[Botan Error] Failed to create AES-256/CBC/PKCS7 cipher";
+-            return {};
+-        }
+-
+-        cipher->set_key(key);
+-        cipher->start(iv);
+-        cipher->finish(buffer);
+-
+-        // Convert result to string
+-        std::string output(buffer.begin(), buffer.end());
+-        return QString::fromStdString(output);
+-
+-    } catch (const Botan::Exception &e) {
++        // Create the KEY and IV
++        Botan::KDF *kdf = Botan::get_kdf("KDF2(SHA-1)");
++
++        // Create the master key
++        Botan::SecureVector<Botan::byte> mMaster =
++            pbkdf2
++                .derive_key(48, mPassword.toStdString(), &mSalt[0], mSalt.size(), PBKDF2_ITERATIONS)
++                .bits_of();
++        Botan::SymmetricKey mKey = kdf->derive_key(32, mMaster, "salt1");
++        Botan::InitializationVector mIV = kdf->derive_key(16, mMaster, "salt2");
++
++        Botan::Pipe pipe(new Botan::Base64_Decoder,
++                         get_cipher("AES-256/CBC/PKCS7", mKey, mIV, Botan::DECRYPTION));
++        pipe.process_msg(Data.toStdString());
++        QString Value = QString::fromStdString(pipe.read_all_as_string(0));
++        return Value;
++    } catch (Botan::Exception &e) {
+         qWarning() << "[Botan Error] " << e.what();
+-        return {};
++        return QString();
+     }
+ }
+ 
+-- 
+2.52.0
+

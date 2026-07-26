@@ -1,0 +1,22 @@
+--- planets-0.1.13/Makefile.orig	2019-08-01 12:44:01.227147147 -0600
++++ planets-0.1.13/Makefile	2023-09-09 15:47:33.792652088 -0600
+@@ -15,8 +15,8 @@ INCLUDES=-I +labltk
+ CAMLP4=-pp $(CAMLP4O)
+ OCAMLDEP=ocamldep
+ CAMLLIBS=unix.cma str.cma labltk.cma # libjpf.cma mylibs.cma
+-OCAMLFLAGS=$(INCLUDES) $(CAMLP4) -g -custom $(CAMLLIBS) -cclib -lunix 
+-OCAMLOPTFLAGS=$(INCLUDES) $(CAMLP4) $(CAMLLIBS:.cma=.cmxa) -inline 50 -cclib -lunix
++OCAMLFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS) -cclib -lunix 
++OCAMLOPTFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS:.cma=.cmxa) -inline 50 -cclib -lunix
+ 
+ ifdef PROFILING
+   OCAMLC=ocamlcp
+@@ -74,7 +74,7 @@ planets: $(OBJS)
+ 	$(OCAMLOPT) -o planets $(OCAMLOPTFLAGS) $^
+ 
+ planets.bc: $(OBJS:.cmx=.cmo)
+-	$(OCAMLC) -o planets.bc $(OCAMLFLAGS) $^
++	$(OCAMLC) -o planets.bc -output-complete-exe $(OCAMLFLAGS) $^
+ 
+ test: test.ml
+ 	$(OCAMLC) -o test $(OCAMLFLAGS) $^

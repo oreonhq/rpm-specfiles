@@ -1,0 +1,12 @@
+diff --git a/servus/serializable.h b/servus/serializable.h
+index 0ee07dc..2e14202 100644
+--- a/servus/serializable.h
++++ b/servus/serializable.h
+@@ -25,6 +25,7 @@
+ 
+ #include <functional> // function
+ #include <memory>     // shared_ptr
++#include <stdexcept>
+ 
+ namespace servus
+ {

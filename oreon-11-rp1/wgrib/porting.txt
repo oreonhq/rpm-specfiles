@@ -1,0 +1,263 @@
+
+	wgrib v1.6				     12/97 Wesley Ebisuzaki
+        Portable Grib decoder                        Revised 4/2007, 8/2014
+
+
+
+                              Introduction:
+ 
+
+    The program wgrib is written in standard (ANSI/ISO) C.  The last
+report of a compiler not being able to handle wgrib was several years
+ago.  The code requires, at minimum, a 32-bit computer.  (A user did 
+port the code to a 286 but that was years ago.)  However, if you plan 
+to work with 2+ GB files, you should use a 64-bit computer (compile 
+with 64-bit integers).  
+
+                              Compiling:
+
+    Version 1.6 introduces a compile-time option "DEF_T62_NCEP_TABLE".  
+For the operational version of wgrib, DEF_T62_NCEP_TABLE=opn while 
+Reanalysis uses DEF_T62_NCEP_TABLE=rean.  For compatibility with 
+earlier versions, the default is "reanalysis".  The compile-time option 
+determines whether to use the operational or reanalysis GRIB table for 
+the T62 model when the subcenter is zero.  Of course, the default can 
+be changed at run time by the -ncep_opn and -ncep_rean options.
+
+Compiling wgrib with the default option (Reanalysis):
+
+	ibm/sp (32 bit ints): c89 -O2 -o wgrib wgrib.c
+	ibm/sp (64 bit ints): c89 -O2 -q64 -o wgrib wgrib.c 
+		apparently on some machines, try
+	ibm/sp (32 bit ints): c89 -O2 -o wgrib wgrib.c -lm
+	ibm/sp (64 bit ints): c89 -O2 -q64 -o wgrib wgrib.c -lm
+        sun: acc -o wgrib wgrib.c -lm
+        sun: gcc -o wgrib wgrib.c -lm
+            (note: sun's cc is not an ANSI C compiler [ed this is a really old
+            statement, may not be true today])
+        cray C90: cc -o wgrib wgrib.c
+        sgi: cc -o wgrib wgrib.c -lm
+        hp risc: gcc -o wgrib wgrib.c -lm
+        hp risc: cc -Aa -o wgrib wgrib.c -lm
+        68K amiga: sc link math=ieee output=wgrib wgrib.c
+	linux: gcc -o wgrib wgrib.c -lm
+        OS X (Mavericks): install XCode, cc -O2 -o wgrib wgrib.c -lm 
+        Visual C++.net: (B. DeTracey 1/2006)
+
+		Visual C++.net compiling instructions. No optimisations. No debugging
+		information.
+
+		From the Visual Studio .NET 2003 Command Prompt:
+		1)Change to your wgrib source directory
+		2)Compile and link using:
+		cl /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /EHsc /ML /GS /W3
+		/Wp64 /TP /Fewgrib.exe *.c
+
+		If you get an error message related to a file named wgrib_c.c, delete this
+		file and try again. This file resulted from your previous attempt to build
+		the application from within the Visual Studio .NET 2003 IDE (Windows
+		application interface). 
+
+
+Compiling wgrib for the operational version:
+
+	ibm/sp (32 bit ints): c89 -O2 -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c
+	ibm/sp (64 bit ints): c89 -O2 -q64 -o wgrib 
+			-DDEF_T62_NCEP_TABLE=opn wgrib.c
+	sun: acc -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c -lm
+        sun: gcc -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c -lm
+        cray: cc -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c
+        sgi: cc -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c -lm
+        hp: gcc -o wgrib -DDEF_T62_NCEP_TABLE=opn wgib.c -lm
+        hp: cc -Aa -o wgrib -DDEF_T62_NCEP_TABLE=opn wgrib.c -lm
+ 
+The value of "DEF_T62_NCEP_TABLE" can be defined as opn, opn_nowarn,
+rean (default), and rean_nowarn.  
+
+
+                            Optimization:
+
+    You may have noticed that the previous compilation command lines
+do not include any optimizations.  My suggestion is that one should
+avoid the compiler optimizations unless one is willing to make sure
+that the compiler optimizations do not break the code.  Sure compilers
+have improved but optimization bugs still occur.
+
+2014 revision:  C compilers have improved and most C compilers
+enable some optimizations by default.  I haven't encountered any
+problems with the default optimizations.  I haven't played with
+higher levels of optimization because the program is more limited
+by the disk than CPU speeds.
+
+
+
+                         Problems Compiling:
+
+ 
+    If you have problems with compiling, you are probably using a non-standard
+C compiler or the compiler has been improperly set up.  
+
+    Another possibility is that the source code was corrupted.  There has
+been one case where the source code was obtained using a browser and the
+code would not compile cleanly.  The problem was solved by obtaining the 
+source code using anonymous FTP from
+
+   ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib/wgrib.c
+
+I suspect that the browser was converting the <cr> in to <cr><lf> which 
+was incompatible with their C compiler.
+
+    If you have problems linking ("undefined ....") then you are not 
+including a necessary library.  On many UNIX machines, you need to include 
+the math library ('-lm' option).
+
+    If you have problems compiling wgrib, consult a local wizard.  I have
+compiled the code on sun, cray, sgi, hp, linux, amiga and even DOS.  Others
+have used NT, OS/2, NEC supercomputers and Alpha (unix).  If you have
+problem with one of the previous machine or any 32/64 bit unix machine, it is 
+likely that you have a local problem.
+
+
+                           MS-DOS and Windows
+
+revised 1/2006:
+   The cygwin port of gcc compiles wgrib and that compiler is open source.
+At one time, it was rare for a Windows compiler to compile wgrib correctly.  
+However, I haven't had a report of a deficient Windows compiler for 
+several years.
+
+
+
+                            Testing wgrib:
+
+
+Test 1:  
+After you've compiled wgrib is simply type "wgrib."  You should see the 
+help screen which should be similar to the following:
+
+  
+  Portable Grib decoder for NCEP Operations etc.
+     it slices, dices    v1.6.0 prelim 2 (7-01-97) Wesley Ebisuzaki
+     usage: ./wgrib [grib file] [options]
+  
+  Inventory/diagnostic output selection
+    -s/-v/-V  short inventory/verbose inventory/very verbose non-inventory
+    (default) regular inventory
+  Options for inventory/diagnostic output
+    -PDS/-PDS10/-GDS/-GDS10      print PDS/GDS in hex/dec
+    -verf                        print forecast verification time
+    -4yr/-ncep_opn/-ncep_rean    see documentation
+  
+  Decoding Grib selection
+    -d [record number]  dump record number
+    -p [byte position]  dump record at byte position
+    -i                  dump controlled by stdin (inventory list)
+    (none)              no decode .. inventory only
+  Options for decoding Grib
+    -text/-ieee/-bin/-grib  dump to a text/ieee/bin/grib file
+    -h/-nh                  dump will have headers (default)/no headers
+    -H                      dump will include PDS and GDS (-bin/-ieee only)
+    -append                 append to dump file
+    -o [file]               output file name, 'dump' is default
+
+
+The first line of the "help" page should include the phrase "NCEP Operations"
+or "NCEP/NCAR Reanalysis" which indicates the default GRIB table (see 
+"Compiling.")
+
+Test 2:
+The second test is to see if wgrib will read a grib file.  If the file
+"land.grb" is not with the source code, a copy can be obtained from
+ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib/land.grb.  'land.grb' is the land-sea
+mask used by Reanalysis.
+
+    enter: wgrib land.grb
+    see:
+        1:0:d=87010100:LAND:kpds5=81:kpds6=1:kpds7=0:TR=0:P1=0:P2=0:TimeU=1:sfc:anl:NAve=1 
+
+Test 3
+The third test is read the grib file and decode the numeric data.
+
+    enter: wgrib land.grb -V
+    see:
+        1:0:date 1987010100 LAND kpds5=81 kpds6=1 kpds7=0 levels=(0,0) grid=255 sfc anl:
+        LAND=Land-sea mask [1=land; 0=sea]
+        timerange 0 P1 0 P2 0 TimeU 1  nx 192 ny 94 GDS grid 4 num_in_ave 1 missing 0
+        center 7 subcenter 2 process 80 Table 2
+        gaussian: lat  88.542000 to -88.542000
+                  long 0.000000 to -1.875000 by 1.875000, (192 x 94) scan 0 bdsgrid 1
+        min/max data 0 1  num bits 4  BDS_Ref 0  DecScale 1 BinScale 0
+
+
+Test 4:
+This tests the wgrib's ability to extract a record and write it as a text file.
+
+    enter: wgrib land.grb -d 1 -text
+    see:  1:0:d=87010100:LAND:sfc:anl:NAve=1
+    The first 10 lines of the file 'dump' should be:
+         192 94
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+         0
+
+Text 5
+In this test a record is written as a f77 big-endian IEEE file.
+    enter: wgrib land.grb -d 1 -ieee -s
+    see:  1:0:d=87010100:LAND:sfc:anl:NAve=1
+    Should find a file 'dump' which is which is 72200 bytes long.
+
+Test 6
+In this test a record is written as native-format binary file.
+    enter: wgrib land.grb -d 1 -s
+    see:  1:0:d=87010100:LAND:sfc:anl:NAve=1
+    Should find a new file 'dump' which is often 72200 bytes long.
+
+Test 7
+Reading a binary file using a C program.
+    Run test 6 to convert the land mask into a binary file.
+    Compile the program testbin.c using a C compiler.
+    Some possible compilation lines are
+
+       cc -o testbin testbin.c -lm                      (normal unix C)
+       gcc -o testbin testbin.c -lm                     (GNU C)
+       acc -o testbin testbin.c -lm                     (Sun's acc)
+       sc link math=ieee output=testbin testbin.c       (SAS C)
+
+    The program reads the binary file "dump" and should print out the land mask.
+
+
+Test 8
+Reading the binary file with fortran.
+    Run test 6 to convert the land mask into a binary file.
+    Compile and run the program testbin.f using your fortran 77 compiler.
+    If everything went correctly, you should see the land mask.   If it 
+    works, good.  If it doesn't work, too bad.  You are on your own.  
+    Suggestions: (1) if all else fails, read the fortran manual (RTFM),
+    (2) change fortran compilers, (3) try reading the data with no 
+    headers (-nh option in wgrib), (4) give up and read the text dump 
+    instead.  This step is very system dependent. Consult your local expert.
+
+
+
+Support:
+
+    No support is necessary because the instructions are crystal clear 
+and the code is bug free.  If my directions are as clear as Mississippi
+mud, think how understandable my verbal directions will be! (Yes, I've
+been known to talk without nouns, adverbs and even adjectives.) Please,
+do not waste your dime and call me asking how to compile or link wgrib.
+You have to ask some one who knows YOUR SYSTEM.  If tests 1-6 are
+successful then wgrib works. Test 7 is simply a test of your fortran
+compiler and you have to read the documentation.
+
+4/2007: updated URLs for land.grb and test programs
+
+    If you really think that you found a bug in the code, then send me
+an e-mail (wesley.ebisuzaki@noaa.gov).  
+

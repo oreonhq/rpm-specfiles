@@ -1,0 +1,28 @@
+From bf8511d16d1c0d44be6686ae8c1f5f9e7811f09c Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Tue, 18 Jan 2022 09:04:52 +0100
+Subject: [PATCH] fix build with hiredis >= 0.14
+
+---
+ phpiredis.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/phpiredis.c b/phpiredis.c
+index 2665fee..85c2f35 100644
+--- a/phpiredis.c
++++ b/phpiredis.c
+@@ -33,6 +33,14 @@ int le_redis_persistent_context;
+ #define TSRMLS_DC
+ #endif
+ 
++#if HIREDIS_MAJOR > 0 || HIREDIS_MINOR >= 14
++#define redisReplyReaderGetReply redisReaderGetReply
++#define redisReplyReaderFeed     redisReaderFeed
++#define redisReplyReaderGetError redisReaderGetError
++#define redisReplyReaderFree     redisReaderFree
++#define redisReplyReaderCreate   redisReaderCreate
++#endif
++
+ typedef struct callback {
+ #ifdef ZEND_ENGINE_3
+     zval function;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Petr Hracek <phracek@redhat.com> -->
+<component type="addon">
+    <id>vim-taglist</id>
+    <extends>gvim.desktop</extends>
+    <name>vim-taglist</name>
+    <summary>The "Tag List" plugin is a source code browser for the Vim editor.</summary>
+    <url type="homepage">http://vim-taglist.sourceforge.net/index.html</url>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>Vim</project_license>
+    <updatecontact>phracek@redhat.com</updatecontact>
+</component>

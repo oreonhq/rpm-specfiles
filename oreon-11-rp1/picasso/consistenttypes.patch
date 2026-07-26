@@ -1,0 +1,26 @@
+diff -ruN picasso-2.8.0/src/gfx/gfx_font_adapter_freetype2.cpp picasso-2.8.0-mod/src/gfx/gfx_font_adapter_freetype2.cpp
+--- picasso-2.8.0/src/gfx/gfx_font_adapter_freetype2.cpp	2024-07-15 13:12:46.000000000 +0300
++++ picasso-2.8.0-mod/src/gfx/gfx_font_adapter_freetype2.cpp	2025-03-30 16:16:49.458982739 +0300
+@@ -156,10 +156,10 @@
+ 
+     FT_Vector* point;
+     FT_Vector* limit;
+-    char* tags;
++    unsigned char* tags;
+ 
+     int first; // index of first point in contour
+-    char tag; // current point's state
++    unsigned char tag; // current point's state
+ 
+     first = 0;
+ 
+@@ -175,7 +175,8 @@
+         v_control = v_start;
+ 
+         point = outline.points + first;
+-        tags = outline.tags + first;
++        tags = outline.tags;
++        tags += first;
+         tag = FT_CURVE_TAG(tags[0]);
+ 
+         // A contour cannot start with a cubic control point!

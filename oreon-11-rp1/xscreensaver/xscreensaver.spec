@@ -1,0 +1,1210 @@
+%global source0_hash none
+
+%define name          xscreensaver
+
+%define mainversion   6.14
+%dnl %define extratarver   1
+%dnl %define beta_ver      b2
+
+%define modular_conf  1
+%define split_getimage   0
+%if 0%{?fedora} >= 14
+%define split_getimage   1
+%endif
+
+%define baserelease    1
+
+%global use_clang_as_cc 0
+%global use_clang_analyze 0
+%global use_cppcheck   0
+%global use_gcc_strict_sanitize 0
+%global use_gcc_trap_on_sanitize 0
+%global use_gcc_analyzer 0
+
+%global enable_animation 1
+%undefine extrarel
+
+%global flagrel %{nil}
+%if 0%{?use_cppcheck} >= 1
+%global flagrel %{flagrel}.CPPCHECK
+%endif
+%if 0%{?use_gcc_strict_sanitize} >= 1
+%global flagrel %{flagrel}.SAN
+%endif
+%if 0%{?use_clang_analyze} >= 1
+%global flagrel %{flagrel}.clang_alz
+%endif
+
+%global toolchain     gcc
+%if 0%{?use_clang_as_cc} >= 1
+%global toolchain     clang
+%endif
+
+# EPEL6
+%{!?__git:%define __git git}
+
+%if 0%{?fedora}
+%define default_text  %{_sysconfdir}/fedora-release
+%else
+%define default_text  %{_sysconfdir}/system-release
+%endif
+%define default_URL   http://planet.fedoraproject.org/rss20.xml
+
+%define pam_ver       0.80-7
+%define autoconf_ver  2.53
+
+%define update_po     1
+%define build_tests   0
+
+%global support_setcap 0
+%if 0%{?fedora} >= 31
+# TODO write selinux policy for selinux-policy-mls 
+# (currently works with selinux-policy-targeted)
+#%%global support_setcap 1
+%endif
+# enable xscreensaver-systemd for F-33
+%global  support_systemd 0
+%if 0%{?fedora} >= 33
+%global  support_systemd 1
+%endif
+
+%undefine        _changelog_trimtime
+
+Summary:         X screen saver and locker
+Name:            %{name}
+Version:         %{mainversion}%{?extratarver:.%extratarver}
+Release:         %{?beta_ver:0.}%{baserelease}%{?beta_ver:.%beta_ver}%{?dist}%{flagrel}%{?extrarel}
+Epoch:           1
+License:         MIT
+URL:             http://www.jwz.org/xscreensaver/
+Source0:         http://www.jwz.org/xscreensaver/xscreensaver-%{mainversion}%{?beta_ver}%{?extratarver:.%extratarver}.tar.gz
+%if %{modular_conf}
+Source10:        update-xscreensaver-hacks
+%endif
+%if 0%{?fedora} >= 12
+Source11:        xscreensaver-autostart
+Source12:        xscreensaver-autostart.desktop
+%endif
+# wrapper script for switching user (bug 1878730)
+Source13:        xscreensaver-newlogin-wrapper
+# bug 129335
+# Remove unwilling words from barcode hack
+Source20:        barcode-words-blacklist.txt
+Source100:       ja.po
+##
+## Patches
+##
+# bug 129335
+Patch1:          xscreensaver-5.45-0001-barcode-glsnake-sanitize-the-names-of-modes.patch
+## Patches already sent to the upsteam
+## Patches which must be discussed with upstream
+# See bug 472061
+Patch21:         xscreensaver-6.06-webcollage-default-nonet.patch
+# make_ximage: avoid integer overflow on left shift
+Patch4701:       xscreensaver-6.07-0001-make_ximage-avoid-integer-overflow-on-left-shift.patch
+# convert_ximage_to_rgba32: avoid integer overflow on left shift
+Patch4702:       xscreensaver-6.07-0002-convert_ximage_to_rgba32-avoid-integer-overflow-on-l.patch
+# driver/Makefile.in: fix test-vp linkage
+Patch5401:       xscreensaver-6.14-0001-driver-fix-linkage-for-test-vp.patch
+# Fedora specific
+# window_init: search parenthesis first for searching year
+Patch10001:      xscreensaver-6.00-0001-screensaver_id-search-parenthesis-first-for-searchin.patch
+# dialog.c: window_init: show more version string
+Patch10003:      xscreensaver-6.00-0003-dialog.c-window_init-show-more-version-string.patch
+#
+# gcc warning cleanup
+# Some cppcheck cleanup
+#
+# Debugging patch
+# Not apply by default
+# XIO: print C backtrace on error
+Patch13501:      xscreensaver-5.35-0101-XIO-print-C-backtrace-on-error.patch
+#
+# Patches end
+Requires:        xscreensaver-base = %{epoch}:%{version}-%{release}
+Requires:        xscreensaver-extras = %{epoch}:%{version}-%{release}
+Requires:        xscreensaver-gl-extras = %{epoch}:%{version}-%{release}
+
+%package base
+Summary:         A minimal installation of xscreensaver
+
+%if 0%{?use_clang_analyze} >= 1
+BuildRequires:   clang-analyzer
+BuildRequires:   clang
+%endif
+%if 0%{?use_clang_as_cc}
+BuildRequires:   clang
+%endif
+%if 0%{?use_cppcheck}
+BuildRequires:   cppcheck
+%endif
+%if 0%{?use_gcc_strict_sanitize}
+BuildRequires:   libasan
+BuildRequires:   libubsan
+%endif
+BuildRequires:   make
+BuildRequires:   git
+BuildRequires:   autoconf
+BuildRequires:   automake
+BuildRequires:   intltool
+BuildRequires:   bc
+BuildRequires:   desktop-file-utils
+BuildRequires:   gawk
+BuildRequires:   gettext
+BuildRequires:   gettext-devel
+BuildRequires:   libtool
+BuildRequires:   pam-devel > %{pam_ver}
+BuildRequires:   sed
+BuildRequires:   libxcrypt-devel
+# Use pseudo symlink
+# BuildRequires:   xdg-utils
+BuildRequires:   xorg-x11-proto-devel
+# extrusioni
+%if 0%{?fedora} >= 13
+BuildRequires:   libgle-devel
+%endif
+BuildRequires:   libX11-devel
+BuildRequires:   libXScrnSaver-devel
+# xscreensaver 6.00
+#BuildRequires:   libXcomposite-devel
+BuildRequires:   libXext-devel
+# From xscreensaver 5.12, write explicitly
+BuildRequires:   libXi-devel
+BuildRequires:   libXinerama-devel
+# Dropped from 6.00
+# BuildRequires:   libXmu-devel
+# xscreensaver 5.39: check if the following can be removed
+BuildRequires:   libXpm-devel
+# xscreensaver 5.39
+BuildRequires:   libpng-devel
+# Write explicitly
+BuildRequires:   libXrandr-devel
+BuildRequires:   libXt-devel
+# libXxf86misc removed from F-31
+#BuildRequires:   libXxf86misc-devel
+BuildRequires:   libXxf86vm-devel
+# XScreenSaver 5.31
+BuildRequires:   pkgconfig(xft)
+BuildRequires:   pkgconfig(gtk+-3.0) >= 2.22.0
+BuildRequires:   pkgconfig(gmodule-2.0)
+BuildRequires:   pkgconfig(libxml-2.0)
+BuildRequires:   pkgconfig(gio-2.0)
+# Write explicitly below, especially
+# for F-23 gdk_pixbuf package splitting
+BuildRequires:   pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:   libjpeg-devel
+BuildRequires:   libglade2-devel
+%if 0%{?support_setcap} >= 1
+BuildRequires:   pkgconfig(libcap)
+%endif
+# From F-33, enable systemd support
+%if 0%{?support_systemd} >= 1
+BuildRequires:   pkgconfig(libsystemd)
+%endif
+# From xscreensaver 6.07
+%if 0%{?enable_animation}
+BuildRequires:   pkgconfig(libavutil)
+BuildRequires:   pkgconfig(libavcodec)
+BuildRequires:   pkgconfig(libavformat)
+BuildRequires:   pkgconfig(libswscale)
+BuildRequires:   pkgconfig(libswresample)
+%endif
+# From xscreensaver 6.12
+BuildRequires:   pkgconfig(wayland-server)
+BuildRequires:   pkgconfig(wayland-client)
+%if 0%{?fedora}
+BuildRequires:   %{default_text}
+%endif
+# For https://fedoraproject.org/wiki/Packaging:Perl#Build_Dependencies
+# https://fedoraproject.org/wiki/Changes/Build_Root_Without_Perl
+BuildRequires:    perl-interpreter
+BuildRequires:    perl-generators
+# xscreensaver 6.07 calls check-configs.pl
+BuildRequires:    perl(strict)
+BuildRequires:    perl(diagnostics)
+# For --with-login-manager option
+%if 0%{?fedora} >= 14
+# Use pseudo symlink, not writing BR: gdm
+#BuildRequires:   gdm
+%endif
+Requires:        %{_sysconfdir}/pam.d/system-auth
+Requires:        pam > %{pam_ver}
+# For xdg-open
+Requires:        xdg-utils
+%if ! %{split_getimage}
+Requires:        appres
+%endif
+# For switch user wrapper
+Requires:        %{_bindir}/pidof
+# XScreenSaver 6.07: For manual
+# Actually the following is not needed, yelp is still used
+#Recommends:      xterm
+%if 0%{?build_tests} < 1
+# Obsoletes but not Provides
+Obsoletes:       xscreeensaver-tests < %{epoch}:%{version}-%{release}
+%endif
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1030659
+# XScreenSaver 6.06 xscreensaver-settings now needs xscreensaver-gl-visual
+Requires:        %{name}-gl-base = %{epoch}:%{version}-%{release}
+
+%package extras-base
+Summary:         A base package for screensavers
+%if 0%{?fedora} < 19
+Requires:        %{name}-base = %{epoch}:%{version}-%{release}
+%endif
+Requires:        appres
+
+%package extras
+Summary:         An enhanced set of screensavers
+%if 0%{?fedora} >= 19
+# Does not available on EPEL7
+BuildRequires:   desktop-backgrounds-basic
+%else
+BuildRequires:   gnome-backgrounds
+%endif
+Requires:        %{name}-base = %{epoch}:%{version}-%{release}
+%if %{split_getimage}
+Requires:        %{name}-extras-base = %{epoch}:%{version}-%{release}
+%endif
+
+%package gl-base
+Summary:         A base package for screensavers that require OpenGL
+
+%package gl-extras
+Summary:         An enhanced set of screensavers that require OpenGL
+Provides:        xscreensaver-gl = %{epoch}:%{version}-%{release}
+Obsoletes:       xscreensaver-gl <= 1:5.00
+BuildRequires:   libGL-devel
+BuildRequires:   libGLU-devel
+%if %{modular_conf}
+Requires:        %{name}-gl-base = %{epoch}:%{version}-%{release}
+%else
+Requires:        %{name}-base = %{epoch}:%{version}-%{release}
+%endif
+%if %{split_getimage}
+Requires:        %{name}-extras-base = %{epoch}:%{version}-%{release}
+%endif
+
+%package extras-gss
+Summary:         Desktop files of extras for other screensaver
+Requires:        %{name}-extras = %{epoch}:%{version}-%{release}
+
+%package gl-extras-gss
+Summary:         Desktop files of gl-extras for other screensaver
+Requires:        %{name}-gl-extras = %{epoch}:%{version}-%{release}
+
+%package tests
+Summary:         Test programs related to XScreenSaver
+Requires:        %{name}-base = %{epoch}:%{version}-%{release}
+
+%package clang-analyze
+Summary:         Clang analyze result log
+
+%package cppcheck
+Summary:         cppcheck result log
+
+%description
+A modular screen saver and locker for the X Window System.
+More than 200 display modes are included in this package.
+
+This is a metapackage for installing all default packages
+related to XScreenSaver.
+
+%description -l fr
+Un économiseur d'écran modulaire pour le système X Window.
+Plus de 200 modes d'affichages sont inclus dans ce paquet.
+
+This is a metapackage for installing all default packages
+related to XScreenSaver.
+
+%description base
+A modular screen saver and locker for the X Window System.
+This package contains the bare minimum needed to blank and
+lock your screen.  The graphical display modes are the
+"xscreensaver-extras" and "xscreensaver-gl-extras" packages.
+
+%description -l fr base 
+Un économiseur d'écran modulaire pour le système X Window.
+Ce paquet contient le minimum vital pour éteindre et verouiller
+votre écran. Les modes d'affichages graphiques sont inclus
+dans les paquets "xscreensaver-extras" et "xscreensaver-gl-extras".
+
+%description extras-base
+This package contains common files to make screensaver hacks
+work for XScreenSaver.
+
+%description extras
+A modular screen saver and locker for the X Window System.
+This package contains a variety of graphical screen savers for
+your mind-numbing, ambition-eroding, time-wasting, hypnotized
+viewing pleasure.
+
+%description -l fr extras
+Un économiseur d'écran modulaire pour le système X Window.
+Ce paquet contient une pléthore d'économiseurs d'écran graphiques
+pour votre plaisir des yeux.
+
+%description gl-base
+A modular screen saver and locker for the X Window System.
+This package contains minimal files to make screensaver hacks
+that require OpenGL work for XScreenSaver.
+
+%description gl-extras
+A modular screen saver and locker for the X Window System.
+This package contains a variety of OpenGL-based (3D) screen
+savers for your mind-numbing, ambition-eroding, time-wasting,
+hypnotized viewing pleasure.
+
+%description -l fr gl-extras
+Un économiseur d'écran modulaire pour le système X Window.
+Ce paquet contient une pléthore d'économiseurs d'écran basés sur OpenGL (3D)
+pour votre plaisir des yeux.
+
+%description extras-gss
+This package contains desktop files of extras screensavers
+for other screensaver compatibility.
+
+%description gl-extras-gss
+This package contains desktop files of gl-extras screensavers
+for other screensaver compatibility.
+
+%description tests
+This package contains some test programs to debug XScreenSaver.
+
+%description clang-analyze
+This package contains Clang analyze result of XScreenSaver.
+
+%description cppcheck
+This package contains cppcheck result of XScreenSaver.
+
+%prep
+%setup -q -n %{name}-%{mainversion}%{?beta_ver}
+
+cat > .gitignore <<EOF
+configure
+config.guess
+config.sub
+aclocal.m4
+config.h.in
+config.rpath
+OSX
+EOF
+
+# Firstly clean this
+rm -f driver/XScreenSaver_ad.h
+
+# chmod
+find . -name \*.c -exec chmod ugo-x {} \;
+
+%__git init
+%__git config user.email "xscreensaver-maintainer@fedoraproject.org"
+%__git config user.name "XScreenSaver maintainer"
+%__git add .
+%__git commit -m "base" -q
+
+%__cat %PATCH1 | %__git am
+%__cat %SOURCE20 | while read f
+do
+	sed -i hacks/barcode.c -e "\@\"$f\"@s@^.*\$@/**/@"
+done
+%__git commit -m "barcode: sanitize the names of modes" -a
+%__cat %PATCH21 | %__git am
+
+%__cat %PATCH4701 | %__git am
+%__cat %PATCH4702 | %__git am
+%__cat %PATCH5401 | %__git am
+%__cat %PATCH10001 | %__git am
+%__cat %PATCH10003 | %__git am
+
+#%%__cat %PATCH13501 | %%__git am
+
+change_option(){
+   set +x
+   ADFILE=$1
+   if [ ! -f ${ADFILE}.opts ] ; then
+      cp -p $ADFILE ${ADFILE}.opts
+   fi
+   shift
+
+   for ARG in "$@" ; do
+      TYPE=`echo $ARG | sed -e 's|=.*$||'`
+      VALUE=`echo $ARG | sed -e 's|^.*=||'`
+
+      eval sed -i \
+         -e \'s\|\^\\\(\\\*$TYPE\:\[ \\t\]\[ \\t\]\*\\\)\[\^ \\t\]\.\*\$\|\\1$VALUE\|\' \
+         $ADFILE
+   done
+   set -x
+}
+
+silence_hack(){
+   set +x
+   ADFILE=$1
+   if [ ! -f ${ADFILE}.hack ] ; then
+      cp -p $ADFILE ${ADFILE}.hack
+   fi
+   shift
+
+   for hack in "$@" ; do
+      eval sed -i \
+         -e \'\/\^\[ \\t\]\[ \\t\]\*$hack\/s\|\^\|-\|g\' \
+         -e \'s\|\^@GL_\.\*@.*\\\(GL\:\[ \\t\]\[ \\t\]\*$hack\\\)\|-\\t\\1\|g\' \
+         $ADFILE
+   done
+   set -x
+}
+
+%global PATCH_desc \
+# change some files to UTF-8
+for f in \
+   hacks/glx/sproingies.man \
+   hacks/glx/cubocteversion.man \
+   ; do
+   iconv -f ISO-8859-1 -t UTF-8 $f > $f.tmp || cp -p $f $f.tmp
+   touch -r $f $f.tmp
+   mv $f.tmp $f
+done
+%__git commit -m "%PATCH_desc" -a
+
+%global PATCH_desc \
+# Change some options \
+# For grabDesktopImages, lock, see bug 126809
+change_option driver/XScreenSaver.ad.in \
+   captureStderr=False \
+   passwdTimeout=0:00:15 \
+   grabDesktopImages=False \
+   lock=True \
+   splash=False \
+   ignoreUninstalledPrograms=True \
+   textProgram=fortune\ -s \
+%if 0%{?fedora} >= 12
+   textURL=%{default_URL}
+%endif
+%__git commit -m "%PATCH_desc" -a
+
+# peepers: 5.39: too scary (mtasaka)
+# headroom: 5.45: too scary (mtasaka)
+%global PATCH_desc \
+# Disable the following hacks by default \
+# (disable, not remove)
+silence_hack driver/XScreenSaver.ad.in \
+   bsod \
+   covid19 \
+   flag \
+   headroom \
+   peepers \
+   skulloop \
+   skytentacles \
+   %{nil}
+%__git commit -m "%PATCH_desc" -a
+
+%global PATCH_desc \
+# Record time, EVR
+eval sed -i.ver \
+   -e \'s\|version \[45\]\.\[0-9a-z\]\[0-9a-z\]\*\|version %{version}-`echo \
+      %{release} | sed -e '/IGNORE THIS/s|\.[a-z][a-z0-9].*$||'`\|\' \
+      driver/XScreenSaver.ad.in
+
+eval sed -i.date \
+   -e \'s\|\[0-9\].\*-.\*-20\[0-9\]\[0-9\]\|`LANG=C LC_ALL=C date -u +'%%d-%%b-%%Y'`\|g\' \
+   driver/XScreenSaver.ad.in
+
+eval sed -i.ver \
+   -e \'s\|\(\[0-9\].\*-.\*-20\[0-9\]\[0-9\]\)\|\(`LANG=C LC_ALL=C \
+      date -u +'%%d-%%b-%%Y'`\)\|g\' \
+   -e \'s\|\\\([56]\\\.\[0-9\]\[0-9\]\\\)[a-z]\[0-9\]\[0-9\]\*\|\\\1\|\' \
+   -e \'s\|[56]\\\.\[0-9\]\[0-9\]\|%{version}-`echo %{release} | \
+      sed -e '/IGNORE THIS/s|\.[a-zA-Z][a-zA-Z0-9].*$||'`\|\' \
+   -e \'s\|\\\(XSCREENSAVER_RELEASED\\\)\.\*\|\\\1 ${SOURCE_DATE_EPOCH}\|\' \
+   utils/version.h
+%__git commit -m "%PATCH_desc" -a
+
+%global PATCH_desc \
+# Move man entry to 6x (bug 197741)
+for f in `find hacks -name Makefile.in` ; do
+   sed -i.mansuf \
+      -e '/^mansuffix/s|6|6x|'\
+      $f
+done
+%__git commit -m "%PATCH_desc" -a
+
+%global PATCH_desc \
+# Search first 6x entry, next 1 entry for man pages
+sed -i.manentry -e 's@man %%s@man 6x %%s 2>/dev/null || man 1 %%s @' \
+   driver/XScreenSaver.ad.in
+%__git commit -m "%PATCH_desc" -a
+
+# XScreenSaver 6.07: use xterm
+sed -i.term \
+   driver/XScreenSaver.ad.in \
+   -e 's|lxterminal|xterm|'
+%__git commit -m "Manual: change terminal to xterm" -a
+
+# xscreensaver 6.12
+# xscreensaver 6.14: use login pam module as vanilla xscreensaver does
+%if 0
+sed -i.auth driver/xscreensaver.pam.in \
+	-e '\@auth.*include.*system-auth@s|^#||'
+%__git commit -m "Use system-auth for auth again" -a
+# xscreensaver 6.13
+# and don't override xscreensaver.pam by system-wide /etc/pam.d/login or so
+sed -i.nooverride driver/Makefile.in \
+	-e '\@src2.*PAM_DIR@s|src2=.*$|src2= ;\\|'
+%__git commit -m "Don't override xscreensaver.pam by system-wide /etc/pam.d/login or so" -a
+%endif
+
+if [ -x %{_datadir}/libtool/config.guess ]; then
+  # use system-wide copy
+   cp -p %{_datadir}/libtool/config.{sub,guess} .
+fi
+
+%global PATCH_desc \
+# test-fade: give more time between fading
+sed -i.delay -e 's| delay = 2| delay = 3|' driver/test-fade.c
+%__git commit -m "%PATCH_desc" -a
+
+%global PATCH_desc \
+# test-grab: testing time too long, setting time 15 min -> 20 sec
+sed -i.delay -e 's|60 \* 15|20|' driver/test-grab.c
+%__git commit -m "%PATCH_desc" -a
+
+# Well, clang misinterpretates how gcc / autoconf uses -Wunknown-warning-option ....
+sed -i 's|-Wunknown-warning-option|-Wfoo-bar-baz|' ax_pthread.m4
+%__git commit -m "Really use unknowing warning option" -a
+
+# xscreensaver 6.03: manually fix po/Makefile.in.in
+# ca.po seems broken
+pushd po
+sed -i Makefile.in.in \
+	-e "\@^POFILES[ \t]*=@s@^.*@POTFILES\t=$(ls -1 *po | grep -v ca.po | while read f ; do echo -n -e " $f" ; done)@" \
+	-e "\@^GMOFILES[ \t]*=@s@^.*@GMOTFILES\t=$(ls -1 *po | grep -v ca.po | while read f ; do echo -n -e " ${f%.po}.gmo" ; done)@" \
+	-e "\@^CATALOGS[ \t]*=@s@^.*@CATALOGS\t=$(ls -1 *po | grep -v ca.po | while read f ; do echo -n -e " ${f%.po}.gmo" ; done)@" \
+	-e "\@^CATOBJEXT[ \t]*=@s@^.*@CATOBJEXT\t= .gmo@" \
+	-e "\@^INSTOBJEXT[ \t]*=@s@^.*@INSTOBJEXT\t= .mo@" \
+	-e "\@^MKINSTALLDIRS[ \t]*=@s@^.*@MKINSTALLDIRS\t= install -d@" \
+	%{nil}
+popd
+%__git commit -m "Manually fix po files entry" -a
+
+# xscreensaver 6.13: test-wayland-lock: no rule for wayland-lock.o
+sed -i driver/Makefile.in -e 's|test-wayland-lock$||'
+%__git commit -m "Skip test-wayland-lock for now" -a
+
+# %%configure adds --disable-dependency-tracking, don't fail with that for now
+sed -i configure.ac \
+	-e "$(($(sed -n '\@ac_unrecognized_opts@=' configure.ac | head -n 1) + 2))s|exit 2|true exit 2|"
+%__git commit -m "Don't make configure fail with unrecognized option" -a
+
+touch config.rpath
+# Add ACLOCAL_PATH for gettext 0.25 (ref: bug 2366708)
+export ACLOCAL_PATH=%{_datadir}/gettext/m4/
+aclocal
+autoconf
+autoheader
+
+%build
+
+archdir=`sh ./config.guess`
+[ -d $archdir ] || mkdir $archdir
+cd $archdir
+
+# Create temporary path and symlink
+rm -rf ./TMPBINDIR
+
+# Make it sure that perl interpreter is recognized
+# as /usr/bin/perl, not /bin/perl so as not to make
+# /bin/perl added as rpm dependency
+export PATH=/usr/bin:$PATH
+
+mkdir TMPBINDIR
+pushd TMPBINDIR/
+export PATH=$(pwd):$PATH
+
+# xdg-open
+ln -sf /bin/true xdg-open
+popd
+# gtk-update-icon-cache
+ln -sf /bin/true gtk-update-icon-cache
+
+# Set optflags first
+%set_build_flags
+
+# Doesn't work well when generating debuginfo...
+# export CFLAGS="$(echo $CFLAGS | sed -e 's|-g |-g3 -ggdb |')"
+
+export CFLAGS="$CFLAGS -Wno-long-long"
+export CFLAGS="$CFLAGS -Wno-variadic-macros"
+
+%if 0%{?use_clang_as_cc}
+export CFLAGS="$CFLAGS -Wno-gnu-statement-expression"
+%endif
+
+%if 0%{?use_gcc_strict_sanitize}
+export CC="${CC} -fsanitize=address -fsanitize=undefined"
+export LDFLAGS="${LDFLAGS} -pthread"
+%if 0%{?use_gcc_trap_on_sanitize}
+export CC="$CC -fsanitize-undefined-trap-on-error"
+%endif
+# Currently -fPIE binary cannot work with ASAN on kernel 4.12
+# https://github.com/google/sanitizers/issues/837
+export CFLAGS="$(echo $CFLAGS   | sed -e 's|-specs=[^ \t][^ \t]*hardened[^ \t][^ \t]*||g')"
+export LDFLAGS="$(echo $LDFLAGS | sed -e 's|-specs=[^ \t][^ \t]*hardened[^ \t][^ \t]*||g')"
+%endif
+
+%if 0%{?use_gcc_analyzer}
+export CC="${CC} -fanalyzer"
+# make build log look clear
+%global _smp_mflags -j1
+%endif
+
+# Show 1/100sec on blurb
+export CFLAGS="$CFLAGS -DBLURB_CENTISECONDS"
+
+CONFIG_OPTS="--prefix=%{_prefix} --with-pam --without-shadow --without-kerberos"
+CONFIG_OPTS="$CONFIG_OPTS --without-setuid-hacks"
+CONFIG_OPTS="$CONFIG_OPTS --with-text-file=%{default_text}"
+CONFIG_OPTS="$CONFIG_OPTS --with-x-app-defaults=%{_datadir}/X11/app-defaults"
+CONFIG_OPTS="$CONFIG_OPTS --disable-root-passwd"
+CONFIG_OPTS="$CONFIG_OPTS --with-browser=xdg-open"
+# 6.12
+CONFIG_OPTS="$CONFIG_OPTS --with-wayland"
+
+# From xscreensaver 5.12, login-manager option is on by default
+# For now, let's enable it on F-14 and above
+pushd TMPBINDIR
+# ln -sf /bin/true gdmflexiserver
+install -cpm 0755 %{SOURCE13} .
+CONFIG_OPTS="$CONFIG_OPTS --with-login-manager=xscreensaver-newlogin-wrapper"
+popd
+
+# Enable extrusion on F-13 and above
+# CONFIG_OPTS="$CONFIG_OPTS --with-gle" # default
+
+# Enable account type pam validation on F-18+,
+# debian bug 656766
+CONFIG_OPTS="$CONFIG_OPTS --enable-pam-check-account-type"
+
+# xscreensaver 5.30
+%if 0%{?enable_animation}
+CONFIG_OPTS="$CONFIG_OPTS --with-record-animation"
+%endif
+
+%if 0%{?support_setcap}
+CONFIG_OPTS="$CONFIG_OPTS --with-setcap-hacks"
+%endif
+
+%if 0%{?support_systemd}
+CONFIG_OPTS="$CONFIG_OPTS --with-systemd"
+%endif
+
+# This is flaky:
+# CONFIG_OPTS="$CONFIG_OPTS --with-login-manager"
+
+%if 0%{?use_clang_analyze} >= 1
+#%%global _configure scan-build --use-analyzer %_bindir/clang --use-cc %_bindir/clang -v -v -v ./configure
+%endif
+
+unlink configure || :
+ln -s ../configure .
+%configure $CONFIG_OPTS || { cat config.log ; sleep 10 ; exit 1; }
+rm -f configure
+
+# Remove embedded build path
+sed -i driver/XScreenSaver.ad -e "s|$(pwd)/TMPBINDIR/||"
+
+%if %{update_po}
+pushd po
+  make generate_potfiles_in
+  # The following hack still seems needed
+  sed -i POTFILES.in POTFILES \
+     -e '\@driver/.*\.ui@s|^\([ \t]*\)\(.*\)$|\1[type: gettext/glade]\2|'
+  # Update POTFILES.in, the copy to the original directory
+  cp -p POTFILES.in ../../po/
+  git commit -m "POTFILES.in regenerated" -a || true
+  ( cd .. ; ./config.status )
+
+  cp -p POTFILES{.in,} ..
+  make xscreensaver.pot srcdir=..
+  make update-po
+  rm -f ../POTFILES{.in,}
+popd
+
+( cp -p po/* ../po/)
+( ( cd ../po ; git add *.po ; git commit -m "po regenerated" ) || true )
+%endif
+
+# Update po
+#cp -p %{SOURCE100} po/
+
+%if 0%{?use_clang_analyze} >= 1
+%global __make scan-build  --use-analyzer %_bindir/clang --use-cc %_bindir/clang -v -v -v -o clang-analyze make
+mkdir clang-analyze
+%endif
+
+BUILD_STATUS=0
+%if 0%{?use_clang_analyze} < 1
+make -C ../hacks/images || BUILD_STATUS=1
+for dir in \
+  utils driver ../hacks/images hacks/images hacks hacks/glx po
+do
+  %__make %{?_smp_mflags} -k \
+    -C $dir \
+	GMSGFMT="msgfmt --statistics" || BUILD_STATUS=1
+done
+%endif
+
+# Again
+%__make %{?_smp_mflags} -k || BUILD_STATUS=1
+if [ $BUILD_STATUS != 0 ] ; then
+	exit $BUILD_STATUS
+fi
+
+%if %{modular_conf}
+# Make XScreenSavar.ad modular (bug 200881)
+CONFD=xscreensaver
+rm -rf $CONFD
+mkdir $CONFD
+
+# Preserve the original adfile
+cp -p driver/XScreenSaver.ad $CONFD
+
+# First split XScreenSaver.ad into 3 parts
+cat driver/XScreenSaver.ad | \
+   sed -n -e '1,/\*programs/p' > $CONFD/XScreenSaver.ad.header
+cat driver/XScreenSaver.ad | sed -e '1,/\*programs/d' | \
+   sed -n -e '1,/\\n$/p' > $CONFD/XScreenSaver.ad.hacks
+cat driver/XScreenSaver.ad | sed -e '1,/\\n$/d' > $CONFD/XScreenSaver.ad.tail
+
+# Seperate XScreenSaver.ad.hacks into each hacks
+cd $CONFD
+mkdir hacks.conf.d
+cat XScreenSaver.ad.hacks | grep -v GL: > hacks.conf.d/xscreensaver-extras.conf
+cat XScreenSaver.ad.hacks | grep    GL: > hacks.conf.d/xscreensaver-gl-extras.conf
+cd ..
+
+%endif
+
+# test
+# for now, build tests anyway (even if they are not to be installed)
+make tests -C driver
+
+%if 0%{?use_cppcheck} >= 1
+cd ..
+CPPCHECK_FLAGS=""
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS --enable=all --std=c89 -U__STRICT_ANSI__"
+
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -I. -Iutils -Iutils/images -Idriver -Ihacks"
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -I$archdir -I$archdir/driver -I$archdir/hacks"
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -I$archdir/hacks/glx"
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -I%{_includedir}"
+# find stddef.h
+GCC_HEADER_PATH=$(echo '#include <stddef.h>' | gcc -E - | sed -n -e 's|^.*"\(.*\)stddef\.h".*$|\1|p' | head -n 1)
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -I$GCC_HEADER_PATH"
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS $(pkg-config --cflags gtk+-2.0 | sed -e 's|-pthread||')"
+# C default macros
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS $(echo "int foo; " | gcc -dM -E - | sed -n -e "s@^\#define \([^ ][^ ]*\) 1\$@-D\1@p")"
+# xscreeensaver macros
+CPPCHECK_FLAGS="$CPPCHECK_FLAGS -DSTANDALONE -DHAVE_CONFIG_H -DUSE_GL"
+
+cppcheck $CPPCHECK_FLAGS . 2>&1 | tee cppcheck-result.log
+cppcheck $CPPCHECK_FLAGS --check-config . 2>&1 | tee cppcheck-path-inclusion-check.log
+
+cd $archdir
+%endif
+
+%install
+archdir=`sh ./config.guess`
+cd $archdir
+
+# Same as %%build
+export PATH=/usr/bin:$PATH
+pushd TMPBINDIR/
+export PATH=$(pwd):$PATH
+popd
+
+rm -rf ${RPM_BUILD_ROOT}
+
+# We have to make sure these directories exist,
+# or nothing will be installed into them.
+#
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/pam.d
+
+make DESTDIR=$RPM_BUILD_ROOT INSTALL="install -c -p" install
+
+# Kill OnlyShowIn=GNOME; on F-11+ (bug 483495)
+desktop-file-install --vendor "" --delete-original    \
+   --dir $RPM_BUILD_ROOT%{_datadir}/applications         \
+%if 0%{?fedora} < 11
+   --add-only-show-in GNOME                              \
+%endif
+   --add-category    DesktopSettings                     \
+%if 0
+   --add-category X-Red-Hat-Base                         \
+%else
+   --remove-category Appearance                          \
+   --remove-category AdvancedSettings                    \
+   --remove-category Application                         \
+   --remove-category Screensaver                         \
+%endif
+   $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
+
+# This function prints a list of things that get installed.
+# It does this by parsing the output of a dummy run of "make install".
+list_files() {
+   echo "%%defattr(-,root,root,-)"
+   make -s DESTDIR=${RPM_BUILD_ROOT} INSTALL=true "$@"  \
+      | sed -e '\@gtk-update-icon-cache@d' \
+      | sed -n -e 's@.* \(/[^ ]*\)$@\1@p'                      \
+      | sed    -e "s@^${RPM_BUILD_ROOT}@@"                     \
+               -e "s@/[a-z][a-z]*/\.\./@/@"                    \
+      | sed    -e 's@\(.*/man/.*\)@%%doc \1\*@'                      \
+               -e 's@\(.*/pam\.d/\)@%%config(noreplace) \1@'    \
+      | sort  \
+      | uniq
+}
+
+# Generate three lists of files for the three packages.
+#
+dd=%{_builddir}/%{name}-%{mainversion}%{?beta_ver}
+
+# In case rpm -bi --short-circuit is tried multiple times:
+rm -f $dd/*.files
+
+(  cd hacks     ; list_files install ) >  $dd/extras.files
+(  cd hacks/fonts     ; list_files install ) >>  $dd/extras.files
+(  cd hacks/glx ; list_files install ) >  $dd/gl-extras.files
+(  cd driver    ; list_files install ) >  $dd/base.files
+
+%if 0%{?support_setcap} >= 1
+sed -i $dd/gl-extras.files \
+	-e '\@sonar$@s|^|%%attr(0755,root,root) %%caps(cap_net_raw=p)|' \
+	%{nil}
+%endif
+# Own directory
+echo "%%dir %{_datadir}/fonts/xscreensaver" >> $dd/extras.files
+
+# Move xscreensaver-gettext-foo, xscreensaver-text to extras-base
+# (bug 668427)
+%if %{split_getimage}
+echo "%%defattr(-,root,root,-)" >> $dd/extras-base.files
+for target in \
+   /xscreensaver-getimage \
+   /xscreensaver-text \
+   /fonts/xscreensaver \
+   %{nil}
+do
+   grep -v $target $dd/extras.files > $dd/extras.files.new
+   grep $target $dd/extras.files >> $dd/extras-base.files
+   mv $dd/extras.files{.new,}
+done
+%endif
+
+# Move %%{_bindir}/xscreensaver-gl-helper to gl-base
+# (bug 336331).
+%if %{modular_conf}
+echo "%%defattr(-,root,root,-)" >> $dd/gl-base.files
+
+grep xscreensaver-gl-visual $dd/gl-extras.files >> $dd/gl-base.files
+sed -i -e '/xscreensaver-gl-visual/d' $dd/gl-extras.files
+sed -i -e 's|^\(%{_mandir}.*\)$|\1*|' $dd/gl-base.files
+%endif
+
+%if %{modular_conf}
+# Install update script
+mkdir -p $RPM_BUILD_ROOT%{_sbindir}
+install -cpm 755 %{SOURCE10} $RPM_BUILD_ROOT%{_sbindir}
+echo "%{_sbindir}/update-xscreensaver-hacks" >> $dd/base.files
+
+# Make hack conf modular
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xscreensaver
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/xscreensaver/hacks.conf.d
+cp -p xscreensaver/XScreenSaver.ad* \
+   $RPM_BUILD_ROOT%{_sysconfdir}/xscreensaver
+cp -p xscreensaver/hacks.conf.d/xscreensaver*.conf \
+   $RPM_BUILD_ROOT%{_datadir}/xscreensaver/hacks.conf.d/
+
+for adfile in xscreensaver/XScreenSaver.ad.* ; do
+   filen=`basename $adfile`
+   echo "%%config(noreplace) %{_sysconfdir}/xscreensaver/$filen" >> $dd/base.files
+done
+echo -n "%%verify(not size md5 mtime) " >> $dd/base.files
+echo "%{_sysconfdir}/xscreensaver/XScreenSaver.ad" >> \
+   $dd/base.files
+echo "%{_datadir}/xscreensaver/hacks.conf.d/xscreensaver-extras.conf" \
+   >> $dd/extras.files
+echo "%{_datadir}/xscreensaver/hacks.conf.d/xscreensaver-gl-extras.conf" \
+   >> $dd/gl-extras.files
+
+# Check symlink
+rm -f $RPM_BUILD_ROOT%{_datadir}/X11/app-defaults/XScreenSaver
+
+pushd $RPM_BUILD_ROOT%{_datadir}/X11/app-defaults
+pushd ../../../..
+if [ ! $(pwd) == $RPM_BUILD_ROOT ] ; then
+   echo "Possibly symlink broken"
+   exit 1
+fi
+popd
+popd
+
+ln -sf ../../../..%{_sysconfdir}/xscreensaver/XScreenSaver.ad \
+   $RPM_BUILD_ROOT%{_datadir}/X11/app-defaults/XScreenSaver
+
+%endif
+
+# Add documents
+pushd $dd &> /dev/null
+for f in README* ; do
+   echo "%%doc $f" >> $dd/base.files
+done
+popd
+
+# Add directory
+pushd $RPM_BUILD_ROOT
+for dir in `find . -type d | grep xscreensaver` ; do
+   echo "%%dir ${dir#.}" >> $dd/base.files
+done
+popd
+
+%find_lang %{name}
+cat %{name}.lang | uniq >> $dd/base.files
+
+# Suppress rpmlint warnings
+# sanitize path in script file
+for f in ${RPM_BUILD_ROOT}%{_bindir}/xscreensaver-getimage-* \
+   ${RPM_BUILD_ROOT}%{_libexecdir}/xscreensaver/vidwhacker \
+   ${RPM_BUILD_ROOT}%{_bindir}/xscreensaver-text ; do
+   if [ -f $f ] ; then
+      sed -i -e 's|%{_prefix}//bin|%{_bindir}|g' $f
+   fi
+done
+
+# tests
+%if %{build_tests}
+echo "%%defattr(-,root,root,-)" > $dd/tests.files
+cd driver
+for tests in `find . -name test-\* -perm -0700` ; do
+   install -cpm 0755 $tests ${RPM_BUILD_ROOT}%{_libexecdir}/xscreensaver
+   echo "%{_libexecdir}/xscreensaver/$tests" >> $dd/tests.files
+done
+cd ..
+%endif
+
+%if 0%{?use_clang_analyze} >= 1
+pushd ..
+rm -rf clang-analyze
+mkdir -p clang-analyze/html
+cp -a $archdir/clang-analyze/*/* clang-analyze/html
+popd
+%endif
+
+# Install desktop application autostart stuff
+# Add OnlyShowIn=GNOME (bug 517391)
+# Leave autostart stuff installed (at least useful for LXDE),
+# but not show them by default for all DE
+# (bug 1266521) for F-27+
+%if 0%{?fedora} >= 12
+mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/xdg/autostart
+install -cpm 0755 %{SOURCE11} ${RPM_BUILD_ROOT}%{_libexecdir}/
+desktop-file-install \
+   --vendor "" \
+   --dir ${RPM_BUILD_ROOT}%{_sysconfdir}/xdg/autostart \
+%if 0%{?fedora} >= 27
+   --add-only-show-in=X-NODEFAULT \
+%else
+   --add-only-show-in=GNOME \
+%endif
+   %{SOURCE12}
+chmod 0644 ${RPM_BUILD_ROOT}%{_sysconfdir}/xdg/autostart/xscreensaver*.desktop
+
+echo "%{_libexecdir}/xscreensaver-autostart" >> $dd/base.files
+echo '%{_sysconfdir}/xdg/autostart/xscreensaver*.desktop' >> $dd/base.files
+%endif
+
+# Create desktop entry for gnome-screensaver
+# bug 204944, 208560
+create_desktop(){
+   COMMAND=`cat $1 | sed -n -e 's|^<screen.*name=\"\([^ ][^ ]*\)\".*$|\1|p'`
+# COMMAND must be full path (see bug 531151)
+# Check if the command actually exists
+   COMMAND=%{_libexecdir}/xscreensaver/$COMMAND
+   if [ ! -x $RPM_BUILD_ROOT/$COMMAND ] ; then
+      echo
+      echo "WARNING:"
+      echo "$COMMAND could not be found under $RPM_BUILD_ROOT"
+      #exit 1
+   fi
+# NAME entry fix (bug 953558)
+   NAME=`cat $1 | sed -n -e 's|^<screen.*_label=\"\([^\"][^\"]*\)\".*>.*$|\1|p'`
+   ARG=`cat $1 | sed -n -e 's|^.*<command arg=\"\([^ ][^ ]*\)\".*$|\1|p'`
+   ARG=$(echo "$ARG" | while read line ; do echo -n "$line " ; done)
+   COMMENT="`cat $1 | sed -e '1,/_description/d' | \
+     sed -e '/_description/q' | sed -e '/_description/d'`"
+   COMMENT=$(echo "$COMMENT" | while read line ; do echo -n "$line " ; done)
+
+# webcollage treatment
+## changed to create wrapper script
+%if 0
+   if [ "x$COMMAND" = "xwebcollage" ] ; then
+      ARG="$ARG -directory %{_datadir}/backgrounds/images"
+   fi
+%endif
+
+   if [ "x$NAME" = "x" ] ; then NAME=$COMMAND ; fi
+
+   rm -f $2
+   echo "[Desktop Entry]" >> $2
+#   echo "Encoding=UTF-8" >> $2
+   echo "Name=$NAME" >> $2
+   echo "Comment=$COMMENT" >> $2
+   echo "TryExec=$COMMAND" >> $2
+   echo "Exec=$COMMAND $ARG" >> $2
+   echo "StartupNotify=false" >> $2
+   echo "Type=Application" >> $2
+   echo "Categories=GNOME;Screensaver;" >> $2
+# Add OnlyShowIn (bug 953558)
+   echo "OnlyShowIn=GNOME;MATE;" >> $2
+}
+
+cd $dd
+
+SAVERDIR=%{_datadir}/applications/screensavers
+mkdir -p ${RPM_BUILD_ROOT}${SAVERDIR}
+echo "%%dir $SAVERDIR" >> base.files
+
+for list in *extras.files ; do
+
+   glist=gnome-$list
+   rm -f $glist
+
+   echo "%%defattr(-,root,root,-)" > $glist
+##  move the owner of $SAVERDIR to -base
+##   echo "%%dir $SAVERDIR" >> $glist
+
+   set +x
+   for xml in `cat $list | grep xml$` ; do
+      file=${RPM_BUILD_ROOT}${xml}
+      desktop=xscreensaver-`basename $file`
+      desktop=${desktop%.xml}.desktop
+
+      echo + create_desktop $file  ${RPM_BUILD_ROOT}${SAVERDIR}/$desktop
+      create_desktop $file  ${RPM_BUILD_ROOT}${SAVERDIR}/$desktop
+      echo ${SAVERDIR}/$desktop >> $glist
+   done
+   set -x
+done
+
+# Create wrapper script for webcollage to use nonet option
+# by default, and rename the original webcollage
+# (see bug 472061)
+pushd ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}
+mv -f webcollage webcollage.original
+
+cat > webcollage <<EOF
+#!/bin/sh
+PATH=%{_libexecdir}/%{name}:\$PATH
+exec webcollage.original \\
+	-directory %{_datadir}/backgrounds/images \\
+	"\$@"
+EOF
+chmod 0755 webcollage
+echo "%%{_libexecdir}/%%{name}/webcollage.original" >> \
+	$dd/extras.files
+
+# install wrapper-script for switching user
+install -cpm 0755 %{SOURCE13} ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}
+echo "%{_libexecdir}/%{name}/xscreensaver-newlogin-wrapper" >> $dd/base.files
+
+# Make sure all files are readable by all, and writable only by owner.
+#
+chmod -R a+r,u+w,og-w ${RPM_BUILD_ROOT}
+
+%post base
+%if %{modular_conf}
+%{_sbindir}/update-xscreensaver-hacks
+%endif
+
+%if 0%{?fedora} >= 18
+# In the case that pam setting is edited locally by sysadmin:
+if ! grep -q '^account' %{_sysconfdir}/pam.d/xscreensaver
+then
+    echo "Warning: %{_sysconfdir}/pam.d/xscreensaver saved as %{_sysconfdir}/pam.d/xscreensaver.rpmsave"
+    cp -p %{_sysconfdir}/pam.d/xscreensaver{,.rpmsave}
+    PAMFILE=%{_sysconfdir}/pam.d/xscreensaver
+    echo >> $PAMFILE
+    echo "# Account validation" >> $PAMFILE
+    echo "account include system-auth" >> $PAMFILE
+fi
+%endif
+
+exit 0
+
+%post extras
+%if %{modular_conf}
+%{_sbindir}/update-xscreensaver-hacks
+%endif
+exit 0
+
+%postun extras
+%if %{modular_conf}
+%{_sbindir}/update-xscreensaver-hacks
+%endif
+exit 0
+
+%post gl-extras
+%if %{modular_conf}
+%{_sbindir}/update-xscreensaver-hacks
+%endif
+exit 0
+
+%postun gl-extras
+%if %{modular_conf}
+%{_sbindir}/update-xscreensaver-hacks
+%endif
+exit 0
+
+%files
+%defattr(-,root,root,-)
+
+%files -f base.files base
+%defattr(-,root,root,-)
+
+%if %{build_tests}
+%files -f tests.files tests
+%defattr(-,root,root,-)
+%endif
+
+%if %{split_getimage}
+%files -f extras-base.files extras-base
+%defattr(-,root,root,-)
+%endif
+
+%files -f extras.files extras
+%defattr(-,root,root,-)
+
+%if %{modular_conf}
+%files -f gl-base.files gl-base
+%defattr(-,root,root,-)
+%endif
+
+%files -f gl-extras.files gl-extras
+%defattr(-,root,root,-)
+
+%files -f gnome-extras.files extras-gss
+%defattr(-,root,root,-)
+
+%files -f gnome-gl-extras.files gl-extras-gss
+%defattr(-,root,root,-)
+
+%if 0%{?use_clang_analyze} >= 1
+%files clang-analyze
+%doc clang-analyze/html
+%endif
+
+%if 0%{?use_cppcheck} >= 1
+%files cppcheck
+%doc cppcheck-*.log
+%endif
+
+%changelog
+%autochangelog

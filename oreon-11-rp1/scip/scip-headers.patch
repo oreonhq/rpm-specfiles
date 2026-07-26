@@ -1,0 +1,50 @@
+--- scip-10.0.0/src/CMakeLists.txt.orig	2025-11-25 13:42:00.904318810 -0700
++++ scip-10.0.0/src/CMakeLists.txt	2025-11-25 13:52:22.391826611 -0700
+@@ -1142,7 +1142,7 @@ set_property(TARGET libscip PROPERTY INT
+ target_include_directories(libscip BEFORE PUBLIC
+     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+-    $<INSTALL_INTERFACE:include>)
++    $<INSTALL_INTERFACE:include/scip>)
+ 
+ target_link_libraries(libscip
+     PRIVATE
+@@ -1226,25 +1226,25 @@ target_include_directories(scip BEFORE P
+     $<INSTALL_INTERFACE:include>)
+ 
+ # install the header files of scip
+-install(FILES ${lpiheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lpi)
+-install(FILES ${lpiexactheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lpiexact)
+-install(FILES ${rectluheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rectlu)
+-install(FILES ${dijkstraheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dijkstra)
+-install(FILES ${objscipheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/objscip)
+-install(FILES ${scipheaders} ${PROJECT_BINARY_DIR}/scip/config.h ${PROJECT_BINARY_DIR}/scip/scip_export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip)
+-install(FILES ${tcliqueheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tclique)
+-install(FILES ${tinycthreadheader} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tinycthread)
+-install(FILES ${tpiheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tpi)
+-install(FILES ${xmlheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/xml)
+-install(FILES ${symheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/symmetry)
+-install(FILES ${blockmemshellheader} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/blockmemshell)
++install(FILES ${lpiheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/lpi)
++install(FILES ${lpiexactheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/lpiexact)
++install(FILES ${rectluheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/rectlu)
++install(FILES ${dijkstraheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/dijkstra)
++install(FILES ${objscipheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/objscip)
++install(FILES ${scipheaders} ${PROJECT_BINARY_DIR}/scip/config.h ${PROJECT_BINARY_DIR}/scip/scip_export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/scip)
++install(FILES ${tcliqueheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/tclique)
++install(FILES ${tinycthreadheader} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/tinycthread)
++install(FILES ${tpiheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/tpi)
++install(FILES ${xmlheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/xml)
++install(FILES ${symheaders} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/symmetry)
++install(FILES ${blockmemshellheader} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip/blockmemshell)
+ 
+ # install the binary and the library to appropriate locations and add them to an export group
+ install(TARGETS scip libscip EXPORT scip-targets
+         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/scip)
+ 
+ # install the debug program database files
+ if(MSVC)

@@ -1,0 +1,38 @@
+.TH PYNWB\-VALIDATE "1" "December 2025" "" "User Commands"
+.SH NAME
+.B pynwb\-validate
+\(en
+Validate an NWB file
+.SH SYNOPSIS
+.B pynwb\-validate
+.RB [ \-h ]
+.RB [ \-lns ]
+.RB [ \-n\ \fINS ]
+.RB [ \-\-json\-output\-path\ \fIJSON_OUTPUT_PATH ]
+.RB [ \-\-no\-cached\-namespace ]
+.I paths
+.RI [ paths \ ...]
+.SH OPTIONS
+If
+.B \-\-ns
+is not specified, validate against all namespaces in the NWB file.
+.SS POSITIONAL ARGUMENTS
+.I paths
+NWB file paths
+.SS OPTIONAL ARGUMENTS
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-lns\fR, \fB\-\-list\-namespaces
+List the available namespaces and exit
+.TP
+.B \-n\fR, \fB\-\-ns\ \fINS
+The namespace to validate against
+.TP
+.B \-\-json\-output\-path\ \fIJSON_OUTPUT_PATH
+Write json output to this location
+.TP
+.B \-\-no\-cached\-namespace
+Use the namespaces installed by PyNWB (true)
+or use the cached namespaces (false; default)

@@ -1,0 +1,49 @@
+diff -up stack-3.7.1/src/Stack/Config.hs~ stack-3.7.1/src/Stack/Config.hs
+--- stack-3.7.1/src/Stack/Config.hs~	2025-06-15 22:57:29.000000000 +0800
++++ stack-3.7.1/src/Stack/Config.hs	2025-07-22 14:28:58.453909444 +0800
+@@ -472,9 +472,9 @@ configFromConfigMonoid
+           fromFirst Constants.hackageBaseUrl configMonoid.hackageBaseUrl
+         hideSourcePaths = fromFirstTrue configMonoid.hideSourcePaths
+         recommendStackUpgrade = fromFirstTrue configMonoid.recommendStackUpgrade
+-        notifyIfNixOnPath = fromFirstTrue configMonoid.notifyIfNixOnPath
+-        notifyIfGhcUntested = fromFirstTrue configMonoid.notifyIfGhcUntested
+-        notifyIfCabalUntested = fromFirstTrue configMonoid.notifyIfCabalUntested
++        notifyIfNixOnPath = fromFirstFalse configMonoid.notifyIfNixOnPath
++        notifyIfGhcUntested = fromFirstFalse configMonoid.notifyIfGhcUntested
++        notifyIfCabalUntested = fromFirstFalse configMonoid.notifyIfCabalUntested
+         notifyIfArchUnknown = fromFirstTrue configMonoid.notifyIfArchUnknown
+         notifyIfNoRunTests = fromFirstTrue configMonoid.notifyIfNoRunTests
+         notifyIfNoRunBenchmarks =
+diff -up stack-3.7.1/src/Stack/Types/ConfigMonoid.hs~ stack-3.7.1/src/Stack/Types/ConfigMonoid.hs
+--- stack-3.7.1/src/Stack/Types/ConfigMonoid.hs~	2025-06-15 22:57:29.000000000 +0800
++++ stack-3.7.1/src/Stack/Types/ConfigMonoid.hs	2025-07-22 14:30:23.654826664 +0800
+@@ -187,11 +187,11 @@ data ConfigMonoid = ConfigMonoid
+     -- ^ See 'Stack.Types.Config.hideSourcePaths'
+   , recommendStackUpgrade   :: !FirstTrue
+     -- ^ See 'Stack.Types.Config.recommendStackUpgrade'
+-  , notifyIfNixOnPath       :: !FirstTrue
++  , notifyIfNixOnPath       :: !FirstFalse
+     -- ^ See 'Stack.Types.Config.notifyIfNixOnPath'
+-  , notifyIfGhcUntested     :: !FirstTrue
++  , notifyIfGhcUntested     :: !FirstFalse
+     -- ^ See 'Stack.Types.Config.notifyIfGhcUntested'
+-  , notifyIfCabalUntested   :: !FirstTrue
++  , notifyIfCabalUntested   :: !FirstFalse
+     -- ^ See 'Stack.Types.Config.notifyIfCabalUntested'
+   , notifyIfArchUnknown     :: !FirstTrue
+     -- ^ See 'Stack.Types.Config.notifyIfArchUnknown'
+@@ -344,11 +344,11 @@ parseConfigMonoidObject rootDir obj = do
+   hideSourcePaths <- FirstTrue <$> obj ..:? configMonoidHideSourcePathsName
+   recommendStackUpgrade <-
+     FirstTrue <$> obj ..:? configMonoidRecommendStackUpgradeName
+-  notifyIfNixOnPath <- FirstTrue <$> obj ..:? configMonoidNotifyIfNixOnPathName
++  notifyIfNixOnPath <- FirstFalse <$> obj ..:? configMonoidNotifyIfNixOnPathName
+   notifyIfGhcUntested <-
+-    FirstTrue <$> obj ..:? configMonoidNotifyIfGhcUntestedName
++    FirstFalse <$> obj ..:? configMonoidNotifyIfGhcUntestedName
+   notifyIfCabalUntested <-
+-    FirstTrue <$> obj ..:? configMonoidNotifyIfCabalUntestedName
++    FirstFalse <$> obj ..:? configMonoidNotifyIfCabalUntestedName
+   notifyIfArchUnknown <-
+     FirstTrue <$> obj ..:? configMonoidNotifyIfArchUnknownName
+   notifyIfNoRunTests <-

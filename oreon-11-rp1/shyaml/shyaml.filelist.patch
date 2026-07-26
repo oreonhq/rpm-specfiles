@@ -1,0 +1,20 @@
+diff --git a/setup.cfg b/setup.cfg
+index 624413e..ec69908 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -4,7 +4,6 @@ version = 0.6.1
+ summary = YAML for command line
+ description-file =
+     README.rst
+-    CHANGELOG.rst
+ license_file = LICENSE
+ requires-dist =
+     pyyaml
+@@ -45,7 +44,6 @@ universal = 1
+ [files]
+ extra_files =
+     README.rst
+-    CHANGELOG.rst
+     setup.py
+ ## Note: d2to1 maps ``setup.py``'s ``py_modules`` to ``modules`` here.
+ ## This is required for single-file module, this allows the ``entry_point``

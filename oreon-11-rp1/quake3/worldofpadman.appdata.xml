@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>worldofpadman.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and proprietary</project_license>
+  <name>World of Padman</name>
+  <summary>Comic 3D-Shooter</summary>
+  <description>
+    <p>
+     World of Padman (WoP) is a first-person shooter computer game. The idea is
+     based on the Padman comic strip for the magazine PlayStation Games created
+     by the professional cartoon artist Andreas 'ENTE' Endres. Most of the maps
+     in the game are lilliput style.
+    </p>
+    <p>
+     World of Padman uses the Open Source ioquake3 engine, however the Wop
+     data-files are not freely redistributable. This package will install a
+     World of Padman menu entry, which will automatically download the
+     necessary datafiles (1GB!) the first time you start World of Padman.
+    </p>
+  </description>
+  <url type="homepage">http://worldofpadman.net/</url>
+  <screenshots>
+    <screenshot type="default">https://a.fsdn.com/con/app/proj/worldofpadman/screenshots/309709.jpg</screenshot>
+    <screenshot>https://a.fsdn.com/con/app/proj/worldofpadman/screenshots/309711.jpg</screenshot>
+    <screenshot>https://a.fsdn.com/con/app/proj/worldofpadman/screenshots/309713.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

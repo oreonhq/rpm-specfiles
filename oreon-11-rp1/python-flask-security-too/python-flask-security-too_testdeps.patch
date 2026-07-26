@@ -1,0 +1,23 @@
+diff -rupN --no-dereference flask_security_too-5.6.2/requirements/tests.txt flask_security_too-5.6.2-new/requirements/tests.txt
+--- flask_security_too-5.6.2/requirements/tests.txt	2025-05-04 21:52:25.949992000 +0200
++++ flask_security_too-5.6.2-new/requirements/tests.txt	2025-05-29 19:32:34.634791350 +0200
+@@ -9,13 +9,10 @@ bcrypt
+ bleach
+ coverage
+ cryptography
+-djlint
+ freezegun
+ mongoengine
+ mongomock
+-msgcheck
+ peewee
+-pony
+ phonenumberslite
+ pydocstyle
+ pytest-cache
+@@ -26,5 +23,4 @@ qrcode
+ requests
+ sqlalchemy
+ sqlalchemy-utils
+-webauthn
+ zxcvbn

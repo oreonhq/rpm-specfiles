@@ -1,0 +1,48 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 1 Nov 2022 10:42:37 +0100
+Subject: [PATCH] Fedora: use cryptodome explicitly
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/eth_keyfile/keyfile.py b/eth_keyfile/keyfile.py
+index db2d89e..6ac54f9 100644
+--- a/eth_keyfile/keyfile.py
++++ b/eth_keyfile/keyfile.py
+@@ -20,19 +20,19 @@ from uuid import (
+     uuid4,
+ )
+ 
+-from Crypto import (
++from Cryptodome import (
+     Random,
+ )
+-from Crypto.Cipher import (
++from Cryptodome.Cipher import (
+     AES,
+ )
+-from Crypto.Hash import (
++from Cryptodome.Hash import (
+     SHA256,
+ )
+-from Crypto.Protocol.KDF import (
++from Cryptodome.Protocol.KDF import (
+     scrypt,
+ )
+-from Crypto.Util import (
++from Cryptodome.Util import (
+     Counter,
+ )
+ from eth_keys import (
+diff --git a/setup.py b/setup.py
+index d052760..1062a13 100644
+--- a/setup.py
++++ b/setup.py
+@@ -51,7 +51,7 @@ setup(
+         "eth-keys>=0.4.0",
+         "eth-utils>=2",
+         "py_ecc>=5.2.0",
+-        "pycryptodome>=3.6.6,<4",
++        "pycryptodomex>=3.6.6,<4",
+     ],
+     python_requires=">=3.8, <4",
+     extras_require=extras_require,

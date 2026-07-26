@@ -1,0 +1,105 @@
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/common/memory_allocator.h.sys_mmap	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/common/memory_allocator.h	2021-11-08 22:21:13.962461668 +0900
+@@ -42,11 +42,14 @@
+ #include <sanitizer/msan_interface.h>
+ #endif
+ 
+-#ifdef __APPLE__
++#if defined(__APPLE__) || defined(__linux__) 
+ #define sys_mmap mmap
+ #define sys_munmap munmap
++#if !defined(__linux__)
+ #define MAP_ANONYMOUS MAP_ANON
+-#else
++#endif
++#endif
++#if ! defined(__APPLE__)
+ #include "third_party/lss/linux_syscall_support.h"
+ #endif
+ 
+--- ugene-42.x/src/libs_3rdparty/breakpad/src/third_party/lss/linux_syscall_support.h.sys_mmap	2021-10-11 15:41:23.000000000 +0900
++++ ugene-42.x/src/libs_3rdparty/breakpad/src/third_party/lss/linux_syscall_support.h	2021-11-09 00:46:06.363362301 +0900
+@@ -86,10 +86,7 @@
+  * on Linux.
+  * Porting to other related platforms should not be difficult.
+  */
+-#if (defined(__i386__) || defined(__x86_64__) || defined(__ARM_ARCH_3__) ||   \
+-     defined(__mips__) || defined(__PPC__) || defined(__ARM_EABI__) || \
+-     defined(__aarch64__) || defined(__s390__) || defined(__e2k__))  \
+-  && (defined(__linux) || defined(__ANDROID__))
++#if defined(__linux) || defined(__ANDROID__)
+ 
+ #ifndef SYS_CPLUSPLUS
+ #ifdef __cplusplus
+@@ -108,15 +105,21 @@ extern "C" {
+ #include <stddef.h>
+ #include <stdint.h>
+ #include <string.h>
+-#include <sys/ptrace.h>
+ #include <sys/resource.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
++#include <sys/stat.h>
+ #include <sys/syscall.h>
++#include <sys/ptrace.h>
+ #include <unistd.h>
+ #include <linux/unistd.h>
++#include <dirent.h>
+ #include <endian.h>
+ 
++#ifndef __linux__
++#ifndef __linux__
++#ifndef __linux__
++
+ #ifdef __mips__
+ /* Include definitions of the ABI currently in use.                          */
+ #ifdef __ANDROID__
+@@ -4859,6 +4862,48 @@ struct kernel_statfs {
+ #pragma pop_macro("pwrite64")
+ #pragma pop_macro("getdents64")
+ 
++#endif
++#endif
++#endif
++#ifdef __linux__
++#define sys_open open
++#define sys_close close
++#define sys_lseek lseek
++#define sys_write ::write
++#define sys_read read
++#define sys_pipe pipe
++#define sys_tgkill tgkill
++#define sys_gettid gettid
++#define sys_prctl prctl
++#define sys_clone clone
++#define sys_waitpid waitpid
++#define sys_sigaltstack sigaltstack
++#define sys_getpid getpid
++#define sys_ptrace(a,b,c,d) ptrace((enum __ptrace_request)a,b,c,d)
++#define sys_stat stat
++#define sys_sendmsg sendmsg
++#define sys_getdents getdents64
++#define sys_readlink readlink
++#define sys_fstat fstat
++#define sys_fstat64 fstat64
++#define sys_mmap mmap
++#define sys_munmap munmap
++#define kernel_iovec iovec
++#define kernel_msghdr msghdr
++#define kernel_stat stat
++#define kernel_stat64 stat64
++#define kernel_dirent linux_dirent64
++
++struct linux_dirent64 {
++	ino64_t        d_ino;    /* 64-bit inode number */
++	off64_t        d_off;    /* 64-bit offset to next structure */
++	unsigned short d_reclen; /* Size of this dirent */
++	unsigned char  d_type;   /* File type */
++	char           d_name[]; /* Filename (null-terminated) */
++};
++
++#endif
++
+ #if defined(__cplusplus) && !defined(SYS_CPLUSPLUS)
+ }
+ #endif

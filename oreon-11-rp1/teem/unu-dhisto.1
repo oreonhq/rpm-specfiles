@@ -1,0 +1,55 @@
+.TH UNU\-DHISTO "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-dhisto \- create image of 1\-D value histogram
+.SH SYNOPSIS
+.B unu\ dhisto
+.BR \-h , \-\-height
+.RI < height >
+.RB [ \-nolog ]
+.RB [ \-notick ]
+.RB [ \-max , \-\-maximum
+.RI < max\ #\ hits >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Create image of 1\-D value histogram.
+With
+.RB \(lq \-nolog \(rq,
+this becomes a quick & dirty way of plotting a function.
+.IP \(bu +2n
+Uses
+.B nrrdHistoDraw
+.SH OPTIONS
+.TP
+.B \-h\fR\ <\fIheight\fR>\ ,\ \fB\-\-height\fR\ <\fIheight\fR>
+height of output image (horizontal size is determined by number of bins in
+input histogram).
+.RI ( unsigned\ int )
+.TP
+.B \-nolog
+do not show the log-scaled histogram with decade tick-marks
+.TP
+.B \-notick
+do not draw the log decade tick marks
+.TP
+.B \-max\fR\ <\fImax\ #\ hits\fR>\ ,\ \fB\-\-maximum\fR\ <\fImax\ #\ hits\fR>
+constrain the top of the drawn histogram to be at this number of hits.
+This will either scale the drawn histogram downward or clip its top, depending
+on whether the given max is higher or lower than the actual maximum bin count.
+By not using this option (the default), the actual maximum bin count is used
+.RI \(lq double \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

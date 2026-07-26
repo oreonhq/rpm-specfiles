@@ -1,0 +1,33 @@
+From d86b4d3532267eeb17df57547c4c0213ae535e02 Mon Sep 17 00:00:00 2001
+From: Tom Hughes <tom@compton.nu>
+Date: Mon, 3 Nov 2025 20:39:59 +0000
+Subject: [PATCH 5/5] Adjust required versions
+
+---
+ pyproject.toml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 4a8ff0b02..77bf4323e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ requires = [
+-         "setuptools >= 80.9.0",
+-         "pybind11 >= 3.0.1",
++         "setuptools >= 78.1.1",
++         "pybind11 >= 3.0",
+ ]
+ build-backend = "setuptools.build_meta"
+ 
+@@ -35,4 +35,4 @@ Changelog = "https://github.com/mapnik/python-mapnik/blob/master/CHANGELOG.md"
+ minversion = "8.0"
+ testpaths = [
+     "test/python_tests",
+-]
+\ No newline at end of file
++]
+-- 
+2.51.1
+

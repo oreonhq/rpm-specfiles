@@ -1,0 +1,337 @@
+From 335dbece103e2cbf6c7cf819ab6672c2956b17b3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?B=C5=82a=C5=BCej=20Szczygie=C5=82?= <spaz16@wp.pl>
+Date: Wed, 11 Jan 2017 21:45:27 +0100
+Subject: [PATCH 23/23] Fix plastique, cleanlooks and motif animation timer
+
+Move plastique and cleanlooks timer event to "event()" method, because
+"timerEvent()" doesn't work on class derivated from "QProxyStyle".
+
+Also unify plastique, cleanlooks and motif animation timer methods.
+This allows to kill timer for plastique and motif styles when it will
+be no longer necessary (as in cleanlooks style).
+
+Change-Id: I1365e57d56bf35bf07c3efc604482a5405608930
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp | 38 +++++++----
+ src/plugins/styles/cleanlooks/qcleanlooksstyle.h   |  2 +-
+ src/plugins/styles/motif/qmotifstyle.cpp           | 47 ++++++++++----
+ src/plugins/styles/motif/qmotifstyle.h             |  2 +
+ src/plugins/styles/plastique/qplastiquestyle.cpp   | 75 +++++++++++++++-------
+ src/plugins/styles/plastique/qplastiquestyle.h     |  4 +-
+ 6 files changed, 116 insertions(+), 52 deletions(-)
+
+diff --git a/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp b/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
+index 2ebe10f..1843b56 100644
+--- a/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
++++ b/src/plugins/styles/cleanlooks/qcleanlooksstyle.cpp
+@@ -609,7 +609,6 @@ static void qt_cleanlooks_draw_mdibutton(QPainter *painter, const QStyleOptionTi
+ QCleanlooksStyle::QCleanlooksStyle() : QProxyStyle(QStyleFactory::create(QLatin1String("Windows"))), animateStep(0), animateTimer(0)
+ {
+     setObjectName(QLatin1String("CleanLooks"));
+-    startTime.start();
+ }
+ 
+ /*!
+@@ -3945,17 +3944,26 @@ void QCleanlooksStyle::unpolish(QApplication *app)
+ /*!
+   \reimp
+ */
+-void QCleanlooksStyle::timerEvent(QTimerEvent *event)
++bool QCleanlooksStyle::event(QEvent *event)
+ {
++    switch (event->type()) {
++    case QEvent::Timer: {
+ #ifndef QT_NO_PROGRESSBAR
+-    if (event->timerId() == animateTimer) {
+-        Q_ASSERT(progressAnimationFps> 0);
+-        animateStep = startTime.elapsed() / (1000 / progressAnimationFps);
+-        foreach (QProgressBar *bar, animatedProgressBars)
+-            bar->update();
+-    }
++        QTimerEvent *timerEvent = reinterpret_cast<QTimerEvent *>(event);
++        if (timerEvent->timerId() == animateTimer) {
++            Q_ASSERT(progressAnimationFps > 0);
++            animateStep = startTime.elapsed() / (1000 / progressAnimationFps);
++            foreach (QProgressBar *bar, animatedProgressBars)
++                bar->update();
++        }
+ #endif // QT_NO_PROGRESSBAR
+-    event->ignore();
++        event->ignore();
++    }
++    default:
++        break;
++    }
++
++    return QProxyStyle::event(event);
+ }
+ 
+ /*!
+@@ -3998,6 +4006,8 @@ void QCleanlooksStyle::startProgressAnimation(QObject *o, QProgressBar *bar)
+         animatedProgressBars << bar;
+         if (!animateTimer) {
+             Q_ASSERT(progressAnimationFps > 0);
++            animateStep = 0;
++            startTime.start();
+             animateTimer = o->startTimer(1000 / progressAnimationFps);
+         }
+     }
+@@ -4005,10 +4015,12 @@ void QCleanlooksStyle::startProgressAnimation(QObject *o, QProgressBar *bar)
+ 
+ void QCleanlooksStyle::stopProgressAnimation(QObject *o, QProgressBar *bar)
+ {
+-    animatedProgressBars.removeAll(bar);
+-    if (animatedProgressBars.isEmpty() && animateTimer) {
+-        o->killTimer(animateTimer);
+-        animateTimer = 0;
++    if (!animatedProgressBars.isEmpty()) {
++        animatedProgressBars.removeOne(bar);
++        if (animatedProgressBars.isEmpty() && animateTimer) {
++            o->killTimer(animateTimer);
++            animateTimer = 0;
++        }
+     }
+ }
+ 
+diff --git a/src/plugins/styles/cleanlooks/qcleanlooksstyle.h b/src/plugins/styles/cleanlooks/qcleanlooksstyle.h
+index 76023bf..39720e1 100644
+--- a/src/plugins/styles/cleanlooks/qcleanlooksstyle.h
++++ b/src/plugins/styles/cleanlooks/qcleanlooksstyle.h
+@@ -97,7 +97,7 @@ public:
+ 
+ 
+ protected:
+-    void timerEvent(QTimerEvent *) Q_DECL_OVERRIDE;
++    bool event(QEvent *event) Q_DECL_OVERRIDE;
+     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+     void startProgressAnimation(QObject *o, QProgressBar *bar);
+     void stopProgressAnimation(QObject *o, QProgressBar *bar);
+diff --git a/src/plugins/styles/motif/qmotifstyle.cpp b/src/plugins/styles/motif/qmotifstyle.cpp
+index 7bc340d..508057d 100644
+--- a/src/plugins/styles/motif/qmotifstyle.cpp
++++ b/src/plugins/styles/motif/qmotifstyle.cpp
+@@ -114,7 +114,6 @@ QMotifStyle::QMotifStyle(bool useHighlightCols) : QCommonStyle(), focus(0),
+     highlightCols(useHighlightCols), animationFps(25), animateTimer(0), animateStep(0),
+     spinboxHCoeff(6)
+ {
+-    startTime.start();
+ }
+ 
+ /*!
+@@ -136,26 +135,22 @@ bool QMotifStyle::eventFilter(QObject *o, QEvent *e)
+ #ifndef QT_NO_PROGRESSBAR
+     switch (e->type()) {
+     case QEvent::StyleChange:
++    case QEvent::Paint:
+     case QEvent::Show:
+         if (QProgressBar *bar = qobject_cast<QProgressBar *>(o)) {
+-            bars << bar;
+-            if (bars.size() == 1) {
+-                Q_ASSERT(animationFps> 0);
+-                animateTimer = startTimer(1000 / animationFps);
+-            }
++            // Animation by timer for progress bars that have their min and
++            // max values the same
++            if (bar->minimum() == bar->maximum())
++                startProgressAnimation(bar);
++            else
++                stopProgressAnimation(bar);
+         }
+         break;
+     case QEvent::Destroy:
+     case QEvent::Hide:
+         // reinterpret_cast because there is no type info when getting
+         // the destroy event. We know that it is a QProgressBar.
+-        if (QProgressBar *bar = reinterpret_cast<QProgressBar *>(o)) {
+-            bars.removeAll(bar);
+-            if (bars.isEmpty() && animateTimer) {
+-                killTimer(animateTimer);
+-                animateTimer = 0;
+-            }
+-        }
++        stopProgressAnimation(reinterpret_cast<QProgressBar *>(o));
+     default:
+         break;
+     }
+@@ -163,6 +158,30 @@ bool QMotifStyle::eventFilter(QObject *o, QEvent *e)
+     return QStyle::eventFilter(o, e);
+ }
+ 
++void QMotifStyle::startProgressAnimation(QProgressBar *bar)
++{
++    if (!bars.contains(bar)) {
++        bars << bar;
++        if (bars.size() == 1) {
++            Q_ASSERT(animationFps > 0);
++            animateStep = 0;
++            startTime.start();
++            animateTimer = startTimer(1000 / animationFps);
++        }
++    }
++}
++
++void QMotifStyle::stopProgressAnimation(QProgressBar *bar)
++{
++    if (!bars.isEmpty()) {
++        bars.removeOne(bar);
++        if (bars.isEmpty() && animateTimer) {
++            killTimer(animateTimer);
++            animateTimer = 0;
++        }
++    }
++}
++
+ /*!
+     \reimp
+ */
+@@ -271,7 +290,7 @@ void QMotifStyle::unpolish(QWidget* widget)
+ #ifndef QT_NO_PROGRESSBAR
+     if (qobject_cast<QProgressBar *>(widget)) {
+         widget->removeEventFilter(this);
+-        bars.removeAll(static_cast<QProgressBar*>(widget));
++        bars.removeOne(static_cast<QProgressBar*>(widget));
+      }
+ #endif
+ }
+diff --git a/src/plugins/styles/motif/qmotifstyle.h b/src/plugins/styles/motif/qmotifstyle.h
+index 4efabe0..96de559 100644
+--- a/src/plugins/styles/motif/qmotifstyle.h
++++ b/src/plugins/styles/motif/qmotifstyle.h
+@@ -106,6 +106,8 @@ protected:
+     QPointer<QFocusFrame> focus;
+     void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
++    void startProgressAnimation(QProgressBar *bar);
++    void stopProgressAnimation(QProgressBar *bar);
+ 
+ private:
+     bool highlightCols;
+diff --git a/src/plugins/styles/plastique/qplastiquestyle.cpp b/src/plugins/styles/plastique/qplastiquestyle.cpp
+index fbcf766..f76042f 100644
+--- a/src/plugins/styles/plastique/qplastiquestyle.cpp
++++ b/src/plugins/styles/plastique/qplastiquestyle.cpp
+@@ -5657,7 +5657,7 @@ void QPlastiqueStyle::unpolish(QWidget *widget)
+ #ifndef QT_NO_PROGRESSBAR
+     if (AnimateBusyProgressBar && qobject_cast<QProgressBar *>(widget)) {
+         widget->removeEventFilter(this);
+-        bars.removeAll(static_cast<QProgressBar*>(widget));
++        bars.removeOne(static_cast<QProgressBar*>(widget));
+     }
+ #endif
+ 
+@@ -5779,25 +5779,21 @@ bool QPlastiqueStyle::eventFilter(QObject *watched, QEvent *event)
+ {
+ #ifndef QT_NO_PROGRESSBAR
+     switch (event->type()) {
++    case QEvent::StyleChange:
++    case QEvent::Paint:
+     case QEvent::Show:
+         if (QProgressBar *bar = qobject_cast<QProgressBar *>(watched)) {
+-            bars.append(bar);
+-            if (bars.size() == 1) {
+-                Q_ASSERT(ProgressBarFps > 0);
+-                timer.start();
+-                progressBarAnimateTimer = startTimer(1000 / ProgressBarFps);
+-            }
++            // Animation by timer for progress bars that have their min and
++            // max values the same
++            if (bar->minimum() == bar->maximum())
++                startProgressAnimation(bar);
++            else
++                stopProgressAnimation(bar);
+         }
+         break;
+     case QEvent::Destroy:
+     case QEvent::Hide:
+-        if (!bars.isEmpty()) {
+-            bars.removeAll(reinterpret_cast<QProgressBar*>(watched));
+-            if (bars.isEmpty()) {
+-                killTimer(progressBarAnimateTimer);
+-                progressBarAnimateTimer = 0;
+-            }
+-        }
++        stopProgressAnimation(reinterpret_cast<QProgressBar *>(watched));
+         break;
+ #if defined QPlastique_MaskButtons
+     case QEvent::Resize:
+@@ -5828,19 +5824,52 @@ bool QPlastiqueStyle::eventFilter(QObject *watched, QEvent *event)
+ /*!
+     \reimp
+ */
+-void QPlastiqueStyle::timerEvent(QTimerEvent *event)
++bool QPlastiqueStyle::event(QEvent *event)
+ {
++    switch (event->type()) {
++    case QEvent::Timer: {
+ #ifndef QT_NO_PROGRESSBAR
+-    if (event->timerId() == progressBarAnimateTimer) {
+-        Q_ASSERT(ProgressBarFps > 0);
+-        animateStep = timer.elapsed() / (1000 / ProgressBarFps);
+-        foreach (QProgressBar *bar, bars) {
+-            if (AnimateProgressBar || (bar->minimum() == 0 && bar->maximum() == 0))
+-                bar->update();
++        QTimerEvent *timerEvent = reinterpret_cast<QTimerEvent *>(event);
++        if (timerEvent->timerId() == progressBarAnimateTimer) {
++            Q_ASSERT(ProgressBarFps > 0);
++            animateStep = timer.elapsed() / (1000 / ProgressBarFps);
++            foreach (QProgressBar *bar, bars) {
++                if (AnimateProgressBar || (bar->minimum() == 0 && bar->maximum() == 0))
++                    bar->update();
++            }
+         }
+-    }
+ #endif // QT_NO_PROGRESSBAR
+-    event->ignore();
++        event->ignore();
++    }
++    default:
++        break;
++    }
++
++    return QProxyStyle::event(event);
++}
++
++void QPlastiqueStyle::startProgressAnimation(QProgressBar *bar)
++{
++    if (!bars.contains(bar)) {
++        bars << bar;
++        if (bars.size() == 1) {
++            Q_ASSERT(ProgressBarFps > 0);
++            animateStep = 0;
++            timer.start();
++            progressBarAnimateTimer = startTimer(1000 / ProgressBarFps);
++        }
++    }
++}
++
++void QPlastiqueStyle::stopProgressAnimation(QProgressBar *bar)
++{
++    if (!bars.isEmpty()) {
++        bars.removeOne(bar);
++        if (bars.isEmpty() && progressBarAnimateTimer) {
++            killTimer(progressBarAnimateTimer);
++            progressBarAnimateTimer = 0;
++        }
++    }
+ }
+ 
+ QT_END_NAMESPACE
+diff --git a/src/plugins/styles/plastique/qplastiquestyle.h b/src/plugins/styles/plastique/qplastiquestyle.h
+index 4ed6a4e..b2d2d5d 100644
+--- a/src/plugins/styles/plastique/qplastiquestyle.h
++++ b/src/plugins/styles/plastique/qplastiquestyle.h
+@@ -100,7 +100,9 @@ public:
+ 
+ protected:
+     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
++    bool event(QEvent *event) Q_DECL_OVERRIDE;
++    void startProgressAnimation(QProgressBar *bar);
++    void stopProgressAnimation(QProgressBar *bar);
+ 
+ private:
+     int animateStep;
+-- 
+2.9.3
+

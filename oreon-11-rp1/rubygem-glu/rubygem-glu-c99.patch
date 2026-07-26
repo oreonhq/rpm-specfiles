@@ -1,0 +1,63 @@
+VALUE casts for rb_funcall arguments
+
+The Ruby API expects VALUE types instead of void *, so add casts. This
+avoids compilation errors with current compilers.
+
+Submitted upstream: <https://github.com/larskanis/glu/pull/3>
+
+diff -ur glu-8.3.0.orig/ext/glu/glu.c glu-8.3.0/ext/glu/glu.c
+--- glu-8.3.0.orig/ext/glu/glu.c	2024-01-05 11:12:18.598561476 +0100
++++ glu-8.3.0/ext/glu/glu.c	2024-01-05 11:18:42.217732888 +0100
+@@ -636,7 +636,7 @@
+ void* data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_VERTEX), callId, 1, data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_VERTEX), callId, 1, (VALUE) data);
+ }
+ static void CALLBACK
+ t_end()
+@@ -657,7 +657,7 @@
+ void* user_data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_BEGIN_DATA), callId, 2, INT2NUM(type), user_data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_BEGIN_DATA), callId, 2, INT2NUM(type), (VALUE) user_data);
+ }
+ static void CALLBACK
+ t_edgeFlag_data(flag, user_data)
+@@ -665,7 +665,7 @@
+ void* user_data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_EDGE_FLAG_DATA), callId, 2, GLBOOL2RUBY(flag), user_data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_EDGE_FLAG_DATA), callId, 2, GLBOOL2RUBY(flag), (VALUE) user_data);
+ }
+ static void CALLBACK
+ t_vertex_data(data, user_data)
+@@ -673,14 +673,14 @@
+ void* user_data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_VERTEX_DATA), callId, 2, data, user_data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_VERTEX_DATA), callId, 2, (VALUE) data, (VALUE) user_data);
+ }
+ static void CALLBACK
+ t_end_data(user_data)
+ void* user_data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_END_DATA), callId, 1, user_data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_END_DATA), callId, 1, (VALUE) user_data);
+ }
+ static void CALLBACK
+ t_error_data(errorno, user_data)
+@@ -688,7 +688,7 @@
+ void* user_data;
+ {
+   TESS_CALLBACK_COMMON
+-  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_ERROR_DATA), callId, 2, INT2NUM(errorno), user_data);
++  rb_funcall(rb_ary_entry(tdata->t_ref, TESS_ERROR_DATA), callId, 2, INT2NUM(errorno), (VALUE) user_data);
+ }
+ 
+ static void CALLBACK

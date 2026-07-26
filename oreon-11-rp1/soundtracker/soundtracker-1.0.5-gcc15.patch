@@ -1,0 +1,12 @@
+diff -uNr soundtracker-1.0.5.orig/app/file-operations.c soundtracker-1.0.5/app/file-operations.c
+--- soundtracker-1.0.5.orig/app/file-operations.c	2022-01-21 17:47:26.000000000 +0100
++++ soundtracker-1.0.5/app/file-operations.c	2025-02-23 18:43:35.894000000 +0100
+@@ -47,7 +47,7 @@
+ 
+ struct _file_op {
+     GtkWidget *dialog, *chooser;
+-    void (*callback)();
++    void (*callback)(const gchar *, const gchar *);
+     gchar flags;
+     gchar index; /* -1 for standalone dialogs */
+     const gchar *title, *tip, *ext;

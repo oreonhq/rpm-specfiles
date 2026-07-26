@@ -1,0 +1,36 @@
+From 39d2224d455f0b4639aa4e48db27c122372d8274 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Tue, 12 Aug 2025 21:25:58 -0400
+Subject: [PATCH 2/2] Fix test on Python 3.14
+
+Note, this is just a hack, and may be fixed differently by upstream:
+https://github.com/saulpw/visidata/issues/2773
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ visidata/tests/test_path.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/visidata/tests/test_path.py b/visidata/tests/test_path.py
+index 4bc39f83..6319e746 100644
+--- a/visidata/tests/test_path.py
++++ b/visidata/tests/test_path.py
+@@ -1,5 +1,5 @@
+ import io
+-import pytest
++import sys
+ 
+ from visidata import Path
+ 
+@@ -22,7 +22,7 @@ class TestVisidataPath:
+         assert Path('foo').ext == ''
+         assert Path('foo').base_stem == 'foo'
+         assert Path('foo.').ext == ''
+-        assert Path('foo.').base_stem == 'foo.'
++        assert Path('foo.').base_stem == ('foo.' if sys.version_info < (3, 14) else 'foo')
+         assert Path('.foo').ext == ''
+         assert Path('.foo').base_stem == '.foo'
+ 
+-- 
+2.50.0
+

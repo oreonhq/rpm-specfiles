@@ -1,0 +1,146 @@
+diff -ur xpa-2.1.20/Makefile.in xpa-2.1.20.make/Makefile.in
+--- xpa-2.1.20/Makefile.in	2020-04-03 21:57:41.000000000 +0200
++++ xpa-2.1.20.make/Makefile.in	2023-07-11 21:14:42.060810488 +0200
+@@ -37,19 +37,19 @@
+ INSTALL_ROOT =
+ 
+ # Directory in which to install the .a or .so binary for the XPA library:
+-LIB_INSTALL_DIR =	$(INSTALL_ROOT)$(exec_prefix)/lib
++LIB_INSTALL_DIR =	$(INSTALL_ROOT)$(libdir)
+ 
+ # Directory in which to install the program wish:
+-BIN_INSTALL_DIR =	$(INSTALL_ROOT)$(exec_prefix)/bin
++BIN_INSTALL_DIR =	$(INSTALL_ROOT)$(bindir)
+ 
+ # Directory in which to install the include file xpa.h:
+-INCLUDE_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/include
++INCLUDE_INSTALL_DIR =	$(INSTALL_ROOT)$(includedir)
+ 
+ # Top-level directory for manual entries:
+-MAN_INSTALL_DIR =	$(INSTALL_ROOT)$(prefix)/man
++MAN_INSTALL_DIR =	$(INSTALL_ROOT)$(mandir)
+ 
+ # Top-level directory for share entries:
+-MAN_SHARE_DIR =		$(INSTALL_ROOT)$(prefix)/share/xpa
++MAN_SHARE_DIR =		$(INSTALL_ROOT)$(datadir)
+ 
+ # Platform-specific X compiler flags (include file specifications)
+ X_CFLAGS = 		@X_CFLAGS@
+@@ -102,6 +102,27 @@
+ INSTALL_PROGRAM =	${INSTALL}
+ INSTALL_DATA =		${INSTALL} -m 644
+ 
++bindir = @bindir@
++build_alias = @build_alias@
++datadir = @datadir@
++exec_prefix = @exec_prefix@
++host_alias = @host_alias@
++includedir = @includedir@
++infodir = @infodir@
++install_sh = @install_sh@
++libdir = @libdir@
++libexecdir = @libexecdir@
++localstatedir = @localstatedir@
++mandir = @mandir@
++mkdir_p = @mkdir_p@
++oldincludedir = @oldincludedir@
++prefix = @prefix@
++program_transform_name = @program_transform_name@
++sbindir = @sbindir@
++sharedstatedir = @sharedstatedir@
++sysconfdir = @sysconfdir@
++target_alias = @target_alias@
++
+ #----------------------------------------------------------------
+ # The information below is modified by the configure script when
+ # Makefile is generated from Makefile.in.  You shouldn't normally
+@@ -147,7 +168,7 @@
+ 
+ # used in link line
+ # LLIB=	$(LIB)
+-LLIB=	@LLIB@
++LLIB= -L. -lxpa
+ 
+ PROGS =		xpaset xpaget xpainfo xpaaccess xpans xpamb
+ 
+@@ -177,7 +198,7 @@
+ 		$(RANLIB) $(LIB)
+ 
+ shlib:		$(LIB)
+-		@(rm -rf lib$(PACKAGE).tmp; mkdir lib$(PACKAGE).tmp; \
++		@(rm -rf lib$(PACKAGE).tmp; mkdir -p lib$(PACKAGE).tmp; \
+ 		(cd lib$(PACKAGE).tmp && ar x ../lib$(PACKAGE).a); \
+ 		rm -f lib$(PACKAGE).tmp/xt*.o; \
+ 		rm -f lib$(PACKAGE).tmp/tcl*.o; \
+@@ -193,7 +214,7 @@
+ 		-lwsock32
+ 
+ tclxpa:		$(LIB)
+-		@(rm -rf libtclxpa.tmp; mkdir libtclxpa.tmp; \
++		@(rm -rf libtclxpa.tmp; mkdir -p libtclxpa.tmp; \
+ 		(cd libtclxpa.tmp && ar x ../lib$(PACKAGE).a); \
+ 		rm -f libtclxpa.tmp/xt*.o; \
+ 		CC='$(CC)' CXX=$(CXX) \
+@@ -213,34 +234,34 @@
+ 		echo "pkg_mkIndex -direct -verbose . libtclxpa.so; exit"| tclsh)
+ 
+ xpaset:		$(LIB) xpaset.o
+-		$(CC) $(LDFLAGS) xpaset.o -o xpaset$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpaset.o -o xpaset$(EXE) $(LLIB) $(LIBS)
+ 
+ xpaget:		$(LIB) xpaget.o
+-		$(CC) $(LDFLAGS) xpaget.o -o xpaget$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpaget.o -o xpaget$(EXE) $(LLIB) $(LIBS)
+ 
+ xpainfo:	$(LIB) xpainfo.o
+-		$(CC) $(LDFLAGS) xpainfo.o -o xpainfo$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpainfo.o -o xpainfo$(EXE) $(LLIB) $(LIBS)
+ 
+ xpaaccess:	$(LIB) xpaaccess.o
+-		$(CC) $(LDFLAGS) xpaaccess.o -o xpaaccess$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpaaccess.o -o xpaaccess$(EXE) $(LLIB) $(LIBS)
+ 
+ xpans:		$(LIB) xpans.o
+-		$(CC) $(LDFLAGS) xpans.o -o xpans$(EXE) $(LLIB) $(LIBS) $(TLIB)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpans.o -o xpans$(EXE) $(LLIB) $(LIBS) $(TLIB)
+ 
+ xpamb:		$(LIB) xpamb.o
+-		$(CC) $(LDFLAGS) xpamb.o -o xpamb$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) xpamb.o -o xpamb$(EXE) $(LLIB) $(LIBS)
+ 
+ ctest:		$(LIB) ctest.o
+-		$(CC) $(LDFLAGS) ctest.o -o ctest$(EXE) $(LLIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) ctest.o -o ctest$(EXE) $(LLIB) $(LIBS)
+ 
+ stest:		$(LIB) stest.o
+-		$(CC) $(LDFLAGS) stest.o -o stest$(EXE) $(LIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) stest.o -o stest$(EXE) $(LIB) $(LIBS)
+ 
+ rtest:		$(LIB) rtest.o
+-		$(CC) $(LDFLAGS) rtest.o -o rtest$(EXE) $(LIB) $(LIBS)
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) rtest.o -o rtest$(EXE) $(LIB) $(LIBS)
+ 
+ stestx:		$(LIB) stest.o
+-		$(CC) $(LDFLAGS) stest.o -o stest$(EXE) $(LIB) \
++		$(CC) $(CFLAGS) -fno-PIC $(LDFLAGS) stest.o -o stest$(EXE) $(LIB) \
+ 		$(X_LIBS) -lXt $(X_PRE_LIBS) -lXext -lX11 $(LIBS)
+ 
+ # Smoke test: allows end-users to quickly discern basic usability
+@@ -266,7 +287,7 @@
+ 	   else \
+ 		echo "Installing $$i" ; \
+ 		$(INSTALL_DATA) $$i $(LIB_INSTALL_DIR)/$$i ; \
+-		chmod 555 $(LIB_INSTALL_DIR)/$$i; \
++		chmod 755 $(LIB_INSTALL_DIR)/$$i; \
+ 	   fi; \
+ 	   done;)
+ 
+@@ -283,7 +304,7 @@
+ 	@echo "Installing $(LIB)";
+ 	@$(INSTALL_DATA) $(LIB) $(LIB_INSTALL_DIR)/$(LIB);
+ 	@(cd $(LIB_INSTALL_DIR); $(RANLIB) $(LIB));
+-	@chmod 555 $(LIB_INSTALL_DIR)/$(LIB);
++	@chmod 755 $(LIB_INSTALL_DIR)/$(LIB);
+ 	@echo "Installing xpa.h"
+ 	@$(INSTALL_DATA) xpa.h $(INCLUDE_INSTALL_DIR)/xpa.h
+ 	@echo "Installing prsetup.h"

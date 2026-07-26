@@ -1,0 +1,282 @@
+From 2ecdd95bed7833f201e14dd603feb3cdcbe4031f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Tue, 9 Dec 2025 03:35:42 +0100
+Subject: [PATCH 2/2] Check the correct sorting of imports from now on
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ pyproject.toml                    |  2 +-
+ pyrpkg/__init__.py                | 27 +++++++++++++++++++--------
+ pyrpkg/layout/__init__.py         |  9 +++++++--
+ pyrpkg/lookaside.py               |  3 +--
+ tests/commands/test_check_repo.py |  3 ++-
+ tests/commands/test_clone.py      |  1 +
+ tests/test_commands.py            |  1 +
+ tests/test_flatpak_build.py       |  4 ++--
+ tests/test_lookaside.py           |  3 +--
+ tests/test_retire.py              |  5 +++--
+ tests/test_side_tag.py            |  3 ++-
+ tests/test_spec.py                |  2 +-
+ tests/test_utils.py               | 13 +++++++++----
+ tests/utils.py                    |  1 +
+ 14 files changed, 51 insertions(+), 26 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index d9f30a7..fee23af 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -106,7 +106,7 @@ select = [
+     # flake8-simplify
+     #"SIM",
+     # isort
+-    #"I",
++    "I",
+     # flake8-bandit
+     "S",
+     # flake8-type-checking
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index 38ccbcf..8276b2b 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -45,15 +45,27 @@ from six.moves import configparser, urllib
+ from six.moves.urllib.parse import urljoin
+ 
+ from pyrpkg import layout
+-from pyrpkg.errors import (AlreadyUploadedError, HashtypeMixingError,
+-                           NoSourcesError, SpecfileDoesntMatchRepoNameError,
+-                           UnknownTargetError, rpkgAuthError, rpkgError)
++from pyrpkg.errors import (
++    AlreadyUploadedError,
++    HashtypeMixingError,
++    NoSourcesError,
++    SpecfileDoesntMatchRepoNameError,
++    UnknownTargetError,
++    rpkgAuthError,
++    rpkgError,
++)
+ from pyrpkg.lookaside import CGILookasideCache
+ from pyrpkg.sources import SourcesFile
+ from pyrpkg.spec import SpecFile
+-from pyrpkg.utils import (cached_property, extract_srpm, find_me,
+-                          is_file_tracked, is_lookaside_eligible_file,
+-                          log_result, spec_file_undo_rpmautospec)
++from pyrpkg.utils import (
++    cached_property,
++    extract_srpm,
++    find_me,
++    is_file_tracked,
++    is_lookaside_eligible_file,
++    log_result,
++    spec_file_undo_rpmautospec,
++)
+ 
+ from .gitignore import GitIgnore
+ 
+@@ -78,8 +90,7 @@ except ImportError:
+     specfile_uses_rpmautospec = None
+ 
+ try:
+-    from rpmautospec import \
+-        calculate_release_number as rpmautospec_calculate_release_number
++    from rpmautospec import calculate_release_number as rpmautospec_calculate_release_number
+     from rpmautospec import process_distgit as rpmautospec_process_distgit
+ except ImportError:
+     rpmautospec_process_distgit = None
+diff --git a/pyrpkg/layout/__init__.py b/pyrpkg/layout/__init__.py
+index 850ddc2..c17a81e 100644
+--- a/pyrpkg/layout/__init__.py
++++ b/pyrpkg/layout/__init__.py
+@@ -12,8 +12,13 @@
+ from pyrpkg.errors import LayoutError
+ 
+ from .base import MetaLayout
+-from .layouts import (DistGitLayout, DistGitResultsDirLayout,  # noqa: F401
+-                      IncompleteLayout, RetiredLayout, SRPMLayout)
++from .layouts import (  # noqa: F401
++    DistGitLayout,
++    DistGitResultsDirLayout,
++    IncompleteLayout,
++    RetiredLayout,
++    SRPMLayout,
++)
+ 
+ 
+ def build(path, hint=None):
+diff --git a/pyrpkg/lookaside.py b/pyrpkg/lookaside.py
+index 2a786df..689b8b6 100644
+--- a/pyrpkg/lookaside.py
++++ b/pyrpkg/lookaside.py
+@@ -26,8 +26,7 @@ import pycurl
+ import six
+ from six.moves import http_client, urllib
+ 
+-from .errors import (AlreadyUploadedError, DownloadError, InvalidHashType,
+-                     UploadError)
++from .errors import AlreadyUploadedError, DownloadError, InvalidHashType, UploadError
+ 
+ 
+ class CGILookasideCache(object):
+diff --git a/tests/commands/test_check_repo.py b/tests/commands/test_check_repo.py
+index 8952481..29a0849 100644
+--- a/tests/commands/test_check_repo.py
++++ b/tests/commands/test_check_repo.py
+@@ -5,9 +5,10 @@ import subprocess
+ import sys
+ import tempfile
+ 
+-from pyrpkg.errors import rpkgError
+ from six.moves import StringIO
+ 
++from pyrpkg.errors import rpkgError
++
+ try:
+     from unittest.mock import patch
+ except ImportError:
+diff --git a/tests/commands/test_clone.py b/tests/commands/test_clone.py
+index 85fdfd1..d9ed832 100644
+--- a/tests/commands/test_clone.py
++++ b/tests/commands/test_clone.py
+@@ -4,6 +4,7 @@ import sys
+ import tempfile
+ 
+ import git
++
+ import pyrpkg
+ 
+ from . import CommandTestCase
+diff --git a/tests/test_commands.py b/tests/test_commands.py
+index 012a618..383edf4 100644
+--- a/tests/test_commands.py
++++ b/tests/test_commands.py
+@@ -11,6 +11,7 @@ from datetime import datetime
+ import git
+ import rpm
+ import six
++
+ from pyrpkg import rpkgError
+ 
+ try:
+diff --git a/tests/test_flatpak_build.py b/tests/test_flatpak_build.py
+index 32926a8..3a143db 100644
+--- a/tests/test_flatpak_build.py
++++ b/tests/test_flatpak_build.py
+@@ -3,10 +3,10 @@ import subprocess
+ from textwrap import dedent
+ 
+ import requests
+-from pyrpkg import Modulemd
+-
+ from utils import CommandTestCase
+ 
++from pyrpkg import Modulemd
++
+ try:
+     import unittest2 as unittest
+ except ImportError:
+diff --git a/tests/test_lookaside.py b/tests/test_lookaside.py
+index 6bace2e..b42b447 100644
+--- a/tests/test_lookaside.py
++++ b/tests/test_lookaside.py
+@@ -21,8 +21,7 @@ try:
+ except ImportError:
+     import mock
+ 
+-from pyrpkg.errors import (AlreadyUploadedError, DownloadError,
+-                           InvalidHashType, UploadError)
++from pyrpkg.errors import AlreadyUploadedError, DownloadError, InvalidHashType, UploadError
+ from pyrpkg.lookaside import CGILookasideCache
+ 
+ old_stat = os.stat
+diff --git a/tests/test_retire.py b/tests/test_retire.py
+index 1fdeafd..3f4d943 100644
+--- a/tests/test_retire.py
++++ b/tests/test_retire.py
+@@ -5,11 +5,12 @@ import shutil
+ import subprocess
+ import tempfile
+ 
+-import pyrpkg.cli
+ import six
+-from pyrpkg.errors import rpkgError
+ from six.moves import configparser
+ 
++import pyrpkg.cli
++from pyrpkg.errors import rpkgError
++
+ try:
+     from unittest import mock
+ except ImportError:
+diff --git a/tests/test_side_tag.py b/tests/test_side_tag.py
+index 7a7f859..be96778 100644
+--- a/tests/test_side_tag.py
++++ b/tests/test_side_tag.py
+@@ -4,10 +4,11 @@ import logging
+ import os
+ 
+ import koji
+-import pyrpkg.cli
+ import six
+ from six.moves import StringIO, configparser
+ 
++import pyrpkg.cli
++
+ try:
+     from unittest import mock
+ except ImportError:
+diff --git a/tests/test_spec.py b/tests/test_spec.py
+index 0c7907a..2f61c2c 100644
+--- a/tests/test_spec.py
++++ b/tests/test_spec.py
+@@ -1,7 +1,7 @@
+ import os
+ import shutil
+-import unittest
+ import tempfile
++import unittest
+ 
+ from pyrpkg import spec
+ from pyrpkg.errors import rpkgError
+diff --git a/tests/test_utils.py b/tests/test_utils.py
+index 0cd62d8..c0feda6 100644
+--- a/tests/test_utils.py
++++ b/tests/test_utils.py
+@@ -14,12 +14,17 @@ try:
+ except ImportError:
+     import mock
+ 
+-from pyrpkg.utils import (cached_property, is_file_in_directory,
+-                          is_file_tracked, log_result,
+-                          spec_file_undo_rpmautospec, warn_deprecated)
+-
+ from utils import CommandTestCase
+ 
++from pyrpkg.utils import (
++    cached_property,
++    is_file_in_directory,
++    is_file_tracked,
++    log_result,
++    spec_file_undo_rpmautospec,
++    warn_deprecated,
++)
++
+ 
+ class CachedPropertyTestCase(unittest.TestCase):
+     def test_computed_only_once(self):
+diff --git a/tests/utils.py b/tests/utils.py
+index c58d836..52b9215 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -7,6 +7,7 @@ import sys
+ import tempfile
+ 
+ import six
++
+ from pyrpkg import Commands
+ 
+ # For running tests with Python 2
+-- 
+2.52.0
+

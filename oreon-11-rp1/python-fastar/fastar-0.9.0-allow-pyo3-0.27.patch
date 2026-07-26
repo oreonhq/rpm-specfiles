@@ -1,0 +1,11 @@
+diff -Naur a/Cargo.toml b/Cargo.toml
+--- a/Cargo.toml	2026-03-20 14:05:55.000000000 +0000
++++ b/Cargo.toml	2026-03-20 15:32:16.326116863 +0000
+@@ -10,6 +10,6 @@
+ 
+ [dependencies]
+ flate2 = "1.1.4"
+-pyo3 = "0.28.2"
++pyo3 = ">=0.27.0, <0.29.0"
+ tar = "0.4.44"
+ zstd = "0.13.3"

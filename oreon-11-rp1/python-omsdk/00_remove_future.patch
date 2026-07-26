@@ -1,0 +1,231 @@
+From 8cd96f773b6c39ecf66e1f9b93bd861d8b5e9b84 Mon Sep 17 00:00:00 2001
+From: Daniel Milnes <daniel@daniel-milnes.uk>
+Date: Sat, 1 Jun 2024 19:41:12 +0100
+Subject: [PATCH 1/2] Remove requirement for python-future
+
+d7cf49abf5e0996e98b7682696269a4b21cd2e6d has already removed the usages of future, this commit will remove it as a dependency.
+
+Resolves #42.
+---
+ requirements-python2x.txt | 3 +--
+ requirements-python3x.txt | 2 +-
+ setup-omsdk.py            | 1 -
+ setup.py                  | 1 -
+ 4 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/requirements-python2x.txt b/requirements-python2x.txt
+index 613186d..8e9910d 100644
+--- a/requirements-python2x.txt
++++ b/requirements-python2x.txt
+@@ -3,5 +3,4 @@ pyasn1>=0.4.4
+ enum34>=1.1.6
+ requests>=2.12.3
+ PyYAML>=3.12
+-future>=0.16.0
+-pysnmp_mibs>=0
+\ No newline at end of file
++pysnmp_mibs>=0
+diff --git a/requirements-python3x.txt b/requirements-python3x.txt
+index 51c5fc8..f5838b1 100644
+--- a/requirements-python3x.txt
++++ b/requirements-python3x.txt
+@@ -4,4 +4,4 @@ PyYAML>=3.12
+ future>=0.16.0
+ pysnmp_mibs>=0
+ pywinrm
+-urllib3
+\ No newline at end of file
++urllib3
+diff --git a/setup-omsdk.py b/setup-omsdk.py
+index 2ea1177..12d3d7f 100644
+--- a/setup-omsdk.py
++++ b/setup-omsdk.py
+@@ -107,7 +107,6 @@
+         "enum34; python_version<'3.4'",
+         "requests>=2.12.3",
+         "PyYAML>=3.12",
+-        "future>=0.16.0",
+         "pysnmp_mibs>=0",
+         "ipaddress>=0"
+     ],
+diff --git a/setup.py b/setup.py
+index 6f650a3..a6f57fd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -30,7 +30,6 @@ def installReqFn():
+         'python_version<3.4',
+         'requests>=2.12.3',
+         'PyYAML>=3.12',
+-        'future>=0.16.0',
+         'pysnmp_mibs>=0',
+         'ipaddress>=0'
+     ]
+
+From 6d8a32303333d9d6a19f459699b6fb8637937566 Mon Sep 17 00:00:00 2001
+From: Daniel Milnes <daniel@daniel-milnes.uk>
+Date: Sat, 1 Jun 2024 20:43:02 +0100
+Subject: [PATCH 2/2] Remove usage of `past.builtins.long`
+
+long has been equivalent to int since PEP-237 (Python 2.2)
+---
+ omdrivers/lifecycle/iDRAC/iDRACConfig.py    | 29 ++++++++++-----------
+ omdrivers/lifecycle/iDRAC/iDRACStreaming.py | 25 +++++++++---------
+ 2 files changed, 26 insertions(+), 28 deletions(-)
+
+diff --git a/omdrivers/lifecycle/iDRAC/iDRACConfig.py b/omdrivers/lifecycle/iDRAC/iDRACConfig.py
+index 3e25e16..1522d36 100644
+--- a/omdrivers/lifecycle/iDRAC/iDRACConfig.py
++++ b/omdrivers/lifecycle/iDRAC/iDRACConfig.py
+@@ -44,7 +44,6 @@
+ from omsdk.simulator.devicesim import Simulator
+ from omdrivers.lifecycle.iDRAC.SCPParsers import XMLParser
+ from omdrivers.lifecycle.iDRAC.RAIDHelper import RAIDHelper
+-from past.builtins import long
+ import sys
+ import logging
+ import tempfile
+@@ -2130,24 +2129,24 @@ def format_enum_wsman(enval):
+             ]},
+         "Args": {
+             "file_type": FileTypeEnum,
+-            "in_session_id": long,
++            "in_session_id": int,
+             "chunk_size": type(1),
+-            "file_size": long,
++            "file_size": int,
+             "txfr_descriptor": TxfrDescriptorEnum,
+             "payload": type(""),
+             "crc": type(""),
+             "payload_encoding": PayLoadEncodingEnum
+         },
+         "Return": {
+-            "SessionID": long
++            "SessionID": int
+         },
+         "Parameters": [
+             ("ChunkSize", "chunk_size", None, int, None),
+             ("FileType", "file_type", None, FileTypeEnum, None),
+             # ("ImportFileName", "filename", None, ResetForceEnum, None),
+-            ("InSessionID", "in_session_id", None, long, None),
++            ("InSessionID", "in_session_id", None, int, None),
+             ("CRC", "crc", None, str, None),
+-            ("FileSize", "file_size", None, long, None),
++            ("FileSize", "file_size", None, int, None),
+             ("TxfrDescriptor", "txfr_descriptor", None, TxfrDescriptorEnum, None),
+             ("PayLoad", "payload", None, str, None),
+             ("PayLoadEncoding", "payload_encoding", None, PayLoadEncodingEnum, None)
+@@ -2165,27 +2164,27 @@ def format_enum_wsman(enval):
+             ]},
+         "Args": {
+             "file_type": FileTypeEnum,
+-            "in_session_id": long,
++            "in_session_id": int,
+             "in_chunk_size": type(1),
+-            "file_offset": long,
+-            "tx_data_size": long,
++            "file_offset": int,
++            "tx_data_size": int,
+             "payload_encoding": PayLoadEncodingEnum
+         },
+         "Return": {
+-            "file_size": long,
++            "file_size": int,
+             "txfr_descriptor": TxfrDescriptorEnum,
+             "payload": type(""),
+             "crc": type(""),
+             "chunk_size": type(1),
+             "session_id": type(""),
+-            "ret_file_offset": long,
+-            "ret_tx_data_size": long
++            "ret_file_offset": int,
++            "ret_tx_data_size": int
+         },
+         "Parameters": [
+-            ("FileOffset", "file_offset", None, long, None),
+-            ("TxDataSize", "tx_data_size", None, long, None),
++            ("FileOffset", "file_offset", None, int, None),
++            ("TxDataSize", "tx_data_size", None, int, None),
+             ("FileType", "file_type", None, FileTypeEnum, None),
+-            ("InSessionID", "in_session_id", None, long, None),
++            ("InSessionID", "in_session_id", None, int, None),
+             ("InChunkSize", "in_chunk_size", None, int, None),
+             ("PayLoadEncoding", "payload_encoding", None, PayLoadEncodingEnum, None),
+         ]
+diff --git a/omdrivers/lifecycle/iDRAC/iDRACStreaming.py b/omdrivers/lifecycle/iDRAC/iDRACStreaming.py
+index d0ad39f..6e02d8c 100644
+--- a/omdrivers/lifecycle/iDRAC/iDRACStreaming.py
++++ b/omdrivers/lifecycle/iDRAC/iDRACStreaming.py
+@@ -30,7 +30,6 @@
+ from omsdk.sdkprint import Prettifyer
+ from omsdk.sdkcenum import EnumWrapper
+ from omdrivers.enums.iDRAC.iDRACEnums import *
+-from past.builtins import long
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -234,9 +233,9 @@ def export_data(self, file_type=FileTypeEnum.SystemConfigXML, export_file="", **
+         # Export the first chunk of data
+         logger.debug("Exporting the first Chunk...")
+ 
+-        session_id = long(0)
+-        file_offset = long(0)
+-        tx_data_size = long(0)
++        session_id = int(0)
++        file_offset = int(0)
++        tx_data_size = int(0)
+ 
+         export_data_resp = self._config_mgr.export_data(
+             file_type=file_type,
+@@ -258,9 +257,9 @@ def export_data(self, file_type=FileTypeEnum.SystemConfigXML, export_file="", **
+ 
+         crc = export_data_output["CRC"]
+         payload = export_data_output["PayLoad"]
+-        ret_file_offset = long(export_data_output["RetFileOffset"])
+-        ret_tx_Data_size = long(export_data_output["RetTxDataSize"])
+-        session_id = long(export_data_output["SessionID"])
++        ret_file_offset = int(export_data_output["RetFileOffset"])
++        ret_tx_Data_size = int(export_data_output["RetTxDataSize"])
++        session_id = int(export_data_output["SessionID"])
+         txfr_descriptor = export_data_output["TxfrDescriptor"]
+ 
+         payloads_list = list()
+@@ -290,9 +289,9 @@ def export_data(self, file_type=FileTypeEnum.SystemConfigXML, export_file="", **
+ 
+             # chunk_size = export_data_output["ChunkSize"]
+             payload = export_data_output["PayLoad"]
+-            ret_file_offset = long(export_data_output["RetFileOffset"])
+-            ret_tx_Data_size = long(export_data_output["RetTxDataSize"])
+-            session_id = long(export_data_output["SessionID"])
++            ret_file_offset = int(export_data_output["RetFileOffset"])
++            ret_tx_Data_size = int(export_data_output["RetTxDataSize"])
++            session_id = int(export_data_output["SessionID"])
+             txfr_descriptor = export_data_output["TxfrDescriptor"]
+ 
+             payloads_list.append(payload)
+@@ -366,7 +365,7 @@ def import_data(self, import_file_type=FileTypeEnum.SystemConfigXML, import_file
+ 
+             import_data = import_file_content.encode("utf-8")
+ 
+-            file_size = long(len(import_data))
++            file_size = int(len(import_data))
+ 
+             clear_transfer_session_resp = self._config_mgr.clear_transfer_session(
+                 file_operation=FileOperationEnum.Import,
+@@ -403,7 +402,7 @@ def import_data(self, import_file_type=FileTypeEnum.SystemConfigXML, import_file
+             logger.debug(payload_chunks)
+ 
+             number_of_chunks = len(payload_chunks)
+-            session_id = long(0)
++            session_id = int(0)
+ 
+             # Import the Base64 Encoded Config XML data chunk-by-chunk
+             for count in range(1, number_of_chunks + 1):
+@@ -439,7 +438,7 @@ def import_data(self, import_file_type=FileTypeEnum.SystemConfigXML, import_file
+                                        import_chunk_resp["Message"]
+                         }
+ 
+-                    session_id = long(import_chunk_resp["Data"]["ImportData_OUTPUT"]["SessionID"])
++                    session_id = int(import_chunk_resp["Data"]["ImportData_OUTPUT"]["SessionID"])
+ 
+                 # Import the last chunk
+                 elif count == number_of_chunks:

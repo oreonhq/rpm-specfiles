@@ -1,0 +1,12 @@
+diff -up worminator-3.0R2.1/prototypes.h~ worminator-3.0R2.1/prototypes.h
+--- worminator-3.0R2.1/prototypes.h~	2006-02-24 20:02:25.000000000 +0100
++++ worminator-3.0R2.1/prototypes.h	2026-01-24 12:54:21.075157509 +0100
+@@ -173,7 +173,7 @@ void push_player(float x_amount, float y
+ void player_touched(int x_tile_location, int y_tile_location);
+ 
+ void control_player();
+-void trigger_switch();
++void trigger_switch(int x, int y);
+ 
+ /* This function will assign the player.frame attribute to an appropriate
+    value, based on what the player is doing at the time.                */

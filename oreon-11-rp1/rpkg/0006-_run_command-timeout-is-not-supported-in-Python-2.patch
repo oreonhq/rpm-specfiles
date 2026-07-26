@@ -1,0 +1,43 @@
+From d0a4e9a8e4778d4b232af4565b36e4b83ae6071b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Tue, 9 Dec 2025 21:39:32 +0100
+Subject: [PATCH] _run_command: timeout is not supported in Python 2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Splitting this functionality for Python's versions.
+This relates to the commit 0123ce42d214968defe74b8a05ba7d9c7ecfa6c1.
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ pyrpkg/__init__.py | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/pyrpkg/__init__.py b/pyrpkg/__init__.py
+index 8276b2b..8df338c 100644
+--- a/pyrpkg/__init__.py
++++ b/pyrpkg/__init__.py
+@@ -1331,11 +1331,14 @@ class Commands(object):
+         except Exception as e:
+             raise rpkgError(e)
+ 
+-        try:
+-            exit_code = proc.wait(timeout=3600)
+-        except subprocess.TimeoutExpired:
+-            proc.kill()
+-            raise rpkgError('Command timed out.')
++        if six.PY3:
++            try:
++                exit_code = proc.wait(timeout=3600)
++            except subprocess.TimeoutExpired:
++                proc.kill()
++                raise rpkgError('Command timed out.')
++        else:
++            exit_code = proc.wait()
+         if exit_code > 0 and not return_stderr:
+             raise rpkgError('Failed to execute command.')
+ 
+-- 
+2.52.0
+

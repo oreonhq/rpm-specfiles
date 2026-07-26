@@ -1,0 +1,18 @@
+diff -udHrN -- a/install.sh b/install.sh
+--- a/install.sh	2022-01-16 17:11:45.000000000 +0100
++++ b/install.sh	2022-01-17 20:59:08.009725109 +0100
+@@ -31,10 +31,10 @@
+ install -m 755 -d $destdir/share/icons/hicolor/scalable
+ install -m 755 -d $destdir/share/icons/hicolor/scalable/apps
+ 
+-install -v -m 755 -s skychart/cdc  $destdir/bin/skychart
+-install -v -m 755 -s skychart/cdcicon  $destdir/bin/cdcicon
+-install -v -m 755 -s skychart/catgen  $destdir/bin/catgen
+-install -v -m 755 -s varobs/varobs  $destdir/bin/varobs
++install -v -m 755 skychart/cdc  $destdir/bin/skychart
++install -v -m 755 skychart/cdcicon  $destdir/bin/cdcicon
++install -v -m 755 skychart/catgen  $destdir/bin/catgen
++install -v -m 755 varobs/varobs  $destdir/bin/varobs
+ install -v -m 644 system_integration/Linux/share/applications/net.ap_i.skychart.desktop $destdir/share/applications/net.ap_i.skychart.desktop
+ install -v -m 644 system_integration/Linux/share/applications/net.ap_i.catgen.desktop $destdir/share/applications/net.ap_i.catgen.desktop
+ install -v -m 644 system_integration/Linux/share/applications/net.ap_i.varobs.desktop $destdir/share/applications/net.ap_i.varobs.desktop

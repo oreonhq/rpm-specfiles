@@ -1,0 +1,96 @@
+%global source0_hash 1c06cda6fd2dc9f7f9fe4575bc1823bf69ff43935a58d231c4c1ee646b65d01e
+
+%bcond tests 1
+
+Name:           python-scooby
+Version:        0.11.0
+Release:        %autorelease
+Summary:        A Great Dane turned Python environment detective
+
+License:        MIT
+URL:            https://github.com/banesullivan/scooby
+# The GitHub archive contains tests; the PyPI sdist lacks them.
+Source0:        %{url}/archive/v%{version}/scooby-%{version}.tar.gz
+# Man page hand-written for Fedora in groff_man(7) format based on --help
+Source1:        scooby.1
+
+BuildSystem:            pyproject
+# We cannot package (nor generate BR’s from) the “cpu” extra because it
+# requires python3dist(mkl), which is proprietary software.
+%if %{with tests}
+BuildOption(generate_buildrequires): requirements_test.txt
+%endif
+BuildOption(install):   -l scooby
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+
+%if %{with tests}
+BuildRequires:  /usr/bin/time
+%endif
+
+%global common_description %{expand:
+This is a lightweight tool for easily reporting your Python environment’s
+package versions and hardware resources.}
+
+%description %{common_description}
+
+%package -n python3-scooby
+Summary:        %{summary}
+
+# We cannot package the “cpu” extra because it requires python3dist(mkl), which
+# is proprietary software. However, python3dist(psutil), which it also
+# requires, adds additional detail to scooby’s reports independent of
+# python3dist(mkl), so we add it as a weak dependency.
+BuildRequires:  %{py3_dist psutil}
+Recommends:     %{py3_dist psutil}
+
+%description -n python3-scooby %{common_description}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n scooby-%{version} -p1
+
+# - Omit mkl from the test dependencies because it is proprietary
+# - Omit pyvips, which is not packaged (upstream CI lacks it too)
+# - Omit no_version, which is not packaged; it is just a demonstration of a
+#   package without a __version__. Without this, we must skip two tests; that
+#   seems a reasonable price to pay in order to avoid packaging something which
+#   is merely “for demonstration purposes.”
+# - https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+sed -r -i 's/^(mkl|pyvips|no_version|pytest-cov)\b/# &/' requirements_test.txt
+
+%generate_buildrequires -p
+export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+
+%build -p
+export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+
+%install -a
+install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
+
+%check -a
+%if %{with tests}
+# These require the no_version package; see notes in %%prep.
+k="${k-}${k+ and }not test_get_version"
+k="${k-}${k+ and }not test_tracking"
+# This requires pyvips to be installed *without* libvips, as it is in upstream
+# CI; we would have both if we had pyvips, so this test makes no sense for us.
+# See also the comments in the source of the test.
+k="${k-}${k+ and }not test_import_os_error"
+# Import performance test may fail flakily or on slower hardware
+k="${k-}${k+ and }not test_import_time"
+
+%pytest -k "${k-}" -v
+%endif
+
+%files -n python3-scooby -f %{pyproject_files}
+%doc README.md
+
+%{_bindir}/scooby
+%{_mandir}/man1/scooby.1*
+
+%changelog
+%autochangelog

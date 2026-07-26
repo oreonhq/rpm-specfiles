@@ -1,0 +1,41 @@
+From e2bb2a9bc6b4729a2fef135f7eb4f7b3b41e03d4 Mon Sep 17 00:00:00 2001
+From: Mike Dalessio <mike.dalessio@gmail.com>
+Date: Tue, 14 Jan 2025 12:32:25 -0500
+Subject: [PATCH] dep(test): remove implicit dependence on benchmark gem
+
+Time.now is fine, and benchmark is being removed from default gems in
+Ruby 3.5.
+---
+ test/test_integration_pending.rb | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/test/test_integration_pending.rb b/test/test_integration_pending.rb
+index b8933bcb..0b40a37f 100644
+--- a/test/test_integration_pending.rb
++++ b/test/test_integration_pending.rb
+@@ -1,7 +1,5 @@
+ require "helper"
+ 
+-require "benchmark"
+-
+ class IntegrationPendingTestCase < SQLite3::TestCase
+   class ThreadSynchronizer
+     def initialize
+@@ -103,12 +101,12 @@ def test_busy_timeout
+     end
+     synchronizer.wait_for_thread :ready_0
+ 
+-    time = Benchmark.measure do
+-      assert_raise(SQLite3::BusyException) do
+-        @db.execute "insert into foo (b) values ( 'from 2' )"
+-      end
++    start_time = Time.now
++    assert_raise(SQLite3::BusyException) do
++      @db.execute "insert into foo (b) values ( 'from 2' )"
+     end
+-    assert_operator time.real * 1000, :>=, 1000
++    end_time = Time.now
++    assert_operator(end_time - start_time, :>=, 1.0)
+ 
+     synchronizer.send_to_thread :end_1
+     synchronizer.close_main

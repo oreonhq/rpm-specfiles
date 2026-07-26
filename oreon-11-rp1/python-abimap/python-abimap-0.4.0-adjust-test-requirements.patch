@@ -1,0 +1,11 @@
+diff --git a/requirements-test.txt b/requirements-test.txt
+index d1c9d8e..2b8c6c4 100644
+--- a/requirements-test.txt
++++ b/requirements-test.txt
+@@ -20,6 +20,3 @@ build>=0.10.0
+ # Documentation tools
+ sphinx>=6.0.0
+ watchdog>=2.0.0
+-
+-# Install package in development mode for testing
+--e .

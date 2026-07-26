@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=XPilot NG
+Comment=Multi-player space arcade game
+Exec=xpilot-ng-sdl
+Icon=xpilot-ng
+Terminal=false
+Type=Application
+Categories=Application;Game;ArcadeGame;
+Keywords=game;arcade;spacewar;multi-player;classic;retro;

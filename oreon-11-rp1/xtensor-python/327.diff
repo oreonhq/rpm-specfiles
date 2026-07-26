@@ -1,0 +1,13 @@
+diff --git a/include/xtensor-python/pystrides_adaptor.hpp b/include/xtensor-python/pystrides_adaptor.hpp
+index fde929a..bde3923 100644
+--- a/include/xtensor-python/pystrides_adaptor.hpp
++++ b/include/xtensor-python/pystrides_adaptor.hpp
+@@ -89,6 +89,8 @@ namespace xt
+         using iterator_category = std::random_access_iterator_tag;
+         using shape_pointer = typename pystrides_adaptor<N>::shape_type;
+ 
++        pystrides_iterator() = default;
++
+         inline pystrides_iterator(pointer current, shape_pointer shape)
+             : p_current(current)
+             , p_shape(shape)

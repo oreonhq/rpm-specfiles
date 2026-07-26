@@ -1,0 +1,19 @@
+--- src/qvgeapp/qvgeMainWindow.cpp.orig	2022-11-20 17:37:43.695415665 +0300
++++ src/qvgeapp/qvgeMainWindow.cpp	2022-11-20 17:41:00.724414633 +0300
+@@ -289,16 +289,5 @@
+ 
+ 	CPlatformWin32::registerFileType("qvge.xgr", "QVGE native graph document", ".xgr", 0);
+ 
+-#elif defined Q_OS_LINUX
+-
+-	// assuming application-xgr has been already added
+-    //QSettings mimeapps("/usr/share/applications/defaults.list", QSettings::NativeFormat);
+-    QSettings mimeapps(QDir::homePath() + "/.config/mimeapps.list", QSettings::IniFormat);
+-    mimeapps.beginGroup("Default Applications");
+-	mimeapps.setValue("application/xgr", "qvge.desktop");
+-	mimeapps.endGroup();
+-    mimeapps.sync();
+-    qDebug() << mimeapps.status();
+-
+ #endif
+ }

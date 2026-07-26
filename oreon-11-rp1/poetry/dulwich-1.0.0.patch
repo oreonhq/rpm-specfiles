@@ -1,0 +1,30 @@
+From 12e3c455b129a63c8fa47f5d85dee302b6a04697 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 22 Jan 2026 14:25:49 +0100
+Subject: [PATCH] Update to dulwich 1.0.0
+
+From the release notes:
+
+> From here on, Dulwich will not break backwards compatibility until 2.0
+
+https://github.com/jelmer/dulwich/commit/ca9de6da80e2dab04f0da4c260afc09ae24bc1c1
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 838bb05..ec985e9 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -8,7 +8,7 @@ dependencies = [
+     "build (>=1.2.1,<2.0.0)",
+     "cachecontrol[filecache] (>=0.14.0,<0.15.0)",
+     "cleo (>=2.1.0,<3.0.0)",
+-    "dulwich (>=0.25.0,<0.26.0)",
++    "dulwich (>=0.25.0,<2)",
+     "fastjsonschema (>=2.18.0,<3.0.0)",
+     "installer (>=0.7.0,<0.8.0)",
+     "keyring (>=25.1.0,<26.0.0)",
+-- 
+2.52.0
+

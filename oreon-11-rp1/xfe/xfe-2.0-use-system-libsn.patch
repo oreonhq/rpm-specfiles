@@ -1,0 +1,129 @@
+--- xfe-2.0/configure.ac.syssn	2024-12-13 01:25:08.000000000 +0900
++++ xfe-2.0/configure.ac	2025-01-12 16:00:33.560454862 +0900
+@@ -178,9 +178,13 @@ AC_ARG_ENABLE(sn,[  --disable-sn
+ AC_MSG_RESULT([$enable_sn])
+ AC_SUBST(STARTUPNOTIFY,false)
+ if test "x$enable_sn" != "xno"; then
+-	CXXFLAGS="${CXXFLAGS} -DSTARTUP_NOTIFICATION"
+-	AC_SUBST(STARTUPNOTIFY,true)
+-	enable_sn=yes
++	AC_CHECK_PROGS(pkg_config,pkg-config,)
++	if test -n "$pkg_config"; then
++		PKG_CHECK_MODULES(LIBSN, libstartup-notification-1.0)
++		CXXFLAGS="${CXXFLAGS} -DSTARTUP_NOTIFICATION -DSN_API_NOT_YET_FROZEN"
++		AC_SUBST(STARTUPNOTIFY,true)
++		enable_sn=yes
++	fi
+ 
+ 	# Check for xcb libs
+ 	PKG_CHECK_MODULES([xcb], [xcb >= 1.6],,
+--- xfe-2.0/src/Makefile.am.syssn	2025-01-12 16:00:33.560454862 +0900
++++ xfe-2.0/src/Makefile.am	2025-01-12 16:03:12.205154877 +0900
+@@ -44,18 +44,7 @@ xfe_SOURCES = ../st/x.c \
+ 			  XFileExplorer.cpp \
+               main.cpp
+ 
+-if STARTUPNOTIFY
+-xfe_SOURCES += ../libsn/sn-common.c  \
+-              ../libsn/sn-launchee.c \
+-              ../libsn/sn-launcher.c \
+-              ../libsn/sn-list.c \
+-              ../libsn/sn-monitor.c \
+-              ../libsn/sn-util.c \
+-              ../libsn/sn-xmessages.c \
+-              ../libsn/sn-xutils.c
+-endif
+-
+-xfe_LDADD = @LIBINTL@ -lutil
++xfe_LDADD = @LIBINTL@ -lutil @LIBSN_LIBS@
+ 
+ 
+ xfa_SOURCES = ../st/x.c \
+@@ -82,18 +71,7 @@ xfa_SOURCES = ../st/x.c \
+ 			  TextLabel.cpp \
+               XFileArchive.cpp
+ 
+-if STARTUPNOTIFY
+-xfa_SOURCES += ../libsn/sn-common.c  \
+-              ../libsn/sn-launchee.c \
+-              ../libsn/sn-launcher.c \
+-              ../libsn/sn-list.c \
+-              ../libsn/sn-monitor.c \
+-              ../libsn/sn-util.c \
+-              ../libsn/sn-xmessages.c \
+-              ../libsn/sn-xutils.c
+-endif
+-
+-xfa_LDADD = @LIBINTL@ -lutil
++xfa_LDADD = @LIBINTL@ -lutil @LIBSN_LIBS@
+ 
+ 
+ xfi_SOURCES = ../st/x.c \
+@@ -120,18 +98,7 @@ xfi_SOURCES = ../st/x.c \
+  			  TextLabel.cpp \
+               XFileImage.cpp
+ 
+-if STARTUPNOTIFY
+-xfi_SOURCES += ../libsn/sn-common.c  \
+-              ../libsn/sn-launchee.c \
+-              ../libsn/sn-launcher.c \
+-              ../libsn/sn-list.c \
+-              ../libsn/sn-monitor.c \
+-              ../libsn/sn-util.c \
+-              ../libsn/sn-xmessages.c \
+-              ../libsn/sn-xutils.c
+-endif
+-
+-xfi_LDADD = @LIBINTL@ -lutil
++xfi_LDADD = @LIBINTL@ -lutil @LIBSN_LIBS@
+ 
+ 
+ xfp_SOURCES = ../st/x.c \
+@@ -158,18 +125,7 @@ xfp_SOURCES = ../st/x.c \
+ 			  TextLabel.cpp \
+               XFilePackage.cpp
+ 
+-if STARTUPNOTIFY
+-xfp_SOURCES += ../libsn/sn-common.c  \
+-              ../libsn/sn-launchee.c \
+-              ../libsn/sn-launcher.c \
+-              ../libsn/sn-list.c \
+-              ../libsn/sn-monitor.c \
+-              ../libsn/sn-util.c \
+-              ../libsn/sn-xmessages.c \
+-              ../libsn/sn-xutils.c
+-endif
+-
+-xfp_LDADD = @LIBINTL@ -lutil
++xfp_LDADD = @LIBINTL@ -lutil @LIBSN_LIBS@
+ 	  
+ 
+ xfw_SOURCES = ../st/x.c \
+@@ -199,25 +155,14 @@ xfw_SOURCES = ../st/x.c \
+               WriteWindow.cpp \
+               XFileWrite.cpp
+ 
+-if STARTUPNOTIFY
+-xfw_SOURCES += ../libsn/sn-common.c  \
+-              ../libsn/sn-launchee.c \
+-              ../libsn/sn-launcher.c \
+-              ../libsn/sn-list.c \
+-              ../libsn/sn-monitor.c \
+-              ../libsn/sn-util.c \
+-              ../libsn/sn-xmessages.c \
+-              ../libsn/sn-xutils.c
+-endif
+-
+-xfw_LDADD = @LIBINTL@ -lutil
++xfw_LDADD = @LIBINTL@ -lutil @LIBSN_LIBS@
+ 
+ 				
+ 
+ 
+ localedir = $(datadir)/locale
+ 
+-AM_CPPFLAGS = -I. -I$(top_srcdir) -I$(top_srcdir)/intl
++AM_CPPFLAGS = -I. -I$(top_srcdir) -I$(top_srcdir)/intl @LIBSN_CFLAGS@
+ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+ 
+ EXTRA_DIST =  ../libsn/sn-common.h	\

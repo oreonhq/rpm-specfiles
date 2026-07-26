@@ -1,0 +1,9 @@
+Extensions are shipped in /usr/lib64/timew/ext/
+-----------------------------------------------
+
+/usr/lib64/timew/ext
+/usr/lib64/timew/ext/on-modify.timewarrior
+/usr/lib64/timew/ext/totals.py
+
+
+Please copy these over or use symlinks. They include the correct shebang and are executable.

@@ -1,0 +1,24 @@
+From 84775c6c3f65c2cef3833f6f854f12ded7b93d22 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 19 Jun 2024 10:45:16 -0400
+Subject: [PATCH] Drop PySide2 dependency from the example in Python 3.12+
+
+PySide2 was never adjusted to work with Python 3.12 and later; all
+effort went into PySide6 instead.
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 715380b5..c1639767 100755
+--- a/setup.py
++++ b/setup.py
+@@ -16,7 +16,7 @@
+ extras_require = {
+     'develop': ['qtsass', 'watchdog'],
+     'docs': ['sphinx', 'sphinx_rtd_theme'],
+-    'example': ['pyqt5', 'pyside2']
++    'example': ['pyqt5', 'pyside2; python_version<"3.12"']
+ }
+ 
+ classifiers = [

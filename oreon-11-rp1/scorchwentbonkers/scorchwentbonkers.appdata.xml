@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>scorchwentbonkers.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Zlib</project_license>
+  <name>Scorch Went Bonkers</name>
+  <summary>Realtime remake of Scorched Earth</summary>
+  <description>
+    <p>
+     As the name suggests, Scorch Went Bonkers is a remake of the old PC classic.
+     However, many things were changed and the type of fun delivered by the game
+     is different. Where Scorched Earth puts emphasis on tactics and careful
+     calculations, SWB requires quick thinking, perfect timing and only one
+     finger for controlling your tank. The game is real-time instead of turn
+     based.
+    </p>
+    <p>
+     Works best when you can get 4+ people in front of a single computer, as
+     this is where the battles become fun and frantic.
+    </p>
+  </description>
+  <url type="homepage">http://wasyl.eu/games/scorch-went-bonkers.html</url>
+  <screenshots>
+    <screenshot type="default">http://wasyl.eu/assets/images/swb-2-full.jpg</screenshot>
+    <screenshot>http://wasyl.eu/assets/images/swb-3-full.jpg</screenshot>
+    <screenshot>http://wasyl.eu/assets/images/swb-1-full.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

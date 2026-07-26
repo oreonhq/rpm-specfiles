@@ -1,0 +1,112 @@
+.TH TEND\-MSIM "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-msim \- simulate DW images from an image of models
+.SH SYNOPSIS
+.B tend\ msim
+.RB [ \-sigma
+.RI < sigma >]
+.RB [ \-seed
+.RI < seed >]
+.B \-g
+.RI < grad\ list >
+.RB [ \-b0
+.RI < b0\ image >]
+.RB [ \-i
+.RI < model\ image >]
+.B \-m
+.RI < model >
+.RB [ \-ib0
+.RI < bool >]
+.RB [ \-b
+.RI < b >]
+.RB [ \-kvp
+.RI < bool >]
+.RB [ \-t
+.RI < type >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Simulate DW images from an image of models.
+The output will be in the same form as the input to
+.BR tend\-estim (1).
+The B-matrices
+.RB (\(lq \-B \(rq)
+can be the output from
+.BR tend\-bmat (1),
+or the gradients can be given directly
+.RB (\(lq \-g \(rq);
+one of these is required.
+Note that the input tensor image
+.RB (\(lq \-i \(rq)
+is the basis of the output per-axis fields and image orientation.
+.B NOTE:
+this includes the measurement frame used in the input tensor image, which
+implies that the given gradients or B-matrices are already expressed in that
+measurement frame.
+.SH OPTIONS
+.TP
+.B \-sigma\fR <\fIsigma\fR>
+Gaussian/Rician noise parameter
+.RI ( double )
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-seed\fR <\fIseed\fR>
+seed value for RNG which creates noise
+.RI ( int )
+default:
+.RB \(lq 42 \(rq
+.TP
+.B \-g\fR <\fIgrad\ list\fR>
+gradient list, one row per diffusion-weighted image
+.TP
+.B \-b0\fR <\fIb0\ image\fR>
+reference non-diffusion-weighted
+.RB (\(lq B0 \(rq)
+image, which may be needed if it isn\(cqt part of the given model parameter
+image
+.TP
+.B \-m\fR <\fImodel\fR>
+model with which to simulate DWIs, which must be specified if it is not
+indicated by the first axis in input model image.
+.RB \(lq string \(rq
+.TP
+.B \-ib0\fR <\fIbool\fR>
+insert a non-DW
+.B B0
+image at the beginning of the experiment specification (useful if the given
+gradient list doesn\(cqt already have one) and hence also insert a
+.B B0
+image at the beginning of the output simulated DWIs
+.RB \(lq bool \(rq
+default:
+.RB \(lq false \(rq
+.TP
+.B \-b\fR <\fIb\fR>
+.B b
+value for simulated scan
+.RB \(lq double \(rq
+default:
+.RB \(lq 1000 \(rq
+.TP
+.B \-kvp\fR <\fIbool\fR>
+generate key/value pairs in the NRRD header corresponding to the input
+.BR b -value
+and gradients.
+.RB \(lq bool \(rq
+default:
+.RB \(lq true \(rq
+.TP
+.B \-t\fR <\fItype\fR>
+output type of DWIs; default:
+.RB \(lq float \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output dwis
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-bmat (1),
+.BR tend\-estim (1)

@@ -1,0 +1,304 @@
+From 9f3e7d551b48e6b01f0e1282dfb0c23cc9e8c378 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Sun, 17 Mar 2024 21:35:53 +0100
+Subject: [PATCH] Remove autoupdate feature
+
+---
+ cmd/tx/main.go                |  40 -----------
+ internal/txlib/update.go      |  97 --------------------------
+ internal/txlib/update_test.go | 128 ----------------------------------
+ 3 files changed, 265 deletions(-)
+ delete mode 100644 internal/txlib/update.go
+ delete mode 100644 internal/txlib/update_test.go
+
+diff --git a/cmd/tx/main.go b/cmd/tx/main.go
+index 8198b3b..f66650a 100644
+--- a/cmd/tx/main.go
++++ b/cmd/tx/main.go
+@@ -947,46 +947,6 @@ func Main() {
+ 					return nil
+ 				},
+ 			},
+-			{
+-				Name:  "update",
+-				Usage: "Update the `tx` application if there is a newer version",
+-				Flags: []cli.Flag{
+-					&cli.BoolFlag{
+-						Name:    "check",
+-						Aliases: []string{"c"},
+-						Usage:   "Check if there is a new version of tx",
+-					},
+-					&cli.BoolFlag{
+-						Name:    "no-interactive",
+-						Aliases: []string{"ni"},
+-						Usage:   "Update if there is a newer version without prompt",
+-					},
+-					&cli.BoolFlag{
+-						Name:    "debug",
+-						Aliases: []string{"d"},
+-						Usage:   "Enable debug logs for the update process",
+-					},
+-				},
+-				Action: func(c *cli.Context) error {
+-					version := c.App.Version
+-					arguments := txlib.UpdateCommandArguments{
+-						Version:       version,
+-						Check:         c.Bool("check"),
+-						NoInteractive: c.Bool("no-interactive"),
+-						Debug:         c.Bool("debug"),
+-					}
+-
+-					err := txlib.UpdateCommand(arguments)
+-					if err != nil {
+-						if err == promptui.ErrInterrupt {
+-							return cli.Exit("", 1)
+-						} else {
+-							return cli.Exit(errorColor(fmt.Sprint(err)), 1)
+-						}
+-					}
+-					return nil
+-				},
+-			},
+ 			{
+ 				Name:  "status",
+ 				Usage: "tx status [resource_id...]",
+diff --git a/internal/txlib/update.go b/internal/txlib/update.go
+deleted file mode 100644
+index 1003824..0000000
+--- a/internal/txlib/update.go
++++ /dev/null
+@@ -1,97 +0,0 @@
+-package txlib
+-
+-import (
+-	"fmt"
+-	"os"
+-
+-	"github.com/blang/semver"
+-	"github.com/fatih/color"
+-	"github.com/manifoldco/promptui"
+-	"github.com/rhysd/go-github-selfupdate/selfupdate"
+-)
+-
+-type UpdateCommandArguments struct {
+-	Version       string
+-	NoInteractive bool
+-	Check         bool
+-	Debug         bool
+-}
+-
+-func UpdateCommand(arguments UpdateCommandArguments) error {
+-	if arguments.Debug {
+-		selfupdate.EnableLog()
+-	}
+-	// Gets the version from txlib
+-	version := arguments.Version
+-
+-	current, err := semver.Parse(version)
+-	if err != nil {
+-		return err
+-	}
+-
+-	latest, _, err := selfupdate.DetectLatest("transifex/cli")
+-	if err != nil {
+-		return err
+-	}
+-	if arguments.Check {
+-		if current.GE(latest.Version) {
+-			fmt.Println("Congratulations, you are up to date with", version)
+-		} else {
+-			fmt.Printf(
+-				"There is a new latest release for you"+
+-					" v%s -> v%s", current, latest.Version.String(),
+-			)
+-			fmt.Println()
+-			fmt.Println(
+-				"Use `tx update` or `tx update --no-interactive` " +
+-					"command to update to the latest version.")
+-			fmt.Println("If you want to download and install it manually, " +
+-				"you can get the asset from")
+-			fmt.Println(latest.AssetURL)
+-		}
+-	} else {
+-		if current.GE(latest.Version) {
+-			fmt.Println("Congratulations, you are up to date with ", version)
+-		} else {
+-			fmt.Printf(
+-				"There is a new latest release for you"+
+-					" v%s -> v%s", current, latest.Version.String(),
+-			)
+-			fmt.Println()
+-			// Show prompt if there is no no-interactive flag
+-			if !arguments.NoInteractive {
+-				prompt := promptui.Prompt{
+-					Label:     "Do you want to update",
+-					IsConfirm: true,
+-				}
+-
+-				_, err := prompt.Run()
+-
+-				if err != nil {
+-					fmt.Println("Update Cancelled")
+-					return nil
+-				}
+-			}
+-
+-			exe, err := os.Executable()
+-			if err != nil {
+-				fmt.Println("Could not locate executable path")
+-				return err
+-			}
+-
+-			msg := fmt.Sprintf("# Updating to v%s", latest.Version)
+-			fmt.Println(msg)
+-			if err != nil {
+-				return err
+-			}
+-			// Update executable
+-			if err := selfupdate.UpdateTo(latest.AssetURL, exe); err != nil {
+-				return err
+-			}
+-			color.Green("Successfully updated to v%s", latest.Version)
+-
+-		}
+-
+-	}
+-	return nil
+-}
+diff --git a/internal/txlib/update_test.go b/internal/txlib/update_test.go
+deleted file mode 100644
+index 51adc0a..0000000
+--- a/internal/txlib/update_test.go
++++ /dev/null
+@@ -1,128 +0,0 @@
+-package txlib
+-
+-import (
+-	"io/ioutil"
+-	"os"
+-	"strings"
+-	"testing"
+-
+-	"github.com/rhysd/go-github-selfupdate/selfupdate"
+-	"github.com/transifex/cli/pkg/assert"
+-)
+-
+-func TestUpdateCommandVersionLessThanProduction(t *testing.T) {
+-	arguments := UpdateCommandArguments{
+-		Version: "0.0.1",
+-		Check:   true,
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "There is a new latest release for you "))
+-}
+-
+-func TestUpdateCommandCheckGreaterThanProduction(t *testing.T) {
+-	arguments := UpdateCommandArguments{
+-		Version: "100.0.0",
+-		Check:   true,
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "Congratulations, you are up to date"))
+-}
+-
+-func TestUpdateCommandCheckEQtoProduction(t *testing.T) {
+-	latest, _, err := selfupdate.DetectLatest("transifex/cli")
+-	if err != nil {
+-		t.Error(err)
+-	}
+-	arguments := UpdateCommandArguments{
+-		Version: latest.Version.String(),
+-		Check:   true,
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "Congratulations, you are up to date"))
+-}
+-
+-func TestUpdateCommandCheckLessThanProduction(t *testing.T) {
+-	arguments := UpdateCommandArguments{
+-		Version: "0.0.1",
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "There is a new latest release"))
+-
+-	// There was a prompt that proceeded with no
+-	assert.True(t, strings.Contains(
+-		result, "Update Cancelled"))
+-}
+-
+-func TestUpdateCommandGreaterThanProduction(t *testing.T) {
+-	arguments := UpdateCommandArguments{
+-		Version: "100.0.0",
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "Congratulations, you are up to date"))
+-}
+-
+-func TestUpdateCommandEQtoProduction(t *testing.T) {
+-	latest, _, err := selfupdate.DetectLatest("transifex/cli")
+-	if err != nil {
+-		t.Error(err)
+-	}
+-	arguments := UpdateCommandArguments{
+-		Version: latest.Version.String(),
+-	}
+-	rescueStdout := os.Stdout
+-	r, w, _ := os.Pipe()
+-	os.Stdout = w
+-	_ = UpdateCommand(arguments)
+-	w.Close()
+-	out, _ := ioutil.ReadAll(r)
+-	os.Stdout = rescueStdout
+-
+-	result := string(out)
+-	assert.True(t, strings.Contains(
+-		result, "Congratulations, you are up to date"))
+-}
+-- 
+2.44.0
+

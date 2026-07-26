@@ -1,0 +1,1772 @@
+From 07d377b037696a75a74b057b58b78a32c6050d48 Mon Sep 17 00:00:00 2001
+From: evan <evan@evanw.org>
+Date: Mon, 24 Sep 2018 16:47:19 -0500
+Subject: [PATCH] initial python3/wxPython4 support
+
+---
+ rtlsdr_scanner/__main__.py         | 10 ++---
+ rtlsdr_scanner/cli.py              | 44 ++++++++++-----------
+ rtlsdr_scanner/constants.py        |  2 +-
+ rtlsdr_scanner/devices.py          |  6 +--
+ rtlsdr_scanner/dialogs_devices.py  | 12 +++---
+ rtlsdr_scanner/dialogs_file.py     | 20 +++++-----
+ rtlsdr_scanner/dialogs_help.py     |  2 +-
+ rtlsdr_scanner/dialogs_prefs.py    | 30 +++++++-------
+ rtlsdr_scanner/dialogs_scan.py     |  2 +-
+ rtlsdr_scanner/dialogs_toolbars.py |  2 +-
+ rtlsdr_scanner/dialogs_tools.py    |  8 ++--
+ rtlsdr_scanner/events.py           |  4 +-
+ rtlsdr_scanner/file.py             | 28 ++++++-------
+ rtlsdr_scanner/location.py         | 10 ++---
+ rtlsdr_scanner/main_window.py      | 30 +++++++-------
+ rtlsdr_scanner/menus.py            |  4 +-
+ rtlsdr_scanner/misc.py             |  2 +-
+ rtlsdr_scanner/panels.py           | 20 +++++-----
+ rtlsdr_scanner/plot_3d.py          |  2 +-
+ rtlsdr_scanner/plot_controls.py    |  2 +-
+ rtlsdr_scanner/plot_line.py        | 20 +++++-----
+ rtlsdr_scanner/plot_preview.py     |  2 +-
+ rtlsdr_scanner/plot_spect.py       | 16 ++++----
+ rtlsdr_scanner/plot_status.py      |  6 +--
+ rtlsdr_scanner/plot_time.py        |  2 +-
+ rtlsdr_scanner/rtlsdr_scan_diag.py | 36 ++++++++---------
+ rtlsdr_scanner/rtltcp.py           |  2 +-
+ rtlsdr_scanner/scan.py             |  4 +-
+ rtlsdr_scanner/settings.py         | 26 ++++++------
+ rtlsdr_scanner/spectrum.py         | 16 ++++----
+ rtlsdr_scanner/toolbars.py         | 63 +++++++++++++++---------------
+ rtlsdr_scanner/utils_google.py     |  2 +-
+ rtlsdr_scanner/utils_mpl.py        |  2 +-
+ rtlsdr_scanner/utils_wx.py         |  4 +-
+ rtlsdr_scanner/widgets.py          | 32 +++++++--------
+ setup.py                           |  2 +-
+ 36 files changed, 239 insertions(+), 236 deletions(-)
+
+diff --git a/rtlsdr_scanner/__main__.py b/rtlsdr_scanner/__main__.py
+index 1fb93fb..b6790d9 100755
+--- a/rtlsdr_scanner/__main__.py
++++ b/rtlsdr_scanner/__main__.py
+@@ -36,7 +36,7 @@
+     import rtlsdr  # @UnusedImport
+     import wx  # @UnusedImport
+ except ImportError as error:
+-    print 'Import error: {}'.format(error)
++    print('Import error: {}'.format(error))
+     input('\nError importing libraries\nPress [Return] to exit')
+     exit(1)
+ 
+@@ -109,20 +109,20 @@ def __arguments():
+         args.dirname, args.filename = os.path.split(args.file)
+ 
+     if error is not None:
+-        print "Error: {}".format(error)
++        print("Error: {}".format(error))
+         parser.exit(1)
+ 
+     return isGui, (args)
+ 
+ 
+ if __name__ == '__main__':
+-    print APP_NAME + "\n"
++    print(APP_NAME + "\n")
+ 
+     isGui, args = __arguments()
+     if isGui:
+         app = RtlSdrScanner()
+         app.SetClassName(APP_NAME)
+-        wx.Locale().Init2()
++        wx.Locale().Init()
+         frame = FrameMain(APP_NAME)
+         if args.file is not None:
+             frame.open(os.path.abspath(args.dirname), args.filename)
+@@ -131,5 +131,5 @@ def __arguments():
+         try:
+             Cli(args)
+         except KeyboardInterrupt:
+-            print '\nAborted'
++            print('\nAborted')
+             exit(1)
+diff --git a/rtlsdr_scanner/cli.py b/rtlsdr_scanner/cli.py
+index 1ac81af..34a4e0b 100644
+--- a/rtlsdr_scanner/cli.py
++++ b/rtlsdr_scanner/cli.py
+@@ -23,14 +23,14 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
++from six.moves import queue as Queue
+ from collections import OrderedDict
+ import os
+ import sys
+ from threading import Thread
+ import threading
+ import time
+-from urlparse import urlparse
++from six.moves.urllib.parse import urlparse
+ 
+ from rtlsdr_scanner.constants import SAMPLE_RATE
+ from rtlsdr_scanner.devices import DeviceRTL, get_devices_rtl
+@@ -126,7 +126,7 @@ def __init__(self, args):
+                     error = 'No devices found'
+ 
+         if error is not None:
+-            print "Error: {}".format(error)
++            print("Error: {}".format(error))
+             exit(1)
+ 
+         self.settings.start = start
+@@ -137,19 +137,19 @@ def __init__(self, args):
+         self.settings.devicesRtl[index].gain = gain
+         self.settings.devicesRtl[index].lo = lo
+ 
+-        print "{} - {}MHz".format(start, end)
+-        print "{} Sweeps".format(sweeps)
+-        print "{}dB Gain".format(gain)
+-        print "{}s Dwell".format(self.settings.dwell)
+-        print "{} FFT points".format(nfft)
+-        print "{}MHz LO".format(lo)
++        print("{} - {}MHz".format(start, end))
++        print("{} Sweeps".format(sweeps))
++        print("{}dB Gain".format(gain))
++        print("{}s Dwell".format(self.settings.dwell))
++        print("{} FFT points".format(nfft))
++        print("{}MHz LO".format(lo))
+         if remote is not None:
+-            print remote
++            print(remote)
+         else:
+-            print self.settings.devicesRtl[index].name
++            print(self.settings.devicesRtl[index].name)
+ 
+         if len(self.settings.devicesGps):
+-            print 'Using GPS configuration \'{}\''.format(self.settings.devicesGps[0].name)
++            print('Using GPS configuration \'{}\''.format(self.settings.devicesGps[0].name))
+             self.threadLocation = ThreadLocation(self.queueLocation,
+                                                  self.settings.devicesGps[0])
+             if not self.__gps_wait():
+@@ -169,10 +169,10 @@ def __init__(self, args):
+             export_plot(fullName, exportType, self.spectrum)
+ 
+         self.__gps_stop()
+-        print "Done"
++        print("Done")
+ 
+     def __gps_wait(self):
+-        print '\nWaiting for GPS fix: {}'.format(self.settings.devicesGps[0].get_desc())
++        print('\nWaiting for GPS fix: {}'.format(self.settings.devicesGps[0].get_desc()))
+ 
+         while True:
+             if not self.queueLocation.empty():
+@@ -191,7 +191,7 @@ def __scan(self, sweeps, settings, index):
+         samples = next_2_to_pow(int(samples))
+ 
+         for sweep in range(0, sweeps):
+-            print '\nSweep {}:'.format(sweep + 1)
++            print('\nSweep {}:'.format(sweep + 1))
+             threadScan = ThreadScan(self.queueNotify, self.queueScan, None,
+                                     settings, index, samples, False)
+             while threadScan.isAlive() or self.steps > 0:
+@@ -200,11 +200,11 @@ def __scan(self, sweeps, settings, index):
+                 if not self.queueLocation.empty():
+                     self.__process_event(self.queueLocation)
+             if self.settings.scanDelay > 0 and sweep < sweeps - 1:
+-                print '\nDelaying {}s'.format(self.settings.scanDelay)
++                print('\nDelaying {}s'.format(self.settings.scanDelay))
+                 time.sleep(self.settings.scanDelay)
+             threadScan.rtl_close()
+-            print ""
+-        print ""
++            print("")
++        print("")
+ 
+     def __process_event(self, queue):
+         event = queue.get()
+@@ -213,7 +213,7 @@ def __process_event(self, queue):
+         arg2 = event.data.get_arg2()
+ 
+         if status == Event.STARTING:
+-            print "Starting"
++            print("Starting")
+         elif status == Event.STEPS:
+             self.stepsTotal = (arg1 + 1) * 2
+             self.steps = self.stepsTotal
+@@ -232,7 +232,7 @@ def __process_event(self, queue):
+             process.start()
+             self.__progress()
+         elif status == Event.ERROR:
+-            print "Error: {}".format(arg2)
++            print("Error: {}".format(arg2))
+             exit(1)
+         elif status == Event.PROCESSED:
+             offset = self.settings.devicesRtl[self.settings.indexRtl].offset
+@@ -253,7 +253,7 @@ def __process_event(self, queue):
+                                                       arg2[1],
+                                                       arg2[2])
+         elif status == Event.LOC_ERR:
+-            print 'Error: {}'.format(arg2)
++            print('Error: {}'.format(arg2))
+             exit(1)
+ 
+         return status
+@@ -265,5 +265,5 @@ def __progress(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/constants.py b/rtlsdr_scanner/constants.py
+index d9e6b97..b94bd00 100644
+--- a/rtlsdr_scanner/constants.py
++++ b/rtlsdr_scanner/constants.py
+@@ -106,5 +106,5 @@ class Markers(object):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/devices.py b/rtlsdr_scanner/devices.py
+index 58bdad5..f4ef5d4 100644
+--- a/rtlsdr_scanner/devices.py
++++ b/rtlsdr_scanner/devices.py
+@@ -147,13 +147,13 @@ def get_devices_rtl(currentDevices=None, statusBar=None):
+ 
+ 
+ def format_device_rtl_name(name):
+-    remove = ["/", "\\"]
++    remove = [b"/", b"\\"]
+     for char in remove:
+-        name = name.replace(char, " ")
++        name = name.replace(char, b" ")
+ 
+     return name
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_devices.py b/rtlsdr_scanner/dialogs_devices.py
+index e7d67fa..dee6b54 100644
+--- a/rtlsdr_scanner/dialogs_devices.py
++++ b/rtlsdr_scanner/dialogs_devices.py
+@@ -23,9 +23,9 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
++from six.moves import queue as Queue
+ import copy
+-from urlparse import urlparse
++from six.moves.urllib.parse import urlparse
+ 
+ from wx import grid
+ import wx
+@@ -74,7 +74,7 @@ def __init__(self, parent, devices, settings):
+         dc.SetFont(self.gridDev.GetLabelFont())
+         maxHeight = 0
+         for i in range(self.COLS - 1):
+-            _w, h, _hl = dc.GetMultiLineTextExtent(self.gridDev.GetColLabelValue(i))
++            _w, h, _hl = dc.GetFullMultiLineTextExtent(self.gridDev.GetColLabelValue(i))
+             if h > maxHeight:
+                 maxHeight = h
+         self.gridDev.SetColLabelSize(maxHeight * 1.25)
+@@ -284,12 +284,12 @@ def __init__(self, parent, settings):
+         wx.Dialog.__init__(self, parent=parent, title="GPS")
+ 
+         self.checkGps = wx.CheckBox(self, wx.ID_ANY, "Enable GPS")
+-        self.checkGps.SetToolTipString('Record GPS locations in scans')
++        self.checkGps.SetToolTip('Record GPS locations in scans')
+         self.checkGps.SetValue(settings.gps)
+         self.Bind(wx.EVT_CHECKBOX, self.__on_check, self.checkGps)
+ 
+         self.checkGpsRetry = wx.CheckBox(self, wx.ID_ANY, "Retry after disconnection")
+-        self.checkGpsRetry.SetToolTipString('Retry GPS if disconnected')
++        self.checkGpsRetry.SetToolTip('Retry GPS if disconnected')
+         self.checkGpsRetry.SetValue(settings.gpsRetry)
+         self.checkGpsRetry.Enable(settings.gps)
+ 
+@@ -714,5 +714,5 @@ def __add_raw(self, text):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_file.py b/rtlsdr_scanner/dialogs_file.py
+index 30eec8c..e22634c 100644
+--- a/rtlsdr_scanner/dialogs_file.py
++++ b/rtlsdr_scanner/dialogs_file.py
+@@ -23,8 +23,8 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
+-import cPickle
++from six.moves import queue as Queue
++from six.moves import cPickle
+ import os
+ 
+ from PIL import Image
+@@ -377,7 +377,7 @@ def __init__(self, parent, spectrum, settings):
+ 
+         self.textSize = wx.StaticText(self)
+         buttonSize = wx.Button(self, label='Change...')
+-        buttonSize.SetToolTipString('Change exported image size')
++        buttonSize.SetToolTip('Change exported image size')
+         self.Bind(wx.EVT_BUTTON, self.__on_imagesize, buttonSize)
+         self.__show_image_size()
+ 
+@@ -610,7 +610,7 @@ def __init__(self, parent, spectrum, location, settings):
+ 
+         textMesh = wx.StaticText(self, label='Mesh')
+         self.checkMesh = wx.CheckBox(self, label='On')
+-        self.checkMesh.SetToolTipString('Signal level mesh')
++        self.checkMesh.SetToolTip('Signal level mesh')
+         self.checkMesh.SetValue(self.plotMesh)
+         self.Bind(wx.EVT_CHECKBOX, self.__on_mesh, self.checkMesh)
+         self.choiceMapMesh = wx.Choice(self, choices=colours)
+@@ -628,7 +628,7 @@ def __init__(self, parent, spectrum, location, settings):
+         colours = get_colours()
+         textHeat = wx.StaticText(self, label='Heat map')
+         self.checkHeat = wx.CheckBox(self, label='On')
+-        self.checkHeat.SetToolTipString('GPS location heatmap')
++        self.checkHeat.SetToolTip('GPS location heatmap')
+         self.checkHeat.SetValue(self.plotHeat)
+         self.Bind(wx.EVT_CHECKBOX, self.__on_heat, self.checkHeat)
+         self.choiceMapHeat = wx.Choice(self, choices=colours)
+@@ -646,7 +646,7 @@ def __init__(self, parent, spectrum, location, settings):
+         textRange = wx.StaticText(self, label='Range')
+         textCentre = wx.StaticText(self, label='Centre')
+         self.spinCentre = wx.SpinCtrl(self)
+-        self.spinCentre.SetToolTipString('Centre frequency (kHz)')
++        self.spinCentre.SetToolTip('Centre frequency (kHz)')
+         self.spinCentre.SetRange(freqMin, freqMax)
+         self.spinCentre.SetValue(freqMin + bw / 2)
+         sizerCentre = wx.BoxSizer(wx.HORIZONTAL)
+@@ -654,7 +654,7 @@ def __init__(self, parent, spectrum, location, settings):
+         sizerCentre.Add(self.spinCentre, flag=wx.ALL, border=5)
+         textBw = wx.StaticText(self, label='Bandwidth')
+         self.spinBw = wx.SpinCtrl(self)
+-        self.spinBw.SetToolTipString('Bandwidth (kHz)')
++        self.spinBw.SetToolTip('Bandwidth (kHz)')
+         self.spinBw.SetRange(1, bw)
+         self.spinBw.SetValue(bw / 10)
+         sizerBw = wx.BoxSizer(wx.HORIZONTAL)
+@@ -671,7 +671,7 @@ def __init__(self, parent, spectrum, location, settings):
+         textOutput = wx.StaticText(self, label='Output')
+         self.textRes = wx.StaticText(self)
+         buttonRes = wx.Button(self, label='Change...')
+-        buttonRes.SetToolTipString('Change output resolution')
++        buttonRes.SetToolTip('Change output resolution')
+         self.Bind(wx.EVT_BUTTON, self.__on_imageres, buttonRes)
+         sizerRes = wx.BoxSizer(wx.HORIZONTAL)
+         sizerRes.Add(self.textRes, flag=wx.ALL, border=5)
+@@ -762,7 +762,7 @@ def __draw_plot(self):
+         y = []
+         z = []
+ 
+-        for coord, peak in coords.iteritems():
++        for coord, peak in coords.items():
+             x.append(coord[1])
+             y.append(coord[0])
+             z.append(peak)
+@@ -1071,5 +1071,5 @@ def get_restored(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_help.py b/rtlsdr_scanner/dialogs_help.py
+index 7057e64..9bb6013 100644
+--- a/rtlsdr_scanner/dialogs_help.py
++++ b/rtlsdr_scanner/dialogs_help.py
+@@ -135,5 +135,5 @@ def __init__(self, parent):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_prefs.py b/rtlsdr_scanner/dialogs_prefs.py
+index 6ab464e..5b264e8 100644
+--- a/rtlsdr_scanner/dialogs_prefs.py
++++ b/rtlsdr_scanner/dialogs_prefs.py
+@@ -136,7 +136,7 @@ def __plot(self, capture):
+                                             window=function(1024))
+ 
+         plot = []
+-        for x, y in itertools.izip(freqs, powers):
++        for x, y in zip(freqs, powers):
+             plot.append((x, y))
+         plot.sort()
+         x, y = numpy.transpose(plot)
+@@ -215,16 +215,16 @@ def __init__(self, parent, settings):
+         self.checkBackup = wx.CheckBox(self, wx.ID_ANY,
+                                        "Backup")
+         self.checkBackup.SetValue(settings.backup)
+-        self.checkBackup.SetToolTipString('Backup data after crash')
++        self.checkBackup.SetToolTip('Backup data after crash')
+         self.checkAlert = wx.CheckBox(self, wx.ID_ANY,
+                                       "Level alert (dB)")
+         self.checkAlert.SetValue(settings.alert)
+-        self.checkAlert.SetToolTipString('Play alert when level exceeded')
++        self.checkAlert.SetToolTip('Play alert when level exceeded')
+         self.Bind(wx.EVT_CHECKBOX, self.__on_alert, self.checkAlert)
+         self.spinLevel = wx.SpinCtrl(self, wx.ID_ANY, min=-100, max=20)
+         self.spinLevel.SetValue(settings.alertLevel)
+         self.spinLevel.Enable(settings.alert)
+-        self.spinLevel.SetToolTipString('Alert threshold')
++        self.spinLevel.SetToolTip('Alert threshold')
+         textBackground = wx.StaticText(self, label='Background colour')
+         self.buttonBackground = wx.Button(self, wx.ID_ANY)
+         self.buttonBackground.SetBackgroundColour(self.background)
+@@ -237,31 +237,31 @@ def __init__(self, parent, settings):
+         self.checkPoints = wx.CheckBox(self, wx.ID_ANY,
+                                        "Limit points")
+         self.checkPoints.SetValue(settings.pointsLimit)
+-        self.checkPoints.SetToolTipString('Limit the resolution of plots')
++        self.checkPoints.SetToolTip('Limit the resolution of plots')
+         self.Bind(wx.EVT_CHECKBOX, self.__on_points, self.checkPoints)
+         self.spinPoints = wx.SpinCtrl(self, wx.ID_ANY, min=1000, max=100000)
+         self.spinPoints.Enable(settings.pointsLimit)
+         self.spinPoints.SetValue(settings.pointsMax)
+-        self.spinPoints.SetToolTipString('Maximum number of points to plot_line')
++        self.spinPoints.SetToolTip('Maximum number of points to plot_line')
+         textDpi = wx.StaticText(self, label='Export DPI')
+         self.spinDpi = wx.SpinCtrl(self, wx.ID_ANY, min=72, max=6000)
+         self.spinDpi.SetValue(settings.exportDpi)
+-        self.spinDpi.SetToolTipString('DPI of exported images')
++        self.spinDpi.SetToolTip('DPI of exported images')
+         self.checkTune = wx.CheckBox(self, wx.ID_ANY,
+                                      "Tune SDR#")
+         self.checkTune.SetValue(settings.clickTune)
+-        self.checkTune.SetToolTipString('Double click plot_line to tune SDR#')
++        self.checkTune.SetToolTip('Double click plot_line to tune SDR#')
+         textPlugin = wx.HyperlinkCtrl(self, wx.ID_ANY,
+                                       label="(Requires plugin)",
+                                       url="http://eartoearoak.com/software/sdrsharp-net-remote")
+ 
+         self.radioAvg = wx.RadioButton(self, wx.ID_ANY, 'Average Scans',
+                                        style=wx.RB_GROUP)
+-        self.radioAvg.SetToolTipString('Average level with each scan')
++        self.radioAvg.SetToolTip('Average level with each scan')
+         self.Bind(wx.EVT_RADIOBUTTON, self.__on_radio, self.radioAvg)
+         self.radioRetain = wx.RadioButton(self, wx.ID_ANY,
+                                           'Retain previous scans')
+-        self.radioRetain.SetToolTipString('Can be slow')
++        self.radioRetain.SetToolTip('Can be slow')
+         self.Bind(wx.EVT_RADIOBUTTON, self.__on_radio, self.radioRetain)
+         self.radioRetain.SetValue(settings.retainScans)
+ 
+@@ -269,7 +269,7 @@ def __init__(self, parent, settings):
+         self.spinCtrlMaxScans = wx.SpinCtrl(self)
+         self.spinCtrlMaxScans.SetRange(1, 5000)
+         self.spinCtrlMaxScans.SetValue(settings.retainMax)
+-        self.spinCtrlMaxScans.SetToolTipString('Maximum previous scans'
++        self.spinCtrlMaxScans.SetToolTip('Maximum previous scans'
+                                                ' to display')
+ 
+         textWidth = wx.StaticText(self, label="Line width")
+@@ -392,7 +392,7 @@ def __init__(self, parent, settings):
+                                       settings.overlap * 100,
+                                       0, 75,
+                                       style=wx.SL_LABELS)
+-        self.slideOverlap.SetToolTipString('Power spectral density'
++        self.slideOverlap.SetToolTip('Power spectral density'
+                                            ' overlap')
+         textWindow = wx.StaticText(self, label='Window')
+         self.buttonWindow = wx.Button(self, wx.ID_ANY, self.winFunc)
+@@ -442,12 +442,12 @@ def __init__(self, parent, settings):
+         textFreq = wx.StaticText(self, label='Frequency precision')
+         self.spinFreq = wx.SpinCtrl(self, wx.ID_ANY, min=0, max=6)
+         self.spinFreq.SetValue(settings.precisionFreq)
+-        self.spinFreq.SetToolTipString('Displayed frequency decimal precision')
++        self.spinFreq.SetToolTip('Displayed frequency decimal precision')
+ 
+         textLevel = wx.StaticText(self, label='Level precision')
+         self.spinLevel = wx.SpinCtrl(self, wx.ID_ANY, min=0, max=2)
+         self.spinLevel.SetValue(settings.precisionLevel)
+-        self.spinLevel.SetToolTipString('Displayed level decimal precision')
++        self.spinLevel.SetToolTip('Displayed level decimal precision')
+ 
+         sizerButtons = wx.StdDialogButtonSizer()
+         buttonOk = wx.Button(self, wx.ID_OK)
+@@ -555,5 +555,5 @@ def get_win_func(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_scan.py b/rtlsdr_scanner/dialogs_scan.py
+index 6f68ca4..a3e8ee4 100644
+--- a/rtlsdr_scanner/dialogs_scan.py
++++ b/rtlsdr_scanner/dialogs_scan.py
+@@ -59,5 +59,5 @@ def __on_ok(self, _event):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_toolbars.py b/rtlsdr_scanner/dialogs_toolbars.py
+index a4fcbdb..5f2b4a8 100644
+--- a/rtlsdr_scanner/dialogs_toolbars.py
++++ b/rtlsdr_scanner/dialogs_toolbars.py
+@@ -110,5 +110,5 @@ def __on_ok(self, _event):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/dialogs_tools.py b/rtlsdr_scanner/dialogs_tools.py
+index 5d3f998..2bd252a 100644
+--- a/rtlsdr_scanner/dialogs_tools.py
++++ b/rtlsdr_scanner/dialogs_tools.py
+@@ -23,7 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
++from six.moves import queue as Queue
+ import copy
+ import textwrap
+ 
+@@ -431,14 +431,14 @@ def __init__(self, parent, log):
+         self.choiceFilter = wx.Choice(self,
+                                       choices=['All'] + self.log.TEXT_LEVEL)
+         self.choiceFilter.SetSelection(0)
+-        self.choiceFilter.SetToolTipString('Filter log level')
++        self.choiceFilter.SetToolTip('Filter log level')
+         self.Bind(wx.EVT_CHOICE, self.__on_filter, self.choiceFilter)
+         sizerFilter = wx.BoxSizer()
+         sizerFilter.Add(textFilter, flag=wx.ALL, border=5)
+         sizerFilter.Add(self.choiceFilter, flag=wx.ALL, border=5)
+ 
+         buttonRefresh = wx.Button(self, wx.ID_ANY, label='Refresh')
+-        buttonRefresh.SetToolTipString('Refresh the log')
++        buttonRefresh.SetToolTip('Refresh the log')
+         buttonClose = wx.Button(self, wx.ID_CLOSE)
+         self.Bind(wx.EVT_BUTTON, self.__on_refresh, buttonRefresh)
+         self.Bind(wx.EVT_BUTTON, self.__on_close, buttonClose)
+@@ -509,5 +509,5 @@ def __update_grid(self, level=None):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/events.py b/rtlsdr_scanner/events.py
+index 99372b2..7a163fd 100644
+--- a/rtlsdr_scanner/events.py
++++ b/rtlsdr_scanner/events.py
+@@ -23,7 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
++from six.moves import queue as Queue
+ import time
+ 
+ import wx
+@@ -124,5 +124,5 @@ def post_event(destination, status):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/file.py b/rtlsdr_scanner/file.py
+index 0228681..9aaeffe 100644
+--- a/rtlsdr_scanner/file.py
++++ b/rtlsdr_scanner/file.py
+@@ -23,7 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import cPickle
++from six.moves import cPickle
+ from collections import OrderedDict
+ import datetime
+ import glob
+@@ -129,7 +129,7 @@ def get_type_filters(type=Types.PLOT):
+ 
+         filters = ''
+         length = len(types)
+-        for i in xrange(length):
++        for i in range(length):
+             filters += types[i]
+             if i < length - 1:
+                 filters += '|'
+@@ -142,7 +142,7 @@ def get_type_pretty(type):
+ 
+         pretty = ''
+         length = len(types)
+-        for i in xrange(length):
++        for i in range(length):
+             pretty += File.get_type_ext(i, type)
+             if i < length - 2:
+                 pretty += ', '
+@@ -154,7 +154,7 @@ def get_type_pretty(type):
+     @staticmethod
+     def get_type_index(extension, type=Types.PLOT):
+         exports = File.__get_types(type)
+-        for i in xrange(len(exports)):
++        for i in range(len(exports)):
+             if extension == File.get_type_ext(i, type):
+                 return i
+ 
+@@ -230,7 +230,7 @@ def __get(self):
+                     os.remove(backup)
+                 except:
+                     pass
+-        files.sort(lambda x, y: cmp(x[1], y[1]), reverse=True)
++        files.sort(key=lambda x: x[1], reverse=True)
+ 
+         return files
+ 
+@@ -340,18 +340,18 @@ def open_plot(dirname, filename):
+                 lon = data[1]['Longitude']
+             if version < 7:
+                 spectrum[1] = {}
+-                for f, p in data[1]['Spectrum'].iteritems():
++                for f, p in data[1]['Spectrum'].items():
+                     spectrum[1][float(f)] = p
+             else:
+-                for t, s in data[1]['Spectrum'].iteritems():
++                for t, s in data[1]['Spectrum'].items():
+                     spectrum[float(t)] = {}
+-                    for f, p in s.iteritems():
++                    for f, p in s.items():
+                         spectrum[float(t)][float(f)] = p
+             if version > 7:
+                 desc = data[1]['Description']
+             if version > 8:
+                 location = {}
+-                for t, l in data[1]['Location'].iteritems():
++                for t, l in data[1]['Location'].items():
+                     location[float(t)] = l
+ 
+         except ValueError:
+@@ -469,8 +469,8 @@ def export_csv(handle, spectrum, header=True):
+     if header:
+         handle.write(u"Time (UTC), Frequency (MHz),Level (dB/Hz)\n")
+     if spectrum is not None:
+-        for plot in spectrum.iteritems():
+-            for freq, pwr in plot[1].iteritems():
++        for plot in spectrum.items():
++            for freq, pwr in plot[1].items():
+                 handle.write("{}, {}, {}\n".format(plot[0], freq, pwr))
+ 
+ 
+@@ -486,9 +486,9 @@ def export_plt(handle, spectrum):
+     handle.write('set hidden3d\n')
+     handle.write('set palette rgb 33,13,10\n')
+     handle.write('splot "-" using 1:2:3 notitle with lines \n')
+-    for plot in spectrum.iteritems():
++    for plot in spectrum.items():
+         handle.write('\n')
+-        for freq, pwr in plot[1].iteritems():
++        for freq, pwr in plot[1].items():
+             handle.write("{} {} {}\n".format(freq, plot[0], pwr))
+ 
+ 
+@@ -660,5 +660,5 @@ def extension_add(fileName, index, fileType):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/location.py b/rtlsdr_scanner/location.py
+index db52767..8f40fad 100644
+--- a/rtlsdr_scanner/location.py
++++ b/rtlsdr_scanner/location.py
+@@ -23,7 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
++from six.moves.BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+ import json
+ import mimetypes
+ import os
+@@ -32,7 +32,7 @@
+ import threading
+ import time
+ import urllib
+-from urlparse import urlparse
++from six.moves.urllib.parse import urlparse
+ 
+ import serial
+ from serial.serialutil import SerialException
+@@ -414,8 +414,8 @@ def __create_lookat(self):
+         begin = format_iso_time(min(self.server.locations))
+         end = format_iso_time(max(self.server.locations))
+ 
+-        lat = [y for y, _x, _z in self.server.locations.itervalues()]
+-        lon = [x for _y, x, _z in self.server.locations.itervalues()]
++        lat = [y for y, _x, _z in self.server.locations.values()]
++        lon = [x for _y, x, _z in self.server.locations.values()]
+         latMin = min(lat)
+         latMax = max(lat)
+         lonMin = min(lon)
+@@ -626,5 +626,5 @@ def cancel(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/main_window.py b/rtlsdr_scanner/main_window.py
+index 035c9b3..5c955b9 100644
+--- a/rtlsdr_scanner/main_window.py
++++ b/rtlsdr_scanner/main_window.py
+@@ -23,12 +23,12 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import Queue
++from six.moves import queue as Queue
+ from collections import OrderedDict
+ import math
+ import os.path
+ import tempfile
+-import thread
++from six.moves import _thread as thread
+ from threading import Thread
+ import threading
+ import time
+@@ -38,9 +38,9 @@
+ from wx.lib.agw import aui
+ from wx.lib.masked.numctrl import NumCtrl
+ 
+-from location import ThreadLocation, LocationServer
+-from menus import MenuMain, PopMenuMain
+-from misc import RemoteControl, calc_samples, get_dwells, calc_real_dwell, \
++from rtlsdr_scanner.location import ThreadLocation, LocationServer
++from rtlsdr_scanner.menus import MenuMain, PopMenuMain
++from rtlsdr_scanner.misc import RemoteControl, calc_samples, get_dwells, calc_real_dwell, \
+     format_iso_time, limit
+ from rtlsdr_scanner.constants import F_MIN, F_MAX, MODE, NFFT, DISPLAY, Warn, \
+     Cal, Mode, APP_NAME, LOCATION_PORT
+@@ -220,8 +220,8 @@ def __create_toolbars(self):
+ 
+         self.spinCtrlStart = wx.SpinCtrl(self.toolbar1)
+         self.spinCtrlStop = wx.SpinCtrl(self.toolbar1)
+-        self.spinCtrlStart.SetToolTipString('Start frequency')
+-        self.spinCtrlStop.SetToolTipString('Stop frequency')
++        self.spinCtrlStart.SetToolTip('Start frequency')
++        self.spinCtrlStop.SetToolTip('Stop frequency')
+         self.spinCtrlStart.SetRange(F_MIN, F_MAX - 1)
+         self.spinCtrlStop.SetRange(F_MIN + 1, F_MAX)
+         self.Bind(wx.EVT_SPINCTRL, self.__on_spin, self.spinCtrlStart)
+@@ -250,21 +250,21 @@ def __create_toolbars(self):
+ 
+         textMode = wx.StaticText(self.toolbar2, label="Mode")
+         self.choiceMode = wx.Choice(self.toolbar2, choices=MODE[::2])
+-        self.choiceMode.SetToolTipString('Scanning mode')
++        self.choiceMode.SetToolTip('Scanning mode')
+ 
+         textDwell = wx.StaticText(self.toolbar2, label="Dwell")
+         self.choiceDwell = wx.Choice(self.toolbar2, choices=get_dwells()[::2])
+-        self.choiceDwell.SetToolTipString('Scan time per step')
++        self.choiceDwell.SetToolTip('Scan time per step')
+ 
+         textNfft = wx.StaticText(self.toolbar2, label="FFT size")
+-        self.choiceNfft = wx.Choice(self.toolbar2, choices=map(str, NFFT))
+-        self.choiceNfft.SetToolTipString('Higher values for greater'
++        self.choiceNfft = wx.Choice(self.toolbar2, choices=list(map(str, NFFT)))
++        self.choiceNfft.SetToolTip('Higher values for greater'
+                                          'precision')
+ 
+         textDisplay = wx.StaticText(self.toolbar2, label="Display")
+         self.choiceDisplay = wx.Choice(self.toolbar2, choices=DISPLAY[::2])
+         self.Bind(wx.EVT_CHOICE, self.__on_choice, self.choiceDisplay)
+-        self.choiceDisplay.SetToolTipString('Spectrogram available in'
++        self.choiceDisplay.SetToolTip('Spectrogram available in'
+                                             'continuous mode')
+ 
+         grid2 = wx.GridBagSizer(5, 5)
+@@ -371,7 +371,7 @@ def __create_menu(self):
+         self.Bind(wx.EVT_MENU, self.__on_sys_info, self.menuMain.sys)
+         self.Bind(wx.EVT_MENU, self.__on_about, self.menuMain.about)
+ 
+-        idF1 = wx.wx.NewId()
++        idF1 = wx.NewId()
+         self.Bind(wx.EVT_MENU, self.__on_help, id=idF1)
+         accelTable = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_F1, idF1)])
+         self.SetAcceleratorTable(accelTable)
+@@ -1021,7 +1021,7 @@ def __calc_ppm(self, freq):
+             timeStamp = max(self.spectrum)
+             spectrum = self.spectrum[timeStamp].copy()
+ 
+-            for x, y in spectrum.iteritems():
++            for x, y in spectrum.items():
+                 spectrum[x] = (((x - freq) * (x - freq)) + 1) * y
+                 peak = max(spectrum, key=spectrum.get)
+ 
+@@ -1415,5 +1415,5 @@ def open(self, dirname, filename):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/menus.py b/rtlsdr_scanner/menus.py
+index 6270cc6..2e758e6 100644
+--- a/rtlsdr_scanner/menus.py
++++ b/rtlsdr_scanner/menus.py
+@@ -42,7 +42,7 @@ def __init__(self, parent, settings):
+         recent = wx.Menu()
+         settings.fileHistory.UseMenu(recent)
+         settings.fileHistory.AddFilesToMenu()
+-        file.AppendMenu(wx.ID_ANY, "&Recent Files", recent)
++        file.Append(wx.ID_ANY, "&Recent Files", recent)
+         file.AppendSeparator()
+         self.save = file.Append(wx.ID_SAVE, "&Save As...",
+                                 "Save plot_line")
+@@ -249,5 +249,5 @@ def set_state(self, state, spectrum):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/misc.py b/rtlsdr_scanner/misc.py
+index adb2534..ab602ec 100644
+--- a/rtlsdr_scanner/misc.py
++++ b/rtlsdr_scanner/misc.py
+@@ -215,5 +215,5 @@ def limit_to_ascii(text):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/panels.py b/rtlsdr_scanner/panels.py
+index 8da2bde..51e5174 100644
+--- a/rtlsdr_scanner/panels.py
++++ b/rtlsdr_scanner/panels.py
+@@ -696,7 +696,7 @@ def __init__(self, graph, settings):
+         self.grid.SetColSize(7, 1)
+         self.grid.SetColSize(11, 1)
+         self.grid.SetColSize(15, 1)
+-        self.grid.SetMargins(0, wx.SystemSettings_GetMetric(wx.SYS_HSCROLL_Y))
++        self.grid.SetMargins(0, wx.SystemSettings.GetMetric(wx.SYS_HSCROLL_Y))
+ 
+         for x in range(self.grid.GetNumberRows()):
+             self.grid.SetRowLabelValue(x, '')
+@@ -760,17 +760,17 @@ def __init__(self, graph, settings):
+         dc.SetFont(font)
+         widthMHz = dc.GetTextExtent('###.######')[0] * 1.2
+         widthdB = dc.GetTextExtent('-##.##')[0] * 1.2
+-        for _desc, (_row, col) in self.locsDesc.iteritems():
++        for _desc, (_row, col) in self.locsDesc.items():
+             self.grid.AutoSizeColumn(col)
+         for col in [1, 5, 14, 18]:
+             self.grid.SetColSize(col, widthMHz)
+-            for row in xrange(self.grid.GetNumberRows()):
++            for row in range(self.grid.GetNumberRows()):
+                 self.grid.SetCellFont(row, col, font)
+         for col in [6, 10]:
+             self.grid.SetColSize(col, widthdB)
+-            for row in xrange(self.grid.GetNumberRows()):
++            for row in range(self.grid.GetNumberRows()):
+                 self.grid.SetCellFont(row, col, font)
+-        for _desc, (_row, col) in self.locsCheck.iteritems():
++        for _desc, (_row, col) in self.locsCheck.items():
+             self.grid.AutoSizeColumn(col)
+ 
+         toolTips = {}
+@@ -814,12 +814,12 @@ def __set_descs(self):
+         font = self.grid.GetCellFont(0, 0)
+         font.SetWeight(wx.BOLD)
+ 
+-        for desc, (row, col) in self.locsDesc.iteritems():
++        for desc, (row, col) in self.locsDesc.items():
+             self.grid.SetCellValue(row, col, desc)
+             self.grid.SetCellFont(row, col, font)
+ 
+     def __set_check_editor(self):
+-        for _desc, (row, col) in self.locsCheck.iteritems():
++        for _desc, (row, col) in self.locsCheck.items():
+             self.grid.SetCellEditor(row, col, wxGrid.GridCellBoolEditor())
+             self.grid.SetCellAlignment(row, col, wx.ALIGN_RIGHT, wx.ALIGN_CENTRE)
+             self.grid.SetCellRenderer(row, col, CheckBoxCellRenderer(self))
+@@ -879,7 +879,7 @@ def __on_cell_click(self, event):
+                     check = '1'
+                 self.grid.SetCellValue(row, col, check)
+ 
+-                for control, (r, c) in self.locsCheck.iteritems():
++                for control, (r, c) in self.locsCheck.items():
+                     if (r, c) == (row, col):
+                         self.checked[control] = check
+ 
+@@ -889,7 +889,7 @@ def __on_cell_click(self, event):
+                     col = self.selected[1]
+                     self.grid.SetGridCursor(row, col)
+                 self.update_measure()
+-        elif (row, col) in self.locsMeasure.itervalues():
++        elif (row, col) in self.locsMeasure.values():
+             self.selected = (row, col)
+             self.grid.SetGridCursor(row, col)
+         elif self.selected is None:
+@@ -1076,5 +1076,5 @@ def set_type(self, display):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_3d.py b/rtlsdr_scanner/plot_3d.py
+index 0b0661b..fadfdce 100644
+--- a/rtlsdr_scanner/plot_3d.py
++++ b/rtlsdr_scanner/plot_3d.py
+@@ -294,5 +294,5 @@ def __clear_markers(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_controls.py b/rtlsdr_scanner/plot_controls.py
+index a20b8e9..63dcb9e 100644
+--- a/rtlsdr_scanner/plot_controls.py
++++ b/rtlsdr_scanner/plot_controls.py
+@@ -212,5 +212,5 @@ def clear(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_line.py b/rtlsdr_scanner/plot_line.py
+index fe6c051..dba01fc 100644
+--- a/rtlsdr_scanner/plot_line.py
++++ b/rtlsdr_scanner/plot_line.py
+@@ -130,7 +130,7 @@ def __setup_measure(self):
+             self.lines[Markers.OFS].set_path_effects([effect])
+             self.lines[Markers.OFE].set_path_effects([effect])
+ 
+-        for line in self.lines.itervalues():
++        for line in self.lines.values():
+             self.axes.add_line(line)
+ 
+         bbox = self.axes.bbox
+@@ -170,7 +170,7 @@ def __setup_measure(self):
+                                         ha="center", va="top", bbox=box,
+                                         color='#996600')
+ 
+-        for label in self.labels.itervalues():
++        for label in self.labels.values():
+             self.axes.add_artist(label)
+ 
+     def __setup_overflow(self):
+@@ -194,7 +194,7 @@ def __setup_overflow(self):
+                                              transform=self.axes.transAxes,
+                                              alpha=0.5)
+ 
+-        for label in self.overflowLabels.itervalues():
++        for label in self.overflowLabels.values():
+             self.axes.add_artist(label)
+ 
+     def __clear_overflow(self):
+@@ -238,7 +238,7 @@ def __draw_vline(self, marker, x):
+             self.overflow['right'].append(marker)
+ 
+     def __draw_overflow(self):
+-        for pos, overflow in self.overflow.iteritems():
++        for pos, overflow in self.overflow.items():
+             if len(overflow) > 0:
+                 text = ''
+                 for measure in overflow:
+@@ -298,11 +298,11 @@ def draw_measure(self, measure, show):
+         self.__draw_overflow()
+ 
+     def hide_measure(self):
+-        for line in self.lines.itervalues():
++        for line in self.lines.values():
+             line.set_visible(False)
+-        for label in self.labels.itervalues():
++        for label in self.labels.values():
+             label.set_visible(False)
+-        for label in self.overflowLabels.itervalues():
++        for label in self.overflowLabels.values():
+             label.set_visible(False)
+ 
+     def scale_plot(self, force=False):
+@@ -411,6 +411,8 @@ def set_colourmap(self, colourMap):
+             pass
+ 
+     def close(self):
++        import ipdb
++        ipdb.set_trace()
+         self.figure.clear()
+         self.figure = None
+ 
+@@ -665,7 +667,7 @@ def __create_segments(self, points):
+         levels = []
+ 
+         if len(points):
+-            prev = points[0]
++            prev = list(points)[0]
+             for point in points:
+                 segment = [prev, point]
+                 segments.append(segment)
+@@ -706,5 +708,5 @@ def __clear_markers(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_preview.py b/rtlsdr_scanner/plot_preview.py
+index a7cc89b..4db73e1 100644
+--- a/rtlsdr_scanner/plot_preview.py
++++ b/rtlsdr_scanner/plot_preview.py
+@@ -185,5 +185,5 @@ def to_front(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_spect.py b/rtlsdr_scanner/plot_spect.py
+index 0df9551..16626e7 100644
+--- a/rtlsdr_scanner/plot_spect.py
++++ b/rtlsdr_scanner/plot_spect.py
+@@ -111,7 +111,7 @@ def __setup_measure(self):
+             self.lines[Markers.OFS].set_path_effects([effect])
+             self.lines[Markers.OFE].set_path_effects([effect])
+ 
+-        for line in self.lines.itervalues():
++        for line in self.lines.values():
+             self.axes.add_line(line)
+ 
+         bbox = self.axes.bbox
+@@ -130,7 +130,7 @@ def __setup_measure(self):
+                                         ha="center", va="top", bbox=box,
+                                         color='#996600')
+ 
+-        for label in self.labels.itervalues():
++        for label in self.labels.values():
+             self.axes.add_artist(label)
+ 
+     def __setup_overflow(self):
+@@ -146,7 +146,7 @@ def __setup_overflow(self):
+                                             transform=self.axes.transAxes,
+                                             alpha=0.5)
+ 
+-        for label in self.overflowLabels.itervalues():
++        for label in self.overflowLabels.values():
+             self.axes.add_artist(label)
+ 
+     def __clear_overflow(self):
+@@ -172,7 +172,7 @@ def __draw_vline(self, marker, x):
+             self.overflow['right'].append(marker)
+ 
+     def __draw_overflow(self):
+-        for pos, overflow in self.overflow.iteritems():
++        for pos, overflow in self.overflow.items():
+             if len(overflow) > 0:
+                 text = ''
+                 for measure in overflow:
+@@ -210,11 +210,11 @@ def draw_measure(self, measure, show):
+         self.__draw_overflow()
+ 
+     def hide_measure(self):
+-        for line in self.lines.itervalues():
++        for line in self.lines.values():
+             line.set_visible(False)
+-        for label in self.labels.itervalues():
++        for label in self.labels.values():
+             label.set_visible(False)
+-        for label in self.overflowLabels.itervalues():
++        for label in self.overflowLabels.values():
+             label.set_visible(False)
+ 
+     def scale_plot(self, force=False):
+@@ -424,5 +424,5 @@ def __clear_markers(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_status.py b/rtlsdr_scanner/plot_status.py
+index a19adb5..f8f156c 100644
+--- a/rtlsdr_scanner/plot_status.py
++++ b/rtlsdr_scanner/plot_status.py
+@@ -157,8 +157,8 @@ def run(self):
+         cols = len(text[0])
+         fontProperties = FontProperties()
+         fontProperties.set_weight('semibold')
+-        for row in xrange(rows):
+-            for col in xrange(cols):
++        for row in range(rows):
++            for col in range(cols):
+                 fp = fontProperties if col == 0 else None
+                 table.add_cell(row, col,
+                                text=text[row][col],
+@@ -181,5 +181,5 @@ def run(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/plot_time.py b/rtlsdr_scanner/plot_time.py
+index eabaafc..a6f263b 100644
+--- a/rtlsdr_scanner/plot_time.py
++++ b/rtlsdr_scanner/plot_time.py
+@@ -156,5 +156,5 @@ def run(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/rtlsdr_scan_diag.py b/rtlsdr_scanner/rtlsdr_scan_diag.py
+index 7aad71a..b1afa48 100644
+--- a/rtlsdr_scanner/rtlsdr_scan_diag.py
++++ b/rtlsdr_scanner/rtlsdr_scan_diag.py
+@@ -70,46 +70,46 @@ def find_rtlsdr_driver():
+     except:
+         pass
+ 
+-    print 'rtlsdr_scan_diag\n'
+-    print 'Tests for missing libraries\n'
++    print('rtlsdr_scan_diag\n')
++    print('Tests for missing libraries\n')
+ 
+     version = sys.version_info
+     if version < (2, 7):
+-        print 'Warning unsupported version, please use Python 2.7 or greater'
++        print('Warning unsupported version, please use Python 2.7 or greater')
+ 
+     problem = False
+ 
+     if not find_rtlsdr_driver():
+-        print 'rtlsdr driver not found in path'
+-        print "Download from 'http://sdr.osmocom.org/trac/wiki/rtl-sdr'"
+-        print ''
++        print('rtlsdr driver not found in path')
++        print("Download from 'http://sdr.osmocom.org/trac/wiki/rtl-sdr'")
++        print('')
+     else:
+         platform = sys.platform
+         for lib, name, url, package, ports in LIBS:
+-            print 'Testing for {}'.format(name)
++            print('Testing for {}'.format(name))
+             if not try_import(lib):
+                 problem = True
+-                print '{} not found'.format(name)
++                print('{} not found'.format(name))
+                 if platform == 'linux' or platform == 'linux2':
+                     if package:
+-                        print "\tInstall using the system package manager or download from '{}'".format(url)
++                        print("\tInstall using the system package manager or download from '{}'".format(url))
+                     else:
+-                        print "\tDownload from '{}'".format(url)
++                        print("\tDownload from '{}'".format(url))
+                 elif platform == 'darwin':
+                     if ports:
+-                        print "\tInstall using MacPorts or download from '{}'".format(url)
++                        print("\tInstall using MacPorts or download from '{}'".format(url))
+                     else:
+-                        print "\tDownload from '{}'".format(url)
++                        print("\tDownload from '{}'".format(url))
+                 else:
+-                    print "\tDownload from '{}'".format(url)
++                    print("\tDownload from '{}'".format(url))
+ 
+-                print ''
++                print('')
+ 
+         if problem:
+-            print '\nProblems found, please install the libraries for Python {}.{}'.format(version[0], version[1])
+-            print 'Further instructions can be found at http://eartoearoak.com/software/rtlsdr-scanner/rtlsdr-scanner-installation'
++            print('\nProblems found, please install the libraries for Python {}.{}'.format(version[0], version[1]))
++            print('Further instructions can be found at http://eartoearoak.com/software/rtlsdr-scanner/rtlsdr-scanner-installation')
+         else:
+-            print 'No problems found'
+-            print '\nUsing driver {}'.format(find_rtlsdr_driver())
++            print('No problems found')
++            print('\nUsing driver {}'.format(find_rtlsdr_driver()))
+ 
+     input('\nPress [Return]')
+diff --git a/rtlsdr_scanner/rtltcp.py b/rtlsdr_scanner/rtltcp.py
+index 38b291f..7ec4fbf 100644
+--- a/rtlsdr_scanner/rtltcp.py
++++ b/rtlsdr_scanner/rtltcp.py
+@@ -196,5 +196,5 @@ def abort(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/scan.py b/rtlsdr_scanner/scan.py
+index 18dbf7d..ce457fd 100644
+--- a/rtlsdr_scanner/scan.py
++++ b/rtlsdr_scanner/scan.py
+@@ -180,7 +180,7 @@ def run(self):
+                                             NFFT=self.nfft,
+                                             Fs=SAMPLE_RATE / 1e6,
+                                             window=function(self.nfft))
+-        for freqPsd, pwr in itertools.izip(freqs, powers):
++        for freqPsd, pwr in zip(freqs, powers):
+             xr = freqPsd + (self.freq / 1e6)
+             xr = xr + (xr * self.cal / 1e6)
+             spectrum[xr] = pwr * self.levelOff
+@@ -234,5 +234,5 @@ def update_spectrum(notify, lock, start, stop, data, offset,
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/settings.py b/rtlsdr_scanner/settings.py
+index f9cef2e..4a2c283 100644
+--- a/rtlsdr_scanner/settings.py
++++ b/rtlsdr_scanner/settings.py
+@@ -23,7 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-import ConfigParser
++from six.moves import configparser as ConfigParser
+ 
+ import wx
+ 
+@@ -170,17 +170,17 @@ def __save_devices_rtl(self):
+                     name = device.name
+                 else:
+                     name = "{}:{}".format(device.server, device.port)
+-                self.cfg.SetPath("/DevicesRTL/" + format_device_rtl_name(name))
+-                self.cfg.Write('serial', device.serial)
+-                self.cfg.WriteBool('isDevice', device.isDevice)
+-                self.cfg.Write('server', device.server)
+-                self.cfg.WriteInt('port', device.port)
+-                self.cfg.WriteFloat('gain', device.gain)
+-                self.cfg.WriteFloat('lo', device.lo)
+-                self.cfg.WriteFloat('calibration', device.calibration)
+-                self.cfg.WriteFloat('offset', device.offset)
+-                self.cfg.WriteInt('tuner', device.tuner)
+-                self.cfg.WriteFloat('levelOff', device.levelOff)
++                self.cfg.SetPath(b'/DevicesRTL/' + format_device_rtl_name(name))
++                self.cfg.Write(b'serial', device.serial)
++                self.cfg.WriteBool(b'isDevice', device.isDevice)
++                self.cfg.Write(b'server', device.server)
++                self.cfg.WriteInt(b'port', device.port)
++                self.cfg.WriteFloat(b'gain', device.gain)
++                self.cfg.WriteFloat(b'lo', device.lo)
++                self.cfg.WriteFloat(b'calibration', device.calibration)
++                self.cfg.WriteFloat(b'offset', device.offset)
++                self.cfg.WriteInt(b'tuner', device.tuner)
++                self.cfg.WriteFloat(b'levelOff', device.levelOff)
+ 
+     def __save_devices_gps(self):
+         self.cfg.DeleteGroup('/DevicesGPS')
+@@ -378,5 +378,5 @@ def reset(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/spectrum.py b/rtlsdr_scanner/spectrum.py
+index 56a4e2b..abffc1d 100644
+--- a/rtlsdr_scanner/spectrum.py
++++ b/rtlsdr_scanner/spectrum.py
+@@ -66,7 +66,7 @@ def __calc_extent(self, spectrum):
+                 self.lMin = min(self.lMin, lMin)
+                 if(lMax >= self.lMax):
+                     self.lMax = lMax
+-                    self.fPeak, self.lPeak = max(points, key=lambda(_f, l): l)
++                    self.fPeak, self.lPeak = max(points, key=lambda l: l[1])
+                     self.tPeak = timeStamp
+ 
+     def get_f(self):
+@@ -216,7 +216,7 @@ def reduce_points(spectrum, limit):
+     for timeStamp in spectrum:
+         points = spectrum[timeStamp].items()
+         reduced = OrderedDict()
+-        for i in xrange(int(len(points) / ratio)):
++        for i in range(int(len(points) / ratio)):
+             point = points[int(i * ratio):int((i + 1) * ratio)][0]
+             reduced[point[0]] = point[1]
+         newSpectrum[timeStamp] = reduced
+@@ -225,16 +225,16 @@ def reduce_points(spectrum, limit):
+ 
+ 
+ def split_spectrum(spectrum):
+-    freqs = spectrum.keys()
+-    powers = map(spectrum.get, freqs)
++    freqs = list(spectrum.keys())
++    powers = list(spectrum.values())
+ 
+     return freqs, powers
+ 
+ 
+ def split_spectrum_sort(spectrum):
+-    freqs = spectrum.keys()
++    freqs = list(spectrum.keys())
+     freqs.sort()
+-    powers = map(spectrum.get, freqs)
++    powers = list(map(spectrum.get, freqs))
+ 
+     return freqs, powers
+ 
+@@ -255,7 +255,7 @@ def slice_spectrum(spectrum, start, end):
+             return None
+ 
+     sweepTemp = {}
+-    for f, p in sweep.iteritems():
++    for f, p in sweep.items():
+         if start <= f <= end:
+             sweepTemp[f] = p
+     return sorted(sweepTemp.items(), key=lambda t: t[0])
+@@ -362,5 +362,5 @@ def get_peaks(spectrum, threshold):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/toolbars.py b/rtlsdr_scanner/toolbars.py
+index 8c06456..5b03d5a 100644
+--- a/rtlsdr_scanner/toolbars.py
++++ b/rtlsdr_scanner/toolbars.py
+@@ -30,8 +30,9 @@
+ import matplotlib
+ from matplotlib.backend_bases import NavigationToolbar2
+ from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg
++
+ import wx
+-from wx.animate import AnimationCtrl, Animation
++from wx.adv import AnimationCtrl, Animation
+ 
+ from rtlsdr_scanner.constants import Display, PlotFunc
+ from rtlsdr_scanner.dialogs_toolbars import DialogSmoothPrefs, DialogPeakThreshold
+@@ -64,7 +65,7 @@ def __init__(self, parent, log):
+                                     style=wx.GA_HORIZONTAL | wx.GA_SMOOTH)
+         animation = Animation(get_resource('busy.gif'))
+         busy = AnimationCtrl(self, anim=animation)
+-        busy.SetToolTipString('Updating plot')
++        busy.SetToolTip('Updating plot')
+         self.controls[4] = busy
+ 
+         self.controls[3].Hide()
+@@ -98,21 +99,21 @@ def __format_tooltip(self, text):
+     def set_general(self, text, level=Log.INFO):
+         text = self.TEXT_GENERAL + text
+         self.controls[0].SetLabel(text)
+-        self.controls[0].SetToolTipString(self.__format_tooltip(text))
++        self.controls[0].SetToolTip(self.__format_tooltip(text))
+         self.controls[0].Refresh()
+         self.log.add(text, level)
+ 
+     def set_info(self, text, level=Log.INFO):
+         text = self.TEXT_INFO + text
+         self.controls[1].SetLabel(text)
+-        self.controls[1].SetToolTipString(self.__format_tooltip(text))
++        self.controls[1].SetToolTip(self.__format_tooltip(text))
+         self.controls[1].Refresh()
+         self.log.add(text, level)
+ 
+     def set_gps(self, text, level=Log.INFO):
+         text = self.TEXT_GPS + text
+         self.controls[2].SetLabel(text)
+-        self.controls[2].SetToolTipString(self.__format_tooltip(text))
++        self.controls[2].SetToolTip(self.__format_tooltip(text))
+         self.controls[2].Refresh()
+         self.log.add(text, level)
+ 
+@@ -144,14 +145,14 @@ def set_progress(self, progress):
+             text = '{:.1f}%\n{}'.format(progress, delta)
+ 
+         self.controls[3].SetValue(progress)
+-        self.controls[3].SetToolTipString(self.__format_tooltip(text))
++        self.controls[3].SetToolTip(self.__format_tooltip(text))
+ 
+     def show_progress(self):
+         self.controls[3].Show()
+ 
+     def hide_progress(self):
+         self.controls[3].Hide()
+-        self.controls[3].SetToolTipString('')
++        self.controls[3].SetToolTip('')
+ 
+     def set_busy(self, busy):
+         animCtrl = self.controls[4]
+@@ -183,13 +184,13 @@ def __init__(self, canvas, panel, settings, callBackHideOverlay):
+         self.__add_spacer(False)
+ 
+         liveId = wx.NewId()
+-        self.AddCheckTool(liveId, load_bitmap('auto_refresh'),
++        self.AddCheckTool(liveId, "", load_bitmap('auto_refresh'),
+                           shortHelp='Real time plotting\n(slow and buggy)')
+         self.ToggleTool(liveId, settings.liveUpdate)
+         wx.EVT_TOOL(self, liveId, self.__on_check_update)
+ 
+         gridId = wx.NewId()
+-        self.AddCheckTool(gridId, load_bitmap('grid'),
++        self.AddCheckTool(gridId, "", load_bitmap('grid'),
+                           shortHelp='Toggle plot_line grid')
+         self.ToggleTool(gridId, settings.grid)
+         wx.EVT_TOOL(self, gridId, self.__on_check_grid)
+@@ -246,47 +247,47 @@ def release_zoom(self, event):
+         self.clear_auto()
+ 
+     def __on_check_auto_f(self, event):
+-        self.settings.autoF = event.Checked()
++        self.settings.autoF = event.IsChecked()
+         self.panel.redraw_plot()
+ 
+     def __on_check_auto_l(self, event):
+-        self.settings.autoL = event.Checked()
++        self.settings.autoL = event.IsChecked()
+         self.panel.redraw_plot()
+ 
+     def __on_check_auto_t(self, event):
+-        self.settings.autoT = event.Checked()
++        self.settings.autoT = event.IsChecked()
+         self.panel.redraw_plot()
+ 
+     def __on_check_update(self, event):
+-        self.settings.liveUpdate = event.Checked()
++        self.settings.liveUpdate = event.IsChecked()
+ 
+     def __on_check_grid(self, event):
+-        grid = event.Checked()
++        grid = event.IsChecked()
+         self.settings.grid = grid
+         self.panel.set_grid(grid)
+ 
+     def __on_check_peak(self, event):
+-        peak = event.Checked()
++        peak = event.IsChecked()
+         self.settings.annotate = peak
+         self.panel.redraw_plot()
+ 
+     def __on_check_peaks(self, event):
+-        peaks = event.Checked()
++        peaks = event.IsChecked()
+         self.settings.peaks = peaks
+         self.panel.redraw_plot()
+ 
+     def __on_check_fade(self, event):
+-        fade = event.Checked()
++        fade = event.IsChecked()
+         self.settings.fadeScans = fade
+         self.panel.redraw_plot()
+ 
+     def __on_check_wire(self, event):
+-        wire = event.Checked()
++        wire = event.IsChecked()
+         self.settings.wireframe = wire
+         self.panel.create_plot()
+ 
+     def __on_check_avg(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.AVG
+         else:
+@@ -295,7 +296,7 @@ def __on_check_avg(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_min(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.MIN
+         else:
+@@ -304,7 +305,7 @@ def __on_check_min(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_max(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.MAX
+         else:
+@@ -313,7 +314,7 @@ def __on_check_max(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_var(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.VAR
+         else:
+@@ -322,7 +323,7 @@ def __on_check_var(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_smooth(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.SMOOTH
+         else:
+@@ -331,7 +332,7 @@ def __on_check_smooth(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_diff(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.DIFF
+         else:
+@@ -340,7 +341,7 @@ def __on_check_diff(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_check_delta(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         if check:
+             self.settings.plotFunc = PlotFunc.DELTA
+         else:
+@@ -365,7 +366,7 @@ def __on_colour(self, event):
+         self.panel.redraw_plot()
+ 
+     def __on_colour_use(self, event):
+-        check = event.Checked()
++        check = event.IsChecked()
+         self.settings.colourMapUse = check
+         self.colourId.Enable(check)
+         self.plot.set_colourmap_use(check)
+@@ -374,7 +375,7 @@ def __on_colour_use(self, event):
+     def __add_check_tool(self, bitmap, toolTip, callback, setting=None, toolId=None):
+         if toolId is None:
+             toolId = wx.NewId()
+-        self.AddCheckTool(toolId, load_bitmap(bitmap), shortHelp=toolTip)
++        self.AddCheckTool(toolId, "", load_bitmap(bitmap), shortHelp=toolTip)
+         wx.EVT_TOOL(self, toolId, callback)
+         if setting is not None:
+             self.ToggleTool(toolId, setting)
+@@ -382,7 +383,7 @@ def __add_check_tool(self, bitmap, toolTip, callback, setting=None, toolId=None)
+ 
+     def __add_spacer(self, temp=True):
+         sepId = wx.NewId()
+-        self.AddCheckTool(sepId, load_bitmap('spacer'))
++        self.AddCheckTool(sepId, "", load_bitmap('spacer'))
+         self.EnableTool(sepId, False)
+         if temp:
+             self.extraTools.append(sepId)
+@@ -597,13 +598,13 @@ def __init__(self, panel):
+         self.AddSeparator()
+ 
+         gridId = wx.NewId()
+-        self.AddCheckTool(gridId, load_bitmap('grid'),
++        self.AddCheckTool(gridId, "", load_bitmap('grid'),
+                           shortHelp='Toggle grid')
+         self.ToggleTool(gridId, True)
+         wx.EVT_TOOL(self, gridId, self.__on_check_grid)
+ 
+     def __on_check_grid(self, event):
+-        grid = event.Checked()
++        grid = event.IsChecked()
+         self.panel.set_grid(grid)
+ 
+     def clear_auto(self):
+@@ -611,5 +612,5 @@ def clear_auto(self):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/utils_google.py b/rtlsdr_scanner/utils_google.py
+index beee956..b4590e2 100644
+--- a/rtlsdr_scanner/utils_google.py
++++ b/rtlsdr_scanner/utils_google.py
+@@ -42,5 +42,5 @@ def create_gearth(handle):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/utils_mpl.py b/rtlsdr_scanner/utils_mpl.py
+index b7b8a0f..311f773 100644
+--- a/rtlsdr_scanner/utils_mpl.py
++++ b/rtlsdr_scanner/utils_mpl.py
+@@ -134,5 +134,5 @@ def create_heatmap(xs, ys, imageSize, blobSize, cmap):
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/utils_wx.py b/rtlsdr_scanner/utils_wx.py
+index cb4702a..489f7dc 100644
+--- a/rtlsdr_scanner/utils_wx.py
++++ b/rtlsdr_scanner/utils_wx.py
+@@ -27,6 +27,7 @@
+ 
+ import wx
+ from rtlsdr_scanner.misc import get_resource
++from matplotlib.backends.backend_wx import _load_bitmap
+ 
+ 
+ class ValidatorCoord(wx.PyValidator):
+@@ -74,7 +75,6 @@ def load_bitmap(name):
+ 
+     return wx.Bitmap(filename, wx.BITMAP_TYPE_PNG)
+ 
+-
+ def load_icon(name):
+     filename = get_resource(name + '.png')
+ 
+@@ -88,5 +88,5 @@ def close_modeless():
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/rtlsdr_scanner/widgets.py b/rtlsdr_scanner/widgets.py
+index bd31e3d..5271595 100644
+--- a/rtlsdr_scanner/widgets.py
++++ b/rtlsdr_scanner/widgets.py
+@@ -26,15 +26,15 @@
+ from collections import OrderedDict
+ 
+ import wx
+-from wx.grid import PyGridCellRenderer
++from wx.grid import GridCellRenderer
+ 
+ 
+-class MultiButton(wx.PyControl):
++class MultiButton(wx.Control):
+     PADDING = 5
+     ARROW_SIZE = 6
+ 
+     def __init__(self, parent, options, tips=None, selected=0):
+-        wx.PyControl.__init__(self, parent=parent, size=wx.DefaultSize,
++        wx.Control.__init__(self, parent=parent, size=wx.DefaultSize,
+                               style=wx.NO_BORDER)
+         self.options = options
+         self.tips = tips
+@@ -104,7 +104,7 @@ def __show_menu(self):
+     def __set_text(self):
+         self.SetLabel(self.options[self.selected])
+         if self.tips is not None:
+-            self.SetToolTipString(self.tips[self.selected])
++            self.SetToolTip(self.tips[self.selected])
+         self.Refresh()
+ 
+     def __is_over_arrow(self, event):
+@@ -188,14 +188,14 @@ def GetSelected(self):
+         return self.selected
+ 
+ 
+-class Led(wx.PyControl):
++class Led(wx.Control):
+     PULSE_TIME = 250
+ 
+     def __init__(self, parent, id=wx.ID_ANY, label=''):
+         self.lit = False
+         self.colour = wx.GREEN
+ 
+-        wx.PyControl.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
++        wx.Control.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
+                               style=wx.NO_BORDER)
+ 
+         self.SetLabel(label)
+@@ -261,13 +261,13 @@ def pulse(self, colour=wx.GREEN):
+         self.timer.Start(self.PULSE_TIME)
+ 
+ 
+-class SatLevel(wx.PyControl):
++class SatLevel(wx.Control):
+     BAR_WIDTH = 10
+     BAR_HEIGHT = 75
+     PADDING = 5
+ 
+     def __init__(self, parent, id=wx.ID_ANY, barCount=16):
+-        wx.PyControl.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
++        wx.Control.__init__(self, parent=parent, id=id, size=wx.DefaultSize,
+                               style=wx.NO_BORDER)
+ 
+         self.barCount = barCount
+@@ -367,19 +367,19 @@ def clear_sats(self):
+         self.Refresh()
+ 
+ 
+-class TickCellRenderer(PyGridCellRenderer):
++class TickCellRenderer(GridCellRenderer):
+     SIZE = 5
+     PADDING = 3
+ 
+     def __init__(self):
+-        PyGridCellRenderer.__init__(self)
++        GridCellRenderer.__init__(self)
+ 
+     def GetBestSize(self, _grid, _attr, _dc, _row, _col):
+         return wx.Size(self.SIZE + self.PADDING, self.SIZE + self.PADDING)
+ 
+     def Draw(self, grid, attr, dc, rect, row, col, _isSelected):
+         dc.SetBrush(wx.Brush(attr.GetBackgroundColour()))
+-        dc.DrawRectangleRect(rect)
++        dc.DrawRectangle(rect)
+ 
+         gc = wx.GraphicsContext.Create(dc)
+         gc.SetPen(wx.Pen(attr.GetTextColour()))
+@@ -401,7 +401,7 @@ def Draw(self, grid, attr, dc, rect, row, col, _isSelected):
+             gc.StrokePath(pathTick)
+ 
+ 
+-class CheckBoxCellRenderer(PyGridCellRenderer):
++class CheckBoxCellRenderer(GridCellRenderer):
+     SIZE = 8
+ 
+     def __init__(self, parent, showBox=True):
+@@ -409,7 +409,7 @@ def __init__(self, parent, showBox=True):
+         self.showBox = showBox
+         self.enabled = True
+ 
+-        PyGridCellRenderer.__init__(self)
++        GridCellRenderer.__init__(self)
+ 
+     def GetBestSize(self, _grid, _attr, _dc, _row, _col):
+         return wx.Size(self.SIZE * 2, self.SIZE)
+@@ -421,7 +421,7 @@ def Draw(self, grid, _attr, dc, rect, row, col, _isSelected):
+         if not self.enabled:
+             flags |= wx.CONTROL_DISABLED
+ 
+-        dc.DrawRectangleRect(rect)
++        dc.DrawRectangle(rect)
+         renderer = wx.RendererNative.Get()
+         renderer.DrawCheckBox(self.parent, dc, rect, flags)
+ 
+@@ -453,9 +453,9 @@ def __on_motion(self, event):
+             else:
+                 toolTip = ''
+ 
+-            self.grid.GetGridWindow().SetToolTipString(toolTip)
++            self.grid.GetGridWindow().SetToolTip(toolTip)
+ 
+ 
+ if __name__ == '__main__':
+-    print 'Please run rtlsdr_scan.py'
++    print('Please run rtlsdr_scan.py')
+     exit(1)
+diff --git a/setup.py b/setup.py
+index 6ff2ddd..4d78307 100644
+--- a/setup.py
++++ b/setup.py
+@@ -47,4 +47,4 @@
+       license='GPLv3',
+       packages=find_packages(),
+       package_data={'rtlsdr_scanner.res': ['*']},
+-      install_requires=['numpy', 'matplotlib', 'Pillow', 'pyrtlsdr', 'pyserial', 'visvis'])
++      install_requires=['numpy', 'matplotlib', 'Pillow', 'pyrtlsdr', 'pyserial', 'visvis', 'six'])

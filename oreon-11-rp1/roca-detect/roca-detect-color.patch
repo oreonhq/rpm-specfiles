@@ -1,0 +1,183 @@
+diff -up ./roca/detect.py.color ./roca/detect.py
+--- ./roca/detect.py.color	2018-03-02 09:29:08.000000000 -0500
++++ ./roca/detect.py	2024-07-15 21:19:47.229232769 -0400
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#! /usr/bin/python3 -sPsPsPsPsPs
+ # -*- coding: utf-8 -*-
+ 
+ """
+@@ -24,7 +24,7 @@ The fingerprinter supports the following
+ Script requirements:
+ 
+     - Tested on Python 2.7.13, 3.4, 3.5, 3.6
+-    - pip install cryptography pgpdump coloredlogs future six pycrypto>=2.6 python-dateutil pyx509_ph4 apk_parse_ph4 pyjks M2Crypto
++    - pip install cryptography pgpdump coloredlogs six pycrypto>=2.6 python-dateutil pyx509_ph4 apk_parse_ph4 pyjks M2Crypto
+     - some system packages are usually needed for pip to install dependencies (like gcc):
+         sudo sudo yum install python-devel python-pip gcc gcc-c++ make automake autoreconf libtool openssl-devel libffi-devel dialog
+         sudo apt-get install python-pip python-dev build-essential libssl-dev libffi-dev
+@@ -33,17 +33,17 @@ Script requirements:
+     https://roca.crocs.fi.muni.cz
+ """
+ 
+-from future.utils import iteritems
+ from builtins import bytes
+-from past.builtins import basestring
+-from past.builtins import long
+ 
+ from functools import reduce
+ 
+ import json
+ import argparse
+ import logging
+-import coloredlogs
++try:
++  import coloredlogs
++except:
++  coloredlogs = None
+ import base64
+ import hashlib
+ import sys
+@@ -62,8 +62,17 @@ from math import ceil, log
+ LOG_FORMAT = '%(asctime)s [%(process)d] %(levelname)s %(message)s'
+ 
+ 
++
+ logger = logging.getLogger(__name__)
+-coloredlogs.install(level=logging.INFO, fmt=LOG_FORMAT)
++if coloredlogs:
++  coloredlogs.install(level=logging.INFO, fmt=LOG_FORMAT)
++else:
++  logging.basicConfig(
++	  stream=sys.stdout,
++	  level=logging.INFO,
++	  format='%(asctime)s %(message)s',
++	  datefmt='%Y%b%d %H:%M:%S'
++  )
+ 
+ 
+ #
+@@ -109,7 +118,7 @@ def format_pgp_key(key):
+     """
+     if key is None:
+         return None
+-    if isinstance(key, (int, long)):
++    if isinstance(key, int):
+         return '%016x' % key
+     elif isinstance(key, list):
+         return [format_pgp_key(x) for x in key]
+@@ -311,7 +320,7 @@ def to_string(x):
+     """
+     if isinstance(x, bytes):
+         return x.decode('utf-8')
+-    if isinstance(x, basestring):
++    if isinstance(x, str):
+         return x
+ 
+ 
+@@ -323,7 +332,7 @@ def to_bytes(x):
+     """
+     if isinstance(x, bytes):
+         return x
+-    if isinstance(x, basestring):
++    if isinstance(x, str):
+         return x.encode('utf-8')
+ 
+ 
+@@ -457,8 +466,8 @@ class TestResult(object):
+     """
+     def __init__(self, data=None, **kwargs):
+         self._data = collections.OrderedDict(data if data is not None else {})
+-        for key, value in iteritems(kwargs):
+-            self._data[key] = value
++        for key in kwargs:
++            self._data[key] = kwargs[key]
+ 
+     @property
+     def type(self):
+@@ -1759,7 +1768,7 @@ class RocaFingerprinter(object):
+         :param sub_idx:
+         :return:
+         """
+-        if isinstance(data, (int, long)):
++        if isinstance(data, int):
+             js = collections.OrderedDict()
+             js['type'] = 'js-mod-num'
+             js['fname'] = name
+@@ -1941,7 +1950,7 @@ class RocaFingerprinter(object):
+         ret = []
+         num_certs_found = 0
+         for idx, match in enumerate(matches):
+-            match = re.sub('[\r\t\n\s]', '', match)
++            match = re.sub(r'[\r\t\n\s]', '', match)
+             try:
+                 bindata = base64.b64decode(match)
+                 x509 = load_der_x509_certificate(bindata, self.get_backend())
+@@ -2242,7 +2251,7 @@ class RocaFingerprinter(object):
+         parser = self.init_parser()
+         self.args = parser.parse_args()
+ 
+-        if self.args.debug:
++        if self.args.debug and coloredlogs:
+             coloredlogs.install(level=logging.DEBUG, fmt=LOG_FORMAT)
+ 
+         self.work()
+diff -up ./roca/detect_tls.py.color ./roca/detect_tls.py
+--- ./roca/detect_tls.py.color	2018-03-02 09:29:08.000000000 -0500
++++ ./roca/detect_tls.py	2024-07-15 21:12:45.037986755 -0400
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#! /usr/bin/python3 -sPsPsPsPsPs
+ # -*- coding: utf-8 -*-
+ 
+ """
+@@ -21,7 +21,6 @@ Script requirements:
+ import sys
+ import argparse
+ import logging
+-import coloredlogs
+ from ssl import get_server_certificate
+ from roca.detect import RocaFingerprinter
+ 
+@@ -151,7 +150,16 @@ class RocaTLSFingerprinter(object):
+         Init command line parser
+         :return:
+         """
+-        parser = argparse.ArgumentParser(description='ROCA TLS Fingerprinter')
++        parser = argparse.ArgumentParser(
++            formatter_class=argparse.RawDescriptionHelpFormatter,
++            description='''ROCA TLS Fingerprinter
++
++Reads from one or more text files that contain a newline-separated list of
++address:port entries. Example:
++
++    github.com:443
++    google.com:443
++    internal.example.com:8080''')
+ 
+         parser.add_argument('--debug', dest='debug', default=False, action='store_const', const=True,
+                             help='Debugging logging')
+@@ -187,7 +195,6 @@ class RocaTLSFingerprinter(object):
+         self.roca.args.indent = self.args.indent
+ 
+         if self.args.debug:
+-            coloredlogs.install(level=logging.DEBUG)
+             self.roca.args.debug = True
+ 
+         self.work()
+diff -up ./setup.py.color ./setup.py
+--- ./setup.py.color	2018-03-02 09:29:08.000000000 -0500
++++ ./setup.py	2024-07-15 21:12:45.097987863 -0400
+@@ -8,11 +8,8 @@ version = '1.2.12'
+ # Please update tox.ini when modifying dependency version requirements
+ install_requires = [
+     'cryptography>=1.2.3',
+-    'setuptools>=1.0',
+     'six',
+-    'future',
+-    'coloredlogs',
+-    'pgpdump',
++    'pgpdump3',
+     'python-dateutil',
+ ]
+ 

@@ -1,0 +1,33 @@
+--- why3-1.8.2/lib/coq/bv/BV_Gen.v.orig	2025-09-16 09:37:32.000000000 -0600
++++ why3-1.8.2/lib/coq/bv/BV_Gen.v	2026-03-03 17:07:31.885655859 -0700
+@@ -994,7 +994,7 @@ match p with
+             ((Vector.last prev) :: (Vector.shiftout prev))
+ end.
+ 
+-Lemma mod1_is_mod : forall x y, y > 0 -> mod1 x y = Zmod x y.
++Lemma mod1_is_mod : forall x y, y > 0 -> mod1 x y = Z.modulo x y.
+   intros; unfold mod1, div.
+   case Z_le_dec; intro.
+   rewrite Z.mod_eq by lia; trivial.
+--- why3-1.8.2/lib/coq/int/EuclideanDivision.v.orig	2025-09-16 09:37:32.000000000 -0600
++++ why3-1.8.2/lib/coq/int/EuclideanDivision.v	2026-03-03 17:08:16.588687381 -0700
+@@ -21,7 +21,7 @@ Require Import Lia.
+ Definition div : Numbers.BinNums.Z -> Numbers.BinNums.Z -> Numbers.BinNums.Z.
+ Proof.
+ intros x y.
+-case (Z_le_dec 0 (Zmod x y)) ; intros H.
++case (Z_le_dec 0 (Z.modulo x y)) ; intros H.
+ exact (Z.div x y).
+ exact (Z.div x y + 1)%Z.
+ Defined.
+--- why3-1.8.2/lib/coq/number/Divisibility.v.orig	2025-09-16 09:37:32.000000000 -0600
++++ why3-1.8.2/lib/coq/number/Divisibility.v	2026-03-03 17:08:33.884500190 -0700
+@@ -203,7 +203,7 @@ Lemma divides_mod_euclidean :
+   divides b a -> ((int.EuclideanDivision.mod1 a b) = 0%Z).
+ Proof.
+ intros a b Zb H.
+-assert (Zmod a b = Z0).
++assert (Z.modulo a b = Z0).
+ now apply Zdivide_mod.
+ unfold mod1, div.
+ rewrite H0.

@@ -1,0 +1,38 @@
+From 2685b2875892e2f79b9171747e807b8ee577fe50 Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Fri, 12 Dec 2025 12:52:03 -0600
+Subject: [PATCH] Drop more over-aggressive asserts from test_rosdep_main
+ (#1020)
+
+These asserts check that nothing was written to stderr during some
+top-level rosdep invocations. On derivative platforms like CentOS and
+AlmaLinux, a message is written to stderr during normal operation
+stating that the platform is an alias to the parent platform (RHEL, in
+this example). This is normal and expected behavior on those platforms,
+so the tests should still pass there.
+
+Follow-up to 7ce18a308fa3157e165ff399d2ae53131c64c040
+Fixes 0a38d49b739f0d957b1af6f2323bba9b6da619cf
+---
+ test/test_rosdep_main.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/test/test_rosdep_main.py b/test/test_rosdep_main.py
+index 78bde7ef0..8c3dc23d2 100644
+--- a/test/test_rosdep_main.py
++++ b/test/test_rosdep_main.py
+@@ -291,14 +291,12 @@ def test_search(self):
+                 assert 'Closest keys' in stdout.getvalue(), stdout.getvalue()
+                 assert 'curl' in stdout.getvalue(), stdout.getvalue()
+                 assert 'Closest packages' not in stdout.getvalue(), stdout.getvalue()
+-                assert not stderr.getvalue(), stderr.getvalue()
+             with fakeout() as b:
+                 rosdep_main(['search', 'libeigen3-dev', '--os=ubuntu:noble'] + cmd_extras)
+                 stdout, stderr = b
+                 assert 'Closest keys' not in stdout.getvalue(), stdout.getvalue()
+                 assert 'Closest packages' in stdout.getvalue(), stdout.getvalue()
+                 assert 'eigen:' in stdout.getvalue(), stdout.getvalue()
+-                assert not stderr.getvalue(), stderr.getvalue()
+         except SystemExit:
+             assert False, 'system exit occurred'
+         try:

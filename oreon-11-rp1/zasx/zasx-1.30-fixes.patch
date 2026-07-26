@@ -1,0 +1,1291 @@
+diff -urN Zasx.org/Makefile Zasx/Makefile
+--- Zasx.org/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ Zasx/Makefile	2006-04-02 20:16:58.000000000 +0200
+@@ -0,0 +1,25 @@
++PREFIX  = /usr/local
++DATADIR = $(PREFIX)/share/$(TARGET)
++CFLAGS  = -g -Wall -Wno-deprecated-declarations -O2 -fsigned-char -DALLEGRO_FIX_ALIASES
++LDFLAGS = `allegro-config --libs` -ldumb -laldmb -lm -lpthread
++DEFINES = -DDATADIR=\"$(DATADIR)/\" -Iinclude
++OBJS    = obj/anim.o obj/dataload.o obj/gamemenu.o obj/input.o obj/log.o \
++ obj/particle.o obj/scorer.o obj/asteroid.o obj/drs.o obj/gametimer.o \
++ obj/player.o obj/star.o obj/config.o obj/effect.o obj/gfx.o obj/main.o \
++ obj/ppcol.o obj/weapon.o obj/jgmod.o obj/unix.o
++TARGET  = zasx
++
++$(TARGET): $(OBJS)
++	$(CC) $(LDFLAGS) -o $@ $^
++
++obj/%.o: src/%.c
++	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $<
++
++install: $(TARGET)
++	mkdir -p $(PREFIX)/bin
++	mkdir -p $(DATADIR)
++	install -p -m 755 $(TARGET) $(PREFIX)/bin
++	install -p -m 644 data/*.dat $(DATADIR)
++	
++clean:
++	rm -f $(OBJS) $(TARGET) src/*~ include/*~
+diff -urN Zasx.org/include/anim.h Zasx/include/anim.h
+--- Zasx.org/include/anim.h	2001-08-09 01:18:44.000000000 +0200
++++ Zasx/include/anim.h	2006-04-02 20:16:58.000000000 +0200
+@@ -1,3 +1,3 @@
+ void load_anim_bank(char *key, char *filename);
+ struct PARTICLE *make_anim_particle(char *key);
+-void remove_anim();
+\ No newline at end of file
++void remove_anim();
+diff -urN Zasx.org/include/asteroid.h Zasx/include/asteroid.h
+--- Zasx.org/include/asteroid.h	2001-04-10 17:32:02.000000000 +0200
++++ Zasx/include/asteroid.h	2006-04-02 20:16:58.000000000 +0200
+@@ -9,4 +9,4 @@
+ } ASTEROID;
+ 
+ ASTEROID *create_asteroid(int family, int size);
+-void destroy_asteroid(ASTEROID *a);
+\ No newline at end of file
++void destroy_asteroid(ASTEROID *a);
+diff -urN Zasx.org/include/config.h Zasx/include/config.h
+--- Zasx.org/include/config.h	2001-04-14 16:31:28.000000000 +0200
++++ Zasx/include/config.h	2006-04-02 20:16:58.000000000 +0200
+@@ -5,4 +5,4 @@
+ 
+ extern const char *config_get_input_name(int type);
+ extern const char *config_get_key_name(int n);
+-extern void get_default_player_config(int n, INPUT *dev);
+\ No newline at end of file
++extern void get_default_player_config(int n, INPUT *dev);
+diff -urN Zasx.org/include/game.h Zasx/include/game.h
+--- Zasx.org/include/game.h	2001-08-09 01:04:14.000000000 +0200
++++ Zasx/include/game.h	2006-04-02 20:16:58.000000000 +0200
+@@ -42,3 +42,4 @@
+ 
+ extern void DoGame(int n);
+ 
++extern int FullscreenToggleRequested;
+diff -urN Zasx.org/include/gamemenu.h Zasx/include/gamemenu.h
+--- Zasx.org/include/gamemenu.h	2001-04-14 16:55:02.000000000 +0200
++++ Zasx/include/gamemenu.h	2006-04-02 20:16:58.000000000 +0200
+@@ -1 +1 @@
+-extern void DoMenu();
+\ No newline at end of file
++extern void DoMenu();
+diff -urN Zasx.org/include/gametimer.h Zasx/include/gametimer.h
+--- Zasx.org/include/gametimer.h	2001-04-14 16:03:48.000000000 +0200
++++ Zasx/include/gametimer.h	2006-04-02 20:16:58.000000000 +0200
+@@ -37,4 +37,4 @@
+ #endif
+ 
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -urN Zasx.org/include/gfx.h Zasx/include/gfx.h
+--- Zasx.org/include/gfx.h	2001-05-20 22:28:12.000000000 +0200
++++ Zasx/include/gfx.h	2006-04-02 20:16:58.000000000 +0200
+@@ -8,8 +8,11 @@
+ 
+ 
+ extern BITMAP *BackBuffer;
++extern int display_w;
++extern int display_h;
++extern int fullscreen;
+ 
+-extern int GFX_Init(int w, int h, int c, int f);
++extern int GFX_Init(void);
+ extern int GFX_Shutdown();
+ 
+ extern BITMAP *GFX_CreateAccelBitmap(int w, int h);
+@@ -17,8 +20,8 @@
+ 
+ extern void GFX_HQ_RotateSprite(BITMAP *dest, BITMAP *src, int x, int y, fixed angle);
+ 
+-#define DISPLAY_W 640
+-#define DISPLAY_H 480
++#define DISPLAY_W display_w
++#define DISPLAY_H display_h
+ 
+ 
+ #ifdef __cplusplus
+@@ -26,4 +29,4 @@
+ #endif
+ 
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -urN Zasx.org/include/jgmod.h Zasx/include/jgmod.h
+--- Zasx.org/include/jgmod.h	1970-01-01 01:00:00.000000000 +0100
++++ Zasx/include/jgmod.h	2006-04-02 20:16:58.000000000 +0200
+@@ -0,0 +1,40 @@
++/*  incomplete DUMB JGMOD compatibility wrapper, because JGMOD's license is
++    not opensource / GPL compatible and because there are already enough mod
++    playing libs.
++   
++    Copyright 2006 Hans de Goede <j.w.r.degoede@hhs.nl>
++   
++    This wrapper is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public   
++    License as published by the Free Software Foundation; either 
++    version 2.1 of the License, or (at your option) any later version.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of 
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library; if not, write to the Free Software
++    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA   
++*/
++   
++#ifndef __JGMOD_H
++#define __JGMOD_H
++
++#include <aldumb.h>
++
++#define JGMOD DUH
++
++void install_mod(int channels); /* ignored */
++void remove_mod(void);
++
++JGMOD *load_mod(const char *path); /* path may be a packfile # index */
++void destroy_mod(JGMOD *mod);
++
++void play_mod(JGMOD *mod, int loop);
++void stop_mod(void);
++
++void set_mod_volume(int volume); /* 0 - 255 */
++
++#endif
+diff -urN Zasx.org/include/log.h Zasx/include/log.h
+--- Zasx.org/include/log.h	2001-04-18 13:34:38.000000000 +0200
++++ Zasx/include/log.h	2006-04-02 20:16:58.000000000 +0200
+@@ -53,10 +53,10 @@
+ #else
+ 
+ 
+-#define ERROR(n, x) {}
+-#define ERROR2(n, x, y) {}
+-#define VERROR(n, x) {}
+-#define LOG {}
++#define ERROR(n, x)
++#define ERROR2(n, x, y)
++#define VERROR(n, x)
++#define LOG(format, arg...)
+ 
+ #endif
+ 
+diff -urN Zasx.org/include/particle.h Zasx/include/particle.h
+--- Zasx.org/include/particle.h	2001-05-13 22:56:30.000000000 +0200
++++ Zasx/include/particle.h	2006-04-02 20:16:58.000000000 +0200
+@@ -94,4 +94,4 @@
+ void clear_particles();
+ int install_particle();
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -urN Zasx.org/include/star.h Zasx/include/star.h
+--- Zasx.org/include/star.h	2001-05-13 16:42:06.000000000 +0200
++++ Zasx/include/star.h	2006-04-02 20:16:58.000000000 +0200
+@@ -18,4 +18,4 @@
+ void clear_stars();
+ void destroy_star(STAR *star);
+ int install_star();
+-void add_ray();
+\ No newline at end of file
++void add_ray();
+diff -urN Zasx.org/include/weapon.h Zasx/include/weapon.h
+--- Zasx.org/include/weapon.h	2001-04-21 20:05:48.000000000 +0200
++++ Zasx/include/weapon.h	2006-04-02 20:16:58.000000000 +0200
+@@ -52,4 +52,4 @@
+ extern WEAPON *load_weapon(char *filename);
+ 
+ extern int get_ship_weapon_ammo(SHIP_WEAPON *w);
+-extern int get_weapon_ammo(WEAPON *w);
+\ No newline at end of file
++extern int get_weapon_ammo(WEAPON *w);
+diff -urN Zasx.org/src/anim.c Zasx/src/anim.c
+--- Zasx.org/src/anim.c	2001-08-09 01:20:10.000000000 +0200
++++ Zasx/src/anim.c	2006-04-02 20:16:58.000000000 +0200
+@@ -328,4 +328,4 @@
+ 	AnimKeys = NULL;
+ 
+ 	return;
+-}
+\ No newline at end of file
++}
+diff -urN Zasx.org/src/asteroid.c Zasx/src/asteroid.c
+--- Zasx.org/src/asteroid.c	2001-08-02 01:38:10.000000000 +0200
++++ Zasx/src/asteroid.c	2006-04-02 20:16:58.000000000 +0200
+@@ -52,4 +52,4 @@
+ 	free(a);
+ 
+ 	return;
+-}
+\ No newline at end of file
++}
+diff -urN Zasx.org/src/config.c Zasx/src/config.c
+--- Zasx.org/src/config.c	2001-08-02 01:38:08.000000000 +0200
++++ Zasx/src/config.c	2006-04-02 20:16:58.000000000 +0200
+@@ -26,6 +26,11 @@
+ 	{"W", "S", "D", "A", "LControl"}
+ };
+ 
++const char *default_joy[NUM_PLAYERS][NUM_KEYS] = {
++	{"Joy0 0 -2", "Joy0 0 1", "Joy0 0 0", "Joy0 0 -1", "Joy0 0 0"},
++	{"Joy1 0 -2", "Joy1 0 1", "Joy1 0 0", "Joy1 0 -1", "Joy1 0 0"}
++};
++
+ 
+ INPUT *load_player_input_config(int n) {
+ 
+@@ -41,7 +46,9 @@
+ 		return NULL;
+ 	}
+ 
++#ifndef __unix__
+ 	set_config_file("zasx.cfg");
++#endif
+ 
+ 	sprintf(keyname, "Player%i_Type", n);
+ 	type = get_config_string("controls", keyname, "keyboard");
+@@ -57,7 +64,10 @@
+ 
+ 		for (i = 0; i < NUM_KEYS; i++) {
+ 			sprintf(keyname, "Player%i_%s", n, control_name[i]);
+-			new_key = get_config_string("controls", keyname, default_key[n - 1][i]);
++			new_key = get_config_string("controls", keyname,
++				(itype== INPUT_TYPE_JOYSTICK)?
++				default_joy[n - 1][i]:
++				default_key[n - 1][i]);
+ 			set_input(ret, input_names[i], new_key);
+ 		}
+ 	}
+@@ -90,7 +100,9 @@
+ 		return;
+ 	}
+ 
++#ifndef __unix__
+ 	set_config_file("zasx.cfg");
++#endif
+ 
+ 	sprintf(keyname, "Player%i_Type", n);
+ 	type = get_input_type_name(in);
+@@ -99,7 +111,7 @@
+ 
+ 	for (i = 0; i < NUM_KEYS; i++) {
+ 		sprintf(keyname, "Player%i_%s", n, control_name[i]);
+-		set_config_string("controls", keyname, get_input_name(in, input_names[i], buf, 11));
++		set_config_string("controls", keyname, get_input_name(in, input_names[i], buf, 0));
+ 	}		
+ 
+ 	return;
+@@ -119,8 +131,29 @@
+ 		return;
+ 	}
+ 
+-	for (i = 0; i < NUM_KEYS; i++)
+-		set_input(dev, input_names[i], default_key[n - 1][i]);
++	if (get_input_type(dev) == INPUT_TYPE_JOYSTICK)
++	{
++		/* <sigh> broken by design get the full name to find the
++		   joystick number, after this use player 1 defaults as base
++		   and replace the joystick number with the device joy number.
++		   */
++		char buf[16], *p = get_input_type_full_name(dev);
++		int joynum;
++
++		p += strlen("Joystick ");
++		joynum = atoi(p) - 1;
++		
++		for (i = 0; i < NUM_KEYS; i++)
++		{
++			/* replace the joystick number */
++			snprintf(buf, sizeof(buf), "Joy%d %s", joynum,
++				default_joy[0][i] + strlen("Joy0 "));
++			set_input(dev, input_names[i], buf);
++		}
++	}
++	else
++		for (i = 0; i < NUM_KEYS; i++)
++			set_input(dev, input_names[i], default_key[n - 1][i]);
+ 
+ 	return;
+-}
+\ No newline at end of file
++}
+diff -urN Zasx.org/src/dataload.c Zasx/src/dataload.c
+--- Zasx.org/src/dataload.c	2001-08-09 01:20:16.000000000 +0200
++++ Zasx/src/dataload.c	2006-04-02 20:16:58.000000000 +0200
+@@ -7,15 +7,17 @@
+  */
+ 
+ #include "allegro.h"
+-#include "game.h"
+-
+ #include "gfx.h"
+ #include "demo.h"
+ #include "jgmod.h"
+ #include "weapon.h"
+ #include "anim.h"
++#include "game.h"
+ 
+ 
++#ifndef DATADIR
++#define DATADIR "data/"
++#endif
+ 
+ int LoadData() {
+ 	
+@@ -42,10 +44,10 @@
+ 		set_color_conversion(COLORCONV_NONE);
+ 
+ 	/* Load Demo data file, convert to color depth, scale if necessary */
+-	demodata = load_datafile("data/demo.dat");
++	demodata = load_datafile(DATADIR "demo.dat");
+ 	if (!demodata) {
+ 		set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+-		allegro_message("Can't load Datafile!\ndata/demo.dat\n");
++		allegro_message("Can't load datafile demo.dat!\n");
+ 		return -2;
+ 	}
+ 
+@@ -61,7 +63,7 @@
+ 
+ 	UPDATE_LOAD_BAR("Color mapping tables     ");
+ 
+-	if (!exists("data/colormap.bin")) {
++	if (!exists(DATADIR "colormap.bin")) {
+ 		PACKFILE *file;
+ 		create_rgb_table(&palette_map, GamePal, NULL);
+ 
+@@ -82,7 +84,7 @@
+ 
+ 		set_add_blender(128, 128, 128, 255);
+ 
+-		file = pack_fopen("data/colormap.bin", "wp");
++		file = pack_fopen(DATADIR "colormap.bin", "wp");
+ 
+ 		if (file) {
+ 			pack_fwrite(&palette_map, sizeof(RGB_MAP), file);
+@@ -96,7 +98,7 @@
+ 	else {
+ 		PACKFILE *file;
+ 
+-		file = pack_fopen("data/colormap.bin", "rp");
++		file = pack_fopen(DATADIR "colormap.bin", "rp");
+ 
+ 		if (file) {
+ 			pack_fread(&palette_map, sizeof(RGB_MAP), file);
+@@ -174,22 +176,22 @@
+ 
+ 	UPDATE_LOAD_BAR("Music                    ");
+ 
+-	Music = load_mod("data/demo.dat#ZASX_XM");
++	Music = load_mod(DATADIR "demo.dat#ZASX_XM");
+ 
+ 	UPDATE_LOAD_BAR("Weapons                  ");
+ 
+-	NormalGun = load_weapon("data/demo.dat#NORMALGUN_WPN");
+-	RapidFireGun = load_weapon("data/demo.dat#RAPIDFIRE_WPN");
+-	LaserGun =  load_weapon("data/demo.dat#LASER_WPN");	
+-	Laser2Gun = load_weapon("data/demo.dat#LASER2_WPN");	
+-	Laser3Gun = load_weapon("data/demo.dat#LASER3_WPN");	
++	NormalGun = load_weapon(DATADIR "demo.dat#NORMALGUN_WPN");
++	RapidFireGun = load_weapon(DATADIR "demo.dat#RAPIDFIRE_WPN");
++	LaserGun =  load_weapon(DATADIR "demo.dat#LASER_WPN");	
++	Laser2Gun = load_weapon(DATADIR "demo.dat#LASER2_WPN");	
++	Laser3Gun = load_weapon(DATADIR "demo.dat#LASER3_WPN");	
+ 
+ 	UPDATE_LOAD_BAR("Health power-up          ");	
+-	load_anim_bank("Health", "data/health.dat");
++	load_anim_bank("Health", DATADIR "health.dat");
+ 	UPDATE_LOAD_BAR("RapidFire power-up       ");
+-	load_anim_bank("RapidFire", "data/rapid.dat");
++	load_anim_bank("RapidFire", DATADIR "rapid.dat");
+ 	UPDATE_LOAD_BAR("Laser power-up           ");
+-	load_anim_bank("LaserGun", "data/laser.dat");
++	load_anim_bank("LaserGun", DATADIR "laser.dat");
+ 	UPDATE_LOAD_BAR("Done.                    ");
+ 
+ #undef UPDATE_LOAD_BAR
+@@ -209,4 +211,4 @@
+ 	remove_anim();
+ 
+ 	return 0;
+-}
+\ No newline at end of file
++}
+diff -urN Zasx.org/src/drs.c Zasx/src/drs.c
+--- Zasx.org/src/drs.c	2001-05-12 22:52:12.000000000 +0200
++++ Zasx/src/drs.c	2006-04-02 20:16:58.000000000 +0200
+@@ -24,6 +24,7 @@
+ #include <allegro.h>
+ 
+ #include "drs.h"
++#include "gfx.h"
+ 
+ /* Rectangle.  */
+ typedef struct __DRS_rect_t
+@@ -89,9 +90,9 @@
+   __DRS_size = 2 * _size;
+ 
+   /* Allocate memory.  */
+-  DRS_work = create_bitmap (SCREEN_W, SCREEN_H);
+-  __DRS_bank = (int*) malloc (sizeof (int) * SCREEN_H);
+-  __DRS_span = (__DRS_span_t*) malloc (sizeof (__DRS_span_t) * SCREEN_W);
++  DRS_work = create_bitmap (DISPLAY_W, DISPLAY_H);
++  __DRS_bank = (int*) malloc (sizeof (int) * DISPLAY_H);
++  __DRS_span = (__DRS_span_t*) malloc (sizeof (__DRS_span_t) * DISPLAY_W);
+   __DRS_omem = (__DRS_rect_t*) malloc (sizeof (__DRS_rect_t) * __DRS_size);
+   __DRS_nmem = (__DRS_rect_t*) malloc (sizeof (__DRS_rect_t) * __DRS_size);
+ 
+@@ -122,10 +123,10 @@
+   /* Calculate bank starts.  */
+   {
+     int i;
+-    int next_bank_line = SCREEN_H;
++    int next_bank_line = DISPLAY_H;
+ 
+-    __DRS_bank[SCREEN_H - 1] = SCREEN_H;
+-    for (i = SCREEN_H - 2; i >= 0; i--)
++    __DRS_bank[DISPLAY_H - 1] = DISPLAY_H;
++    for (i = DISPLAY_H - 2; i >= 0; i--)
+       {
+ 	if (screen->line[i] >= screen->line[i + 1])
+ 	  next_bank_line = i + 1;
+@@ -263,7 +264,7 @@
+       if (__DRS_bbmp == 0)
+ 	clear_to_color (DRS_work, __DRS_bcol);
+       else
+-	blit (__DRS_bbmp, DRS_work, __DRS_xoff, __DRS_yoff, 0, 0, SCREEN_W, SCREEN_H);
++	blit (__DRS_bbmp, DRS_work, __DRS_xoff, __DRS_yoff, 0, 0, DISPLAY_W, DISPLAY_H);
+       __DRS_nnum = 0;
+     }
+   else
+@@ -288,7 +289,7 @@
+ 	  ybeg = (rbeg->y <= yend) ? yend : rbeg->y;
+ 	  yend = rbeg->y + rbeg->h;
+ 
+-	  if (ybeg >= SCREEN_H)
++	  if (ybeg >= DISPLAY_H)
+ 	    break;
+ 
+ 	  /* Add more rectangles to the strip.  */
+@@ -389,8 +390,8 @@
+ 
+   if (__DRS_dbuf != 0)
+     return;
+-  else if ((_w > 0) && (x < SCREEN_W) && ((x + _w) > 0)
+-	   && (_h > 0) && (y < SCREEN_H) && ((y + _h) > 0))
++  else if ((_w > 0) && (x < DISPLAY_W) && ((x + _w) > 0)
++	   && (_h > 0) && (y < DISPLAY_H) && ((y + _h) > 0))
+     {
+       /* Rectangle is visible on screen.  */
+       if ((__DRS_onum >= __DRS_size) || (__DRS_nnum >= __DRS_size))
+@@ -427,8 +428,8 @@
+ 
+   if (__DRS_dbuf != 0)
+     return;
+-  else if ((_w > 0) && (x < SCREEN_W) && ((x + _w) > 0)
+-	   && (_h > 0) && (y < SCREEN_H) && ((y + _h) > 0))
++  else if ((_w > 0) && (x < DISPLAY_W) && ((x + _w) > 0)
++	   && (_h > 0) && (y < DISPLAY_H) && ((y + _h) > 0))
+     {
+       /* Rectangle is visible on screen.  */
+       if (__DRS_nnum >= __DRS_size)
+@@ -459,8 +460,8 @@
+ 
+   if (__DRS_dbuf != 0)
+     return;
+-  else if ((_w > 0) && (x < SCREEN_W) && ((x + _w) > 0)
+-	   && (_h > 0) && (y < SCREEN_H) && ((y + _h) > 0))
++  else if ((_w > 0) && (x < DISPLAY_W) && ((x + _w) > 0)
++	   && (_h > 0) && (y < DISPLAY_H) && ((y + _h) > 0))
+     {
+       /* Rectangle is visible on screen.  */
+       if (__DRS_onum >= __DRS_size)
+@@ -493,7 +494,7 @@
+ 	vsync ();
+ 
+       /* Update the whole screen.  */
+-      blit (DRS_work, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
++      blit (DRS_work, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 
+       /* If double-buffering, then do full update always.  */
+       __DRS_full = __DRS_dbuf;
+@@ -523,7 +524,7 @@
+ 	  ybeg = (rbeg->y <= yend) ? yend : rbeg->y;
+ 	  yend = rbeg->y + rbeg->h;
+ 
+-	  if (ybeg >= SCREEN_H)
++	  if (ybeg >= DISPLAY_H)
+ 	    break;
+ 
+ 	  /* Limit height of the strip to fit in one bank.  */
+diff -urN Zasx.org/src/gamemenu.c Zasx/src/gamemenu.c
+--- Zasx.org/src/gamemenu.c	2001-08-02 01:37:52.000000000 +0200
++++ Zasx/src/gamemenu.c	2006-04-02 20:16:58.000000000 +0200
+@@ -300,10 +300,7 @@
+ 
+ 			SEND_MESSAGE(&ZasxDialog[0], MSG_DRAW, 0);
+ 
+-			if (DISPLAY_W != SCREEN_W || DISPLAY_H != SCREEN_H)
+-				stretch_blit(BackBuffer, screen, 0, 0, BackBuffer->w, BackBuffer->h, 0, 0, SCREEN_W, SCREEN_H);
+-			else
+-				blit(BackBuffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
++			blit(BackBuffer, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 
+ 		} while (1);
+ 
+diff -urN Zasx.org/src/gametimer.c Zasx/src/gametimer.c
+--- Zasx.org/src/gametimer.c	2001-08-02 01:37:50.000000000 +0200
++++ Zasx/src/gametimer.c	2006-04-02 20:25:10.000000000 +0200
+@@ -6,9 +6,9 @@
+  * Please refer to the accompanying file 'copying.txt' for details.
+  */
+ #include "allegro.h"
+-
++#include "gfx.h"
+ #include "gametimer.h"
+-
++#include "game.h"
+ #include "log.h"
+ 
+ 
+@@ -150,9 +150,28 @@
+ 
+ int GTIME_Poll() {
+ 
+-	int the_time = GameTime;
+-	int i, r;
++	int the_time, i, r, timers_elapsed = 0;
+ 
++	/* We have todo this in a function which gets called from both
++	   the game loop and the menu loop hence we do it here. Not a logical
++	   place or pretty, but it works. */
++	if (FullscreenToggleRequested)
++	{
++		fullscreen = !fullscreen;
++		if (set_gfx_mode(fullscreen? GFX_AUTODETECT_FULLSCREEN:
++				GFX_AUTODETECT_WINDOWED,
++				DISPLAY_W, DISPLAY_H, 0, 0))
++		{
++			fprintf(stderr,
++				"FATAL error switching Fullscreen<->Window\n");
++			exit(1);
++		}
++		set_palette(GamePal);
++		FullscreenToggleRequested = 0;
++	}
++	
++	the_time = GameTime;
++	
+ 	for (i = 0; i < NumPolled; i++) {
+ 
+ 		GTIME_POLL *p = Polled + i;		
+@@ -187,8 +206,13 @@
+ 				i--;
+ 				continue;
+ 			}
++			timers_elapsed++;
+ 		}
+ 	}
++
++	if (timers_elapsed == 0)
++		rest(1);
++		
+ 	return GTIME_OK;
+ }
+ 
+@@ -206,4 +230,4 @@
+ 
+ int GTIME_IsFrozen() {
+ 	return GTIME_FreezeFlag;
+-}
+\ No newline at end of file
++}
+diff -urN Zasx.org/src/gfx.c Zasx/src/gfx.c
+--- Zasx.org/src/gfx.c	2001-08-02 20:08:04.000000000 +0200
++++ Zasx/src/gfx.c	2006-04-02 20:16:58.000000000 +0200
+@@ -10,31 +10,22 @@
+ #include "gfx.h"
+ 
+ 
+-static BITMAP *oldscreen = NULL;
+ BITMAP *BackBuffer = NULL;
++int display_w = 640;
++int display_h = 480;
++int fullscreen = 1;
+ 
+ 
+-int GFX_Init(int w, int h, int c, int f) {
+-
+-	int mode = GFX_AUTODETECT;
+-
+-	if (oldscreen)
+-		destroy_bitmap(oldscreen);
+-	if (BackBuffer)
+-		destroy_bitmap(BackBuffer);	
+-
+-	set_color_depth(c);
+-
+-	if (!f)
+-		mode = GFX_AUTODETECT_WINDOWED;
+-
+-	if (set_gfx_mode(mode, w, h, 0, 0)) {	
++int GFX_Init(void)
++{
++	set_color_depth(8);
++	if (set_gfx_mode(fullscreen?
++			GFX_AUTODETECT_FULLSCREEN:GFX_AUTODETECT_WINDOWED,
++			display_w, display_h, 0, 0)) {
+ 		allegro_message("Can't set graphics mode!\n");
+ 		return -1;
+ 	}
+ 
+-	oldscreen = create_video_bitmap(w, h);
+-
+ 	return 0;
+ }
+ 
+@@ -42,12 +33,8 @@
+ 
+ int GFX_Shutdown() {
+ 
+-	if (oldscreen)
+-		destroy_bitmap(oldscreen);
+-
+ 	set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+ 
+-	oldscreen = NULL;
+ 	BackBuffer = NULL;
+ 
+ 	return 0;
+diff -urN Zasx.org/src/input.c Zasx/src/input.c
+--- Zasx.org/src/input.c	2001-08-02 01:37:42.000000000 +0200
++++ Zasx/src/input.c	2006-04-02 20:16:58.000000000 +0200
+@@ -23,7 +23,7 @@
+    "T",          "U",          "V",          "W",
+    "X",          "Y",          "Z",          "0",
+    "1",          "2",          "3",          "4",
+-   "5",          "6",          "7",          "_8",
++   "5",          "6",          "7",          "8",
+    "9",          "0_PAD",      "1_PAD",      "2_PAD",
+    "3_PAD",      "4_PAD",      "5_PAD",      "6_PAD",
+    "7_PAD",      "8_PAD",      "9_PAD",      "F1",
+@@ -40,7 +40,10 @@
+    "MINUS_PAD",  "PLUS_PAD",   "DEL_PAD",    "ENTER_PAD",
+    "PRTSCR",     "PAUSE",      "ABNT_C1",    "YEN",
+    "KANA",       "CONVERT",    "NOCONVERT",  "AT",
+-   "CIRCUMFLEX", "COLON2",     "KANJI",
++   "CIRCUMFLEX", "COLON2",     "KANJI",	     
++   "EQUALS_PAD", "BACKQUOTE",  "SEMICOLON",  "COMMAND",
++   "UNKNOWN1",   "UNKNOWN2",   "UNKNOWN3",   "UNKNOWN4",
++   "UNKNOWN5",   "UNKNOWN6",   "UNKNOWN7",   "UNKNOWN8",
+    "LSHIFT",     "RSHIFT",     "LCONTROL",   "RCONTROL",
+    "ALT",        "ALTGR",      "LWIN",       "RWIN",
+    "MENU",       "SCRLOCK",    "NUMLOCK",    "CAPSLOCK",
+@@ -48,7 +51,7 @@
+ };
+ 
+ static char *input_name[] = {
+-	"(none)", "Keyboard", "Mouse", "Joystick  "
++	"(none)", "Keyboard", "Mouse", "Joystick"
+ };
+ 
+ 
+@@ -305,21 +308,12 @@
+ 		return 0;
+ 	}
+ 
+-	if (dev->InputType == INPUT_TYPE_JOYSTICK) {
+-		INPUT_JOY *joys = dev->InputData;
+-
+-		if (joys)
+-			sprintf(input_name[dev->InputType], "Joystick");
+-	}
+-
+ 	return input_name[dev->InputType];
+ }
+ 
+ 
+ char* get_input_type_full_name(INPUT *dev) {
+ 
+-	char *ret;
+-
+ 	if (!dev) {
+ 		LOG("--== Error ==-- Input::get_input_type: Null argument 'dev'\n");
+ 		return 0;
+@@ -330,16 +324,18 @@
+ 		return 0;
+ 	}
+ 
+-	ret = input_name[dev->InputType];
+-
+ 	if (dev->InputType == INPUT_TYPE_JOYSTICK) {
+ 		INPUT_JOY *joys = dev->InputData;
+ 
+-		if (joys)
+-			sprintf(ret, "Joystick %i", joys->JoystickNum + 1);
++		if (joys) {
++			static char buf[16];
++			snprintf(buf, sizeof(buf), "Joystick %i",
++				joys->JoystickNum + 1);
++			return buf;
++		}
+ 	}
+ 
+-	return ret;
++	return input_name[dev->InputType];
+ }
+ 
+ 
+@@ -478,7 +474,7 @@
+ 	}
+ 
+ 
+-	if (length < 11) {
++	if (length && length < 11) {
+ 		LOG("--== Error ==-- Input::get_input_name: Buffer length (%i) must be at least 11 bytes long.\n");
+ 		return NULL;
+ 	}
+@@ -510,8 +506,13 @@
+ 			return NULL;
+ 		}
+ 
+-		sprintf(buf, "%*s", length - 1, r);
+-		return buf;
++		if (length)
++		{
++			sprintf(buf, "%*s", length - 1, r);
++			return buf;
++		}
++		else
++			return r;
+ 	}
+ 
+ 	else if (dev->InputType == INPUT_TYPE_JOYSTICK) {
+@@ -560,7 +561,7 @@
+ 		}
+ 
+ 		/* Print minimal form? */
+-		if (length < 12)
++		if (length == 0)
+ 			sprintf(buf, "Joy%i %i %i", joys->JoystickNum, sn, an);
+ 		else
+ 			sprintf(buf, "%*s%c", length - 1, r, nse ? 0 : ((an < 0) ? '+' : '-'));
+diff -urN Zasx.org/src/jgmod.c Zasx/src/jgmod.c
+--- Zasx.org/src/jgmod.c	1970-01-01 01:00:00.000000000 +0100
++++ Zasx/src/jgmod.c	2006-04-02 20:16:58.000000000 +0200
+@@ -0,0 +1,147 @@
++/*  incomplete DUMB JGMOD compatibility wrapper, because JGMOD's license is
++    not opensource / GPL compatible and because there are already enough mod
++    playing libs.
++   
++    Copyright 2006 Hans de Goede <j.w.r.degoede@hhs.nl>
++   
++    This wrapper is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public   
++    License as published by the Free Software Foundation; either 
++    version 2.1 of the License, or (at your option) any later version.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of 
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library; if not, write to the Free Software
++    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA   
++*/
++#include <unistd.h>
++#include <pthread.h>
++#include <string.h>
++#include <strings.h>
++#include "jgmod.h"
++
++static AL_DUH_PLAYER *duh_player = NULL;
++static pthread_t duh_player_thread;
++static pthread_mutex_t duh_player_mutex;
++static int pattern = 0; /* from t3ss implementation, might need it someday */
++static int mod_volume = 255;
++
++void install_mod(int channels) /* ignored */
++{
++    dumb_register_packfiles();
++    pthread_mutex_init(&duh_player_mutex, NULL);
++}
++
++void remove_mod(void)
++{
++    stop_mod();
++    dumb_exit();
++}
++
++JGMOD *load_mod(const char *path) /* path may be a packfile # index */
++{
++    char *p, ext[64];
++
++    snprintf(ext, sizeof(ext), "%s", get_extension(path));
++    if ((p = strrchr(ext, '_')))
++        memmove(ext, p+1, strlen(p));
++    
++    if (!strcasecmp(ext, "it"))
++        return dumb_load_it_quick(path);
++    if (!strcasecmp(ext, "xm"))
++        return dumb_load_xm_quick(path);
++    if (!strcasecmp(ext, "s3m"))
++        return dumb_load_s3m_quick(path);
++    if (!strcasecmp(ext, "mod"))
++        return dumb_load_mod_quick(path);
++    return NULL;                
++}
++
++void destroy_mod(JGMOD *mod)
++{
++    unload_duh(mod);
++}
++
++static void *duh_player_thread_function(void *arg)
++{
++    while(1)
++    {
++        pthread_mutex_lock(&duh_player_mutex);
++        al_poll_duh(duh_player);
++        pthread_mutex_unlock(&duh_player_mutex);
++        pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
++        usleep(10000);
++        pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
++    }
++    return NULL;
++}
++
++void play_mod(JGMOD *mod, int loop)
++{
++    DUMB_IT_SIGDATA *sigdata;
++    DUH_SIGRENDERER *renderer;
++    int num_patterns;
++    
++    if (duh_player)
++        stop_mod();
++    
++    if (!mod)
++        return;
++    
++    sigdata = duh_get_it_sigdata(mod);
++    if (sigdata)
++        num_patterns = dumb_it_sd_get_n_orders(sigdata);
++    else
++        num_patterns = 0;
++        
++    if (pattern >= num_patterns)
++        pattern = 0;
++        
++    renderer = dumb_it_start_at_order(mod, 2, pattern);
++    if (!renderer)
++        return;
++
++    duh_player = al_duh_encapsulate_sigrenderer(renderer, mod_volume/255.0f,
++        2048, 44100);
++    if (!duh_player)
++    {
++        duh_end_sigrenderer(renderer);
++        return;
++    }
++    
++    if (pthread_create(&duh_player_thread, NULL,
++            duh_player_thread_function, NULL))
++    {
++        al_stop_duh(duh_player);
++        duh_player = NULL;
++    }
++}
++
++
++void stop_mod(void)
++{
++    if (duh_player)
++    {
++        /* stop the player thread */
++        pthread_cancel(duh_player_thread);
++        pthread_join(duh_player_thread, NULL);
++        /* and clean up everything */
++        al_stop_duh(duh_player);
++        duh_player = NULL;
++    }
++}
++
++void set_mod_volume(int volume) /* 0 - 255 */
++{
++    mod_volume = volume;
++    if (duh_player)
++    {
++        pthread_mutex_lock(&duh_player_mutex);
++        al_duh_set_volume(duh_player, mod_volume/255.0f);
++        pthread_mutex_unlock(&duh_player_mutex);
++    }
++}
+diff -urN Zasx.org/src/main.c Zasx/src/main.c
+--- Zasx.org/src/main.c	2001-10-06 13:13:28.000000000 +0200
++++ Zasx/src/main.c	2006-04-02 20:33:36.000000000 +0200
+@@ -34,11 +34,10 @@
+ 
+ #define DIST(x, y) sqrt((x)*(x) + (y)*(y))
+ 
+-int ShowFPS = 0, WaitForVSync = 0;
+-int Redraw = 0;
++static int ShowFPS = 0;
++static int Redraw = 0;
+ 
+ BITMAP *Ast[9];
+-BITMAP *BackBuffer;
+ DATAFILE *demodata;
+ BITMAP *Smoke, *Bullet, *Dust;
+ BITMAP *PlayerBitmap[NUM_PLAYERS];
+@@ -60,6 +59,7 @@
+ RGB* GamePal;
+ 
+ int GamePaused = 0;
++int FullscreenToggleRequested = 0;
+ 
+ #ifndef M_PI
+ #define M_PI 3.14159
+@@ -217,9 +217,6 @@
+ 
+ 
+ int play_game(void* dummy) {
+-
+-	static int smokecount = 0;
+-
+ 	int d, i, j, k;
+ 	float vx, vy;
+ 
+@@ -807,7 +804,7 @@
+ 		}
+ 		x += DISPLAY_W / 2;
+ 			
+-		if (x >= SCREEN_W) {
++		if (x >= DISPLAY_W) {
+ 			x = 0;
+ 			y += 60;
+ 		}
+@@ -828,8 +825,15 @@
+ 
+ 	poll_joystick();
+ 
++	if (key[KEY_F11]) {
++		/* Don't toggle twice (or more) for the same keypress */
++		key[KEY_F11] = 0;
++		ShowFPS = !ShowFPS;
++	}
++
+ 	if (key[KEY_F12]) {
+-		clear_keybuf();
++		/* Don't toggle twice (or more) for the same keypress */
++		key[KEY_F12] = 0;
+ 		GamePaused ^= 1;
+ 	}
+ 
+@@ -934,6 +938,7 @@
+ 	GTIME_AddFunction(play_game, 20, NULL, GTIME_NORMAL);
+ 	GTIME_AddFunction(game_input, 50, NULL, GTIME_NORMAL);
+ 
++	GamePaused = 0;
+ 	LOG("Starting game...NOW!\n");
+ 	
+ 	do {
+@@ -950,13 +955,10 @@
+ 				frame_start_time = GameTime;
+ 				frame_count = 0;
+ 			}
+-			textprintf(BackBuffer, font, 0, SCREEN_H - 10, makecol(255, 255, 255), "FPS: %.2f", frame_rate);
+-			DRS_add_rectangle(0, SCREEN_H - 10, 128, 8);
++			textprintf(BackBuffer, font, 0, DISPLAY_H - 10, makecol(255, 255, 255), "FPS: %.2f", frame_rate);
++			DRS_add_rectangle(0, DISPLAY_H - 10, 128, 8);
+ 		}
+ 
+-		if (WaitForVSync)
+-			vsync();
+-
+ 		acquire_screen();
+ 
+ 		if (frame_timer != GameTime / 1000) {
+@@ -1033,24 +1035,49 @@
+ 	return;
+ }
+ 
++/* We use a keyboard_callback handler to detect left-alt + enter for
++   fullscreen toggle, by doing this in the callback handler we can
++   make sure that enter with alt pressed doesn't get into the buffer and thus
++   doesn't cause any menu choices to be made. */
++static int ZasxKeyboardCallback(int keypress)
++{
++	if (key[KEY_ALT] && ((keypress >> 8) == KEY_ENTER))
++	{
++		FullscreenToggleRequested = 1;
++		return 0;
++	}
++	return keypress;
++}
++
+ 
+ int main() {
+ 
+ 	int r;
+-	int w, h, c, mvol, muvol, fullscreen;
++	int mvol, muvol;
++
++#ifdef __unix__
++	char *get_home_dir(void);
++	char config_file_name[512];
++	char *home_dir = get_home_dir();
++	
++	allegro_init();	
++	
++	snprintf(config_file_name, sizeof(config_file_name)/sizeof(char),
++		"%s/.%s", home_dir? home_dir:".", "zasx.cfg");
++      
++	override_config_file(config_file_name);
++#else
+ 	allegro_init();	
++	override_config_file("zasx.cfg");
++#endif
+ 
+-	set_config_file("zasx.cfg");
+-	w = get_config_int("[screen]", "width", 640);
+-	h = get_config_int("[screen]", "height", 480);
+-	c = get_config_int("[screen]", "color", 8);
++	display_w = get_config_int("[screen]", "width", 640);
++	display_h = get_config_int("[screen]", "height", 480);
+ 	fullscreen = get_config_int("[screen]", "full_screen", 1);
+ 	ShowFPS = get_config_int("[screen]", "show_fps", 0);
+-	WaitForVSync = get_config_int("[screen]", "vsync", 0);
+ 	mvol = get_config_int("[sound]", "master_volume", 255);
+ 	muvol = get_config_int("[sound]", "music_volume", 255);
+ 	
+-
+ 	/* Log init */
+ 	LOG("\n\n\n");
+ 	LOG("******************************************\n");
+@@ -1061,11 +1088,12 @@
+ 
+ 
+ 	/* Init */
+-	GFX_Init(w, h, c, fullscreen);
++	GFX_Init();
+ 	set_window_title("Zasx v" VERSION);	
+ 	set_display_switch_callback(SWITCH_IN, SwitchCallback);
+ 
+ 
++	keyboard_callback = ZasxKeyboardCallback;
+ 	install_keyboard();
+ 	install_joystick(JOY_TYPE_AUTODETECT);
+ 	install_timer();
+@@ -1110,6 +1138,16 @@
+ 
+ 	GFX_Shutdown();
+ 
++	/* fullscreen and ShowFPS may have been changed, remember them. For
++	   the others make sure we write them to the config file if they were
++	   not there to give the user a clue howto change these settings :) */
++	set_config_int("[screen]", "full_screen", fullscreen);
++	set_config_int("[screen]", "show_fps", ShowFPS);
++	set_config_int("[screen]", "width", display_w);
++	set_config_int("[screen]", "height", display_h);
++	set_config_int("[sound]", "master_volume", mvol);
++	set_config_int("[sound]", "music_volume", muvol);	
++
+ 	return 0;
+ } END_OF_MAIN();
+ 
+diff -urN Zasx.org/src/scorer.c Zasx/src/scorer.c
+--- Zasx.org/src/scorer.c	2001-10-06 12:38:38.000000000 +0200
++++ Zasx/src/scorer.c	2006-04-02 20:16:58.000000000 +0200
+@@ -66,7 +66,7 @@
+ 
+ 		textprintf_centre(BackBuffer, font, DISPLAY_W / 2, DISPLAY_H - text_height(font), makecol(255, 255, 255), "Press any key to continue...");
+ 
+-		stretch_blit(BackBuffer, screen, 0, 0, BackBuffer->w, BackBuffer->h, 0, 0, SCREEN_W, SCREEN_H);
++		blit(BackBuffer, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 	} while (!keypressed());
+ 
+ 	readkey();
+@@ -93,7 +93,7 @@
+ 		sprintf(t, "Name%0i", i);
+ 		best_name = get_config_string("[scores]", t, "Bob");
+ 		sprintf(t, "Score%0i", i);
+-		score = get_config_int("[scores]", t, 0);
++		score = get_config_int("[scores]", t, 128000/(1<<i));
+ 
+ 		textprintf(BackBuffer, DigitFont, 5, i * (text_height(DigitFont) + 3) + 50, color, "%2i.", i + 1);
+ 		textprintf_right(BackBuffer, DigitFont, DISPLAY_W - 10, i * (text_height(DigitFont) + 3) + 50, color, "%01i", (i == p) ? this_score : score);
+@@ -109,17 +109,21 @@
+ 
+ void ViewHighScore() {
+ 
++#ifndef __unix__
+ 	push_config_state();
+ 	set_config_file("data/zasx.hsc");
++#endif
+ 
+ 	DrawBG();
+ 	DrawScore(-1, -1, -1);
+ 
++#ifndef __unix__
+ 	pop_config_state();
++#endif
+ 
+ 	textprintf_centre(BackBuffer, font, DISPLAY_W / 2, DISPLAY_H - text_height(font), makecol(255, 255, 255), "Press any key to continue");
+ 
+-	stretch_blit(BackBuffer, screen, 0, 0, BackBuffer->w, BackBuffer->h, 0, 0, SCREEN_W, SCREEN_H);
++	blit(BackBuffer, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 
+ 	while (keypressed()) readkey();
+ 	readkey();
+@@ -210,7 +214,7 @@
+ 	    text_mode(rtm);
+ 	    x += w;
+ 	 }
+-	 stretch_blit(BackBuffer, screen, 0, 0, BackBuffer->w, BackBuffer->h, 0, 0, SCREEN_W, SCREEN_H);
++	 blit(BackBuffer, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 	 break;
+ 
+       case MSG_WANTFOCUS:
+@@ -289,8 +293,10 @@
+ 
+ 	int i, p = -1;
+ 
++#ifndef __unix__
+ 	push_config_state();
+ 	set_config_file("data/zasx.hsc");
++#endif
+ 
+ 	for (i = 0; i < 10; i++) {
+ 		char t[80];
+@@ -300,7 +306,7 @@
+ 		sprintf(t, "Name%0i", i);
+ 		best_name = get_config_string("[scores]", t, "Bob");
+ 		sprintf(t, "Score%0i", i);
+-		score = get_config_int("[scores]", t, 0);
++		score = get_config_int("[scores]", t, 128000/(1<<i));
+ 
+ 		if (this_score > score) {
+ 			p = i;
+@@ -319,7 +325,7 @@
+ 			sprintf(t, "Name%0i", i);
+ 			name = get_config_string("[scores]", t, "Bob");
+ 			sprintf(t, "Score%0i", i);
+-			score = get_config_int("[scores]", t, 0);
++			score = get_config_int("[scores]", t, 128000/(1<<i));
+ 
+ 			sprintf(t, "Name%0i", i + 1);
+ 			set_config_string("[scores]", t, name);
+@@ -338,7 +344,7 @@
+ 				{NULL}
+ 			};
+ 			memset(name, 0, 80);
+-			stretch_blit(BackBuffer, screen, 0, 0, BackBuffer->w, BackBuffer->h, 0, 0, SCREEN_W, SCREEN_H);
++			blit(BackBuffer, screen, 0, 0, 0, 0, DISPLAY_W, DISPLAY_H);
+ 
+ 			while (keypressed())
+ 				readkey();
+@@ -356,7 +362,9 @@
+ 		}
+ 	}
+ 
++#ifndef __unix__
+ 	pop_config_state();
++#endif
+ 
+ 	return p;
+ }
+diff -urN Zasx.org/src/star.c Zasx/src/star.c
+--- Zasx.org/src/star.c	2001-08-02 01:38:44.000000000 +0200
++++ Zasx/src/star.c	2006-04-02 20:16:58.000000000 +0200
+@@ -148,8 +148,6 @@
+ 
+ 
+ void clear_stars() {
+-	int i = 0;
+-
+ 	while (NumStars)
+ 		destroy_star(Star[0]);
+ 
+diff -urN Zasx.org/src/unix.c Zasx/src/unix.c
+--- Zasx.org/src/unix.c	1970-01-01 01:00:00.000000000 +0100
++++ Zasx/src/unix.c	2006-04-02 20:16:58.000000000 +0200
+@@ -0,0 +1,38 @@
++/* Function(s) to find the homedir of a user under Unix */
++#ifdef __unix__
++#include <pwd.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/types.h>
++#if defined(__DECC) && defined(VMS)
++#include <unixlib.h>
++static char *vms_to_unix_buffer = NULL;
++static int convert_vms_to_unix(char *vms_dir_name)
++{
++	vms_to_unix_buffer = vms_dir_name;
++}
++#endif
++
++/* 
++ * Locate user's home directory.
++ */
++char *get_home_dir(void)
++{
++	struct passwd *pw;
++
++	if (!(pw = getpwuid(getuid())))
++	{ 
++		fprintf(stderr, "Who are you? Not found in passwd database!!\n");
++		return NULL;
++	}
++
++#if defined(__DECC) && defined(VMS)
++	/* Convert The OpenVMS Formatted "$HOME" Directory Path Into Unix
++	   Format. */
++	decc$from_vms(pw->pw_dir, convert_vms_to_unix, 1);
++	return vms_to_unix_buffer;
++#else
++	return pw->pw_dir;
++#endif
++}
++#endif /* defined __unix__ */
+diff -urN Zasx.org/src/weapon.c Zasx/src/weapon.c
+--- Zasx.org/src/weapon.c	2001-08-09 01:13:06.000000000 +0200
++++ Zasx/src/weapon.c	2006-04-02 20:16:58.000000000 +0200
+@@ -67,19 +67,6 @@
+ }
+ 
+ 
+-static void strip_leading_whitespace(char *buf) {
+-
+-
+-	char *cur = buf;
+-
+-	if (!buf)
+-		return;
+-
+-	//sscanf(buf, "%[^\n]", buf);
+-
+-	return;
+-}
+-
+ static void dup_sample(SAMPLE **dest, SAMPLE *src) {
+ 
+ 	SAMPLE *d;
+@@ -159,8 +146,6 @@
+ 		int r, i;
+ 		float x, y;
+ 
+-		strip_leading_whitespace(buf);
+-
+ 		if (buf[0] == '#')
+ 			continue;
+ 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>xpilot-ng-sdl.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>XPilot NG</name>
+  <summary>Multi-player space arcade game</summary>
+  <description>
+    <p>
+      A highly addictive, infinitely configurable multiplayer space
+      arcade game.  You pilot a spaceship around space, dodging
+      obstacles, shooting players and bots, collecting power-ups, and
+      causing general mayhem. Some features are borrowed
+      from classics like the Atari coin-ups Asteroids and Gravitar, and the
+      home-computer games Thrust and Gravity Force.
+    </p>
+    <p>
+      XPilot NG is an extended version of the original XPilot. Like in XPilot,
+      the aim of the game is to have fun and to beat your fellow pilots.
+      In a team game, you can humiliate your enemies, blow up your their ships
+      and steal their treasure. There are also other game modes:
+      individual game and a race mode.
+    </p>
+    <p>
+      XPilot NG is a networked multi-player game, you can either start your
+      own server, or join an existing internet game.
+    </p>
+  </description>
+  <url type="homepage">http://xpilot.sourceforge.net/</url>
+  <screenshots>
+    <screenshot type="default">http://xpilot.sourceforge.net/shots/polybloods1.png</screenshot>
+    <screenshot>http://xpilot.sourceforge.net/shots/xpilot_sdl.png</screenshot>
+    <screenshot>http://xpilot.sourceforge.net/shots/fishtank.png</screenshot>
+    <screenshot>http://xpilot.sourceforge.net/shots/dragon.png</screenshot>
+    <screenshot>http://xpilot.sourceforge.net/shots/spaceball.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

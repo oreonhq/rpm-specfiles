@@ -1,0 +1,17 @@
+From: William Desportes <williamdes@wdes.fr>
+Date: Sun, 21 Jan 2024 11:12:07 +0100
+Subject: Update the VERSION file
+
+Origin: vendor
+Forwarded: not-needed
+---
+ VERSION | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/VERSION b/VERSION
+index 3dc8526..9b73887 100644
+--- a/VERSION
++++ b/VERSION
+@@ -1 +1 @@
+-RELEASE-1.2.6.6
++RELEASE-1.2.6.7

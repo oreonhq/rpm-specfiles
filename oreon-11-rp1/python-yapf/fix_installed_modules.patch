@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 7d0366f..a3f400a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -50,7 +50,8 @@ package-dir = { yapf_third_party = 'third_party/yapf_third_party' }
+ 
+ [tool.setuptools.packages.find]
+ where = [".", 'third_party']
+-include = ["yapf*", 'yapftests*']
++include = ['yapf*']
++exclude = ['yapftests*']
+ 
+ [tool.setuptools.package-data]
+ yapf_third_party = [

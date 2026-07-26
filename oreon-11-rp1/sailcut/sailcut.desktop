@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Sailcut
+Comment=Sail design application
+Exec=sailcut %U
+Icon=sailcut
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Graphics;
+MimeType=application/x-sailcut;

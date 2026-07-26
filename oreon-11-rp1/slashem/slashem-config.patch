@@ -1,0 +1,26 @@
+diff -up slashem-0.0.8E0F1/include/config.h.config slashem-0.0.8E0F1/include/config.h
+--- slashem-0.0.8E0F1/include/config.h.config	2006-12-30 14:04:53.000000000 +0100
++++ slashem-0.0.8E0F1/include/config.h	2009-05-21 09:54:05.000000000 +0200
+@@ -220,8 +220,8 @@
+ 
+ #ifdef UNIX
+ /* path and file name extension for compression program */
+-# define COMPRESS "/usr/bin/compress" /* Lempel-Ziv compression */
+-# define COMPRESS_EXTENSION ".Z"	     /* compress's extension */
++# define COMPRESS "/usr/bin/bzip2" /* bzip2 compression */
++# define COMPRESS_EXTENSION ".bz2"	     /* bzip2 extension */
+ 
+ /* An example of one alternative you might want to use: */
+ /* # define COMPRESS "/usr/local/bin/gzip" */   /* FSF gzip compression */
+diff -up slashem-0.0.8E0F1/include/unixconf.h.config slashem-0.0.8E0F1/include/unixconf.h
+--- slashem-0.0.8E0F1/include/unixconf.h.config	2006-12-30 14:04:53.000000000 +0100
++++ slashem-0.0.8E0F1/include/unixconf.h	2009-05-21 09:52:56.000000000 +0200
+@@ -113,7 +113,7 @@
+  * FILE_AREA_DOC	For human-readable documentation
+  */
+ 
+-/* #define FILE_AREAS */		/* Use file areas */
++#define FILE_AREAS 		/* Use file areas */
+ 
+ #ifdef FILE_AREAS
+ 

@@ -1,0 +1,22 @@
+From 3911395a85f0b259155865d3f39cb002053741a1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 12 Aug 2025 08:35:30 -0400
+Subject: [PATCH] Allow wrapt 2.x
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e36b50ad0..e125ea84f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -8,7 +8,7 @@ dynamic = ["readme", "version"]
+ description = "Controller Area Network interface module for Python"
+ authors = [{ name = "python-can contributors" }]
+ dependencies = [
+-    "wrapt~=1.10",
++    "wrapt >= 1.10, < 3",
+     "packaging >= 23.1",
+     "typing_extensions>=3.10.0.0",
+ ]

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=xdrawchem
+Icon=xdrawchem
+Comment=Chemical drawing.
+Comment[da]=Tegning af kemiske stoffer.
+Terminal=false
+Name=Xdrawchem
+Encoding=UTF-8
+Categories=Application;Education;Chemistry;Graphics;Science;

@@ -1,0 +1,36 @@
+From 8dc854dcea01d1cb193df8fcbdfe064b929e5235 Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Fri, 4 Aug 2023 11:17:27 -0400
+Subject: [PATCH 2/7] fedora: build shared instead of static library
+
+---
+ Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9921c0bca..d6b139b95 100644
+--- a/Makefile
++++ b/Makefile
+@@ -74,7 +74,7 @@ ARCHFLAGS := $(ARCHFLAGS)
+ 
+ OPTFLAGS  ?= -g -O
+ 
+-CFLAGS    += -Wall -Wno-unused-function -Wno-write-strings -Wno-sign-compare $(ARCHFLAGS)
++CFLAGS    += -Wno-unused-function $(OPTFLAGS) $(ARCHFLAGS) -Isrc
+ ifneq ($(findstring arm,$(shell uname -m)),)
+ 	CFLAGS += -DABC_MEMALIGN=4
+ endif
+@@ -242,7 +242,9 @@ lib$(PROG).a: $(LIBOBJ)
+ 
+ lib$(PROG).so: $(LIBOBJ)
+ 	@echo "$(MSG_PREFIX)\`\` Linking:" $(notdir $@)
+-	$(VERBOSE)$(CXX) -shared -o $@ $^ $(LIBS)
++	$(VERBOSE)$(CXX) -shared -Wl,-h,lib$(PROG).so.0 -o lib$(PROG).so.0.0.0 $^ $(LIBS)
++	$(VERBOSE)ln -s lib$(PROG).so.0.0.0 lib$(PROG).so.0
++	$(VERBOSE)ln -s lib$(PROG).so.0 $@
+ 
+ docs:
+ 	@echo "$(MSG_PREFIX)\`\` Building documentation." $(notdir $@)
+-- 
+2.52.0
+

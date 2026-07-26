@@ -1,0 +1,410 @@
+diff -U 3 -dHrN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/CMakeLists.txt	2026-03-14 11:05:34.680886726 +0100
+@@ -0,0 +1,76 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(xephem VERSION 4.1.0 LANGUAGES C)
++set(DISPLAY_NAME "XEphem")
++set(CMAKE_C_STANDARD 17)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++# Required packages
++find_package(Motif REQUIRED)
++find_package(OpenSSL REQUIRED)
++find_package(X11 REQUIRED)
++
++# Optional packages
++find_package(JPEG)
++find_package(PNG)
++find_package(ZLIB)
++
++# Define installation directories
++if((NOT WIN32) AND (NOT NATIVE_OSX_APP))
++  include(GNUInstallDirs)
++endif()
++if(NATIVE_OSX_APP)
++  set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.app/Contents")
++  set(CMAKE_INSTALL_FULL_LOCALEDIR "${CMAKE_INSTALL_PREFIX}/Resources/locale")
++  set(CMAKE_INSTALL_BINDIR "MacOS")
++  set(XEPHEM_DATADIR "${CMAKE_INSTALL_PREFIX}/Resources")
++elseif(WIN32)
++  set(CMAKE_INSTALL_BINDIR ".")
++  set(CMAKE_INSTALL_DATAROOTDIR ".")
++  set(CMAKE_INSTALL_DATADIR ".")
++  set(CMAKE_INSTALL_FULL_LOCALEDIR "locale")
++  set(CMAKE_INSTALL_LOCALEDIR "${CMAKE_INSTALL_FULL_LOCALEDIR}")
++  set(XEPHEM_DATADIR "${CMAKE_INSTALL_DATADIR}")
++else()
++  set(XEPHEM_DATADIR "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}")
++endif()
++
++# Build libraries
++add_subdirectory(libastro)
++add_subdirectory(libip)
++if(NOT JPEG_FOUND)
++  add_subdirectory(libjpegd)
++endif()
++add_subdirectory(liblilxml)
++if(NOT PNG_FOUND)
++  add_subdirectory(libpng)
++endif()
++if(NOT ZLIB_FOUND)
++  add_subdirectory(libz)
++endif()
++
++# Build main program
++add_subdirectory(GUI/xephem)
++
++# Install
++install(TARGETS xephem
++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(FILES ${CMAKE_BINARY_DIR}/xephem.1
++        DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
++install(DIRECTORY GUI/xephem/auxil
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/catalogs
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/fifos
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/fits
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/gallery
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/help
++        DESTINATION ${XEPHEM_DATADIR})
++install(DIRECTORY GUI/xephem/lo
++        DESTINATION ${XEPHEM_DATADIR})
+diff -U 3 -dHrN a/GUI/xephem/CMakeLists.txt b/GUI/xephem/CMakeLists.txt
+--- a/GUI/xephem/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/GUI/xephem/CMakeLists.txt	2026-03-14 11:05:34.681033815 +0100
+@@ -0,0 +1,95 @@
++cmake_minimum_required(VERSION 3.10)
++
++set(SRC_FILES 
++  aavso.c
++  annotmenu.c
++  broadcast.c
++  calmenu.c
++  closemenu.c
++  compiler.c
++  coordsmenu.c
++  datamenu.c
++  db.c
++  dbmenu.c
++  earthmap.c
++  earthmenu.c
++  fallbacks.c
++  favmenu.c
++  formats.c
++  fsmenu.c
++  gallerymenu.c
++  glance.c
++  gsc.c
++  gscnet.c
++  helpmenu.c
++  homeio.c
++  hznmenu.c
++  imregmenu.c
++  indimenu.c
++  jpeg2pm.c
++  jupmenu.c
++  listmenu.c
++  mainmenu.c
++  marsmenu.c
++  marsmmenu.c
++  moonmenu.c
++  moviemenu.c
++  msgmenu.c
++  netmenu.c
++  objmenu.c
++  obslog.c
++  patchlevel.c
++  plot_aux.c
++  plotmenu.c
++  preferences.c
++  progress.c
++  ps.c
++  query.c
++  rotated.c
++  satmenu.c
++  saveres.c
++  scope.c
++  sites.c
++  skybinary.c
++  skyeyep.c
++  skyfifos.c
++  skyfiltmenu.c
++  skyfits.c
++  skyhist.c
++  skyip.c
++  skylist.c
++  skytoolbar.c
++  skyviewmenu.c
++  solsysmenu.c
++  splash.c
++  srchmenu.c
++  sunmenu.c
++  time.c
++  tips.c
++  trailmenu.c
++  ucac.c
++  uranusmenu.c
++  usno.c
++  versionmenu.c
++  webdbmenu.c
++  xe2.c
++  xe3.c
++  xephem.c
++  xmisc.c)
++
++set(TARGET_LIB astro ip lilxml m png ssl Xm Xt Xext Xmu X11 z)
++if(NOT JPEG_FOUND)
++  set(TARGET_LIB ${TARGET_LIB} jpegd)
++else()
++  set(TARGET_LIB ${TARGET_LIB} jpeg)
++endif()
++
++add_executable(xephem ${SRC_FILES})
++target_link_libraries(xephem ${TARGET_LIB})
++
++add_custom_command(TARGET xephem
++                   POST_BUILD
++                   COMMAND nroff -man ${CMAKE_CURRENT_SOURCE_DIR}/xephem.man > xephem.1
++                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
++                   COMMENT "Building manpage"
++                   VERBATIM)
+diff -U 3 -dHrN a/libastro/CMakeLists.txt b/libastro/CMakeLists.txt
+--- a/libastro/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/libastro/CMakeLists.txt	2026-03-14 11:06:44.260765464 +0100
+@@ -0,0 +1,70 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(libastro C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  aa_hadec.c
++  aberration.c
++  actan.c
++  airmass.c
++  anomaly.c
++  ap_as.c
++  atlas.c
++  auxil.c
++  bdl.c
++  chap95.c
++  chap95_data.c
++  circum.c
++  comet.c
++  constel.c
++  dbfmt.c
++  deep.c
++  deltat.c
++  eclipses.c
++  earthsat.c
++  eq_ecl.c
++  eq_gal.c
++  formats.c
++  helio.c
++  jupmoon.c
++  libration.c
++  magdecl.c
++  marsmoon.c
++  misc.c
++  mjd.c
++  moon.c
++  mooncolong.c
++  moonnf.c
++  nutation.c
++  obliq.c
++  parallactic.c
++  parallax.c
++  plans.c
++  plmoon.c
++  plshadow.c
++  precess.c
++  reduce.c
++  refract.c
++  rings.c
++  riset.c
++  riset_cir.c
++  satmoon.c
++  sdp4.c
++  sgp4.c
++  sphcart.c
++  sun.c
++  thetag.c
++  twobody.c
++  umoon.c
++  utc_gst.c
++  vsop87.c
++  vsop87_data.c)
++
++add_library(astro STATIC ${SRC_FILES})
++target_include_directories(astro PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")
+diff -U 3 -dHrN a/libip/CMakeLists.txt b/libip/CMakeLists.txt
+--- a/libip/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/libip/CMakeLists.txt	2026-03-14 11:05:34.681189843 +0100
+@@ -0,0 +1,26 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(libip C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  explodegif.c
++  fits.c
++  fsmatch.c
++  gaussfit.c
++  lstsqr.c
++  median.c
++  sqr.c
++  stars.c
++  stats.c
++  walk.c
++  wcs.c)
++
++add_library(ip STATIC ${SRC_FILES})
++target_link_libraries(ip astro)
++target_include_directories(ip PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")
+diff -U 3 -dHrN a/libjpegd/CMakeLists.txt b/libjpegd/CMakeLists.txt
+--- a/libjpegd/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/libjpegd/CMakeLists.txt	2026-03-14 11:05:34.681320833 +0100
+@@ -0,0 +1,40 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(libjpegd C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  jcomapi.c
++  jdapimin.c
++  jdapistd.c
++  jdatasrc.c
++  jdcoefct.c
++  jdcolor.c
++  jddctmgr.c
++  jdhuff.c
++  jdinput.c
++  jdmainct.c
++  jdmarker.c
++  jdmaster.c
++  jdmerge.c
++  jdphuff.c
++  jdpostct.c
++  jdsample.c
++  jerror.c
++  jidctflt.c
++  jidctfst.c
++  jidctint.c
++  jidctred.c
++  jmemmgr.c
++  jmemnobs.c
++  jquant1.c
++  jquant2.c
++  jutils.c)
++
++add_library(jpegd STATIC ${SRC_FILES})
++target_include_directories(jpegd PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")
+diff -U 3 -dHrN a/liblilxml/CMakeLists.txt b/liblilxml/CMakeLists.txt
+--- a/liblilxml/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/liblilxml/CMakeLists.txt	2026-03-14 11:05:34.681428772 +0100
+@@ -0,0 +1,16 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(liblilxml C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  base64.c
++  lilxml.c)
++
++add_library(lilxml STATIC ${SRC_FILES})
++target_include_directories(lilxml PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")
+diff -U 3 -dHrN a/libpng/CMakeLists.txt b/libpng/CMakeLists.txt
+--- a/libpng/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/libpng/CMakeLists.txt	2026-03-14 11:05:34.681501601 +0100
+@@ -0,0 +1,30 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(libpng C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  png.c
++  pngerror.c
++  pngget.c
++  pngmem.c
++  pngpread.c
++  pngread.c
++  pngrio.c
++  pngrtran.c
++  pngrutil.c
++  pngset.c
++  pngtrans.c
++  pngwio.c
++  pngwrite.c
++  pngwtran.c
++  pngwutil.c)
++
++add_library(png STATIC ${SRC_FILES})
++target_link_libraries(png z)
++target_include_directories(png PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")
+diff -U 3 -dHrN a/libz/CMakeLists.txt b/libz/CMakeLists.txt
+--- a/libz/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/libz/CMakeLists.txt	2026-03-14 11:05:34.681573741 +0100
+@@ -0,0 +1,25 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(libz C)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
++
++set(SRC_FILES 
++  adler32.c
++  compress.c
++  crc32.c
++  deflate.c
++  inffast.c
++  inflate.c
++  inftrees.c
++  testzlib.c
++  trees.c
++  uncompr.c
++  zutil.c)
++
++add_library(z STATIC ${SRC_FILES})
++target_include_directories(z PUBLIC
++                           "${CMAKE_CURRENT_BINARY_DIR}"
++                           "${CMAKE_CURRENT_SOURCE_DIR}")

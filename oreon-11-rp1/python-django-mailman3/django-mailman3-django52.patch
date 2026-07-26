@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -19,7 +19,7 @@ classifiers = [
+ dependencies = [
+     "django-allauth[socialaccount,openid]>=0.63",
+     "django-gravatar2 >= 1.0.6",
+-    "django>=4.2,<5.1",
++    "django>=4.2,<5.3",
+     "mailmanclient>=3.3.3",
+ ]
+ requires-python = ">=3.9"

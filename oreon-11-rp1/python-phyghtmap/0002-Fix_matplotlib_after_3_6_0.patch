@@ -1,0 +1,52 @@
+From: Federico Pellegrin <fede@evolware.org>
+Date: Mon Nov 14 03:36:36 PM CET 2022
+Subject: [PATCH] Fix package with newer Matplotlib (>3.6.0) versions
+
+Recent Matplotlib have renamed (again) the contour package and additionally
+removed the QuadContourGenerator. As per example in Matplotlib, use
+therefore the external countourpy module to do the same work. The results,
+being it a different algorithm all together, are not exactly the same as
+in the previous version, but the tests done until now seem to bring a
+pretty good result.
+
+diff -ruN a/phyghtmap/hgt.py b/phyghtmap/hgt.py
+--- a/phyghtmap/hgt.py	2022-11-14 15:45:42.413235703 +0100
++++ b/phyghtmap/hgt.py	2022-11-14 15:43:32.341422030 +0100
+@@ -14,8 +14,10 @@
+ 	from matplotlib.path import Path as PolygonPath
+ if mplversion < "2.0.0":
+ 	from matplotlib import _cntr
+-else:
++elif mplversion < "3.6.0":
+ 	from matplotlib import _contour
++else:
++	from matplotlib import contour
+ import numpy
+ 
+ from phyghtmap.varint import bboxStringtypes
+@@ -845,13 +847,24 @@
+ 			Contours = ContourObject(_cntr.Cntr(x, y, z.filled(), None),
+ 				maxNodesPerWay, self.transform, self.polygon,
+ 				rdpEpsilon, rdpMaxVertexDistance)
+-		else:
++		elif mplversion < "3.6.0":
+ 			corner_mask = True
+ 			nchunk = 0
+ 			Contours = ContourObject(
+ 				_contour.QuadContourGenerator(x, y, z.filled(), self.mask, corner_mask, nchunk),
+ 				maxNodesPerWay, self.transform, self.polygon,
+ 				rdpEpsilon, rdpMaxVertexDistance)
++		else:
++			import contourpy
++			corner_mask = True
++			nchunk = 0
++			Contours = ContourObject(
++				contourpy.contour_generator(x, y, z, name="mpl2014",
++								corner_mask=corner_mask, chunk_size=nchunk,
++								line_type=contourpy.LineType.SeparateCode, fill_type=contourpy.FillType.OuterCode),
++				maxNodesPerWay, self.transform, self.polygon,
++				rdpEpsilon, rdpMaxVertexDistance)
++
+ 		return levels, Contours
+ 
+ 	def countNodes(self, maxNodesPerWay=0, stepCont=20, minCont=None,

@@ -1,0 +1,222 @@
+diff -up validator-1.0/htdocs/config/types.conf~ validator-1.0/htdocs/config/types.conf
+--- validator-1.0/htdocs/config/types.conf~	2010-06-15 01:11:45.000000000 +0300
++++ validator-1.0/htdocs/config/types.conf	2010-06-18 00:48:40.806847363 +0300
+@@ -31,8 +31,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html20
+     ALT URI   = http://www.w3.org/Icons/valid-html20-blue
+-    Local URI = images/valid_icons/valid-html20
+-    Local ALT URI = images/valid_icons/valid-html20-blue
+   </Badge>
+ </HTML_2_0>
+ 
+@@ -49,8 +47,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html20
+     ALT URI   = http://www.w3.org/Icons/valid-html20-blue
+-    Local URI = images/valid_icons/valid-html20
+-    Local ALT URI = images/valid_icons/valid-html20-blue
+   </Badge>
+ </HTML_2_0_Level_2>
+ 
+@@ -67,8 +63,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html20
+     ALT URI   = http://www.w3.org/Icons/valid-html20-blue
+-    Local URI = images/valid_icons/valid-html20
+-    Local ALT URI = images/valid_icons/valid-html20-blue
+   </Badge>
+ </HTML_2_0_Strict>
+ 
+@@ -85,8 +79,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html20
+     ALT URI   = http://www.w3.org/Icons/valid-html20-blue
+-    Local URI = images/valid_icons/valid-html20
+-    Local ALT URI = images/valid_icons/valid-html20-blue
+   </Badge>
+ </HTML_2_0_Level_1>
+ 
+@@ -103,8 +95,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html20
+     ALT URI   = http://www.w3.org/Icons/valid-html20-blue
+-    Local URI = images/valid_icons/valid-html20
+-    Local ALT URI = images/valid_icons/valid-html20-blue
+   </Badge>
+ </HTML_2_0_Strict_Level_1>
+ 
+@@ -124,8 +114,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html32
+     ALT URI   = http://www.w3.org/Icons/valid-html32-blue
+-    Local URI = images/valid_icons/valid-html32
+-    Local ALT URI = images/valid_icons/valid-html32-blue
+     Height    = 31
+     Width     = 88
+   </Badge>
+@@ -149,8 +137,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html40
+     ALT URI   = http://www.w3.org/Icons/valid-html40-blue
+-    Local URI = images/valid_icons/valid-html40
+-    Local ALT URI = images/valid_icons/valid-html40-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.0 Strict
+@@ -171,8 +157,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html40
+     ALT URI   = http://www.w3.org/Icons/valid-html40-blue
+-    Local URI = images/valid_icons/valid-html40
+-    Local ALT URI = images/valid_icons/valid-html40-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.0 Transitional
+@@ -193,8 +177,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html40
+     ALT URI   = http://www.w3.org/Icons/valid-html40-blue
+-    Local URI = images/valid_icons/valid-html40
+-    Local ALT URI = images/valid_icons/valid-html40-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.0 Frameset
+@@ -215,8 +197,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html401
+     ALT URI   = http://www.w3.org/Icons/valid-html401-blue
+-    Local URI = images/valid_icons/valid-html401
+-    Local ALT URI = images/valid_icons/valid-html401-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.01 Strict
+@@ -237,8 +217,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html401
+     ALT URI   = http://www.w3.org/Icons/valid-html401-blue
+-    Local URI = images/valid_icons/valid-html401
+-    Local ALT URI = images/valid_icons/valid-html401-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.01 Transitional
+@@ -259,8 +237,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-html401
+     ALT URI   = http://www.w3.org/Icons/valid-html401-blue
+-    Local URI = images/valid_icons/valid-html401
+-    Local ALT URI = images/valid_icons/valid-html401-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid HTML 4.01 Frameset
+@@ -297,8 +273,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtml10
+     ALT URI   = http://www.w3.org/Icons/valid-xhtml10-blue
+-    Local URI = images/valid_icons/valid-xhtml10
+-    Local ALT URI = images/valid_icons/valid-xhtml10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML 1.0 Strict
+@@ -322,8 +296,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtml10
+     ALT URI   = http://www.w3.org/Icons/valid-xhtml10-blue
+-    Local URI = images/valid_icons/valid-xhtml10
+-    Local ALT URI = images/valid_icons/valid-xhtml10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML 1.0 Transitional
+@@ -347,8 +319,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtml10
+     ALT URI   = http://www.w3.org/Icons/valid-xhtml10-blue
+-    Local URI = images/valid_icons/valid-xhtml10
+-    Local ALT URI = images/valid_icons/valid-xhtml10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML 1.0 Frameset
+@@ -373,8 +343,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtmlbasic10
+     ALT URI   = http://www.w3.org/Icons/valid-xhtmlbasic10-blue
+-    Local URI = images/valid_icons/valid-xhtmlbasic10
+-    Local ALT URI = images/valid_icons/valid-xhtmlbasic10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML Basic 1.0
+@@ -465,8 +433,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtmlprint10
+     ALT URI   = http://www.w3.org/Icons/valid-xhtmlprint10-blue
+-    Local URI = images/valid_icons/valid-xhtmlprint10
+-    Local ALT URI = images/valid_icons/valid-xhtmlprint10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML-Print 1.0
+@@ -490,8 +456,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtml11
+     ALT URI   = http://www.w3.org/Icons/valid-xhtml11-blue
+-    Local URI = images/valid_icons/valid-xhtml11
+-    Local ALT URI = images/valid_icons/valid-xhtml11-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML 1.1
+@@ -564,8 +528,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-mathml20
+     ALT URI   = http://www.w3.org/Icons/valid-mathml20-blue
+-    Local URI = images/valid_icons/valid-mathml20
+-    Local ALT URI = images/valid_icons/valid-mathml20-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid MathML 2.0
+@@ -637,8 +599,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-xhtml-rdfa
+     ALT URI   = http://www.w3.org/Icons/valid-xhtml-rdfa-blue
+-    Local URI = images/valid_icons/valid-xhtml-rdfa
+-    Local ALT URI = images/valid_icons/valid-xhtml-rdfa-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid XHTML + RDFa
+@@ -667,8 +627,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-svg10
+     ALT URI   = http://www.w3.org/Icons/valid-svg10-blue
+-    Local URI = images/valid_icons/valid-svg10
+-    Local ALT URI = images/valid_icons/valid-svg10-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid SVG 1.0
+@@ -695,8 +653,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-svg11
+     ALT URI   = http://www.w3.org/Icons/valid-svg11-blue
+-    Local URI = images/valid_icons/valid-svg11
+-    Local ALT URI = images/valid_icons/valid-svg11-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid SVG 1.1
+@@ -722,8 +678,6 @@
+   <Badge>
+     URI       = http://www.w3.org/Icons/valid-svgtiny11
+     ALT URI   = http://www.w3.org/Icons/valid-svgtiny11-blue
+-    Local URI = images/valid_icons/valid-svgtiny11
+-    Local ALT URI = images/valid_icons/valid-svgtiny11-blue
+     Height    = 31
+     Width     = 88
+     Alt       = Valid SVG 1.1 Tiny
+diff -up validator-1.0/htdocs/docs/help.html~ validator-1.0/htdocs/docs/help.html
+--- validator-1.0/htdocs/docs/help.html~	2007-07-06 08:45:50.000000000 +0300
++++ validator-1.0/htdocs/docs/help.html	2010-06-18 00:48:38.679847453 +0300
+@@ -333,7 +333,7 @@ mailing-list.</p>
+     <h4 id="icon">"valid" icons</h4>
+   <h5 id="icon-usage">My document is valid, can I use your "valid" icon?</h5>
+   <p>
+-      <img class="inline-badge" src="<!--#echo var="relroot" -->images/valid_icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" />
++      <img class="inline-badge" src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" />
+       Yes. To show readers that one has taken some care to create an
+       interoperable Web page, a "W3C valid" badge may be displayed 
+       (here, the "valid XHTML 1.0" badge) <strong>on any page

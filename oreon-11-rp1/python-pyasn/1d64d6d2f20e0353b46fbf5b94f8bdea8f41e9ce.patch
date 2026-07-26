@@ -1,0 +1,41 @@
+From 1d64d6d2f20e0353b46fbf5b94f8bdea8f41e9ce Mon Sep 17 00:00:00 2001
+From: Hadi Asghari <hadiasghari@users.noreply.github.com>
+Date: Tue, 18 Aug 2020 16:12:30 +0200
+Subject: [PATCH] bump to 1.6.1
+
+---
+ README.md         | 4 ++--
+ pyasn/_version.py | 4 +---
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/README.md b/README.md
+index 1583c56..a860281 100644
+--- a/README.md
++++ b/README.md
+@@ -27,7 +27,7 @@ Installation
+ ============
+ Installation is a breeze via pip: ::
+ 
+-    pip install pyasn --pre
++    pip install pyasn
+ 
+ Or with the standard Python: ::
+ 
+@@ -145,7 +145,7 @@ run with the following command: ::
+ 
+     python setup.py test
+ 
+-This beta release has been tested under python version 2.6, 2.7, 3.3, 3.4 and 3.5. We appreciate contributions towards
++This beta release has been tested under python version 2.6, 2.7, and 3.3 to 3.8. We appreciate contributions towards
+ testing *pyasn*!
+ 
+ **New in v1.6:** pyasn_util_convert.py offers a '--dump-screen' option which shows the MRT/RIB archive contents and
+diff --git a/pyasn/_version.py b/pyasn/_version.py
+index 190584c..bb64aa4 100644
+--- a/pyasn/_version.py
++++ b/pyasn/_version.py
+@@ -1,3 +1 @@
+-__version__ = '1.6.0b1'
+-
+-
++__version__ = '1.6.1'

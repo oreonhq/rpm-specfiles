@@ -1,0 +1,61 @@
+.TH UNU\-INSET "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-inset \- replace a sub-region with a different
+.I nrrd
+.SH SYNOPSIS
+.B unu\ inset
+.BR \-min , \-\-minimum
+.RI < pos0 \ ...>
+.BR \-s , \-\-subset
+.RI < nsub >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Replace a sub-region with a different
+.IR nrrd .
+This is functionally the opposite of
+.RB \(lq crop \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdInset
+.SH OPTIONS
+.TP
+.B \-min\fR\ [<\fIpos0\fR\ ...>]\ ,\ \fB\-\-minimum\fR\ [<\fIpos0\fR\ ...>]
+coordinates of where to locate sub-volume within input
+.IR nrrd .
+.RS +7n
+.IP \(bu 2
+.RI < int >
+gives 0\-based index
+.IP \(bu 2
+.BR M ,
+.BR M\+ <\fIint\fR>,
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.IP
+(1 or more
+.IR position s)
+.TP
+.B \-s\fR\ <\fInsub\fR>\ ,\ \fB\-\-subset\fR\ <\fInsub\fR>
+sub-region
+.IR nrrd .
+This is the data to be inset in
+.I nin
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-crop (1)

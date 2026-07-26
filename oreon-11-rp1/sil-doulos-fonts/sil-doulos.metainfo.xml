@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>sil-doulos</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Doulos SIL</name>
+  <summary>Doulos SIL fonts</summary>
+  <description>
+    <p>
+      Doulos SIL provides glyphs for a wide range of Latin and Cyrillic
+      characters. Doulos's design is similar to the design of the Times-like
+      fonts, but only has a single regular face. It is intended for use alongside
+      other Times-like fonts where a range of styles (italic, bold) are not
+      needed.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://scripts.sil.org/DoulosSILFont</url>
+</component>

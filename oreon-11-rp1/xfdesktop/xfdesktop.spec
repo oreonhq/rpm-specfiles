@@ -1,0 +1,76 @@
+%global source0_hash acccde849265bbf4093925ba847977b7abf70bb2977e4f78216570e887c157b8
+
+%global xfceversion 4.20
+
+Name:           xfdesktop
+Version:        4.20.1
+Release:        %autorelease
+Summary:        Desktop manager for the Xfce Desktop Environment
+
+# Automatically converted from old format: GPLv2+ - review is highly recommended.
+License:        GPL-2.0-or-later
+URL:            http://www.xfce.org/
+Source0:        http://archive.xfce.org/src/xfce/%{name}/%{xfceversion}/%{name}-%{version}.tar.bz2
+
+BuildRequires:  make
+BuildRequires:  gcc-c++
+BuildRequires:  libxfce4ui-devel >= %{xfceversion}
+BuildRequires:  gettext
+BuildRequires:  exo-devel >= 0.12.0
+BuildRequires:  libgudev1-devel >= 145
+BuildRequires:  Thunar-devel >= 1.8.0
+BuildRequires:  dbus-glib-devel >= 0.84
+BuildRequires:  garcon-devel >= 0.1.2
+BuildRequires:  libwnck3-devel >= 3.14
+BuildRequires:  libnotify-devel >= 0.4.0
+BuildRequires:  xfconf-devel >= %{xfceversion}
+BuildRequires:  libyaml-devel
+BuildRequires:  intltool
+BuildRequires:  desktop-file-utils
+BuildRequires:  libSM-devel
+BuildRequires:  libICE-devel
+BuildRequires:  libxfce4windowing-devel
+
+Requires:       xfwm4 >= %{xfceversion}
+Requires:       xfce4-panel >= %{xfceversion}
+Requires:       redhat-menus
+Requires:       desktop-backgrounds-compat
+%if 0%{?fedora} >= 37 && 0%{?fedora} < 43
+Requires:       webp-pixbuf-loader%{?_isa}
+%endif
+
+%description
+This package includes a desktop manager for the Xfce Desktop Environment.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q
+
+%build
+%configure --with-default-backdrop-filename=%{_datadir}/backgrounds/images/default.jxl
+
+%make_build
+
+%install
+%make_install
+
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+desktop-file-validate \
+    %{buildroot}/%{_datadir}/applications/xfce-backdrop-settings.desktop
+
+%find_lang %{name}
+
+%files -f %{name}.lang
+%license COPYING
+%doc ChangeLog NEWS AUTHORS
+%{_bindir}/*
+%{_datadir}/applications/*
+%{_datadir}/icons/hicolor/*/*/*
+%{_datadir}/pixmaps/*
+%{_datadir}/backgrounds/xfce
+%{_mandir}/man1/*
+
+%changelog
+%autochangelog

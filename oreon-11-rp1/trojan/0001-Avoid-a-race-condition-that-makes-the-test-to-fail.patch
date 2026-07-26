@@ -1,0 +1,22 @@
+From 7a6354b8b350b036ceb7e9447cdd7daeb4d75347 Mon Sep 17 00:00:00 2001
+From: Qiyu Yan <yanqiyu@fedoraproject.org>
+Date: Sat, 4 Jul 2020 18:09:12 +0800
+Subject: [PATCH] Avoid a race condition that makes the test to fail
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9a53641..3ab893e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -126,4 +126,5 @@ else()
+              COMMAND bash ${CMAKE_SOURCE_DIR}/tests/LinuxSmokeTest/basic.sh ${CMAKE_BINARY_DIR}/trojan)
+     add_test(NAME LinuxSmokeTest-fake-client
+              COMMAND bash ${CMAKE_SOURCE_DIR}/tests/LinuxSmokeTest/fake-client.sh ${CMAKE_BINARY_DIR}/trojan)
++    SET_TESTS_PROPERTIES(LinuxSmokeTest-fake-client PROPERTIES DEPENDS "LinuxSmokeTest-basic")
+ endif()
+-- 
+2.26.2
+

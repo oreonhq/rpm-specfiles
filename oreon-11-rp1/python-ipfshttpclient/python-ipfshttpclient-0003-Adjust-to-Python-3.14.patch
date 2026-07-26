@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 31 Jul 2025 07:00:42 +0200
+Subject: [PATCH] Adjust to Python 3.14
+
+See this PR - python/cpython#133306.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/test/unit/test_filescanner.py b/test/unit/test_filescanner.py
+index 27cb03f..60f8040 100644
+--- a/test/unit/test_filescanner.py
++++ b/test/unit/test_filescanner.py
+@@ -47,7 +47,7 @@ def test_fs_node_entry_as_str() -> None:
+ ])
+ def test_glob_compile(pattern: ty.AnyStr, expected: ty.List[ty.AnyStr], kwargs: ty.Dict[str, bool]):
+ 	matcher = filescanner.GlobMatcher(pattern, **kwargs)
+-	assert list(map(lambda r: r.pattern if r is not None else None, matcher._pat)) == expected
++	assert list(map(lambda r: r.pattern.lower() if r is not None else None, matcher._pat)) ==  [x.lower() if x is not None else None for x in expected]
+ 
+ 
+ def test_glob_sep_normalize(monkeypatch):

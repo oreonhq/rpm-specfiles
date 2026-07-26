@@ -1,0 +1,37 @@
+From 7904c37c9e5febe0157ad33e8338d94190bd3af9 Mon Sep 17 00:00:00 2001
+From: Koichi ITO <koic.ito@gmail.com>
+Date: Tue, 10 Sep 2024 00:10:09 +0900
+Subject: [PATCH] Suppress a Ruby 3.3's warning
+
+This PR suppresses the following warning:
+
+```console
+$ cd path/to/djberg96/sys-uname
+$ ruby -v
+ruby 3.3.5 (2024-09-03 revision ef084cc8f4) [x86_64-darwin23]
+$ bundle exec rake
+(snip)
+
+gems/3.3.0/gems/rspec-core-3.13.1/exe/rspec --pattern spec/\*\*\{,/\*/\*\*\}/\*_spec.rb
+/Users/koic/src/github.com/djberg96/sys-uname/lib/sys/uname.rb:18: warning: ostruct was loaded from the standard library,
+but will no longer be part of the default gems starting from Ruby 3.5.0.
+You can add ostruct to your Gemfile or gemspec to silence this warning.
+```
+
+`OpenStruct` is no longer used as of commit https://github.com/djberg96/sys-uname/commit/790ffe9.
+Therefore, it is safe to remove `require 'ostruct'`.
+---
+ lib/sys/unix/uname.rb | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/sys/unix/uname.rb b/lib/sys/unix/uname.rb
+index e64d8e7..6001ff5 100644
+--- a/lib/sys/unix/uname.rb
++++ b/lib/sys/unix/uname.rb
+@@ -1,6 +1,5 @@
+ require 'ffi'
+ require 'rbconfig'
+-require 'ostruct'
+ 
+ # The Sys module serves as a namespace only.
+ module Sys

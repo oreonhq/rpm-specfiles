@@ -1,0 +1,13 @@
+--- gertty-1.0.3/old_setup.cfg	2015-01-05 14:46:24.980791318 +0100
++++ gertty-1.0.3/setup.cfg	2015-01-05 14:55:50.248777638 +0100
+@@ -18,6 +18,10 @@
+ 	gertty
+ data_files = 
+ 	share/gertty/examples = examples/*
++package-data =
++    gertty = alembic/versions/*
++    gertty = alembic/*.py alembic/*.mako alembic/README
++    gertty = *.ini
+ 
+ [entry_points]
+ console_scripts = 

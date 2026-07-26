@@ -1,0 +1,46 @@
+Installation and setup on Fedora
+--------------------------------
+
+tl;dr:  taskd will run as a 'taskd' user, so the config and certificates should
+be readable by that user after you create them.
+
+    # Generate ca, server and client keys
+    su - taskd
+    cd /etc/pki/taskd
+    ./generate
+
+    # Set up an organization and user
+    taskd add org ORGNAME --data /var/lib/taskd
+    taskd add user ORGNAME USERNAME --data /var/lib/taskd
+
+    exit  # to bail on the taskd user.
+
+This will print out a key that you need to save. It might look something like
+this: New user key: b981dda6-8f6d-4610-90f2-a34e593e270f
+
+    # Open a firewall port
+    firewall-cmd --permanent --zone=public --add-service=taskd
+
+    # Start taskd
+    systemctl start taskd
+
+On your your_client, install taskwarrior from the Fedora repos as usual. Then,
+copy down the client certificates that were conveniently generated on your
+server:
+
+    scp your_server:/etc/pki/taskd/client.\*.pem ~/.task/.
+
+Configure your taskwarrior client to talk to your_server. Add the following to
+your local ~/.taskrc:
+
+    taskd.server=your_server:6544
+    taskd.credentials=ORGNAME/USERNAME/USER_KEY
+
+    taskd.certificate=/home/USERNAME/.task/client.cert.pem
+    taskd.key=/home/USERNAME/.task/client.key.pem
+    taskd.trust=yes
+
+On your local client, try it out:
+
+    task sync initialize
+    task sync

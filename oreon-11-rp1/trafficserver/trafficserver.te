@@ -1,0 +1,120 @@
+policy_module(trafficserver, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+## <desc>
+## <p>
+## Allow trafficserver to bind to all ports
+## </p>
+## </desc>
+gen_tunable(trafficserver_can_bind_all, false)
+
+## <desc>
+## <p>
+## Allow trafficserver to connect to all ports
+## </p>
+## </desc>
+gen_tunable(trafficserver_can_connect_all, false)
+
+# Define our types & attach file attributes
+type trafficserver_t;
+type trafficserver_exec_t;
+init_daemon_domain(trafficserver_t, trafficserver_exec_t)
+
+type trafficserver_cache_t;
+files_type(trafficserver_cache_t)
+
+type trafficserver_etc_t;
+files_config_file(trafficserver_etc_t)
+
+type trafficserver_log_t;
+logging_log_file(trafficserver_log_t)
+
+type trafficserver_run_t;
+files_type(trafficserver_run_t)
+
+type trafficserver_unit_file_t;
+systemd_unit_file(trafficserver_unit_file_t)
+
+########################################
+#
+# trafficserver local policy
+#
+
+# We run as the trafficserver user and use capabilities to bind privileged ports,
+# so this permission is not required and should not be granted!
+# allow trafficserver_t self:capability { setgid setuid };
+
+allow trafficserver_t self:process { execmem fork setcap setrlimit signal_perms setsched };
+allow trafficserver_t self:fifo_file rw_fifo_file_perms;
+allow trafficserver_t self:tcp_socket create_stream_socket_perms;
+allow trafficserver_t self:unix_stream_socket { create_stream_socket_perms connectto };
+
+allow trafficserver_t trafficserver_exec_t:file execute_no_trans;
+
+# etc files are read-only to trafficserver
+list_dirs_pattern(trafficserver_t, trafficserver_etc_t, trafficserver_etc_t)
+read_files_pattern(trafficserver_t, trafficserver_etc_t, trafficserver_etc_t)
+read_lnk_files_pattern(trafficserver_t, trafficserver_etc_t, trafficserver_etc_t)
+
+# trafficserver has free rein over cache
+manage_dirs_pattern(trafficserver_t, trafficserver_cache_t, trafficserver_cache_t)
+manage_files_pattern(trafficserver_t, trafficserver_cache_t, trafficserver_cache_t)
+
+# trafficserver does its own log management, rotation, etc
+manage_dirs_pattern(trafficserver_t, trafficserver_log_t, trafficserver_log_t)
+manage_files_pattern(trafficserver_t, trafficserver_log_t, trafficserver_log_t)
+manage_lnk_files_pattern(trafficserver_t, trafficserver_log_t, trafficserver_log_t)
+logging_log_filetrans(trafficserver_t, trafficserver_log_t, { dir file lnk_file })
+
+# run - communications sockets and lockfiles, runtime copies of plugins
+manage_dirs_pattern(trafficserver_t, trafficserver_run_t, trafficserver_run_t)
+mmap_exec_files_pattern(trafficserver_t, trafficserver_run_t, trafficserver_run_t)
+manage_files_pattern(trafficserver_t, trafficserver_run_t, trafficserver_run_t)
+manage_sock_files_pattern(trafficserver_t, trafficserver_run_t, trafficserver_run_t)
+
+# hwloc reads a bunch of system files
+dev_list_sysfs(trafficserver_t)
+dev_read_sysfs(trafficserver_t)
+
+fs_getattr_xattr_fs(trafficserver_t)
+fs_read_cgroup_files(trafficserver_t)
+fs_search_cgroup_dirs(trafficserver_t)
+
+kernel_read_fs_sysctls(trafficserver_t)
+kernel_read_net_sysctls(trafficserver_t)
+kernel_search_network_sysctl(trafficserver_t)
+kernel_read_system_state(trafficserver_t)
+
+logging_send_syslog_msg(trafficserver_t)
+
+miscfiles_read_generic_certs(trafficserver_t)
+
+sysnet_dns_name_resolve(trafficserver_t)
+
+# By default we can only connect to the standard http and http_cache ports
+# UDP is used for QUIC
+corenet_tcp_bind_generic_node(trafficserver_t)
+corenet_udp_bind_generic_node(trafficserver_t)
+corenet_tcp_bind_http_port(trafficserver_t)
+corenet_udp_bind_http_port(trafficserver_t)
+corenet_tcp_bind_http_cache_port(trafficserver_t)
+corenet_udp_bind_http_cache_port(trafficserver_t)
+corenet_tcp_connect_http_port(trafficserver_t)
+corenet_tcp_connect_http_cache_port(trafficserver_t)
+
+# Internal DNS resolver binds a random port
+corenet_udp_bind_all_unreserved_ports(trafficserver_t)
+
+tunable_policy(`trafficserver_can_bind_all',`
+	corenet_tcp_bind_all_ports(trafficserver_t)
+	corenet_udp_bind_all_ports(trafficserver_t)
+')
+
+tunable_policy(`trafficserver_can_connect_all',`
+	corenet_tcp_connect_all_ports(trafficserver_t)
+')
+

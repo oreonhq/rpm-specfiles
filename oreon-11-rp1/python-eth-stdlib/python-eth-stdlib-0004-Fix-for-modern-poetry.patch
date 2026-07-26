@@ -1,0 +1,24 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 25 Mar 2025 14:26:13 +0100
+Subject: [PATCH] Fix for modern poetry
+
+Fixes #25.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e92d4b9..b91a4e5 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,11 @@
+ [project]
++name = "eth-stdlib"
++version = "0.2.7"
++description = "Ethereum Standard Library for Python"
++authors = [{name = "Edward Amor", email = "edward.amor3@gmail.com"}]
+ license = "LGPL-3.0-or-later"
+ license-files = [ "COPYING.LESSER", ]
++readme = "README.md"
+ 
+ [tool.poetry]
+ name = "eth-stdlib"

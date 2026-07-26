@@ -1,0 +1,34 @@
+--- zenon-0.8.5/zenon_coqbool.v.orig	2020-10-23 09:19:07.000000000 -0600
++++ zenon-0.8.5/zenon_coqbool.v	2026-03-03 16:33:33.636474063 -0700
+@@ -1,6 +1,6 @@
+ (*  Copyright 2004 INRIA  *)
+ 
+-Require Export Bool.
++From Stdlib Require Export Bool.
+ 
+ Definition __g_not_b := negb.
+ Definition __g_and_b := andb.
+--- zenon-0.8.5/zenon_focal.v.orig	2020-10-23 09:19:07.000000000 -0600
++++ zenon-0.8.5/zenon_focal.v	2026-03-03 16:34:30.531982864 -0700
+@@ -1,8 +1,8 @@
+ (*  Copyright 2004 INRIA  *)
+ 
+-Require Export Bool.
+-Require Import ClassicalEpsilon.
+-Require List.
++From Stdlib Require Export Bool.
++From Stdlib Require Import ClassicalEpsilon.
++From Stdlib Require List.
+ 
+ (* magic: this whole file depends on the following definitions:
+    basics.and_b := andb
+--- zenon-0.8.5/zenon.v.orig	2020-10-23 09:19:07.000000000 -0600
++++ zenon-0.8.5/zenon.v	2026-03-03 16:33:06.988515450 -0700
+@@ -1,6 +1,6 @@
+ (*  Copyright 2004 INRIA  *)
+ 
+-Require Export Classical.
++From Stdlib Require Export Classical.
+ 
+ Lemma zenon_notnot : forall P : Prop,
+   P -> (~ P -> False).

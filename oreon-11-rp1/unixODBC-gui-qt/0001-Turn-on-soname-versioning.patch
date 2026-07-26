@@ -1,0 +1,55 @@
+From 7bb7dbfa7a74cc34a4e38defc09514396e4aa600 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 15 Jan 2019 14:47:53 +0100
+Subject: [PATCH] Turn on soname versioning
+
+Signed-off-by: rpm-build <rpm-build>
+---
+ common.pri                | 2 ++
+ gtrtstQ5/gtrtstQ5.pro     | 1 +
+ odbcinstQ5/odbcinstQ5.pro | 4 +---
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/common.pri b/common.pri
+index 8c0a731..077fabf 100644
+--- a/common.pri
++++ b/common.pri
+@@ -14,6 +14,8 @@ OBJECTS_DIR	= .tmp
+ UI_DIR          = .tmp
+ MOC_DIR	       	= .tmp
+ 
++FEDORA_SO_VERSION = 2.0.0
++
+ win32 {
+ #   This to resolve a legacy variation of printf used by ODBC. 
+ #   This is to resolve legacy MessageBoxW used by ODBC.	
+diff --git a/gtrtstQ5/gtrtstQ5.pro b/gtrtstQ5/gtrtstQ5.pro
+index 4f24fee..1b85486 100644
+--- a/gtrtstQ5/gtrtstQ5.pro
++++ b/gtrtstQ5/gtrtstQ5.pro
+@@ -8,6 +8,7 @@ QT += gui
+ 
+ TEMPLATE= lib
+ TARGET  = gtrtstQ5
++VERSION = $${FEDORA_SO_VERSION}
+ DESTDIR	= ../lib
+ CONFIG	+= staticlib
+ 
+diff --git a/odbcinstQ5/odbcinstQ5.pro b/odbcinstQ5/odbcinstQ5.pro
+index 37baad9..ed74712 100644
+--- a/odbcinstQ5/odbcinstQ5.pro
++++ b/odbcinstQ5/odbcinstQ5.pro
+@@ -7,9 +7,7 @@ TEMPLATE= lib
+ TARGET  = odbcinstQ5
+ 
+ 
+-# We do not want a version for a plugin file name (although gnu auto tools will use one but it at least sym links to a name without)...
+-# VERSION = %V_MAJOUR%.%V_MINOR%.%V_RELEASE%
+-
++VERSION = $${FEDORA_SO_VERSION}
+ DESTDIR	= ../lib
+ CONFIG	+= plugin
+ 
+-- 
+2.43.2
+

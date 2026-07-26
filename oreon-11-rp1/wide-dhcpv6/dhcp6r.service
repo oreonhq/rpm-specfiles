@@ -1,0 +1,10 @@
+[Unit]
+Description=Wide DHCPv6 relay agent
+Documentation=man:dhcp6relay(8)
+
+[Service]
+ExecStart=/usr/sbin/dhcp6relay -f
+
+[Install]
+WantedBy=network.target
+

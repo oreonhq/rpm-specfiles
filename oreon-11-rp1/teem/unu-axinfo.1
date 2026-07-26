@@ -1,0 +1,80 @@
+.TH UNU\-AXINFO "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-axinfo \- modify attributes of one or more axes
+.SH SYNOPSIS
+.B unu\ axinfo
+.BR \-a , \-\-axes
+.RI < ax0 \  ax1 \ ...>
+.RB [ \-l , \-\-label
+.RI < label >]
+.RB [ \-u , \-\-units
+.RI < units >]
+.RB [ \-mm , \-\-minmax
+.RI < min \  max >]
+.RB [ \-sp , \-\-spacing
+.RI < spacing >]
+.RB [ \-c , \-\-center
+.RI < center >]
+.RB [ \-k , \-\-kind
+.RI < kind >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Modify attributes of one or more axes.
+The only attributes which are set are those for which command-line options are
+given.
+.IP \(bu +2n
+Uses no particular function; just sets fields in
+.B NrrdAxisInfo
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIax0\fR \fIax1\fR\ ...>\ ,\ \fB\-\-axes\fR\ <\fIax0\fR \fIax1\fR\ ...>
+the one or more axes that should be modified
+(1 or more
+.IR unsigned\ int s)
+.TP
+.B \-l\fR\ <\fIlabel\fR>\ ,\ \fB\-\-label\fR\ <\fIlabel\fR>
+label to associate with axis
+.RI ( string )
+.TP
+.B \-u\fR\ <\fIunits\fR>\ ,\ \fB\-\-units\fR\ <\fIunits\fR>
+units of measurement
+.RI ( string )
+.TP
+.B \-mm\fR\ <\fImin\fR\ \fImax\fR>\ ,\ \fB\-\-minmax\fR\ <\fImin\fR\ \fImax\fR>
+units of measurement
+min and max values along axis
+( 2
+.IR double s)
+.TP
+.B \-sp\fR\ <\fIspacing\fR>\ ,\ \fB\-\-spacing\fR\ <\fIspacing\fR>
+spacing between samples along axis
+.RI ( double )
+.TP
+.B \-c\fR\ <\fIcenter\fR>\ ,\ \fB\-\-center\fR\ <\fIcenter\fR>
+axis centering:
+.RB \(lq cell \(rq
+or
+.RB \(lq node \(rq.
+Not using this option leaves the centering as it is on input
+.RI ( string )
+.TP
+.B \-k\fR\ <\fIkind\fR>\ ,\ \fB\-\-kind\fR\ <\fIkind\fR>
+axis kind.
+Not using this option leaves the kind as it is on input
+.RI ( string )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

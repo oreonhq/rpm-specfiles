@@ -1,0 +1,20 @@
+diff -U 3 -dHrN a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml	2024-11-02 22:09:08.000000000 +0100
++++ b/pyproject.toml	2025-01-04 10:55:49.821456690 +0100
+@@ -29,7 +29,6 @@
+ test = [
+     "pytest",
+     "pytest-astropy-header",
+-    "pytest-cython",
+     "pytest-doctestplus",
+     "requests",
+     "matplotlib",
+@@ -74,7 +73,7 @@
+ # Skip MUSL libc builds.
+ skip = "pp* *_i686 *-musllinux_*"
+ test-command = [
+-    "pytest --doctest-plus --doctest-cython --pyargs healpy",
++    "pytest --doctest-plus --pyargs healpy",
+     "pytest {project}/test"
+ ]
+ test-extras = ["test"]

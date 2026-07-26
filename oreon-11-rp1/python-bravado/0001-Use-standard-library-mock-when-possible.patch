@@ -1,0 +1,438 @@
+From f13e3f98e073ab129007ad274679fc7d1e91838d Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Mon, 5 May 2025 18:19:21 -0500
+Subject: [PATCH] Use standard library mock when possible
+
+Mock has been in the standard library since 3.3. Use it when available,
+falling back to the mock from PyPI if necessary.
+---
+ docs/source/testing.rst                          |  4 ++--
+ requirements-dev.txt                             |  2 +-
+ tests/client/construct_params_test.py            |  5 ++++-
+ tests/client/construct_request_test.py           |  6 +++++-
+ .../inject_headers_for_remote_refs_test.py       |  5 ++++-
+ tests/client_test.py                             |  5 ++++-
+ tests/config_test.py                             |  5 ++++-
+ tests/fido_client/FidoClient/request_test.py     | 16 +++++++++-------
+ .../fido_client/FidoFutureAdapter/result_test.py |  5 ++++-
+ tests/fido_client/fido_response_adapter_test.py  |  5 ++++-
+ tests/http_client_test.py                        |  5 ++++-
+ tests/http_future/HttpFuture/cancel_test.py      |  5 ++++-
+ tests/http_future/HttpFuture/conftest.py         |  5 ++++-
+ tests/http_future/HttpFuture/response_test.py    |  5 ++++-
+ tests/http_future/HttpFuture/result_test.py      |  6 ++++--
+ tests/http_future/raise_on_expected_test.py      |  5 ++++-
+ tests/http_future/raise_on_unexpected_test.py    |  5 ++++-
+ .../unmarshall_response_inner_test.py            |  5 ++++-
+ tests/http_future/unmarshall_response_test.py    |  6 ++++--
+ .../RequestsFutureAdapter/conftest.py            |  5 ++++-
+ tests/response_test.py                           |  5 ++++-
+ tests/testing/response_mocks_test.py             |  6 +++++-
+ tests/warning/warn_for_deprecated_op_test.py     |  6 ++++--
+ 23 files changed, 94 insertions(+), 33 deletions(-)
+
+diff --git a/docs/source/testing.rst b/docs/source/testing.rst
+index 6fa3266..049b444 100644
+--- a/docs/source/testing.rst
++++ b/docs/source/testing.rst
+@@ -30,7 +30,7 @@ First of all, in order to make sure your code doesn't do any network requests, y
+ 
+ .. code-block:: python
+ 
+-    import mock
++    from unittest import mock
+     import pytest
+ 
+     from bravado.client import SwaggerClient
+@@ -46,7 +46,7 @@ Now we can mock out that call to ``findPetsByStatus`` by using the
+ 
+ .. code-block:: python
+ 
+-    import mock
++    from unittest import mock
+ 
+     from bravado.testing.response_mocks import BravadoResponseMock
+ 
+diff --git a/requirements-dev.txt b/requirements-dev.txt
+index 2dac6d2..83ae96f 100644
+--- a/requirements-dev.txt
++++ b/requirements-dev.txt
+@@ -1,7 +1,7 @@
+ bottle
+ ephemeral_port_reserve
+ httpretty
+-mock
++mock; python_version<'3.3'
+ pip>=9.0.1 # workaround to https://github.com/pypa/pip/issues/3903
+ pre-commit
+ pytest==7.4.4
+diff --git a/tests/client/construct_params_test.py b/tests/client/construct_params_test.py
+index 1caf964..8c59488 100644
+--- a/tests/client/construct_params_test.py
++++ b/tests/client/construct_params_test.py
+@@ -2,7 +2,10 @@
+ import pytest
+ from bravado_core.exception import SwaggerMappingError
+ from bravado_core.operation import Operation
+-from mock import patch
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
+ 
+ from bravado.client import CallableOperation
+ from bravado.client import construct_params
+diff --git a/tests/client/construct_request_test.py b/tests/client/construct_request_test.py
+index a831033..f3a60d9 100644
+--- a/tests/client/construct_request_test.py
++++ b/tests/client/construct_request_test.py
+@@ -2,7 +2,11 @@
+ from typing import Any
+ from typing import Dict
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
++
+ import pytest
+ from bravado_core.operation import Operation
+ from bravado_core.request import IncomingRequest
+diff --git a/tests/client/inject_headers_for_remote_refs_test.py b/tests/client/inject_headers_for_remote_refs_test.py
+index 072480d..893b9af 100644
+--- a/tests/client/inject_headers_for_remote_refs_test.py
++++ b/tests/client/inject_headers_for_remote_refs_test.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ from bravado_core.operation import Operation
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado.client import inject_headers_for_remote_refs
+ 
+diff --git a/tests/client_test.py b/tests/client_test.py
+index 3c2015f..cd80331 100644
+--- a/tests/client_test.py
++++ b/tests/client_test.py
+@@ -2,7 +2,10 @@
+ import typing
+ from copy import deepcopy
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado.client import CallableOperation
+diff --git a/tests/config_test.py b/tests/config_test.py
+index 9d3d2b0..604ca1b 100644
+--- a/tests/config_test.py
++++ b/tests/config_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado.config import _get_response_metadata_class
+diff --git a/tests/fido_client/FidoClient/request_test.py b/tests/fido_client/FidoClient/request_test.py
+index 9574fc4..c938925 100644
+--- a/tests/fido_client/FidoClient/request_test.py
++++ b/tests/fido_client/FidoClient/request_test.py
+@@ -1,12 +1,14 @@
+ # -*- coding: utf-8 -*-
+-import mock
+-from mock import patch
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ from bravado.fido_client import FidoClient
+ 
+ 
+ def test_request_no_timeouts_passed_to_fido():
+-    with patch('bravado.fido_client.fido.fetch') as fetch:
++    with mock.patch('bravado.fido_client.fido.fetch') as fetch:
+         request_params = dict(url='http://foo.com/')
+         FidoClient().request(request_params)
+         assert fetch.call_args == mock.call(
+@@ -18,7 +20,7 @@ def test_request_no_timeouts_passed_to_fido():
+ 
+ 
+ def test_request_timeout_passed_to_fido():
+-    with patch('bravado.fido_client.fido.fetch') as fetch:
++    with mock.patch('bravado.fido_client.fido.fetch') as fetch:
+         request_params = dict(url='http://foo.com/', timeout=1)
+         FidoClient().request(request_params)
+         assert fetch.call_args == mock.call(
+@@ -31,7 +33,7 @@ def test_request_timeout_passed_to_fido():
+ 
+ 
+ def test_request_connect_timeout_passed_to_fido():
+-    with patch('bravado.fido_client.fido.fetch') as fetch:
++    with mock.patch('bravado.fido_client.fido.fetch') as fetch:
+         request_params = dict(url='http://foo.com/', connect_timeout=1)
+         FidoClient().request(request_params)
+         assert fetch.call_args == mock.call(
+@@ -44,7 +46,7 @@ def test_request_connect_timeout_passed_to_fido():
+ 
+ 
+ def test_request_connect_timeout_and_timeout_passed_to_fido():
+-    with patch('bravado.fido_client.fido.fetch') as fetch:
++    with mock.patch('bravado.fido_client.fido.fetch') as fetch:
+         request_params = dict(url='http://foo.com/', connect_timeout=1,
+                               timeout=2)
+         FidoClient().request(request_params)
+@@ -59,7 +61,7 @@ def test_request_connect_timeout_and_timeout_passed_to_fido():
+ 
+ 
+ def test_request_tcp_nodeley_passed_to_fido():
+-    with patch('bravado.fido_client.fido.fetch') as fetch:
++    with mock.patch('bravado.fido_client.fido.fetch') as fetch:
+         request_params = dict(url='http://foo.com/', tcp_nodelay=True)
+         FidoClient().request(request_params)
+         assert fetch.call_args == mock.call(
+diff --git a/tests/fido_client/FidoFutureAdapter/result_test.py b/tests/fido_client/FidoFutureAdapter/result_test.py
+index 19937c7..e25e2aa 100644
+--- a/tests/fido_client/FidoFutureAdapter/result_test.py
++++ b/tests/fido_client/FidoFutureAdapter/result_test.py
+@@ -2,7 +2,10 @@
+ import crochet
+ import fido.exceptions
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado.fido_client import FidoFutureAdapter
+ 
+diff --git a/tests/fido_client/fido_response_adapter_test.py b/tests/fido_client/fido_response_adapter_test.py
+index 6004dd1..0dafc81 100644
+--- a/tests/fido_client/fido_response_adapter_test.py
++++ b/tests/fido_client/fido_response_adapter_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ from __future__ import unicode_literals
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ from bravado.fido_client import FidoResponseAdapter
+ 
+diff --git a/tests/http_client_test.py b/tests/http_client_test.py
+index c282c5d..e1f435f 100644
+--- a/tests/http_client_test.py
++++ b/tests/http_client_test.py
+@@ -4,7 +4,10 @@ import typing
+ import unittest
+ 
+ import httpretty
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ import requests
+ from bravado_core.response import IncomingResponse
+diff --git a/tests/http_future/HttpFuture/cancel_test.py b/tests/http_future/HttpFuture/cancel_test.py
+index 13ec098..64f78b1 100644
+--- a/tests/http_future/HttpFuture/cancel_test.py
++++ b/tests/http_future/HttpFuture/cancel_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ from bravado_core.response import IncomingResponse
+ 
+diff --git a/tests/http_future/HttpFuture/conftest.py b/tests/http_future/HttpFuture/conftest.py
+index e053c36..bf2d42a 100644
+--- a/tests/http_future/HttpFuture/conftest.py
++++ b/tests/http_future/HttpFuture/conftest.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ 
+ from bravado.http_future import FutureAdapter
+diff --git a/tests/http_future/HttpFuture/response_test.py b/tests/http_future/HttpFuture/response_test.py
+index 6316056..c0cc353 100644
+--- a/tests/http_future/HttpFuture/response_test.py
++++ b/tests/http_future/HttpFuture/response_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import pytest
+ from bravado_core.response import IncomingResponse
+ 
+diff --git a/tests/http_future/HttpFuture/result_test.py b/tests/http_future/HttpFuture/result_test.py
+index 242b550..5ab8a68 100644
+--- a/tests/http_future/HttpFuture/result_test.py
++++ b/tests/http_future/HttpFuture/result_test.py
+@@ -4,8 +4,10 @@ import typing
+ import pytest
+ from bravado_core.operation import Operation
+ from bravado_core.response import IncomingResponse
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado.config import RequestConfig
+ from bravado.exception import HTTPError
+diff --git a/tests/http_future/raise_on_expected_test.py b/tests/http_future/raise_on_expected_test.py
+index e68f8c5..7b36cad 100644
+--- a/tests/http_future/raise_on_expected_test.py
++++ b/tests/http_future/raise_on_expected_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from bravado_core.response import IncomingResponse
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado.exception import HTTPError
+ from bravado.http_future import raise_on_expected
+diff --git a/tests/http_future/raise_on_unexpected_test.py b/tests/http_future/raise_on_unexpected_test.py
+index a74529c..f6c1ef1 100644
+--- a/tests/http_future/raise_on_unexpected_test.py
++++ b/tests/http_future/raise_on_unexpected_test.py
+@@ -1,7 +1,10 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+ from bravado_core.response import IncomingResponse
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ 
+ from bravado.exception import HTTPError
+ from bravado.http_future import raise_on_unexpected
+diff --git a/tests/http_future/unmarshall_response_inner_test.py b/tests/http_future/unmarshall_response_inner_test.py
+index b2a3724..cbb4158 100644
+--- a/tests/http_future/unmarshall_response_inner_test.py
++++ b/tests/http_future/unmarshall_response_inner_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import msgpack
+ import pytest
+ from bravado_core.content_type import APP_JSON
+diff --git a/tests/http_future/unmarshall_response_test.py b/tests/http_future/unmarshall_response_test.py
+index e19599b..5aa617b 100644
+--- a/tests/http_future/unmarshall_response_test.py
++++ b/tests/http_future/unmarshall_response_test.py
+@@ -3,8 +3,10 @@ import pytest
+ from bravado_core.exception import MatchingResponseNotFound
+ from bravado_core.operation import Operation
+ from bravado_core.response import IncomingResponse
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado.exception import HTTPError
+ from bravado.http_future import unmarshal_response
+diff --git a/tests/requests_client/RequestsFutureAdapter/conftest.py b/tests/requests_client/RequestsFutureAdapter/conftest.py
+index a120b1a..11ba000 100644
+--- a/tests/requests_client/RequestsFutureAdapter/conftest.py
++++ b/tests/requests_client/RequestsFutureAdapter/conftest.py
+@@ -1,6 +1,9 @@
+ # -*- coding: utf-8 -*-
+ import pytest
+-from mock import Mock
++try:
++    from unittest.mock import Mock
++except ImportError:
++    from mock import Mock
+ from requests.sessions import Session
+ 
+ 
+diff --git a/tests/response_test.py b/tests/response_test.py
+index 32d933a..4998217 100644
+--- a/tests/response_test.py
++++ b/tests/response_test.py
+@@ -1,5 +1,8 @@
+ # -*- coding: utf-8 -*-
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ 
+ from bravado.config import RequestConfig
+ from bravado.response import BravadoResponseMetadata
+diff --git a/tests/testing/response_mocks_test.py b/tests/testing/response_mocks_test.py
+index ce148cc..aa01019 100644
+--- a/tests/testing/response_mocks_test.py
++++ b/tests/testing/response_mocks_test.py
+@@ -1,7 +1,11 @@
+ # -*- coding: utf-8 -*-
+ import inspect
+ 
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
++
+ import pytest
+ from bravado_core.response import IncomingResponse
+ 
+diff --git a/tests/warning/warn_for_deprecated_op_test.py b/tests/warning/warn_for_deprecated_op_test.py
+index c7ef9f5..7aeac57 100644
+--- a/tests/warning/warn_for_deprecated_op_test.py
++++ b/tests/warning/warn_for_deprecated_op_test.py
+@@ -1,6 +1,8 @@
+ # -*- coding: utf-8 -*-
+-from mock import Mock
+-from mock import patch
++try:
++    from unittest.mock import Mock, patch
++except ImportError:
++    from mock import Mock, patch
+ 
+ from bravado.client import CallableOperation
+ from bravado.warning import warn_for_deprecated_op
+-- 
+2.49.0
+

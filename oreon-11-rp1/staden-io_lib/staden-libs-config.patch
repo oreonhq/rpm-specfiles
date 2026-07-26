@@ -1,0 +1,13 @@
+diff --git io_lib-1.12.4/io_lib-config.in~ io_lib-1.12.4/io_lib-config.in
+index 4d63fa0fcc..48d7eaf6ed 100755
+--- io_lib-1.12.4/io_lib-config.in~
++++ io_lib-1.12.4/io_lib-config.in
+@@ -30,7 +30,7 @@ case "$1" in
+     echo "-I@includedir@"
+     ;;
+ --libs)
+-    echo "-L@libdir@ -lstaden-read @LDFLAGS@ @LIBS@ @LIBCURL@ @LIBZ@"
++    echo "-L@libdir@ -lstaden-read @LIBS@"
+     ;;
+ --version)
+     echo @VERSION@

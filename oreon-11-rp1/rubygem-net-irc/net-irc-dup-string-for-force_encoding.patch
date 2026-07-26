@@ -1,0 +1,51 @@
+commit e3d69b79559f0f9638ffe3ca3c185e06a9378ee0
+Author: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date:   Mon Dec 23 01:32:44 2013 +0900
+
+    dup string for force_encoding to avoid frozen string issue
+    
+    Fix the following error when using rabbitrc
+    /usr/share/gems/gems/net-irc-0.0.9/lib/net/irc/client.rb:100:in `force_encoding': can't modify frozen String (RuntimeError)
+            from /usr/share/gems/gems/net-irc-0.0.9/lib/net/irc/client.rb:100:in `block in post'
+            from /usr/share/gems/gems/net-irc-0.0.9/lib/net/irc/client.rb:98:in `map'
+            from /usr/share/gems/gems/net-irc-0.0.9/lib/net/irc/client.rb:98:in `post'
+            from /usr/share/gems/gems/net-irc-0.0.9/lib/net/irc/client.rb:31:in `start'
+            from /usr/share/gems/gems/rabbit-2.1.1/bin/rabbirc:86:in `<top (required)>'
+            from /bin/rabbirc:23:in `load'
+            from /bin/rabbirc:23:in `<main>'
+
+diff --git a/lib/net/irc/client.rb b/lib/net/irc/client.rb
+index 22f76ee..f6faf92 100644
+--- a/lib/net/irc/client.rb
++++ b/lib/net/irc/client.rb
+@@ -97,7 +97,7 @@ class Net::IRC::Client
+ 	def post(command, *params)
+ 		m = Message.new(nil, command, params.map {|s|
+ 			if s
+-				s.force_encoding("ASCII-8BIT") if s.respond_to? :force_encoding
++				s.dup.force_encoding("ASCII-8BIT") if s.respond_to? :force_encoding
+ 				#s.gsub(/\r\n|[\r\n]/, " ")
+ 				s.tr("\r\n", " ")
+ 			else
+commit f56b92d35890833d5e00a87cc72e0a73954692ca
+Author: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date:   Mon Dec 23 01:54:27 2013 +0900
+
+    Modify previous commit
+
+diff --git a/lib/net/irc/client.rb b/lib/net/irc/client.rb
+index f6faf92..f5c2ec4 100644
+--- a/lib/net/irc/client.rb
++++ b/lib/net/irc/client.rb
+@@ -97,9 +97,9 @@ class Net::IRC::Client
+ 	def post(command, *params)
+ 		m = Message.new(nil, command, params.map {|s|
+ 			if s
+-				s.dup.force_encoding("ASCII-8BIT") if s.respond_to? :force_encoding
++				t = s.dup.force_encoding("ASCII-8BIT") if s.respond_to? :force_encoding
+ 				#s.gsub(/\r\n|[\r\n]/, " ")
+-				s.tr("\r\n", " ")
++				t.tr("\r\n", " ")
+ 			else
+ 				""
+ 			end

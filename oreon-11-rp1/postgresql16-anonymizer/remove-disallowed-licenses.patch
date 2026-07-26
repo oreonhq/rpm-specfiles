@@ -1,0 +1,39 @@
+diff --git original/vendor/constant_time_eq-0.3.1/Cargo.toml new/vendor/constant_time_eq-0.3.1/Cargo.toml
+index ad4a2f04..c1b743bd 100644
+--- original/vendor/constant_time_eq-0.3.1/Cargo.toml
++++ new/vendor/constant_time_eq-0.3.1/Cargo.toml
+@@ -28,7 +28,7 @@ categories = [
+     "cryptography",
+     "no-std",
+ ]
+-license = "CC0-1.0 OR MIT-0 OR Apache-2.0"
++license = "MIT-0 OR Apache-2.0"
+ repository = "https://github.com/cesarb/constant_time_eq"
+ 
+ [lib]
+diff --git original/vendor/dunce-1.0.5/Cargo.toml new/vendor/dunce-1.0.5/Cargo.toml
+index cec0d04a..81c1b859 100644
+--- original/vendor/dunce-1.0.5/Cargo.toml
++++ new/vendor/dunce-1.0.5/Cargo.toml
+@@ -31,7 +31,7 @@ keywords = [
+     "deunc",
+ ]
+ categories = ["filesystem"]
+-license = "CC0-1.0 OR MIT-0 OR Apache-2.0"
++license = "MIT-0 OR Apache-2.0"
+ repository = "https://gitlab.com/kornelski/dunce"
+ 
+ [package.metadata.docs.rs]
+diff --git original/vendor/imgref-1.11.0/Cargo.toml new/vendor/imgref-1.11.0/Cargo.toml
+index fe1a3dc8..9c24085c 100644
+--- original/vendor/imgref-1.11.0/Cargo.toml
++++ new/vendor/imgref-1.11.0/Cargo.toml
+@@ -34,7 +34,7 @@ categories = [
+     "rust-patterns",
+     "multimedia::images",
+ ]
+-license = "CC0-1.0 OR Apache-2.0"
++license = "Apache-2.0"
+ repository = "https://github.com/kornelski/imgref"
+ 
+ [package.metadata.docs.rs]

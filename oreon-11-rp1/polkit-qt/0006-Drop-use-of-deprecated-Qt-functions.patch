@@ -1,0 +1,92 @@
+From d2b6703be5c01a26a384d33f88314801c8a27932 Mon Sep 17 00:00:00 2001
+From: David Edmundson <kde@davidedmundson.co.uk>
+Date: Thu, 14 Jan 2016 17:38:39 +0000
+Subject: [PATCH 6/8] Drop use of deprecated Qt functions REVIEW: 126747
+
+---
+ CMakeLists.txt                     |  1 -
+ agent/polkitqt1-agent-listener.cpp |  2 +-
+ core/polkitqt1-authority.cpp       | 14 +++++++-------
+ 3 files changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb91bde..8daeb01 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,7 +35,6 @@ if(USE_QT5)
+     set(REQUIRED_QT_VERSION 5.1.0)
+ 
+     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
+-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
+ 
+     set(POLKITQT-1_PCNAME "polkit-qt5-1")
+     set(POLKITQT-1_CORE_PCNAME "polkit-qt5-core-1")
+diff --git a/agent/polkitqt1-agent-listener.cpp b/agent/polkitqt1-agent-listener.cpp
+index 38744ec..5efc091 100644
+--- a/agent/polkitqt1-agent-listener.cpp
++++ b/agent/polkitqt1-agent-listener.cpp
+@@ -94,7 +94,7 @@ bool Listener::registerListener(const PolkitQt1::Subject &subject, const QString
+     bool r = polkit_agent_register_listener(d->listener,
+ #endif
+                                             subject.subject(),
+-                                            objectPath.toAscii().data(),
++                                            objectPath.toLatin1().data(),
+ #ifndef POLKIT_QT_1_COMPATIBILITY_MODE
+                                             NULL,
+ #endif
+diff --git a/core/polkitqt1-authority.cpp b/core/polkitqt1-authority.cpp
+index efa8271..886fb41 100644
+--- a/core/polkitqt1-authority.cpp
++++ b/core/polkitqt1-authority.cpp
+@@ -286,7 +286,7 @@ void Authority::Private::dbusFilter(const QDBusMessage &message)
+ 
+         // TODO: Test this with the multiseat support
+         if (message.member() == "SeatAdded") {
+-            seatSignalsConnect(qVariantValue<QDBusObjectPath> (message.arguments()[0]).path());
++            seatSignalsConnect(message.arguments()[0].value<QDBusObjectPath>().path());
+         }
+     }
+ }
+@@ -342,7 +342,7 @@ Authority::Result Authority::checkAuthorizationSync(const QString &actionId, con
+ 
+     pk_result = polkit_authority_check_authorization_sync(d->pkAuthority,
+                 subject.subject(),
+-                actionId.toAscii().data(),
++                actionId.toLatin1().data(),
+                 NULL,
+                 (PolkitCheckAuthorizationFlags)(int)flags,
+                 NULL,
+@@ -377,7 +377,7 @@ void Authority::checkAuthorization(const QString &actionId, const Subject &subje
+ 
+     polkit_authority_check_authorization(d->pkAuthority,
+                                          subject.subject(),
+-                                         actionId.toAscii().data(),
++                                         actionId.toLatin1().data(),
+                                          NULL,
+                                          (PolkitCheckAuthorizationFlags)(int)flags,
+                                          d->m_checkAuthorizationCancellable,
+@@ -489,8 +489,8 @@ bool Authority::registerAuthenticationAgentSync(const Subject &subject, const QS
+     }
+ 
+     result = polkit_authority_register_authentication_agent_sync(d->pkAuthority,
+-             subject.subject(), locale.toAscii().data(),
+-             objectPath.toAscii().data(), NULL, &error);
++             subject.subject(), locale.toLatin1().data(),
++             objectPath.toLatin1().data(), NULL, &error);
+ 
+     if (error) {
+         d->setError(E_RegisterFailed, error->message);
+@@ -514,8 +514,8 @@ void Authority::registerAuthenticationAgent(const Subject &subject, const QStrin
+ 
+     polkit_authority_register_authentication_agent(d->pkAuthority,
+             subject.subject(),
+-            locale.toAscii().data(),
+-            objectPath.toAscii().data(),
++            locale.toLatin1().data(),
++            objectPath.toLatin1().data(),
+             d->m_registerAuthenticationAgentCancellable,
+             d->registerAuthenticationAgentCallback,
+             this);
+-- 
+2.5.0
+

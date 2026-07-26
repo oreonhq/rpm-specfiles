@@ -1,0 +1,100 @@
+From fe98ad09ff30f1b6cc5fd5dcc0769f9505c09166 Mon Sep 17 00:00:00 2001
+From: Jim Easterbrook <jim@jim-easterbrook.me.uk>
+Date: Wed, 22 Oct 2025 08:44:03 +0100
+Subject: [PATCH] Disable some refcount tests if Python >= 3.14
+
+---
+ tests/test_basicio.py | 2 ++
+ tests/test_exif.py    | 2 ++
+ tests/test_image.py   | 4 +++-
+ tests/test_iptc.py    | 2 ++
+ tests/test_preview.py | 2 ++
+ tests/test_xmp.py     | 2 ++
+ 6 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test_basicio.py b/tests/test_basicio.py
+index e9232ee1..b8563d80 100644
+--- a/tests/test_basicio.py
++++ b/tests/test_basicio.py
+@@ -224,6 +224,8 @@ def test_MemIo(self):
+         with self.assertWarns(DeprecationWarning):
+             self.assertEqual(memoryview(io), self.data + b'+fred+jim')
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         # MemIo keeps a reference to the data buffer
+         count = sys.getrefcount(self.data)
+diff --git a/tests/test_exif.py b/tests/test_exif.py
+index 958ff6e8..7af59870 100644
+--- a/tests/test_exif.py
++++ b/tests/test_exif.py
+@@ -310,6 +310,8 @@ def test_pointers(self):
+         self.assertEqual(datum_pointer, datum)
+         self.assertEqual(datum_pointer, datum_iter)
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         self.image.readMetadata()
+         # exifData keeps a reference to image
+diff --git a/tests/test_image.py b/tests/test_image.py
+index 61bca8ab..691a400a 100644
+--- a/tests/test_image.py
++++ b/tests/test_image.py
+@@ -1,6 +1,6 @@
+ ##  python-exiv2 - Python interface to libexiv2
+ ##  http://github.com/jim-easterbrook/python-exiv2
+-##  Copyright (C) 2023-24  Jim Easterbrook  jim@jim-easterbrook.me.uk
++##  Copyright (C) 2023-25  Jim Easterbrook  jim@jim-easterbrook.me.uk
+ ##
+ ##  This program is free software: you can redistribute it and/or
+ ##  modify it under the terms of the GNU General Public License as
+@@ -183,6 +183,8 @@ def test_ImageFactory(self):
+                           exiv2.ImageType, exiv2.ImageType.jpeg)
+         self.assertIsInstance(factory.open(self.image_path), exiv2.Image)
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         # opening from data keeps reference to buffer
+         self.assertEqual(sys.getrefcount(self.image_data), 2)
+diff --git a/tests/test_iptc.py b/tests/test_iptc.py
+index 04ed5e92..35b4723c 100644
+--- a/tests/test_iptc.py
++++ b/tests/test_iptc.py
+@@ -204,6 +204,8 @@ def test_IptcDatum(self):
+         del datum2
+         self._test_datum(datum)
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         self.image.readMetadata()
+         # iptcData keeps a reference to image
+diff --git a/tests/test_preview.py b/tests/test_preview.py
+index c1f7900c..476abbf4 100644
+--- a/tests/test_preview.py
++++ b/tests/test_preview.py
+@@ -116,6 +116,8 @@ def test_PreviewProperties(self):
+         with self.assertRaises(TypeError):
+             properties['fred'] = 123
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         # manager keeps reference to image
+         self.assertEqual(sys.getrefcount(self.image), 2)
+diff --git a/tests/test_xmp.py b/tests/test_xmp.py
+index 81857aae..6ce2b88b 100644
+--- a/tests/test_xmp.py
++++ b/tests/test_xmp.py
+@@ -246,6 +246,8 @@ def test_pointers(self):
+         self.assertEqual(datum_pointer, datum)
+         self.assertEqual(datum_pointer, datum_iter)
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     'cannot test optimised ref counts')
+     def test_ref_counts(self):
+         self.image.readMetadata()
+         # xmpData keeps a reference to image

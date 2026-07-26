@@ -1,0 +1,21 @@
+diff -up tvtime-1.0.10/configure.ac~ tvtime-1.0.10/configure.ac
+--- tvtime-1.0.10/configure.ac~	2016-02-27 13:49:28.000000000 +0100
++++ tvtime-1.0.10/configure.ac	2016-03-08 10:51:27.203137275 +0100
+@@ -173,17 +173,6 @@ if test x"$GCC" = x"yes"; then
+ 
+     dnl -Wall -Werror moved to the end to not disturb the configure script
+ 
+-    dnl -O3
+-    changequote(<<,>>)
+-    OPT_CFLAGS=`echo "$CFLAGS"|sed "s/-O[0-9]*//g;"`
+-    changequote([,])
+-    OPT_CFLAGS="$OPT_CFLAGS -O3"
+-    AC_TRY_CFLAGS([$OPT_CFLAGS],[CFLAGS=$OPT_CFLAGS])
+-
+-    dnl -fomit-frame-pointer
+-    OPT_CFLAGS="$CFLAGS -fomit-frame-pointer"
+-    AC_TRY_CFLAGS([$OPT_CFLAGS],[CFLAGS=$OPT_CFLAGS])
+-
+     dnl -std=gnu99
+     OPT_CFLAGS="$CFLAGS -std=gnu99"
+     AC_TRY_CFLAGS([$OPT_CFLAGS],[CFLAGS=$OPT_CFLAGS])

@@ -1,0 +1,24 @@
+From d716e38296f2429efba48fdeb5f00de97369919b Mon Sep 17 00:00:00 2001
+From: "Alan D. Salewski" <salewski@att.net>
+Date: Thu, 9 Apr 2020 04:39:34 -0400
+Subject: [PATCH] fixes #44 (unit tests): silence deprecation warning "This
+ will fail in Minitest 6"
+
+Switch a single nil-checking `assert_equal(...)` with the equivalent `assert_nil(...)`
+---
+ test/test_netrc.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test_netrc.rb b/test/test_netrc.rb
+index 73c5c25..45dc2c7 100644
+--- a/test/test_netrc.rb
++++ b/test/test_netrc.rb
+@@ -166,7 +166,7 @@ def test_add_get
+ 
+   def test_get_missing
+     n = Netrc.read("data/sample.netrc")
+-    assert_equal(nil, n["x"])
++    assert_nil(n["x"])
+   end
+ 
+   def test_save

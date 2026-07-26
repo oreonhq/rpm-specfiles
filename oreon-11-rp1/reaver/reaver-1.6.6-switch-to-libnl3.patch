@@ -1,0 +1,137 @@
+diff --git a/src/Makefile b/src/Makefile
+index 6a2ec89..b3c5249 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -12,9 +12,13 @@ DISABLED_WARNINGS= \
+  -Wno-unused-function \
+  -Wno-pointer-sign
+ 
++LIBNL_CFLAGS=$(shell pkg-config --cflags libnl-3.0 libnl-genl-3.0)
++LIBNL_LDFLAGS=$(shell pkg-config --libs libnl-3.0 libnl-genl-3.0)
++
+ CFLAGS=-DCONF_DIR='"$(CONFDIR)"' $(CFLAGS_USER) $(DISABLED_WARNINGS)
+ CFLAGS += $(INC)
+ CFLAGS += -DCONFIG_IPV6
++CFLAGS += $(LIBNL_CFLAGS)
+ 
+ UTILS_OBJS= \
+         utils/base64.o \
+@@ -97,7 +101,6 @@ MAIN_OBJS=globule.o init.o sigint.o iface.o sigalrm.o \
+ 
+ PROG_OBJS=$(MAIN_OBJS) exchange.o argsparser.o wpscrack.o wpsmon.o cracker.o main.o
+ 
+-
+ all: wash reaver
+ 
+ $(WPS_OBJS): CFLAGS+=-I. -Iutils
+@@ -110,7 +113,7 @@ wash: reaver
+ 	ln -sf ./reaver wash
+ 
+ reaver: $(PROG_OBJS) $(LIB_OBJS)
+-	$(CC) $(CFLAGS) $(INC) $(PROG_OBJS) $(LIB_OBJS) $(LDFLAGS) -lpthread -liw -o reaver
++	$(CC) $(CFLAGS) $(INC) $(PROG_OBJS) $(LIB_OBJS) $(LDFLAGS) -lpthread $(LIBNL_LDFLAGS) -o reaver
+ 
+ extest.o: exchange.c
+ 	$(CC) $(CFLAGS) -g3 -O0 -DEX_TEST -c exchange.c -o extest.o
+diff --git a/src/iface.c b/src/iface.c
+index 8ac50e7..51e2513 100644
+--- a/src/iface.c
++++ b/src/iface.c
+@@ -32,10 +32,14 @@
+  */
+ 
+ #include "iface.h"
+-#include "iwlib.h"
+ #include "globule.h"
++#include <net/ethernet.h>
+ #include <net/if.h>
+ #include <netinet/in.h>
++#include <netlink/netlink.h>
++#include <netlink/genl/genl.h>
++#include <netlink/genl/ctrl.h>
++#include <linux/nl80211.h>
+ #include <sys/ioctl.h>
+ #include <stdlib.h>
+ 
+@@ -140,6 +144,17 @@ int next_channel()
+ 	return 0;
+ }
+ 
++/* took from the Aircrack-ng */
++static int ieee80211_channel_to_frequency(int chan)
++{
++	if (chan < 14) return 2407 + chan * 5;
++
++	if (chan == 14) return 2484;
++
++	/* FIXME: dot11ChannelStartingFactor (802.11-2007 17.3.8.3.2) */
++	return (chan + 1000) * 5;
++}
++
+ /* Sets the 802.11 channel for the selected interface */
+ #ifdef __APPLE__
+ int change_channel(int channel)
+@@ -161,36 +176,39 @@ int change_channel(int channel)
+ #else
+ int change_channel(int channel)
+ {
+-        int skfd = 0, ret_val = 0;
+-        struct iwreq wrq;
++	int skfd = 0, ret_val = 0;
++	unsigned int freq;
+ 
+-        memset((void *) &wrq, 0, sizeof(struct iwreq));
++	cprintf(VERBOSE, "[+] Switching %s to channel %d\n", get_iface(), channel);
+ 
+-        /* Open NET socket */
+-        if((skfd = iw_sockets_open()) < 0)
+-        {
+-                perror("iw_sockets_open");
+-        }
+-        else if(get_iface())
+-        {
+-                /* Convert channel to a frequency */
+-                iw_float2freq((double) channel, &(wrq.u.freq));
++/* Modified example from the stackoverflow probably inspired by the Aircrack-ng code */
++/* https://stackoverflow.com/questions/21846965/set-wireless-channel-using-netlink-api */
++	freq = ieee80211_channel_to_frequency(channel);
++	/* Create the socket and connect to it. */
++	struct nl_sock *sckt = nl_socket_alloc();
++	genl_connect(sckt);
+ 
+-                /* Fixed frequency */
+-                wrq.u.freq.flags = IW_FREQ_FIXED;
++	/* Allocate a new message. */
++	struct nl_msg *mesg = nlmsg_alloc();
+ 
+-        	cprintf(VERBOSE, "[+] Switching %s to channel %d\n", get_iface(), channel);
++	/* Check /usr/include/linux/nl80211.h for a list of commands and attributes. */
++	enum nl80211_commands command = NL80211_CMD_SET_WIPHY;
+ 
+-                /* Set frequency */
+-                if(iw_set_ext(skfd, get_iface(), SIOCSIWFREQ, &wrq) >= 0)
+-                {
+-			set_channel(channel);
+-                        ret_val = 1;
+-                }
++	/* Create the message so it will send a command to the nl80211 interface. */
++	genlmsg_put(mesg, 0, 0, genl_ctrl_resolve(sckt, "nl80211"), 0, 0, command, 0);
+ 
+-                iw_sockets_close(skfd);
+-        }
++	/* Add specific attributes to change the frequency of the device. */
++	NLA_PUT_U32(mesg, NL80211_ATTR_IFINDEX, if_nametoindex(get_iface()));
++	NLA_PUT_U32(mesg, NL80211_ATTR_WIPHY_FREQ, freq);
+ 
+-        return ret_val;
++	/* Finally send it and receive the amount of bytes sent. */
++	int ret = nl_send_auto_complete(sckt, mesg);
++
++	ret_val = 1;
++
++nla_put_failure:
++	nlmsg_free(mesg);
++
++	return ret_val;
+ }
+ #endif

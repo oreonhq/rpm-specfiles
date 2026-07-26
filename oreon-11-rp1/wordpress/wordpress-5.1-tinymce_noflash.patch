@@ -1,0 +1,35 @@
+diff -up wordpress/wp-includes/js/tinymce/plugins/media/plugin.js.orig wordpress/wp-includes/js/tinymce/plugins/media/plugin.js
+--- wordpress/wp-includes/js/tinymce/plugins/media/plugin.js.orig	2019-02-21 14:59:28.793415420 +0100
++++ wordpress/wp-includes/js/tinymce/plugins/media/plugin.js	2019-02-21 15:00:14.319647286 +0100
+@@ -166,7 +166,6 @@ var media = (function () {
+         mp4: 'video/mp4',
+         webm: 'video/webm',
+         ogg: 'video/ogg',
+-        swf: 'application/x-shockwave-flash'
+       };
+       var fileEnd = url.toLowerCase().split('.').pop();
+       var mime = mimes[fileEnd];
+@@ -424,14 +423,6 @@ var media = (function () {
+       var allowFullscreen = data.allowFullscreen ? ' allowFullscreen="1"' : '';
+       return '<iframe src="' + data.source1 + '" width="' + data.width + '" height="' + data.height + '"' + allowFullscreen + '></iframe>';
+     };
+-    var getFlashHtml = function (data) {
+-      var html = '<object data="' + data.source1 + '" width="' + data.width + '" height="' + data.height + '" type="application/x-shockwave-flash">';
+-      if (data.poster) {
+-        html += '<img src="' + data.poster + '" width="' + data.width + '" height="' + data.height + '" />';
+-      }
+-      html += '</object>';
+-      return html;
+-    };
+     var getAudioHtml = function (data, audioTemplateCallback) {
+       if (audioTemplateCallback) {
+         return audioTemplateCallback(data);
+@@ -494,8 +485,6 @@ var media = (function () {
+         });
+         if (data.type === 'iframe') {
+           return getIframeHtml(data);
+-        } else if (data.source1mime === 'application/x-shockwave-flash') {
+-          return getFlashHtml(data);
+         } else if (data.source1mime.indexOf('audio') !== -1) {
+           return getAudioHtml(data, audioTemplateCallback);
+         } else if (data.type === 'script') {

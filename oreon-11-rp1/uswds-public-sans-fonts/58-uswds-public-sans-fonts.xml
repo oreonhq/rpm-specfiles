@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Public Sans</target>
+    <match>
+      <family>Public Sans Thin</family>
+      <change>
+        <style>Light</style>
+        <into>Thin</into>
+      </change>
+      <change>
+        <style>Light Italic</style>
+        <into>Thin Italic</into>
+      </change>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Thin</name>
+        <value>0</value>
+      </step>
+    </axis>
+    <like>
+      <family>Libre Franklin</family>
+      <family>SF Pro</family>
+      <family>Roboto</family>
+      <family>Tahoma</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

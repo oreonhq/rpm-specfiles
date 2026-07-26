@@ -1,0 +1,11 @@
+--- smbldap_tools.pl
++++ smbldap_tools.pl
+@@ -430,7 +430,7 @@ sub get_user_dn {
+     my $user = shift;
+     my $dn   = '';
+     my $mesg = $ldap->search(
+-        base   => $config{suffix},
++        base   => $config{usersdn},
+         scope  => $config{scope},
+         filter => "(&(objectclass=posixAccount)(uid=$user))"
+     );

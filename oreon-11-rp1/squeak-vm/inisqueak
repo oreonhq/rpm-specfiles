@@ -1,0 +1,238 @@
+#!/bin/bash
+#
+# inisqueak -- setup a directory for use with Squeak
+#
+#   Copyright (C) 1996-2004 by Ian Piumarta and other authors/contributors
+#                              listed elsewhere in this file.
+#   All rights reserved.
+#
+#   This file is part of Unix Squeak.
+#
+#   Permission is hereby granted, free of charge, to any person obtaining a copy
+#   of this software and associated documentation files (the "Software"), to deal
+#   in the Software without restriction, including without limitation the rights
+#   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#   copies of the Software, and to permit persons to whom the Software is
+#   furnished to do so, subject to the following conditions:
+#
+#   The above copyright notice and this permission notice shall be included in
+#   all copies or substantial portions of the Software.
+#
+#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#   SOFTWARE.
+#
+# Author: Ian.Piumarta@INRIA.Fr
+#
+# Modified for Fedora by: Jaroslav Škarvada <jskarvad@redhat.com>
+#
+# Last edited: 2006-10-18 10:14:20 by piumarta on emilia.local
+#              2012-11-22 Jaroslav Škarvada <jskarvad@redhat.com>
+
+BINDIR=/usr/bin
+SQUEAK=${BINDIR}/squeak
+IMGDIR=/usr/share/squeak
+WDIR="$SQUEAKHOME"
+GZIPSUFF=.gz
+# Symlink to latest sources that will be dereferenced
+SOURCESGZLNK=squeak.sources${GZIPSUFF}
+BASENAME=squeak
+IMAGE=${BASENAME}.image
+CHANGES=${BASENAME}.changes
+IMAGEGZ=${IMAGE}${GZIPSUFF}
+CHANGESGZ=${CHANGES}${GZIPSUFF}
+
+LIST=false
+STARTUP=false
+BATCH=false
+INTERACTIVE=true
+
+function is_int
+{
+  [ ! -z "${1##*[^0-9]*}" ]
+}
+
+function missing()
+{
+  echo "The file ${1} is missing." >&2
+  echo "Please check your Squeak installation." >&2
+  exit 1
+}
+
+function check_args()
+{
+  if [ -e "${2}" ]
+  then
+    echo "${2} is already present -- leaving it alone"
+  else
+    [ -e "${1}" ] && return 0
+    missing "${1}"
+  fi
+  return 1
+}
+
+function do_link()
+{
+  $INTERACTIVE && echo "Creating symbolic link '$2' -> '$1'"
+  check_args "$@" && ln -s "$1" "$2"
+}
+
+function do_unzip()
+{
+  if [ -f "$2" ]
+  then
+    $INTERACTIVE && echo "File '$2' exists, skipping."
+  else
+    $INTERACTIVE && echo "Unpacking '$1' to '$2'"
+    check_args "$@" && zcat "$1" > "$2"
+  fi
+}
+
+function do_install()
+{
+  # choose an image to install
+  if ! ${LIST}
+  then
+    if [ ! -e "${IMGDIR}/${IMAGEGZ}" -o ! -e ${IMGDIR}/${CHANGESGZ} ]
+    then
+      if ${BATCH}
+      then
+        echo "Could not find default image to install -- giving up." >&2
+        exit 1
+      fi
+      LIST=true
+      echo "No default image, looking for alternatives..."
+      echo
+    fi
+  fi
+
+  if ${LIST}
+  then
+    pushd "$IMGDIR" &> /dev/null
+    IMAGES="`ls -1 *.image${GZIPSUFF} 2>/dev/null`"
+    popd &> /dev/null
+    if [ -z "$IMAGES" ]
+    then
+      echo "I could not find an image to install." >&2
+      echo "Did you install squeak-image?" >&2
+      echo "Please check your Squeak installation." >&2
+      exit 1
+    fi
+
+    REP=true
+    while $REP
+    do
+      echo "I found the following images:"
+      echo
+      for I in $IMAGES
+      do
+        if [ ! -L "${IMGDIR}/${I}" ]
+        then
+          I="${I%%.image${GZIPSUFF}}"
+          IMAGESARR[${#IMAGESARR[*]}]="$I"
+          echo -e "${#IMAGESARR[*]}:\t${I}"
+        fi
+      done
+
+      echo
+      read -p "Which one should I install [1-${#IMAGESARR[*]}]? "
+      if is_int "$REPLY" && (( "$REPLY" > 0 && "$REPLY" <= "${#IMAGESARR[*]}" ))
+      then
+        REP=false
+      else
+        echo
+        echo "Let's try that again, with a NUMBER between 1 and ${#IMAGESARR[*]}."
+        echo
+      fi
+    done
+
+    IMAGEGZ="${IMAGESARR[$(( ${REPLY} - 1 ))]}"
+    CHANGESGZ=${IMAGEGZ}.changes${GZIPSUFF}
+    IMAGEGZ=${IMAGEGZ}.image${GZIPSUFF}
+
+    unset IMAGESARR
+  fi
+
+  $INTERACTIVE && echo "Installing ${IMAGEGZ} to `pwd`"
+
+# We cannot link, because we could break users images on upgrade
+#  do_link "${IMGDIR}/${SOURCES}" "${SOURCES}"
+  do_unzip "${IMGDIR}/${SOURCESGZ}" "`pwd`/${SOURCES}"
+  do_unzip "${IMGDIR}/${IMAGEGZ}" "`pwd`/${IMAGE}"
+  do_unzip "${IMGDIR}/${CHANGESGZ}" "`pwd`/${CHANGES}"
+}
+
+while true; do
+  case "$1" in
+    -l) LIST=true; shift;;
+    -m) WDIR="$HOME"; shift;;
+    -r) STARTUP=true; shift;;
+    -b) BATCH=true; INTERACTIVE=false; shift;;
+    -o) BASENAME="`basename $2`"
+        if [ -z "$2" ]
+        then
+           echo "Invalid parameters, see help" >&2
+           exit 1
+        fi
+        IMAGE=${BASENAME}.image
+        CHANGES=${BASENAME}.changes
+        shift 2
+        ;;
+    -h|-help|--help)
+        echo "`basename $0` [-option...] [rootdir]"
+        echo "    -b       batch (avoid interaction, exit status reflects success)"
+        echo "    -m       as a target use home directory of current user"
+        echo "    -l       always present a list of alternative images (overrides -b)"
+        echo "    -r       run Squeak after installing the files"
+        echo "    -o NAME  base name for generated image and changes (by default '$BASENAME')"
+        echo "    -h       you already know about"
+        echo "    -help    same as -h"
+        echo "    --help   same as -help"
+        exit 0;;
+    *)  break;;
+  esac
+done
+
+if [ "$WDIR" -a -d "$WDIR" ]; then
+  if ! cd "$WDIR"; then
+    echo "Unable to change directory to '$WDIR'." >&2
+    exit 1
+  fi
+fi
+
+if [ ! -w . ]; then
+  echo "You don't have write permission to the directory '$(pwd)'." >&2
+  exit 1
+fi
+
+if [ "$1" ]; then
+  if [ ! -d "$1" ]; then
+    echo "Directory '$1' doesn't exist." >&2
+    exit 1
+  fi
+  BINDIR=${1%%/}/${BINDIR##/}
+  SQUEAK=${1%%/}/${BINDIR##/}
+  IMGDIR=${1%%/}/${IMGDIR##/}
+fi
+
+SOURCESGZ=`readlink -f "${IMGDIR}/${SOURCESGZLNK}"`
+SOURCESGZ=`basename $SOURCESGZ 2>/dev/null`
+SOURCES="${SOURCESGZ%%${GZIPSUFF}}"
+
+if [ ! -f "${IMAGE}" -o ! -f "${CHANGES}" -o ! -e "${SOURCES}" ]
+then
+  do_install
+else
+  $INTERACTIVE && echo "Nothing to install."
+fi
+
+if ${STARTUP}
+then
+  [ -x ${SQUEAK} ] || missing "${SQUEAK}"
+  $INTERACTIVE && echo "Running ${SQUEAK}"
+  exec ${SQUEAK}
+fi

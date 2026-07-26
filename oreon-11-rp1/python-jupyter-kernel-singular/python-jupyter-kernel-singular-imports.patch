@@ -1,0 +1,24 @@
+diff --git a/jupyter_kernel_singular/kernel.py b/jupyter_kernel_singular/kernel.py
+index c06a725..eaba566 100644
+--- a/jupyter_kernel_singular/kernel.py
++++ b/jupyter_kernel_singular/kernel.py
+@@ -1,18 +1,12 @@
+ from ipykernel.kernelbase import Kernel
+ 
+-from subprocess import check_output
+-from os import unlink, path
+-
+ import base64
+-import imghdr
+ import re
+ import signal
+-import urllib
+ import pexpect
+ from pexpect import replwrap, EOF, which
+ 
+-from ipykernel.comm import Comm
+-from ipykernel.comm import CommManager
++#from ipykernel.comm import CommManager
+ 
+ import sys
+ 

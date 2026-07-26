@@ -1,0 +1,85 @@
+%global source0_hash 3ec6f47761c9ff777827a9d5e9fded29bdfea84e20f3a41d11013d741ce351f2
+
+%global srcname howdoi
+
+Name:           python-%{srcname}
+Version:        2.0.20
+Release:        %autorelease
+Summary:        Instant coding answers via the command line
+
+License:        MIT
+URL:            https://github.com/gleitz/howdoi
+# pypi archive does not contain test data
+# Source0:        {pypi_source}
+Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(pytest)
+
+%global _description %{expand:
+Sherlock, your neighborhood command-line sloth sleuth.
+
+Are you a hack programmer? Do you find yourself constantly Googling for how to
+do basic programming tasks?
+
+Suppose you want to know how to format a date in bash. Why open your browser and
+read through blogs (risking major distraction) when you can simply stay in the
+console and ask howdoi:
+
+    $ howdoi format date bash
+    > DATE=`date +%%Y-%%m-%%d`}
+
+%description %_description
+
+%package -n %{srcname}
+Summary:        %{summary}
+Provides:       python3-%{srcname} = %{version}-%{release}
+Obsoletes:      python3-%{srcname} < 2.0.20-2
+
+%description -n %{srcname} %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{srcname}-%{version} -p1
+# remove shebang
+sed -i.shebang '1d' howdoi/howdoi.py
+touch -r howdoi/howdoi.py.shebang howdoi/howdoi.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%pyproject_save_files %srcname
+
+%check
+TEST_CLASS=test_howdoi.py::HowdoiTestCase
+skipped_tests=(
+  all_text
+  answer_links_using_all_option
+  answer_links_using_l_option
+  colorize
+  json_output
+  missing_pre_or_code_query
+  multiple_answers
+  position
+)
+DESELECT=
+for testcase in "${skipped_tests[@]}"; do
+  DESELECT+=" --deselect ${TEST_CLASS}::test_${testcase}"
+done
+%pytest -v ${DESELECT}
+
+%files -n %{srcname} -f %{pyproject_files}
+%license LICENSE.txt
+%doc CHANGES.txt README.md
+%{_bindir}/%{srcname}
+
+%changelog
+%autochangelog

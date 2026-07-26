@@ -1,0 +1,157 @@
+From f1c2983ab8824b80c09b52639410701732c8f535 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 12 Aug 2015 15:55:08 +0200
+Subject: [PATCH] Remove AC_TRY_CFLAGS.
+
+---
+ configure    | 115 ++---------------------------------------------------------
+ configure.ac |   6 ++--
+ 2 files changed, 6 insertions(+), 115 deletions(-)
+
+diff --git a/configure b/configure
+index f99649f..cc2095d 100755
+--- a/configure
++++ b/configure
+@@ -10765,119 +10765,10 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
+-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_try_cflags_ok=yes
+-else
+-  ac_cv_try_cflags_ok=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-    CFLAGS="$SAVE_CFLAGS"
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_try_cflags_ok" >&5
+-$as_echo "$ac_cv_try_cflags_ok" >&6; }
+-    if test x"$ac_cv_try_cflags_ok" = x"yes"; then
+-        CFLAGS="${CFLAGS} -g -O2"
+-    else
+-        :
+-    fi
+ # Code qui fait des warnings == code de porc == deux baffes dans ta gueule
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CC supports -Wall flags" >&5
+-$as_echo_n "checking if $CC supports -Wall flags... " >&6; }
+-    SAVE_CFLAGS="$CFLAGS"
+-    CFLAGS="-Wall"
+-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_try_cflags_ok=yes
+-else
+-  ac_cv_try_cflags_ok=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-    CFLAGS="$SAVE_CFLAGS"
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_try_cflags_ok" >&5
+-$as_echo "$ac_cv_try_cflags_ok" >&6; }
+-    if test x"$ac_cv_try_cflags_ok" = x"yes"; then
+-        CFLAGS="${CFLAGS} -Wall"
+-    else
+-        :
+-    fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CC supports -W flags" >&5
+-$as_echo_n "checking if $CC supports -W flags... " >&6; }
+-    SAVE_CFLAGS="$CFLAGS"
+-    CFLAGS="-W"
+-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_try_cflags_ok=yes
+-else
+-  ac_cv_try_cflags_ok=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-    CFLAGS="$SAVE_CFLAGS"
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_try_cflags_ok" >&5
+-$as_echo "$ac_cv_try_cflags_ok" >&6; }
+-    if test x"$ac_cv_try_cflags_ok" = x"yes"; then
+-        CFLAGS="${CFLAGS} -W"
+-    else
+-        :
+-    fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CC supports -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare flags" >&5
+-$as_echo_n "checking if $CC supports -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare flags... " >&6; }
+-    SAVE_CFLAGS="$CFLAGS"
+-    CFLAGS="-Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare"
+-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_try_cflags_ok=yes
+-else
+-  ac_cv_try_cflags_ok=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-    CFLAGS="$SAVE_CFLAGS"
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_try_cflags_ok" >&5
+-$as_echo "$ac_cv_try_cflags_ok" >&6; }
+-    if test x"$ac_cv_try_cflags_ok" = x"yes"; then
+-        CFLAGS="${CFLAGS} -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare"
+-    else
+-        :
+-    fi
++#AC_TRY_CFLAGS(-Wall, CFLAGS="${CFLAGS} -Wall")
++#AC_TRY_CFLAGS(-W, CFLAGS="${CFLAGS} -W")
++#AC_TRY_CFLAGS(-Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare, CFLAGS="${CFLAGS} -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare")
+ 
+ case "${host_os}" in
+   *mingw32*)
+diff --git a/configure.ac b/configure.ac
+index cf9b09a..a00ec37 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,9 +24,9 @@ AC_MSG_RESULT($SONAME)
+ AC_DEFINE_UNQUOTED(SONAME, "$SONAME", [Define to the libzzuf full name])
+ 
+ # Code qui fait des warnings == code de porc == deux baffes dans ta gueule
+-AC_TRY_CFLAGS(-Wall, CFLAGS="${CFLAGS} -Wall")
+-AC_TRY_CFLAGS(-W, CFLAGS="${CFLAGS} -W")
+-AC_TRY_CFLAGS(-Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare, CFLAGS="${CFLAGS} -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare")
++#AC_TRY_CFLAGS(-Wall, CFLAGS="${CFLAGS} -Wall")
++#AC_TRY_CFLAGS(-W, CFLAGS="${CFLAGS} -W")
++#AC_TRY_CFLAGS(-Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare, CFLAGS="${CFLAGS} -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare")
+ 
+ case "${host_os}" in
+   *mingw32*)
+-- 
+2.4.3
+

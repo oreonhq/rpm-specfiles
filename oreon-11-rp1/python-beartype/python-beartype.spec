@@ -1,0 +1,66 @@
+%global source0_hash ecc0518c0c9102637e711c8f46ce0ba561c3138c89aea522d4b28b84a5f47b2d
+
+%global forgeurl https://github.com/beartype/beartype
+%global version0 0.22.9
+%forgemeta
+
+Name:           python-beartype
+Version:        %forgeversion
+Release:        %autorelease
+Summary:        Unbearably fast runtime type checking in pure Python
+License:        MIT
+URL:            https://beartype.readthedocs.io
+Source:         %forgesource
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(pytest) 
+BuildRequires:  python3dist(sphinx)
+BuildRequires:  make
+
+%global _description %{expand:
+An open-source pure-Python PEP-compliant near-real-time hybrid
+runtime-static third-generation type checker emphasizing efficiency,
+usability, unsubstantiated jargon we just made up, and thrilling puns.}
+
+%description %_description
+
+%package -n     python3-beartype
+Summary:        %{summary}
+
+%description -n python3-beartype %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 %{forgesetupargs}
+
+%generate_buildrequires
+%pyproject_buildrequires -r
+
+%build
+%pyproject_wheel
+(cd doc; make man singlehtml)
+
+%install
+%pyproject_install
+%pyproject_save_files beartype
+install -m0644 -D doc/trg/man/beartype.1 %{buildroot}%{_mandir}/man1/beartype.1
+gzip %{buildroot}%{_mandir}/man1/beartype.1
+mv doc/trg/singlehtml/index.html beartype.html
+# https://github.com/beartype/beartype/issues/331
+find %{buildroot}/%{python3_sitelib} -type f -name \*.py -print0 | xargs -0  sed -i "s:#\!/usr/bin/env python3:# :"
+
+%check
+%pyproject_check_import
+# test_api_typing: https://github.com/beartype/beartype/issues/620
+%pytest beartype_test -k 'not test_api_typing'
+
+%files -n python3-beartype -f %{pyproject_files}
+%license LICENSE
+%doc beartype.html
+%{_mandir}/man1/beartype.1.*
+
+%changelog
+%autochangelog

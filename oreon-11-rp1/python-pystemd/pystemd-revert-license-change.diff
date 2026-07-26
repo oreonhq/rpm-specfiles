@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -30,7 +30,7 @@ classifiers = [
+     "Development Status :: 5 - Production/Stable",
+     "Topic :: Utilities",
+ ]
+-license =  "LGPL-2.1+" 
++license =  { text = "LGPL-2.1+" }
+ keywords = ["systemd", "linux", "dbus"]
+ 
+ [project.optional-dependencies]

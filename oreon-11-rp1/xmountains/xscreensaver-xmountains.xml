@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<screensaver name="xmountains" _label="xmountains">
+	<command arg="-b -Z 0 -r 1"/>
+
+	<boolean id="refrection" _label="Produce reflections in the water" arg-set="-M"/>
+	<number id="sleep" type="slider" arg="-Z %"
+		_label="Sleeping seconds" _low-label="0 second" _high-label="10 seconds"
+		low="0" high="10" default="0"/>
+	<number id="column" type="slider" arg="-r %"
+		_label="Columns" _low-label="-10" _high-label="10"
+		low="-10" high="10" default="1"/>
+	<boolean id="top" _label="Top view" arg-set="-m"/>
+
+	<xscreensaver-updater />
+
+    <_description>
+xmountains  is  a  X11  based fractal landscape generator.  It generates 
+random fractal surfaces and displays them in a window.  While the program is 
+running the fractal is continuously extended on the right and the image is 
+scrolled from right to left to expose the newly generated area.
+
+Written by Stephen Booth &lt;s.booth at ed.ac.uk&gt;.
+    </_description>
+
+</screensaver>
+

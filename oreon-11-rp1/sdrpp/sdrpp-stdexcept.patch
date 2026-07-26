@@ -1,0 +1,16 @@
+Index: SDRPlusPlus-052167962dbf9adc2a02825f2f428e7613255d50/core/src/utils/networking.cpp
+===================================================================
+--- SDRPlusPlus-052167962dbf9adc2a02825f2f428e7613255d50.orig/core/src/utils/networking.cpp
++++ SDRPlusPlus-052167962dbf9adc2a02825f2f428e7613255d50/core/src/utils/networking.cpp
+@@ -1,3 +1,4 @@
++#include <stdexcept>
+ #include <utils/networking.h>
+ #include <assert.h>
+ #include <utils/flog.h>
+@@ -505,4 +506,4 @@ namespace net {
+ 
+         return Conn(new ConnClass(sock, raddr, true));
+     }
+-}
+\ No newline at end of file
++}

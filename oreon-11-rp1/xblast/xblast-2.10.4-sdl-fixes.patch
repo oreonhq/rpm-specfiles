@@ -1,0 +1,22 @@
+--- xblast-2.10.4/sdl_tile.c~	2007-02-18 09:34:49.000000000 +0100
++++ xblast-2.10.4/sdl_tile.c	2007-02-18 09:34:49.000000000 +0100
+@@ -355,7 +355,7 @@
+ 	assert (pixScore[block] != NULL);
+ 
+ 	Rect.x = x * STAT_WIDTH;
+-#ifdef SMPF
++#if 1 /* def SMPF */
+ 	Rect.y = MAZE_H * BLOCK_HEIGHT + y * STAT_HEIGHT;
+ #else
+ 	Rect.y = MAZE_H * BLOCK_HEIGHT;
+--- xblast-2.10.4/sdl_text.c~	2007-02-18 12:10:07.000000000 +0100
++++ xblast-2.10.4/sdl_text.c	2007-02-18 12:10:07.000000000 +0100
+@@ -79,7 +79,7 @@
+ {
+ 	const CFGFont *cfgFont;
+ 	const CFGColor *cfgColor;
+-	char *fontName = "Vera.ttf";
++	char *fontName = "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf";
+ 
+ 	/*
+ 	 * Initialize SDL_ttf library

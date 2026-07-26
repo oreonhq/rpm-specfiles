@@ -1,0 +1,204 @@
+From 3503ba48869994a272c49e177289feb31c07a690 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 9 Oct 2013 16:28:58 +0200
+Subject: [PATCH] Adjust sample configuration
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ sample.data/rwhoisd.auth_area | 34 +++++++++++++++++-----------------
+ sample.data/rwhoisd.conf      | 24 ++++++++++++------------
+ sample.data/rwhoisd.dir       |  2 +-
+ sample.data/rwhoisd.root      |  2 +-
+ sample.data/rwhoisd.x.dir     | 18 +++++++++---------
+ 5 files changed, 40 insertions(+), 40 deletions(-)
+
+diff --git a/sample.data/rwhoisd.auth_area b/sample.data/rwhoisd.auth_area
+index e5a2108..0289ee4 100644
+--- a/sample.data/rwhoisd.auth_area
++++ b/sample.data/rwhoisd.auth_area
+@@ -12,23 +12,23 @@
+ # master: the host:port pair describing the primary server for this
+ #         slave
+ #
+-type: master
+-name: a.com
+-data-dir: a.com/data
+-schema-file: a.com/schema
+-soa-file: a.com/soa
+----
+-type:master
+-name:10.0.0.0/8
+-data-dir: net-10.0.0.0-8/data
+-schema-file: net-10.0.0.0-8/schema
+-soa-file: net-10.0.0.0-8/soa
+----
+-type: master
+-name: fd00:1234::/32
+-data-dir: net-fd00:1234::-32/data
+-schema-file: net-fd00:1234::-32/schema
+-soa-file: net-fd00:1234::-32/soa
++#type: master
++#name: a.com
++#data-dir: a.com/data
++#schema-file: a.com/schema
++#soa-file: a.com/soa
++#---
++#type:master
++#name:10.0.0.0/8
++#data-dir: net-10.0.0.0-8/data
++#schema-file: net-10.0.0.0-8/schema
++#soa-file: net-10.0.0.0-8/soa
++#---
++#type: master
++#name: fd00:1234::/32
++#data-dir: net-fd00:1234::-32/data
++#schema-file: net-fd00:1234::-32/schema
++#soa-file: net-fd00:1234::-32/soa
+ #---
+ # A sample secondary entry
+ #type:slave
+diff --git a/sample.data/rwhoisd.conf b/sample.data/rwhoisd.conf
+index cd149a1..e8fbd7f 100644
+--- a/sample.data/rwhoisd.conf
++++ b/sample.data/rwhoisd.conf
+@@ -12,7 +12,7 @@
+ # normal default is ""
+ # NOTE:  you want to change this.
+ 
+-root-dir: /home/databases/rwhoisd
++root-dir: /var/rwhoisd
+ 
+ # bin-path: Where to find extra binaries.
+ # bin-path: bin means <root-dir>/bin
+@@ -30,13 +30,13 @@ root-dir: /home/databases/rwhoisd
+ # directives.  This file is required.
+ # normal default is "rwhoisd.dir"
+ 
+-# directive-file: rwhoisd.dir
++directive-file: /etc/rwhoisd.dir
+ 
+ # X-directive-file:  This file contains the definitions for any extended
+ # ("X-") directives.  This file is optional.
+ # normal default is rwhoisd.x.dir
+ 
+-# x-directive-file: rwhoisd.x.dir
++x-directive-file: /etc/rwhoisd.x.dir
+ 
+ # max-hits-default: The starting value for the hit limit.  It can be
+ # changed with the -limit directive.  
+@@ -59,7 +59,7 @@ max-hits-ceiling: 60
+ # punt-file: used by the punt (or "up") referral.
+ # normal default is "rwhoisd.root"
+ 
+-# punt-file: rwhoisd.root
++punt-file: /etc/rwhoisd.root
+ 
+ # local-host:  What we want the local host to be known as.  This is
+ # primarily for the welcome banner and for determining whether a
+@@ -78,15 +78,15 @@ max-hits-ceiling: 60
+ # server itself. This is optional.
+ # normal default is "/etc/hosts.allow"
+ 
+-# security-allow:/etc/hosts.allow
+-security-allow: rwhoisd.allow
++security-allow:/etc/hosts.allow
++# security-allow: rwhoisd.allow
+ 
+ # The tcp_wrappers deny list for rwhoisd.  See the comments for
+ # security-allow
+ # normal default is "/etc/hosts.deny"
+ 
+-# security-deny:/etc/hosts.deny
+-security-deny: rwhoisd.deny
++security-deny:/etc/hosts.deny
++# security-deny: rwhoisd.deny
+ 
+ # deadman-time: The number of seconds of idle-time before the server
+ # automatically disconnects. 
+@@ -114,20 +114,20 @@ userid: rwhoisd
+ # pid-file: where to put the file containing the pid of the server.
+ # normal default is "rwhoisd.pid"
+ 
+-# pid-file: /var/run/rwhoisd.pid
+-pid-file: rwhoisd.pid
++pid-file: /var/run/rwhoisd.pid
++# pid-file: rwhoisd.pid
+ 
+ # server contact: who to contact about problems related to the server
+ # itself.
+ # this option doesn't have a default.
+ 
+-server-contact: hostmaster@a.com
++server-contact: hostmaster@example.com
+ 
+ # use-syslog: whether or not to log using syslog;
+ # if it isn't logging to syslog, it attempts to log to files (see below)
+ # normal default is YES
+ 
+-use-syslog: NO
++# use-syslog: NO
+ 
+ # syslog-facility: the syslog facility to use (daemon, mail, news,
+ # etc.); default is 3 (daemon)
+diff --git a/sample.data/rwhoisd.dir b/sample.data/rwhoisd.dir
+index cbb5b34..8b33f80 100644
+--- a/sample.data/rwhoisd.dir
++++ b/sample.data/rwhoisd.dir
+@@ -10,7 +10,7 @@ holdconnect:    yes
+ limit:          yes 
+ notify:         yes
+ quit:           yes 
+-register:       yes
++register:       no
+ schema:         yes
+ security:       yes
+ soa:            yes
+diff --git a/sample.data/rwhoisd.root b/sample.data/rwhoisd.root
+index 4af2926..bab29c9 100644
+--- a/sample.data/rwhoisd.root
++++ b/sample.data/rwhoisd.root
+@@ -5,5 +5,5 @@
+ # It just prints the value out after a %referral token.
+ 
+ # this is the new style -- note the ':4321' is optional
+-rwhois://root.rwhois.net:4321/auth-area=.
++rwhois://root.example.com:4321/auth-area=.
+ 
+diff --git a/sample.data/rwhoisd.x.dir b/sample.data/rwhoisd.x.dir
+index 4a08a98..4a544b5 100644
+--- a/sample.data/rwhoisd.x.dir
++++ b/sample.data/rwhoisd.x.dir
+@@ -12,18 +12,18 @@
+ 
+ # command: the name of the directive.  In rwhoisd, it will become
+ # -X-<command>.  For instance, here we define -X-date.
+-command: date
++#command: date
+ 
+ # command-len: how many characters of the command are significant.
+-command-len: 4
++#command-len: 4
+ 
+ # description: printed out as part of the -directive response.
+-description: an example of an extended directive
++#description: an example of an extended directive
+ 
+ # program: what program to run to execute the directive.
+-program: /usr/bin/date
+----
+-command:pgp
+-command-len:3
+-description:The PGP key server gateway
+-program:Xpgp
++#program: /usr/bin/date
++#---
++#command:pgp
++#command-len:3
++#description:The PGP key server gateway
++#program:Xpgp
+-- 
+1.8.3.1
+

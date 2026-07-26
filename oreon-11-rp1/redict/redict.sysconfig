@@ -1,0 +1,1 @@
+OPTIONS="--logfile /var/log/redict/redict.log --dir /var/lib/redict --unixsocket /var/run/redict/redict.sock --pidfile /var/run/redict/redict.pid"

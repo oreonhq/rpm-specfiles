@@ -1,0 +1,11 @@
+--- src/tennix.h~	2016-01-27 09:13:40.000000000 -0600
++++ src/tennix.h	2016-01-27 09:24:52.262323364 -0600
+@@ -72,7 +72,7 @@
+ typedef void TennixNet;
+ #endif /* HAVE_SDL_NET */
+ 
+-#define ARCHIVE_FILE "tennix.tnx"
++#define ARCHIVE_FILE "/usr/share/tennix/tennix.tnx"
+ #define ARCHIVE_FILE_INSTALLED "/" PREFIX "/share/tennix/" ARCHIVE_FILE
+ 
+ #define GAMESTATE_FILE ".tennix-current_match-" VERSION

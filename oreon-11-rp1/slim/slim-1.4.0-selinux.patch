@@ -1,0 +1,45 @@
+Index: slim-1.4.0/slim.conf
+===================================================================
+--- slim.conf.org
++++ slim.conf
+@@ -4,13 +4,13 @@
+ default_path        /bin:/usr/bin:/usr/local/bin
+ default_xserver     /usr/bin/X
+ #xserver_arguments   -dpi 75
+-xserver_arguments   -nolisten tcp -deferglyphs 16
++#xserver_arguments   -nolisten tcp -deferglyphs 16
+ 
+ # Full path to the xauth binary
+ xauth_path         /usr/bin/xauth 
+ 
+ # Xauth file for server
+-authfile           /var/run/slim.auth
++authfile           /var/run/slim/slim.auth
+ 
+ 
+ # Commands for halt, login, etc.
+@@ -43,12 +43,12 @@
+ #
+ # sessionstart_cmd	some command
+ # sessionstop_cmd	some command
+-sessionstart_cmd	/usr/bin/sessreg -a -l "$DISPLAY" %user
+-sessionstop_cmd     /usr/bin/sessreg -d -l "$DISPLAY" %user
++# sessionstart_cmd	/usr/bin/sessreg -a -l "$DISPLAY" %user
++# sessionstop_cmd     /usr/bin/sessreg -d -l "$DISPLAY" %user
+ 
+ # Start in daemon mode. Valid values: yes | no
+ # Note that this can be overridden by the command line options "-d" and "-n"
+-daemon	yes
++daemon	no
+ 
+ # Available sessions:
+ # The current chosen session name replaces %session in the login_cmd
+@@ -103,7 +103,7 @@
+ current_theme       default
+ 
+ # Lock file
+-lockfile            /run/slim.pid
++lockfile            /var/run/slim.pid
+ 
+ # Log file - full path for a file, or just stderr (or /dev/stderr) to send
+ # all log messages to stderr.

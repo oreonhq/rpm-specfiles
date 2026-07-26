@@ -1,0 +1,53 @@
+URONode is intended to be called from systemd, ax25d or inetd. It doesn't need
+any command line arguments. See the uronode(8) manual page.
+
+You need to have correctly configured ax25 port to use URONode.
+
+URONode systemd service with socket activation is installed for you.
+This works similarly as inetd - systemd spawns URONode when there is incoming
+traffic detected on the preconfigured TCP port. This is by default disabled,
+to enable it:
+  systemctl enable uronode.socket
+  systemctl start uronode.socket
+
+By default it listens on all interfaces on TCP port 3694. Systemd default is
+used for maximum number of allowed connections / instances (the exact value
+can be found in the systemd.socket manual page). These parameters can be
+overriden by creating /etc/systemd/system/uronode.socket.d/local.conf file
+with your custom settings, e.g.:
+[Socket]
+ListenStream=3694
+MaxConnections=64
+
+For more details see systemd.socket manual page.
+
+
+To run URONode from ax25d, /etc/ax25/ax25d.conf should contain something
+like this:
+
+  # AX25 Port ax0
+  # Belows SSID can not be the same as your netrom node SSID!
+  [N1URO-2 VIA ax0]
+  default  * * * * * *  -    root  /usr/sbin/uronode  uronode
+
+  # NETROM Port
+  <nr0>
+  default  * * * * * *  -    root  /usr/sbin/uronode  uronode
+
+Add uronode as a service in /etc/services:
+uronode         3694/tcp                        # Node/URONode packet
+
+Example configuration file for xinetd uronode service is installed
+to /usr/share/uronode/xinet.d/uronode. If you want to use it, copy it to
+/etc/xinetd.d/uronode and edit it so that it contains:
+  disable = no
+
+Then make sure xinetd is installed. If it is not already enabled,
+enable xinetd by:
+  systemctl enable xinetd.service
+  systemctl start xinetd.service
+
+
+Also flexd systemd service is installed for you, to enable it:
+  systemctl enable flexd.service
+  systemctl start flexd.service

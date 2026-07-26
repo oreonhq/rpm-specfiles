@@ -1,0 +1,78 @@
+From 016abf0fa18a6f578a55d9816084f901a9809367 Mon Sep 17 00:00:00 2001
+From: Darcy Mason <darcymason@gmail.com>
+Date: Fri, 15 Nov 2024 17:17:07 -0500
+Subject: [PATCH] Python 3.13+ updates * fix ByteString removed in Py 3.14 *
+ fix Py 3.13+ isabs() False in Windows for leading forward slash
+
+---
+ src/pydicom/data/data_manager.py | 14 ++++++++------
+ src/pydicom/pixels/utils.py      |  8 ++++++--
+ 2 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/src/pydicom/data/data_manager.py b/src/pydicom/data/data_manager.py
+index 53f89b8300..eac0121106 100644
+--- a/src/pydicom/data/data_manager.py
++++ b/src/pydicom/data/data_manager.py
+@@ -328,13 +328,9 @@ def get_testdata_file(
+     ValueError
+         If `name` is an absolute path.
+     """
+-    if os.path.isabs(name):
+-        raise ValueError(
+-            f"'get_testdata_file' does not support absolute paths, as it only works"
+-            f" with internal pydicom test data - did you mean 'dcmread(\"{name}\")'?"
+-        )
+ 
+     path = _get_testdata_file(name=name, download=download)
++        
+     if read and path is not None:
+         from pydicom.filereader import dcmread
+ 
+@@ -345,6 +341,12 @@ def get_testdata_file(
+ def _get_testdata_file(name: str, download: bool = True) -> str | None:
+     # Check pydicom local
+     data_path = Path(DATA_ROOT) / "test_files"
++
++    if Path(name).anchor:
++        raise ValueError(
++                f"'get_testdata_file' does not support absolute paths, as it only works"
++                f" with internal pydicom test data - did you mean 'dcmread(\"{name}\")'?"
++            )
+     matches = [m for m in data_path.rglob(name)]
+     if matches:
+         return os.fspath(matches[0])
+@@ -400,7 +402,7 @@ def get_testdata_files(pattern: str = "**/*") -> list[str]:
+     ValueError
+         If `pattern` matches an absolute path.
+     """
+-    if os.path.isabs(pattern):
++    if Path(pattern).anchor:
+         raise ValueError(
+             "'get_testdata_files' does not support absolute paths, as it only works"
+             " with internal pydicom test data."
+diff --git a/src/pydicom/pixels/utils.py b/src/pydicom/pixels/utils.py
+index 2d49c5fb6e..ba6c8d09a1 100644
+--- a/src/pydicom/pixels/utils.py
++++ b/src/pydicom/pixels/utils.py
+@@ -1,7 +1,11 @@
+ # Copyright 2008-2024 pydicom authors. See LICENSE file for details.
+ """Utilities for pixel data handling."""
+ 
+-from collections.abc import Iterable, Iterator, ByteString
++from collections.abc import Iterable, Iterator
++try:
++    from collections.abc import Buffer
++except ImportError:
++    from collections.abc import ByteString as Buffer  # Python 3.10, 3.11
+ import importlib
+ import logging
+ from pathlib import Path
+@@ -683,7 +687,7 @@ def decompress(
+     return ds
+ 
+ 
+-def expand_ybr422(src: ByteString, bits_allocated: int) -> bytes:
++def expand_ybr422(src: Buffer, bits_allocated: int) -> bytes:
+     """Return ``YBR_FULL_422`` data expanded to ``YBR_FULL``.
+ 
+     Uncompressed datasets with a (0028,0004) *Photometric Interpretation* of

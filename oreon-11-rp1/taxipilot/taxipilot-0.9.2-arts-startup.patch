@@ -1,0 +1,20 @@
+--- taxipilot-0.9.2/taxipilot/soundwrapper.cpp	2007-05-27 16:53:29.000000000 +0200
++++ taxipilot-0.9.2.new/taxipilot/soundwrapper.cpp	2007-12-19 13:28:02.000000000 +0100
+@@ -22,6 +22,7 @@
+ #include <arts/qiomanager.h>
+ #include <klocale.h>
+ #include <arts/kartsdispatcher.h>
++#include <arts/kartsserver.h>
+ 
+ #include "cdp.h"
+ 
+@@ -134,7 +135,8 @@
+ 
+ /** Creates server, factory and all registered sounds */
+ void SoundWrapper::start_server () {
+-	server = Arts::Reference("global:Arts_SoundServerV2");
++	KArtsServer kserver;
++	server = kserver.server();
+ 	if (server.isNull ()) {
+ 		sound_error = true;
+ 		cdp->debug_msg (i18n ("Could not reference sound-server. Sound is disabled."), Serious);

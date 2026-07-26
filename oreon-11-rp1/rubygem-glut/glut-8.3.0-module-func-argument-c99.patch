@@ -1,0 +1,23 @@
+--- glut-8.3.0/ext/glut/glut.c.type	2024-01-20 23:36:30.914983563 +0900
++++ glut-8.3.0/ext/glut/glut.c	2024-01-20 23:58:50.771935385 +0900
+@@ -124,17 +124,17 @@ void *glut_MainLoop0(void *ignored) {
+ }
+ 
+ static VALUE
+-glut_MainLoop(void) {
++glut_MainLoop(VALUE self) {
+   rb_thread_call_without_gvl(glut_MainLoop0, NULL, NULL, NULL);
+ 
+   return Qnil; /* never reached */
+ }
+ 
+ static VALUE
+-glut_CheckLoop(void) {
++glut_CheckLoop(VALUE self) {
+   rb_warn("calling fake CheckLoop implementation which never returns");
+ 
+-  glut_MainLoop();
++  glut_MainLoop(self);
+ 
+   return Qnil;
+ }

@@ -1,0 +1,127 @@
+diff -urw wol-0.7.1-orig/doc/wol.texi wol-0.7.1/doc/wol.texi
+--- wol-0.7.1-orig/doc/wol.texi	2004-04-18 10:52:18.000000000 +0200
++++ wol-0.7.1/doc/wol.texi	2018-08-19 23:45:59.526088977 +0200
+@@ -236,6 +236,13 @@
+ (default IP address is @code{255.255.255.255}).
+ 
+ 
++@item -b HOST
++@itemx --bind=HOST
++
++Bind to this IP address or hostname. This allows broadcasting on multihomed
++hosts by specifying the IP address of the desired outgoing interface.
++
++
+ @item -p NUM
+ @itemx --port=NUM
+ 
+diff -urw wol-0.7.1-orig/include/net.h wol-0.7.1/include/net.h
+--- wol-0.7.1-orig/include/net.h	2004-02-05 19:20:07.000000000 +0100
++++ wol-0.7.1/include/net.h	2018-08-19 23:45:59.526088977 +0200
+@@ -27,6 +27,7 @@
+ 
+ #include <sys/types.h>
+ 
++int bind_to_addr(int sockfd, const char *ip_str);
+ 
+ int udp_open (void);
+ 
+diff -urw wol-0.7.1-orig/src/net.c wol-0.7.1/src/net.c
+--- wol-0.7.1-orig/src/net.c	2004-04-20 21:51:18.000000000 +0200
++++ wol-0.7.1/src/net.c	2018-08-19 23:45:59.526088977 +0200
+@@ -100,7 +100,33 @@
+   return sockfd;
+ }
+ 
++int
++bind_to_addr(int sockfd, const char *ip_str)
++{
++  struct sockaddr_in toaddr;
++
++  if (ip_str == NULL)
++    {
++      return -1;
++    }
+ 
++  memset (&toaddr, 0, sizeof (struct sockaddr_in));
++
++  if (net_resolv (ip_str, &toaddr.sin_addr))
++    {
++      error (0, 0, _("Invalid IP address given: %s"), strerror (errno));
++      return -1;
++    }
++
++  toaddr.sin_family = AF_INET;
++
++  if (bind (sockfd, (const struct sockaddr *) &toaddr, sizeof (toaddr)))
++    {
++      error (0, 0, _("Couldn't bind to %s: %s"), ip_str, strerror (errno));
++      return -1;
++    }
++  return 0;
++}
+ 
+ int
+ tcp_open (const char *ip_str,
+diff -urw wol-0.7.1-orig/src/wol.c wol-0.7.1/src/wol.c
+--- wol-0.7.1-orig/src/wol.c	2004-04-18 13:42:11.000000000 +0200
++++ wol-0.7.1/src/wol.c	2018-08-19 23:47:31.440398340 +0200
+@@ -56,6 +56,9 @@
+ /* IP Address or hostname magic packet is addressed to */
+ static char *host_str = DEFAULT_IPADDR;
+ 
++/* IP Address or hostname to bind to */
++static char *bind_str = NULL;
++
+ /* filename with mac addresses */
+ static char *pathname = NULL;
+ 
+@@ -107,6 +110,7 @@
+ -f, --file=FILE     read addresses from file FILE (\"-\" reads from stdin)\n\
+     --passwd[=PASS] send SecureON password PASS (if no PASS is given, you\n\
+                     will be prompted for the password)\n\
++-b, --bind=HOST     bind to this IP address or hostname\n\
+ \n\
+ Each MAC-ADDRESS is written as x:x:x:x:x:x, where x is a hexadecimal number\n\
+ between 0 and ff which represents one byte of the address, which is in\n\
+@@ -144,7 +148,7 @@
+   int c;
+   int option_index;
+   int password_set = 0;
+-  char *options = "Vvw:h:i:p:f:s:-";
++  char *options = "Vvw:h:i:p:f:s:b:-";
+   static struct option long_options[] = 
+     {
+       { "help", no_argument, NULL, 'H' },
+@@ -156,6 +160,7 @@
+       { "port", required_argument, NULL, 'p' },
+       { "file", required_argument, NULL, 'f' },
+       { "passwd", optional_argument, NULL, 'P' },
++      { "bind", required_argument, NULL, 'b' },
+       /* { "proxy", required_argument, NULL, 's' }, */
+       { NULL, 0, NULL, 0 }
+     };
+@@ -209,6 +214,9 @@
+ 	  host_str = optarg;
+ 	  break;
+ 
++	case 'b':
++	  bind_str = optarg;
++	  break;
+ 
+ 	case 'p':
+ 	  if ((sscanf (optarg, "%5u", &port) != 1) ||
+@@ -370,6 +378,13 @@
+       exit (1);
+     }
+ 
++  if (NULL != bind_str)
++    {
++      if (bind_to_addr (sockfd, bind_str))
++        {
++          exit (1);
++        }
++    }
+ 
+   /* loop through possible MAC addresses */
+   if (!request_stdin)

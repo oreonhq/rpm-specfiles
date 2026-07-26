@@ -1,0 +1,97 @@
+--- a/test-requirements.txt
++++ b/test-requirements.txt
+@@ -1,6 +1,5 @@
+ -r requirements.txt
+ 
+-mock
+ pytest
+ pytest-cov
+ tox
+--- a/tests/test_add_module.py
++++ b/tests/test_add_module.py
+@@ -28,7 +28,7 @@ import six
+ import tempfile
+ import unittest
+ from argparse import Namespace
+-from mock import patch
++from unittest.mock import patch
+ from tests import TEST_DATA_DIR, MockMBSBuildsData, make_mmd, dump_mmd
+ from ursa_major.handlers.add_module import AddModuleHandler
+ if six.PY3:  # SafeConfigParser == ConfigParser, former deprecated in >= 3.2
+--- a/tests/test_check_config.py
++++ b/tests/test_check_config.py
+@@ -26,7 +26,7 @@ import os
+ import pytest
+ import tempfile
+ 
+-from mock import call, patch
++from unittest.mock import call, patch
+ from tests import TEST_DATA_DIR, MockMBSBuildsData, make_mmd, dump_mmd
+ from ursa_major.cli import main
+ 
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -27,7 +27,7 @@ import tempfile
+ import ursa_major.cli
+ import pytest
+ 
+-from mock import patch
++from unittest.mock import patch
+ 
+ 
+ class TestTagConfigFileCLIOption:
+--- a/tests/test_remove_module.py
++++ b/tests/test_remove_module.py
+@@ -28,7 +28,7 @@ import six
+ import tempfile
+ import unittest
+ from argparse import Namespace
+-from mock import patch
++from unittest.mock import patch
+ from tests import TEST_DATA_DIR, MockMBSBuildsData, make_mmd, dump_mmd
+ from ursa_major.handlers.remove_module import RemoveModuleHandler
+ 
+--- a/tests/test_add_tag_handler.py
++++ b/tests/test_add_tag_handler.py
+@@ -23,7 +23,7 @@
+ #            Qixiang Wan <qwan@redhat.com>
+ 
+ import json
+-import mock
++from unittest import mock
+ import os
+ import shutil
+ import tempfile
+--- a/tests/test_koji_service.py
++++ b/tests/test_koji_service.py
+@@ -22,7 +22,7 @@
+ # Written by Chenxiong Qi <cqi@redhat.com>
+ #            Qixiang Wan <qwan@redhat.com>
+ 
+-import mock
++from unittest import mock
+ import unittest
+ 
+ from ursa_major.koji_service import KojiService
+--- a/tests/test_mbs.py
++++ b/tests/test_mbs.py
+@@ -22,7 +22,7 @@
+ # Written by Chenxiong Qi <cqi@redhat.com>
+ #            Qixiang Wan <qwan@redhat.com>
+ 
+-import mock
++from unittest import mock
+ 
+ from tests import UrsaMajorTestCase, MockResponse, MockMBSBuildsData
+ from ursa_major.mbs import MBS
+--- a/tests/test_update_tag.py
++++ b/tests/test_update_tag.py
+@@ -23,7 +23,7 @@
+ #            Qixiang Wan <qwan@redhat.com>
+ 
+ import json
+-import mock
++from unittest import mock
+ import os
+ import six
+ import shutil

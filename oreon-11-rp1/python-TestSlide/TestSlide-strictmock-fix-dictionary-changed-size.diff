@@ -1,0 +1,11 @@
+--- a/testslide/strict_mock.py
++++ b/testslide/strict_mock.py
+@@ -413,7 +413,7 @@ class StrictMock:
+         for klass in self._template.mro():
+             if klass is object:
+                 continue
+-            for name in klass.__dict__:
++            for name in list(klass.__dict__):
+                 if name in type(self).__dict__:
+                     continue
+                 if name == "__hash__":

@@ -1,0 +1,44 @@
+From 9c8cef8d589dfbd2d913010a1211d8a49279c986 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sat, 2 Aug 2025 18:30:43 -0400
+Subject: [PATCH 5/5] Skip x86 tests on ARM
+
+They are currently broken:
+https://github.com/tinygo-org/tinygo/issues/4969
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ main_test.go | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/main_test.go b/main_test.go
+index ca052821..13a40997 100644
+--- a/main_test.go
++++ b/main_test.go
+@@ -192,7 +192,10 @@ func TestBuild(t *testing.T) {
+ 	if runtime.GOOS == "linux" {
+ 		for name, osArch := range supportedLinuxArches {
+ 			options := optionsFromOSARCH(osArch, sema)
+-			if options.GOARCH != runtime.GOARCH { // Native architecture already run above.
++			if options.GOARCH == "386" && runtime.GOARCH == "arm64" {
++				// This is currently broken running in qemu.
++				// https://github.com/tinygo-org/tinygo/issues/4969
++			} else if options.GOARCH != runtime.GOARCH { // Native architecture already run above.
+ 				t.Run(name, func(t *testing.T) {
+ 					runPlatTests(options, tests, t)
+ 				})
+@@ -895,7 +898,10 @@ func TestTest(t *testing.T) {
+ 		if runtime.GOOS == "linux" {
+ 			for name, osArch := range supportedLinuxArches {
+ 				options := optionsFromOSARCH(osArch, sema)
+-				if options.GOARCH != runtime.GOARCH { // Native architecture already run above.
++				if options.GOARCH == "386" && runtime.GOARCH == "arm64" {
++					// This is currently broken running in qemu.
++					// https://github.com/tinygo-org/tinygo/issues/4969
++				} else if options.GOARCH != runtime.GOARCH { // Native architecture already run above.
+ 					targs = append(targs, targ{name, options})
+ 				}
+ 			}
+-- 
+2.50.0
+

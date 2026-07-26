@@ -1,0 +1,113 @@
+From 64f83714a66912e6d4ab303de9f9b56f95126f1a Mon Sep 17 00:00:00 2001
+From: Michel Alexandre Salim <salimma@fedoraproject.org>
+Date: Feb 02 2023 02:07:50 +0000
+Subject: Remove shebangs
+
+
+Signed-off-by: Michel Alexandre Salim <salimma@fedoraproject.org>
+
+---
+
+diff --git a/ebranch/__init__.py b/ebranch/__init__.py
+index 44809b9..0400503 100644
+--- a/ebranch/__init__.py
++++ b/ebranch/__init__.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/__main__.py b/ebranch/__main__.py
+index aa4d8ae..78d2a69 100644
+--- a/ebranch/__main__.py
++++ b/ebranch/__main__.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/bugzilla.py b/ebranch/bugzilla.py
+index 7f92e41..883bb8d 100644
+--- a/ebranch/bugzilla.py
++++ b/ebranch/bugzilla.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/cli.py b/ebranch/cli.py
+index 60a3de6..82f72f2 100644
+--- a/ebranch/cli.py
++++ b/ebranch/cli.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/dependencies.py b/ebranch/dependencies.py
+index 9f6174e..b3adbd3 100644
+--- a/ebranch/dependencies.py
++++ b/ebranch/dependencies.py
+@@ -1,3 +1,16 @@
++# -*- coding: utf-8 -*-
++
++# (c) Meta Platforms, Inc. and affiliates.
++#
++# Fedora-License-Identifier: GPLv2+
++# SPDX-2.0-License-Identifier: GPL-2.0+
++# SPDX-3.0-License-Identifier: GPL-2.0-or-later
++#
++# This program is free software.
++# For more information on the license, see COPYING.md.
++# For more information on free software, see
++# <https://www.gnu.org/philosophy/free-sw.en.html>.
++
+ """
+ Dependencies
+ """
+diff --git a/ebranch/dnf.py b/ebranch/dnf.py
+index b8e13eb..7a878c2 100644
+--- a/ebranch/dnf.py
++++ b/ebranch/dnf.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/pagure.py b/ebranch/pagure.py
+index 3c77ec5..869be36 100644
+--- a/ebranch/pagure.py
++++ b/ebranch/pagure.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/tests/__init__.py b/ebranch/tests/__init__.py
+index bd85df8..f80c1ce 100644
+--- a/ebranch/tests/__init__.py
++++ b/ebranch/tests/__init__.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/tests/test_dnf.py b/ebranch/tests/test_dnf.py
+index 5874a74..80f5f88 100644
+--- a/ebranch/tests/test_dnf.py
++++ b/ebranch/tests/test_dnf.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+diff --git a/ebranch/tests/test_pagure.py b/ebranch/tests/test_pagure.py
+index ce92600..e07d0ae 100644
+--- a/ebranch/tests/test_pagure.py
++++ b/ebranch/tests/test_pagure.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # (c) Meta Platforms, Inc. and affiliates.
+

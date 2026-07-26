@@ -1,0 +1,24 @@
+diff --git a/src/decl.cc b/src/decl.cc
+index f80f83e..245361d 100644
+--- a/src/decl.cc
++++ b/src/decl.cc
+@@ -21,6 +21,7 @@
+ 
+ #include <SDL.h>
+ 
++#include <algorithm>
+ #include <cstdlib>
+ #include <cstring>
+ #include <sys/stat.h>
+diff --git a/src/level.cc b/src/level.cc
+index e1e2bb8..ac2faf3 100644
+--- a/src/level.cc
++++ b/src/level.cc
+@@ -27,6 +27,7 @@
+ #endif
+ 
+ #include "decl.h"
++#include <algorithm>
+ 
+ #ifdef _WIN32
+ #include <direct.h>

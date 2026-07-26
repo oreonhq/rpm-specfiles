@@ -1,0 +1,21 @@
+[Unit]
+Description=Postfix firewall daemon
+After=network.target
+Before=postfix.service
+Documentation=man:postfwd(8)
+
+[Service]
+Type=forking
+PIDFile=/run/postfwd/postfwd.pid
+Environment="ARGS=--shortlog --summary 600 --cache 600 --cache-rbl-timeout 3600 --cleanup-requests 1200 --cleanup-rbls 1800 --cleanup-rates 1200"
+Environment="CFG=/etc/postfwd/postfwd.cf"
+Environment="SERVER_SOCKET=tcp:localhost:10040"
+Environment="PIDFILE=/run/postfwd/postfwd.pid"
+EnvironmentFile=-/etc/sysconfig/postfwd
+ExecStart=/usr/sbin/postfwd $ARGS --daemon --file $CFG --server_socket $SERVER_SOCKET --server_umask 0117 --user postfwd --group postfwd --pidfile $PIDFILE $OPTIONS
+ExecStop=/usr/sbin/postfwd --file $CFG --pidfile $PIDFILE --kill
+ExecReload=/usr/sbin/postfwd --file $CFG --pidfile $PIDFILE --reload
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

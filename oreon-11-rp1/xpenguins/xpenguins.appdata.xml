@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>xpenguins.desktop</id>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <description>
+    <p>
+      XPenguins animates a friendly family of penguins in your root
+      window.  They drop in from the top of the screen, walk along the
+      tops of your windows, up the side of your windows, levitate,
+      skateboard, and do other similarly exciting things.  XPenguins
+      is now themeable so if you are bored of penguins, try something
+      else.  The themes that come with this package are "Penguins",
+      "Classic Penguins", "Big Penguins", "Turtles" and "Bill".
+    </p>
+    <p xml:lang="sv">
+      XPengiuns animerar en vänlig familj av pingviner i ditt
+      rotfönster.  De trillar ner från toppen av skärmen, går längs
+      överkanten av dina fönster, upp längs sidorna på dina fönster,
+      svävar, åker skateboard, och gör andra liknande spännande saker.
+      XPenguins kan nu använda teman, så om du har tröttnat på
+      pingviner, pröva något annat.  De teman som följer med detta
+      paket är "Penguins" (pingviner), "Classic Penguins" (klassiska
+      pingviner), "Big Penguins" (stora pingviner), "Turtles"
+      (sköldpaddor) och "Bill" (Bill).
+    </p>
+    <p>
+      XPenguins works by drawing on the X root window.  This might not
+      have the desired effect in modern desktop environments like
+      Gnome where the root window is not visible.
+    </p>
+    <p xml:lang="sv">
+      XPenguins fungerar genom att rita på X rotfönster.  Detta
+      fungerar kanske inte som önskat i moderna skrivbordsmiljöer som
+      Gnome där rotfönstret inte är synligt.
+    </p>
+  </description>
+  <launchable type="desktop-id">xpenguins.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image width="465" height="262">
+	https://upload.wikimedia.org/wikipedia/commons/0/02/XPenguins.png
+      </image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://ratrabbit.nl/ratrabbit/software/xpenguins/</url>
+  <update_contact>goeran@uddeborg.se</update_contact>
+</component>

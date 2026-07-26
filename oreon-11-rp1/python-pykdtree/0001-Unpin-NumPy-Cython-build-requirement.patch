@@ -1,0 +1,40 @@
+From 11964a0a86abc523efb86a1ce2370727bb02b12d Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Fri, 26 Apr 2024 16:24:00 -0400
+Subject: [PATCH] Unpin NumPy & Cython build requirement
+
+NumPy is pinned because 2 provides ABI compatibility with 1.25, and
+Cython is pinned for free-threading support, neither of which we need
+specifically.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ pyproject.toml | 2 +-
+ setup.py       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 529e93f..044f88e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,3 +1,3 @@
+ [build-system]
+-requires = ["setuptools", "numpy>=2.0.0,<3", "Cython>=3.1"]
++requires = ["setuptools", "numpy", "Cython>=3"]
+ build-backend = "setuptools.build_meta"
+diff --git a/setup.py b/setup.py
+index 9efdf8d..8d0da2e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -190,7 +190,7 @@ extensions = [
+     Extension('pykdtree.kdtree', sources=['pykdtree/kdtree.pyx', 'pykdtree/_kdtree_core.c'],
+               include_dirs=[np.get_include()],
+               define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_25_API_VERSION")],
+-              cython_directives={"language_level": "3", "freethreading_compatible": True},
++              cython_directives={"language_level": "3"},
+               ),
+ ]
+ 
+-- 
+2.50.0
+

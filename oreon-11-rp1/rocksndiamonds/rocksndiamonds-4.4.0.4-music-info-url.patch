@@ -1,0 +1,74 @@
+diff -up rocksndiamonds-4.4.0.4/src/files.c.url rocksndiamonds-4.4.0.4/src/files.c
+--- rocksndiamonds-4.4.0.4/src/files.c.url	2025-03-19 15:59:45.653806856 -0400
++++ rocksndiamonds-4.4.0.4/src/files.c	2025-03-20 10:40:25.705618187 -0400
+@@ -14640,12 +14640,14 @@ static struct MusicFileInfo *get_music_f
+     { "artist_header",	&tmp_music_file_info.artist_header	},
+     { "album_header",	&tmp_music_file_info.album_header	},
+     { "year_header",	&tmp_music_file_info.year_header	},
++    { "url_header",	&tmp_music_file_info.url_header		},
+     { "played_header",	&tmp_music_file_info.played_header	},
+ 
+     { "title",		&tmp_music_file_info.title		},
+     { "artist",		&tmp_music_file_info.artist		},
+     { "album",		&tmp_music_file_info.album		},
+     { "year",		&tmp_music_file_info.year		},
++    { "url",		&tmp_music_file_info.url		},
+     { "played",		&tmp_music_file_info.played		},
+ 
+     { NULL,		NULL					},
+@@ -14760,12 +14762,14 @@ void LoadMusicInfo(void)
+     checked_free(music_file_info->artist_header);
+     checked_free(music_file_info->album_header);
+     checked_free(music_file_info->year_header);
++    checked_free(music_file_info->url_header);
+     checked_free(music_file_info->played_header);
+ 
+     checked_free(music_file_info->title);
+     checked_free(music_file_info->artist);
+     checked_free(music_file_info->album);
+     checked_free(music_file_info->year);
++    checked_free(music_file_info->url);
+     checked_free(music_file_info->played);
+ 
+     free(music_file_info);
+diff -up rocksndiamonds-4.4.0.4/src/main.h.url rocksndiamonds-4.4.0.4/src/main.h
+--- rocksndiamonds-4.4.0.4/src/main.h.url	2025-03-19 15:59:45.654806860 -0400
++++ rocksndiamonds-4.4.0.4/src/main.h	2025-03-20 10:36:02.334843688 -0400
+@@ -4416,12 +4416,14 @@ struct MusicFileInfo
+   char *artist_header;
+   char *album_header;
+   char *year_header;
++  char *url_header;
+   char *played_header;
+ 
+   char *title;
+   char *artist;
+   char *album;
+   char *year;
++  char *url;
+   char *played;
+ 
+   int music;
+diff -up rocksndiamonds-4.4.0.4/src/screens.c.url rocksndiamonds-4.4.0.4/src/screens.c
+--- rocksndiamonds-4.4.0.4/src/screens.c.url	2025-03-19 15:59:45.655591405 -0400
++++ rocksndiamonds-4.4.0.4/src/screens.c	2025-03-20 10:38:25.744265425 -0400
+@@ -4043,6 +4043,19 @@ void HandleInfoScreen_Music(int dx, int
+       ystart += ystep_head;
+     }
+ 
++    if (!strEqual(list->url, UNKNOWN_NAME))
++    {
++      if (!strEqual(list->url_header, UNKNOWN_NAME))
++        DrawTextSCentered(ystart, font_head, list->url_header);
++      else
++        DrawTextSCentered(ystart, font_head, "from the website");
++
++      ystart += ystep_head;
++
++      DrawTextFCentered(ystart, font_text, "%s", list->url);
++      ystart += ystep_head;
++    }
++
+     if (!strEqual(list->played, UNKNOWN_NAME))
+     {
+       if (!strEqual(list->played_header, UNKNOWN_NAME))

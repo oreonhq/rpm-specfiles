@@ -1,0 +1,185 @@
+Update cycleclock.h from Google to get fixes for aarch64 and a definition
+at all for s390x.
+
+--- spasm-1.2/src/cycleclock.h.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/src/cycleclock.h	2023-11-12 15:05:51.898758852 -0700
+@@ -39,6 +39,11 @@
+ // clock increments at a constant rate or is synchronized across all logical
+ // cpus in a system.
+ //
++// If you need the above guarantees, please consider using a different
++// API. There are efforts to provide an interface which provides a millisecond
++// granularity and implemented as a memory read. A memory read is generally
++// cheaper than the CycleClock for many architectures.
++//
+ // Also, in some out of order CPU implementations, the CycleClock is not
+ // serializing. So if you're trying to count at cycles granularity, your
+ // data might be inaccurate due to out of order instruction execution.
+@@ -47,6 +52,7 @@
+ #ifndef GOOGLE_BASE_CYCLECLOCK_H_
+ #define GOOGLE_BASE_CYCLECLOCK_H_
+ 
++#include <stddef.h>
+ #include <inttypes.h> // charles.bouillaguet
+ typedef uint64_t int64;
+ typedef uint64_t uint64;
+@@ -69,7 +75,8 @@ typedef uint32_t uint32;
+ // declarations of some other intrinsics, breaking compilation.
+ // Therefore, we simply declare __rdtsc ourselves. See also
+ // http://connect.microsoft.com/VisualStudio/feedback/details/262047
+-#if defined(_MSC_VER) && !defined(_M_IX86)
++#if defined(_MSC_VER) && !defined(_M_IX86) && !defined(_M_ARM64) && \
++    !defined(_M_ARM64EC)
+ extern "C" uint64 __rdtsc();
+ #pragma intrinsic(__rdtsc)
+ #endif
+@@ -111,16 +118,15 @@ extern "C" uint64 __rdtsc();
+     return tb;
+ #elif defined(__powerpc__) || defined(__ppc__)
+     // This returns a time-base, which is not always precisely a cycle-count.
+-    uint32 tbu, tbl, tmp;
++    uint32 tbl, tbu0, tbu1;
+     __asm__ volatile (\
+-      "0:\n"
+       "mftbu %0\n"
+-      "mftbl %1\n"
++      "mftb %1\n"
+       "mftbu %2\n"
+-      "cmpw %0, %2\n"
+-      "bne- 0b"
+-      : "=r" (tbu), "=r" (tbl), "=r" (tmp));
+-    return (((uint64) tbu << 32) | tbl);
++      : "=r" (tbu0), "=r" (tbl), "=r" (tbu1));
++    tbl &= -static_cast<int32_t>(tbu0 == tbu1);
++    // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is no longer needed)
++    return (static_cast<uint64_t>(tbu1) << 32) | tbl;
+ #elif defined(__sparc__)
+     int64 tick;
+     asm(".byte 0x83, 0x41, 0x00, 0x00");
+@@ -136,38 +142,113 @@ extern "C" uint64 __rdtsc();
+     // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+     // the code is being compiled with a non-ancient compiler.
+     _asm rdtsc
++#elif defined(_MSC_VER) && (defined(_M_ARM64) || defined(_M_ARM64EC))
++    // See // https://docs.microsoft.com/en-us/cpp/intrinsics/arm64-intrinsics
++    // and https://reviews.llvm.org/D53115
++    int64_t virtual_timer_value;
++    virtual_timer_value = _ReadStatusReg(ARM64_CNTVCT);
++    return virtual_timer_value;
+ #elif defined(_MSC_VER)
+     return __rdtsc();
+-#elif defined(ARMV3) || defined(__aarch64__)
+-#if defined(ARMV7)  // V7 is the earliest arch that has a standard cyclecount
+-    uint32 pmccntr;
+-    uint32 pmuseren;
+-    uint32 pmcntenset;
++#elif defined(_OS_NACL)
++    // Native Client validator on x86/x86-64 allows RDTSC instructions,
++    // and this case is handled above. Native Client validator on ARM
++    // rejects MRC instructions (used in the ARM-specific sequence below),
++    // so we handle it here. Portable Native Client compiles to
++    // architecture-agnostic bytecode, which doesn't provide any
++    // cycle counter access mnemonics.
++
++    // Native Client does not provide any API to access cycle counter.
++    // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
++    // because is provides nanosecond resolution (which is noticeable at
++    // least for PNaCl modules running on x86 Mac & Linux).
++    // Initialize to always return 0 if clock_gettime fails.
++    struct timespec ts = {0, 0};
++    clock_gettime(CLOCK_MONOTONIC, &ts);
++    return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
++#elif defined(__aarch64__)
++    // System timer of ARMv8 runs at a different frequency than the CPU's.
++    // The frequency is fixed, typically in the range 1-50MHz.  It can be
++    // read at CNTFRQ special register.  We assume the OS has set up
++    // the virtual timer properly.
++    int64_t virtual_timer_value;
++    asm volatile("mrs %0, cntvct_el0" : "=r"(virtual_timer_value));
++    return virtual_timer_value;
++#elif defined(__ARM_ARCH)
++  // V6 is the earliest arch that has a standard cyclecount
++  // Native Client validator doesn't allow MRC instructions.
++#if defined(ARMV6)
++    uint32_t pmccntr;
++    uint32_t pmuseren;
++    uint32_t pmcntenset;
+     // Read the user mode perf monitor counter access permissions.
+-    asm volatile ("mrc p15, 0, %0, c9, c14, 0" : "=r" (pmuseren));
++    asm volatile("mrc p15, 0, %0, c9, c14, 0" : "=r"(pmuseren));
+     if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+-      asm volatile ("mrc p15, 0, %0, c9, c12, 1" : "=r" (pmcntenset));
++      asm volatile("mrc p15, 0, %0, c9, c12, 1" : "=r"(pmcntenset));
+       if (pmcntenset & 0x80000000ul) {  // Is it counting?
+-        asm volatile ("mrc p15, 0, %0, c9, c13, 0" : "=r" (pmccntr));
++        asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(pmccntr));
+         // The counter is set up to count every 64th cycle
+-        return ((int64) (pmccntr) * 64);  // Should optimize to << 6
++        return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+       }
+     }
+ #endif
+     struct timeval tv;
+     gettimeofday(&tv, NULL);
+-    return ((int64) ((tv.tv_sec*1000000 + tv.tv_usec )));
+-#elif defined(__mips__)
++    return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
++#elif defined(__mips__) || defined(__m68k__)
+     // mips apparently only allows rdtsc for superusers, so we fall
+     // back to gettimeofday.  It's possible clock_gettime would be better.
+     struct timeval tv;
+     gettimeofday(&tv, NULL);
+-    return ((int64) ((tv.tv_sec*1000000 + tv.tv_usec)));
++    return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
++#elif defined(__loongarch__) || defined(__csky__)
++    struct timeval tv;
++    gettimeofday(&tv, NULL);
++    return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
++#elif defined(__s390__)  // Covers both s390 and s390x.
++    // Return the CPU clock.
++    uint64_t tsc;
++#if defined(_OS_ZOS) && defined(COMPILER_IBMXL)
++    // z/OS XL compiler HLASM syntax.
++    asm(" stck %0" : "=m"(tsc) : : "cc");
++#else
++    asm("stck %0" : "=Q"(tsc) : : "cc");
++#endif
++    return tsc;
++#elif defined(__riscv)  // RISC-V
++    // Use RDCYCLE (and RDCYCLEH on riscv32)
++#if __riscv_xlen == 32
++    uint32_t cycles_lo, cycles_hi0, cycles_hi1;
++    // This asm also includes the PowerPC overflow handling strategy, as above.
++    // Implemented in assembly because Clang insisted on branching.
++    asm volatile(
++        "rdcycleh %0\n"
++        "rdcycle %1\n"
++        "rdcycleh %2\n"
++        "sub %0, %0, %2\n"
++        "seqz %0, %0\n"
++        "sub %0, zero, %0\n"
++        "and %1, %1, %0\n"
++        : "=r"(cycles_hi0), "=r"(cycles_lo), "=r"(cycles_hi1));
++    return (static_cast<uint64_t>(cycles_hi1) << 32) | cycles_lo;
++#else
++    uint64_t cycles;
++    asm volatile("rdcycle %0" : "=r"(cycles));
++    return cycles;
++#endif
++#elif defined(__e2k__) || defined(__elbrus__)
++    struct timeval tv;
++    gettimeofday(&tv, NULL);
++    return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
++#elif defined(__hexagon__)
++    uint64_t pcycle;
++    asm volatile("%0 = C15:14" : "=r"(pcycle));
++    return static_cast<double>(pcycle);
+ #else
+ // The soft failover to a generic implementation is automatic only for ARM.
+ // For other platforms the developer is expected to make an attempt to create
+ // a fast implementation and use generic version if nothing better is available.
+-#error You need to define CycleTimer for your O/S and CPU
++#error You need to define CycleTimer for your OS and CPU
+ #endif
+   }
+ 

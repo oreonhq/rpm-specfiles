@@ -1,0 +1,53 @@
+diff --git a/src/parser.cc b/src/parser.cc
+index 76ed9da..e97e91e 100644
+--- a/src/parser.cc
++++ b/src/parser.cc
+@@ -4110,7 +4110,7 @@ Expression* Parser::ParseObjectLiteral(bool* ok) {
+             // Validate the property.
+             checker.CheckProperty(property, loc, CHECK_OK);
+             properties->Add(property, zone());
+-            if (peek() != Token::RBRACE) Expect(Token::COMMA, CHECK_OK);
++            if (peek() != Token::RBRACE) { Expect(Token::COMMA, CHECK_OK); }
+ 
+             if (fni_ != NULL) {
+               fni_->Infer();
+@@ -4180,7 +4180,7 @@ Expression* Parser::ParseObjectLiteral(bool* ok) {
+     properties->Add(property, zone());
+ 
+     // TODO(1240767): Consider allowing trailing comma.
+-    if (peek() != Token::RBRACE) Expect(Token::COMMA, CHECK_OK);
++    if (peek() != Token::RBRACE) { Expect(Token::COMMA, CHECK_OK); }
+ 
+     if (fni_ != NULL) {
+       fni_->Infer();
+@@ -4249,7 +4249,7 @@ ZoneList<Expression*>* Parser::ParseArguments(bool* ok) {
+       return NULL;
+     }
+     done = (peek() == Token::RPAREN);
+-    if (!done) Expect(Token::COMMA, CHECK_OK);
++    if (!done) { Expect(Token::COMMA, CHECK_OK); }
+   }
+   Expect(Token::RPAREN, CHECK_OK);
+   return result;
+@@ -4426,7 +4426,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(Handle<String> function_name,
+         return NULL;
+       }
+       done = (peek() == Token::RPAREN);
+-      if (!done) Expect(Token::COMMA, CHECK_OK);
++      if (!done) { Expect(Token::COMMA, CHECK_OK); }
+     }
+     Expect(Token::RPAREN, CHECK_OK);
+ 
+diff --git a/src/preparser.cc b/src/preparser.cc
+index 21da4f8..7769130 100644
+--- a/src/preparser.cc
++++ b/src/preparser.cc
+@@ -1306,7 +1306,7 @@ PreParser::Expression PreParser::ParseObjectLiteral(bool* ok) {
+     ParseAssignmentExpression(true, CHECK_OK);
+ 
+     // TODO(1240767): Consider allowing trailing comma.
+-    if (peek() != i::Token::RBRACE) Expect(i::Token::COMMA, CHECK_OK);
++    if (peek() != i::Token::RBRACE) { Expect(i::Token::COMMA, CHECK_OK); }
+   }
+   Expect(i::Token::RBRACE, CHECK_OK);
+ 

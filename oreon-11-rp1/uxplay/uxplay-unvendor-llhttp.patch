@@ -1,0 +1,31 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2026-02-12 07:21:14.000000000 -0800
++++ b/CMakeLists.txt	2026-03-11 21:26:39.984673048 -0700
+@@ -48,7 +48,6 @@
+   set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
+ endif()
+ 
+-add_subdirectory( lib/llhttp )
+ add_subdirectory( lib/playfair )
+ add_subdirectory( lib )
+ add_subdirectory( renderers )
+@@ -72,7 +71,6 @@
+ install( TARGETS  uxplay RUNTIME DESTINATION bin )
+ install( FILES uxplay.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1 )
+ install( FILES README.md README.txt README.html LICENSE DESTINATION ${CMAKE_INSTALL_DOCDIR} ) 
+-install( FILES lib/llhttp/LICENSE-MIT DESTINATION ${CMAKE_INSTALL_DOCDIR}/llhttp )
+ install( FILES uxplay.service DESTINATION ${CMAKE_INSTALL_DOCDIR}/systemd ) 
+ 
+ if (DBUS_FOUND)
+diff -Naur a/lib/http_request.c b/lib/http_request.c
+--- a/lib/http_request.c	2026-02-12 07:21:14.000000000 -0800
++++ b/lib/http_request.c	2026-03-11 21:26:39.985141682 -0700
+@@ -21,7 +21,7 @@
+ #include <stdio.h>
+ 
+ #include "http_request.h"
+-#include "llhttp/llhttp.h"
++#include <llhttp.h>
+ 
+ struct http_request_s {
+     llhttp_t parser;

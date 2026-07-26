@@ -1,0 +1,74 @@
+%global source0_hash 8fa993c8e9c8c55655e81bec3096b5ccb5b49b73271762c9bc4c2a46ea4b3e1f
+
+# tests are enabled by default
+%bcond_without tests
+
+%global         srcname     google-cloud-dns
+%global         forgeurl    https://github.com/googleapis/python-dns
+Version:        0.34.2
+%global         tag         v%{version}
+%forgemeta
+
+Name:           python-%{srcname}
+Release:        %autorelease
+Summary:        Python Client for Google Cloud DNS
+
+# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+License:        Apache-2.0
+URL:            %forgeurl
+Source0:        %forgesource
+Patch0:         python-google-cloud-dns-mock.patch
+
+BuildArch:      noarch
+
+BuildRequires:  pyproject-rpm-macros
+
+%if %{with tests}
+BuildRequires:  python3dist(google-cloud-core)
+BuildRequires:  python3dist(pytest)
+%endif
+
+%global _description %{expand:
+The Google Cloud DNS API provides methods that you can use to manage DNS
+on Google infrastructure.}
+
+%description %{_description}
+
+%package -n python3-%{srcname}
+Summary: %{summary}
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname} %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%forgeautosetup -p1
+
+%generate_buildrequires
+%pyproject_buildrequires -r
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files google
+
+%check
+%pyproject_check_import
+
+%if %{with tests}
+# NOTE(mhayden): Setting PYTHONUSERBASE as a hack for PEP 420 namespaces.
+# Thanks to churchyard for the fix.
+PYTHONUSERBASE=%{buildroot}%{_prefix} \
+    %pytest tests/unit
+%endif
+
+%files -n python3-%{srcname} -f %{pyproject_files}
+%doc README.rst CHANGELOG.md SECURITY.md
+%license LICENSE
+%{python3_sitelib}/google_cloud_dns-%{version}-py*-nspkg.pth
+
+%changelog
+%autochangelog

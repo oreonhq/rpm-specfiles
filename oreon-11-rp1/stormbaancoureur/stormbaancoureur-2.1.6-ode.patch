@@ -1,0 +1,22 @@
+--- src-common/dynamicobject.h~	2007-10-13 12:38:03.000000000 -0500
++++ src-common/dynamicobject.h	2012-08-20 15:53:29.385805698 -0500
+@@ -1,6 +1,8 @@
+ #ifndef DYNAMICOBJECT_H
+ #define DYNAMICOBJECT_H
+ 
++#define dSINGLE
++
+ #include <string>
+ 
+ #include <ode/ode.h>
+--- src-common/staticworldobject.h~	2008-03-10 22:28:22.000000000 -0500
++++ src-common/staticworldobject.h	2012-08-20 15:55:34.908802899 -0500
+@@ -1,6 +1,8 @@
+ #ifndef STATICWORLDOBJECT_H
+ #define STATICWORLDOBJECT_H
+ 
++#define dSINGLE
++
+ #include <string>
+ #include <vector>
+ 

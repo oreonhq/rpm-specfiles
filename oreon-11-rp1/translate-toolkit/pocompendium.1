@@ -1,0 +1,64 @@
+.TH pocompendium 1 "Translate Toolkit 1.3.0" "" "Translate Toolkit 1.3.0"
+.SH NAME
+pocompendium \- Create a PO compendium from a directory of PO files.
+.SH SYNOPSIS
+\fBpocompendium\fR [options] \fIoutput.po\fR <\fB\-d\fR
+\fIpo-directory(ies)\fR|\fIpo-file(s)\fR>
+.SH DESCRIPTION
+Takes a directory of translated PO files and creates a single PO files
+called a PO compendium. This compendium can be used to review word choice
+conflicts or as input during a merge using \fBpomigrate\fR(1).
+.SH OPTIONS
+.TP
+\fB\-v\fR, \fB\-\-invert\fR
+creates an inverse compendium with msgid and msgstr swapped
+.TP
+\fB\-e\fR, \fB\-\-errors\fR
+only output message bundles that have conflicts
+.TP
+\fB\-c\fR, \fB\-\-correct\fR
+only output message bundles that are correctly translated
+.TP
+\fB\-i\fR, \fB\-\-ignore-case\fR
+drops all strings to lowercase
+.TP
+\fB\-st\fR, \fB\-tilde\fR, \fB\-\-strip\-accel\-amp\fR
+remove all & style accelerator markers
+.TP
+\fB\-sa\fR, \fB\-amp\fR, \fB\-\-strip\-accel\-tilde\fR
+remove all ~ style accelerator markers
+.TP
+\fB\-su\fR, \fB\-\-strip\-accel\-under\fR
+remove all _ style accelerator markers
+.SH EXAMPLES
+.SS Compendium creation
+create a compendium with all your translations to use as input during a
+message merge either when migrating an existing project or starting a new
+one.
+.SS Conflicting translations
+use \fB\-\-errors\fR to find where you have translated an English string
+differently. Many times this is OK but often it will pick up subtle
+spelling mistakes or help you to migrate older translations to a newer
+choice of words.
+.SS Conflicting word choice
+use \fB\-\-invert\fR and \fB\-\-errors\fR to get a compendium file that
+show how you have used a translated word for different English words. You
+might have chosen a word that is valid for both of the English expressions
+but that in the context of computers would cause confusion for the user.
+You can now easily identify these words and make changes in the underlying
+translations.
+.SH Narrowing Results
+PO files treat slight changes in capitalisation, accelerator, punctuation
+and whitespace as different translations. In cases 2) and 3) above it is
+sometimes useful to remove the inconsistencies so that you can focus on
+the errors in translation not on shifts in capitals. To this end you can
+use the following: \fB\-\-ignore\-case\fR, \fB\-\-strip\-accel\-amp\fR,
+\fB\-\-strip\-accel\-tilde\fR, \fB\-\-strip\-accel\-under\fR.
+.SH OPERATION
+\fBpocompendium\fR makes use of the Gettext tool \fBmsgcat\fR(1) to
+perform its task. It traverses the PO directories and cat's all found PO
+files into the single compendium output file. It then uses
+\fBmsgattrib\fR(1) to extract only certain messages, \fBmsghack\fR to
+invert messages and \fBmsgfilter\fR(1) to convert messages to lowercase.
+.SH BUGS
+There are some absolute/relative path name issues.

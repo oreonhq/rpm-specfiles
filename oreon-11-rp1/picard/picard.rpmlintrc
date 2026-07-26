@@ -1,0 +1,6 @@
+# ERRORS
+addFilter(r" no-manual-page-for-binary picard")
+addFilter(r" invalid-lc-messages-dir")
+addFilter(r" incorrect-locale-subdir")
+addFilter(r" python-leftover-require")
+#addFilter(r" strange-permission")

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Vym
+Comment=View your mind
+Exec=vym %f
+Icon=vym
+MimeType=application/x-vym;application/zip;
+Terminal=false
+Type=Application
+Categories=Qt;KDE;Office;

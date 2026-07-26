@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Harmattan</target>
+    <match>
+      <family>Harmattan</family>
+      <good-lang>ar</good-lang>
+      <good-lang>az-ir</good-lang>
+      <good-lang>fa</good-lang>
+      <good-lang>ku-iq</good-lang>
+      <good-lang>ku-ir</good-lang>
+      <good-lang>ota</good-lang>
+    </match>
+    <like>
+      <family>Andika New Basic</family>
+      <family>Andika</family>
+      <family>Andika Compact</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

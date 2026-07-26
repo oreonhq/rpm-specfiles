@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=RocqIDE
+Comment=Examine and develop Rocq .v files
+Exec=rocqide
+Icon=rocq
+Type=Application
+Categories=Development;
+MimeType=application/x-rocq;

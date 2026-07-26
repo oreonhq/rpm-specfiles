@@ -1,0 +1,39 @@
+Index: raidem-0.3.1-src/Makefile
+===================================================================
+--- raidem-0.3.1-src.orig/Makefile
++++ raidem-0.3.1-src/Makefile
+@@ -318,7 +318,7 @@ $(ZZIPLIB) :
+ 
+ 
+ $(GAME) : $(GAME-OBJS) $(CANDIES) $(MAP-EDITOR-OBJS) $(PROJECTILES) $(SEB-OBJS) $(UNITS) $(ICON)
+-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS) -lm
++	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS) -lm $(LDFLAGS)
+ 
+ obj/%.o : %.c
+ 	$(CC) $(CFLAGS) -o $@ -c $<
+Index: raidem-0.3.1-src/lib/loadpng/Makefile
+===================================================================
+--- raidem-0.3.1-src.orig/lib/loadpng/Makefile
++++ raidem-0.3.1-src/lib/loadpng/Makefile
+@@ -1,7 +1,7 @@
+ ## Toplevel Makefile
+ 
+ CC := gcc
+-CFLAGS := -W -Wall -O3 -I.
++CFLAGS += -W -Wall -I.
+ 
+ VERSION := 1.4
+ # (note to self: remember to edit loadpng.h as well)
+Index: raidem-0.3.1-src/lib/loadpng/Makefile.unx
+===================================================================
+--- raidem-0.3.1-src.orig/lib/loadpng/Makefile.unx
++++ raidem-0.3.1-src/lib/loadpng/Makefile.unx
+@@ -18,7 +18,7 @@ SHAREDLIB := libloadpng-$(VERSION).so
+ shared: $(SHAREDLIB)
+ 
+ $(SHAREDLIB): loadpng.c savepng.c regpng.c
+-	$(CC) -o $(SHAREDLIB) $(CFLAGS) -fPIC -shared loadpng.c savepng.c regpng.c
++	$(CC) -o $(SHAREDLIB) $(CFLAGS) $(LDFLAGS) -fPIC -shared loadpng.c savepng.c regpng.c
+ 
+ #--------------------------------------------------
+ .PHONY: install install-headers install-shared

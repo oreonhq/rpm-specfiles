@@ -1,0 +1,28 @@
+From ddad7b111139e54638bdef42aad2d464d52773f0 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Mon, 19 Jan 2026 16:55:13 +0900
+Subject: [PATCH] driver: fix linkage for test-vp
+
+test-vp needs -lXxf86vm. Currently linkage fails like:
+
+/xscreensaver-6.14/x86_64-pc-linux-gnu/driver/../../driver/test-vp.c:116:(.text.startup+0x110): undefined reference to `XF86VidModeQueryExtension'
+---
+ driver/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/driver/Makefile.in b/driver/Makefile.in
+index 6276e0e..edc86b1 100644
+--- a/driver/Makefile.in
++++ b/driver/Makefile.in
+@@ -1108,7 +1108,7 @@ test-xkb: $(TESTXKB_OBJS)
+ 	$(CC) $(LDFLAGS) -o $@ $(TESTXKB_OBJS) $(TESTXKB_LIBS)
+ 
+ test-vp: test-vp.o blurb.o
+-	$(CC) $(LDFLAGS) -o $@ test-vp.o blurb.o $(GFX_LIBS)
++	$(CC) $(LDFLAGS) -o $@ test-vp.o blurb.o $(GFX_LIBS) -lXxf86vm
+ 
+ test-randr: test-randr.o blurb.o
+ 	$(CC) $(LDFLAGS) -o $@ test-randr.o blurb.o $(GFX_LIBS)
+-- 
+2.52.0
+

@@ -1,0 +1,12 @@
+--- mozilla/layout/base/PresShell.cpp.orig	2023-06-15 17:09:42.302874890 +0300
++++ mozilla/layout/base/PresShell.cpp	2023-06-15 17:25:00.681339398 +0300
+@@ -4173,6 +4173,9 @@ PresShell::DoFlushPendingNotifications(m
+ #endif
+ 
+       mPresContext->RestyleManager()->ProcessPendingRestyles();
++      // Clear mNeedStyleFlush here agagin to make this flag work properly for
++      // optimization since the flag might have set in ProcessPendingRestyles().
++      mNeedStyleFlush = false;
+     }
+ 
+     didStyleFlush = true;

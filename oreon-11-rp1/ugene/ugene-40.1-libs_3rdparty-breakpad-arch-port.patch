@@ -1,0 +1,183 @@
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/dump_writer_common/thread_info.cc.port	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/dump_writer_common/thread_info.cc	2021-11-09 11:04:57.375470034 +0900
+@@ -270,9 +270,19 @@ void ThreadInfo::FillCPUContext(RawConte
+   out->float_save.fir = mcontext.fpc_eir;
+ #endif
+ }
++
++#else
++uintptr_t ThreadInfo::GetInstructionPointer() const {
++  return 0;
++}
++
++void ThreadInfo::FillCPUContext(RawContextCPU* out) const {
++}
++
+ #endif  // __mips__
+ 
+ void ThreadInfo::GetGeneralPurposeRegisters(void** gp_regs, size_t* size) {
++#if defined(__i386) || defined(__x86_64) || defined(__ARM_EABI__) || defined(__aarch64__) ||  defined(__mips__)
+   assert(gp_regs || size);
+ #if defined(__mips__)
+   if (gp_regs)
+@@ -285,9 +295,11 @@ void ThreadInfo::GetGeneralPurposeRegist
+   if (size)
+     *size = sizeof(regs);
+ #endif
++#endif
+ }
+ 
+ void ThreadInfo::GetFloatingPointRegisters(void** fp_regs, size_t* size) {
++#if defined(__i386) || defined(__x86_64) || defined(__ARM_EABI__) || defined(__aarch64__) ||  defined(__mips__)
+   assert(fp_regs || size);
+ #if defined(__mips__)
+   if (fp_regs)
+@@ -300,6 +312,7 @@ void ThreadInfo::GetFloatingPointRegiste
+   if (size)
+     *size = sizeof(fpregs);
+ #endif
++#endif
+ }
+ 
+ }  // namespace google_breakpad
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/dump_writer_common/ucontext_reader.cc.port	2021-11-09 12:13:14.526068539 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/dump_writer_common/ucontext_reader.cc	2021-11-09 12:13:47.079160354 +0900
+@@ -254,6 +254,16 @@ void UContextReader::FillCPUContext(RawC
+   out->float_save.fir = uc->uc_mcontext.fpc_eir;  // Unused.
+ #endif
+ }
++
++#else
++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
++  return 0;
++}
++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
++  return 0;
++}
++void UContextReader::FillCPUContext(RawContextCPU* out, const ucontext_t* uc) {
++}
+ #endif
+ 
+ }  // namespace google_breakpad
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/handler/exception_handler.cc.port	2021-11-09 11:04:57.135469882 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/handler/exception_handler.cc	2021-11-09 12:06:47.875738562 +0900
+@@ -442,6 +442,7 @@ int ExceptionHandler::ThreadEntry(void*
+ // This function runs in a compromised context: see the top of the file.
+ // Runs on the crashing thread.
+ bool ExceptionHandler::HandleSignal(int /*sig*/, siginfo_t* info, void* uc) {
++#if defined(__i386) || defined(__x86_64) || defined(__ARM_EABI__) || defined(__aarch64__) ||  defined(__mips__)
+   if (filter_ && !filter_(callback_context_))
+     return false;
+ 
+@@ -483,6 +484,9 @@ bool ExceptionHandler::HandleSignal(int
+     }
+   }
+   return GenerateDump(&g_crash_context_);
++#else
++  return false;
++#endif
+ }
+ 
+ // This is a public interface to HandleSignal that allows the client to
+@@ -661,6 +665,7 @@ bool ExceptionHandler::WriteMinidump(con
+ __attribute__((optimize("no-omit-frame-pointer")))
+ #endif
+ bool ExceptionHandler::WriteMinidump() {
++#if defined(__i386) || defined(__x86_64) || defined(__ARM_EABI__) || defined(__aarch64__) ||  defined(__mips__)
+   if (!IsOutOfProcess() && !minidump_descriptor_.IsFD() &&
+       !minidump_descriptor_.IsMicrodumpOnConsole()) {
+     // Update the path of the minidump so that this can be called multiple times
+@@ -735,6 +740,9 @@ bool ExceptionHandler::WriteMinidump() {
+ #endif
+ 
+   return GenerateDump(&context);
++#else
++  return false;
++#endif
+ }
+ 
+ void ExceptionHandler::AddMappingInfo(const string& name,
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/microdump_writer/microdump_writer.cc.port	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/microdump_writer/microdump_writer.cc	2021-11-09 12:20:24.529281407 +0900
+@@ -338,7 +338,7 @@ class MicrodumpWriter {
+ #  error "This mips ABI is currently not supported (n32)"
+ #endif
+ #else
+-#error "This code has not been ported to your platform yet"
++    const char kArch[] = "unknown";
+ #endif
+ 
+     LogAppend("O ");
+@@ -409,11 +409,15 @@ class MicrodumpWriter {
+   void DumpCPUState() {
+     RawContextCPU cpu;
+     my_memset(&cpu, 0, sizeof(RawContextCPU));
++#if !defined(__i386__) && !defined(__x86_64) && !defined(__aarch64__)
++    UContextReader::FillCPUContext(&cpu, ucontext_);
++#else
+ #if !defined(__ARM_EABI__) && !defined(__mips__)
+     UContextReader::FillCPUContext(&cpu, ucontext_, float_state_);
+ #else
+     UContextReader::FillCPUContext(&cpu, ucontext_);
+ #endif
++#endif
+     LogAppend("C ");
+     LogAppend(&cpu, sizeof(cpu));
+     LogCommitLine();
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/linux_dumper.h.port	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/linux_dumper.h	2021-11-09 11:04:57.384470040 +0900
+@@ -63,6 +63,7 @@ namespace google_breakpad {
+  (defined(__mips__) && _MIPS_SIM == _ABIO32)
+ typedef Elf32_auxv_t elf_aux_entry;
+ #elif defined(__x86_64) || defined(__aarch64__) || \
++      defined(__powerpc64__) || defined(__s390x__) || \
+      (defined(__mips__) && _MIPS_SIM != _ABIO32)
+ typedef Elf64_auxv_t elf_aux_entry;
+ #endif
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/linux_ptrace_dumper.cc.port	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/linux_ptrace_dumper.cc	2021-11-09 11:04:57.384470040 +0900
+@@ -198,6 +198,7 @@ bool LinuxPtraceDumper::ReadRegisters(Th
+ // these members are set to -1. Returns true iff all three members are
+ // available.
+ bool LinuxPtraceDumper::GetThreadInfoByIndex(size_t index, ThreadInfo* info) {
++#if defined(__i386) || defined(__x86_64) || defined(__ARM_EABI__) || defined(__aarch64__) ||  defined(__mips__)
+   if (index >= threads_.size())
+     return false;
+ 
+@@ -304,6 +305,9 @@ bool LinuxPtraceDumper::GetThreadInfoByI
+   info->stack_pointer = reinterpret_cast<uintptr_t>(stack_pointer);
+ 
+   return true;
++#else
++  return false;
++#endif
+ }
+ 
+ bool LinuxPtraceDumper::IsPostMortem() const {
+--- ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/minidump_writer.cc.port	2021-10-11 15:41:23.000000000 +0900
++++ ugene-40.1/src/libs_3rdparty/breakpad/src/client/linux/minidump_writer/minidump_writer.cc	2021-11-09 12:20:06.954231835 +0900
+@@ -468,11 +468,15 @@ class MinidumpWriter {
+         if (!cpu.Allocate())
+           return false;
+         my_memset(cpu.get(), 0, sizeof(RawContextCPU));
++#if !defined(__i386__) && !defined(__x86_64) && !defined(__aarch64__)
++        UContextReader::FillCPUContext(cpu.get(), ucontext_);
++#else
+ #if !defined(__ARM_EABI__) && !defined(__mips__)
+         UContextReader::FillCPUContext(cpu.get(), ucontext_, float_state_);
+ #else
+         UContextReader::FillCPUContext(cpu.get(), ucontext_);
+ #endif
++#endif
+         thread.thread_context = cpu.location();
+         crashing_thread_context_ = cpu.location();
+       } else {
+@@ -1206,7 +1210,7 @@ class MinidumpWriter {
+     return true;
+   }
+ #else
+-#  error "Unsupported CPU"
++  bool WriteCPUInformation(MDRawSystemInfo* sys_info) { return false; }
+ #endif
+ 
+   bool WriteFile(MDLocationDescriptor* result, const char* filename) {

@@ -1,0 +1,9 @@
+diff -rupN qpdfview-0.5/qpdfview.pri qpdfview-0.5-new/qpdfview.pri
+--- qpdfview-0.5/qpdfview.pri	2023-01-28 11:40:47.229000000 +0100
++++ qpdfview-0.5-new/qpdfview.pri	2023-10-08 01:20:01.402246510 +0200
+@@ -12,4 +12,4 @@ isEmpty(APP_DIR_DATA_PATH):APP_DIR_DATA_
+ win32:include(qpdfview_win32.pri)
+ os2:include(qpdfview_os2.pri)
+ 
+-CONFIG += c++11
++CONFIG += c++17

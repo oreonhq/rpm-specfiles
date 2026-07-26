@@ -1,0 +1,16 @@
+Include <unistd.h> for the _exit function, to avoid an implicit
+function declaration.  An equivalent fix is already included in the
+ultimate gnulib/libintl upstream project.
+
+diff --git a/m4/intdiv0.m4 b/m4/intdiv0.m4
+index 744b99ea8da87ca1..f5cbd3e944362697 100644
+--- a/m4/intdiv0.m4
++++ b/m4/intdiv0.m4
+@@ -33,6 +33,7 @@ changequote([,])dnl
+           [AC_LANG_SOURCE([[
+ #include <stdlib.h>
+ #include <signal.h>
++#include <unistd.h>
+ 
+ static void
+ sigfpe_handler (int sig)

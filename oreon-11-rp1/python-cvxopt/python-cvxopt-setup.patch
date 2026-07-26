@@ -1,0 +1,43 @@
+--- cvxopt-1.3.3/setup.py.orig	2026-02-09 04:16:53.000000000 -0700
++++ cvxopt-1.3.3/setup.py	2026-02-09 08:23:34.455695272 -0700
+@@ -3,8 +3,8 @@ from glob import glob
+ import os, sys, platform
+ 
+ # Default names of BLAS and LAPACK libraries
+-BLAS_LIB = ['blas']
+-LAPACK_LIB = ['lapack']
++BLAS_LIB = ['flexiblas']
++LAPACK_LIB = ['flexiblas']
+ BLAS_EXTRA_LINK_ARGS = []
+ 
+ # Set environment variable BLAS_NOUNDERSCORES=1 if your BLAS/LAPACK do
+@@ -13,16 +13,16 @@ BLAS_NOUNDERSCORES = False
+ 
+ # Set to 1 if you are using the random number generators in the GNU
+ # Scientific Library.
+-BUILD_GSL = 0
++BUILD_GSL = 1
+ 
+ # Set to 1 if you are installing the fftw module.
+-BUILD_FFTW = 0
++BUILD_FFTW = 1
+ 
+ # Set to 1 if you are installing the glpk module.
+-BUILD_GLPK = 0
++BUILD_GLPK = 1
+ 
+ # Set to 1 if you are installing the DSDP module.
+-BUILD_DSDP = 0
++BUILD_DSDP = 1
+ 
+ # Guess prefix and library directories
+ if platform.system() == "Darwin":
+@@ -65,7 +65,7 @@ else:
+         BLAS_LIB_DIR = PREFIX + "/lib"
+         SUITESPARSE_LIB_DIR = PREFIX + "/lib"
+ 
+-    DSDP_INC_DIR = PREFIX + "/include/dsdp"
++    DSDP_INC_DIR = PREFIX + "/include/DSDP"
+     DSDP_LIB_DIR = PREFIX + "/lib"
+     FFTW_INC_DIR = PREFIX + "/include"
+     FFTW_LIB_DIR = PREFIX + "/lib"

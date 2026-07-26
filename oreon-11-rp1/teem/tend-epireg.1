@@ -1,0 +1,139 @@
+.TH TEND\-EPIREG "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-epireg \- register diffusion-weighted echo-planar images
+.SH SYNOPSIS
+.B tend\ epireg
+.B \-i
+.RI < dwi0\fR\ \fBdwi1 \ ...>
+.B \-g
+.RI < grads >
+.RB [ \-r
+.RI < reference >]
+.RB [ \-nv ]
+.RB [ \-p ]
+.RB [ \-bw
+.RI < x\fB,\fIy\fB\ blur >]
+.RB [ \-t
+.RI < DWI\ thresh >]
+.RB [ \-ncc ]
+.RB [ \-f
+.RI < fit\ frac >]
+.RB [ \-k
+.RI < kernel >]
+.RB [ \-s
+.RI < start\ # >]
+.RB [ \-o
+.RI < output/prefix >]
+.SH DESCRIPTION
+.P
+Register diffusion-weighted echo-planar images.
+This registration corrects the shear, scale, and translate along the phase
+encoding direction (assumed to be the Y (second) axis of the image) caused by
+eddy currents from the diffusion-encoding gradients with echo-planar imaging.
+The method is based on calculating moments of segmented images, where the
+segmentation is a simple procedure based on blurring (optional), thresholding
+and connected component analysis.
+The registered DWIs are resampled with the chosen kernel, with the separate
+DWIs stacked along axis 0.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fIdwi0\fR\ \fIdwi1\fR\ ...>
+all the diffusion-weighted images (DWIs), as separate 3D
+.IR nrrd s,
+.BR OR :
+one 4D
+.I nrrd
+of all DWIs stacked along axis 0 (1 or more
+.IR nrrd s)
+.TP
+.B \-g\fR <\fIgrads\fR>
+array of gradient directions, in the same order as the associated DWIs were
+given to
+.RB \(lq \-i \(rq,
+.B OR
+.RB \(lq \-g\ kvp \(rq
+signifies that gradient directions should be read from the key/value pairs of
+the DWI
+.RI ( string )
+.TP
+.B \-r\fR <\fIreference\fR>
+which of the DW volumes (zero-based numbering) should be used as the standard,
+to which all other images are transformed.
+Using
+.B \-1
+(the default) means that 9 intrinsic parameters governing the relationship
+between the gradient direction and the resulting distortion are estimated and
+fitted, ensuring good registration with the non-diffusion-weighted T2 image
+(which is never explicitly used in registration).
+Otherwise, by picking a specific DWI, no distortion parameter estimation is
+done.
+.RI ( int );
+default:
+.RB \(lq \-1 \(rq
+.TP
+.B \-nv
+turn OFF verbose mode, and have no idea what stage processing is at.
+.TP
+.B \-p
+save out intermediate steps of processing
+.TP
+.B \-bw\fR <\fIx\fB,\fIy\ blur\fR>
+standard deviations in X and Y directions of gaussian filter used to blur the
+DWIs prior to doing segmentation.
+This blurring does not effect the final resampling of registered DWIs.
+Use
+.RB \(lq 0.0\ 0.0 \(rq
+to say \(lqno blurring\(rq (2
+.IR float s);
+default:
+.RB \(lq 1.0\ 2.0 \(rq
+.TP
+.B \-t\fR <\fIDWI\ thresh\fR>
+Threshold value to use on DWIs, to do initial separation of brain and
+non-brain.
+By default, the threshold is determined automatically by histogram analysis.
+.RI ( float )
+.TP
+.B \-ncc
+do
+.B NOT
+do connected component (CC) analysis, after thresholding and before moment
+calculation.
+Doing CC analysis usually gives better results because it converts the
+thresholding output into something much closer to a real segmentation
+.TP
+.B \-f\fR <\fIfit\ frac\fR>
+(only meaningful with
+.RB \(lq \-r\ \-1 \(rq)
+When doing linear fitting of the intrinsic distortion parameters, it is good to
+ignore the slices for which the segmentation was poor.
+A heuristic is used to rank the slices according to segmentation quality.
+This option controls how many of the (best) slices contribute to the fitting.
+Use
+.RB \(lq 0 \(rq
+to disable distortion parameter fitting.
+.RI ( float )
+default:
+.RB \(lq 0.70 \(rq
+.TP
+.B \-k\fR <\fIkernel\fR>
+kernel for resampling DWIs along the phase-encoding direction during final
+registration stage; default:
+.RB \(lq cubic:0,0.5 \(rq
+.TP
+.B \-s\fR <\fIstart\ #\fR>
+first number to use in numbered sequence of output files.
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-o\fR <\fIoutput/prefix\ #\fR>
+For separate 3D DWI volume inputs: prefix for output filenames; will save out
+one (registered) DWI for each input DWI, using the same type as the input.
+.BR OR :
+For single 4D DWI input: output file name.
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

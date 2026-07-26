@@ -1,0 +1,16 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 1a07d66..f4ccf17 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -77,6 +77,11 @@ packages = ["tldextract"]
+ include-package-data = true
+ license-files = ["LICENSE"]
+ 
++[tool.setuptools.package-data]
++tldextract = [
++    ".tld_set_snapshot",
++]
++
+ [tool.setuptools_scm]
+ write_to = "tldextract/_version.py"
+ 

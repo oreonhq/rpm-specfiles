@@ -1,0 +1,154 @@
+From 0b77330ccb9c5a819acd7ebd8efcbc9338b5f63e Mon Sep 17 00:00:00 2001
+From: Terje Rosten <terje.rosten@ntnu.no>
+Date: Sat, 1 Feb 2020 12:02:30 +0100
+Subject: [PATCH] Fix usage of global variables
+
+---
+ src/freq.c | 14 ++++++++------
+ src/freq.h | 13 +++++--------
+ src/main.c |  9 +++++----
+ 3 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/src/freq.c b/src/freq.c
+index 271af9d..2d68650 100644
+--- a/src/freq.c
++++ b/src/freq.c
+@@ -19,6 +19,8 @@
+ #include <stdlib.h>
+ #include "freq.h"
+ 
++Wordlist * wordhash[NHASH];
++
+ /* 
+  * Since wf is not managing character sets using somehting like libiconv to an
+  * internal representation (it assumes ISO-LATIN-1) it is necessary to handle
+@@ -86,7 +88,7 @@ addword_source(Wordsource *w, char *orig)
+ }
+ 
+ int
+-addword (char *orig, char *name)
++addword (char *orig, char *name, struct opttable opt)
+ {
+ 	int h;
+ 	char * text;
+@@ -129,20 +131,20 @@ worddump_source(Wordsource *w)
+ }
+ 
+ void
+-worddump (void) 
++worddump (struct opttable opt)
+ {
+ 	Wordlist *w;
+ 	int	h;
+ 
+ 	for (h = 0; h < NHASH; h++)
+ 		for (w = wordhash[h]; w != NULL; w = w->next) {
+-			do_output(w);
++		        do_output(w, opt);
+ 		}
+ 	return;
+ }
+ 
+ void
+-wordsort (int amount)
++wordsort (int amount, struct opttable opt)
+ {
+ 	Wordlist *w, *r;
+ 	Wordlist **u,**t;
+@@ -164,14 +166,14 @@ wordsort (int amount)
+ 	for (h = 0; h < amount; h++)
+ 	{
+ 		r = t[h];
+-		do_output(r);
++		do_output(r, opt);
+ 	}
+ 
+ 	return;
+ }
+ 
+ void
+-do_output (Wordlist *w)
++do_output (Wordlist *w, struct opttable opt)
+ {
+ 	if (w->count < opt.min_count) 
+ 		return;
+diff --git a/src/freq.h b/src/freq.h
+index 8666930..38938ee 100644
+--- a/src/freq.h
++++ b/src/freq.h
+@@ -8,7 +8,7 @@ struct opttable {
+ 	int per_word;
+ 	int min_length;
+ 	char *fname;
+-} opt;
++};
+ 
+ /*
+  * ISO-8858 Interest character table 
+@@ -108,17 +108,14 @@ struct Wordlist {
+ 	Wordsource	*source;
+ };
+ 
+-Wordlist	* wordhash[NHASH];
+-Wordsource	* wordhash_orig[NHASH];
+-
+ /* freq.c */
+ int wf_isalpha(unsigned char c);
+ int wf_tolower(unsigned char c);
+ void str_tolower(char *);
+ unsigned int hash(char *);
+-int addword(char *, char *);
++int addword(char *, char *, struct opttable opt);
+ int cmpword(const void *, const void *);
+-void worddump(void);
+-void wordsort(int);
+-void do_output(Wordlist *w);
++void worddump(struct opttable opt);
++void wordsort(int, struct opttable opt);
++void do_output(Wordlist *w, struct opttable opt);
+ 
+diff --git a/src/main.c b/src/main.c
+index 7b4bcb9..b6b163d 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -28,7 +28,6 @@
+ #define GT(str) gettext(str)
+ 
+ /* Default Options */
+-struct opttable opt = { 0, 0, 0, 0, 0, 0, 0, NULL };
+ 
+ struct option long_options[] =
+ {
+@@ -62,6 +61,8 @@ int
+ main (int argc, char *argv[])
+ {
+ 	/* Option parsing */
++	struct opttable opt = { 0, 0, 0, 0, 0, 0, 0, NULL };
++
+ 	int c;
+ 	int digit_optind = 0;
+ 	int i;
+@@ -178,7 +179,7 @@ main (int argc, char *argv[])
+ 						str_tolower(buf);
+ 
+ 					if (c >= opt.min_length) {
+-						if (addword(buf_orig, buf))
++						if (addword(buf_orig, buf, opt))
+ 							wcount++;
+ 					}
+ 
+@@ -196,9 +197,9 @@ main (int argc, char *argv[])
+ 
+ 	/* Output result with choosen ordering option */
+ 	if (opt.sort)
+-		wordsort(wcount);
++		wordsort(wcount, opt);
+ 	else
+-		worddump();
++		worddump(opt);
+ 
+ 	fprintf(stderr, "Total words: %d\n",wcount);
+ 
+-- 
+2.24.1
+

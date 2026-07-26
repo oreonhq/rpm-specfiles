@@ -1,0 +1,11 @@
+--- src/notator.cc~	2016-02-25 15:10:15.000000000 -0500
++++ src/notator.cc	2016-02-25 15:10:32.468138296 -0500
+@@ -334,7 +334,7 @@
+       }
+     } else {
+       OctaveTic=(RefPitch_wt>AbsPitch_wt?',':'\'');
+-      NumTics=(abs(RefPitch_wt-AbsPitch_wt)+3)/7;
++      NumTics=(RefPitch_wt-AbsPitch_wt+3)/7;
+       RefPitch_wt=AbsPitch_wt;
+     }
+     for (int i=0; i<NumTics; i++){

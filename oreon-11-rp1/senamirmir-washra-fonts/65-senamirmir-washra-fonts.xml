@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Ethiopic WashRa</target>
+    <family>Ethiopic WashRa Bold</family>
+    <match>
+      <family>Ethiopic WashRa SemiBold</family>
+      <change>
+        <style>Bold</style>
+        <into>SemiBold</into>
+      </change>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>SemiBold</name>
+        <value>180</value>
+      </step>
+      <step>
+        <name>Bold</name>
+        <value>200</value>
+      </step>
+    </axis>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

@@ -1,0 +1,10 @@
+--- a/examples/systemd/vnstat.service	2015-12-01 08:05:12.053856367 +0100
++++ b/examples/systemd/vnstat.service	2015-12-01 08:05:07.967936194 +0100
+@@ -4,6 +4,7 @@
+ StartLimitBurst=4
+ 
+ [Service]
++User=vnstat
+ ExecStart=/usr/sbin/vnstatd --nodaemon
+ ExecReload=/bin/kill -HUP $MAINPID
+ Restart=on-failure

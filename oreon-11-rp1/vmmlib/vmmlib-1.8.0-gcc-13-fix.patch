@@ -1,0 +1,12 @@
+diff --git a/vmmlib/vector.hpp b/vmmlib/vector.hpp
+index 4adc2de..dfbf9fb 100644
+--- a/vmmlib/vector.hpp
++++ b/vmmlib/vector.hpp
+@@ -45,6 +45,7 @@
+ #include <cstring>
+ #include <limits>
+ #include <algorithm>
++#include <cstdint>
+ 
+ namespace vmml
+ {

@@ -1,0 +1,23 @@
+From 77685ef38af7edf230e941848421accdf7ad4217 Mon Sep 17 00:00:00 2001
+From: Ed Marshall <esm@logic.net>
+Date: Thu, 26 Oct 2017 02:35:13 -0700
+Subject: [PATCH] Fix translation issue with version 5 hiera.yaml
+
+With the version 5 `hiera.yaml` format, we can still use older custom backends like this via `hiera3_backend`. There appears to be some magic to translate hash keys from `name` to `:name` for compatibility purposes, but it doesn't appear to recurse down into options more than one level deep, resulting in a mounts hash that looks like `"generic"=>"foo"}` instead of `:mounts=>{:generic=>"puppet"}`. This is a quick hack to just work around the problem, in lieu of a proper conversion to version 5.
+---
+ lib/hiera/backend/vault_backend.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/hiera/backend/vault_backend.rb b/lib/hiera/backend/vault_backend.rb
+index 8cba891..2b67615 100644
+--- a/lib/hiera/backend/vault_backend.rb
++++ b/lib/hiera/backend/vault_backend.rb
+@@ -9,7 +9,7 @@ def initialize()
+ 
+         @config = Config[:vault]
+         @config[:mounts] ||= {}
+-        @config[:mounts][:generic] ||= ['secret']
++        @config[:mounts][:generic] ||= @config[:mounts]['generic'] || ['secret']
+         @config[:default_field_parse] ||= 'string' # valid values: 'string', 'json'
+ 
+         if not ['string','json'].include?(@config[:default_field_parse])

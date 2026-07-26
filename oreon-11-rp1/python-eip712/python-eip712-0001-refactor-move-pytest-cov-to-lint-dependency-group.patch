@@ -1,0 +1,95 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 13 Dec 2025 11:08:04 +0100
+Subject: [PATCH] refactor: move pytest-cov to lint dependency group
+
+Currently, pytest-cov runs automatically on every pytest invocation due
+to the coverage flags in [tool.pytest.ini_options] addopts. This creates
+several issues for packagers and downstream users:
+
+1. **Unnecessary dependency**: Coverage is a development/CI tool, not
+   required for validating functionality. Users running tests to verify
+   correct installation shouldn't need pytest-cov installed.
+
+2. **Compatibility concerns**: Coverage tools can be slow to adapt to
+   new Python versions, potentially blocking early testing with Python
+   alpha/beta releases. Having it as a hard requirement delays adoption.
+
+3. **Build system conflicts**: Some distribution build systems (like
+   Fedora's RPM packaging) have policies against running code quality
+   tools during package builds, preferring to focus purely on functional
+   testing.
+
+This change:
+- Removes coverage options from default pytest addopts
+- Moves pytest-cov to the 'lint' dependency group (alongside other code
+  quality tools like ruff and mypy)
+- Updates GitHub Actions workflow to explicitly enable coverage with
+  flags when needed for CI
+
+Benefits:
+- Developers can still collect coverage by passing `--cov=eip712` flags
+- CI/CD workflows remain unchanged (coverage still collected)
+- Easier for downstream packagers to run functional tests without
+  installing/running quality tools
+- Clearer separation: test dependencies vs. development/quality
+  dependencies
+
+This aligns with the principle that coverage is a quality metric for
+development, not a functional requirement for test execution.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/.github/workflows/test.yaml b/.github/workflows/test.yaml
+index dd99170..d38c672 100644
+--- a/.github/workflows/test.yaml
++++ b/.github/workflows/test.yaml
+@@ -64,7 +64,7 @@ jobs:
+             python-version: ${{ matrix.python-version }}
+ 
+         - name: Run Tests
+-          run: uv run --group test pytest -m "not fuzzing" -n 0 -s --cov
++          run: uv run --group test --group lint pytest -m "not fuzzing" -n 0 -s --cov --cov-branch --cov-report=term --cov-report=xml --cov=eip712
+ 
+     fuzzing:
+         runs-on: ubuntu-latest
+@@ -82,4 +82,4 @@ jobs:
+         - uses: astral-sh/setup-uv@v7
+ 
+         - name: Run Tests
+-          run: uv run --group test pytest -m "fuzzing" --no-cov -s
++          run: uv run --group test pytest -m "fuzzing" -s
+diff --git a/pyproject.toml b/pyproject.toml
+index 1d7d975..eedff70 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -40,7 +40,6 @@ test = [
+     "hexbytes",
+     "pytest",
+     "pytest-xdist",
+-    "pytest-cov",
+     "hypothesis",
+ ]
+ lint = [
+@@ -51,6 +50,7 @@ lint = [
+     "mdformat-gfm",
+     "mdformat-frontmatter",
+     "mdformat-pyproject",
++    "pytest-cov",
+ ]
+ docs = [
+     "sphinx-ape",
+@@ -82,13 +82,6 @@ target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
+ include = '\.pyi?$'
+ 
+ [tool.pytest.ini_options]
+-addopts = """
+-    --cov-branch
+-    --cov-report term
+-    --cov-report html
+-    --cov-report xml
+-    --cov=eip712
+-"""
+ python_files = "test_*.py"
+ testpaths = "tests"
+ markers = "fuzzing: Run Hypothesis fuzz test suite"

@@ -1,0 +1,44 @@
+Only in puma-6.4.2: config
+diff -urp '--exclude=*~' puma-6.4.2.orig/test/helper.rb puma-6.4.2/test/helper.rb
+--- puma-6.4.2.orig/test/helper.rb	2025-12-28 23:45:54.702791036 +0900
++++ puma-6.4.2/test/helper.rb	2025-12-28 23:59:32.606466111 +0900
+@@ -15,6 +15,7 @@ require "securerandom"
+ 
+ require_relative "minitest/verbose"
+ require "minitest/autorun"
++require "minitest/mock"
+ require "minitest/pride"
+ require "minitest/proveit"
+ require "minitest/stub_const"
+@@ -245,9 +246,28 @@ class Minitest::Test
+ 
+   PROJECT_ROOT = File.dirname(__dir__)
+ 
+-  def self.run(reporter, options = {}) # :nodoc:
+-    prove_it!
+-    super
++  def self.extended(obj)
++    require "minitest"
++    case Minitest::VERSION
++      when /^5/ then
++        obj.extend MT5
++      when /^6/ then
++        obj.extend MT6
++    end
++  end
++
++  module MT5
++    def run(reporter, options = {}) # :nodoc:
++      prove_it!
++      super
++    end
++  end
++
++  module MT6
++    def run_suite(reporter, options = {}) # :nodoc:
++      prove_it!
++      super
++    end
+   end
+ 
+   def full_name

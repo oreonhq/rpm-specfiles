@@ -1,0 +1,17 @@
+Include "ps_error.h" for a prototype of the ps_error function, to
+avoid an implicit function declaration.
+
+Submitted upstream: <https://sourceforge.net/p/pslib/patches/2/>
+
+diff --git a/src/bmp.c b/src/bmp.c
+index 00ccad2050f7add5..44c208fd3de16c4f 100644
+--- a/src/bmp.c
++++ b/src/bmp.c
+@@ -77,6 +77,7 @@ typedef uint32_t uint32;
+ #endif
+ 
+ #include "bmp.h"
++#include "ps_error.h"
+ 
+ #ifndef O_BINARY
+ # define O_BINARY 0

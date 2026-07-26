@@ -1,0 +1,26 @@
+diff --git a/src/corelibs/U2Gui/src/util/RegionSelectorController.cpp b/src/corelibs/U2Gui/src/util/RegionSelectorController.cpp
+index 0b7076cf5..d5f6b7304 100644
+--- a/src/corelibs/U2Gui/src/util/RegionSelectorController.cpp
++++ b/src/corelibs/U2Gui/src/util/RegionSelectorController.cpp
+@@ -337,7 +337,7 @@ void RegionSelectorController::connectSlots() {
+ 
+     connect(gui.startLineEdit, &QLineEdit::textEdited, this, &RegionSelectorController::sl_onRegionChanged);
+     connect(gui.endLineEdit, &QLineEdit::textEdited, this, &RegionSelectorController::sl_onRegionChanged);
+-    connect(gui.presetsComboBox, &QComboBox::activated, this, &RegionSelectorController::sl_onPresetChanged);
++    connect(gui.presetsComboBox, QOverload<int>::of(&QComboBox::activated), this, &RegionSelectorController::sl_onPresetChanged);
+ 
+     if (settings.selection != nullptr) {
+         connect(settings.selection, SIGNAL(si_onSelectionChanged(GSelection*)), SLOT(sl_onSelectionChanged(GSelection*)));
+diff --git a/src/corelibs/U2View/src/ov_sequence/find_pattern/FindPatternWidget.cpp b/src/corelibs/U2View/src/ov_sequence/find_pattern/FindPatternWidget.cpp
+index 531d21d1d..89a2314b4 100644
+--- a/src/corelibs/U2View/src/ov_sequence/find_pattern/FindPatternWidget.cpp
++++ b/src/corelibs/U2View/src/ov_sequence/find_pattern/FindPatternWidget.cpp
+@@ -485,7 +485,7 @@ void FindPatternWidget::connectSlots() {
+     connect(annotatedDnaView->getActiveSequenceContext()->getSequenceObject(), SIGNAL(si_sequenceChanged()), this, SLOT(sl_onSequenceModified()));
+ 
+     connect(loadFromFileToolButton, SIGNAL(clicked()), SLOT(sl_onFileSelectorClicked()));
+-    connect(patternSelectorBG, &QButtonGroup::buttonToggled, this, &FindPatternWidget::sl_onFileSelectorToggled);
++    connect(patternSelectorBG, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled), this, &FindPatternWidget::sl_onFileSelectorToggled);
+ 
+     usePatternFromTextEditRadioButton->setChecked(true);
+     updatePatternSourceControlsUiState();

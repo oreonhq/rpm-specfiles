@@ -1,0 +1,28 @@
+From 65490c3acaa76a785ef83fa347344c5e4e7891c5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Thu, 3 Aug 2023 09:53:09 +0200
+Subject: [PATCH] Mocha 2.0+ compatibility
+
+The support for `require 'mocha'` is long time deprecated and was
+removed in Mocha 2.0:
+
+https://github.com/freerange/mocha/commit/642a0ff4
+
+Fixes #43
+---
+ test/test-uuid.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test-uuid.rb b/test/test-uuid.rb
+index 335bb0d..73ddcb5 100644
+--- a/test/test-uuid.rb
++++ b/test/test-uuid.rb
+@@ -7,7 +7,7 @@
+ require 'test/unit'
+ require 'rubygems'
+ require 'uuid'
+-require 'mocha'
++require 'mocha/test_unit'
+ 
+ class TestUUID < Test::Unit::TestCase
+ 

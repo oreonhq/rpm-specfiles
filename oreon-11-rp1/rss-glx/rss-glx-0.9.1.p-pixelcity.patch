@@ -1,0 +1,11 @@
+--- rss-glx_0.9.1.p.orig/src/PixelCity/Mesh.cpp	2010-01-04 04:12:24.000000000 +0100
++++ rss-glx_0.9.1.p/src/PixelCity/Mesh.cpp	2020-05-16 15:22:13.288970473 +0200
+@@ -118,7 +118,7 @@
+   }
+   for (qsi = _quad_strip.begin(); qsi < _quad_strip.end(); ++qsi) {
+     glBegin (GL_QUAD_STRIP);
+-    for (n = qsi->index_list.begin(); n < qsi->index_list.end(); ++n) {
++    for (n = qsi->index_list.begin(); n < qsi->index_list.end() -1 ; ++n) {
+       glTexCoord2fv (&_vertex[*n].uv.x);
+       glVertex3fv (&_vertex[*n].position.x);
+     }

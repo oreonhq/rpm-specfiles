@@ -1,0 +1,121 @@
+From 4f6e2803bbe7bda3650900eb45a45fecb8f2963a Mon Sep 17 00:00:00 2001
+From: Neal Gompa <neal@gompa.dev>
+Date: Fri, 31 Oct 2025 19:56:08 +0100
+Subject: [PATCH] Use VP9+Opus on MKV for recordings
+
+Using high-quality royalty-free codecs by default makes this usable
+in many more environments by default. In particular, distributions
+like Fedora and openSUSE have limited builds of FFmpeg that do not
+include encumbered codecs. This change makes it usable for them
+out of the box by default without breaking broad support anywhere
+else.
+---
+ README.md             | 6 +++---
+ manpage/wf-recorder.1 | 8 ++++----
+ meson_options.txt     | 4 ++--
+ src/main.cpp          | 4 ++--
+ 4 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/README.md b/README.md
+index 9d2f02a..b2efba4 100644
+--- a/README.md
++++ b/README.md
+@@ -84,12 +84,12 @@ git clone https://github.com/ammen99/wf-recorder.git && cd wf-recorder
+ meson build --prefix=/usr --buildtype=release
+ ninja -C build
+ ```
+-Optionally configure with `-Ddefault_codec='codec'`. The default is libx264. Now you can just run `./build/wf-recorder` or install it with `sudo ninja -C build install`.
++Optionally configure with `-Ddefault_codec='codec'`. The default is libvpx-vp9. Now you can just run `./build/wf-recorder` or install it with `sudo ninja -C build install`.
+ 
+ The man page can be read with `man ./manpage/wf-recorder.1`.
+ 
+ # Usage
+-In its simplest form, run `wf-recorder` to start recording and use Ctrl+C to stop. This will create a file called `recording.mp4` in the current working directory using the default codec.
++In its simplest form, run `wf-recorder` to start recording and use Ctrl+C to stop. This will create a file called `recording.mkv` in the current working directory using the default codec.
+ 
+ Use `-f <filename>` to specify the output file. In case of multiple outputs, you'll first be prompted to select the output you want to record. If you know the output name beforehand, you can use the `-o <output name>` option.
+ To view all available output options, use the list flag `-L` or `--list-output`
+@@ -103,7 +103,7 @@ wf-recorder -g "$(slurp)"
+ You can record screen and sound simultaneously with
+ 
+ ```
+-wf-recorder --audio --file=recording_with_audio.mp4
++wf-recorder --audio --file=recording_with_audio.mkv
+ ```
+ 
+ To specify an audio device, use the `-a<device>` or `--audio=<device>` options.
+diff --git a/manpage/wf-recorder.1 b/manpage/wf-recorder.1
+index 6fd382b..f788a72 100644
+--- a/manpage/wf-recorder.1
++++ b/manpage/wf-recorder.1
+@@ -47,7 +47,7 @@ to start recording and use
+ .Ql Ctrl+C
+ to stop.
+ This will create a file called
+-.Ql recording.mp4
++.Ql recording.mkv
+ in the current working directory using the default
+ .Ar codec.
+ .Pp
+@@ -185,7 +185,7 @@ screen area that will be recorded:
+ .Dl $ wf-recorder -g \(dq$(slurp)\(dq
+ .Pp
+ You can record screen and sound simultaneously with
+-.Dl $ wf-recorder --audio --file=recording_with_audio.mp4
++.Dl $ wf-recorder --audio --file=recording_with_audio.mkv
+ .Pp
+ To specify an audio device, use the
+ .Fl -a<DEVICE>
+@@ -211,12 +211,12 @@ loopback you might use:
+ .Dl $ wf-recorder --muxer=v4l2 --codec=rawvideo --file=/dev/video2
+ .Pp
+ To use GPU encoding, use a VAAPI codec (for ex.
+-.Ql h264_vaapi
++.Ql vp9_vaapi
+ ) and specify a GPU
+ device to use with the
+ .Fl d
+ option:
+-.Dl $ wf-recorder -f test-vaapi.mkv -c h264_vaapi -d /dev/dri/renderD128
++.Dl $ wf-recorder -f test-vaapi.mkv -c vp9_vaapi -d /dev/dri/renderD128
+ .Pp
+ Some drivers report support for
+ .Ql rgb0
+diff --git a/meson_options.txt b/meson_options.txt
+index 5163f95..29436b3 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,6 +1,6 @@
+-option('default_codec', type: 'string', value: 'libx264', description: 'Codec that will be used by default')
++option('default_codec', type: 'string', value: 'libvpx-vp9', description: 'Codec that will be used by default')
+ option('default_pixel_format', type: 'string', value: '', description: 'Pixel format that will be used by default')
+-option('default_audio_codec', type: 'string', value: 'aac', description: 'Audio codec that will be used by default')
++option('default_audio_codec', type: 'string', value: 'libopus', description: 'Audio codec that will be used by default')
+ option('default_audio_sample_rate', type: 'integer', value: 48000, description: 'Audio sample rate that will be used by default')
+ option('default_container_format', type: 'string', value: 'mkv', description: 'Container file format that will be used by default')
+ option('fallback_audio_sample_fmt', type: 'string', value: 's16', description: 'Fallback audio sample format that will be used if wf-recorder cannot determine the sample formats supported by a codec')
+diff --git a/src/main.cpp b/src/main.cpp
+index 8ff65f9..d68d847 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -991,7 +991,7 @@ Examples:)");
+     printf(R"(
+ 
+   - wf-recorder                         Records the video. Use Ctrl+C to stop recording.
+-                                        The video file will be stored as recording.mp4 in the
++                                        The video file will be stored as recording.mkv in the
+                                         current working directory.
+ 
+   - wf-recorder -f <filename>.ext       Records the video. Use Ctrl+C to stop recording.
+@@ -1003,7 +1003,7 @@ Examples:)");
+   Video and Audio:
+ 
+   - wf-recorder -a                      Records the video and audio. Use Ctrl+C to stop recording.
+-                                        The video file will be stored as recording.mp4 in the
++                                        The video file will be stored as recording.mkv in the
+                                         current working directory.
+ 
+   - wf-recorder -a -f <filename>.ext    Records the video and audio. Use Ctrl+C to stop recording.
+-- 
+2.51.1
+

@@ -1,0 +1,55 @@
+.TH EZDXF\-AUDIT "1" "May 2024" "" "User Commands"
+.B ezdxf\ audit
+\(en audit and repair DXF files
+.SH SYNOPSIS
+.B ezdxf\ audit
+.RB [ \-h ]
+.RB [ \-s ]
+.RI [ FILE ]
+.RI [ FILE ...]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to audit
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-s\fR,\ \fB\-\-save
+save recovered files with extension
+.B .rec.dxf
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH EXAMPLES
+.P
+Audit and recover the DXF file
+.RB \(lq gear.dxf \(rq
+and save the recovered version as
+.RB \(lq gear.rec.dxf \(rq:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ audit\ \-s\ gear.dxf
+.B \:
+.B auditing\ file:\ gear.dxf
+.B No\ errors\ found.
+.B Saved\ recovered\ file\ as:\ gear.rec.dxf
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

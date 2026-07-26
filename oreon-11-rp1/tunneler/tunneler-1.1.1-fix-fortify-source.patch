@@ -1,0 +1,12 @@
+diff -u tunneler-1.1.1/src/main.c.orig tunneler-1.1.1/src/main.c
+--- tunneler-1.1.1/src/main.c.orig	2024-01-06 12:27:35.858799575 +0100
++++ tunneler-1.1.1/src/main.c	2024-01-06 12:27:39.702826782 +0100
+@@ -96,7 +96,7 @@
+ 	return;
+     }
+ 
+-    conffile = malloc( strlen(home) + strlen(CONF_FILE) + 1 );
++    conffile = malloc( strlen(home) + strlen(CONF_FILE) + 2 );
+     sprintf( conffile, "%s/%s", home, CONF_FILE );
+ #else
+     char *end;

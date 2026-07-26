@@ -1,0 +1,113 @@
+From 9952d043823b4fb0b5d249137292014af3166cfa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 25 Sep 2025 12:04:45 +0200
+Subject: [PATCH 1/3] setup.py: Avoid TypeError: not all arguments converted
+ during string formatting
+
+Don't try to format a tuple as %s.
+---
+ setup.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index a8bd0dd..97b2e58 100644
+--- a/setup.py
++++ b/setup.py
+@@ -3,11 +3,11 @@
+ 
+ rpm_version = subprocess.check_output(["rpm", "--version"])
+ # Example: RPM version 4.16.90
+-rpm_version = rpm_version.split(b" ")[2].split(b".")
++rpm_version_ = rpm_version.split(b" ")[2].split(b".")
+ # Ignore the last bit, which could be e.g. 0-beta1
+-rpm_version = tuple(map(int, rpm_version[:2]))
++rpm_version = tuple(map(int, rpm_version_[:2]))
+ if rpm_version[0] != 4:
+-    raise Exception("RPM version %s is not major version 4" % rpm_version)
++    raise Exception("RPM version %s is not major version 4" % rpm_version_)
+ ext_defines = []
+ if rpm_version[1] >= 15:
+     ext_defines.append(("RPM_415", None))
+@@ -16,7 +16,7 @@
+ elif rpm_version[1] == 11:
+     ext_defines.append(("RPM_411", None))
+ else:
+-    raise Exception("Unsupported RPM version %s" % rpm_version)
++    raise Exception("Unsupported RPM version %s" % rpm_version_)
+ 
+ requires = [
+     "cryptography",
+
+From d2146e136c63f889fc44ea7e1277a281ccbba302 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 25 Sep 2025 12:05:25 +0200
+Subject: [PATCH 2/3] Don't fail with RPM versions > 4
+
+---
+ setup.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 97b2e58..39e59a6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -6,8 +6,8 @@
+ rpm_version_ = rpm_version.split(b" ")[2].split(b".")
+ # Ignore the last bit, which could be e.g. 0-beta1
+ rpm_version = tuple(map(int, rpm_version_[:2]))
+-if rpm_version[0] != 4:
+-    raise Exception("RPM version %s is not major version 4" % rpm_version_)
++if rpm_version[0] < 4:
++    raise Exception("RPM version %s is not major version 4+" % rpm_version_)
+ ext_defines = []
+ if rpm_version[1] >= 15:
+     ext_defines.append(("RPM_415", None))
+
+From b902b7823a703f1ceb5ada1a7bdf6b663469716a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Mon, 29 Sep 2025 14:01:18 +0200
+Subject: [PATCH 3/3] Define RPMTAG_PAYLOADDIGEST to RPMTAG_PAYLOADSHA256 on
+ RPM 6
+
+See https://bugzilla.redhat.com/show_bug.cgi?id=2366308#c8
+---
+ rpm_head_signing/insertlib.c | 4 ++++
+ setup.py                     | 8 +++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/rpm_head_signing/insertlib.c b/rpm_head_signing/insertlib.c
+index b39caf7..543f457 100644
+--- a/rpm_head_signing/insertlib.c
++++ b/rpm_head_signing/insertlib.c
+@@ -17,6 +17,10 @@
+ // This one function is identical from 4.11 onwards...
+ int rpmWriteSignature(FD_t fd, Header sigh);
+ 
++#if defined(RPM_6)
++    #define RPMTAG_PAYLOADDIGEST RPMTAG_PAYLOADSHA256
++#endif
++
+ #if defined(RPM_415)
+ 
+     // There are 4.15 versions that don't have this define
+diff --git a/setup.py b/setup.py
+index 39e59a6..791e3cf 100644
+--- a/setup.py
++++ b/setup.py
+@@ -9,11 +9,13 @@
+ if rpm_version[0] < 4:
+     raise Exception("RPM version %s is not major version 4+" % rpm_version_)
+ ext_defines = []
+-if rpm_version[1] >= 15:
++if rpm_version[:2] >= (5, 90):
++    ext_defines.append(("RPM_6", None))
++if rpm_version[:2] >= (4, 15):
+     ext_defines.append(("RPM_415", None))
+-elif rpm_version[1] == 14:
++elif rpm_version[:2] == (4, 14):
+     ext_defines.append(("RPM_414", None))
+-elif rpm_version[1] == 11:
++elif rpm_version[:2] == (4, 11):
+     ext_defines.append(("RPM_411", None))
+ else:
+     raise Exception("Unsupported RPM version %s" % rpm_version_)

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=VDrift
+GenericName=VDrift
+Comment=Drift Racing Simulation
+Exec=vdrift
+Icon=vdrift
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;SportsGame;

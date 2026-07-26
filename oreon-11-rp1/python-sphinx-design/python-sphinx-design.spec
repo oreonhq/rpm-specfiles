@@ -1,0 +1,98 @@
+%global source0_hash c2d9e45ffafc930cb552296238da300d6d0623c0816cfbabdc14534fd16e9ca3
+
+%global giturl  https://github.com/executablebooks/sphinx-design
+
+Name:           python-sphinx-design
+Version:        0.7.0
+Release:        %autorelease
+Summary:        Sphinx extension for responsive web components
+
+# This project is MIT, but bundles JSON glyphs
+# - sphinx_design/compiled/material* is Apache-2.0
+# - sphinx_design/compiled/octicon* is MIT
+License:        MIT AND Apache-2.0
+URL:            https://sphinx-design.readthedocs.io/
+VCS:            git:%{giturl}.git
+Source:         %{giturl}/archive/v%{version}/sphinx-design-%{version}.tar.gz
+
+BuildArch:      noarch
+BuildSystem:    pyproject
+BuildOption(generate_buildrequires): -x testing
+BuildOption(install): -l sphinx_design
+
+# The Fedora package does not contain JSON glyphs
+Provides:       bundled(material-icons-fonts) = 4.0.0.116.ge9da21
+
+# Octicons is not available from Fedora
+# The upstream release tarball does not contain JSON glyphs
+Provides:       bundled(octicons) = 19.8.0
+
+%global _description %{expand:This package contains a Sphinx extension for designing beautiful, view size
+responsive web components.}
+
+%description
+%_description
+
+%package     -n python3-sphinx-design
+Summary:        Sphinx extension for responsive web components
+
+%description -n python3-sphinx-design
+%_description
+
+%package        doc
+Summary:        Documentation for %{name}
+# This project is MIT.  The Javascript and CSS bundled with the documentation
+# has the following licenses:
+# _static/_sphinx_javascript_frameworks_compat.js: BSD-2-Clause
+# _static/alabaster.css: BSD-3-Clause
+# _static/basic.css: BSD-2-Clause
+# _static/custom.css: BSD-3-Clause
+# _static/doctools.js: BSD-2-Clause
+# _static/documentation_options.js: BSD-2-Clause
+# _static/file.png: BSD-2-Clause
+# _static/jquery*.js: MIT
+# _static/js: MIT
+# _static/language_data.js: BSD-2-Clause
+# _static/minus.png: BSD-2-Clause
+# _static/plus.png: BSD-2-Clause
+# _static/searchtools.js: BSD-2-Clause
+# _static/underscore*.js: MIT
+# genindex.html: BSD-2-Clause
+# search.html: BSD-2-Clause
+# searchindex.js: BSD-2-Clause
+License:        MIT AND BSD-2-Clause AND BSD-3-Clause
+
+%description    doc
+Documentation for %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n sphinx-design-%{version} -p1
+
+# Unpin pytest and myst-parser's version
+sed -i "/pytest~=/s/~=8\.3//" pyproject.toml
+sed -i "/myst-parser>=/s/>=4,<6//" pyproject.toml
+
+# Do not run code coverage tools
+sed -i "/pytest-cov/d" pyproject.toml
+
+%build -a
+# Build documentation
+PYTHONPATH=$PWD sphinx-build -b html docs html
+rm -rf html/{.buildinfo,.doctrees}
+
+%check
+%pytest -v
+
+%files -n python3-sphinx-design -f %{pyproject_files}
+%doc CHANGELOG.md README.md
+%license sphinx_design/compiled/material-icons_LICENSE
+%license sphinx_design/compiled/octicon_LICENSE
+
+%files doc
+%doc html
+%license LICENSE
+
+%changelog
+%autochangelog

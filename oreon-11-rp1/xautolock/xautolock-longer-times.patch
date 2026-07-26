@@ -1,0 +1,22 @@
+diff -u -r -U5 xautolock-2.2/include/config.h xautolock-2.2.longer-times/include/config.h
+--- xautolock-2.2/include/config.h	2007-09-30 17:27:49.000000000 -0400
++++ xautolock-2.2.longer-times/include/config.h	2013-06-09 23:54:49.201065251 -0400
+@@ -75,16 +75,16 @@
+ #define BELL_PERCENT      40          /* as is says                        */
+ 
+ #define MIN_LOCK_MINS     1           /* minimum number of minutes
+                                          before firing up the locker       */
+ #define LOCK_MINS         10          /* default ...                       */
+-#define MAX_LOCK_MINS     60          /* maximum ...                       */
++#define MAX_LOCK_MINS     1440        /* maximum ...                       */
+ 
+ #define MIN_KILL_MINS     10          /* minimum number of minutes
+                                          before firing up the killer       */
+ #define KILL_MINS         20          /* default ...                       */
+-#define MAX_KILL_MINS     120         /* maximum ...                       */
++#define MAX_KILL_MINS     1440        /* maximum ...                       */
+ 
+ #define CREATION_DELAY    30          /* should be > 10 and
+                                          < min(45,(MIN_LOCK_MINS*30))      */
+ #define CORNER_SIZE       10          /* size in pixels of the
+                                          force-lock areas                  */

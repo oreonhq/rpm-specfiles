@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>tulrich-tuffy</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Tuffy</name>
+  <summary>Generic sans font</summary>
+  <description>
+    <p>
+      Tuffy is an innocuous looking sans font.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://tulrich.com/fonts/</url>
+</component>

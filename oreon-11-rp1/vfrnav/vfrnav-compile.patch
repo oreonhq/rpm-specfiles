@@ -1,0 +1,127 @@
+--- vfrnav-20230429/src/metartaf.cc.orig	2025-01-07 13:51:24.837306522 +0100
++++ vfrnav-20230429/src/metartaf.cc	2025-01-07 13:53:02.445841777 +0100
+@@ -497,7 +497,7 @@
+ 						 "from metar where " + get_querycoord(bbox, tran) + ") T1 where T1.observation_time in "
+ 						 "(select T2.observation_time from metar T2 where T2.station_id = T1.station_id "
+ 						 "order by T2.observation_time desc limit " +
+-						 tran.quote(metarhistory) + ")", "Metar Taf Set METAR"));
++						 tran.quote(metarhistory) + ")", std::string_view{"Metar Taf Set METAR"}));
+ 			for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 				std::pair<result_t::iterator,bool> ins(result.insert(Station(ri[0].as<std::string>(),
+ 											     Point(ri[2].as<Point::coord_t>(), ri[1].as<Point::coord_t>()),
+@@ -513,7 +513,7 @@
+ 						 "from taf where " + get_querycoord(bbox, tran) + ") T1 where T1.issue_time in "
+ 						 "(select T2.issue_time from taf T2 where T2.station_id = T1.station_id "
+ 						 "order by T2.issue_time desc limit " +
+-						 tran.quote(tafhistory) + ")", "Metar Taf Set TAF"));
++						 tran.quote(tafhistory) + ")", std::string_view{"Metar Taf Set TAF"}));
+ 			for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 				std::pair<result_t::iterator,bool> ins(result.insert(Station(ri[0].as<std::string>(),
+ 											     Point(ri[2].as<Point::coord_t>(), ri[1].as<Point::coord_t>()),
+@@ -556,7 +556,7 @@
+ 		q += "valid_from <= " + tran.quote(tmax) + " and valid_to >= " + tran.quote(tmin);
+ 		if (!false)
+ 			std::cerr << "pg: sigmet query " << q << std::endl;
+-		pqxx::result r(tran.exec(q, "Briefing Pack SIGMET"));
++		pqxx::result r(tran.exec(q, std::string_view{"Briefing Pack SIGMET"}));
+ 		for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 			if (!false)
+ 				std::cerr << "pg: sigmet for " << ri[0].as<std::string>() << " seq " << ri[8].as<std::string>()
+--- vfrnav-20230429/carto/osm.cc.orig	2025-01-07 13:55:20.693183894 +0100
++++ vfrnav-20230429/carto/osm.cc	2025-01-07 13:56:31.305848028 +0100
+@@ -1783,7 +1783,7 @@
+ 			 "ST_AsBinary(ST_Transform(way,4326)) from planet_osm_point where way && " + get_queryrect(tran));
+ 	if (false)
+ 		std::cerr << "OSM query: " << qstr << std::endl;
+-	pqxx::result r(tran.exec(qstr, "Briefing Pack OSM"));
++	pqxx::result r(tran.exec(qstr, std::string_view{"Briefing Pack OSM"}));
+ 	for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 		Tags tags;
+ 		tags.add_pg(to_str(ri[69]));
+@@ -1894,7 +1894,7 @@
+ 			 "ST_AsBinary(ST_Transform(way,4326)) from planet_osm_line where way && " + get_queryrect(tran));
+ 	if (false)
+ 		std::cerr << "OSM query: " << qstr << std::endl;
+-	pqxx::result r(tran.exec(qstr, "Briefing Pack OSM"));
++	pqxx::result r(tran.exec(qstr, std::string_view{"Briefing Pack OSM"}));
+ 	for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 		Tags tags;
+ 		tags.add_pg(to_str(ri[68]));
+@@ -2005,7 +2005,7 @@
+ 			 "ST_AsBinary(ST_Transform(way,4326)) from planet_osm_roads where way && " + get_queryrect(tran));
+ 	if (false)
+ 		std::cerr << "OSM query: " << qstr << std::endl;
+-	pqxx::result r(tran.exec(qstr, "Briefing Pack OSM"));
++	pqxx::result r(tran.exec(qstr, std::string_view{"Briefing Pack OSM"}));
+ 	for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 		Tags tags;
+ 		tags.add_pg(to_str(ri[68]));
+@@ -2116,7 +2116,7 @@
+ 			 "ST_AsBinary(ST_Transform(way,4326)) from planet_osm_polygon where way && " + get_queryrect(tran));
+ 	if (false)
+ 		std::cerr << "OSM query: " << qstr << std::endl;
+-	pqxx::result r(tran.exec(qstr, "Briefing Pack OSM"));
++	pqxx::result r(tran.exec(qstr, std::string_view{"Briefing Pack OSM"}));
+ 	for (pqxx::result::const_iterator ri(r.begin()), re(r.end()); ri != re; ++ri) {
+ 		Tags tags;
+ 		tags.add_pg(to_str(ri[68]));
+--- vfrnav-20230429/cfmu/adr.cc.orig	2026-01-30 12:46:50.497664549 +0100
++++ vfrnav-20230429/cfmu/adr.cc	2026-01-30 12:47:31.905992663 +0100
+@@ -77,13 +77,13 @@
+ 			return u;
+ 	} catch (const std::runtime_error& e) {
+ 	}
+-	static const boost::uuids::uuid nsuuid = {
++	static const boost::uuids::uuid nsuuid = {{
+ 		0x5b, 0x20, 0xbd, 0x56,
+ 		0x73, 0x8d,
+ 		0x47, 0xcb,
+ 		0xb1, 0xea,
+ 		0x30, 0x0f, 0x31, 0x7e, 0x8b, 0x32
+-	};
++	}};
+ 	return from_str(nsuuid, x.substr(pfx));
+ }
+ 
+@@ -95,13 +95,13 @@
+ 
+ UUID UUID::from_countryborder(const std::string& x)
+ {
+-	static const boost::uuids::uuid nsuuid = {
++	static const boost::uuids::uuid nsuuid = {{
+ 		0x00, 0xff, 0xf6, 0xf3,
+ 		0xff, 0xf5,
+ 		0x43, 0x74,
+ 		0x96, 0x3b,
+ 		0x0b, 0x8f, 0x11, 0x34, 0x22, 0xb9
+-	};
++	}};
+ 	return from_str(nsuuid, x);
+ }
+ 
+--- vfrnav-20230429/cfmu/adrgraph.cc.orig	2026-01-30 12:46:57.341079989 +0100
++++ vfrnav-20230429/cfmu/adrgraph.cc	2026-01-30 12:47:44.106975328 +0100
+@@ -154,10 +154,10 @@
+ 
+ const float GraphEdge::maxmetric = std::numeric_limits<float>::max();
+ const float GraphEdge::invalidmetric = std::numeric_limits<float>::quiet_NaN();
+-const boost::uuids::uuid GraphEdge::matchalluuid = {
++const boost::uuids::uuid GraphEdge::matchalluuid = {{
+ 	0xb7, 0xc9, 0xbe, 0x9a, 0x2e, 0xcb, 0x49, 0x03,
+ 	0xb2, 0xd5, 0x58, 0xf9, 0xac, 0xbe, 0x36, 0x75
+-};
++}};
+ const UUID GraphEdge::matchall(matchalluuid);
+ 
+ GraphEdge::GraphEdge(timetype_t tm, const Object::const_ptr_t& obj, unsigned int levels)
+--- vfrnav-20230429/doc/flightdeck.tex.orig	2026-01-30 13:22:27.770429063 +0100
++++ vfrnav-20230429/doc/flightdeck.tex	2026-01-30 13:22:41.561489169 +0100
+@@ -26,7 +26,7 @@
+ \else
+ \documentclass[a4paper,10pt,dvips]{article}
+ \fi
+-\usepackage[german,english]{babel}
++\usepackage[english]{babel}
+ \selectlanguage{english}
+ \usepackage{graphicx}
+ \usepackage[isolatin]{inputenc}

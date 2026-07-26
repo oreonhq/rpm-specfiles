@@ -1,0 +1,16 @@
+Common subdirectories: cloudflare-2.19.4-orig/cli4 and cloudflare-2.19.4/cli4
+Common subdirectories: cloudflare-2.19.4-orig/CloudFlare and cloudflare-2.19.4/CloudFlare
+Common subdirectories: cloudflare-2.19.4-orig/cloudflare.egg-info and cloudflare-2.19.4/cloudflare.egg-info
+Common subdirectories: cloudflare-2.19.4-orig/examples and cloudflare-2.19.4/examples
+diff -u cloudflare-2.19.4-orig/setup.py cloudflare-2.19.4/setup.py
+--- cloudflare-2.19.4-orig/setup.py	2024-04-29 12:06:27.000000000 -0500
++++ cloudflare-2.19.4/setup.py	2024-08-10 20:25:47.759334826 -0500
+@@ -35,7 +35,7 @@
+         test_suite="CloudFlare.tests",
+         include_package_data=True,
+         data_files=[('share/man/man1', ['cli4/cli4.1'])],
+-        install_requires=['requests', 'pyyaml', 'jsonlines'],
++        install_requires=['requests', 'pyyaml'],
+         keywords='cloudflare',
+         entry_points={
+             'console_scripts': [

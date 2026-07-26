@@ -1,0 +1,30 @@
+[Unit]
+Description=Apache Traffic Server is a fast, scalable and extensible caching proxy server.
+Documentation=man:traffic_server(8)
+After=network-online.target
+
+Requires=trafficserver-10-update.service
+After=trafficserver-10-update.service
+
+[Service]
+Type=simple
+User=trafficserver
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+EnvironmentFile=-/etc/sysconfig/trafficserver
+ExecStart=/usr/bin/traffic_server $TM_DAEMON_ARGS
+ExecStopPost=/bin/sh -c ' \
+        export TS_PIDFILE=$(/usr/bin/traffic_layout 2>/dev/null | grep RUNTIMEDIR | cut -d: -f2)/server.lock ; \
+        /bin/rm -f $TS_PIDFILE ; \
+        if [[ $? -ne 0 ]]; then echo "ERROR: Unable to delete PID"; exit 1; fi'
+ExecReload=/usr/bin/traffic_ctl config reload
+KillMode=process
+SuccessExitStatus=15
+Restart=on-failure
+
+# From upstream
+RestartSec=5s
+TimeoutStopSec=5s
+LimitNOFILE=1000000
+
+[Install]
+WantedBy=multi-user.target

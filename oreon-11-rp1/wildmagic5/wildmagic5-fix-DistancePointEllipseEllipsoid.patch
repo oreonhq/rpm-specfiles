@@ -1,0 +1,11 @@
+--- WildMagic5/SampleMathematics/DistancePointEllipseEllipsoid/DistancePointEllipseEllipsoid.cpp.orig      2015-04-27 18:23:55.915645820 -0300
++++ WildMagic5/SampleMathematics/DistancePointEllipseEllipsoid/DistancePointEllipseEllipsoid.cpp   2015-04-27 18:24:30.936645486 -0300
+@@ -718,7 +718,7 @@ void DistancePointEllipseEllipsoid::Hype
+ //----------------------------------------------------------------------------
+ int DistancePointEllipseEllipsoid::Main (int, char**)
+ {
+-    std::string output = ThePath + "output.txt";
++    std::string output = "output.txt";
+     FILE* outFile = fopen(output.c_str(), "wt");
+ 
+     char filename[256];

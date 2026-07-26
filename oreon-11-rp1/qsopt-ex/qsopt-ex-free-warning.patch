@@ -1,0 +1,11 @@
+--- qsopt-ex-e5d498fde468e4669a3fbc4736e5d3b878e8c148/esolver/esolver.c.orig	2017-07-29 15:08:45.000000000 -0600
++++ qsopt-ex-e5d498fde468e4669a3fbc4736e5d3b878e8c148/esolver/esolver.c	2023-10-23 11:25:04.875797795 -0600
+@@ -375,7 +375,7 @@ int main (int ac,
+ 	}
+ 	/* ending */
+ CLEANUP:
+-	EGfree(solname);
++	if (solname != NULL) EGfree(solname);
+ 	mpq_EGlpNumFreeArray (x_mpq);
+ 	mpq_EGlpNumFreeArray (y_mpq);
+ 	/* free the last allocated basis, and if we wanted to save it, do so */

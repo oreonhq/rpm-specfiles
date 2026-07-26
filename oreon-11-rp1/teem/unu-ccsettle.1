@@ -1,0 +1,40 @@
+.TH UNU\-CCSETTLE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-ccsettle \- remap CC values down to lowest contiguous values
+.SH SYNOPSIS
+.B unu\ ccsettle
+.BR \-i , \-\-input
+.RI < nin >
+.RB [ \-v , \-\-values
+.RI < filename >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Remap CC values down to lowest contiguous values.
+.IP \(bu +2n
+Uses
+.B nrrdCCSettle
+.SH OPTIONS
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-v\fR\ <\fIfilename\fR>\ ,\ \fB\-\-values\fR\ <\fIfilename\fR>
+Giving a
+.I filename
+here allows you to save out the mapping from new (settled) values to old
+values, in the form of a 1-D lookup table
+.RI ( string )
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-ccfind (1),
+.BR unu\-ccadj (1),
+.BR unu\-ccmerge (1)

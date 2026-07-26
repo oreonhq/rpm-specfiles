@@ -1,0 +1,42 @@
+diff -uNr pydiffx-1.1.orig/setup.py pydiffx-1.1/setup.py
+--- pydiffx-1.1.orig/setup.py	2022-11-26 09:43:09.312415208 -0600
++++ pydiffx-1.1/setup.py	2022-11-26 10:48:59.269366690 -0600
+@@ -8,10 +8,8 @@
+ 
+ from setuptools import setup, find_packages
+ 
+-from pydiffx import get_package_version
+-
+-
+ PACKAGE_NAME = 'pydiffx'
++version = 1.1
+ 
+ # NOTE: When updating, make sure you update the classifiers below.
+ SUPPORTED_PYVERS = ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+@@ -36,7 +34,7 @@
+ 
+ 
+ setup(name=PACKAGE_NAME,
+-      version=get_package_version(),
++      version=version,
+       license='MIT',
+       description='Python module for reading and writing DiffX files.',
+       long_description=long_description,
+@@ -46,9 +44,17 @@
+       packages=find_packages(),
+       maintainer='Christian Hammond',
+       maintainer_email='christian@beanbaginc.com',
++      include_package_data=True,
+       install_requires=[
+           'six',
++          'pygments'
+       ],
++      extras_require={
++          'test': [
++              'pytest',
++              'kgb ~= 7.1.1'
++          ]
++      },
+       entry_points={
+           'pygments.lexers': [
+               'diffx = pydiffx.integrations.pygments_lexer:DiffXLexer',

@@ -1,0 +1,264 @@
+.TH GPROBE "1" "April 2021" "" "User Commands"
+.SH NAME
+gprobe \- shows off the functionality of the gage library
+.SH SYNOPSIS
+.B gprobe
+.B \-i
+.RI < nin >
+.B \-k
+.RI < kind >
+.RB [ \-v
+.RI < verbosity >]
+.B \-q
+.RI < query >
+.RB [ \-gmc
+.RI < min\ gradmag >]
+.RB [ \-ofs ]
+.RB [ \-seed
+.RI < N >]
+.RB [ \-c
+.RI < bool >]
+.RB [ \-k00
+.RI < kern00 >]
+.RB [ \-k11
+.RI < kern11 >]
+.RB [ \-k22
+.RI < kern22 >]
+.RB [ \-rn ]
+.RB [ \-ssn
+.RI < SS\ # >]
+.RB [ \-ssr
+.RI < scale\ range >]
+.RB [ \-kssb
+.RI < kernel >]
+.RB [ \-kssr
+.RI < kernel >]
+.RB [ \-ssu ]
+.RB [ \-sso ]
+.RB [ \-ssnd ]
+.RB [ \-ssnb
+.RI < bias >]
+.RB [ \-ssf
+.RI < SS\ read/save\ format >]
+.RB [ \-s
+.RI < sclX \  xclY \  sxlZ >]
+.RB [ \-ssp
+.RI < pos >]
+.RB [ \-pg
+.RI < nrrd >]
+.RB [ \-pi
+.RI < nrrd >]
+.RB [ \-pp
+.RI < pos \ ...>]
+.RB [ \-eps
+.RI < epsilon >]
+.RB [ \-psi
+.RI < p >]
+.RB [ \-t
+.RI < type >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+.P
+Shows off the functionality of the gage library.
+Uses gageProbe() to query various kinds of volumes to learn various measured or
+derived quantities.
+.SH OPTIONS
+.TP
+.B \-i\fR\ <\fInin\fR>
+input volume
+.TP
+.B \-k\fR\ <\fIkind\fR>
+\(lqkind\(rq of volume
+.RB (\(lq scalar \(rq,
+.RB \(lq vector \(rq,
+.RB \(lq tensor \(rq,
+or
+.RB \(lq dwi \(rq)
+.TP
+.B \-v\fR\ <\fIverbosity\fR>
+verbosity level
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-q\fR\ <\fIquery\fR>
+the quantity
+.RB ( scalar ,
+.BR vector ,
+or
+.BR matrix )
+to learn by probing
+.RI ( string )
+.TP
+.B \-gmc\fR\ <\fImin\ gradmag\fR>
+For curvature-based queries, use zero when gradient magnitude is below this
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-ofs
+If only per-axis spacing is available, use that to contrive full orientation
+info
+.TP
+.B \-seed\fR\ <\fIN\fR>
+RNG seed; mostly for debugging
+.RI ( unsigned\ int );
+default:
+.RB \(lq 42 \(rq
+.TP
+.B \-c\fR\ <\fIbool\fR>
+clamp positions as part of probing
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-k00\fR\ <\fIkern00\fR>
+kernel for
+.BR gageKernel00 ;
+default:
+.RB \(lq tent \(rq
+.TP
+.B \-k11\fR\ <\fIkern11\fR>
+kernel for
+.BR gageKernel11 ;
+default:
+.RB \(lq cubicd:1,0 \(rq
+.TP
+.B \-k22\fR\ <\fIkern22\fR>
+kernel for
+.BR gageKernel22 ;
+default:
+.RB \(lq cubicdd:1,0 \(rq
+.TP
+.B \-rn
+renormalize kernel weights at each new sample location.
+\(lqAccurate\(rq kernels don\(cqt need this; doing it always makes things go
+slower
+.TP
+.B \-ssn\fR\ <\fISS\ #\fR>
+how many scale-space samples to evaluate, or,
+.B 0
+to turn-off all scale-space behavior
+.RI ( unsigned\ int );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-ssr\fR\ <\fIscale\ range\fR>
+range of scales in scale-space (2
+.IR double s);
+default:
+.RB \(lq nan\ nan \(rq
+.TP
+.B \-kssb\fR\ <\fIkernel\fR>
+blurring kernel, to sample scale space; default:
+.RB \(lq dgauss:1,5 \(rq
+.TP
+.B \-kssr\fR\ <\fIkernel\fR>
+kernel for reconstructing from scale space samples
+.RB \(lq hermite \(rq
+.TP
+.B \-ssu
+do uniform samples along sigma, and not (by default) samples according to the
+effective diffusion scale
+.TP
+.B \-sso
+if not using \(lq\-ssu\(rq, use pre-computed optimal sigmas when possible
+.TP
+.B \-ssnd
+normalize derivatives by scale
+.TP
+.B \-ssnb\fR\ <\fIbias\fR>
+bias on scale-based derivative normalization
+.RI ( double );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-ssf\fR\ <\fISS\ read/save\ format\fR>
+.BR printf (3)\-style
+format (including a
+.RB \(lq %u \(rq)
+for the filenames from which to read pre-blurred volumes computed for the
+stack, if they exist and match the stack parameters, and where to save them if
+they had to be re-computed.
+Leave this as empty string to disable this.
+.RI ( string );
+default: \(lq\(rq
+.TP
+.B \-s\fR\ <\fIsclX\fR\ \fIsclY\fR\ \fIsxlZ\fR>
+scaling factor for resampling on each axis
+.RB (> 1.0 :
+supersampling); use
+.RB \(lq \-ssp \(rq
+(and
+.RB \(lq \-psi \(rq)
+to specify scale position of sampling (3
+.IR double s);
+default:
+.RB \(lq 1\ 1\ 1 \(rq
+.TP
+.B \-ssp\fR\ <\fIpos\fR>
+when using scale-space, scale-position at which to probe
+.RI ( double );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-pg\fR\ <\fInrrd\fR>
+overrides
+.RB \(lq \-s \(rq:
+2-D
+.I nrrd
+which specifies origin and direction vectors for sampling grid; default:
+\(lq\(rq
+.TP
+.B \-pi\fR\ <\fInrrd\fR>
+overrides
+.RB \(lq \-pv \(rq:
+probes at this list of 3-vec or 4-vec positions; default:
+\(lq\(rq
+.TP
+.B \-pp\fR\ <\fIpos\fR ...>
+overrides
+.RB \(lq \-pi \(rq:
+only sample at this specified point (3..4 \fIdouble\fRs); default:
+.RB \(lq nan\ nan \(rq
+.TP
+.B \-eps\fR\ <\fIepsilon\fR>
+if non-zero, and if query is a scalar, and if using
+.RB \(lq \-pp \(rq
+to query at a single point, then do
+.I epsilon
+offset probes to calculate discrete differences, to find the numerical gradient
+and hessian (for debugging)
+.RI ( double );
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-psi\fR\ <\fIp\fR>
+whether the probe location specification (by any of the four previous flags)
+are in index space
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>
+type of output volume
+.RI ( type );
+default:
+.RB \(lq float \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>
+output volume
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR ilk (1),
+.BR miter (1),
+.BR mrender (1),
+.BR nrrdSanity (1),
+.BR overrgb (1),
+.BR puller (1),
+.BR tend (1),
+.BR unu (1),
+.BR vprobe (1)

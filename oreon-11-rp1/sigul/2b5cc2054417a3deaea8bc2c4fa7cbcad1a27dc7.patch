@@ -1,0 +1,79 @@
+From 2b5cc2054417a3deaea8bc2c4fa7cbcad1a27dc7 Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <patrick@puiterwijk.org>
+Date: Tue, 10 Oct 2023 14:02:07 +0000
+Subject: [PATCH] Implemenent limited x509_name_from_rfc4514_string
+
+Add support for versions of python-cryptography that don't
+have x509.Name.from_rfc4514_string.
+Our implementation is quite limited, and doesn't implement
+some values from RFC4514, but it does the most common ones.
+
+Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+---
+ src/server.py        |  2 +-
+ src/server_common.py | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/src/server.py b/src/server.py
+index 4449012..9f1fdbb 100644
+--- a/src/server.py
++++ b/src/server.py
+@@ -2184,7 +2184,7 @@ def cmd_sign_certificate(db, conn):
+         required=True,
+         identifier=True,
+     )
+-    subject_name = x509.Name.from_rfc4514_string(
++    subject_name = server_common.x509_name_from_rfc4514_string(
+         conn.safe_outer_field("subject", required=True)
+     )
+     serial_number = x509.random_serial_number()
+diff --git a/src/server_common.py b/src/server_common.py
+index e93b9d5..1f6ced2 100644
+--- a/src/server_common.py
++++ b/src/server_common.py
+@@ -26,7 +26,9 @@
+ import subprocess
+ import tempfile
+ 
++from cryptography import x509
+ import cryptography.hazmat.primitives.asymmetric.ec
++from cryptography.x509.oid import NameOID
+ 
+ import nss.nss
+ import sqlalchemy
+@@ -710,3 +712,35 @@ def gpg_detached_signature(config, signature_file, cleartext_file, fingerprint,
+     ctx.armor = armor
+     ctx.textmode = False
+     ctx.sign(cleartext_file, signature_file, ourgpg.constants.SIG_MODE_DETACH)
++
++
++def x509_name_from_rfc4514_string(full_string):
++    if hasattr(x509.Name, 'from_rfc4514_string'):
++        return x509.Name.from_rfc4514_string(full_string)
++    # This is too old of a python-cryptography to have this method.
++    # Instead, we parse just a few basic things
++    # If it contains any unsupported (or unparseable) parts,
++    # we just return an error
++    attrs = []
++    if '%' in full_string:
++        raise ValueError("Unsupported RFC4514 value '%s'" % part)
++    for part in full_string.split(','):
++        key, split, value = part.partition("=")
++        if split != '=':
++            raise ValueError("Invalid RFC4514 part '%s'" % part)
++        if key == "CN":
++            oid = NameOID.COMMON_NAME
++        elif key == "L":
++            oid = NameOID.LOCALITY_NAME
++        elif key == "ST":
++            oid = NameOID.STATE_OR_PROVINCE_NAME
++        elif key == "O":
++            oid = NameOID.ORGANIZATION_NAME
++        elif key == "OU":
++            oid = NameOID.ORGANIZATIONAL_UNIT_NAME
++        elif key == "C":
++            oid = NameOID.COUNTRY_NAME
++        else:
++            raise ValueError("Unsupported RFC4514 part '%s'" % part)
++        attrs.append(x509.NameAttribute(oid, value))
++    return x509.Name(attrs)

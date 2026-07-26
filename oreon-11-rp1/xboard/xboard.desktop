@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=XBoard
+Type=Application
+Categories=Game;BoardGame;
+Icon=xboard
+Comment=Challenging human-vs-computer chess game
+Exec=xboard

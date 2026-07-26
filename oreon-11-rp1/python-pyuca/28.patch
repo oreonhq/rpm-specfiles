@@ -1,0 +1,126 @@
+From 214a1c30c5fee17bedc07cdb90e948bd336a1441 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Fri, 23 Feb 2024 13:56:37 +0100
+Subject: [PATCH 1/2] Clarify applicable licenses
+
+- Include current text of Unicode-3.0 license
+- Explain applicable licenses in COPYING
+- Solves issue #27
+---
+ COPYING             |  9 +++++++++
+ LICENSE-Unicode-3.0 | 39 +++++++++++++++++++++++++++++++++++++++
+ LICENSE-allkeys     |  7 -------
+ 3 files changed, 48 insertions(+), 7 deletions(-)
+ create mode 100644 COPYING
+ create mode 100644 LICENSE-Unicode-3.0
+ delete mode 100644 LICENSE-allkeys
+
+diff --git a/COPYING b/COPYING
+new file mode 100644
+index 0000000..da543c6
+--- /dev/null
++++ b/COPYING
+@@ -0,0 +1,9 @@
++Pyuca is licensed under MIT, except for the Unicode Collation Element Tables (DUCET),
++which can be found in pyuca/allkeys*.txt. Those files are licensed under the terms of the
++Unicode License v3 (Unicode-3.0).
++
++The terms of the MIT license are included in LICENSE.
++The terms of the Unicode License v3 can be found in LICENSE-Unicode-3.0.
++
++More information on the Unicode Copyright and Terms of Use can be found online:
++https://www.unicode.org/copyright.html
+diff --git a/LICENSE-Unicode-3.0 b/LICENSE-Unicode-3.0
+new file mode 100644
+index 0000000..f28d471
+--- /dev/null
++++ b/LICENSE-Unicode-3.0
+@@ -0,0 +1,39 @@
++UNICODE LICENSE V3
++
++COPYRIGHT AND PERMISSION NOTICE
++
++Copyright © 1991-2023 Unicode, Inc.
++
++NOTICE TO USER: Carefully read the following legal agreement. BY
++DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING DATA FILES, AND/OR
++SOFTWARE, YOU UNEQUIVOCALLY ACCEPT, AND AGREE TO BE BOUND BY, ALL OF THE
++TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO NOT
++DOWNLOAD, INSTALL, COPY, DISTRIBUTE OR USE THE DATA FILES OR SOFTWARE.
++
++Permission is hereby granted, free of charge, to any person obtaining a
++copy of data files and any associated documentation (the "Data Files") or
++software and any associated documentation (the "Software") to deal in the
++Data Files or Software without restriction, including without limitation
++the rights to use, copy, modify, merge, publish, distribute, and/or sell
++copies of the Data Files or Software, and to permit persons to whom the
++Data Files or Software are furnished to do so, provided that either (a)
++this copyright and permission notice appear with all copies of the Data
++Files or Software, or (b) this copyright and permission notice appear in
++associated Documentation.
++
++THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
++KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF
++THIRD PARTY RIGHTS.
++
++IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE
++BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES,
++OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
++WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
++ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA
++FILES OR SOFTWARE.
++
++Except as contained in this notice, the name of a copyright holder shall
++not be used in advertising or otherwise to promote the sale, use or other
++dealings in these Data Files or Software without prior written
++authorization of the copyright holder.
+diff --git a/LICENSE-allkeys b/LICENSE-allkeys
+deleted file mode 100644
+index d24b40a..0000000
+--- a/LICENSE-allkeys
++++ /dev/null
+@@ -1,7 +0,0 @@
+-Copyright Â© 1991-2013 Unicode, Inc. All rights reserved. Distributed under the Terms of Use in http://www.unicode.org/copyright.html.
+-
+-Permission is hereby granted, free of charge, to any person obtaining a copy of the Unicode data files and any associated documentation (the "Data Files") or Unicode software and any associated documentation (the "Software") to deal in the Data Files or Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, and/or sell copies of the Data Files or Software, and to permit persons to whom the Data Files or Software are furnished to do so, provided that (a) the above copyright notice(s) and this permission notice appear with all copies of the Data Files or Software, (b) both the above copyright notice(s) and this permission notice appear in associated documentation, and (c) there is clear notice in each modified Data File or in the Software as well as in the documentation associated with the Data File(s) or Software that the data or software has been modified.
+-
+-THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA FILES OR SOFTWARE.
+-
+-Except as contained in this notice, the name of a copyright holder shall not be used in advertising or otherwise to promote the sale, use or other dealings in these Data Files or Software without prior written authorization of the copyright holder.
+
+From c609051af4bf6f86688d3dc26e147c5e0903e62f Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Fri, 8 Mar 2024 14:17:25 +0100
+Subject: [PATCH 2/2] Make sure a copy of Unicode-3.0 license is shipped
+
+Also amend `README.md` referring to Unicode-3.0 license.
+---
+ MANIFEST.in | 2 +-
+ README.md   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 09617f5..06b58d5 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -1,4 +1,4 @@
+ include LICENSE
+-include LICENSE-allkeys
++include LICENSE-Unicode-3.0
+ include README.md
+ 
+diff --git a/README.md b/README.md
+index 292c580..d544e5b 100644
+--- a/README.md
++++ b/README.md
+@@ -63,8 +63,7 @@ Tauber, J. K. (2016). pyuca: a Python implementation of the Unicode Collation Al
+ ## License
+ 
+ Python code is made available under an MIT license (see `LICENSE`).
+-`allkeys.txt` is made available under the similar license defined in
+-`LICENSE-allkeys`.
++`pyuce/allkeys.*txt` are made available under the Unicode-3.0 license. A copy of which can be found in `LICENSE-Unicode-3.0`.
+ 
+ ## Contacting the Developer
+ 

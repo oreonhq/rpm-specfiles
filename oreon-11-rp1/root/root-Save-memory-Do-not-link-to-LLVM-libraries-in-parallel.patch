@@ -1,0 +1,47 @@
+From 98a5042a02dd7c1aaa9fbd5e54c8620c6b72484f Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 2 Jun 2025 21:22:39 +0200
+Subject: [PATCH] Save memory. Do not link to LLVM libraries in parallel
+
+---
+ core/clingutils/test/CMakeLists.txt                        | 3 +++
+ interpreter/CppInterOp/unittests/CppInterOp/CMakeLists.txt | 6 ++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/core/clingutils/test/CMakeLists.txt b/core/clingutils/test/CMakeLists.txt
+index a6c7aedac99..90ac0139c24 100644
+--- a/core/clingutils/test/CMakeLists.txt
++++ b/core/clingutils/test/CMakeLists.txt
+@@ -36,3 +36,6 @@ if(NOT builtin_clang)
+ endif()
+ 
+ ROOT_ADD_UNITTEST_DIR(Core ${CLING_LIBRARIES} $<TARGET_OBJECTS:ClingUtils>)
++
++# Save memory. Do not link to LLVM libraries in parallel
++add_dependencies(coreclingutilstestUnit CppInterOpTests)
+diff --git a/interpreter/CppInterOp/unittests/CppInterOp/CMakeLists.txt b/interpreter/CppInterOp/unittests/CppInterOp/CMakeLists.txt
+index 4b4b43bdd29..a028802fedc 100644
+--- a/interpreter/CppInterOp/unittests/CppInterOp/CMakeLists.txt
++++ b/interpreter/CppInterOp/unittests/CppInterOp/CMakeLists.txt
+@@ -66,6 +66,9 @@ target_link_libraries(CppInterOpTests
+   clangCppInterOp
+ )
+ 
++# Save memory. Do not link to LLVM libraries in parallel
++add_dependencies(CppInterOpTests DynamicLibraryManagerTests)
++
+ set_output_directory(CppInterOpTests
+   BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/${EXTRA_PATH_TEST_BINARIES}
+   LIBRARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/${EXTRA_PATH_TEST_BINARIES}
+@@ -129,5 +132,8 @@ set_output_directory(DynamicLibraryManagerTests
+ 
+ add_dependencies(DynamicLibraryManagerTests TestSharedLib)
+ 
++# Save memory. Do not link to LLVM libraries in parallel
++add_dependencies(DynamicLibraryManagerTests Cling)
++
+ #export_executable_symbols_for_plugins(TestSharedLib)
+ add_subdirectory(TestSharedLib)
+-- 
+2.52.0
+

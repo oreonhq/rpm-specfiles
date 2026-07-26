@@ -1,0 +1,31 @@
+--- a/minizip/ioapi_buf.orig.c	2021-05-14 12:57:50.000000000 +0200
++++ b/minizip/ioapi_buf.c	2024-03-17 21:21:15.921141751 +0100
+@@ -10,6 +10,12 @@
+    See the accompanying LICENSE file for the full text of the license.
+ */
+ 
++#if defined __GNUC__ && __GNUC__ >= 14
++#pragma GCC diagnostic warning "-Wimplicit-function-declaration"
++#pragma GCC diagnostic warning "-Wincompatible-pointer-types"
++#pragma GCC diagnostic warning "-Wint-conversion"
++#pragma GCC diagnostic warning "-Wreturn-mismatch"
++#endif
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+--- a/minizip/unzip.orig.c	2021-05-14 12:57:50.000000000 +0200
++++ b/minizip/unzip.c	2024-03-17 21:35:00.081438969 +0100
+@@ -21,6 +21,13 @@
+    access functions to crctables and pkeys
+ */
+ 
++#if defined __GNUC__ && __GNUC__ >= 14
++#pragma GCC diagnostic warning "-Wimplicit-function-declaration"
++#pragma GCC diagnostic warning "-Wincompatible-pointer-types"
++#pragma GCC diagnostic warning "-Wint-conversion"
++#pragma GCC diagnostic warning "-Wreturn-mismatch"
++#endif
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>

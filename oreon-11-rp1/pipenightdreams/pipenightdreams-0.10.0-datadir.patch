@@ -1,0 +1,11 @@
+--- pipenightdreams-0.10.0/configure.datadir	2006-04-05 19:46:59.000000000 +0200
++++ pipenightdreams-0.10.0/configure	2006-04-05 19:47:18.000000000 +0200
+@@ -1613,7 +1613,7 @@
+ 
+ #Thanks to Ingo Ruhnke <grumbel@gmx.de>
+ 
+-	game_datadir="$datadir/games/$PACKAGE"
++	game_datadir="$datadir/$PACKAGE"
+ 	game_datadir=`(
+ 		test "x$prefix" = xNONE && prefix=${ac_default_prefix}
+ 		test "x$exec_prefix" = xNONE && exec_prefix=${prefix}

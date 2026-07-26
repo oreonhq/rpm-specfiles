@@ -1,0 +1,34 @@
+-- This project file works together with the RPM spec file to compile Zlib-Ada
+-- into an RPM package.
+-- Copyright 2012 B. Persson, Bjorn@Rombobeorn.se
+--
+-- This file is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+
+with "directories";
+library project Build_Zlib_Ada is
+
+   Version := external("VERSION");
+   Destdir := external("DESTDIR");
+
+   for Library_Name    use "zlib_ada";
+   for Library_Kind    use "relocatable";
+   for Library_Version use "libzlib_ada-" & Version & ".so.0";
+   for Library_Src_Dir use Destdir & Directories.Includedir & "/zlib-ada";
+   for Library_Dir     use Destdir & Directories.Libdir;
+   for Library_ALI_Dir use Destdir & Directories.Libdir & "/zlib-ada";
+   for Library_Options use ("-lz");
+
+   for Source_Files      use ("zlib.ads",
+                              "zlib.adb",
+                              "zlib-streams.ads",
+                              "zlib-streams.adb",
+                              "zlib-thin.ads",
+                              "zlib-thin.adb");
+   for Library_Interface use ("Zlib", "Zlib.Streams", "Zlib.Thin");
+   -- Zlib.Thin must be listed as an interface unit because the body of Zlib
+   -- depends on it.
+
+end Build_Zlib_Ada;

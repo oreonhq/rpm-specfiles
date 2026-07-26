@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=SolarWolf
+Exec=solarwolf
+Comment=A Python port of SolarFox
+Icon=solarwolf.png
+Terminal=false
+Categories=Game;ActionGame;
+StartupNotify=false

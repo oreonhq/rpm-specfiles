@@ -1,0 +1,130 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 29 Apr 2023 19:31:41 +0200
+Subject: [PATCH] Reverse debug/nodebug flags
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/extractaudio/Makefile.am b/extractaudio/Makefile.am
+index 0c014295..38f8b47b 100644
+--- a/extractaudio/Makefile.am
++++ b/extractaudio/Makefile.am
+@@ -33,7 +33,7 @@ extractaudio_debug_SOURCES = $(extractaudio_BASESOURCES) $(RTPP_MEMDEB_CORESRCS)
+ extractaudio_debug_LDADD = $(extractaudio_LDADD) $(RTPP_MEMDEB_LDADD)
+ extractaudio_debug_CPPFLAGS = $(extractaudio_CPPFLAGS) \
+   $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP=extractaudio
+-extractaudio_debug_CFLAGS = $(NOPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
++extractaudio_debug_CFLAGS = $(OPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
+ extractaudio_debug_LDFLAGS = $(extractaudio_LDFLAGS)
+ 
+ DEFS=   -DWITHOUT_RTPPLOG $(CC_WFLAGS) @DEFS@
+diff --git a/libexecinfo/Makefile.am b/libexecinfo/Makefile.am
+index 6cd3f400..f29415a9 100644
+--- a/libexecinfo/Makefile.am
++++ b/libexecinfo/Makefile.am
+@@ -12,8 +12,8 @@ endif
+ noinst_LTLIBRARIES = libexecinfo.la
+ libexecinfo_la_SOURCES = execinfo.c execinfo.h stacktraverse.h \
+  execinfo_internal.h ${STR_SOURCE}
+-libexecinfo_la_CFLAGS = $(NOPT_CFLAGS) $(RTPP_MEMDEB_CFLAGS) $(LTO_FLAG)
+-libexecinfo_la_CPPFLAGS = $(NOPT_CFLAGS) $(RTPP_MEMDEB_CFLAGS) $(LTO_FLAG) $(CPPFLAGS_UNWIND)
++libexecinfo_la_CFLAGS = $(OPT_CFLAGS) $(RTPP_MEMDEB_CFLAGS) $(LTO_FLAG)
++libexecinfo_la_CPPFLAGS = $(OPT_CFLAGS) $(RTPP_MEMDEB_CFLAGS) $(LTO_FLAG) $(CPPFLAGS_UNWIND)
+ libexecinfo_la_LIBADD = @LIBS_UNWIND@
+ 
+ noinst_PROGRAMS = execinfo_check execinfo_TEST
+diff --git a/makeann/Makefile.am b/makeann/Makefile.am
+index e07b9e84..6e185d80 100644
+--- a/makeann/Makefile.am
++++ b/makeann/Makefile.am
+@@ -17,7 +17,7 @@ makeann_LDFLAGS = $(LTO_FLAG)
+ makeann_debug_SOURCES = $(makeann_SOURCES) $(RTPP_MEMDEB_CORESRCS) $(rtpp_refcnt_AUTOSRCS)
+ makeann_debug_LDADD = $(makeann_LDADD) $(RTPP_MEMDEB_LDADD)
+ makeann_debug_CPPFLAGS = $(makeann_CPPFLAGS) $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP=makeann
+-makeann_debug_CFLAGS = $(NOPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
++makeann_debug_CFLAGS = $(OPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
+ makeann_debug_LDFLAGS = $(makeann_LDFLAGS)
+ 
+ DEFS=	-Wall @DEFS@
+diff --git a/modules/acct_csv/Makefile.am b/modules/acct_csv/Makefile.am
+index fb4d161c..f7638f2f 100644
+--- a/modules/acct_csv/Makefile.am
++++ b/modules/acct_csv/Makefile.am
+@@ -19,7 +19,7 @@ rtpp_acct_csv_debug_la_LIBADD = $(RTPP_MEMDEB_LDADD)
+ rtpp_acct_csv_debug_la_LDFLAGS=${rtpp_acct_csv_la_LDFLAGS}
+ rtpp_acct_csv_debug_la_CPPFLAGS=$(rtpp_acct_csv_la_CPPFLAGS) \
+  $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP="acct_csv"
+-rtpp_acct_csv_debug_la_CFLAGS = $(NOPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
++rtpp_acct_csv_debug_la_CFLAGS = $(OPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
+ 
+ librtpp_acct_csv_la_SOURCES = $(rtpp_acct_csv_la_SOURCES)
+ librtpp_acct_csv_la_CPPFLAGS = $(rtpp_acct_csv_la_CPPFLAGS) -DLIBRTPPROXY
+diff --git a/modules/acct_rtcp_hep/Makefile.am b/modules/acct_rtcp_hep/Makefile.am
+index 83f5b12b..2853c294 100644
+--- a/modules/acct_rtcp_hep/Makefile.am
++++ b/modules/acct_rtcp_hep/Makefile.am
+@@ -33,7 +33,7 @@ rtpp_acct_rtcp_hep_debug_la_LIBADD = $(rtpp_acct_rtcp_hep_la_LIBADD) $(RTPP_MEMD
+ rtpp_acct_rtcp_hep_debug_la_LDFLAGS=$(rtpp_acct_rtcp_hep_la_LDFLAGS)
+ rtpp_acct_rtcp_hep_debug_la_CPPFLAGS=$(rtpp_acct_rtcp_hep_la_CPPFLAGS) \
+  $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP="acct_rtcp_hep"
+-rtpp_acct_rtcp_hep_debug_la_CFLAGS = $(NOPT_CFLAGS) $(CFLAGS_acct_rtcp_hep_common) \
++rtpp_acct_rtcp_hep_debug_la_CFLAGS = $(OPT_CFLAGS) $(CFLAGS_acct_rtcp_hep_common) \
+  $(RTPP_MEMDEB_CFLAGS)
+ 
+ noinst_PROGRAMS += rtpp_sbuf_selftest
+diff --git a/modules/badmod/Makefile.am b/modules/badmod/Makefile.am
+index 6ac53211..260a23de 100644
+--- a/modules/badmod/Makefile.am
++++ b/modules/badmod/Makefile.am
+@@ -18,7 +18,7 @@ rtpp_badmod1_debug_la_LIBADD = $(RTPP_MEMDEB_LDADD)
+ rtpp_badmod1_debug_la_LDFLAGS=${rtpp_badmod1_la_LDFLAGS}
+ rtpp_badmod1_debug_la_CPPFLAGS=$(rtpp_badmod1_la_CPPFLAGS) \
+  $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP="badmod1"
+-rtpp_badmod1_debug_la_CFLAGS = $(NOPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
++rtpp_badmod1_debug_la_CFLAGS = $(OPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
+ 
+ rtpp_badmod2_la_SOURCES = rtpp_badmod2.c
+ rtpp_badmod2_la_LDFLAGS = $(rtpp_badmod1_la_LDFLAGS)
+diff --git a/modules/catch_dtmf/Makefile.am b/modules/catch_dtmf/Makefile.am
+index e4ee948e..336850ab 100644
+--- a/modules/catch_dtmf/Makefile.am
++++ b/modules/catch_dtmf/Makefile.am
+@@ -21,7 +21,7 @@ rtpp_catch_dtmf_debug_la_LIBADD = $(rtpp_catch_dtmf_la_LIBADD) $(RTPP_MEMDEB_LDA
+ rtpp_catch_dtmf_debug_la_LDFLAGS = $(rtpp_catch_dtmf_la_LDFLAGS)
+ rtpp_catch_dtmf_debug_la_CPPFLAGS = $(rtpp_catch_dtmf_la_CPPFLAGS) \
+  $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP="catch_dtmf"
+-rtpp_catch_dtmf_debug_la_CFLAGS = $(NOPT_CFLAGS) $(CFLAGS_rtpp_catch_dtmf_common) \
++rtpp_catch_dtmf_debug_la_CFLAGS = $(OPT_CFLAGS) $(CFLAGS_rtpp_catch_dtmf_common) \
+  $(RTPP_MEMDEB_CFLAGS)
+ 
+ librtpp_catch_dtmf_la_SOURCES = $(rtpp_catch_dtmf_la_SOURCES)
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 284fbc87..49e8c392 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -122,7 +122,7 @@ rtpp_rzmalloc_perf_LDADD = -lm
+ 
+ rtpp_rzmalloc_perf_debug_SOURCES = rtpp_rzmalloc_perf.c rtpp_time.c \
+   $(SRCS_MEMDEB_CORE) $(SRCS_AUTOGEN_DEBUG)
+-rtpp_rzmalloc_perf_debug_CFLAGS = $(NOPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
++rtpp_rzmalloc_perf_debug_CFLAGS = $(OPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
+ rtpp_rzmalloc_perf_debug_CPPFLAGS = $(rtpp_rzmalloc_perf_CPPFLAGS) $(RTPP_MEMDEB_CPPFLAGS) \
+   -DMEMDEB_APP=rtpp_rzmalloc_perf -I$(top_srcdir)
+ rtpp_rzmalloc_perf_debug_LDFLAGS = $(rtpp_rzmalloc_perf_LDFLAGS)
+@@ -140,7 +140,7 @@ if BUILD_ELPERIODIC
+ EXTRA_CPPFLAGS += -I$(top_srcdir)/libelperiodic/src
+ endif
+ 
+-rtpproxy_debug_CFLAGS=$(NOPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
++rtpproxy_debug_CFLAGS=$(OPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
+ rtpproxy_debug_CPPFLAGS=$(RTPP_COMMON_CPPFLAGS) $(EXTRA_CPPFLAGS) $(RTPP_MEMDEB_CPPFLAGS) \
+   -DMEMDEB_APP=@PACKAGE@ -I$(top_srcdir)
+ 
+@@ -150,7 +150,7 @@ rtpproxy_CPPFLAGS=$(RTPP_COMMON_CPPFLAGS) $(EXTRA_CPPFLAGS)
+ rtpp_objck_perf_CFLAGS=$(OPT_CFLAGS) $(EXTRA_CFLAGS)
+ rtpp_objck_perf_CPPFLAGS=$(EXTRA_CPPFLAGS) -D_BSD_SOURCE
+ rtpp_objck_perf_LDFLAGS=$(LDO_LDFLAGS)
+-rtpp_objck_CFLAGS=$(NOPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
++rtpp_objck_CFLAGS=$(OPT_CFLAGS) $(EXTRA_CFLAGS) $(RTPP_MEMDEB_CFLAGS)
+ rtpp_objck_CPPFLAGS=$(rtpp_objck_perf_CPPFLAGS) $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP=rtpp_objck \
+   -DRTPQ_CHECK_SEQ
+ rtpp_objck_LDFLAGS=$(rtpp_objck_perf_LDFLAGS)

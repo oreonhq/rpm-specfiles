@@ -1,0 +1,22 @@
+--- src/reaper.c~	2011-08-16 16:52:48.000000000 -0500
++++ src/reaper.c	2024-01-31 11:42:45.581345843 -0600
+@@ -85,7 +85,7 @@
+ 	  return g_object_ref (singleton_reaper);
+   } else {
+ 	  GObject *obj;
+-	  obj = G_OBJECT_CLASS (vte_reaper_parent_class)->constructor (type, n_construct_properties, construct_properties);
++	  obj = (GObject *)(G_OBJECT_CLASS (vte_reaper_parent_class)->constructor (type, n_construct_properties, construct_properties));
+ 	  singleton_reaper = VTE_REAPER (obj);
+ 	  return obj;
+   }
+--- src/reaper.c~	2024-01-31 12:12:15.260939495 -0600
++++ src/reaper.c	2024-01-31 13:03:55.397334625 -0600
+@@ -82,7 +82,7 @@
+                         GObjectConstructParam *construct_properties)
+ {
+   if (singleton_reaper) {
+-	  return g_object_ref (singleton_reaper);
++	  return (GObject *)(g_object_ref (singleton_reaper));
+   } else {
+ 	  GObject *obj;
+ 	  obj = (GObject *)(G_OBJECT_CLASS (vte_reaper_parent_class)->constructor (type, n_construct_properties, construct_properties));

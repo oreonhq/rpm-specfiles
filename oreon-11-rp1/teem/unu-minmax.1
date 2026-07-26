@@ -1,0 +1,49 @@
+.TH UNU\-MINMAX "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-minmax \- print out min and max values in one or more
+.IR nrrd s
+.SH SYNOPSIS
+.B unu\ minmax
+.BR \-blind8
+.RI < bool >
+.RI < nin1 \ ...>
+.SH DESCRIPTION
+Print out min and max values in one or more
+.IR nrrd s.
+Unlike other commands, this doesn\(cqt produce a
+.IRnrrd .
+It only prints to standard out the min and max values found in the input
+.IR nrrd (s),
+and it also indicates if there are non-existent values.
+.IP \(bu +2n
+Uses
+.B nrrdRangeNewSet
+.SH OPTIONS
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+whether to blindly assert the range of 8-bit data, without actually going
+through the data values, i.e.
+.I uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [\-128,127] .
+Note that even if you do not use this option, the default
+.RB ( false )
+is potentialy over-riding the effect of environment variable
+.BR NRRD_STATE_BLIND_8_BIT_RANGE ;
+see
+.BR unu\-env (1)
+.RI ( bool );
+default:
+.RB \(lq false \(rq
+.TP
+.RI < nin1 \ ...>
+input
+.IR nrrd (s)
+(1 or more
+.IR string s)
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-env (1)

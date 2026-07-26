@@ -1,0 +1,62 @@
+diff -up xblast-2.10.4/atom.c~ xblast-2.10.4/atom.c
+--- xblast-2.10.4/atom.c~	2006-02-09 22:21:22.000000000 +0100
++++ xblast-2.10.4/atom.c	2022-07-16 17:36:05.151322538 +0200
+@@ -168,6 +168,7 @@ XBAtom atomRight;
+ XBAtom atomRightKeyboard;
+ XBAtom atomScrambleDel;
+ XBAtom atomScrambleDraw;
++XBAtom atomSDL;
+ XBAtom atomSelect;
+ XBAtom atomServer;
+ XBAtom atomShape;
+@@ -373,6 +374,7 @@ InitDefaultAtoms (void)
+ 	atomRightKeyboard = GUI_StringToAtom ("rightKeyboard");
+ 	atomScrambleDel = GUI_StringToAtom ("scrambleDel");
+ 	atomScrambleDraw = GUI_StringToAtom ("scrambleDraw");
++	atomSDL = GUI_StringToAtom ("sdl");
+ 	atomSelect = GUI_StringToAtom ("select");
+ 	atomServer = GUI_StringToAtom ("server");
+ 	atomShape = GUI_StringToAtom ("shape");
+diff -up xblast-2.10.4/atom.h~ xblast-2.10.4/atom.h
+--- xblast-2.10.4/atom.h~	2006-02-09 22:21:22.000000000 +0100
++++ xblast-2.10.4/atom.h	2022-07-16 17:36:05.687320493 +0200
+@@ -163,6 +163,7 @@ extern XBAtom atomRight;
+ extern XBAtom atomRightKeyboard;
+ extern XBAtom atomScrambleDel;
+ extern XBAtom atomScrambleDraw;
++extern XBAtom atomSDL;
+ extern XBAtom atomSelect;
+ extern XBAtom atomServer;
+ extern XBAtom atomShape;
+diff -up xblast-2.10.4/sdl_config.c~ xblast-2.10.4/sdl_config.c
+--- xblast-2.10.4/sdl_config.c~	2006-02-09 22:21:24.000000000 +0100
++++ xblast-2.10.4/sdl_config.c	2022-07-16 17:36:30.294228033 +0200
+@@ -149,7 +149,7 @@ GetColorConfig (void)
+ void
+ GUI_LoadConfig (void)
+ {
+-	dbGui = DB_Create (DT_Config, atomX11);
++	dbGui = DB_Create (DT_Config, atomSDL);
+ 	assert (dbGui != NULL);
+ 	if (DB_Load (dbGui)) {
+ 		return;
+diff -up xblast-2.10.4/x11_config.c~ xblast-2.10.4/x11_config.c
+--- xblast-2.10.4/x11_config.c~	2006-02-09 22:21:25.000000000 +0100
++++ xblast-2.10.4/x11_config.c	2022-07-16 17:33:34.640897215 +0200
+@@ -101,6 +101,16 @@ GetFontConfig (void)
+ 		DB_GetEntryString (section, atomSmall, &cfgFont.small);
+ 		DB_GetEntryString (section, atomMedium, &cfgFont.medium);
+ 		DB_GetEntryString (section, atomLarge, &cfgFont.large);
++		/*
++		 * detect old SDL version which saved its settings (which
++		 * are invalid for x11) to x11.cfg, in this case fall back
++		 * to the default font settings.
++		 */
++		if (!strcmp (cfgFont.small, "14")) {
++			memcpy (&cfgFont, &defaultFontConfig, sizeof (CFGFont));
++			StoreFontConfig (&cfgFont);
++			DB_Store (dbGui);
++		}
+ 	}
+ 	return &cfgFont;
+ }								/* GetFontConfig */

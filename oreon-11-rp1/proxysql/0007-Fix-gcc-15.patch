@@ -1,0 +1,13 @@
+Fix compilation with GCC 15
+
+--- include/ma_global.h	2024-11-08 12:19:05.000000000 +0100
++++ include/ma_global.h_patched	2025-01-24 01:15:40.474397832 +0100
+@@ -683,7 +683,7 @@ typedef unsigned long	size_s; /* Size of
+ typedef int		myf;	/* Type of MyFlags in my_funcs */
+ typedef char		my_bool; /* Small bool */
+ typedef unsigned long long my_ulonglong;
+-#if !defined(bool) && !defined(bool_defined) && (!defined(HAVE_BOOL) || !defined(__cplusplus))
++#if !defined(bool) && !defined(bool_defined) && (!defined(HAVE_BOOL) || !defined(__cplusplus)) && (__STDC_VERSION__ < 202300L)
+ typedef char		bool;	/* Ordinary boolean values 0 1 */
+ #endif
+ 	/* Macros for converting *constants* to the right type */

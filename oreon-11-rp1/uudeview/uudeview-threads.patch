@@ -1,0 +1,16 @@
+diff -up uudeview-7ef9e26532b39bdcedd319c07b6b77fc70e270dd/configure.ac.threads uudeview-7ef9e26532b39bdcedd319c07b6b77fc70e270dd/configure.ac
+--- uudeview-7ef9e26532b39bdcedd319c07b6b77fc70e270dd/configure.in.threads	2025-01-15 12:34:54.094758034 -0500
++++ uudeview-7ef9e26532b39bdcedd319c07b6b77fc70e270dd/configure.in	2025-01-15 14:03:10.795382171 -0500
+@@ -171,11 +171,7 @@ if test "x$have_tcl" != "xno" ; then
+ 		AC_MSG_RESULT(found in $tcl_lib_dir)
+ 	fi
+ 
+-	case $TCL_DEFS in
+-	*TCL_THREADS*)
+-		CFLAGS="-D_REENTRANT $CFLAGS"
+-		;;
+-	esac
++	CFLAGS="-std=gnu17 -D_REENTRANT $CFLAGS"
+ fi
+ 
+ #

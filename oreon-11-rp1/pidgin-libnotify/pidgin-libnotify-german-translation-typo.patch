@@ -1,0 +1,11 @@
+--- po/de.po	2008-12-14 18:20:36.000000000 +0100
++++ po/de.po	2010-11-26 12:35:30.000000000 +0100
+@@ -48,7 +48,7 @@ 
+ #: src/pidgin-libnotify.c:379
+ #, c-format
+ msgid "%s signed off"
+-msgstr "%s hat sich angemeldet"
++msgstr "%s hat sich abgemeldet"
+ 
+ #: src/pidgin-libnotify.c:406
+ #, c-format

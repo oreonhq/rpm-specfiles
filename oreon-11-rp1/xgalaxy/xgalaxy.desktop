@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XGalaxy
+Comment=Galaxian / Galaga like game with powerups
+Exec=xgalaxy
+Icon=xgalaxy.png
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;

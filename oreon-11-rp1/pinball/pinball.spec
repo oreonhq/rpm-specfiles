@@ -1,0 +1,102 @@
+%global source0_hash none
+
+# Disable automatic .la file removal
+%global __brp_remove_la_files %nil
+
+Name:           pinball
+Version:        0.3.4
+Release:        21%{?dist}
+Summary:        Emilia 3D Pinball Game
+# core license is GPLv2+
+# gnu table licenses are (GFDL or Free Art or CC-BY-SA) and GPLv3 and CC-BY-SA
+# hurd table license is GPLv2+
+License: GPL-2.0-or-later AND FSFAP AND LGPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-SA-3.0
+URL:            http://pinball.sourceforge.net
+Source0:        https://github.com/sergiomb2/pinball/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0:         6.patch
+BuildRequires: make
+BuildRequires:  gcc-c++
+BuildRequires:  libXt-devel
+BuildRequires:  freeglut-devel
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
+BuildRequires:  libtool
+BuildRequires:  libtool-ltdl-devel
+BuildRequires:  gettext-devel
+Requires:   hicolor-icon-theme
+Requires:   opengl-games-utils
+Requires:   timidity++-patches
+
+%description
+The Emilia Pinball project is an open source pinball simulator for linux
+and other unix systems. The current release features a number of tables:
+tux, professor, professor2, gnu and hurd and is very addictive.
+
+%package devel
+Summary:    Development files for %{name}
+Requires:   %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+This package contains files for development with %{name}.
+May be used in pinball-pinedit.
+
+%prep
+%setup -q
+
+%patch -P 0 -p1
+
+sed -i 's/Exec=pinball/Exec=pinball-wrapper/' pinball.desktop
+./bootstrap
+
+%build
+%configure --disable-static
+%make_build
+
+%install
+%make_install
+%find_lang %{name}
+ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/%{name}-wrapper
+# remove unused test module
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/libModuleTest.*
+# .la files are needed for ltdl
+
+# below is the desktop file and icon stuff.
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
+desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+  --set-key='Keywords' --set-value='Game;Arcade;Pinball;' \
+  pinball.desktop
+
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
+install -p -m 644 pinball.png \
+  $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
+
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
+install -p -m 644 pinball.appdata.xml $RPM_BUILD_ROOT%{_datadir}/appdata
+appstream-util validate-relax --nonet \
+  $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml
+
+%files -f %{name}.lang
+%doc README ChangeLog
+%license COPYING
+%{_bindir}/%{name}
+%{_bindir}/%{name}-wrapper
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/*so.*
+%{_libdir}/%{name}/*la
+%{_datadir}/%{name}
+%{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+
+%files devel
+%{_bindir}/%{name}-config
+%{_libdir}/%{name}/*.so
+%{_libdir}/%{name}/*.a
+%{_includedir}/%{name}
+
+%changelog
+%autochangelog

@@ -1,0 +1,4 @@
+# Config file for rpld initscript
+#
+# Uncomment the following line to specify the interface.
+# RPLDOPTS="-I em1"

@@ -1,0 +1,153 @@
+diff -up scantailor-0.9.11.1/filters/page_split/PageLayoutEstimator.cpp.gcc6-build scantailor-0.9.11.1/filters/page_split/PageLayoutEstimator.cpp
+--- scantailor-0.9.11.1/filters/page_split/PageLayoutEstimator.cpp.gcc6-build	2012-02-27 21:21:08.000000000 +0100
++++ scantailor-0.9.11.1/filters/page_split/PageLayoutEstimator.cpp	2017-03-14 21:16:15.178494604 +0100
+@@ -521,7 +521,8 @@ PageLayoutEstimator::cutAtWhitespaceDesk
+ 	
+ 	std::deque<Span> spans;
+ 	SlicedHistogram hist(cc_img, SlicedHistogram::COLS);
+-	span_finder.find(hist, bind(&std::deque<Span>::push_back, var(spans), _1));
++	void (std::deque<Span>::*push_back) (const Span&) = &std::deque<Span>::push_back;
++	span_finder.find(hist, boost::lambda::bind(push_back, var(spans), _1));
+ 	
+ 	if (dbg) {
+ 		visualizeSpans(*dbg, spans, input, "spans");
+diff -up scantailor-0.9.11.1/MainWindow.cpp.gcc6-build scantailor-0.9.11.1/MainWindow.cpp
+--- scantailor-0.9.11.1/MainWindow.cpp.gcc6-build	2017-03-14 21:16:15.176494605 +0100
++++ scantailor-0.9.11.1/MainWindow.cpp	2017-03-14 21:16:15.178494604 +0100
+@@ -1895,8 +1895,10 @@ MainWindow::showInsertFileDialog(BeforeO
+ 		QFileInfo const file_info(files[i]);
+ 		ImageFileInfo image_file_info(file_info, std::vector<ImageMetadata>());
+ 
++    void (std::vector<ImageMetadata>::*push_back) (const ImageMetadata&) =
++          &std::vector<ImageMetadata>::push_back;
+ 		ImageMetadataLoader::Status const status = ImageMetadataLoader::load(
+-			files.at(i), boost::lambda::bind(&std::vector<ImageMetadata>::push_back,
++			files.at(i), boost::lambda::bind(push_back,
+ 			boost::ref(image_file_info.imageInfo()), boost::lambda::_1)
+ 		);
+ 
+diff -up scantailor-0.9.11.1/ProjectFilesDialog.cpp.gcc6-build scantailor-0.9.11.1/ProjectFilesDialog.cpp
+--- scantailor-0.9.11.1/ProjectFilesDialog.cpp.gcc6-build	2017-03-14 21:17:43.330478258 +0100
++++ scantailor-0.9.11.1/ProjectFilesDialog.cpp	2017-03-14 21:25:26.950392285 +0100
+@@ -279,7 +279,7 @@ ProjectFilesDialog::inProjectFiles() con
+ 	using namespace boost::lambda;
+ 	
+ 	std::vector<ImageFileInfo> files;
+-	m_ptrInProjectFiles->items(boost::lambda::bind(&pushFileInfo<Item>, ref(files), boost::lambda::_1));
++	m_ptrInProjectFiles->items(boost::lambda::bind(&pushFileInfo<Item>, boost::ref(files), boost::lambda::_1));
+ 	
+ 	std::sort(files.begin(), files.end(), imageFileInfoLess);
+ 	
+@@ -419,8 +419,10 @@ ProjectFilesDialog::setInputDir(QString
+ 		
+ 		std::vector<QFileInfo> new_files(files.begin(), files.end());
+ 		std::vector<QFileInfo> existing_files;
+-		m_ptrInProjectFiles->files(
+-			boost::lambda::bind(&std::vector<QFileInfo>::push_back, var(existing_files), boost::lambda::_1)
++		void (std::vector<QFileInfo>::*push_back) (const QFileInfo&) =
++    &std::vector<QFileInfo>::push_back;
++    m_ptrInProjectFiles->files(
++			boost::lambda::bind(push_back, var(existing_files), boost::lambda::_1)
+ 		);
+ 		std::sort(new_files.begin(), new_files.end(), FileInfoLess());
+ 		std::sort(existing_files.begin(), existing_files.end(), FileInfoLess());
+@@ -439,7 +441,7 @@ ProjectFilesDialog::setInputDir(QString
+ 		files.begin(), files.end(),
+ 		boost::lambda::bind(
+ 			&pushItemWithFlags<Item, ItemList>,
+-			boost::lambda::_1, ref(items), cref(m_supportedExtensions)
++			boost::lambda::_1, boost::ref(items), cref(m_supportedExtensions)
+ 		)
+ 	);
+ 	
+@@ -471,7 +473,8 @@ ProjectFilesDialog::addToProject()
+ 	typedef std::vector<Item> ItemList;
+ 	ItemList items;
+ 	
+-	m_ptrOffProjectFiles->items(selection, boost::lambda::bind(&ItemList::push_back, var(items), boost::lambda::_1));
++	void (ItemList::*push_back) (const Item&) = &ItemList::push_back;	
++  m_ptrOffProjectFiles->items(selection, boost::lambda::bind(push_back, var(items), boost::lambda::_1));
+ 	
+ 	m_ptrInProjectFiles->append(items.begin(), items.end());
+ 	m_ptrOffProjectFiles->remove(selection);
+@@ -510,7 +513,7 @@ ProjectFilesDialog::removeFromProject()
+ 	m_ptrInProjectFiles->items(
+ 		selection, boost::lambda::bind(
+ 			&pushItemIfSameDir<Item, ItemList>,
+-			ref(items), boost::lambda::_1, cref(input_dir)
++			boost::ref(items), boost::lambda::_1, cref(input_dir)
+ 		)
+ 	);
+ 	
+@@ -703,7 +706,7 @@ ProjectFilesDialog::FileList::remove(QIt
+ 	
+ 	std::sort(
+ 		sorted_ranges.begin(), sorted_ranges.end(),
+-		boost::lambda::bind((IntMemPtr)&Range::first, boost::lambda::_1) < bind((IntMemPtr)&Range::first, boost::lambda::_2)
++		boost::lambda::bind((IntMemPtr)&Range::first, boost::lambda::_1) < boost::lambda::bind((IntMemPtr)&Range::first, boost::lambda::_2)
+ 	);
+ 	
+ 	QVectorIterator<Range> it(sorted_ranges);
+@@ -787,9 +790,11 @@ ProjectFilesDialog::FileList::loadNextFi
+ 	Item& item = m_items[item_idx];
+ 	std::vector<ImageMetadata> per_page_metadata;
+ 	QString const file_path(item.fileInfo().absoluteFilePath());
+-	ImageMetadataLoader::Status const st = ImageMetadataLoader::load(
++  void (std::vector<ImageMetadata>::*push_back) (const ImageMetadata&) =
++  &std::vector<ImageMetadata>::push_back;
++  ImageMetadataLoader::Status const st = ImageMetadataLoader::load(
+ 		file_path, boost::lambda::bind(
+-			&std::vector<ImageMetadata>::push_back,
++			push_back,
+ 			var(per_page_metadata), boost::lambda::_1
+ 		)
+ 	);
+diff -up scantailor-0.9.11.1/tests/TestContentSpanFinder.cpp.gcc6-build scantailor-0.9.11.1/tests/TestContentSpanFinder.cpp
+--- scantailor-0.9.11.1/tests/TestContentSpanFinder.cpp.gcc6-build	2012-02-27 21:21:08.000000000 +0100
++++ scantailor-0.9.11.1/tests/TestContentSpanFinder.cpp	2017-03-14 21:16:15.178494604 +0100
+@@ -37,9 +37,11 @@ BOOST_AUTO_TEST_CASE(test_empty_input)
+ 	ContentSpanFinder span_finder;
+ 	
+ 	std::vector<Span> spans;
++	void (std::vector<Span>::*push_back) (const Span&) =
++		&std::vector<Span>::push_back;
+ 	span_finder.find(
+ 		SlicedHistogram(),
+-		bind(&std::vector<Span>::push_back, var(spans), _1)
++		boost::lambda::bind(push_back, var(spans), _1)
+ 	);
+ 	
+ 	BOOST_CHECK(spans.empty());
+@@ -63,7 +65,9 @@ BOOST_AUTO_TEST_CASE(test_min_content_wi
+ 	span_finder.setMinContentWidth(2);
+ 	
+ 	std::vector<Span> spans;
+-	span_finder.find(hist, bind(&std::vector<Span>::push_back, var(spans), _1));
++	void (std::vector<Span>::*push_back) (const Span&) =
++		&std::vector<Span>::push_back;
++	span_finder.find(hist, boost::lambda::bind(push_back, var(spans), _1));
+ 	
+ 	BOOST_REQUIRE(spans.size() == 2);
+ 	BOOST_REQUIRE(spans[0] == Span(3, 3+3));
+@@ -88,7 +92,9 @@ BOOST_AUTO_TEST_CASE(test_min_whitespace
+ 	span_finder.setMinWhitespaceWidth(2);
+ 	
+ 	std::vector<Span> spans;
+-	span_finder.find(hist, bind(&std::vector<Span>::push_back, var(spans), _1));
++	void (std::vector<Span>::*push_back) (const Span&) =
++		&std::vector<Span>::push_back;
++	span_finder.find(hist, boost::lambda::bind(push_back, var(spans), _1));
+ 	
+ 	BOOST_REQUIRE(spans.size() == 2);
+ 	BOOST_REQUIRE(spans[0] == Span(1, 1+4));
+@@ -114,7 +120,9 @@ BOOST_AUTO_TEST_CASE(test_min_content_an
+ 	span_finder.setMinWhitespaceWidth(2);
+ 	
+ 	std::vector<Span> spans;
+-	span_finder.find(hist, bind(&std::vector<Span>::push_back, var(spans), _1));
++	void (std::vector<Span>::*push_back) (const Span&) =
++		&std::vector<Span>::push_back;
++	span_finder.find(hist, boost::lambda::bind(push_back, var(spans), _1));
+ 	
+ 	// Note that although a content block at index 1 is too short,
+ 	// it's still allowed to merge with content at positions 3 and 4

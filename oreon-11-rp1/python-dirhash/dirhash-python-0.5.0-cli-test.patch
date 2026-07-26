@@ -1,0 +1,22 @@
+diff -uNr a/tests/test_cli.py b/tests/test_cli.py
+--- a/tests/test_cli.py	2024-08-03 17:12:01.000000000 -0500
++++ b/tests/test_cli.py	2024-09-04 11:30:43.940728515 -0500
+@@ -1,5 +1,6 @@
+ import os
+ import shlex
++import shutil
+ import subprocess
+ import sys
+ 
+@@ -7,10 +8,7 @@
+ 
+ import dirhash
+ 
+-console_script = os.path.join(
+-    os.path.dirname(sys.executable),
+-    "dirhash.exe" if os.name == "nt" else "dirhash",
+-)
++console_script = shutil.which("dirhash")
+ if not os.path.isfile(console_script):
+     print(os.listdir(os.path.dirname(sys.executable)))
+     raise FileNotFoundError(f"Could not find console script at {console_script}.")

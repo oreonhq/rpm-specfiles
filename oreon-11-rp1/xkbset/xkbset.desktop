@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=xkbset
+Comment=Configure XKB extensions like AccessX
+Exec=xkbset-gui
+Categories=Settings;DesktopSettings;HardwareSettings;

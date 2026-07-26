@@ -1,0 +1,15 @@
+diff -rupN --no-dereference qgis-3.44.8/src/core/qgsapplication.cpp qgis-3.44.8-new/src/core/qgsapplication.cpp
+--- qgis-3.44.8/src/core/qgsapplication.cpp	2026-03-06 13:02:13.000000000 +0100
++++ qgis-3.44.8-new/src/core/qgsapplication.cpp	2026-03-06 23:20:51.540455627 +0100
+@@ -387,6 +387,11 @@ void QgsApplication::init( QString profi
+         {
+           myDir.cdUp();
+         }
++        // Fix for server which is one level deeper in /usr/libexec/qgis
++        else if ( applicationDirPath().contains( QStringLiteral( "libexec/qgis" ) ) )
++        {
++          myDir.cdUp();
++        }
+         myDir.cdUp(); // Go from /usr/bin or /usr/lib (for server) to /usr
+         QString myPrefix = myDir.absolutePath();
+         setPrefixPath( myPrefix, true );

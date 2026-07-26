@@ -1,0 +1,11 @@
+--- utrac-0.2/utrac.h.old	2004-12-02 17:56:01.000000000 +0100
++++ utrac-0.2/utrac.h	2004-12-15 15:45:40.415374016 +0100
+@@ -71,7 +71,7 @@
+ //const char * UT_CHARMAPS_FILENAME2 = "/home/antoine/dev/utrac/charsets.dat";
+ //UT_CHARMAPS_FILENAME should be set with "gcc -D ..."
+ const char * UT_CHARMAPS_FILENAME2 = "charsets.dat";
+-const char * UT_DEFAULT_ENCODING_UNIX = "ISO-8859-1";
++const char * UT_DEFAULT_ENCODING_UNIX = "UTF-8";
+ #else
+ //! Language and system coeficients applied to charset rating, depending on language or system selected.
+ extern const float UT_LANG_SYS_COEF [];

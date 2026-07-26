@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Worminator
+Comment=A jump, run and shoot action-game
+Exec=worminator
+Icon=worminator
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=Game;Arcade;Scroller;Retro;Worms;Platform;

@@ -1,0 +1,74 @@
+From d1bcbbe315dab07bef1ddb9c6f7335f88e0ebdbd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Gr=C3=A4=C3=9Flin?= <mgraesslin@kde.org>
+Date: Tue, 12 Jan 2016 10:01:38 +0100
+Subject: [PATCH 5/8] Add wrapper for polkit_system_bus_name_get_user_sync
+
+This adds a new method to SystemBusNameSubject to get to the
+UnixUserIdentity for the subject.
+
+This feature depends on new functionality added in polkit 0.113, the
+dependency is nevertheless not raised as the new API is backported in
+distribution packages and we don't want to disrupt developer workflows
+by depending on a version which is not available yet.
+
+REVIEW: 126723
+---
+ core/polkitqt1-subject.cpp |  6 ++++++
+ core/polkitqt1-subject.h   | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/core/polkitqt1-subject.cpp b/core/polkitqt1-subject.cpp
+index f0d69c6..ecb4c0e 100644
+--- a/core/polkitqt1-subject.cpp
++++ b/core/polkitqt1-subject.cpp
+@@ -19,6 +19,7 @@
+  */
+ 
+ #include "polkitqt1-subject.h"
++#include "polkitqt1-identity.h"
+ 
+ #include <QtCore/QDebug>
+ #include <polkit/polkit.h>
+@@ -180,6 +181,11 @@ void SystemBusNameSubject::setName(const QString &name)
+     polkit_system_bus_name_set_name((PolkitSystemBusName *) subject(), name.toUtf8().data());
+ }
+ 
++UnixUserIdentity SystemBusNameSubject::user()
++{
++    return UnixUserIdentity(polkit_system_bus_name_get_user_sync((PolkitSystemBusName *) subject(), NULL, NULL));
++}
++
+ // ----- SystemSession
+ UnixSessionSubject::UnixSessionSubject(const QString &sessionId)
+         : Subject()
+diff --git a/core/polkitqt1-subject.h b/core/polkitqt1-subject.h
+index 4c7a22b..03028f6 100644
+--- a/core/polkitqt1-subject.h
++++ b/core/polkitqt1-subject.h
+@@ -40,6 +40,8 @@ typedef struct _PolkitSystemBusName PolkitSystemBusName;
+ namespace PolkitQt1
+ {
+ 
++class UnixUserIdentity;
++
+ /**
+  * \class Subject polkitqt1-subject.h Subject
+  * \author Jaroslav Reznik <jreznik@redhat.com>
+@@ -208,6 +210,14 @@ public:
+     * \param name System bus name.
+     */
+     void setName(const QString &name);
++
++    /**
++     * Returns the UnixUserIdentity for this subject.
++     *
++     * The ownership of the returned pointer is passed to the caller.
++     * \since 0.113
++     **/
++    UnixUserIdentity user();
+ };
+ 
+ /**
+-- 
+2.5.0
+

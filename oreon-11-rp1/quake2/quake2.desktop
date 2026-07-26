@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=Quake II 
+Comment=First-person shooter game
+Exec=quake2
+StartupNotify=false
+Terminal=false
+Type=Application
+Icon=quake2
+Categories=Game;
+Keywords=game;shooter;multiplayer;online;
+
+# Translations
+Comment[pt_BR]=Jogo de tiro em primeira pessoa

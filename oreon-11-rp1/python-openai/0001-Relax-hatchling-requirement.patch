@@ -1,0 +1,26 @@
+From f204e6182a8e70535071a0fa4828be35ebcf1333 Mon Sep 17 00:00:00 2001
+From: Stephen Gallagher <sgallagh@redhat.com>
+Date: Mon, 14 Jul 2025 13:16:19 -0400
+Subject: [PATCH] Relax hatchling requirement
+
+Signed-off-by: Stephen Gallagher <sgallagh@redhat.com>
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index d9305c54695aff2225de26d00b4c92a610d77803..15fb03e12fe9830e008cb6937fcb448f12a48d27 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -103,7 +103,7 @@ typecheck = { chain = [
+ "typecheck:mypy" = "mypy ."
+ 
+ [build-system]
+-requires = ["hatchling==1.26.3", "hatch-fancy-pypi-readme"]
++requires = ["hatchling>=1.26.3", "hatch-fancy-pypi-readme"]
+ build-backend = "hatchling.build"
+ 
+ [tool.hatch.build]
+-- 
+2.50.1
+

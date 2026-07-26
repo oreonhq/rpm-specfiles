@@ -1,0 +1,11 @@
+--- sawfish_1.13.0/src/sawfish.h.orig	2025-01-27 16:05:55.124235058 +0200
++++ sawfish_1.13.0/src/sawfish.h	2025-01-27 16:07:11.004375863 +0200
+@@ -49,8 +49,6 @@
+ # define rep_INTERFACE 7		/* rep 0.10 */
+ #endif
+ 
+-typedef int bool;
+-
+ #ifdef rep_HAVE_UNIX
+ # define HAVE_UNIX 1
+ #endif

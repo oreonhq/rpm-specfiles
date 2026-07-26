@@ -1,0 +1,27 @@
+diff -up xmbdfed-4.7/Makefile.BAD xmbdfed-4.7/Makefile
+--- xmbdfed-4.7/Makefile.BAD	2008-11-20 11:42:27.000000000 -0500
++++ xmbdfed-4.7/Makefile	2008-11-20 11:45:16.000000000 -0500
+@@ -46,9 +46,9 @@ OBJS = FGrid.o GEdit.o GEditTB.o GTest.o
+ # Uncomment these if you have the FreeType library and want to use it to
+ # import OpenType fonts.
+ #
+-#FTYPE_INCS = -I/usr/local/include
+-#FTYPE_LIBS = -L/usr/local/lib -lfreetype
+-#FTYPE_DEFS = -DHAVE_FREETYPE
++FTYPE_INCS = -I/usr/include/freetype2
++FTYPE_LIBS = -lfreetype
++FTYPE_DEFS = -DHAVE_FREETYPE
+ 
+ #
+ # Uncomment these if you have the hbf.h and hbf.c files in the current
+@@ -89,8 +89,8 @@ LIBS = -R/usr/openwin/lib -R/usr/dt/lib 
+ #
+ # Uncomment these for Linux.
+ #
+-#INCS = -I/usr/X11/include $(FTYPE_INCS)
+-#LIBS = -L/usr/X11/lib -lXm -lXpm -lXmu -lXt -lXext -lX11 -lSM -lICE $(FTYPE_LIBS)
++INCS = $(FTYPE_INCS)
++LIBS = -lXm -lXpm -lXmu -lXt -lXext -lX11 -lSM -lICE $(FTYPE_LIBS)
+ 
+ #
+ # Uncomment these for HPUX.

@@ -1,0 +1,28 @@
+diff --git a/Makefile.unix b/Makefile.unix
+index 1964270..335dabc 100644
+--- a/Makefile.unix
++++ b/Makefile.unix
+@@ -57,12 +57,12 @@ all: classdir $(CLASSFILES)
+ 
+ build:
+ 	export CLASSPATH; CLASSPATH=$(CLASSPATH):.; \
+-	javac -deprecation -g -d $(CLASSDIR) $(JAVA_SOURCEFILES)
++	javac -source 1.8 -target 1.8 -deprecation -g -d $(CLASSDIR) $(JAVA_SOURCEFILES)
+ 	
+ 
+ $(CLASSDIR)/%.class: %.java
+ 	export CLASSPATH; CLASSPATH=$(CLASSPATH):.; \
+-	javac -deprecation -g -d $(CLASSDIR) $<
++	javac -source 1.8 -target 1.8 -deprecation -g -d $(CLASSDIR) $<
+ 
+ $(PCDIR)/%.java: %.java
+ 	sed 's/$/\015/' $< > $@
+@@ -76,7 +76,7 @@ docs: FORCE
+ 		mkdir -p docs; \
+ 	fi
+ 	export CLASSPATH; CLASSPATH=$(CLASSPATH):.; \
+-	javadoc -d docs javax.vecmath
++	javadoc -source 1.8 -d docs javax.vecmath
+ 
+ test:
+ 	export CLASSPATH; CLASSPATH=$(CLASSPATH):.; \

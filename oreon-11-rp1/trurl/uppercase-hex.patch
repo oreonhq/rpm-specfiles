@@ -1,0 +1,54 @@
+diff --git a/tests.json b/tests.json
+index 891271c..eedb538 100644
+--- a/tests.json
++++ b/tests.json
+@@ -703,7 +703,7 @@
+             ]
+         },
+         "expected": {
+-            "stdout": "https://%3ahej%3a@curl.se/hello\n",
++            "stdout": "https://%3Ahej%3A@curl.se/hello\n",
+             "stderr": "",
+             "returncode": 0
+         }
+@@ -2031,7 +2031,7 @@
+             ]
+         },
+         "expected": {
+-            "stdout": "/\\\\\n/%5c%5c\n",
++            "stdout": "/\\\\\n/%5C%5C\n",
+             "returncode": 0,
+             "stderr": ""
+         }
+@@ -2048,7 +2048,7 @@
+         "expected": {
+             "stdout": [
+                 {
+-                    "url": "http://localhost/%5c%5c",
++                    "url": "http://localhost/%5C%5C",
+                     "parts": {
+                         "scheme": "http",
+                         "host": "localhost",
+@@ -2072,7 +2072,7 @@
+             ]
+         },
+         "expected": {
+-            "stdout": "/%5c%5c\n/%5c%5c\n",
++            "stdout": "/%5C%5C\n/%5C%5C\n",
+             "returncode": 0,
+             "stderr": ""
+         }
+@@ -2092,11 +2092,11 @@
+         "expected": {
+             "stdout": [
+                 {
+-                    "url": "http://localhost/abc%5c%5c?a&b&a%26b",
++                    "url": "http://localhost/abc%5C%5C?a&b&a%26b",
+                     "parts": {
+                         "scheme": "http",
+                         "host": "localhost",
+-                        "path": "/abc%5c%5c",
++                        "path": "/abc%5C%5C",
+                         "query": "a&b&a%26b"
+                     },
+                     "params": [

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=xgrav
+Exec=xgrav -s /usr/share/xgrav/example1.g
+Comment=Simple physics simulation
+Icon=xgrav
+Terminal=false
+Categories=Game;Simulation;
+StartupNotify=false

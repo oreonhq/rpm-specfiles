@@ -1,0 +1,12 @@
+diff -Naurp a/plugins/v8/uwsgiplugin.py b/plugins/v8/uwsgiplugin.py
+--- a/plugins/v8/uwsgiplugin.py	2016-05-12 12:37:49.000000000 -0500
++++ b/plugins/v8/uwsgiplugin.py	2016-08-01 22:56:50.969785338 -0500
+@@ -1,7 +1,7 @@
+ import os
+ NAME='v8'
+ 
+-CFLAGS = ['-Wno-deprecated-declarations']
++CFLAGS = ['-Wno-deprecated-declarations', '-I/usr/include/v8-3.14']
+ LDFLAGS = []
+ LIBS = ['-lstdc++', '-lv8']
+ engine = os.environ.get('UWSGICONFIG_V8_ENGINE', '')

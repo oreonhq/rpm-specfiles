@@ -1,0 +1,145 @@
+--- spasm-1.2/src/spasm_io.c.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/src/spasm_io.c	2023-11-12 20:27:51.144410615 -0700
+@@ -1,6 +1,7 @@
+ #include <assert.h>
+ #include <math.h>
+ #include <err.h>
++#include <endian.h>
+ 
+ #include "spasm.h"
+ #include "mmio.h"
+@@ -56,9 +57,11 @@ spasm *spasm_load_bin(FILE * f, int prim
+ 	/* get rows */
+ 	if (fread(&n, sizeof(int), 1, f) != 1)
+ 		err(1, "error reading n");
++	n = le32toh(n);
+ 	/* get columns */
+ 	if (fread(&m, sizeof(int), 1, f) != 1)
+ 		err(1, "error reading m");
++	m = le32toh(m);
+ 
+ 	fprintf(stderr, "[IO] loading %d x %d binary matrix... ", n, m);
+ 	fflush(stderr);
+@@ -70,6 +73,8 @@ spasm *spasm_load_bin(FILE * f, int prim
+ 	size_t r = n + 1;
+ 	if (fread(Mp, sizeof(int), n+1, f) != r)
+ 		err(1, "error while reading the row lengths (read %zu items)", r);
++	for (int i = 0; i <= n; i++)
++		Mp[i] = le32toh(Mp[i]);
+ 	
+ 	int nnz = Mp[n];
+ 	spasm_csr_realloc(M, nnz);
+@@ -79,6 +84,8 @@ spasm *spasm_load_bin(FILE * f, int prim
+ 	r = nnz;
+ 	if (fread(&Mj[0], sizeof(int), nnz, f) != r)
+ 		err(1, "error while reading the compressed column ids (read %zu items)", r);
++	for (int i = 0; i < nnz; i++)
++		Mj[i] = le32toh(Mj[i]);
+ 
+ 	char nnz_s[16];
+ 	spasm_human_format(nnz, nnz_s);
+@@ -170,17 +177,21 @@ spasm *spasm_load_gbla_old(FILE * f, int
+ 	/* get rows */
+ 	if (fread(&n, sizeof(uint32_t), 1, f) != 1)
+ 		err(1, "error reading m");
++	n = le32toh(n);
+ 
+ 	/* get columns */
+ 	if (fread(&m, sizeof(uint32_t), 1, f) != 1)
+ 		err(1, "error reading n");
++	m = le32toh(m);
+ 
+ 	if ((fread(&p, sizeof(uint32_t), 1, f) != 1))
+ 		err(1, "error reading p");
++	p = le32toh(p);
+ 
+ 	/* get number of nonzero elements */
+ 	if (fread(&nnz, sizeof(uint64_t), 1, f) != 1)
+ 		err(1, "error reading nnz");
++	nnz = le64toh(nnz);
+ 
+ 	if (nnz >> 31ull)
+ 		errx(2, "more than 2^31 NNZ. You are going to hit limitations of spasm... Sorry\n");
+@@ -199,6 +210,8 @@ spasm *spasm_load_gbla_old(FILE * f, int
+ 	size_t r = nnz;
+ 	if (fread(buffer, sizeof(uint16_t), nnz, f) != r)
+ 		err(1, "error while reading the coefficients");
++	for (int i = 0; i < nnz; i++)
++		buffer[i] = le16toh(buffer[i]);
+ 	if (with_values)
+ 		for (int i = 0; i < nnz; i++)
+ 			Mx[i] = buffer[i];
+@@ -206,10 +219,14 @@ spasm *spasm_load_gbla_old(FILE * f, int
+ 	r = nnz;
+ 	if (fread(Mj, sizeof(uint32_t), nnz, f) != r)
+ 		err(1, "error while reading the column indices");
++	for (int i = 0; i < nnz; i++)
++		Mj[i] = le32toh(Mj[i]);
+ 	/* read the row lengths */
+ 	r = n;
+ 	if (fread(&Mp[1], sizeof(uint32_t), n, f) != r)
+ 		err(1, "error while reading the row lengths (read %zu items)", r);
++	for (int i = 1; i <= n; i++)
++		Mp[i] = le32toh(Mp[i]);
+ 	/* sum-prefix */
+ 	Mp[0] = 0;
+ 	for (int i = 1; i <= n; i++)
+@@ -234,6 +251,7 @@ spasm *spasm_load_gbla_new(FILE * f) {
+ 	/* get header */
+ 	if (fread(&b, sizeof(uint32_t), 1, f) != 1)
+ 		err(1, "error reading b");
++	b = le32toh(b);
+ 	if ((b & VERMASK) != VERMASK)
+ 		errx(1, "wrong format version");
+ 	b = b ^ VERMASK;
+@@ -242,14 +260,18 @@ spasm *spasm_load_gbla_new(FILE * f) {
+ 	/* get rows */
+ 	if (fread(&n, sizeof(uint32_t), 1, f) != 1)
+ 		err(1, "error reading m");
++	n = le32toh(n);
+ 	/* get columns */
+ 	if (fread(&m, sizeof(uint32_t), 1, f) != 1)
+ 		err(1, "error reading n");
++	m = le32toh(m);
+ 	if ((fread(&p, sizeof(uint16_t), 1, f) != 1))
+ 		err(1, "error reading p");
++	p = le32toh(p);
+ 	/* get number of nonzero elements */
+ 	if (fread(&nnz, sizeof(uint64_t), 1, f) != 1)
+ 		err(1, "error reading nnz");
++	nnz = le64toh(nnz);
+ 	if (nnz >> 31ull)
+ 		errx(2, "more than 2^31 NNZ. You are going to hit limitations of spasm... Sorry\n");
+ 	M = spasm_csr_alloc(n, m, nnz, (int)p, SPASM_IGNORE_VALUES);
+@@ -260,6 +282,8 @@ spasm *spasm_load_gbla_new(FILE * f) {
+ 	size_t r = n;
+ 	if (fread(&Mp[1], sizeof(uint32_t), n, f) != r)
+ 		err(1, "error while reading the row lengths (read %zu items)", r);
++	for (int i = 1; i <= n; i++)
++		Mp[i] = le32toh(Mp[i]);
+ 	/* sum-prefix */
+ 	Mp[0] = 0;
+ 	for (unsigned int i = 1; i <= n; i++)
+@@ -272,17 +296,22 @@ spasm *spasm_load_gbla_new(FILE * f) {
+ 	r = n;
+ 	if (fread(Mj, sizeof(uint32_t), n, f) != r)
+ 		err(1, "error while reading the polmaps (read %zu items)", r);
++	for (int i = 0; i < n; i++)
++		Mj[i] = le32toh(Mj[i]);
+ 
+ 	uint64_t k;
+ 	/* get number of compressed columns element */
+ 	if (fread(&k, sizeof(uint64_t), 1, f) != 1)
+ 		err(1, "error reading k");
++	k = le64toh(k);
+ 
+ 	/* read compressed columns indices */
+ 	uint32_t *buffer = spasm_malloc(k * sizeof(uint32_t));
+ 	r = k;
+ 	if (fread(buffer, sizeof(uint32_t), k, f) != r)
+ 		err(1, "error while reading the compressed column ids (read %zu items)", r);
++	for (int i = 0; i < k; i++)
++		buffer[i] = le32toh(buffer[i]);
+ 
+ 	/* uncompress columns indices */
+ 	i = 0;

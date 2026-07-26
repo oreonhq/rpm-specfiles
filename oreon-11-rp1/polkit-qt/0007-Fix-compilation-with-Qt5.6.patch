@@ -1,0 +1,27 @@
+From 4528ea9f808f7f9de56dee70626040bed2b4b67c Mon Sep 17 00:00:00 2001
+From: David Edmundson <kde@davidedmundson.co.uk>
+Date: Thu, 14 Jan 2016 17:37:09 +0000
+Subject: [PATCH 7/8] Fix compilation with Qt5.6
+
+Qt5.6 has c++11x in code in the headers, so it needs including
+
+REVIEW: 126746
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8daeb01..a60dfa2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -33,6 +33,7 @@ if(USE_QT5)
+     message(STATUS "Using Qt 5")
+ 
+     set(REQUIRED_QT_VERSION 5.1.0)
++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+ 
+     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core DBus Widgets)
+ 
+-- 
+2.5.0
+

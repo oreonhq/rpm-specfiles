@@ -1,0 +1,96 @@
+diff --git a/debugger/mcs51/sdcdb.c b/debugger/mcs51/sdcdb.c
+index 4eeaf41..beb31a5 100644
+--- a/debugger/mcs51/sdcdb.c
++++ b/debugger/mcs51/sdcdb.c
+@@ -62,8 +62,8 @@ structdef **structs = NULL; /* all structures */
+ int nLinkrecs = 0;
+ linkrec **linkrecs = NULL; /* all linkage editor records */
+ context *currCtxt = NULL;
+-short fullname = 0;
+-short showfull = 0;
++bool fullname = false;
++bool showfull = false;
+ char userinterrupt = 0;
+ char nointerrupt = 0;
+ char contsim = 0;
+@@ -573,7 +573,7 @@ static void loadModules (void)
+         {
+           /* for module records do */
+           case MOD_REC:
+-            currMod = parseModule(loop->line, TRUE);
++            currMod = parseModule(loop->line, true);
+             currModName = currMod->name ;
+ 
+             /* search the c source file and load it into buffer */
+@@ -1906,7 +1906,7 @@ static void parseCmdLine (int argc, char **argv)
+ 
+           if (strcmp(argv[i], "-fullname") == 0)
+             {
+-              fullname = TRUE;
++              fullname = false;
+               continue;
+             }
+ 
+diff --git a/debugger/mcs51/sdcdb.h b/debugger/mcs51/sdcdb.h
+index d9f8b81..d96262b 100644
+--- a/debugger/mcs51/sdcdb.h
++++ b/debugger/mcs51/sdcdb.h
+@@ -24,6 +24,7 @@
+ #ifndef  SDCDB_H
+ #define  SDCDB_H
+ 
++
+ #define SDCDB_VERSION	"0.9"
+ 
+ #define SDCDB_DEBUG
+@@ -46,6 +47,7 @@ extern int sdcdbDebug;
+ #include <stdlib.h>
+ #include <string.h>
+ #include <ctype.h>
++#include <stdbool.h>
+ #include <limits.h>
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+@@ -57,11 +59,6 @@ extern int sdcdbDebug;
+ #include "src/SDCCset.h"
+ #include "src/SDCChasht.h"
+ 
+-#define TRUE 1
+-#define FALSE !TRUE
+-
+-typedef short bool;
+-
+ #ifndef max
+ #define max(a,b) (a > b ? a : b)
+ #endif
+@@ -268,7 +265,7 @@ extern set *dispsymbols; /* set of displayable symbols */
+ extern char *currModName ;
+ extern char userinterrupt ;
+ extern char nointerrupt ;
+-extern short showfull ;
++extern bool showfull ;
+ extern int nStructs ;
+ extern struct structdef **structs ; /* all structures */
+ extern char *ssdirl; /* source directory search path */
+@@ -277,7 +274,7 @@ char  *alloccpy(char *,int );
+ char *gc_strdup(const char *s);
+ srcLine **loadFile (char *name, int *nlines);
+ 
+-extern short fullname;
++extern bool fullname;
+ extern int srcMode;
+ extern char contsim;
+ char *searchDirsFname (char *);
+diff --git a/debugger/mcs51/symtab.c b/debugger/mcs51/symtab.c
+index fd4e586..a3391c9 100644
+--- a/debugger/mcs51/symtab.c
++++ b/debugger/mcs51/symtab.c
+@@ -778,7 +778,7 @@ static void lnkCSrc (char *s)
+   mod = NULL;
+   if (!applyToSet(modules,moduleWithCName,mname,&mod))
+     {
+-      mod = parseModule(mname, FALSE);
++      mod = parseModule(mname, false);
+       mod->c_name = alloccpy(mname,strlen(mname));
+       mod->cfullname=searchDirsFname(mod->c_name);
+       mod->cLines = loadFile(mod->c_name,&mod->ncLines);

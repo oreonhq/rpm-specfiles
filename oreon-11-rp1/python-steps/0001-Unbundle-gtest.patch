@@ -1,0 +1,36 @@
+From b56e8b508cc1e41b6c3d934da41866b5d798e332 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Sun, 5 Apr 2020 09:46:08 +0100
+Subject: [PATCH 1/5] Unbundle gtest
+
+---
+ test/CMakeLists.txt | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index e7f290b..ac20c18 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,17 +1,5 @@
+-set(gtest_src "${CMAKE_CURRENT_SOURCE_DIR}/third_party/googletest/googletest")
+-set(gtest_bin "${CMAKE_CURRENT_BINARY_DIR}/third_party/gtest")
+-
+-if(NOT EXISTS ${gtest_src}/CMakeLists.txt)
+-  message(
+-    FATAL_ERROR
+-      " Submodules do not seems to be initialized \n Please run 'git submodule update --init --recursive'"
+-    )
+-endif()
+-
+-add_subdirectory(${gtest_src} ${gtest_bin} EXCLUDE_FROM_ALL)
+-
+-set(inc_dirs "${CMAKE_SOURCE_DIR}/src" "${gtest_src}/include")
+-set(libs libsteps gtest_main)
++set(inc_dirs "${CMAKE_SOURCE_DIR}/src")
++set(libs libsteps gtest_main gtest)
+ 
+ if(LAPACK_FOUND)
+   list(APPEND libs ${LAPACK_LIBRARIES})
+-- 
+2.26.0
+

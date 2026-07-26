@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>KoboDeluxe.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Worminator</name>
+  <summary>Sidescrolling platform and shoot'em up action-game</summary>
+  <description>
+    <p>
+      Worminator is a sidescrolling action game. You play as The Worminator
+      and fight your way through many levels of madness and mayhem.
+    </p>
+    <p>
+      Worminator features nine unique weapons, visible character damage,
+      full screen scrolling, sound and music, and much more!
+    </p>
+  </description>
+  <url type="homepage">https://sourceforge.net/projects/worminator/</url>
+  <screenshots>
+    <screenshot type="default">http://freshmeat.sourceforge.net/screenshots/b2/dc/b2dc91468a7c5b7db1b01dc578e74dfd_medium.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

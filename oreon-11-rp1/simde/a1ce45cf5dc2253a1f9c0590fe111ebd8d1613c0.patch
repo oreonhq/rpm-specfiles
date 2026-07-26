@@ -1,0 +1,24 @@
+From a1ce45cf5dc2253a1f9c0590fe111ebd8d1613c0 Mon Sep 17 00:00:00 2001
+From: Michael Catanzaro <mcatanzaro@redhat.com>
+Date: Wed, 22 May 2024 08:01:24 -0500
+Subject: [PATCH] Don't use _Float16 on s390x
+
+Clang does not support _Float16 on s390x
+
+https://clang.llvm.org/docs/LanguageExtensions.html#half-precision-floating-point
+---
+ simde/simde-f16.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/simde/simde-f16.h b/simde/simde-f16.h
+index 77a220a1b..495fff18f 100644
+--- a/simde/simde-f16.h
++++ b/simde/simde-f16.h
+@@ -71,6 +71,7 @@ SIMDE_BEGIN_DECLS_
+   #elif !defined(__EMSCRIPTEN__) && !(defined(__clang__) && defined(SIMDE_ARCH_POWER)) && \
+     !(defined(HEDLEY_MSVC_VERSION) && defined(__clang__)) && \
+     !(defined(SIMDE_ARCH_MIPS) && defined(__clang__)) && \
++    !(defined(SIMDE_ARCH_ZARCH) && defined(__clang__)) && \
+     !(defined(__clang__) && defined(SIMDE_ARCH_RISCV64)) && ( \
+       defined(SIMDE_X86_AVX512FP16_NATIVE) || \
+       (defined(SIMDE_ARCH_X86_SSE2) && HEDLEY_GCC_VERSION_CHECK(12,0,0)) || \

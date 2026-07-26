@@ -1,0 +1,29 @@
+Declare Attempt_STARTTLS and ICC_Invalidate explicitly, to avoid an
+implicit declarations.  This should improve compatibility with future
+C compilers.
+
+Submitted upstream: <https://sourceforge.net/p/squirrelmail/patches/497/>
+
+diff --git a/include/imapproxy.h b/include/imapproxy.h
+index c31ab58764319fbe..b863606439133964 100644
+--- a/include/imapproxy.h
++++ b/include/imapproxy.h
+@@ -370,9 +370,11 @@ extern void HandleRequest( int );
+ extern char *memtok( char *, char *, char ** );
+ extern int imparse_isatom( const char * );
+ extern ICD_Struct *Get_Server_conn( char *, char *, const char *, const char *, unsigned char, char *, char * );
++extern int Attempt_STARTTLS( ITD_Struct * );
+ extern void ICC_Logout( ICC_Struct * );
+ extern void ICC_Recycle( unsigned int );
+ extern void ICC_Recycle_Loop( void );
++extern void ICC_Invalidate ( ICC_Struct * );
+ extern void LockMutex( pthread_mutex_t * );
+ extern void UnLockMutex( pthread_mutex_t * );
+ extern void SetDefaultConfigValues(ProxyConfig_Struct *);
+@@ -389,6 +391,5 @@ extern int atoui( const char *, unsigned int * );
+ #endif
+ extern void ssl_thread_setup(const char * fn);
+ 
+-
+ #endif /* __IMAPPROXY_H */
+ 

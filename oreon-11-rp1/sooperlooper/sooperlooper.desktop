@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SooperLooper
+Comment=Realtime software looping sampler
+Exec=slgui
+Icon=sooperlooper
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;X-Digital_Processing;X-Jack;X-MIDI;Midi;
+Keywords=Music;Sound;Looper;

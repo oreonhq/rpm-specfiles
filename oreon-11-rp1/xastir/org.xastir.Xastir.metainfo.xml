@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.xastir.Xastir</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+
+  <name>Xastir</name>
+  <summary>APRS client</summary>
+  <description>
+    <p>
+      Xastir is a graphical application that interfaces HAM radio and internet access to realtime mapping software.
+    </p>
+
+    <p>
+      Automatic Packet Reporting System (APRS) is an amateur radio based digital communication system for real-time exchange
+      of digital information to users on the network.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">xastir.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window</caption>
+      <image>https://xastir.org/images/51875.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://xastir.org</url>
+  <url type="bugtracker">https://github.com/Xastir/Xastir/issues</url>
+
+  <content_rating type="oars-1.1" />
+</component>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>M Yuppy GB</target>
+    <match>
+      <family>MYuppyGB-Medium</family>
+      <change>
+        <style>Regular</style>
+        <into>Medium</into>
+      </change>
+    </match>
+    <like>
+      <family>M Yuppy PRC</family>
+      <family>M Yuppy</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

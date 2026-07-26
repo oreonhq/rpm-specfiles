@@ -1,0 +1,13 @@
+##########################################################################
+##########################################################################
+
+# What actual file?  Defaults to LogPath if not absolute path....
+LogFile = /var/log/xpilot.log
+
+# Keep only the lines in the proper date range...
+*ApplyXpilotDate
+
+# Search the rotated log files
+Archive = xpilot.log.*
+
+# vi: shiftwidth=3 tabstop=3 et

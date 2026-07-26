@@ -1,0 +1,9 @@
+---
+host: localhost
+port: 8461
+reuse_port: True
+shutdown_timeout: 20
+cache:
+  type: sqlite
+  options:
+    filename: /var/lib/mta-sts/cache.db

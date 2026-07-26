@@ -1,0 +1,32 @@
+Since zope-testrunner is invoked with python3 -sP on Fedora,
+it seems to cause an issue because lazr.delegates is in system sitelib
+but lazr.config is in buildroot.
+
+On EPEL 9, where the shebang is python3 -s, this works.
+
+Sidestep the issue by invoking python -sm zope.testrunner rather than
+invoking zope-testrunner via its wrapper
+
+h/t churchyard
+```
+Test-module import failures:
+Module: lazr.config.tests.test_config
+ModuleNotFoundError: No module named 'lazr.config'
+Module: lazr.config.tests.test_docs
+ModuleNotFoundError: No module named 'lazr.config'
+Test-modules with import problems:
+  lazr.config.tests.test_config
+  lazr.config.tests.test_docs
+Total: 0 tests, 0 failures, 2 errors and 0 skipped in 0.000 seconds.
+```
+--- a/tox.ini
++++ b/tox.ini
+@@ -16,7 +16,7 @@ skip_missing_interpreters = True
+ deps =
+     zope.testrunner
+ commands =
+-    zope-testrunner --test-path src --tests-pattern ^tests {posargs}
++    python -sm zope.testrunner --test-path src --tests-pattern ^tests {posargs}
+ 
+ [testenv:pre-commit]
+ # necessary to build the woke linter

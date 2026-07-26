@@ -1,0 +1,19 @@
+--- rcs-5.10.1/src/rlog.c       2022-01-27 22:24:25.000000000 +0100
++++ rcs-5.10.1-fix/src/rlog.c   2025-05-10 09:23:17.561013185 +0200
+@@ -871,7 +871,6 @@ rlog_main (const char *cmd, int argc, ch
+         repo_filename = REPO (filename);
+         tip = REPO (tip);
+         defbr = GROK (branch);
+-        locks = GROK (locks);
+         strictly_locking = BE (strictly_locking);
+         kws = BE (kws);
+ 
+@@ -879,6 +878,8 @@ rlog_main (const char *cmd, int argc, ch
+         if (lockflag)
+           trunclocks (&criteria);
+ 
++        locks = GROK (locks);
++
+         /* Do nothing if ‘-L’ is given and there are no locks.  */
+         if (onlylockflag && !locks)
+           continue;

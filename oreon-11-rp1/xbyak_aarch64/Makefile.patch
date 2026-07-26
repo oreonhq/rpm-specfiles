@@ -1,0 +1,30 @@
+--- xbyak_aarch64-1.0.0/MakefileOriginal	2022-11-22 14:33:01.085367255 +0300
++++ xbyak_aarch64-1.0.0/Makefile	2022-11-23 23:09:28.913721325 +0300
+@@ -14,10 +14,10 @@
+ # limitations under the License.
+ #*******************************************************************************
+ ARCH?=$(shell uname -m)
+-TARGET=lib/libxbyak_aarch64.a
++TARGET=lib/libxbyak_aarch64.so.0.soname
+ all: $(TARGET)
+ 
+-CFLAGS=-std=c++11 -DNDEBUG -g -I ./xbyak_aarch64 -Wall -Wextra -fPIC
++CXXFLAGS+=-std=c++11 -DNDEBUG -g -I ./xbyak_aarch64 -Wall -Wextra -fPIC
+ ifneq ($(DEBUG),1)
+ CFLAGS+=-O2
+ endif
+@@ -25,12 +25,12 @@
+ LIB_OBJ=obj/xbyak_aarch64_impl.o obj/util_impl.o
+ 
+ obj/%.o: src/%.cpp
+-	$(CXX) $(CFLAGS) -c $< -o $@ -MMD -MP -MF $(@:.o=.d)
++	$(CXX) $(CXXFLAGS) -c $< -o $@ -MMD -MP -MF $(@:.o=.d)
+ 
+ -include obj/xbyak_aarch64_impl.d
+ 
+ $(TARGET): $(LIB_OBJ)
+-	ar r $@ $^
++	$(CXX) $(CXXFLAGS) -shared -Wl,-soname,libxbyak_aarch64.so.0 -o $@ $^
+ 
+ test: $(TARGET)
+ 	$(MAKE) -C test

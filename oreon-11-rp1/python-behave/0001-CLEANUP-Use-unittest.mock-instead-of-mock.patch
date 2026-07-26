@@ -1,0 +1,307 @@
+From 3f813e1d3f86434a53b43ae29c27400f2467a851 Mon Sep 17 00:00:00 2001
+From: jenisys <jenisys@users.noreply.github.com>
+Date: Wed, 13 Aug 2025 23:52:49 +0200
+Subject: [PATCH] CLEANUP: Use "unittest.mock" instead of "mock"
+
+* SUPERSEDES: pull #1031 (provided by: jblanckelkoo)
+---
+ py.requirements/testing.txt                 | 13 +++++--------
+ pyproject.toml                              |  4 ----
+ tests/api/_test_async_step35.py             |  2 +-
+ tests/functional/test_capture_on_failed.py  |  2 +-
+ tests/functional/test_capture_on_success.py |  2 +-
+ tests/issues/test_issue0619.py              |  2 +-
+ tests/issues/test_issue0767.py              |  2 +-
+ tests/unit/reporter/test_summary.py         |  2 +-
+ tests/unit/test_context_cleanups.py         |  2 +-
+ tests/unit/test_deprecated.py               |  2 +-
+ tests/unit/test_formatter.py                |  2 +-
+ tests/unit/test_log_capture.py              |  2 +-
+ tests/unit/test_matchers.py                 |  2 +-
+ tests/unit/test_model.py                    |  2 +-
+ tests/unit/test_runner.py                   |  2 +-
+ tests/unit/test_runner_context.py           |  2 +-
+ tests/unit/test_runner_hook.py              |  2 +-
+ tests/unit/test_step_registry.py            |  2 +-
+ tests/unit/test_tag_matcher.py              |  2 +-
+ 19 files changed, 22 insertions(+), 29 deletions(-)
+
+diff --git a/py.requirements/testing.txt b/py.requirements/testing.txt
+index 76c3ab3..cd947ba 100644
+--- a/py.requirements/testing.txt
++++ b/py.requirements/testing.txt
+@@ -8,24 +8,21 @@
+ # PREPARED-FUTURE: behave4cmd0, behave4cmd
+ pytest <  5.0; python_version <  '3.0' # pytest >= 4.2
+ pytest >= 5.0; python_version >= '3.0'
++pytest-html >= 2.0; python_version >= '3.0'
+ 
+-pytest-html >= 1.19.0,<2.0; python_version <  '3.0'
+-pytest-html >= 2.0;         python_version >= '3.0'
+-
+-mock  <  4.0;   python_version <  '3.6'
+-mock  >= 4.0;   python_version >= '3.6'
+-PyHamcrest >= 2.0.2; python_version >= '3.0'
++# -- ASSERT-MATCHER:
++yHamcrest >= 2.0.2; python_version >= '3.0'
+ PyHamcrest <  2.0;   python_version <  '3.0'
+ assertpy >= 1.1
+ 
+ chardet
+-# PREAPRED: charset-normalizer
++# PREPARED: charset-normalizer
+ 
+ # -- NEEDED: By some tests (as proof of concept)
+ # NOTE: path.py-10.1 is required for python2.6
+ # HINT: path.py => path (python-install-package was renamed for python3)
+ path.py >=11.5.0,<13.0; python_version <  '3.5'
+-path >= 13.1.0;         python_version >= '3.5'
++path >= 13.1.0; python_version >= '3.5'
+ 
+ # -- EXTRA PYTHON MODULES:
+ freezegun >= 1.5.1; python_version > '3.7'
+diff --git a/pyproject.toml b/pyproject.toml
+index 84ccfd4..8da7a3e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -134,8 +134,6 @@ develop = [
+     "pytest >= 5.0; python_version >= '3.0'",
+     "pytest-html >= 1.19.0,<2.0; python_version <  '3.0'",
+     "pytest-html >= 2.0;         python_version >= '3.0'",
+-    "mock  <  4.0;   python_version <  '3.6'",
+-    "mock  >= 4.0;   python_version >= '3.6'",
+     "PyHamcrest >= 2.0.2; python_version >= '3.0'",
+     "PyHamcrest <  2.0;   python_version <  '3.0'",
+     "pytest-cov",
+@@ -173,8 +171,6 @@ testing = [
+     "pytest >= 5.0; python_version >= '3.0'",
+     "pytest-html >= 1.19.0,<2.0; python_version <  '3.0'",
+     "pytest-html >= 2.0;         python_version >= '3.0'",
+-    "mock  <  4.0;   python_version <  '3.6'",
+-    "mock  >= 4.0;   python_version >= '3.6'",
+     "PyHamcrest >= 2.0.2; python_version >= '3.0'",
+     "PyHamcrest <  2.0;   python_version <  '3.0'",
+     "assertpy >= 1.1",
+diff --git a/tests/api/_test_async_step35.py b/tests/api/_test_async_step35.py
+index ad2367c..9ec06ff 100644
+--- a/tests/api/_test_async_step35.py
++++ b/tests/api/_test_async_step35.py
+@@ -24,7 +24,7 @@ from platform import python_implementation
+ import sys
+ 
+ from hamcrest import assert_that, close_to
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ 
+ from behave._stepimport import use_step_import_modules, SimpleStepContainer
+diff --git a/tests/functional/test_capture_on_failed.py b/tests/functional/test_capture_on_failed.py
+index e5ee2de..e37fd4b 100644
+--- a/tests/functional/test_capture_on_failed.py
++++ b/tests/functional/test_capture_on_failed.py
+@@ -5,7 +5,7 @@ if the TEST ASSUMPTION, that is used here, is true.
+ * TEST ASSUMPTION: STORE_CAPTURED_ON_SUCCESS is False (only failures are captured)
+ """
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ 
+ from behave.configuration import Configuration
+diff --git a/tests/functional/test_capture_on_success.py b/tests/functional/test_capture_on_success.py
+index 6c55c6a..3dd9959 100644
+--- a/tests/functional/test_capture_on_success.py
++++ b/tests/functional/test_capture_on_success.py
+@@ -5,7 +5,7 @@ if the TEST ASSUMPTION, that is used here, is true.
+ * TEST ASSUMPTION: STORE_CAPTURED_ON_SUCCESS is True (everything is captured)
+ """
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ 
+ from behave.configuration import Configuration
+diff --git a/tests/issues/test_issue0619.py b/tests/issues/test_issue0619.py
+index 74463c5..6f6aebe 100644
+--- a/tests/issues/test_issue0619.py
++++ b/tests/issues/test_issue0619.py
+@@ -20,7 +20,7 @@ so the default behaviour of getattr is not executed (see docs).
+ from __future__ import absolute_import
+ from behave.configuration import Configuration
+ from behave.runner import Context, scoped_context_layer
+-from mock import Mock
++from unittest.mock import Mock
+ 
+ 
+ def test_issue__getattr_with_protected_unknown_context_attribute_raises_no_error():
+diff --git a/tests/issues/test_issue0767.py b/tests/issues/test_issue0767.py
+index 401dbd0..f0c61c3 100644
+--- a/tests/issues/test_issue0767.py
++++ b/tests/issues/test_issue0767.py
+@@ -14,7 +14,7 @@ Behave returns nothing. ::
+ This seems to be an oversight.
+ """
+ 
+-from mock import Mock
++from unittest.mock import Mock
+ from behave.fixture import fixture, use_fixture_by_tag
+ from behave.runner import Context
+ 
+diff --git a/tests/unit/reporter/test_summary.py b/tests/unit/reporter/test_summary.py
+index 293824a..0d65774 100644
+--- a/tests/unit/reporter/test_summary.py
++++ b/tests/unit/reporter/test_summary.py
+@@ -1,7 +1,7 @@
+ # -*- coding: UTF-8 -*-
+ 
+ from __future__ import absolute_import, print_function, division
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from behave.model import ScenarioOutline
+ from behave.model_type import Status
+ from behave.reporter.summary import (
+diff --git a/tests/unit/test_context_cleanups.py b/tests/unit/test_context_cleanups.py
+index fd34e8a..eaece75 100644
+--- a/tests/unit/test_context_cleanups.py
++++ b/tests/unit/test_context_cleanups.py
+@@ -13,7 +13,7 @@ OPEN ISSUES:
+ from __future__ import print_function
+ from behave.configuration import Configuration
+ from behave.runner import Context, Runner, scoped_context_layer
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ 
+ 
+diff --git a/tests/unit/test_deprecated.py b/tests/unit/test_deprecated.py
+index 1cd3b4e..d92ee71 100644
+--- a/tests/unit/test_deprecated.py
++++ b/tests/unit/test_deprecated.py
+@@ -11,7 +11,7 @@ from behave.configuration import Configuration
+ from behave.python_feature import PythonFeature
+ from behave.runner import Context, ModelRunner
+ from behave.tag_matcher import ActiveTagMatcher
+-from mock import Mock
++from unittest.mock import Mock
+ import pytest
+ 
+ 
+diff --git a/tests/unit/test_formatter.py b/tests/unit/test_formatter.py
+index e32e91c..4498763 100644
+--- a/tests/unit/test_formatter.py
++++ b/tests/unit/test_formatter.py
+@@ -6,7 +6,7 @@ import sys
+ import tempfile
+ import unittest
+ import six
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from behave.formatter._registry import make_formatters
+ from behave.formatter import pretty
+ from behave.formatter.base import StreamOpener
+diff --git a/tests/unit/test_log_capture.py b/tests/unit/test_log_capture.py
+index 0e8d57f..dede30f 100644
+--- a/tests/unit/test_log_capture.py
++++ b/tests/unit/test_log_capture.py
+@@ -1,6 +1,6 @@
+ # -*- coding: UTF-8 -*-
+ from __future__ import absolute_import, with_statement
+-from mock import patch
++from unittest.mock import patch
+ from behave.log_capture import LoggingCapture
+ from six.moves import range
+ 
+diff --git a/tests/unit/test_matchers.py b/tests/unit/test_matchers.py
+index c9ee164..7b838cd 100644
+--- a/tests/unit/test_matchers.py
++++ b/tests/unit/test_matchers.py
+@@ -2,7 +2,7 @@
+ # ruff: noqa: E731
+ from __future__ import absolute_import, with_statement
+ import pytest
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ import parse
+ from behave.exception import NotSupportedWarning
+ from behave.matchers import (
+diff --git a/tests/unit/test_model.py b/tests/unit/test_model.py
+index fec7486..41d9fe2 100644
+--- a/tests/unit/test_model.py
++++ b/tests/unit/test_model.py
+@@ -4,7 +4,7 @@
+ from __future__ import absolute_import, print_function, with_statement
+ import unittest
+ import pytest
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ import six
+ from six.moves import range     # pylint: disable=redefined-builtin
+ from six.moves import zip       # pylint: disable=redefined-builtin
+diff --git a/tests/unit/test_runner.py b/tests/unit/test_runner.py
+index d465c9e..09381cc 100644
+--- a/tests/unit/test_runner.py
++++ b/tests/unit/test_runner.py
+@@ -8,7 +8,7 @@ import sys
+ import unittest
+ from six import StringIO
+ import pytest
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from behave import runner_util
+ from behave.runner import Context, Runner
+ from behave.exception import ConfigError
+diff --git a/tests/unit/test_runner_context.py b/tests/unit/test_runner_context.py
+index 35ec87c..85de28c 100644
+--- a/tests/unit/test_runner_context.py
++++ b/tests/unit/test_runner_context.py
+@@ -7,7 +7,7 @@ import unittest
+ import warnings
+ from platform import python_implementation
+ 
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ import pytest
+ import six
+ 
+diff --git a/tests/unit/test_runner_hook.py b/tests/unit/test_runner_hook.py
+index 9f7c421..4b1c371 100644
+--- a/tests/unit/test_runner_hook.py
++++ b/tests/unit/test_runner_hook.py
+@@ -3,7 +3,7 @@ Tests for :mod:`behave.runner` related to hook processing.
+ """
+ 
+ from __future__ import absolute_import, print_function
+-from mock import Mock
++from unittest.mock import Mock
+ from behave.capture import CaptureSinkAsCollector
+ from behave.configuration import Configuration
+ from behave.runner import Context, ModelRunner
+diff --git a/tests/unit/test_step_registry.py b/tests/unit/test_step_registry.py
+index e9ff48b..a9ff36e 100644
+--- a/tests/unit/test_step_registry.py
++++ b/tests/unit/test_step_registry.py
+@@ -3,7 +3,7 @@
+ # ruff: noqa: E731
+ 
+ from __future__ import absolute_import, with_statement
+-from mock import Mock, patch
++from unittest.mock import Mock, patch
+ from six.moves import range     # pylint: disable=redefined-builtin
+ from behave import step_registry
+ 
+diff --git a/tests/unit/test_tag_matcher.py b/tests/unit/test_tag_matcher.py
+index 282179b..b959ef2 100644
+--- a/tests/unit/test_tag_matcher.py
++++ b/tests/unit/test_tag_matcher.py
+@@ -9,7 +9,7 @@ Unit tests for active tag-matcher (mod:`behave.tag_matcher`).
+ """
+ 
+ from __future__ import absolute_import
+-from mock import Mock
++from unittest.mock import Mock
+ from unittest import TestCase
+ import operator
+ import pytest
+-- 
+2.51.0
+

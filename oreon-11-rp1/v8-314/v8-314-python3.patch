@@ -1,0 +1,215 @@
+diff -up v8-3.14.5.10/SConstruct.python3 v8-3.14.5.10/SConstruct
+--- v8-3.14.5.10/SConstruct.python3	2020-02-06 15:59:54.384811798 -0500
++++ v8-3.14.5.10/SConstruct	2020-02-06 16:28:20.272457921 -0500
+@@ -31,7 +31,6 @@ import subprocess
+ import sys
+ import os
+ from os.path import join, dirname, abspath
+-from types import DictType, StringTypes
+ root_dir = dirname(File('SConstruct').rfile().abspath)
+ src_dir = join(root_dir, 'src')
+ sys.path.insert(0, join(root_dir, 'tools'))
+@@ -948,7 +947,7 @@ SUFFIXES = {
+ 
+ 
+ def Abort(message):
+-  print message
++  print(message)
+   sys.exit(1)
+ 
+ 
+@@ -993,7 +992,7 @@ def GuessStrictAliasing(env):
+     # but when scons detects msvc this value is not set.
+     version = subprocess.Popen([env['CC'], '-dumpversion'],
+         stdout=subprocess.PIPE).communicate()[0]
+-    if version.find('4.5') == 0:
++    if version.find(b'4.5') == 0:
+       return 'off'
+   return 'default'
+ 
+@@ -1104,7 +1103,7 @@ SIMPLE_OPTIONS = {
+             '(if available on the current architecture/platform)'
+   },
+   'sourcesignatures': {
+-    'values': ['MD5', 'timestamp'],
++    'values': ['MD5', 'MD5-timestamp'],
+     'default': 'MD5',
+     'help': 'set how the build system detects file changes'
+   },
+@@ -1176,7 +1175,7 @@ ALL_OPTIONS = dict(PLATFORM_OPTIONS, **S
+ 
+ def AddOptions(options, result):
+   guess_env = Environment(options=result)
+-  for (name, option) in options.iteritems():
++  for (name, option) in options.items():
+     if 'guess' in option:
+       # Option has a guess function
+       guess = option.get('guess')
+@@ -1189,7 +1188,7 @@ def AddOptions(options, result):
+ 
+ 
+ def GetOptions():
+-  result = Options()
++  result = Variables()
+   result.Add('mode', 'compilation mode (debug, release)', 'release')
+   result.Add('sample', 'build sample (shell, process, lineprocessor)', '')
+   result.Add('cache', 'directory to use for scons build cache', '')
+@@ -1269,7 +1268,7 @@ def IsLegal(env, option, values):
+ 
+ 
+ def WarnAboutDeprecation():
+-  print """
++  print("""
+     #####################################################################
+     #                                                                   #
+     #  LAST WARNING: Building V8 with SCons is deprecated.              #
+@@ -1281,7 +1280,7 @@ def WarnAboutDeprecation():
+     #  Instructions: http://code.google.com/p/v8/wiki/BuildingWithGYP.  #
+     #                                                                   #
+     #####################################################################
+-  """
++  """)
+ 
+ 
+ def VerifyOptions(env):
+@@ -1316,12 +1315,12 @@ def VerifyOptions(env):
+   if env['cache'] and not os.path.isdir(env['cache']):
+     Abort("The specified cache directory does not exist.")
+   if not (env['arch'] == 'arm' or env['simulator'] == 'arm') and ('unalignedaccesses' in ARGUMENTS):
+-    print env['arch']
+-    print env['simulator']
++    print(env['arch'])
++    print(env['simulator'])
+     Abort("Option unalignedaccesses only supported for the ARM architecture.")
+   if env['os'] != 'linux' and env['compress_startup_data'] != 'off':
+     Abort("Startup data compression is only available on Linux")
+-  for (name, option) in ALL_OPTIONS.iteritems():
++  for (name, option) in ALL_OPTIONS.items():
+     if (not name in env):
+       message = ("A value for option %s must be specified (%s)." %
+           (name, ", ".join(option['values'])))
+@@ -1368,7 +1367,7 @@ class BuildContext(object):
+   def GetRelevantSources(self, source):
+     result = []
+     result += source.get('all', [])
+-    for (name, value) in self.options.iteritems():
++    for (name, value) in self.options.items():
+       source_value = source.get(name + ':' + value, [])
+       if type(source_value) == dict:
+         result += self.GetRelevantSources(source_value)
+@@ -1379,7 +1378,7 @@ class BuildContext(object):
+   def AppendFlags(self, options, added):
+     if not added:
+       return
+-    for (key, value) in added.iteritems():
++    for (key, value) in added.items():
+       if key.find(':') != -1:
+         self.AddRelevantSubFlags(options, { key: value })
+       else:
+@@ -1387,11 +1386,11 @@ class BuildContext(object):
+           options[key] = value
+         else:
+           prefix = options[key]
+-          if isinstance(prefix, StringTypes): prefix = prefix.split()
++          if isinstance(prefix, str): prefix = prefix.split()
+           options[key] = prefix + value
+ 
+   def ConfigureObject(self, env, input, **kw):
+-    if (kw.has_key('CPPPATH') and env.has_key('CPPPATH')):
++    if ('CPPPATH' in kw and 'CPPPATH' in env):
+       kw['CPPPATH'] += env['CPPPATH']
+     if self.options['library'] == 'static':
+       return env.StaticObject(input, **kw)
+@@ -1401,7 +1400,7 @@ class BuildContext(object):
+   def ApplyEnvOverrides(self, env):
+     if not self.env_overrides:
+       return
+-    if type(env['ENV']) == DictType:
++    if type(env['ENV']) == dict:
+       env['ENV'].update(**self.env_overrides)
+     else:
+       env['ENV'] = self.env_overrides
+@@ -1412,22 +1411,22 @@ def PostprocessOptions(options, os):
+   if (options['simulator'] != 'none') and (options['arch'] != options['simulator']):
+     if 'arch' in ARGUMENTS:
+       # Print a warning if arch has explicitly been set
+-      print "Warning: forcing architecture to match simulator (%s)" % options['simulator']
++      print("Warning: forcing architecture to match simulator ({})".format(options['simulator']))
+     options['arch'] = options['simulator']
+   if (options['prof'] != 'off') and (options['profilingsupport'] == 'off'):
+     # Print a warning if profiling is enabled without profiling support
+-    print "Warning: forcing profilingsupport on when prof is on"
++    print("Warning: forcing profilingsupport on when prof is on")
+     options['profilingsupport'] = 'on'
+   if os == 'win32' and options['pgo'] != 'off' and options['msvcltcg'] == 'off':
+     if 'msvcltcg' in ARGUMENTS:
+-      print "Warning: forcing msvcltcg on as it is required for pgo (%s)" % options['pgo']
++      print("Warning: forcing msvcltcg on as it is required for pgo ({})".format(options['pgo']))
+     options['msvcltcg'] = 'on'
+   if (options['mipsabi'] != 'none') and (options['arch'] != 'mips') and (options['simulator'] != 'mips'):
+     options['mipsabi'] = 'none'
+   if options['liveobjectlist'] == 'on':
+     if (options['debuggersupport'] != 'on') or (options['mode'] == 'release'):
+       # Print a warning that liveobjectlist will implicitly enable the debugger
+-      print "Warning: forcing debuggersupport on for liveobjectlist"
++      print("Warning: forcing debuggersupport on for liveobjectlist")
+     options['debuggersupport'] = 'on'
+     options['inspector'] = 'on'
+     options['objectprint'] = 'on'
+@@ -1559,7 +1558,7 @@ def BuildSpecific(env, mode, env_overrid
+     sample_env.Depends(sample_program, library)
+     context.sample_targets.append(sample_program)
+ 
+-  cctest_env = env.Copy()
++  cctest_env = env.Clone()
+   cctest_env.Prepend(LIBS=[library_name])
+   cctest_program = cctest_env.SConscript(
+     join('test', 'cctest', 'SConscript'),
+@@ -1569,7 +1568,7 @@ def BuildSpecific(env, mode, env_overrid
+   )
+   context.cctest_targets.append(cctest_program)
+ 
+-  preparser_env = env.Copy()
++  preparser_env = env.Clone()
+   preparser_env.Replace(**context.flags['preparser'])
+   preparser_env.Prepend(LIBS=[preparser_library_name])
+   context.ApplyEnvOverrides(preparser_env)
+@@ -1596,7 +1595,7 @@ def Build():
+   VerifyOptions(env)
+   env_overrides = ParseEnvOverrides(env['env'], env['importenv'])
+ 
+-  SourceSignatures(env['sourcesignatures'])
++  Decider(env['sourcesignatures'])
+ 
+   libraries = []
+   mksnapshots = []
+@@ -1606,7 +1605,7 @@ def Build():
+   d8s = []
+   modes = SplitList(env['mode'])
+   for mode in modes:
+-    context = BuildSpecific(env.Copy(), mode, env_overrides, tools)
++    context = BuildSpecific(env.Clone(), mode, env_overrides, tools)
+     libraries += context.library_targets
+     mksnapshots += context.mksnapshot_targets
+     cctests += context.cctest_targets
+diff -up v8-3.14.5.10/src/SConscript.python3 v8-3.14.5.10/src/SConscript
+--- v8-3.14.5.10/src/SConscript.python3	2020-02-06 16:22:40.599976105 -0500
++++ v8-3.14.5.10/src/SConscript	2020-02-06 16:25:09.388681125 -0500
+@@ -376,7 +376,7 @@ collection.js
+ 
+ 
+ def Abort(message):
+-  print message
++  print(message)
+   sys.exit(1)
+ 
+ 
+@@ -435,7 +435,7 @@ def ConfigureObjectFiles():
+   # directory.  Then rebuild the VM with the cross compiler and specify
+   # snapshot=nobuild on the scons command line.
+   empty_snapshot_obj = context.ConfigureObject(env, 'snapshot-empty.cc')
+-  mksnapshot_env = env.Copy()
++  mksnapshot_env = env.Clone()
+   mksnapshot_env.Replace(**context.flags['mksnapshot'])
+   mksnapshot_src = 'mksnapshot.cc'
+   mksnapshot = mksnapshot_env.Program('mksnapshot', [mksnapshot_src, libraries_obj, experimental_libraries_obj,  non_snapshot_files, empty_snapshot_obj], PDB='mksnapshot.exe.pdb')

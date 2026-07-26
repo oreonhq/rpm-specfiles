@@ -1,0 +1,21 @@
+diff --git a/servus/uint128_t.h b/servus/uint128_t.h
+--- a/servus/uint128_t.h
++++ b/servus/uint128_t.h
+@@ -77,7 +77,16 @@ class uint128_t
+ 
+     /**
+      * Construct a new 128 bit integer with default values.
+-     **/
++     */
++    uint128_t(const servus::uint128_t& rhs)
++        : _high(rhs._high)
++        , _low(rhs._low)
++    {
++    }
++
++    /**
++     * Construct a new 128 bit integer with default values.
++     */
+     uint128_t(const uint64_t high_, const uint64_t low_)
+         : _high(high_)
+         , _low(low_)

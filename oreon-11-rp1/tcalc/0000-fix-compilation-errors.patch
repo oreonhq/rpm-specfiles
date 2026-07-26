@@ -1,0 +1,28 @@
+diff -rU4 tcalc-2.1--orig/src/custom_func.c tcalc-2.1--patched/src/custom_func.c
+--- tcalc-2.1--orig/src/custom_func.c	2016-09-10 10:36:37.000000000 +0200
++++ tcalc-2.1--patched/src/custom_func.c	2026-02-16 22:10:42.938310710 +0100
+@@ -20,8 +20,10 @@
+  */    
+ 
+ #include "defs.h"
+ 
++#include <string.h>
++
+ char custom_func_name[MAX_FUNCTIONS][MAX_FUNCTION_NAME];
+ char *func_body[MAX_FUNCTIONS];
+ char *func_args[MAX_FUNCTIONS];
+ int func_args_count[MAX_FUNCTIONS];
+diff -rU4 tcalc-2.1--orig/src/defs.h tcalc-2.1--patched/src/defs.h
+--- tcalc-2.1--orig/src/defs.h	2020-03-08 08:08:38.141126532 +0100
++++ tcalc-2.1--patched/src/defs.h	2026-02-16 22:09:45.679852267 +0100
+@@ -112,9 +112,9 @@
+ extern double global_vars[MAX_VARIABLES];
+ extern int total_global_vars;
+ void delete_var_by_name(char* var, struct custom_func_s *active_func);
+ void delete_var(int var_no, struct custom_func_s *active_func);
+-void print_vars();
++void print_vars(struct custom_func_s *active_func);
+ extern char global_var_name[MAX_VARIABLES][MAX_VARIABLE_LEN];
+ extern double global_var_value[MAX_VARIABLES];
+ extern int total_global_vars;
+ #define MAX_GLOBAL_VARS			10

@@ -1,0 +1,52 @@
+--- Makefile	2005-02-25 18:07:49.000000000 +0100
++++ Makefile.Fedora	2005-09-27 10:35:42.000000000 +0200
+@@ -49,23 +49,26 @@
+ #### INSTALL / UNINSTALL ######	
+ install: utrac
+ 	strip ./utrac
+-	mkdir -p ${BIN_PATH}
+-	cp ./utrac ${BIN_PATH}
+-	mkdir -p ${SHARE_PATH}
+-	cp -f ${CHARMAPS_FILE} ${SHARE_PATH}
+-	cp -f utrac.1 ${MAN_PATH}
++	mkdir -p $(DESTDIR)${BIN_PATH}
++	cp ./utrac $(DESTDIR)${BIN_PATH}
++	mkdir -p $(DESTDIR)${SHARE_PATH}
++	cp -f ${CHARMAPS_FILE} $(DESTDIR)${SHARE_PATH}
++	mkdir -p $(DESTDIR)${MAN_PATH}
++	cp -f utrac.1 $(DESTDIR)${MAN_PATH}
+ 
+ install-lib: lib
+-	mkdir -p ${LIB_PATH}
+-	cp libutrac.a ${LIB_PATH}
+-	mkdir -p ${LIB_PATH}
+-	cp libutrac.a ${LIB_PATH}
+-	
++	mkdir -p $(DESTDIR)${LIB_PATH}
++	cp libutrac.a $(DESTDIR)${LIB_PATH}
++	mkdir -p $(DESTDIR)${LIB_PATH}
++	cp libutrac.a $(DESTDIR)${LIB_PATH}
++	mkdir -p $(DESTDIR)${INC_PATH}
++	cp -f utrac.h $(DESTDIR)${INC_PATH}
++
+ uninstall:
+-	rm -f ${BIN_PATH}/utrac
+-	rm -f ${LIB_PATH}/libutrac.a
+-	rm -f ${SHARE_PATH}/${CHARMAPS_FILE}
+-	rmdir ${SHARE_PATH}
++	rm -f $(DESTDIR)${BIN_PATH}/utrac
++	rm -f $(DESTDIR)${LIB_PATH}/libutrac.a
++	rm -f $(DESTDIR)${SHARE_PATH}/${CHARMAPS_FILE}
++	rmdir $(DESTDIR)${SHARE_PATH}
+ 
+ ###### OBJECT FILES #########
+ utrac_cmd.o: utrac_cmd.c utrac.h ut_charset.h ut_error.h ut_text.h
+@@ -85,7 +88,7 @@
+ 
+ #option -Wno-multichar has no effect! (gcc 3.3.4) so we use -w...
+ ut_charset.o: ut_charset.c utrac.h ut_charset.h ut_error.h
+-	$(CC) -w -Wno-multichar -c $(CFLAGS) -DUT_CHARMAPS_FILENAME='"${SHARE_PATH}/${CHARMAPS_FILE}"' $< -o $@
++	$(CC) -w -Wno-multichar -c $(CFLAGS) -DUT_CHARMAPS_FILENAME='"$(DESTDIR)${SHARE_PATH}/${CHARMAPS_FILE}"' $< -o $@
+ 
+ ut_utils.o: ut_utils.c ut_error.h utrac.h
+ 	$(CC) -c $(CFLAGS) $< -o $@

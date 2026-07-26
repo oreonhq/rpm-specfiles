@@ -1,0 +1,35 @@
+From cb35d0ae7adc30d71c427d9b371c12299d8e7b14 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 25 Apr 2019 18:06:49 +0200
+Subject: [PATCH 2/5] build: default to --enable-etnaviv=auto
+
+This build option was somehow confused: the documentation suggested that
+it's enabled by default, it was in fact off, but there's a logic further
+on in the configure script to handle ACCEL_ETNAVIV=auto.
+
+Switch the default and the documentation to auto.
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ configure.ac | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 15e73cb..160796f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -132,9 +132,9 @@ AC_ARG_ENABLE(etnadrm,
+ 
+ AC_ARG_ENABLE(etnaviv,
+ 	      AC_HELP_STRING([--enable-etnaviv],
+-			     [Enable Etnaviv (GALcore kernel driver) acceleration support [[default=enable]]]),
++			     [Enable Etnaviv (GALcore kernel driver) acceleration support [[default=auto]]]),
+ 	      [ACCEL_ETNAVIV="$enableval"],
+-	      [ACCEL_ETNAVIV=no])
++	      [ACCEL_ETNAVIV=auto])
+ 
+ AC_ARG_WITH(etnaviv-source,
+             AC_HELP_STRING([--with-etnaviv-source=PATH],
+-- 
+2.21.0
+

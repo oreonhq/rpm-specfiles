@@ -1,0 +1,37 @@
+Fixes these warnings:
+
+  JuPyMake.cpp: In function ‘PyObject* GetCompletion(PyObject*, PyObject*)’:
+  JuPyMake.cpp:143:52: warning: conversion from ‘std::vector<std::__cxx11::basic_string<char> >::size_type’ {aka ‘long unsigned int’} to ‘int’ may change value [-Wconversion]
+    143 |     int       completions_length = completions.size();
+        |                                    ~~~~~~~~~~~~~~~~^~
+
+  JuPyMake.cpp:183:44: warning: conversion from ‘std::vector<std::__cxx11::basic_string<char> >::size_type’ {aka ‘long unsigned int’} to ‘int’ may change value [-Wconversion]
+    183 |     int       results_length = results.size();
+        |                                ~~~~~~~~~~~~^~
+
+--- JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp.orig	2025-09-30 11:20:35.319525241 -0600
++++ JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp	2025-09-30 11:23:59.750099232 -0600
+@@ -140,9 +140,9 @@ static PyObject* GetCompletion(PyObject*
+         return NULL;
+     }
+     RESET_SIGNAL_HANDLERS
+-    int       completions_length = completions.size();
++    ssize_t   completions_length = completions.size();
+     PyObject* return_list = PyList_New(completions_length);
+-    for (int i = 0; i < completions_length; i++) {
++    for (ssize_t i = 0; i < completions_length; i++) {
+         PyList_SetItem(return_list, i,
+                        to_python_string(completions[i].c_str()));
+     }
+@@ -180,9 +180,9 @@ GetContextHelp(PyObject* self, PyObject*
+         return NULL;
+     }
+     RESET_SIGNAL_HANDLERS
+-    int       results_length = results.size();
++    ssize_t   results_length = results.size();
+     PyObject* return_list = PyList_New(results_length);
+-    for (int i = 0; i < results_length; i++) {
++    for (ssize_t i = 0; i < results_length; i++) {
+         PyList_SetItem(return_list, i, to_python_string(results[i].c_str()));
+     }
+     return return_list;

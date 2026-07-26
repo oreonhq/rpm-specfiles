@@ -1,0 +1,15 @@
+diff -up scummvm-2.1.1/configure.me scummvm-2.1.1/configure
+--- scummvm-2.1.1/configure.me	2020-09-14 16:56:27.269114787 +0200
++++ scummvm-2.1.1/configure	2020-09-14 16:55:50.299579120 +0200
+@@ -5389,6 +5389,11 @@ EOF
+ 		;;
+ esac
+ 
++# used bdf linker on x86 as FTBFS workaround
++if test "$_have_x86" = yes ; then
++	set_var LDFLAGS "-fuse-ld=bfd"
++fi
++
+ 
+ #
+ # Check for nasm

@@ -1,0 +1,32 @@
+From 209f938bc08342aed22c1893f5ab4c64eb255235 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Oct 2013 15:47:15 +0200
+Subject: [PATCH] Do not include bundled tcpd.h
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If configured without local tcpwrapper, the server code still included
+the bundled tcpd.h.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ server/security.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/security.c b/server/security.c
+index bd9e755..257d23c 100644
+--- a/server/security.c
++++ b/server/security.c
+@@ -10,7 +10,7 @@
+ #include "security.h"
+ 
+ #ifdef USE_TCP_WRAPPERS
+-#include "../tools/tcpd_wrapper/tcpd.h"
++#include <tcpd.h>
+ #include "defines.h"
+ #endif /* USE_TCP_WRAPPERS */
+ 
+-- 
+1.8.3.1
+

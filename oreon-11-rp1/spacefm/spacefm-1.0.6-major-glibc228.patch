@@ -1,0 +1,10 @@
+--- spacefm-1.0.6/src/main.c.debug	2018-05-15 22:23:58.150900841 +0900
++++ spacefm-1.0.6/src/main.c	2018-05-15 22:34:43.861899547 +0900
+@@ -23,6 +23,7 @@
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <sys/sysmacros.h> /* for major, minor */
+ 
+ #include <signal.h>
+ 

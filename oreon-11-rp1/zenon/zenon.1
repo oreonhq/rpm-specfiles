@@ -1,0 +1,164 @@
+.TH ZENON "1" "2008-07" "David A. Wheeler" "User Commands"
+.SH NAME
+zenon \- Automated theorem prover for first-order classical logic
+.SH SYNOPSIS
+.B zenon
+[\fIOPTIONS\fR] \fIFILE\fR
+.SH DESCRIPTION
+.\" Add any additional description here
+.PP
+Zenon is an automated theorem prover for first order classical logic
+with equality, based on the tableau method.
+Zenon can read input files in TPTP, Coq, Focal, and its own Zenon format.
+Zenon can directly generate Coq proofs (proof scripts or proof terms),
+which can be reinserted into Coq specifications.
+Zenon can also be extended.
+.SH OPTIONS
+.PP
+.\" Mandatory arguments to long options are mandatory for short options too.
+If file is "-", it will read input from stdin.
+.TP 10
+\fB\-context\fR
+provide context for checking the proof independently
+.TP 10
+\fB\-d\fR
+debug mode
+.TP 10
+\fB\-errmsg\fR \fI<message>\fR
+prefix warnings and errors with \fI<message>\fR
+.TP 10
+\fB\-help\fR, \fB\--help\fR
+print this option list and exit
+.TP 10
+\fB\-I\fR \fI<dir>\fR
+add \fI<dir>\fR to the include path (for TPTP input format)
+.TP 10
+\fB\-icoq\fR
+read input file in Coq format
+.TP 10
+\fB\-ifocal\fR
+read input file in Focal format
+.TP 10
+\fB\-itptp\fR
+read input file in TPTP format
+.TP 10
+\fB\-iz\fR
+read input file in Zenon format (default)
+.TP 10
+\fB\-loadpath\fR
+path to Zenon's coq libraries (default /usr/share/zenon)
+.TP 10
+\fB\-max\fR \fI<s>[kMGT]/<i>[kMGT]/<t>[smhd]\fR
+set size, step, and time limits
+.TP 10
+\fB\-max-size\fR \fI<s>[kMGT]\fR
+limit heap size to <s> kilo/mega/giga/tera word (default 100M)
+.TP 10
+\fB\-max-step\fR \fI<i>[kMGT]\fR
+limit number of steps to <s> kilo/mega/giga/tera (default 10k)
+.TP 10
+\fB\-max-time\fR \fI<t>[smhd]\fR
+limit CPU time to <t> second/minute/hour/day (default 5m)
+.TP 10
+\fB\-ocoq\fR
+print the proof in Coq script format
+.TP 10
+\fB\-ocoqterm\fR
+print the proof in Coq term format
+.TP 10
+\fB\-oh\fR
+<n>             print the proof in high-level format up to depth <n>
+.TP 10
+\fB\-ol\fR
+print the proof in low-level format
+.TP 10
+\fB\-olx\fR
+print the proof in raw low-level format
+.TP 10
+\fB\-om\fR
+print the proof in middle-level format
+.TP 10
+\fB\-onone\fR
+do not print the proof (default)
+.TP 10
+\fB\-opt0\fR
+do not optimise the proof
+.TP 10
+\fB\-opt1\fR
+do peephole optimisation of the proof (default)
+.TP 10
+\fB\-p0\fR
+turn off progress bar and progress messages
+.TP 10
+\fB\-p1\fR
+display progress bar (default)
+.TP 10
+\fB\-p2\fR
+display progress messages
+.TP 10
+\fB\-q\fR
+(quiet) suppress proof-found/no-proof/begin-proof/end-proof
+.TP 10
+\fB\-rename\fR
+prefix all input symbols to avoid clashes
+.TP 10
+\fB\-rnd\fR \fI<seed>\fR
+randomize proof search
+.TP 10
+\fB\-stats\fR
+print statistics
+.TP 10
+\fB\-short\fR
+output a less detailed proof
+.TP 10
+\fB\-v\fR
+print version string and exit
+.TP 10
+\fB\-versions\fR
+print CVS version strings and exit
+.TP 10
+\fB\-w\fR
+suppress warnings
+.TP 10
+\fB\-where\fR
+print the location of the zenon library and exit
+.TP 10
+\fB\-wout\fR \fI<file>\fR
+output errors and warnings to \fI<file>\fR instead of stderr
+.TP 10
+\fB\-x\fR \fI<ext>\fR
+activate extension \fI<ext>\fR
+
+.SH EXAMPLE
+.PP
+The command:
+.RS
+  \fCzenon -itptp -ocoq /usr/share/zenon*/examples/tptp-COM003+2.p\fP
+.RE
+will take the input file "tptp-COM003+2.p" in TPTP format (-itptp),
+search for a proof, and produce any proof output in Coq format (-ocoq).
+tptp-COM003+2.p is a TPTP representation of the halting problem.
+Zenon can prove this, and will print out:
+.RS
+\fC(* PROOF-FOUND *)\fP
+.br
+\fC(* BEGIN-PROOF *)\fP
+.br
+\&... details of proof in Coq format
+.br
+\fC(* END-PROOF *)\fP
+.RE
+
+.\" TO DO: .SH EXIT STATUS
+.SH "SEE ALSO"
+.PP
+zenon-format(5)
+
+.SH AUTHOR
+.PP
+This man page was written by David A. Wheeler.
+.SH COPYRIGHT
+Zenon is released under the revised BSD license.
+This man page is released under both the revised BSD and MIT licenses
+(your choice).
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+​ <id>ScribusGenerator.io.github.berteh</id>
+ <extends>scribus.desktop</extends>
+ <name>Templates Generator</name>
+ <summary>PDF (and Scribus) template and mail-merge alternative generator</summary>
+ <url type="homepage">https://berteh.github.io/ScribusGenerator</url>
+ <url type="bugtracker">https://github.com/berteh/ScribusGenerator/issues</url> 
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>MIT</project_license>
+</component>

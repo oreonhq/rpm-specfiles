@@ -1,0 +1,27 @@
+/usr/lib/systemd/system/trafficserver.service  --     gen_context(system_u:object_r:trafficserver_unit_file_t,s0)
+
+/etc/trafficserver(/.*)?                              gen_context(system_u:object_r:trafficserver_etc_t,s0)
+
+/usr/bin/traffic_manager                       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_server                        --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+
+# Helper applications
+/usr/bin/traffic_cache_tool		       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_crashlog		       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_ctl			       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_layout			       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_logcat			       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_logstats		       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_top			       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/traffic_via			       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+/usr/bin/tspush				       --     gen_context(system_u:object_r:trafficserver_exec_t,s0)
+
+# Plugins can do anything the main app might do (listen, connect, read/write data, etc.)
+# Because of this, there's no sense in defining a separate plugin file context
+/usr/lib64/trafficserver/plugins(/.*)?		      gen_context(system_u:object_r:trafficserver_exec_t,s0)
+
+/var/log/trafficserver(/.*)?                          gen_context(system_u:object_r:trafficserver_log_t,s0)
+
+/var/run/trafficserver(/.*)?                          gen_context(system_u:object_r:trafficserver_run_t,s0)
+
+/var/cache/trafficserver(/.*)?                        gen_context(system_u:object_r:trafficserver_cache_t,s0)

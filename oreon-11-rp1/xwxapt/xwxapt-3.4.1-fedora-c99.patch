@@ -1,0 +1,28 @@
+diff -rup a/configure b/configure
+--- a/configure	2018-08-09 03:17:35.000000000 -0400
++++ b/configure	2023-02-09 17:40:22.165239009 -0500
+@@ -6711,6 +6711,9 @@ else
+ 
+ #include <stdlib.h>
+ #include <signal.h>
++#if !(defined _WIN32 && !defined __CYGWIN__)
++#include <unistd.h> /* for _exit() */
++#endif
+ 
+ static void
+ sigfpe_handler (int sig)
+Only in b: configure~
+diff -rup a/m4/intdiv0.m4 b/m4/intdiv0.m4
+--- a/m4/intdiv0.m4	2018-08-09 03:17:29.000000000 -0400
++++ b/m4/intdiv0.m4	2023-02-09 17:39:47.627952523 -0500
+@@ -33,6 +33,9 @@ changequote([,])dnl
+           [AC_LANG_SOURCE([[
+ #include <stdlib.h>
+ #include <signal.h>
++#if !(defined _WIN32 && !defined __CYGWIN__)
++#include <unistd.h> /* for _exit() */
++#endif
+ 
+ static void
+ sigfpe_handler (int sig)
+Only in b/m4: intdiv0.m4~

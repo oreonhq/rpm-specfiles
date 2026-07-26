@@ -1,0 +1,97 @@
+policy_module(vsomeip, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+require {
+        type proc_net_t;
+        type unconfined_service_t;
+	type unreserved_port_t;
+	type node_t;
+}
+
+type vsomeip_t;
+type vsomeip_exec_t;
+init_daemon_domain(vsomeip_t, vsomeip_exec_t)
+
+type vsomeip_rw_t;
+files_type(vsomeip_rw_t)
+
+type vsomeip_var_lib_t;
+files_type(vsomeip_var_lib_t)
+
+type vsomeip_var_run_t;
+files_pid_file(vsomeip_var_run_t)
+
+type vsomeip_unit_file_t;
+systemd_unit_file(vsomeip_unit_file_t)
+
+########################################
+#
+# vsomeip local policy
+#
+allow vsomeip_t proc_net_t:file { open read };
+allow vsomeip_t proc_net_t:lnk_file read;
+allow vsomeip_t self:fifo_file rw_fifo_file_perms;
+allow vsomeip_t self:netlink_route_socket { bind create nlmsg_read shutdown read write };
+allow vsomeip_t self:process { fork setsched };
+allow vsomeip_t self:udp_socket { create setopt bind getopt read write };
+allow vsomeip_t self:unix_dgram_socket { create ioctl };
+allow vsomeip_t self:unix_stream_socket create_stream_socket_perms;
+
+allow vsomeip_t vsomeip_var_run_t:dir { add_name write remove_name };
+allow vsomeip_t vsomeip_var_run_t:file { create lock open write unlink };
+allow vsomeip_t vsomeip_var_run_t:sock_file { create setattr unlink write };
+allow vsomeip_t unreserved_port_t:udp_socket name_bind;
+allow vsomeip_t node_t:udp_socket node_bind;
+files_write_generic_pid_sockets(vsomeip_t)
+
+manage_dirs_pattern(vsomeip_t, vsomeip_rw_t, vsomeip_rw_t)
+manage_files_pattern(vsomeip_t, vsomeip_rw_t, vsomeip_rw_t)
+manage_lnk_files_pattern(vsomeip_t, vsomeip_rw_t, vsomeip_rw_t)
+
+manage_sock_files_pattern(vsomeip_t, vsomeip_rw_t, vsomeip_rw_t)
+
+manage_dirs_pattern(vsomeip_t, vsomeip_var_lib_t, vsomeip_var_lib_t)
+manage_files_pattern(vsomeip_t, vsomeip_var_lib_t, vsomeip_var_lib_t)
+manage_lnk_files_pattern(vsomeip_t, vsomeip_var_lib_t, vsomeip_var_lib_t)
+files_var_lib_filetrans(vsomeip_t, vsomeip_var_lib_t, { dir file lnk_file })
+
+manage_dirs_pattern(vsomeip_t, vsomeip_var_run_t, vsomeip_var_run_t)
+manage_files_pattern(vsomeip_t, vsomeip_var_run_t, vsomeip_var_run_t)
+manage_lnk_files_pattern(vsomeip_t, vsomeip_var_run_t, vsomeip_var_run_t)
+files_pid_filetrans(vsomeip_t, vsomeip_var_run_t, { dir file lnk_file })
+
+domain_use_interactive_fds(vsomeip_t)
+
+files_read_etc_files(vsomeip_t)
+
+miscfiles_read_localization(vsomeip_t)
+
+# Routing manager daemon to unconfined
+optional_policy(`
+        gen_require(`
+                type unconfined_t;
+        ')
+        allow vsomeip_t unconfined_t:unix_stream_socket connectto;
+	allow vsomeip_t unconfined_service_t:unix_stream_socket connectto;
+
+')
+
+# Containers can talk to each other (and routing manager)
+optional_policy(`
+        gen_require(`
+                type container_t;
+        ')
+        vsomeip_use(container_t)
+
+        # Containers can talk to unconfined
+        optional_policy(`
+                gen_require(`
+                                type unconfined_t;
+                            ')
+                vsomeip_talk_to(container_t, unconfined_t)
+       ')
+')

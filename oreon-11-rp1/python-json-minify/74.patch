@@ -1,0 +1,26 @@
+From 4760b6607d4bdc451a071335a7ea133df8ac8dae Mon Sep 17 00:00:00 2001
+From: muxator <a.mux@inwind.it>
+Date: Mon, 27 Nov 2023 13:43:40 +0100
+Subject: [PATCH] python: use raw strings in regex containing escapes. Fix
+ SyntaxWarning in python 3.12
+
+Before this change:
+    <BASE>/json_minify/__init__.py:20: SyntaxWarning: invalid escape sequence '\*'
+      tokenizer = re.compile('"|(/\*)|(\*/)|(//)|\n|\r')
+---
+ json_minify/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/json_minify/__init__.py b/json_minify/__init__.py
+index 81b0369..011231c 100644
+--- a/json_minify/__init__.py
++++ b/json_minify/__init__.py
+@@ -17,7 +17,7 @@
+ 
+ 
+ def json_minify(string, strip_space=True):
+-    tokenizer = re.compile('"|(/\*)|(\*/)|(//)|\n|\r')
++    tokenizer = re.compile(r'"|(/\*)|(\*/)|(//)|\n|\r')
+     end_slashes_re = re.compile(r'(\\)*$')
+ 
+     in_string = False

@@ -1,0 +1,2 @@
+#* * * * *    root    /usr/bin/sysusage      >/dev/null 2>&1
+#*/5 * * * *    root    /usr/bin/sysusagejqgraph >/dev/null 2>&1

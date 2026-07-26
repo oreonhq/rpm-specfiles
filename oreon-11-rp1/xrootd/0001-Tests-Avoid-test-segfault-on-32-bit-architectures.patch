@@ -1,0 +1,42 @@
+From b9340240764bf209fcfbc342ebd0d82947157a15 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Thu, 20 Nov 2025 09:54:34 +0100
+Subject: [PATCH] [Tests] Avoid test segfault on 32 bit architectures
+
+---
+ tests/XrdCl/XrdClFileTest.cc | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/tests/XrdCl/XrdClFileTest.cc b/tests/XrdCl/XrdClFileTest.cc
+index f1ffe64b6..98ca7b543 100644
+--- a/tests/XrdCl/XrdClFileTest.cc
++++ b/tests/XrdCl/XrdClFileTest.cc
+@@ -584,6 +584,16 @@ void FileTest::VectorReadTest()
+   constexpr size_t ior_max = 2*1024*1024 - 16;
+   char *buffer3 = static_cast<char*>(malloc(0x80000000ul)); /* 2 GB */
+ 
++  // The requested memory allocation size above (0x80000000) is larger
++  // than the maximum allowed memory allocation size on a 32 bit Linux
++  // system (0x7FFFFFFF). On these systems the allocation will fail
++  // and a NULL pointer will be returned, resulting in a segmentation
++  // fault when the test code tries to writ to the allocated memory.
++  //
++  // Skip the test in such cases instead.
++
++  if (buffer3) {
++
+   for(size_t i = 0; i < iov_max; ++i)
+     chunkList3.emplace_back(i*ior_max, ior_max);
+ 
+@@ -608,6 +618,8 @@ void FileTest::VectorReadTest()
+   free(buffer3);
+   delete info;
+ 
++  }
++
+   // local vread2
+   info = 0;
+   EXPECT_XRDST_OK( f.VectorRead( chunkList2, buffer2Comp, info ) );
+-- 
+2.51.1
+

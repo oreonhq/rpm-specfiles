@@ -1,0 +1,42 @@
+From 73ab95f8a4eb40140e1904859b135fb2caf6c751 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Wed, 27 Mar 2019 19:13:42 -0400
+Subject: [PATCH 1/2] Remove extra copy of man page
+
+It's already installed in /usr/share/man/man1.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ setup.py         | 2 +-
+ visidata/help.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index fe07f60a..6e18d0cb 100755
+--- a/setup.py
++++ b/setup.py
+@@ -101,7 +101,7 @@ setup(
+         "all": all_requirements(),
+     },
+     package_data={
+-        "visidata.man": ["vd.1", "vd.txt"],
++        "visidata.man": ["vd.txt"],
+         "visidata.ddw": ["input.ddw", "regex.ddw"],
+         "visidata": ["guides/*.md"],
+         "visidata.tests": ["sample.tsv", "benchmark.csv"],
+diff --git a/visidata/help.py b/visidata/help.py
+index b7d315b4..f27cc5fa 100644
+--- a/visidata/help.py
++++ b/visidata/help.py
+@@ -159,7 +159,7 @@ def openManPage(vd):
+     import os
+     with SuspendCurses():
+         module_path = vd.pkg_resources_files(__name__.split('.')[0])
+-        if os.system(' '.join(['man', str(module_path/'man/vd.1')])) != 0:
++        if os.system(' '.join(['man', 'vd.1'])) != 0:
+             vd.push(TextSheet('man_vd', source=module_path/'man/vd.txt'))
+ 
+ 
+-- 
+2.50.0
+

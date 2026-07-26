@@ -1,0 +1,22 @@
+commit 13926c11f6b33aa1ade43dddfea194cb4210760b
+Author: Miroslav Lichvar <mlichvar@redhat.com>
+Date:   Tue May 6 10:19:26 2014 +0200
+
+    canonize also provided filenames for symlinked system dirs
+    
+    This is needed with packages which provide a filename in a symlinked
+    system dir, but don't include it.
+
+diff --git a/rpm.c b/rpm.c
+index 38bc26f..9f10ddb 100644
+--- a/rpm.c
++++ b/rpm.c
+@@ -124,6 +124,8 @@ static int rpm_read_provs(const struct repo *repo, struct pkgs *p, uint firstpid
+ 		provides = rpmdsNew(header, RPMTAG_PROVIDENAME, 0);
+ 		while (rpmdsNext(provides) != -1) {
+ 			prov = rpmdsN(provides);
++			if (prov[0] == '/')
++				prov = get_cpath(rd, prov);
+ 			provflags = rpmdsFlags(provides);
+ 			provver = rpmdsEVR(provides);
+ 			provflags &= RPMSENSE_LESS | RPMSENSE_GREATER |

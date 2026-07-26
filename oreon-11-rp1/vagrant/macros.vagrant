@@ -1,0 +1,43 @@
+%vagrant_embedded_dir %{_datadir}/%{name}
+%vagrant_dir %{vagrant_embedded_dir}/gems/gems/%{name}-%{version}
+
+# Common locations for Vagrant plugin gems
+%vagrant_plugin_dir %{vagrant_embedded_dir}/gems
+%vagrant_plugin_instdir %{vagrant_plugin_dir}/gems/%{vagrant_plugin_name}-%{version}%{?prerelease}
+# We are not prepared for platform dependent vagrant plugins yet.
+# %%vagrant_plugin_extdir %%{_libdir}/%%{name}/gems/ruby/%%{vagrant_plugin_name}-%%{version}
+%vagrant_plugin_libdir %{vagrant_plugin_instdir}/lib
+%vagrant_plugin_cache %{vagrant_plugin_dir}/cache/%{vagrant_plugin_name}-%{version}%{?prerelease}.gem
+%vagrant_plugin_spec %{vagrant_plugin_dir}/specifications/%{vagrant_plugin_name}-%{version}%{?prerelease}.gemspec
+%vagrant_plugin_docdir %{vagrant_plugin_dir}/doc/%{vagrant_plugin_name}-%{version}%{?prerelease}
+
+# Plugin configuration file location.
+%vagrant_plugin_conf_dir %{_sharedstatedir}/%{name}
+# TODO: Drop the link and keep the file in %%vagrant_embedded_dir.
+# https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/message/SKJVY6KZYP24B4KOXLX3BBI5DWSJUEK5/
+%vagrant_plugin_conf_link %{vagrant_embedded_dir}/plugins.json
+%vagrant_plugin_conf %{vagrant_plugin_conf_dir}/plugins.json
+
+# %vagrant_plugin_install - Install vagrant_plugin into appropriate directory.
+#
+# Usage: %vagrant_plugin_install [options]
+#
+# -n <gem_file>      Overrides gem file name for installation.
+# -d <install_dir>   Set installation directory.
+#
+%vagrant_plugin_install(d:n:) \
+mkdir -p %{-d*}%{!?-d:.%{vagrant_plugin_dir}} \
+\
+CONFIGURE_ARGS="--with-cflags='%{optflags}' --with-cxxflags='%{optflags}' $CONFIGURE_ARGS" \\\
+gem install \\\
+        -V \\\
+        --local \\\
+        --no-user-install \\\
+        --install-dir %{-d*}%{!?-d:.%{vagrant_plugin_dir}} \\\
+        --bindir .%{_bindir} \\\
+        --ignore-dependencies \\\
+        --force \\\
+        --document=ri,rdoc \\\
+        --backtrace \\\
+        %{-n*}%{!?-n:%{vagrant_plugin_name}-%{version}%{?prerelease}.gem} \
+%{nil}

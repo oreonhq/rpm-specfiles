@@ -1,0 +1,42 @@
+.TH USERPATH "1" "Feburary 2022" "" "User Commands"
+.SH NAME
+.B userpath
+\(en A tool for modifying a user\(cqs \fBPATH\fR.
+.SH SYNOPSIS
+.B userpath
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.TP
+.B \-\-version
+Show the version and exit.
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.SS "COMMANDS"
+.TP
+.B append
+Appends to the user
+.B PATH
+.IP
+See
+.BR userpath\-append (1).
+.TP
+.B prepend
+Prepends to the user
+.B PATH
+.IP
+See
+.BR userpath\-prepend (1).
+.TP
+.B verify
+Checks if locations are in the user
+.B PATH
+.IP
+See
+.BR userpath\-verify (1).
+.SH "SEE ALSO"
+.BR userpath\-append (1),
+.BR userpath\-prepend (1),
+.BR userpath\-verify (1)

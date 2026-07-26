@@ -1,0 +1,21 @@
+Index: xlog-2.0.22/configure.ac
+===================================================================
+--- xlog-2.0.22.orig/configure.ac
++++ xlog-2.0.22/configure.ac
+@@ -22,11 +22,11 @@ dnl if test "${ac_cv_c_compiler_gnu}" =
+ dnl   CFLAGS="${CFLAGS} -Wno-deprecated-declarations -Wall -Wno-stringop-truncation -Wno-unused-but-set-variable -Werror"
+ dnl fi
+ 
+-AX_CHECK_COMPILE_FLAG([-Werror], [CFLAGS="$CFLAGS -Werror"], [], [])
+-AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations], [CFLAGS="$CFLAGS -Wno-deprecated-declarations"], [], [])
+-AX_CHECK_COMPILE_FLAG([-Wall], [CFLAGS="$CFLAGS -Wall"], [], [])
+-AX_CHECK_COMPILE_FLAG([-Wno-stringop-truncation], [CFLAGS="$CFLAGS -Wno-stringop-truncation"], [], [])
+-AX_CHECK_COMPILE_FLAG([-Wno-unused-but-set-variable], [CFLAGS="$CFLAGS -Wno-unused-but-set-variable"], [], [])
++dnl AX_CHECK_COMPILE_FLAG([-Werror], [CFLAGS="$CFLAGS -Werror"], [], [])
++dnl AX_CHECK_COMPILE_FLAG([-Wno-deprecated-declarations], [CFLAGS="$CFLAGS -Wno-deprecated-declarations"], [], [])
++dnl AX_CHECK_COMPILE_FLAG([-Wall], [CFLAGS="$CFLAGS -Wall"], [], [])
++dnl AX_CHECK_COMPILE_FLAG([-Wno-stringop-truncation], [CFLAGS="$CFLAGS -Wno-stringop-truncation"], [], [])
++dnl AX_CHECK_COMPILE_FLAG([-Wno-unused-but-set-variable], [CFLAGS="$CFLAGS -Wno-unused-but-set-variable"], [], [])
+ 
+ dnl end - see xlog bug #60003 - AndyS 15-Feb-2021
+ 

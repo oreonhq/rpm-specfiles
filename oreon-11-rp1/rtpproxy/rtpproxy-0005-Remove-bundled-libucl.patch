@@ -1,0 +1,514 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 29 Apr 2023 20:33:39 +0200
+Subject: [PATCH] Remove bundled libucl
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/Makefile.am b/Makefile.am
+index c22b588a..19e44969 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -18,7 +18,7 @@ if BUILD_DOCS
+ SUBD_DOCS=	doc
+ endif
+ 
+-SUBDIRS=	libexecinfo libucl libxxHash makeann $(SUBD_MOD) \
++SUBDIRS=	libexecinfo libxxHash makeann $(SUBD_MOD) \
+   $(SUBD_ELP) src $(SUBD_UDCNT) tests \
+   $(SUBD_EAUD) ${SUBD_DOCS}
+ 
+diff --git a/configure.ac b/configure.ac
+index f6ad5692..ba323023 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -392,7 +392,7 @@ AC_CONFIG_FILES([Makefile src/Makefile makeann/Makefile tests/Makefile
+  modules/acct_csv/Makefile modules/acct_rtcp_hep/Makefile
+  modules/catch_dtmf/Makefile modules/badmod/Makefile libxxHash/Makefile
+  modules/dtls_gw/Makefile
+- pertools/Makefile pertools/udp_contention/Makefile libucl/Makefile
++ pertools/Makefile pertools/udp_contention/Makefile
+  python/sippy_lite/sippy/Time/clock_dtime.py doc/Makefile])
+ 
+ AM_COND_IF([BUILD_ELPERIODIC], [AC_CONFIG_SUBDIRS([libelperiodic])])
+diff --git a/libucl/Makefile.am b/libucl/Makefile.am
+deleted file mode 100644
+index 825fed9b..00000000
+--- a/libucl/Makefile.am
++++ /dev/null
+@@ -1,39 +0,0 @@
+-include $(top_srcdir)/m4/memdeb.ami
+-include $(top_srcdir)/m4/ccflags.ami
+-include $(top_srcdir)/m4/coverage.ami
+-
+-UCL_DIR=$(top_srcdir)/external/libucl
+-UCL_SDIR=$(UCL_DIR)/src
+-
+-noinst_LTLIBRARIES = libucl.la libucl_debug.la
+-libucl_la_SOURCES = $(UCL_SDIR)/ucl_emitter_streamline.c \
+-  $(UCL_SDIR)/ucl_emitter_utils.c \
+-  $(UCL_SDIR)/ucl_emitter.c \
+-  $(UCL_SDIR)/ucl_hash.c \
+-  $(UCL_SDIR)/ucl_msgpack.c \
+-  $(UCL_SDIR)/ucl_parser.c \
+-  $(UCL_SDIR)/ucl_schema.c \
+-  $(UCL_SDIR)/ucl_sexp.c \
+-  $(UCL_SDIR)/ucl_util.c
+-CFLAGS_libucl_common = -Wno-pointer-sign -std=c11 -DHAVE_CONFIG_H -D_BSD_SOURCE \
+-  -I$(UCL_DIR)/include \
+-  -I$(UCL_DIR)/uthash \
+-  -I$(UCL_DIR)/klib \
+-  -I$(UCL_DIR)/src/ \
+-  -Wno-unused-parameter $(LTO_FLAG)
+-libucl_la_CFLAGS = $(OPT_CFLAGS) $(CFLAGS_libucl_common)
+-libucl_debug_la_SOURCES = $(libucl_la_SOURCES)
+-libucl_debug_la_CPPFLAGS = -DRTPP_MEMDEB_FREE_NULL $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP=rtpproxy
+-libucl_debug_la_CFLAGS = $(NOPT_CFLAGS) $(CFLAGS_libucl_common) $(RTPP_MEMDEB_CFLAGS)
+-
+-HEPSRCDIR=$(top_srcdir)/hepconnector
+-
+-noinst_PROGRAMS = libucl_test
+-libucl_test_CPPFLAGS = -DMODULE_IF_CODE -Dmod_strdup=strdup $(RTPP_MEMDEB_CPPFLAGS) -DMEMDEB_APP=libucl_test \
+-  -I$(UCL_DIR)/include -I$(HEPSRCDIR)
+-libucl_test_CFLAGS = $(OPT_CFLAGS) $(RTPP_MEMDEB_CFLAGS) $(LTO_FLAG)
+-libucl_test_SOURCES = libucl_test.c \
+-  $(top_srcdir)/modules/acct_rtcp_hep/rtpp_arh_conf.c \
+-  $(top_srcdir)/src/rtpp_ucl.c $(RTPP_MEMDEB_CORESRCS) $(rtpp_refcnt_AUTOSRCS)
+-libucl_test_LDADD=libucl_debug.la $(RTPP_MEMDEB_LDADD)
+-libucl_test_LDLAGS=$(LTO_FLAG)
+diff --git a/libucl/libucl_test.c b/libucl/libucl_test.c
+deleted file mode 100644
+index 913ca5c0..00000000
+--- a/libucl/libucl_test.c
++++ /dev/null
+@@ -1,232 +0,0 @@
+-/* Copyright (c) 2014, 2015 Allan Jude <allanjude@FreeBSD.org>. */
+-
+-#include <assert.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <stdio.h>
+-#include <stdint.h>
+-#include <unistd.h>
+-
+-#include "ucl.h"
+-
+-#include "hepconnector.h"
+-
+-#include "rtpp_memdeb_internal.h"
+-#include "rtpp_types.h"
+-#include "rtpp_log_obj.h"
+-#include "rtpp_ucl.h"
+-#include "libexecinfo/stacktraverse.h"
+-#include "libexecinfo/execinfo.h"
+-
+-RTPP_MEMDEB_STATIC(rtpproxy);
+-RTPP_MEMDEB_STATIC(libucl_test);
+-
+-static bool conf_helper_mapper(const ucl_object_t *obj,
+-  conf_helper_map *map, void *target, conf_helper_map **failed);
+-
+-extern struct rtpp_module_conf *rtpp_arh_conf;
+-
+-static void
+-rtpp_log_obj_write_early(struct rtpp_log *self, const char *fname, int lnum,
+-  int level, const char *fmt, ...)
+-{
+-    va_list ap;
+-
+-    fprintf(stderr, "%s: ", fname);
+-    va_start(ap, fmt);
+-    vfprintf(stderr, fmt, ap);
+-    va_end(ap);
+-    fprintf(stderr, "\n");
+-    fflush(stderr);
+-    return;
+-}
+-
+-static void
+-rtpp_log_obj_ewrite_early(struct rtpp_log *self, const char *fname, int lnum,
+-  int level, const char *fmt, ...)
+-{
+-    va_list ap;
+-
+-    fprintf(stderr, "%s: ", fname);
+-    va_start(ap, fmt);
+-    vfprintf(stderr, fmt, ap);
+-    va_end(ap);
+-    fprintf(stderr, ": %s\n", strerror(errno));
+-    fflush(stderr);
+-    return;
+-}
+-
+-static int
+-parse_modules(const ucl_object_t *wop)
+-{
+-    ucl_object_iter_t it_conf;
+-    const ucl_object_t *obj_file;
+-    const char *cf_key;
+-    const ucl_object_t *obj_key;
+-    int ecode, success;
+-    void *confp;
+-    conf_helper_map *map = rtpp_arh_conf->conf_map;
+-    conf_helper_map *fent;
+-    struct hep_ctx cbuf;
+-
+-    it_conf = ucl_object_iterate_new(wop);
+-    if (it_conf == NULL)
+-        return (-1);
+-    ecode = 0;
+-    memset(&cbuf, '\0', sizeof(cbuf));
+-    confp = &cbuf;
+-    while ((obj_file = ucl_object_iterate_safe(it_conf, true)) != NULL) {
+-        cf_key = ucl_object_key(obj_file);
+-        printf("\tmodule: %s\n", cf_key);
+-        obj_key = ucl_object_find_key(obj_file, "load");
+-        if (obj_key == NULL) {
+-            fprintf(stderr, "Error: Unable to find load parameter in module: %s\n", cf_key);
+-            ecode = -1;
+-            goto e0;
+-        }
+-        fent = NULL;
+-        success = conf_helper_mapper(obj_file, map, confp, &fent);
+-        if (!success) {
+-            fprintf(stderr, "Config parsing issue in section %s",
+-              cf_key);
+-            if (fent != NULL && fent->conf_key != NULL) {
+-                fprintf(stderr, ", parameter %s", fent->conf_key);
+-            }
+-            fprintf(stderr, "\n");
+-            ecode = -1;
+-            goto e1;
+-        }
+-    }
+-e1:
+-    if (cbuf.capt_host != NULL) {
+-        free(cbuf.capt_host);
+-    }
+-e0:
+-    ucl_object_iterate_free(it_conf);
+-    return (ecode);
+-}
+-
+-int
+-main(int argc, char **argv)
+-{
+-    int ecode;
+-    struct ucl_parser *parser;
+-    ucl_object_t *conf_root;
+-    ucl_object_iter_t it_conf;
+-    const ucl_object_t *obj_file;
+-    const char *cf_key;
+-    int fd;
+-    const char *cfile;
+-
+-    RTPP_MEMDEB_INIT(rtpproxy);
+-    RTPP_MEMDEB_INIT1(libucl_test);
+-
+-    ecode = 0;
+-
+-    if (argc < 2) {
+-        cfile = "libucl_test.conf";
+-    } else if (argc == 2) {
+-        cfile = argv[1];
+-    } else {
+-        fprintf(stderr, "usage: libucl_test [conffile]\n");
+-        ecode = 1;
+-        goto e0;
+-    }
+-    fd = open(cfile, O_RDONLY);
+-    if (fd < 0) {
+-        fprintf(stderr, "open(\"%s\") failed\n", cfile);
+-        ecode = 1;
+-        goto e0;
+-    }
+-
+-    parser = ucl_parser_new(UCL_PARSER_NO_FILEVARS);
+-    if (parser == NULL) {
+-        fprintf(stderr, "ucl_parser_new() failed\n");
+-        ecode = 1;
+-        goto e1;
+-    }
+-
+-    ucl_parser_add_fd(parser, fd);
+-    conf_root = ucl_parser_get_object(parser);
+-    if (conf_root == NULL) {
+-        fprintf(stderr, "ucl_parser_get_object() failed\n");
+-        ecode = 1;
+-        goto e2;
+-    }
+-    if (ucl_parser_get_error(parser)) {
+-        fprintf(stderr, "Parse Error occured: %s\n", ucl_parser_get_error(parser));
+-        ecode = 1;
+-        goto e3;
+-    }
+-
+-    it_conf = ucl_object_iterate_new(conf_root);
+-    if (it_conf == NULL) {
+-        fprintf(stderr, "ucl_object_iterate_new() failed\n");
+-        ecode = 1;
+-        goto e3;
+-    }
+-    while ((obj_file = ucl_object_iterate_safe(it_conf, true)) != NULL) {
+-        cf_key = ucl_object_key(obj_file);
+-        printf("Entry: %s\n", cf_key);
+-        if (strcasecmp(cf_key, "modules") == 0) {
+-            if (parse_modules(obj_file) < 0) {
+-                fprintf(stderr, "parse_modules() failed\n");
+-                ecode = 1;
+-                goto e4;
+-            }
+-        }
+-    }
+-e4:
+-    ucl_object_iterate_free(it_conf);
+-e3:
+-    ucl_object_unref(conf_root);
+-e2:
+-    ucl_parser_free(parser);
+-e1:
+-    close(fd);
+-e0:
+-    if ((rtpp_memdeb_dumpstats(_rtpproxy_memdeb, 0) != 0) || (rtpp_memdeb_dumpstats(_libucl_test_memdeb, 0) != 0))
+-        ecode = 1;
+-
+-    return (ecode);
+-}
+-
+-static bool
+-conf_helper_mapper(const ucl_object_t *obj, conf_helper_map *map,
+-  void *target, conf_helper_map **fentrpp)
+-{
+-    ucl_object_iter_t it;
+-    const ucl_object_t *cur;
+-    const char *key = NULL;
+-    int i;
+-    bool ret = true, found = false;
+-    static struct rtpp_log log = {.genwrite = rtpp_log_obj_write_early,
+-      .errwrite = rtpp_log_obj_ewrite_early};
+-
+-    it = ucl_object_iterate_new(obj);
+-    if (it == NULL)
+-        return (false);
+-    while ((cur = ucl_object_iterate_safe(it, true)) != NULL && ret) {
+-        key = ucl_object_key(cur);
+-        found = false;
+-        for (i = 0; map[i].conf_key; i++) {
+-            if (strcasecmp(map[i].conf_key, key) != 0)
+-                continue;
+-            found = true;
+-            if (map[i].callback != NULL) {
+-                ret = map[i].callback(&log, obj, cur, target);
+-                if (!ret && fentrpp != NULL)
+-                    *fentrpp = &map[i];
+-            }
+-            break;
+-        }
+-        if (!found && map[i].callback != NULL) {
+-            /* Call default handler if there is one */
+-            ret = map[i].callback(&log, obj, cur, target);
+-            if (!ret && fentrpp != NULL)
+-                *fentrpp = &map[i];
+-        }
+-    }
+-    ucl_object_iterate_free(it);
+-    return (ret);
+-}
+diff --git a/modules/acct_rtcp_hep/Makefile.am b/modules/acct_rtcp_hep/Makefile.am
+index 2853c294..8dfa37e0 100644
+--- a/modules/acct_rtcp_hep/Makefile.am
++++ b/modules/acct_rtcp_hep/Makefile.am
+@@ -4,7 +4,6 @@ include $(top_srcdir)/m4/coverage.ami
+ include $(top_srcdir)/m4/rtpp_module.ami
+ 
+ HEPSRCDIR=$(top_srcdir)/hepconnector
+-UCLSRCDIR=$(top_srcdir)/external/libucl
+ 
+ pkglib_LTLIBRARIES = rtpp_acct_rtcp_hep.la rtpp_acct_rtcp_hep_debug.la
+ 
+@@ -22,7 +21,7 @@ rtpp_acct_rtcp_hep_la_SOURCES = rtpp_acct_rtcp_hep.c rtcp2json.c rtpp_sbuf.c \
+ rtpp_acct_rtcp_hep_la_LDFLAGS = -avoid-version -module -shared \
+   $(LTO_FLAG) $(LDFLAG_SYMEXPORT)
+ rtpp_acct_rtcp_hep_la_CPPFLAGS = -DRTPP_MODULE -Dmalloc=mod_malloc \
+-  -Dfree=mod_free -Drealloc=mod_realloc -I$(HEPSRCDIR) -I$(UCLSRCDIR)/include \
++  -Dfree=mod_free -Drealloc=mod_realloc -I$(HEPSRCDIR) \
+   -DRTPP_MOD_NAME="acct_rtcp_hep"
+ CFLAGS_acct_rtcp_hep_common = -std=c11 -D_BSD_SOURCE -D_XOPEN_SOURCE \
+   $(LTO_FLAG)
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 49e8c392..fdad36ed 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -2,7 +2,6 @@ include $(top_srcdir)/m4/memdeb.ami
+ include $(top_srcdir)/m4/ccflags.ami
+ include $(top_srcdir)/m4/coverage.ami
+ 
+-UCL_DIR=$(top_srcdir)/external/libucl
+ XXH_DIR=$(top_srcdir)/libxxHash
+ MOD_DIR=$(top_srcdir)/modules
+ 
+@@ -73,9 +72,9 @@ BASE_SOURCES+=$(ADV_DIR)/packet_observer.h $(ADV_DIR)/pproc_manager.c \
+   $(ADV_DIR)/pproc_manager.h
+ BASE_SOURCES+=rtpp_modman.c
+ 
+-rtpproxy_LDADD=-lm -lpthread @LIBS_ELPERIODIC@ $(top_srcdir)/libucl/libucl.la \
++rtpproxy_LDADD=-lm -lpthread @LIBS_ELPERIODIC@ -lucl \
+   $(XXH_DIR)/libxxHash.la
+-rtpproxy_debug_LDADD=-lm -lpthread @LIBS_ELPERIODIC@ $(top_srcdir)/libucl/libucl_debug.la \
++rtpproxy_debug_LDADD=-lm -lpthread @LIBS_ELPERIODIC@ -lucl \
+   $(XXH_DIR)/libxxHash_debug.la $(RTPP_MEMDEB_LDADD)
+ rtpproxy_debug_LDFLAGS=-Wl,--export-dynamic $(LTO_FLAG)
+ rtpproxy_LDFLAGS=$(LTO_FLAG)
+@@ -130,7 +129,7 @@ rtpp_rzmalloc_perf_debug_LDADD = $(rtpp_rzmalloc_perf_LDADD) \
+   $(top_srcdir)/libexecinfo/libexecinfo.la @LIBS_DL@ -lpthread
+ 
+ RTPP_COMMON_CPPFLAGS=-DCFILE_PATH='"$(sysconfdir)/@PACKAGE@.conf"' \
+-  -DMDDIR_PATH='"$(libdir)/@PACKAGE@"' -I$(UCL_DIR)/include \
++  -DMDDIR_PATH='"$(libdir)/@PACKAGE@"' \
+   -I$(XXH_DIR) -D_BSD_SOURCE
+ EXTRA_CFLAGS = $(CC_WFLAGS) $(LTO_FLAG)
+ 
+@@ -171,11 +170,11 @@ rtpp_fintest_CFLAGS = $(OPT_CFLAGS) $(LTO_FLAG) $(RTPP_MEMDEB_CFLAGS)
+ rtpp_fintest_LDADD = $(RTPP_MEMDEB_LDADD)
+ rtpp_fintest_LDFLAGS = $(LTO_FLAG)
+ 
+-librtpproxy_la_SOURCES = $(rtpproxy_SOURCES) $(top_srcdir)/libucl/libucl.la \
++librtpproxy_la_SOURCES = $(rtpproxy_SOURCES) \
+   $(XXH_DIR)/libxxHash.la rtpp_module_if_static.c rtpp_module_if_static.h
+ librtpproxy_la_CFLAGS = $(rtpproxy_CFLAGS) -fPIC
+ librtpproxy_la_CPPFLAGS = $(rtpproxy_CPPFLAGS) -DLIBRTPPROXY
+-librtpproxy_la_LIBADD = $(top_srcdir)/libucl/libucl.la \
++librtpproxy_la_LIBADD = \
+   $(XXH_DIR)/libxxHash.la $(MOD_DIR)/catch_dtmf/librtpp_catch_dtmf.la \
+   $(MOD_DIR)/acct_csv/librtpp_acct_csv.la \
+   $(MOD_DIR)/acct_rtcp_hep/librtpp_acct_rtcp_hep.la \
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 3c44dcbc..51485424 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -7,7 +7,6 @@ include $(srcdir)/autosrc/Makefile.ami
+ include $(srcdir)/recording/Makefile.ami
+ include $(srcdir)/makeann/Makefile.ami
+ include $(srcdir)/unittests/Makefile.ami
+-include $(srcdir)/libucl/Makefile.ami
+ include $(srcdir)/libexecinfo/Makefile.ami
+ include $(srcdir)/acct_rtcp_hep/Makefile.ami
+ include $(srcdir)/catch_dtmf/Makefile.ami
+diff --git a/tests/libucl/Makefile.ami b/tests/libucl/Makefile.ami
+deleted file mode 100644
+index e25fadfd..00000000
+--- a/tests/libucl/Makefile.ami
++++ /dev/null
+@@ -1,5 +0,0 @@
+-libucl_EXTRA_DIST = libucl
+-libucl_CLEANFILES = libucl_test.output
+-TESTS += libucl/libucl1
+-CLEANFILES += ${libucl_CLEANFILES}
+-EXTRA_DIST += ${libucl_EXTRA_DIST}
+diff --git a/tests/libucl/libucl1 b/tests/libucl/libucl1
+deleted file mode 100755
+index 04c341bd..00000000
+--- a/tests/libucl/libucl1
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh
+-
+-BASEDIR="`dirname "${0}"`/.."
+-. "${BASEDIR}/functions"
+-
+-TESTDDIR="${BASEDIR}/libucl"
+-
+-TCONF="libucl_test.conf"
+-TOUT="${TCONF%.conf}.output"
+-${TOP_BUILDDIR}/libucl/libucl_test ${TESTDDIR}/${TCONF} > ${BASEDIR}/${TOUT}
+-report "running libucl_test"
+-${DIFF} ${BASEDIR}/${TOUT} ${TESTDDIR}/${TOUT}
+-report "checking ${TOUT}"
+-
+-for i in 1 2 3 4 5 6 7 8 none "some nonsense"
+-do
+-  cfile="acct_rtcp_hep/broken${i}.conf"
+-  ${TOP_BUILDDIR}/libucl/libucl_test ${cfile}
+-  reportifnotfail "configuration validation"
+-done
+diff --git a/tests/libucl/libucl_test.conf b/tests/libucl/libucl_test.conf
+deleted file mode 100644
+index 55ac47fc..00000000
+--- a/tests/libucl/libucl_test.conf
++++ /dev/null
+@@ -1,14 +0,0 @@
+-modules {
+-    acct_rtcp_hep {
+-        # /var/log/all.log                        600  7     *    @T00  J
+-        load = ../modules/acct_rtcp_hep/.libs/rtpp_acct_rtcp_hep_debug.so
+-        capt_host  = 10.0.0.1
+-        capt_port  = 9060
+-        capt_ptype = udp
+-        capt_id = 101
+-    }
+-    acct_csv {
+-        # /var/log/all.log                        600  7     *    @T00  J
+-        load = ../modules/acct_csv/.libs/rtpp_acct_csv_debug.so
+-    }
+-}
+diff --git a/tests/libucl/libucl_test.nodebug.conf b/tests/libucl/libucl_test.nodebug.conf
+deleted file mode 100644
+index 6309898f..00000000
+--- a/tests/libucl/libucl_test.nodebug.conf
++++ /dev/null
+@@ -1,14 +0,0 @@
+-modules {
+-    acct_rtcp_hep {
+-        # /var/log/all.log                        600  7     *    @T00  J
+-        load = ../modules/acct_rtcp_hep/.libs/rtpp_acct_rtcp_hep.so
+-        capt_host  = 10.0.0.1
+-        capt_port  = 9060
+-        capt_ptype = udp
+-        capt_id = 101
+-    }
+-    acct_csv {
+-        # /var/log/all.log                        600  7     *    @T00  J
+-        load = ../modules/acct_csv/.libs/rtpp_acct_csv.so
+-    }
+-}
+diff --git a/tests/libucl/libucl_test.output b/tests/libucl/libucl_test.output
+deleted file mode 100644
+index a51f7d73..00000000
+--- a/tests/libucl/libucl_test.output
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Entry: modules
+-	module: acct_rtcp_hep
+-	module: acct_csv
+-MEMDEB(libucl_test): all clear
+-MEMDEB(libucl_test): all clear
+diff --git a/tests/memdeb/Makefile.ami b/tests/memdeb/Makefile.ami
+index 06f93e43..e3cfdbdf 100644
+--- a/tests/memdeb/Makefile.ami
++++ b/tests/memdeb/Makefile.ami
+@@ -1,6 +1,6 @@
+ memdeb_EXTRA_DIST = memdeb
+ memdeb_CLEANFILES = glitch1.*
+-TESTS += memdeb/glitch1 memdeb/glitch_libucl1 memdeb/glitch_extractaudio \
++TESTS += memdeb/glitch1 memdeb/glitch_extractaudio \
+   memdeb/glitch_startstop1 memdeb/glitch_basic_versions1 \
+   memdeb/glitch_command_parser1_stdio memdeb/glitch_acct_rtcp_hep \
+   memdeb/glitch_catch_dtmf memdeb/glitch_unittests_sbuf \
+diff --git a/tests/memdeb/glitch_libucl1 b/tests/memdeb/glitch_libucl1
+deleted file mode 100755
+index 856139d5..00000000
+--- a/tests/memdeb/glitch_libucl1
++++ /dev/null
+@@ -1,13 +0,0 @@
+-#!/bin/sh
+-
+-TDIR="`dirname "${0}"`"
+-BASEDIR="${TDIR}/.."
+-SUDO_REQUIRED=1
+-. "${BASEDIR}/functions"
+-
+-. "${TDIR}/glitch.sub"
+-
+-disable_aslr
+-
+-glitch_test libucl/libucl1 0 libucl_test.output
+-report "glitching libucl/libucl1"

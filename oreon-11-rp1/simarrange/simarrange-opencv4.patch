@@ -1,0 +1,36 @@
+diff -up simarrange-8238ce568c3ce23e1ad5fbfec55031907bd23f77/simarrange.c.orig simarrange-8238ce568c3ce23e1ad5fbfec55031907bd23f77/simarrange.c
+--- simarrange-8238ce568c3ce23e1ad5fbfec55031907bd23f77/simarrange.c.orig	2017-03-16 13:01:28.000000000 +0100
++++ simarrange-8238ce568c3ce23e1ad5fbfec55031907bd23f77/simarrange.c	2020-01-27 23:50:22.582498521 +0100
+@@ -18,8 +18,10 @@ along with this program. If not, see <ht
+ #include <admesh/stl.h>
+ #include <stdio.h>
+ #include <sys/stat.h>
+-#include <opencv/cv.h>
+-#include <opencv/highgui.h>
++#include <opencv2/core/core_c.h>
++#include <opencv2/imgcodecs.hpp>
++#include <opencv2/imgproc/imgproc_c.h>
++#include <opencv2/imgproc.hpp>
+ #include "utlist.h"
+ #include <dirent.h>
+ #include <argtable2.h>
+@@ -577,7 +580,8 @@ int main(int argc, char** argv){
+             strcat(imagefn,outdir);
+             strcat(imagefn,tmpfn);
+             cvFlip(img,NULL,0);
+-            cvSaveImage(imagefn,img,0);
++            cv::Mat img_mat = cv::cvarrToMat(&img);
++            cv::imwrite(imagefn,img_mat);
+             sprintf(tmpfn,"plate%02d.stl",plate);
+             stlfn[0]=0;
+             strcat(stlfn,outdir);
+@@ -671,7 +675,8 @@ int main(int argc, char** argv){
+                     imagefn[0]=0;
+                     strcat(imagefn,outdir);
+                     strcat(imagefn,tmpfn);
+-                    cvSaveImage(imagefn,img,0);
++                    img_mat = cv::cvarrToMat(&img);
++                    cv::imwrite(imagefn,img_mat);
+                     sprintf(tmpfn,"plate%02d.stl", platek);
+                     stlfn[0]=0;
+                     strcat(stlfn,outdir);

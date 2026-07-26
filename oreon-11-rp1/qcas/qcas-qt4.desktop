@@ -1,0 +1,18 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Qcas Qt4
+GenericName=Computer Algebra System
+Comment=Qt4 frontend to Giac/Xcas 
+TryExec=qcas-qt4
+Exec=qcas-qt4 %F
+Icon=qcas
+Terminal=false
+Type=Application
+Categories=Science;Education;Math;
+MimeType=application/x-xcas;
+
+X-AppInstall-Package=qcas-qt4
+X-AppInstall-Popcon=330
+X-AppInstall-Section=universe
+Name[en_US]=Qcas Qt4

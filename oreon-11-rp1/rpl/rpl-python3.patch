@@ -1,0 +1,20 @@
+--- rpl.orig	2016-10-29 20:24:14.000000000 +0200
++++ rpl	2018-05-11 08:42:17.348929180 +0200
+@@ -169,7 +169,7 @@
+             sys.stderr.write("(ignoring case)? (Y/[N]) ")
+         else:
+             sys.stderr.write("(case sensitive)? (Y/[N]) ")
+-        line = raw_input()
++        line = input()
+         if line != "" and line[0] in "nN":
+             sys.stderr.write("\nrpl:  User cancelled operation.\n")
+             sys.exit(os.EX_TEMPFAIL)
+@@ -266,7 +266,7 @@
+             sys.stderr.write("\nSave '%s' ? ([Y]/N) " % filename)
+             line = ""
+             while line == "" or line[0] not in "Yy\nnN":
+-                line = raw_input()
++                line = input()
+             if line[0] in "nN":
+                 sys.stderr.write("Not Saved.\n")
+                 os.unlink(tmp_path)

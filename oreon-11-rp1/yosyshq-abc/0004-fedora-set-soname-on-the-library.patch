@@ -1,0 +1,50 @@
+From 9b9d93af8e5899f16a4105c14ce3da1817271e2e Mon Sep 17 00:00:00 2001
+From: Gabriel Somlo <gsomlo@gmail.com>
+Date: Tue, 11 Nov 2025 16:57:38 -0500
+Subject: [PATCH 4/7] fedora: set soname on the library
+
+---
+ CMakeLists.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbb153e64..0232d21ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -64,7 +64,7 @@ execute_process(
+     make
+         ${ABC_READLINE_FLAGS}
+         ${ABC_USE_NAMESPACE_FLAGS}
+-        ARCHFLAGS_EXE=${CMAKE_CURRENT_BINARY_DIR}/abc_arch_flags_program.exe
++        ABC_USE_STDINT_H=1
+         ABC_MAKE_NO_DEPS=1
+         CC=${CMAKE_C_COMPILER}
+         CXX=${CMAKE_CXX_COMPILER}
+@@ -105,6 +105,8 @@ list(REMOVE_ITEM ABC_SRC ${ABC_MAIN_SRC})
+ add_library(libabc EXCLUDE_FROM_ALL ${ABC_SRC})
+ abc_properties(libabc PUBLIC)
+ set_property(TARGET libabc PROPERTY OUTPUT_NAME abc)
++set_property(TARGET libabc PROPERTY VERSION "0.0.0")
++set_property(TARGET libabc PROPERTY SOVERSION 0)
+ 
+ add_executable(abc ${ABC_MAIN_SRC})
+ target_link_libraries(abc PRIVATE libabc)
+@@ -114,6 +116,8 @@ add_library(libabc-pic EXCLUDE_FROM_ALL ${ABC_SRC})
+ abc_properties(libabc-pic PUBLIC)
+ set_property(TARGET libabc-pic PROPERTY POSITION_INDEPENDENT_CODE ON)
+ set_property(TARGET libabc-pic PROPERTY OUTPUT_NAME abc-pic)
++set_property(TARGET libabc-pic PROPERTY VERSION "0.0.0")
++set_property(TARGET libabc-pic PROPERTY SOVERSION 0)
+ 
+ if(NOT DEFINED ABC_SKIP_TESTS)
+     enable_testing()
+@@ -127,4 +131,4 @@ if(NOT DEFINED ABC_SKIP_TESTS)
+     FetchContent_MakeAvailable(googletest)
+     include(GoogleTest)
+     add_subdirectory(test)
+-endif()
+\ No newline at end of file
++endif()
+-- 
+2.52.0
+

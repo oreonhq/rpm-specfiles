@@ -1,0 +1,81 @@
+%global source0_hash 49adb76fc55bc3e6ea8ee414f41428db4aef947e247718d9210be8d14a6524bd
+
+Name:           sc-im
+Version:        0.8.5
+Release:        %autorelease
+Summary:        Spreadsheet Calculator Improvised, ncurses based vim-like spreadsheet calculator
+
+License:        BSD-4-Clause
+URL:            https://github.com/andmarti1424/sc-im
+Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  byacc
+BuildRequires:  pkgconfig(ncursesw)
+BuildRequires:  %{_bindir}/pkg-config
+BuildRequires:  pkgconfig(libxls)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(lua)
+Recommends:     gnuplot
+Recommends:     xclip
+
+#Currently disabled as tests are inactive
+#BuildRequires:   valgrind
+
+%description
+Spreadsheet Calculator Improvised, aka sc-im, is an ncurses based, vim-like
+spreadsheet calculator. sc-im is based on sc, whose original authors are James
+Gosling and Mark Weiser, and mods were later added by Chuck Martin.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+#Adjust name because extracted folder lacks letter v in version
+%autosetup -p1 -n sc-im-%{version}
+
+%build
+# Modify the Makefile to comply with the FHS
+%make_build -C src/ prefix=%{_prefix}
+
+%install
+%make_install -C src/ prefix=%{_prefix}
+
+#Currently the tests fail due to additional string "No such device or address" is attached to end result
+#Issue is under investigation, the problem seems to be with concating of the outputs in the test scripts
+#Specifically with the part '2>&1' of the assert call
+#Also test7 is currently reported as unfunctional
+#%%check
+#pushd tests
+#mv test7.sh test7.sh.known-fail
+#./run_all_tests.sh
+#popd
+
+%files
+%license  LICENSE doc/grammar_yacc_tools/y2l.license
+%doc CHANGES Readme.md BUGS HELP KNOWN_ISSUES USER_REQUESTS WIKI  doc/grammar_yacc_tools/y2l.readme
+
+%dir %{_datadir}/sc-im
+%{_bindir}/sc-im
+%{_bindir}/scopen
+#manpages
+%{_mandir}/man1/sc-im.1*
+
+# Data files in share directory
+%{_datadir}/sc-im/plot_bar
+%{_datadir}/sc-im/plot_line
+%{_datadir}/sc-im/plot_pie
+%{_datadir}/sc-im/plot_scatter
+%{_datadir}/sc-im/sc-im_help
+
+# Themes
+%{_datadir}/themes/dracula.sc
+%{_datadir}/themes/old.sc
+%{_datadir}/themes/papercolor-dark.sc
+%{_datadir}/themes/prince.persia.sc
+
+%changelog
+%autochangelog

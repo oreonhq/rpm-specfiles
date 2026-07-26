@@ -1,0 +1,152 @@
+--- plot2d/plot.cc.orig	2021-03-02 09:51:50.731716615 -0700
++++ plot2d/plot.cc	2021-03-02 09:57:16.754106481 -0700
+@@ -134,7 +134,7 @@ void* readdata(void *x)
+ 	pthread_mutex_lock(&M);
+ 	swap(CE,E);
+ 	pthread_mutex_unlock(&M);
+-	for(int i = 0; i < E.size(); i++) delete E[i];
++	for(size_t i = 0; i < E.size(); i++) delete E[i];
+ 	E.clear(); }
+       else if (c == 'E') { /******* Exit! *******************/
+ 	return 0;
+@@ -155,7 +155,7 @@ void display()
+ {
+   pthread_mutex_lock(&M);
+   glClear(GL_COLOR_BUFFER_BIT);
+-  for(int i = 0; i < CE.size(); i++)
++  for(size_t i = 0; i < CE.size(); i++)
+     CE[i]->glRend(Colors);
+   pthread_mutex_unlock(&M);  
+   glutSwapBuffers();
+@@ -286,7 +286,7 @@ void SNoverSR::glRend(const CADColors &C
+   // 128 or so points that can appear.
+   C.glSetColor(colorType,'D');
+   glBegin(GL_LINE_STRIP);
+-  for(int i = 0; i < V.size(); i++)
++  for(size_t i = 0; i < V.size(); i++)
+     glVertex2(V[i]);
+   glEnd();
+ }
+@@ -328,7 +328,7 @@ bool SRoverSR::read(istream &in)
+     else 
+     {
+       cerr << "Sector over sector in unknown format!" << endl;
+-      for(int i = 0; i < V.size(); i++)
++      for(size_t i = 0; i < V.size(); i++)
+ 	cerr << V[i] << endl;
+       exit(1);
+     }
+--- source/db/SINGULAR.c.orig	2021-03-02 09:55:17.806328937 -0700
++++ source/db/SINGULAR.c	2021-03-02 09:57:16.755106479 -0700
+@@ -67,7 +67,7 @@ Word readSingularPoly(Word r, Word V, is
+   Word A, t;
+   string s;
+   in >> s;
+-  for(int i = 0; i < s.length(); ++i)
++  for(size_t i = 0; i < s.length(); ++i)
+     if (s[i] == '*') s[i] = ' ';
+   s += ".\n";
+   istringstream si(s);
+@@ -108,7 +108,7 @@ string WritePolyForSingular(Word r, Word
+     out = sout.str();
+   }
+   // Put in * symbols
+-  for(int i = 1; i < out.length() - 1; ++i)
++  for(size_t i = 1; i < out.length() - 1U; ++i)
+     if (out[i] == ' ' && out[i+1] != '+' && out[i+1] != '-'
+ 	&& out[i-1] != '+' && out[i-1] != '-'
+ 	)
+--- source/main/qepcadcls.c.orig	2021-03-01 14:24:45.000000000 -0700
++++ source/main/qepcadcls.c	2021-03-02 10:00:46.646714006 -0700
+@@ -60,7 +60,7 @@ void QepcadCls::UnsatCore::FactorInfo::W
+ 
+ void QepcadCls::UnsatCore::OrigAtom::clearTags()
+ {
+-  for(int i = 0; i < factors.size(); i++)
++  for(size_t i = 0; i < factors.size(); i++)
+     factors[i].clearTag();
+ }
+ 
+@@ -82,7 +82,7 @@ void QepcadCls::UnsatCore::prepareForLif
+   }
+ 
+   // set in factored form
+-  for(int k = 0; k < conjuncts.size(); k++)
++  for(int k = 0; (size_t)k < conjuncts.size(); k++)
+   {
+     OrigAtom &A = conjuncts[k];
+     Word r = A.r;
+@@ -205,7 +205,7 @@ void QepcadCls::UnsatCore::OrigAtom::WRI
+   {
+     if (sign < 0) SWRITE("-");
+     if (ICOMP(content,1) != 0) { IWRITE(content); }
+-    for(int i = 0; i < factors.size(); i++)
++    for(size_t i = 0; i < factors.size(); i++)
+       factors[i].WRITEFULL(V);
+     SWRITE(" ");
+     SWRITE(relopString(relop).c_str());
+@@ -218,7 +218,7 @@ void QepcadCls::UnsatCore::OrigAtom::WRI
+ bool QepcadCls::UnsatCore::OrigAtom::isKnownFalse()
+ {
+   int s = signToSigma(sign);
+-  for(int i = 0; i < factors.size(); i++)
++  for(size_t i = 0; i < factors.size(); i++)
+   {    
+     int sf = (factors[i].exp % 2 == 1) ? factors[i].tag : T_square[factors[i].tag];
+     s = T_prod[s][sf];
+@@ -235,7 +235,7 @@ void QepcadCls::UnsatCore::record(Word C
+   if (LELTI(C,HOWTV) == BYEQC) return;
+ 
+   // Clear truth tags (i.e. set them all to UNDET)
+-  for(int i = 0; i < conjuncts.size(); i++)
++  for(size_t i = 0; i < conjuncts.size(); i++)
+     conjuncts[i].clearTags();
+   
+   int k = LELTI(C,LEVEL);
+@@ -252,7 +252,7 @@ void QepcadCls::UnsatCore::record(Word C
+     {
+       int s = FIRST(Si);
+       vector< pair<int,int> > &V = appearsIn[pair<int,int>(i,j)];
+-      for(int h = 0; h < V.size(); h++)
++      for(size_t h = 0; h < V.size(); h++)
+       {
+ 	int a = V[h].first, b = V[h].second;
+ 	conjuncts[a].factors[b].tag = signToSigma(s);
+@@ -262,7 +262,7 @@ void QepcadCls::UnsatCore::record(Word C
+ 
+   // go through each input atomic formula to determine if it's known to be false
+   Word K = NIL;
+-  for(int i = 0; i < conjuncts.size(); i++)
++  for(int i = 0; (size_t)i < conjuncts.size(); i++)
+   {
+     if (conjuncts[i].isKnownFalse())
+     {
+@@ -280,7 +280,7 @@ void QepcadCls::UnsatCore::findUnsatCore
+     // Add equational constraints as size 1 sets.  Recall, right now
+     // we adopt the expedient of making the unsat core include all
+     // equational constraints.
+-    for(int i = 0; i < conjuncts.size(); i++)
++    for(int i = 0; (size_t)i < conjuncts.size(); i++)
+     {
+       if (conjuncts[i].relop == EQOP)
+ 	MHSP = COMP(LIST1(i),MHSP);
+--- source/saclib/gcword.c.orig	2021-03-01 14:24:45.000000000 -0700
++++ source/saclib/gcword.c	2021-03-02 10:02:20.966538453 -0700
+@@ -54,7 +54,7 @@ void clean()
+ void gcw_register(Word *p)
+ {
+   G.push_back(p);
+-  if (G.size() == lim)
++  if (G.size() == (size_t)lim)
+     clean();
+ }
+ 
+@@ -62,7 +62,7 @@ void gcw_MARK()
+ {
+   //  SWRITE("gcw size is: ");IWRITE(G.size()); SWRITE("\n");
+   clean();
+-  for(int i = 0; i < G.size(); i++)
++  for(size_t i = 0; i < G.size(); i++)
+     if (*G[i] > BETA && *G[i] < BETAp && (*G[i] & 1))
+       MARK(*G[i]);
+ 

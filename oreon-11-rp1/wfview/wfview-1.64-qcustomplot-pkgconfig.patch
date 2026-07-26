@@ -1,0 +1,19 @@
+diff --git a/wfview.pro b/wfview.pro
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -138,6 +138,7 @@ macx:LIBS += -framework CoreAudio -framework CoreFoundation -lpthread -lopus
+ # CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+ 
+ CONFIG(debug, release|debug) {
++  linux:LIBS += $$system("/usr/bin/pkg-config --libs qcustomplot-qt5")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotd.so/ {print \"-lQCustomPlotd\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd2.so/ {print \"-lqcustomplotd2\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd.so/ {print \"-lqcustomplotd\"}'")
+@@ -170,6 +170,7 @@ CONFIG(debug, release|debug) {
+     }
+   }
+ } else {
++  linux:LIBS += $$system("/usr/bin/pkg-config --libs qcustomplot-qt5")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlot.so/ {print \"-lQCustomPlot\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot2.so/ {print \"-lqcustomplot2\"}'")
+   linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot.so/ {print \"-lqcustomplot\"}'")

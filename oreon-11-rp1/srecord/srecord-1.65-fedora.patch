@@ -1,0 +1,202 @@
+From e71f627624c010ba3c824d55ce7c8e04dc841fee Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 13 Aug 2023 19:19:05 +0200
+Subject: [PATCH 1/3] use sane library name
+
+---
+ srec_cat/CMakeLists.txt  |  2 +-
+ srec_cmp/CMakeLists.txt  |  2 +-
+ srec_info/CMakeLists.txt |  2 +-
+ srecord/CMakeLists.txt   |  4 ++--
+ test/CMakeLists.txt      | 10 +++++-----
+ 5 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/srec_cat/CMakeLists.txt b/srec_cat/CMakeLists.txt
+index 6174b80f..564680b6 100644
+--- a/srec_cat/CMakeLists.txt
++++ b/srec_cat/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_CAT_SRC "*.cc")
+ add_executable(srec_cat ${SREC_CAT_SRC})
+-target_link_libraries(srec_cat lib_srecord ${LIB_GCRYPT})
++target_link_libraries(srec_cat srecord ${LIB_GCRYPT})
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_cat)
+diff --git a/srec_cmp/CMakeLists.txt b/srec_cmp/CMakeLists.txt
+index 7d5b34f2..d80b8a4b 100644
+--- a/srec_cmp/CMakeLists.txt
++++ b/srec_cmp/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_CMP_SRC "*.cc")
+ add_executable(srec_cmp ${SREC_CMP_SRC})
+-target_link_libraries(srec_cmp lib_srecord ${LIB_GCRYPT})
++target_link_libraries(srec_cmp srecord ${LIB_GCRYPT})
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_cmp)
+diff --git a/srec_info/CMakeLists.txt b/srec_info/CMakeLists.txt
+index 4884f562..0ee6c32d 100644
+--- a/srec_info/CMakeLists.txt
++++ b/srec_info/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_INFO_SRC "*.cc")
+ add_executable(srec_info ${SREC_INFO_SRC})
+-target_link_libraries(srec_info lib_srecord ${LIB_GCRYPT})
++target_link_libraries(srec_info srecord ${LIB_GCRYPT})
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_info)
+diff --git a/srecord/CMakeLists.txt b/srecord/CMakeLists.txt
+index 930dbf99..23920636 100644
+--- a/srecord/CMakeLists.txt
++++ b/srecord/CMakeLists.txt
+@@ -21,10 +21,10 @@ file(GLOB_RECURSE LIB_SRECORD_SRC "*.cc")
+ file(GLOB_RECURSE LIB_SRECORD_HDR "*.h")
+ 
+ message(STATUS "gcrypt location ${LIB_GCRYPT}")
+-add_library(lib_srecord STATIC ${LIB_SRECORD_SRC} ${LIB_SRECORD_HDR} ${LIB_GCRYPT})
++add_library(srecord STATIC ${LIB_SRECORD_SRC} ${LIB_SRECORD_HDR} ${LIB_GCRYPT})
+ 
+ # Install the library
+-install(TARGETS lib_srecord
++install(TARGETS srecord
+         DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+ # Install the development headers
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index a2c77ea5..270bbca3 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -19,23 +19,23 @@
+ # Build test support executables
+ file(GLOB_RECURSE TEST_ARGLEX_AMBIGUOUS_SRC "arglex_ambiguous/*.cc")
+ add_executable(test_arglex_ambiguous ${TEST_ARGLEX_AMBIGUOUS_SRC})
+-target_link_libraries(test_arglex_ambiguous lib_srecord ${LIB_GCRYPT})
++target_link_libraries(test_arglex_ambiguous srecord ${LIB_GCRYPT})
+ 
+ file(GLOB_RECURSE TEST_CRC16_SRC "crc16/*.cc")
+ add_executable(test_crc16 ${TEST_CRC16_SRC})
+-target_link_libraries(test_crc16 lib_srecord)
++target_link_libraries(test_crc16 srecord)
+ 
+ file(GLOB_RECURSE TEST_FLETCHER16_SRC "fletcher16/*.cc")
+ add_executable(test_fletcher16 ${TEST_FLETCHER16_SRC})
+-target_link_libraries(test_fletcher16 lib_srecord)
++target_link_libraries(test_fletcher16 srecord)
+ 
+ file(GLOB_RECURSE TEST_HYPHEN_SRC "hyphen/*.cc")
+ add_executable(test_hyphen ${TEST_HYPHEN_SRC})
+-target_link_libraries(test_hyphen lib_srecord)
++target_link_libraries(test_hyphen srecord)
+ 
+ file(GLOB_RECURSE TEST_URL_DECODE_SRC "url_decode/*.cc")
+ add_executable(test_url_decode ${TEST_URL_DECODE_SRC})
+-target_link_libraries(test_url_decode lib_srecord)
++target_link_libraries(test_url_decode srecord)
+ 
+ configure_file(test_prelude.sh test_prelude COPYONLY)
+ 
+-- 
+2.41.0
+
+
+From d1a9748ee754dd1846cdc2daff62469d144f83aa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 13 Aug 2023 20:31:22 +0200
+Subject: [PATCH 2/3] build with a shared library
+
+---
+ srec_cat/CMakeLists.txt  | 2 +-
+ srec_cmp/CMakeLists.txt  | 2 +-
+ srec_info/CMakeLists.txt | 2 +-
+ srecord/CMakeLists.txt   | 4 +++-
+ 4 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/srec_cat/CMakeLists.txt b/srec_cat/CMakeLists.txt
+index 564680b6..70f927d9 100644
+--- a/srec_cat/CMakeLists.txt
++++ b/srec_cat/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_CAT_SRC "*.cc")
+ add_executable(srec_cat ${SREC_CAT_SRC})
+-target_link_libraries(srec_cat srecord ${LIB_GCRYPT})
++target_link_libraries(srec_cat srecord)
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_cat)
+diff --git a/srec_cmp/CMakeLists.txt b/srec_cmp/CMakeLists.txt
+index d80b8a4b..ae36fdda 100644
+--- a/srec_cmp/CMakeLists.txt
++++ b/srec_cmp/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_CMP_SRC "*.cc")
+ add_executable(srec_cmp ${SREC_CMP_SRC})
+-target_link_libraries(srec_cmp srecord ${LIB_GCRYPT})
++target_link_libraries(srec_cmp srecord)
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_cmp)
+diff --git a/srec_info/CMakeLists.txt b/srec_info/CMakeLists.txt
+index 0ee6c32d..3711a149 100644
+--- a/srec_info/CMakeLists.txt
++++ b/srec_info/CMakeLists.txt
+@@ -19,6 +19,6 @@
+ # Build srecord executable
+ file(GLOB_RECURSE SREC_INFO_SRC "*.cc")
+ add_executable(srec_info ${SREC_INFO_SRC})
+-target_link_libraries(srec_info srecord ${LIB_GCRYPT})
++target_link_libraries(srec_info srecord)
+ 
+ INSTALL_SRECORD_EXECUTABLE_TARGET(srec_info)
+diff --git a/srecord/CMakeLists.txt b/srecord/CMakeLists.txt
+index 23920636..ff9006ed 100644
+--- a/srecord/CMakeLists.txt
++++ b/srecord/CMakeLists.txt
+@@ -21,7 +21,9 @@ file(GLOB_RECURSE LIB_SRECORD_SRC "*.cc")
+ file(GLOB_RECURSE LIB_SRECORD_HDR "*.h")
+ 
+ message(STATUS "gcrypt location ${LIB_GCRYPT}")
+-add_library(srecord STATIC ${LIB_SRECORD_SRC} ${LIB_SRECORD_HDR} ${LIB_GCRYPT})
++add_library(srecord SHARED ${LIB_SRECORD_SRC} ${LIB_SRECORD_HDR} ${LIB_GCRYPT})
++set_target_properties(srecord PROPERTIES SOVERSION ${PROJECT_VERSION} VERSION ${PROJECT_VERSION})
++target_link_libraries(srecord ${LIB_GCRYPT})
+ 
+ # Install the library
+ install(TARGETS srecord
+-- 
+2.41.0
+
+
+From a18bc3752023c5d21a4eeeaf4ba3db7d7d283897 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Sun, 13 Aug 2023 21:29:28 +0200
+Subject: [PATCH 3/3] install runtime deps on Windows only
+
+---
+ etc/packaging.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/etc/packaging.cmake b/etc/packaging.cmake
+index ee2a32c5..fc20095c 100644
+--- a/etc/packaging.cmake
++++ b/etc/packaging.cmake
+@@ -30,6 +30,7 @@ FUNCTION(INSTALL_SRECORD_EXECUTABLE_TARGET target)
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${target}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${target}
+     )
++if (WIN32)
+   message(STATUS "CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION}")
+   message(STATUS "CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
+   # Find standard library DLL's (if needed, this covers mingw clang and gcc on windows)
+@@ -51,6 +52,7 @@ FUNCTION(INSTALL_SRECORD_EXECUTABLE_TARGET target)
+     DIRECTORIES ${DLL_SEARCH_DIRS}
+     COMPONENT ${target}
+     )
++endif()
+ ENDFUNCTION()
+ 
+ # Packaging
+-- 
+2.41.0
+

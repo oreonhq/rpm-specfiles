@@ -1,0 +1,12 @@
+diff -ruN pyspf-2.0.14-v/spf.py pyspf-2.0.14/spf.py
+--- pyspf-2.0.14-v/spf.py	2020-01-02 08:02:26.000000000 +1100
++++ pyspf-2.0.14/spf.py	2020-02-21 09:54:05.593137592 +1100
+@@ -594,6 +594,8 @@
+             if not spf:
+                 spf = self.dns_spf(self.d)
+                 if self.verbose: self.log("top",self.d,spf)
++            # some records contain LF, be relaxed and replace with space
++            if spf: spf = spf.replace('\n', ' ')
+             if self.libspf_local and spf: 
+                 spf = insert_libspf_local_policy(
+                     spf, self.libspf_local)

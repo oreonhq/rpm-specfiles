@@ -1,0 +1,23 @@
+From c1ccccf41dba08bb936c07caca8f8a3dfc484d9a Mon Sep 17 00:00:00 2001
+From: Susi Lehtola <susi.lehtola@gmail.com>
+Date: Wed, 4 Sep 2024 11:10:55 +0300
+Subject: [PATCH] Use sys.executable over explicit call to python which may not
+ be available
+
+---
+ qcengine/programs/psi4.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qcengine/programs/psi4.py b/qcengine/programs/psi4.py
+index 1ba3d7fa..d49a1742 100644
+--- a/qcengine/programs/psi4.py
++++ b/qcengine/programs/psi4.py
+@@ -73,7 +73,7 @@ def found(raise_error: bool = False) -> bool:
+                         psiapi = which_import("psi4", return_bool=True)
+ 
+         if psiapi and not psithon:
+-            with popen(["python", "-c", "import psi4; print(psi4.executable)"]) as exc:
++            with popen([sys.executable, "-c", "import psi4; print(psi4.executable)"]) as exc:
+                 exc["proc"].wait(timeout=30)
+             so, se, rc = exc["stdout"].strip(), exc["stderr"], exc["proc"].returncode
+             error_msg = f" In particular, psi4 module found but unable to load psi4 command into PATH. stdout: {so}, stderr: {se}"

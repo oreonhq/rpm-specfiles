@@ -1,0 +1,32 @@
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Subject: [PATCH] t/cflags-lib
+
+---
+ configure.ac | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 80c8c79..1edc256 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -85,7 +85,7 @@ if test "$debug" = "yes"; then
+ else
+   AC_SUBST( debug, [no] )
+   AC_SUBST( cppflag, [] )
+-  AC_SUBST( cxxflag, [-O3] )
++  AC_SUBST( cxxflag, [] )
+   AC_SUBST( object_path, [Release] )
+ fi
+ AC_MSG_RESULT($debug)
+@@ -100,7 +100,7 @@ fi
+ CPPFLAGS="$CPPFLAGS $cppflag"
+ 
+ # For debugging and optimization ... overwrite default because it has both -g and -O2
+-CXXFLAGS="$cxxflag"
++CXXFLAGS="$CXXFLAGS $cxxflag"
+ 
+ # Check compiler and use -Wall if gnu.
+ if [test $GXX = "yes" ;] then
+
+-- 
+tg: (67475d5..) t/cflags-lib (depends on: master)

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>org.seamonkey_project.seamonkey</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <launchable type="desktop-id">seamonkey.desktop</launchable>
+  <name>SeaMonkey Suite</name>
+  <summary>Web browser, e-mail, news, IRC client, HTML editor</summary>
+  <description>
+    <p>
+      SeaMonkey is an all-in-one Internet application suite and the direct
+      successor to the former popular Netscape Communicator and Mozilla
+      Application suite. It includes an Internet browser, advanced e-mail,
+      newsgroup and feed client, a calendar, IRC client, HTML editor and a tool
+      to inspect the DOM for web pages.
+    </p>
+    <p>
+      SeaMonkey historically shares a common codebase with Mozilla's Firefox
+      browser and the Thunderbird email application. The current releases are
+      now developed primarily by porting (step by step) modern code into an
+      older codebase (branched since Firefox 56), thereby preserving
+      old-school/classic user preferences in interface, features and behaviour.
+      The codebase is also updated upstream for a possible later release using
+      the latest mozilla codebase.
+    </p>
+    <p>
+      However, due to manpower shortage, the development is a bit slow for now
+      and many overly modern sites don't work with SeaMonkey properly.
+      But other suite components, such as email client, are quite usable today
+      and the development team is comitted to update the codebase so that the
+      latest web features are supported again.
+    </p>
+  </description>
+  <categories>
+    <category>Network</category>
+    <category>WebBrowser</category>
+    <category>WebDevelopment</category>
+    <category>Email</category>
+    <category>IRCClient</category>
+    <category>Calendar</category>
+    <category>GTK</category>
+  </categories>
+  <url type="homepage">https://www.seamonkey-project.org</url>
+  <url type="bugtracker">https://bugzilla.mozilla.org/</url>
+  <url type="help">https://www.seamonkey-project.org/doc/</url>
+  <url type="donation">https://www.seamonkey-project.org/donate/</url>
+<!--  not supported on old systems
+  <url type="contact">https://www.seamonkey-project.org/about#contact</url>
+  <url type="vcs-browser">https://gitlab.com/users/seamonkey-project/projects</url>
+  <url type="contribute">https://www.seamonkey-project.org/dev/get-involved</url>
+-->
+  <developer id="org.seamonkey_project">
+    <name>SeaMonkey Project</name>
+  </developer>
+  <update_contact>seamonkey-maintainers@fedoraproject.org</update_contact>
+  <project_group>Mozilla</project_group>
+  <provides>
+    <mediatype>text/html</mediatype>
+    <mediatype>text/xml</mediatype>
+    <mediatype>application/xhtml+xml</mediatype>
+    <mediatype>application/vnd.mozilla.xul+xml</mediatype>
+    <mediatype>text/mml</mediatype>
+    <mediatype>x-scheme-handler/http</mediatype>
+    <mediatype>x-scheme-handler/https</mediatype>
+    <binary>seamonkey</binary>
+  </provides>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Browser</caption>
+      <image type="source">https://www.seamonkey-project.org/doc/img-screen/linux/browser.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Add-ons Manager</caption>
+      <image type="source">https://www.seamonkey-project.org/doc/img-screen/linux/addonman.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Data manager</caption>
+      <image type="source">https://www.seamonkey-project.org/doc/img-screen/linux/dataman.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Messenger</caption>
+      <image type="source">https://www.seamonkey-project.org/doc/img-screen/linux/messenger.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Mail Compose</caption>
+      <image type="source">https://www.seamonkey-project.org/doc/img-screen/linux/mailcompose.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+</component>

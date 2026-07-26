@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Ularn
+GenericName=Ularn
+Comment=Text based game
+Exec=Ularn
+Icon=ularn.png
+Terminal=true
+Type=Application
+Categories=Game;RolePlaying;
+Version=1.0

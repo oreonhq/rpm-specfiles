@@ -1,0 +1,98 @@
+.TH UNU\-HISTO "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-histo \- create 1\-D histogram of values in a
+.I nrrd
+.SH SYNOPSIS
+.B unu\ histo
+.BR \-b , \-\-bins
+.RI < num >
+.RB [ \-w , \-\-weight
+.RI < nweight >]
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Create 1\-D histogram of values in a
+.IR nrrd .
+Can explicitly set bounds of histogram domain or can learn these from the data.
+.IP \(bu +2n
+Uses
+.B nrrdHisto
+.SH OPTIONS
+.TP
+.B \-b\fR\ <\fInum\fR>\ ,\ \fB\-\-bins\fR\ <\fInum\fR>
+# of bins in histogram
+.RI ( unsigned\ int )
+.TP
+.B \-w\fR\ <\fInweight\fR>\ ,\ \fB\-\-weight\fR\ <\fInweight\fR>
+how to weigh contributions to histogram.
+By default (not using this option), the increment is one bin count per sample,
+but by giving a
+.IR nrrd ,
+the value in the
+.I nrrd
+at the corresponding location will be the bin count increment
+.TP
+.B \-min\fR\ <\fIvalue\fR>\ ,\ \fB\-\-minimum\fR\ <\fIvalue\fR>
+Value at low end of histogram, given explicitly as a regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this minimum is specified in terms of the percentage of samples in
+input that are lower.
+By default (not using this option), the lowest value found in input
+.IR nrrd .
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-max\fR\ <\fIvalue\fR>\ ,\ \fB\-\-maximum\fR\ <\fIvalue\fR>
+Value at high end of histogram, given explicitly as a regular number,
+.BR or ,
+if the number is given with a
+.RB \(lq % \(rq
+suffix, this maximum is specified in terms of the percentage of samples in
+input that are higher.
+Defaults to highest value found in input
+.IR nrrd .
+.RI ( string );
+default:
+.RB \(lq nan \(rq
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+Whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [-128,127] ).
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to use for bins in output histogram; default:
+.RB \(lq uint \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

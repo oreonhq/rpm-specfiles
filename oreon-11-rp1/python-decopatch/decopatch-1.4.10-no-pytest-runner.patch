@@ -1,0 +1,21 @@
+diff -Naur decopatch-1.4.10-original/setup.cfg decopatch-1.4.10/setup.cfg
+--- decopatch-1.4.10-original/setup.cfg	2022-03-01 03:57:14.000000000 -0500
++++ decopatch-1.4.10/setup.cfg	2024-12-24 08:21:56.444118668 -0500
+@@ -27,7 +27,6 @@
+ [options]
+ setup_requires = 
+ 	setuptools_scm
+-	pytest-runner
+ install_requires = 
+ 	makefun>=1.5.0
+ 	funcsigs;python_version<'3.3'
+@@ -56,9 +55,6 @@
+ [bdist_wheel]
+ universal = 1
+ 
+-[aliases]
+-test = pytest
+-
+ [tool:pytest]
+ testpaths = tests/
+ addopts = 

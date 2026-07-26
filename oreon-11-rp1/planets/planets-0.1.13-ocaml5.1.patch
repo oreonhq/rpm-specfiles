@@ -1,0 +1,18 @@
+--- planets-0.1.13/Makefile.orig	2023-10-03 17:01:23.349595129 -0600
++++ planets-0.1.13/Makefile	2023-10-03 17:02:21.258585795 -0600
+@@ -15,12 +15,12 @@ INCLUDES=-I +labltk -I +camlp-streams -I
+ CAMLP4=-pp $(CAMLP4O)
+ OCAMLDEP=ocamldep
+ CAMLLIBS=unix.cma str.cma labltk.cma camlp_streams.cma # libjpf.cma mylibs.cma
+-OCAMLFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS) -cclib -lunix 
+-OCAMLOPTFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS:.cma=.cmxa) -inline 50 -cclib -lunix
++OCAMLFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS) -cclib -lunixbyt
++OCAMLOPTFLAGS=$(INCLUDES) $(CAMLP4) -g $(CAMLLIBS:.cma=.cmxa) -inline 50 -cclib -lunixnat
+ 
+ ifdef PROFILING
+   OCAMLC=ocamlcp
+-  OCAMLOPTFLAGS = -p $(INCLUDES) $(CAMLLIBS:.cma=.cmxa) -inline 40 -cclib -lunix
++  OCAMLOPTFLAGS = -p $(INCLUDES) $(CAMLLIBS:.cma=.cmxa) -inline 40 -cclib -lunixnat
+ endif
+ 
+ OBJS =  augSet.cmx augMap.cmx mTimer.cmx common.cmx lstrings.cmx options.cmx \

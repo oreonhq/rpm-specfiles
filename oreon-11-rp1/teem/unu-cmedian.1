@@ -1,0 +1,98 @@
+.TH UNU\-CMEDIAN "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-cmedian \- cheap histogram-based median/mode filtering
+.SH SYNOPSIS
+.B unu\ cmedian
+.BR \-r , \-\-radius
+.RI < radius >
+.RB [ \-mode ]
+.RB [ \-b , \-\-bins
+.RI < num >]
+.RB [ \-w , \-\-weight
+.RI < weight >]
+.RB [ \-p , \-\-pad ]
+.RB [ \-c , \-\-channel ]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Cheap histogram-based median/mode filtering.
+Only works on 1, 2, or 3 dimensions.
+The window over which filtering is done is always square, and only a simplistic
+weighting scheme is available.
+The method is cheap because it does the median or mode based on a histogram,
+which enforces a quantization to the number of bins in the histogram, which
+probably means a loss of precision for anything except 8-bit data.
+Also, integral values can be
+recovered exactly only when the number of bins is exactly
+.IB min \- max +1
+(as reported by
+.BR unu\-minmax (1)).
+.IP \(bu +2n
+Uses
+.BR nrrdCheapMedian ,
+plus
+.B nrrdSlice
+and
+.B nrrdJoin
+in case of
+.RB \(lq \-c \(rq
+.SH OPTIONS
+.TP
+.B \-r\fR\ <\fIradius\fR>\ ,\ \fB\-\-radius\fR\ <\fIradius\fR>
+how big a window to filter over.
+.RB \(lq \-r\ 1 \(rq
+leads to a 3x3 window in an image, and a 3x3x3 window in a volume
+.RI ( unsigned\ int )
+.TP
+.B \-mode
+By default, median filtering is done.
+Using this option enables mode filtering, in which the most common value is
+used as output
+.TP
+.B \-b\fR\ <\fInum\fR>\ ,\ \fB\-\-bins\fR\ <\fInum\fR>
+# of bins in histogram.
+It is in your interest to minimize this number, since big histograms mean
+slower execution times.
+8-bit data needs at most 256 bins.
+.RI ( unsigned\ int );
+default:
+.RB \(lq 256 \(rq
+.TP
+.B \-w\fR\ <\fIweight\fR>\ ,\ \fB\-\-weight\fR\ <\fIweight\fR>
+How much higher to preferentially weight samples that are closer to the center
+of the window.
+.RB \(lq 1.0 \(rq
+weight means that all samples are uniformly weighted over the window, which
+facilitates a simple speed-up.
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-p\fR\ ,\ \fB\-\-pad
+Pad the input (with boundary method
+.RB \(lq bleed \(rq),
+and crop the output, so as to overcome our cheapness and correctly handle the
+border.
+Obviously, this takes more memory.
+.TP
+.B \-c\fR\ ,\ \fB\-\-channel
+Slice the input along axis 0, run filtering on all slices, and join the results
+back together.
+This is the way you\(cqd want to process color (multi-channel) images or
+volumes.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-minmax (1)

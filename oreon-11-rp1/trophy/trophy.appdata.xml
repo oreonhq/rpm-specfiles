@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>trophy.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-1.0+</project_license>
+  <name>Trophy</name>
+  <summary>2D car racing game with power-ups</summary>
+  <description>
+    <p>
+      Trophy is a single-player racing game. Even though the goal is basically
+      to finish the laps as the first, Trophy is an action game which offers
+      much more than just a race.
+    </p>
+    <p>
+      Trophy has lots of extras, which are... er... 'untypical' for racing
+      games. Some of these "unusual" features for races are: shooting other
+      players, putting mines and many others.
+    </p>
+  </description>
+  <url type="homepage">http://trophy.sourceforge.net/</url>
+  <screenshots>
+    <screenshot type="default">http://trophy.sourceforge.net/img/screenshot04.gif</screenshot>
+    <screenshot>http://trophy.sourceforge.net/img/trophy3.gif</screenshot>
+    <screenshot>http://trophy.sourceforge.net/img/screenshot05.gif</screenshot>
+    <screenshot>http://trophy.sourceforge.net/img/trophy5.gif</screenshot>
+    <screenshot>http://trophy.sourceforge.net/img/screenshot06.gif</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

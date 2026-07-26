@@ -1,0 +1,6 @@
+#!/bin/sh
+
+umask 022
+if [ -d /var/spool/slrnpull ]; then
+	exec runuser -s /bin/sh news -c 'slrnpull --expire'
+fi

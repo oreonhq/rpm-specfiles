@@ -1,0 +1,74 @@
+%global source0_hash 6658071d6f1044184d3973062a798187537ae1c3ddb4c31afd417df333316c10
+
+%global libsepolver 3.10-1
+
+Name:           secilc
+Version:        3.10
+Release:        1%{?dist}
+Summary:        The SELinux CIL Compiler
+
+License:        BSD-2-Clause
+URL:            https://github.com/SELinuxProject/selinux/wiki
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/secilc-%{version}.tar.gz
+Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/secilc-%{version}.tar.gz.asc
+Source2:        https://github.com/perfinion.gpg
+# fedora-selinux/selinux: git format-patch -N 3.10 -- secilc
+# i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
+# Patch list start
+# Patch list end
+Requires:       libsepol >= %{libsepolver}
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  libsepol-static >= %{libsepolver}, dblatex, flex, xmlto, pandoc-pdf, texlive-mdwtools
+BuildRequires:  gnupg2
+
+%description
+The SELinux CIL Compiler is a compiler that converts the CIL language as
+described on the CIL design wiki into a kernel binary policy file.
+Please see the CIL Design Wiki at:
+http://github.com/SELinuxProject/cil/wiki/
+for more information about the goals and features on the CIL language.
+
+%package doc
+Summary:        Documentation for the SELinux CIL Compiler
+BuildArch:      noarch
+
+%description doc
+The SELinux CIL Compiler is a compiler that converts the CIL language as
+described on the CIL design wiki into a kernel binary policy file.
+Please see the CIL Design Wiki at:
+http://github.com/SELinuxProject/cil/wiki/
+for more information about the goals and features on the CIL language.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -p 2 -n secilc-%{version}
+
+%build
+%set_build_flags
+make %{?_smp_mflags} LIBSEPOL_STATIC=%{_libdir}/libsepol.a
+pushd docs
+make %{?_smp_mflags}
+popd
+
+%install
+make %{?_smp_mflags} DESTDIR="%{buildroot}" SBINDIR="%{buildroot}%{_sbindir}" LIBDIR="%{buildroot}%{_libdir}" install
+
+%files
+%{_bindir}/secilc
+%{_bindir}/secil2conf
+%{_bindir}/secil2tree
+%{_mandir}/man8/secilc.8*
+%{_mandir}/man8/secil2conf.8*
+%{_mandir}/man8/secil2tree.8*
+%license LICENSE
+
+%files doc
+%doc docs/html
+%doc docs/pdf
+%license LICENSE
+
+%changelog
+%autochangelog

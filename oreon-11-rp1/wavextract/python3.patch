@@ -1,0 +1,24 @@
+--- wavextract.bak	2023-10-20 10:55:38.266247987 -0500
++++ wavextract	2023-10-20 10:55:57.311161774 -0500
+@@ -98,15 +98,15 @@
+             try:
+                 savefile(extreplace(arg, ".wav"), wavextract(arg))
+                 run_status = 0
+-            except Error, e:
+-                print e
++            except Error as e:
++                print(e)
+                 run_status = 1
+-            except CriticalError, e:
+-                print e
++            except CriticalError as e:
++                print(e)
+                 sys.exit(1)
+     else:
+-        print "wavextract - program for extracting embedded audio data from JPEG images"
+-        print "Usage: %s image1.jpg image2.jpg ..." % sys.argv[0]
++        print("wavextract - program for extracting embedded audio data from JPEG images")
++        print("Usage: %s image1.jpg image2.jpg ..." % sys.argv[0])
+         sys.exit(0)
+ 
+     sys.exit(run_status)

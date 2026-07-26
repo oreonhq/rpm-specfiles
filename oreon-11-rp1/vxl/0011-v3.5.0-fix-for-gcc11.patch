@@ -1,0 +1,89 @@
+From 690e4102939836f82afb83bba6120698403fcd43 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 23 Oct 2023 17:05:04 +0100
+Subject: [PATCH 11/18] v3.5.0: fix for gcc11
+
+---
+ .../brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx    | 1 +
+ contrib/brl/bseg/bsgm/bsgm_error_checking.h                      | 1 +
+ contrib/brl/bseg/bsgm/bsgm_remove_spikes.h                       | 1 +
+ contrib/mul/vil3d/algo/vil3d_locally_z_normalise.h               | 1 +
+ core/testlib/testlib_test.h                                      | 1 +
+ core/vnl/vnl_bignum.cxx                                          | 1 +
+ 6 files changed, 6 insertions(+)
+
+diff --git a/contrib/brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx b/contrib/brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx
+index 67f6f1582c..185042f4df 100644
+--- a/contrib/brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx
++++ b/contrib/brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx
+@@ -2,6 +2,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <algorithm>
++#include <limits>
+ #include <bprb/bprb_func_process.h>
+ //:
+ // \file
+diff --git a/contrib/brl/bseg/bsgm/bsgm_error_checking.h b/contrib/brl/bseg/bsgm/bsgm_error_checking.h
+index 3eb3731a48..69ddb9a659 100644
+--- a/contrib/brl/bseg/bsgm/bsgm_error_checking.h
++++ b/contrib/brl/bseg/bsgm/bsgm_error_checking.h
+@@ -11,6 +11,7 @@
+ #include <vgl/vgl_box_2d.h>
+ #include <vil/vil_image_view.h>
+ #include <vector>
++#include <limits>
+ 
+ //:
+ // \file
+diff --git a/contrib/brl/bseg/bsgm/bsgm_remove_spikes.h b/contrib/brl/bseg/bsgm/bsgm_remove_spikes.h
+index fd1ca2a941..c20cfe8b80 100644
+--- a/contrib/brl/bseg/bsgm/bsgm_remove_spikes.h
++++ b/contrib/brl/bseg/bsgm/bsgm_remove_spikes.h
+@@ -2,6 +2,7 @@
+ #include <iomanip>
+ #include <cmath>
+ #include <vector>
++#include <limits>
+ #include <vgl/vgl_point_3d.h>
+ #include <vil/vil_image_view.h>
+ 
+diff --git a/contrib/mul/vil3d/algo/vil3d_locally_z_normalise.h b/contrib/mul/vil3d/algo/vil3d_locally_z_normalise.h
+index 96654ddac0..762d4598bf 100644
+--- a/contrib/mul/vil3d/algo/vil3d_locally_z_normalise.h
++++ b/contrib/mul/vil3d/algo/vil3d_locally_z_normalise.h
+@@ -10,6 +10,7 @@
+ #include <vil3d/vil3d_math.h>
+ #include <vil3d/algo/vil3d_exp_filter.h>
+ #include <cassert>
++#include <limits>
+ #ifdef _MSC_VER
+ #  include <vcl_msvc_warnings.h>
+ #endif
+diff --git a/core/testlib/testlib_test.h b/core/testlib/testlib_test.h
+index e070f2aacc..87d5c5ceb1 100644
+--- a/core/testlib/testlib_test.h
++++ b/core/testlib/testlib_test.h
+@@ -14,6 +14,7 @@
+ 
+ #include <string>
+ #include <complex>
++#include <limits>
+ 
+ //: initialise test counters, check test name 'name' exists
+ void testlib_test_start(const char* name = nullptr);
+diff --git a/core/vnl/vnl_bignum.cxx b/core/vnl/vnl_bignum.cxx
+index 26760c2054..0556918395 100644
+--- a/core/vnl/vnl_bignum.cxx
++++ b/core/vnl/vnl_bignum.cxx
+@@ -6,6 +6,7 @@
+ #include <algorithm>
+ #include <vector>
+ #include <iostream>
++#include <limits>
+ #include "vnl_bignum.h"
+ //:
+ // \file
+-- 
+2.46.1
+

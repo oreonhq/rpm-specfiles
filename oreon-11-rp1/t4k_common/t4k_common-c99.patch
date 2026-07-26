@@ -1,0 +1,22 @@
+GNULIB_UNISTR_U8_MBTOUC_UNSAFE tells the bundled unistr.h to provide a
+function prototype for u8_mbtouc_unsafe. This prevents build failures
+with future compilers which do not support implicit function
+declarations.
+
+Upstream gnulib has split the linebreak module into multiple parts; it
+is hard to tell if it still has the same issue.
+
+Submitted upstream: <https://github.com/tux4kids/t4kcommon/pull/16>
+
+diff --git a/src/linebreak/linebreak.c b/src/linebreak/linebreak.c
+index f9c88a15311aaf6b..0a40d376137b5479 100644
+--- a/src/linebreak/linebreak.c
++++ b/src/linebreak/linebreak.c
+@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+ //#include "c-ctype.h"
+ #include "ctype.h"
+ #include "xsize.h"
++#define GNULIB_UNISTR_U8_MBTOUC_UNSAFE
+ #include "unistr.h"
+ #include "uniwidth.h"
+ #include "uniwidth/cjk.h"

@@ -1,0 +1,51 @@
+From 15e429d17b5c1922d9d8c8e86b918e6e9e08c863 Mon Sep 17 00:00:00 2001
+From: Stephen Gallagher <sgallagh@redhat.com>
+Date: Mon, 12 May 2025 11:17:58 -0400
+Subject: [PATCH] tests: Prefer tomllib where available
+
+Python 3.11 and newer includes tomllib in the standard library.
+
+Signed-off-by: Stephen Gallagher <sgallagh@redhat.com>
+---
+ tests/test_aiolimiter.py | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_aiolimiter.py b/tests/test_aiolimiter.py
+index 04db6d65b7101f54f0ec45f858b2f8dc71a99b9f..43e02541f40093f55dad1141067fb47d7e985cb0 100644
+--- a/tests/test_aiolimiter.py
++++ b/tests/test_aiolimiter.py
+@@ -7,7 +7,21 @@ from pathlib import Path
+ from unittest import mock
+ 
+ import pytest
+-import toml
++
++try:
++    import tomllib
++
++    def toml_load_path(path: Path):
++        with open(path, "rb") as f:
++            data = tomllib.load(f)
++        return data
++
++except ImportError:
++    import toml
++
++    def toml_load_path(path: Path):
++        return toml.load(path)
++
+ 
+ from aiolimiter import AsyncLimiter
+ 
+@@ -22,7 +36,7 @@ def test_version():
+     assert __version__
+ 
+     pyproject = Path(__file__).resolve().parent.parent / "pyproject.toml"
+-    metadata = toml.load(pyproject)["tool"]["poetry"]
++    metadata = toml_load_path(pyproject)["tool"]["poetry"]
+ 
+     # pyproject bumps to -alpha.0, -beta.1, etc., but releases a0, b1
+     # We don't really need to care about those, just verify that sorta
+-- 
+2.49.0
+

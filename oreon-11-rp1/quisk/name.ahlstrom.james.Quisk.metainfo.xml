@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>name.ahlstrom.james.Quisk</id>
+  <launchable type="desktop-id">quisk.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Quisk</name>
+  <developer_name>Jim Ahlstrom</developer_name>
+  <summary>SDR transceiver software</summary>
+  <description>
+    <p>
+      Quisk is a Software Defined Radio (SDR) which can control various radio hardware. You supply an antenna and a complex (I/Q) mixer to convert the radio spectrum to a low IF.
+      Then send that IF to your computer using the sound card, Ethernet or USB. The Quisk software will read the I/Q data, tune it, filter it, demodulate it,
+      and send the audio to headphones or speakers. Quisk has a microphone input and a key input so it can operate as a complete transceiver.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://james.ahlstrom.name/quisk/screen1.jpg</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://james.ahlstrom.name/quisk/</url>
+  <content_rating type="oars-1.1"/>
+</component>

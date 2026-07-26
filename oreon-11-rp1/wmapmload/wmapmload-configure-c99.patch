@@ -1,0 +1,22 @@
+Fix C99 compatibility issue in historic autoconf-generated code.  The
+exit function has not declared at this point, and future compilers
+might not accept implicit function declarations.
+
+No need to upstream this because the issue goes away once autoconf is
+re-run.
+
+diff --git a/configure b/configure
+index 57e5a7a1a0a91217..4f7a9f3a75c5535f 100755
+--- a/configure
++++ b/configure
+@@ -4204,8 +4204,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

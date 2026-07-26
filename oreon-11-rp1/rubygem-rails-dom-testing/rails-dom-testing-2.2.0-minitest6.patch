@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' rails-dom-testing-2.2.0.orig/test/dom_assertions_test.rb rails-dom-testing-2.2.0/test/dom_assertions_test.rb
+--- rails-dom-testing-2.2.0.orig/test/dom_assertions_test.rb	2025-12-30 22:46:20.184461631 +0900
++++ rails-dom-testing-2.2.0/test/dom_assertions_test.rb	2025-12-30 22:48:01.713691965 +0900
+@@ -1,6 +1,7 @@
+ # frozen_string_literal: true
+ 
+ require "test_helper"
++require "minitest/mock"
+ 
+ class DomAssertionsTest < ActiveSupport::TestCase
+   Assertion = Minitest::Assertion

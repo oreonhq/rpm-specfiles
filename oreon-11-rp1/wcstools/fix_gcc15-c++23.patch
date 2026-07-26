@@ -1,0 +1,54 @@
+diff -U 3 -dHrN a/libwcs/dateutil.c b/libwcs/dateutil.c
+--- a/libwcs/dateutil.c	2021-09-15 23:45:06.000000000 +0200
++++ b/libwcs/dateutil.c	2025-01-24 09:38:40.402443820 +0100
+@@ -314,6 +314,8 @@
+  *	Return Mod of floating point number
+  */
+ 
++#define _GNU_SOURCE
++
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+diff -U 3 -dHrN a/libwcs/imgetwcs.c b/libwcs/imgetwcs.c
+--- a/libwcs/imgetwcs.c	2016-06-24 21:23:06.000000000 +0200
++++ b/libwcs/imgetwcs.c	2025-01-24 09:40:12.971028438 +0100
+@@ -31,6 +31,7 @@
+ #include <stdlib.h>
+ #include <math.h>
+ #include <string.h>
++#include <strings.h>
+ 
+ #include "wcs.h"
+ #include "lwcs.h"
+diff -U 3 -dHrN a/libwcs/webread.c b/libwcs/webread.c
+--- a/libwcs/webread.c	2022-02-04 22:08:59.000000000 +0100
++++ b/libwcs/webread.c	2025-01-24 09:37:25.750042386 +0100
+@@ -32,6 +32,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
++#include <strings.h>
+ #include <math.h>
+ #include <ctype.h>
+ #include "wcs.h"
+@@ -976,7 +977,7 @@
+     memset(adrinet, 0, sizeof(struct sockaddr_in));
+     adrinet->sin_family = AF_INET;
+     adrinet->sin_port = htons(port);
+-    memcpy(&adrinet->sin_addr, hp->h_addr, hp->h_length);
++    memcpy(&adrinet->sin_addr, hp->h_addr_list[0], hp->h_length);
+ 
+     return type;
+ }
+diff -U 3 -dHrN a/Makefile b/Makefile
+--- a/Makefile	2025-01-22 08:49:29.246196532 +0100
++++ b/Makefile	2025-01-24 09:31:30.842906462 +0100
+@@ -1,4 +1,7 @@
+ CC= gcc
++
++CFLAGS += -std=c99 -D_XOPEN_SOURCE=500
++
+ LIBWCS = libwcs/libwcstools.so
+ LIBS = -L libwcs -lwcstools -lm
+ #LIBS = $(LIBWCS) -lm -lnsl -lsocket

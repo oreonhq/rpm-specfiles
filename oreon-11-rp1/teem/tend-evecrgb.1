@@ -1,0 +1,108 @@
+.TH TEND\-EVECRGB "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-evecrgb \- make an RGB volume from an eigenvector and an anisotropy
+.SH SYNOPSIS
+.B tend\ evecrgb
+.B \-c
+.RI < evec\ index >
+.B \-a
+.RI < aniso >
+.RB [ \-t
+.RI < thresh >]
+.RB [ \-bg
+.RI < background >]
+.RB [ \-gr
+.RI < gray >]
+.RB [ \-gam
+.RI < gamma >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH OPTIONS
+.TP
+.B \-c\fR <\fIevec\ index\fR>
+which eigenvector will be colored.
+.RB \(lq 0 \(rq
+for the principal,
+.RB \(lq 1 \(rq
+for the middle,
+.RB \(lq 2 \(rq
+for the minor
+.RI ( unsigned\ int )
+.TP
+.B \-a\fR <\fIaniso\fR>
+Which anisotropy to use for modulating the saturation of the colors.
+All the Westin metrics come in two versions.
+Currently supported:
+.RS +7n
+.IP \(bu 2
+.RB \(lq cl1 \(rq,
+.RB \(lq cl2 \(rq:
+Westin\(cqs linear
+.IP \(bu 2
+.RB \(lq cp1 \(rq,
+.RB \(lq cp2 \(rq:
+Westin\(cqs planar
+.IP \(bu 2
+.RB \(lq ca1 \(rq,
+.RB \(lq ca2 \(rq:
+Westin\(cqs linear + planar
+.IP \(bu 2
+.RB \(lq cs1 \(rq,
+.RB \(lq cs2 \(rq:
+Westin\(cqs spherical
+.IP \(bu 2
+.RB \(lq ct1 \(rq,
+.RB \(lq ct2 \(rq:
+GK\(cqs anisotropy type (cp/ca)
+.IP \(bu 2
+.RB \(lq ra \(rq:
+Basser/Pierpaoli relative anisotropy/sqrt(2)
+.IP \(bu 2
+.RB \(lq fa \(rq:
+Basser/Pierpaoli fractional anisotropy
+.IP \(bu 2
+.RB \(lq vf \(rq:
+volume fraction = 1\-(Basser/Pierpaoli volume ratio)
+.IP \(bu 2
+.RB \(lq tr \(rq:
+trace
+.RE
+.TP
+.B \-t\fR <\fIthresh\fR>
+confidence threshold
+.RI ( float )
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-bg\fR <\fIbackground\fR>
+gray level to use for voxels whose confidence is zero
+.RI ( double )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-gr\fR <\fIgray\fR>
+the gray level to desaturate towards as anisotropy decreases (while confidence
+remains 1.0)
+.RI ( double )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-gam\fR <\fIgamma\fR>
+gamma to use on color components
+.RI ( double )
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output image (floating point)
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

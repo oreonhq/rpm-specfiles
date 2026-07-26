@@ -1,0 +1,27 @@
+Description: Iterable import from collections.abc
+ Iterable has moved to collections.abc a long time ago.
+Author: Thomas Goirand <zigo@debian.org>
+Bug-Debian: https://bugs.debian.org/1009460
+Forwarded: no
+Last-Update: 2022-05-01
+
+--- python-marathon-0.13.0.orig/marathon/util.py
++++ python-marathon-0.13.0/marathon/util.py
+@@ -24,7 +24,7 @@ class MarathonJsonEncoder(json.JSONEncod
+         if isinstance(obj, datetime.datetime):
+             return obj.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+ 
+-        if isinstance(obj, collections.Iterable) and not isinstance(obj, str):
++        if isinstance(obj, collections.abc.Iterable) and not isinstance(obj, str):
+             try:
+                 return {k: self.default(v) for k, v in obj.items()}
+             except AttributeError:
+@@ -44,7 +44,7 @@ class MarathonMinimalJsonEncoder(json.JS
+         if isinstance(obj, datetime.datetime):
+             return obj.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+ 
+-        if isinstance(obj, collections.Iterable) and not isinstance(obj, str):
++        if isinstance(obj, collections.abc.Iterable) and not isinstance(obj, str):
+             try:
+                 return {k: self.default(v) for k, v in obj.items() if (v or v in (False, 0))}
+             except AttributeError:

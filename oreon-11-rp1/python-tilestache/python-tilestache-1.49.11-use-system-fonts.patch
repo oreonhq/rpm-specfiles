@@ -1,0 +1,14 @@
+--- a/TileStache/Goodies/Providers/Grid.py	2011-05-12 18:22:06.000000000 -0700
++++ b/TileStache/Goodies/Providers/Grid.py	2014-09-28 21:47:12.405037881 -0700
+@@ -139,8 +139,10 @@
+         self.spacing = int(spacing)
+         self.tick = int(tick)
+ 
+-        file = 'DejaVuSansMono-alphanumeric.ttf'
++        file = 'DejaVuSansMono.ttf'
+         dirs = [dirname(__file__),
++                sys.prefix + '/share/fonts/dejavu',
++                sys.prefix + '/share/fonts/truetype/ttf-dejavu',
+                 abspath(pathjoin(dirname(__file__), '../../../share/tilestache')),
+                 sys.prefix + '/local/share/tilestache',
+                 sys.prefix + '/share/tilestache']

@@ -1,0 +1,12 @@
+diff -up xmp-4.0.4/src/xmp.conf.pulse xmp-4.0.4/src/xmp.conf
+--- xmp-4.0.4/src/xmp.conf.pulse	2013-04-06 15:38:02.000000000 +0200
++++ xmp-4.0.4/src/xmp.conf	2013-04-30 00:18:42.764147342 +0200
+@@ -19,7 +19,7 @@
+ # driver = <name>
+ # Output device to be used
+ #
+-#driver = alsa
++driver = pulseaudio
+ 
+ 
+ # ALSA driver

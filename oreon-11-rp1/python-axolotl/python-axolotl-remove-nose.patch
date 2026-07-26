@@ -1,0 +1,15 @@
+diff --git a/tox.ini b/tox.ini
+index daf4a11..da28e8e 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -8,9 +8,8 @@ skip_missing_interpreters = true
+ envlist = py26, py27, py32, py33, py35, py36, py37
+ 
+ [testenv]
+-commands = nosetests axolotl.tests
++commands = python -m unittest discover
+ deps =
+-    nose
+     protobuf>=3.0.0b2
+     cryptography
+     python-axolotl-curve25519

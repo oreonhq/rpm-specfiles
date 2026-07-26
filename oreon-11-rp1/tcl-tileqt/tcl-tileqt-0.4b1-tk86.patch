@@ -1,0 +1,13 @@
+diff -up tileqt0.4b1/generic/tileQt_Utilities.cpp.tk86 tileqt0.4b1/generic/tileQt_Utilities.cpp
+--- tileqt0.4b1/generic/tileQt_Utilities.cpp.tk86	2010-06-29 16:29:18.238114746 -0400
++++ tileqt0.4b1/generic/tileQt_Utilities.cpp	2010-06-29 16:29:23.576258693 -0400
+@@ -115,9 +115,6 @@ void TileQt_StateInfo(int state, Tk_Wind
+     if (state & TTK_STATE_USER6) {
+       printf("TTK_STATE_USER6 %d ", TTK_STATE_USER6);
+     } 
+-    if (state & TTK_STATE_USER7) {
+-      printf("TTK_STATE_USER7 %d ", TTK_STATE_USER7);
+-    }
+     printf(" state=%d\n", state);
+ }; /* TileQt_StateInfo */
+ 

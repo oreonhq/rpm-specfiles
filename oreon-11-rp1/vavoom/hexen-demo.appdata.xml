@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>hexen-demo.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>proprietary</project_license>
+  <name>Hexen demo installer</name>
+  <summary>Hexen, classic dark fantasy first person shooter, demo installer</summary>
+  <description>
+    <p>
+     Hexen: Beyond Heretic is Raven's classic dark fantasy first person shooter
+     follow-up to Heretic. The Hexen engine is Open Source. The original Hexen
+     datafiles however are not Open Source. There is a gratis, but not Open
+     Source demo version available on the internet.
+    </p>
+    <p>
+     This package contains an applications menu entry for playing Hexen
+     demo using the vavoom engine. The first time you click this menu
+     entry, it will offer to download and install the Hexen demo
+     datafiles for you.
+    </p>
+  </description>
+  <url type="homepage">https://en.wikipedia.org/wiki/Hexen:_Beyond_Heretic</url>
+  <screenshots>
+    <screenshot type="default">http://vavoom-engine.com/images/shots/shot04.jpg</screenshot>
+    <screenshot>http://vavoom-engine.com/images/shots/shot05.jpg</screenshot>
+    <screenshot>http://vavoom-engine.com/images/shots/shot06.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

@@ -1,0 +1,25 @@
+From e9930d9d46a6624e30f40a6b4f7dfb165be243f0 Mon Sep 17 00:00:00 2001
+From: Mathieu Dupuy <mathieu.dupuy@gitguardian.com>
+Date: Fri, 1 Sep 2023 11:09:10 +0200
+Subject: [PATCH] fix invalid escape sequence in regex
+
+---
+ exrex.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/exrex.py b/exrex.py
+index be74f92..ee5c77a 100644
+--- a/exrex.py
++++ b/exrex.py
+@@ -52,9 +52,9 @@
+     sre_parse.CATEGORY_SPACE: sorted(sre_parse.WHITESPACE),
+     sre_parse.CATEGORY_DIGIT: sorted(sre_parse.DIGITS),
+     sre_parse.CATEGORY_WORD: [unichr(x) for x in range(256) if
+-                              match('\w', unichr(x), U)],
++                              match(r'\w', unichr(x), U)],
+     sre_parse.CATEGORY_NOT_WORD: [unichr(x) for x in range(256) if
+-                                  match('\W', unichr(x), U)],
++                                  match(r'\W', unichr(x), U)],
+     'category_any': [unichr(x) for x in range(32, 123)]
+ }
+ 

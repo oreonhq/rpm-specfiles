@@ -1,0 +1,23 @@
+From e5869bf151c2b922fbc52e87edba8f7d1efe8b93 Mon Sep 17 00:00:00 2001
+From: Jean Boussier <jean.boussier@gmail.com>
+Date: Sun, 14 Dec 2025 10:01:01 +0100
+Subject: [PATCH] Update check for Ractor experimental warning
+
+Fix: https://github.com/redis-rb/redis-client/issues/270
+---
+ test/support/raise_warnings.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/support/raise_warnings.rb b/test/support/raise_warnings.rb
+index c79170c..6b3516b 100644
+--- a/test/support/raise_warnings.rb
++++ b/test/support/raise_warnings.rb
+@@ -3,7 +3,7 @@
+ $VERBOSE = true
+ module RaiseWarnings
+   def warn(message, *)
+-    return if message.include?('Ractor is experimental')
++    return if message.match?(/Ractor.*is experimental/)
+ 
+     super
+ 

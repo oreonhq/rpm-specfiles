@@ -1,0 +1,54 @@
+--- Zasx/src/weapon.c~	2006-04-02 22:47:23.000000000 +0200
++++ Zasx/src/weapon.c	2006-04-02 22:52:03.000000000 +0200
+@@ -260,6 +260,22 @@
+ 				c->Image[i]= NULL;
+ 
+ 				sscanf(temp, "%[^ \n\t;]", buf2);
++				/* Move temp to the next image before we
++				   "fix" buf2 */
++				temp += strlen(buf2) + 1;
++#ifdef DATADIR
++				/* Image names usually start with "data/",
++				   this should be replaced with DATADIR */
++				if (strncmp(buf2, "data/", 5) == 0)
++				{
++					/* move the rest of the string back */
++					memmove(buf2 + strlen(DATADIR),
++						buf2 + 5,
++						strlen(buf2 + 5) + 1);
++					/* and put DATADIR in front */
++					memcpy(buf2, DATADIR, strlen(DATADIR));
++				}
++#endif
+ 
+ 				/* Attempt to load it as a datafile object */
+ 				if ((g = strstr(buf2, "#"))) {
+@@ -299,7 +313,6 @@
+ 					c->Image[i] = load_bitmap(buf2, pal);
+ 				}
+ 
+-				temp += strlen(buf2) + 1;
+ 			}
+ 			continue;
+ 		}
+@@ -324,7 +324,19 @@
+ 			DATAFILE *d;
+ 			char oldg;
+ 			char *g;
+-
++#ifdef DATADIR
++			/* Sound names usually start with "data/",
++			   this should be replaced with DATADIR */
++			if (strncmp(buf2, "data/", 5) == 0)
++			{
++				/* move the rest of the string back */
++				memmove(buf2 + strlen(DATADIR),
++					buf2 + 5,
++					strlen(buf2 + 5) + 1);
++				/* and put DATADIR in front */
++				memcpy(buf2, DATADIR, strlen(DATADIR));
++			}
++#endif
+ 			g = strstr(buf2, "#");
+ 			if (g) {
+ 				oldg = *g;

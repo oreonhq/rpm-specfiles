@@ -1,0 +1,107 @@
+.TH UNU\-FFT "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-fft \- Fast Fourier Transform of selected axes
+.SH SYNOPSIS
+.B unu\ fft
+.RI < dir >
+.BR \-a , \-\-axes
+.RI < ax0 \ ...>
+.RB [ \-pr , \-\-planrigor
+.RI < pr >]
+.RB [ \-r , \-\-rescale
+.RI < bool >]
+.RB [ \-w , \-\-wisdom
+.RI < filename >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-ri , \-\-realinput ]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Fast Fourier Transform of selected axes.
+Initial attempt at wrapping the FFTW3 library; options are likely to change in
+Teem 2.0.
+.IP \(bu +2n
+Uses
+.B nrrdFFT
+.SH OPTIONS
+.TP
+.RI < dir >
+forward
+.RB (\(lq forw \(rq,
+.RB \(lq f \(rq)
+or backward/inverse ("back", "b")
+.RB (\(lq back \(rq,
+.RB \(lq b \(rq)
+transform
+.TP
+.B \-a\fR\ <\fIax0\fR\ ...>\ ,\ \fB\-\-axes\fR\ <\fIax0\fR\ ...>
+the one or more axes that should be transformed (1 or more
+.IR unsigned\ int s)
+.TP
+.B \-pr\fR\ <\fIpr\fR>\ ,\ \fB\-\-planrigor\fR\ <\fIpr\fR>
+rigor with which fftw plan is constructed.
+Options include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq e \(rq,
+.RB \(lq est \(rq,
+.RB \(lq estimate \(rq:
+only an estimate
+.IP \(bu 2
+.RB \(lq m \(rq,
+.RB \(lq meas \(rq,
+.RB \(lq measure \(rq:
+standard amount of measurements of system properties
+.IP \(bu 2
+.RB \(lq p \(rq,
+.RB \(lq pat \(rq,
+.RB \(lq patient \(rq:
+slower, more measurements
+.IP \(bu 2
+.RB \(lq x \(rq,
+.RB \(lq ex \(rq,
+.RB \(lq exhaustive \(rq:
+slowest, most measurements
+.P
+default:
+.RB \(lq est \(rq
+.RE
+.TP
+.B \-r\fR\ <\fIbool\fR>\ ,\ \fB\-\-rescale\fR\ <\fIbool\fR>
+scale fftw output (by sqrt(1/N)) so that forward and backward transforms will
+get back to original values
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-w\fR\ <\fIfilename\fR>\ ,\ \fB\-\-wisdom\fR\ <\fIfilename\fR>
+A filename here is used to read in fftw wisdom (if the file exists already),
+and is used to save out updated wisdom after the transform.
+By default (not using this option), no wisdom is read or saved.
+.IR Note :
+no wisdom is gained (that is, learned by FFTW) with planning rigor
+.RB \(lq estimate \(rq.
+.RI ( string )
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-ri\fR\ ,\ \fB\-\-realinput
+input is real-valued, so insert new length-2 axis
+.B 0
+and set complex component to
+.BR 0.0 .
+Axes to transform (indicated by
+.RB \(lq \-a \(rq
+will be incremented accordingly.
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

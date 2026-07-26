@@ -1,0 +1,17 @@
+Define _GNU_SOURCE instead of _XOPEN_SOURCE to obtain a declaration
+of crypt in <unistd.h>.  The missing function prototype looks like
+a real bug (pointer truncation to 32 bits on 64-bit architectures).
+
+diff --git a/tlock.h b/tlock.h
+index 5fd7f575478acf59..4a632b03e96ee20f 100644
+--- a/tlock.h
++++ b/tlock.h
+@@ -20,7 +20,7 @@
+ #ifndef _TLOCK_H
+ #define _TLOCK_H
+ 
+-#define _XOPEN_SOURCE
++#define _GNU_SOURCE
+ #include <stdio.h>             /* For IO functions like printf, scanf */
+ #include <string.h>            /* For string functions like strlen */
+ #include <unistd.h>            /* For crypt function */

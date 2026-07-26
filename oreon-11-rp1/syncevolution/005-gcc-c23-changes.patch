@@ -1,0 +1,19 @@
+diff -up syncevolution-2.0.0/src/synthesis/src/sysync_SDK/Sources/sync_include.h.gcc-changes syncevolution-2.0.0/src/synthesis/src/sysync_SDK/Sources/sync_include.h
+--- syncevolution-2.0.0/src/synthesis/src/sysync_SDK/Sources/sync_include.h.gcc-changes	2025-01-22 08:35:45.191943502 +0100
++++ syncevolution-2.0.0/src/synthesis/src/sysync_SDK/Sources/sync_include.h	2025-01-22 08:35:49.781991487 +0100
+@@ -21,9 +21,12 @@
+ 
+ #if !defined(__cplusplus) && !defined(__OBJC__)
+   #if !defined(SYSYNC_ENGINE) || !defined(__MACH__) || defined(__GNUC__)
+-    typedef unsigned char bool;
+-    #define false 0
+-    #define true  1
++    /* the C23 has the 'bool' as a keyword */
++    #if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202301L
++      typedef unsigned char bool;
++      #define false 0
++      #define true  1
++    #endif
+   #endif
+ #endif
+ 

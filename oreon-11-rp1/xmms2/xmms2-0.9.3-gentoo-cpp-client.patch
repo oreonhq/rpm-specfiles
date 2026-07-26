@@ -1,0 +1,12 @@
+diff -up xmms2-0.9.3/src/include/xmmsclient/xmmsclient++/mainloop.h.gentoo xmms2-0.9.3/src/include/xmmsclient/xmmsclient++/mainloop.h
+--- xmms2-0.9.3/src/include/xmmsclient/xmmsclient++/mainloop.h.gentoo	2023-09-15 09:51:09.760321870 -0400
++++ xmms2-0.9.3/src/include/xmmsclient/xmmsclient++/mainloop.h	2023-09-15 09:53:49.565612336 -0400
+@@ -41,7 +41,7 @@ namespace Xmms
+ 			 *  @note The constructor should only initialize the
+ 			 *        mainloop, not start it!
+ 			 */
+-			MainloopInterface( xmmsc_connection_t* conn ) :
++			MainloopInterface( xmmsc_connection_t*& conn ) :
+ 				running_( false ), conn_( conn ) { }
+ 
+ 			/** Destructor.  Should also stop the loop.

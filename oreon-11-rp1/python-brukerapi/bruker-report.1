@@ -1,0 +1,37 @@
+.TH BRUKER\-REPORT "1" "February 2026" "" "User Commands"
+.SH NAME
+.B bruker\-report
+\(en export properties of data sets to json, or yaml file
+.SH SYNOPSIS
+.B bruker\-report
+.RB [ \-h ]
+.BI \-i\  INPUT
+.RB [ \-o\ \fIOUTPUT ]
+.RB [ \-f\  { json , yml }]
+.RB [ \-p\ \fIPROPS\  [ \fIPROPS \ ...]]
+.RB [ \-v ]
+.SH OPTIONS
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-i\ \fIINPUT\fR, \fB\-\-input\ \fIINPUT
+Path to a folder containing Bruker data
+.TP
+.B \-o\ \fIOUTPUT\fR, \fB\-\-output\ \fIOUTPUT
+Path to a folder containing Bruker data
+.TP
+.B \-f\ \fR{\fBjson\fR,\fByml\fR}, \fB\-\-format\ \fR{\fBjson\fR,\fByml\fR}
+Format of report files
+.TP
+.B \-p\ \fIPROPS\fR\ [\fIPROPS\fR\ ...], \fB\-\-props\ \\fIPROPS\fR\ [\fIPROPS\fR\ ...],
+List of properties to include
+.TP
+.B \-v\fR, \fB\-\-verbose
+Make verbose
+.SH "SEE\ ALSO"
+.BR bruker (1)
+.P
+.BR bruker\-filter (1),
+.BR bruker\-split (1)

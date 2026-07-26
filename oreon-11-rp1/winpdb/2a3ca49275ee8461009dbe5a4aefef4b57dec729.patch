@@ -1,0 +1,49 @@
+From 2a3ca49275ee8461009dbe5a4aefef4b57dec729 Mon Sep 17 00:00:00 2001
+From: Johannes Wilde <git@jowil.de>
+Date: Fri, 21 Feb 2025 15:48:08 +0100
+Subject: [PATCH] Do not print if no file was provided.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The current Python 3.13.2 documentation states [https://docs.python.org/3/library/sys.html#sys.__stderr__]:
+"Note: Under some conditions stdin, stdout and stderr as well as the original values __stdin__, __stdout__ and __stderr__ can be None. It is usually the case for Windows GUI apps that aren’t connected to a console and Python apps started with pythonw."
+
+Using an integrated Python interpreter, I encountered sys.__stderr__ to be None - which prevented me from using rpdb as it crashed when printing debug information in print_debug().
+
+In addition I like using a None file-handle to disable output to it. I find this to be pythonic.
+---
+ rpdb/utils.py | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/rpdb/utils.py b/rpdb/utils.py
+index e20e344..127b187 100644
+--- a/rpdb/utils.py
++++ b/rpdb/utils.py
+@@ -123,17 +123,18 @@ def winlower(path):
+ 
+ 
+ def _print(s, f = sys.stdout, feol = True):
+-    s = as_unicode(s)
++    if f is not None:
++        s = as_unicode(s)
+ 
+-    encoding = detect_encoding(f)
++        encoding = detect_encoding(f)
+ 
+-    s = as_bytes(s, encoding, fstrict = False)
+-    s = as_string(s, encoding)
++        s = as_bytes(s, encoding, fstrict = False)
++        s = as_string(s, encoding)
+ 
+-    if feol:
+-        f.write(s + '\n')
+-    else:
+-        f.write(s)
++        if feol:
++            f.write(s + '\n')
++        else:
++            f.write(s)
+ 
+ 
+ def print_exception(t, v, tb, fForce = False):

@@ -1,0 +1,26 @@
+From 413c963e941db811f41e56eb611be2cbed3d7277 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?=
+ <30413512+eclipseo@users.noreply.github.com>
+Date: Mon, 20 Jul 2020 12:16:11 +0200
+Subject: [PATCH] Fix noise-scale flag
+
+noise_scale was renamed to noise-scale.
+
+Fix #2.
+---
+ mainwindow.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mainwindow.cpp b/mainwindow.cpp
+index 740f95d..cc66bff 100644
+--- a/mainwindow.cpp
++++ b/mainwindow.cpp
+@@ -208,7 +208,7 @@ void MainWindow::on_renderStart_clicked()
+     args << "-m";
+     if (noiseLevel > 0) {
+         if (scaleRatio > 1.0)
+-            args << "noise_scale";
++            args << "noise-scale";
+         else
+             args << "noise";
+     } else {

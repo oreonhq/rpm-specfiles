@@ -1,0 +1,81 @@
+.TH UNU\-GAMMA "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-gamma \- brighten or darken values with a gamma
+.SH SYNOPSIS
+.B unu\ gamma
+.BR \-g , \-\-gamma
+.RI < gamma >
+.RB [ \-min , \-\-minimum
+.RI < value >]
+.RB [ \-max , \-\-maximum
+.RI < value >]
+.RB [ \-blind8
+.RI < bool >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Brighten or darken values with a gamma.
+Just as in
+.BR xv ,
+the gamma value here is actually the reciprocal of the exponent actually used
+to transform the values.
+.IP \(bu +2n
+Uses
+.B nrrdArithGamma
+.SH OPTIONS
+.TP
+.B \-g\fR\ <\fIgamma\fR>\ ,\ \fB\-\-gamma\fR\ <\fIgamma\fR>
+.B 1.0
+brightens; gamma <
+.B 1.0
+darkens.
+Negative gammas invert values (like in
+.BR xv ).
+.RI ( double )
+.TP
+.B \-min\fR\ [<\fIvalue\fR>]\ ,\ \fB\-\-minimum\fR\ [<\fIvalue\fR>]
+Value to implicitly map to
+.B 0.0
+prior to calling
+.BR pow (3).
+Defaults to lowest value found in input
+.IR nrrd .
+.RI ( double )
+.TP
+.B \-max\fR\ [<\fIvalue\fR>]\ ,\ \fB\-\-maximum\fR\ [<\fIvalue\fR>]
+Value to implicitly map to
+.B 1.0
+prior to calling
+.BR pow (3).
+Defaults to highest value found in input
+.IR nrrd .
+.RI ( double )
+.TP
+.B \-blind8\fR\ <\fIbool\fR>
+Whether to know the range of 8-bit data blindly
+.RI ( uchar
+is always
+.BR [0,255] ,
+.I signed\ char
+is
+.BR [-128,127] ).
+.RI ( bool );
+default:
+.RB \(lq true \(rq
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)
+.P
+http://www.trilon.com/xv/

@@ -1,0 +1,65 @@
+diff -ur z88dk/src/copt/copt.c z88dk-64bit/src/copt/copt.c
+--- z88dk/src/copt/copt.c	2002-09-15 19:10:07.000000000 +0200
++++ z88dk-64bit/src/copt/copt.c	2012-11-06 23:40:53.000000000 +0100
+@@ -507,12 +507,12 @@
+ 		/* check for activation rules */
+ 		if (o->o_new && strcmp(o->o_new->l_text, "%activate\n") == 0) {
+ 			/* we have to prevent repeated activation of rules */
+-			char signature[160];
++			char signature[240];
+ 			struct lnode *lnp;
+ 			struct onode *nn, *last;
+ 			int skip = 0;
+ 			/* since we 'install()' strings, we can compare pointers */
+-			sprintf(signature, "%s%08x%08x%08x%08x%08x%08x%08x%08x%08x%08x\n",
++			sprintf(signature, (sizeof(char*)>4)?"%s%016lx%016lx%016lx%016lx%016lx%016lx%016lx%016lx%016lx%016lx\n":"%s%08lx%08lx%08lx%08lx%08lx%08lx%08lx%08lx%08lx%08lx\n",
+ 				activated,
+ 				vars[0], vars[1], vars[2], vars[3], vars[4],
+ 				vars[5], vars[6], vars[7], vars[8], vars[9]);
+diff -ur z88dk/src/sccz80/io.c z88dk-64bit/src/sccz80/io.c
+--- z88dk/src/sccz80/io.c	2009-06-21 23:16:52.000000000 +0200
++++ z88dk-64bit/src/sccz80/io.c	2012-11-06 23:40:53.000000000 +0100
+@@ -334,7 +334,7 @@
+ }
+ 
+ 
+-void outdec(long number)
++void outdec(int number)
+ {
+         if ( number < 0 ) {
+ 		number=-number;
+@@ -344,7 +344,7 @@
+         outd2(number);
+ }
+ 
+-void outd2(long n)
++void outd2(int n)
+ {
+         if ( n > 9 ) {
+                 outd2(n/10) ;
+diff -ur z88dk/src/sccz80/io.h z88dk-64bit/src/sccz80/io.h
+--- z88dk/src/sccz80/io.h	2009-06-21 23:16:52.000000000 +0200
++++ z88dk-64bit/src/sccz80/io.h	2012-11-06 23:40:53.000000000 +0100
+@@ -26,8 +26,8 @@
+ extern void ol(char *ptr);
+ extern void ot(char *ptr);
+ extern void blanks(void);
+-extern void outdec(long number);
+-extern void outd2(long n);
++extern void outdec(int number);
++extern void outd2(int n);
+ extern void queuelabel(int);
+ 
+ typedef struct {
+diff -ur z88dk/src/sccz80/primary.c z88dk-64bit/src/sccz80/primary.c
+--- z88dk/src/sccz80/primary.c	2009-09-06 20:58:37.000000000 +0200
++++ z88dk-64bit/src/sccz80/primary.c	2012-11-06 23:42:18.000000000 +0100
+@@ -739,7 +739,7 @@
+ 	SYMBOL  *ptr;
+     char    temp_type;
+     int     itag;
+-    char    nam[20];
++    char    nam[24];
+ 
+ 
+ 

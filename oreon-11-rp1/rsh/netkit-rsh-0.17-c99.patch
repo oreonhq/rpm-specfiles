@@ -1,0 +1,11 @@
+diff -up netkit-rsh-0.17/configure.c99 netkit-rsh-0.17/configure
+--- netkit-rsh-0.17/configure.c99	2023-01-31 12:30:05.157078600 +0100
++++ netkit-rsh-0.17/configure	2023-01-31 12:30:29.533297300 +0100
+@@ -372,6 +372,7 @@ rm -f __conftest*
+ 
+ echo -n 'Checking for crypt... '
+ cat <<EOF >__conftest.c
++#include <crypt.h>
+ int main() { crypt("aa", "bb"); }
+ 
+ EOF

@@ -1,0 +1,30 @@
+From b68ffdbfbe9c4606cb1494ac27aa3713a920ad43 Mon Sep 17 00:00:00 2001
+From: Juan Orti Alcaine <jortialc@redhat.com>
+Date: Tue, 8 Dec 2020 20:39:32 +0100
+Subject: [PATCH] Run service after network-online.target
+
+The service has to run after the network has been configured, so change
+the ordering of the systemd unit after network-online.target.
+
+Signed-off-by: Juan Orti Alcaine <jortialc@redhat.com>
+---
+ platform/linux/sqm@.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/platform/linux/sqm@.service b/platform/linux/sqm@.service
+index c97e663..82e16c6 100644
+--- a/platform/linux/sqm@.service
++++ b/platform/linux/sqm@.service
+@@ -1,7 +1,7 @@
+ [Unit]
+ Description=SQM scripts for iface %i
+-Wants=network.target
+-Before=network.target
++Wants=network-online.target
++After=network-online.target
+ BindsTo=sys-subsystem-net-devices-%i.device
+ After=sys-subsystem-net-devices-%i.device
+ 
+-- 
+2.29.2
+

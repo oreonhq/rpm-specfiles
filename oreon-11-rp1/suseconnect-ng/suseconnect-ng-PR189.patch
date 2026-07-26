@@ -1,0 +1,25 @@
+From d89b3675d6ed9bb50099f71dd842c67b69e67321 Mon Sep 17 00:00:00 2001
+From: Darragh O'Reilly <doreilly@suse.com>
+Date: Wed, 27 Sep 2023 12:09:42 +0100
+Subject: [PATCH] Fix invalid User-Agent field
+
+When the string in version.txt did not have a "~", GetShortenedVersion()
+was returning the whole string including trailing newline which is invalid
+in User-Agent.
+
+Fixes https://github.com/SUSE/connect-ng/issues/188
+---
+ internal/connect/version.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/internal/connect/version.go b/internal/connect/version.go
+index 3eed8034..15d2edc2 100644
+--- a/internal/connect/version.go
++++ b/internal/connect/version.go
+@@ -12,5 +12,5 @@ var (
+ 
+ // GetShortenedVersion returns the short program version
+ func GetShortenedVersion() string {
+-	return strings.Split(version, "~")[0]
++	return strings.Split(strings.TrimSpace(version), "~")[0]
+ }

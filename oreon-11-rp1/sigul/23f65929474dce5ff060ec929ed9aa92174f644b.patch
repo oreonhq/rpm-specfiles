@@ -1,0 +1,39 @@
+From 23f65929474dce5ff060ec929ed9aa92174f644b Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <patrick@puiterwijk.org>
+Date: Tue, 16 Jan 2024 08:57:14 +0000
+Subject: [PATCH] Always add AuthorityKeyIdentifier on certicates
+
+RFC5280 says AKI MAY be omitted on self-signed certificates,
+but seemingly the Linux kernel contains a bug that makes it
+consider a certificate without it invalid.
+As such, we just always add it.
+
+Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+---
+ src/server.py | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/src/server.py b/src/server.py
+index c2aabe2..f27a5d0 100644
+--- a/src/server.py
++++ b/src/server.py
+@@ -2308,7 +2308,18 @@ def cmd_sign_certificate(db, conn):
+         x509.SubjectKeyIdentifier.from_public_key(subject_pubkey),
+         critical=False,
+     )
+-    if issuer_cert is not None:
++    if issuer_cert is None:
++        # Technically AKI can be omitted with a self-signed cert per RFC5280
++        # (issuer_cert is None), but seemingly the Linux kernel is buggy in
++        # that it requires it. So in order to be compatible, just add it
++        # always.
++        builder = builder.add_extension(
++            x509.AuthorityKeyIdentifier.from_issuer_public_key(
++                subject_pubkey,
++            ),
++            critical=False,
++        )
++    else:
+         issuer_ski = issuer_cert.extensions.get_extension_for_class(
+             x509.SubjectKeyIdentifier
+         )

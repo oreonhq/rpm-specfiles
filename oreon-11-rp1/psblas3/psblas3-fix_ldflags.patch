@@ -1,0 +1,11 @@
+--- test/util/Makefile.orig	2017-04-09 21:11:43.000000000 +0200
++++ test/util/Makefile	2017-05-31 21:35:57.230094848 +0200
+@@ -6,7 +6,7 @@
+ # Libraries used
+ #
+ LIBDIR=$(INSTALLDIR)/lib/
+-PSBLAS_LIB= -L$(LIBDIR) -lpsb_util -lpsb_krylov -lpsb_prec -lpsb_base
++PSBLAS_LIB= $(LDFLAGS) -L$(LIBDIR) -lpsb_util -lpsb_krylov -lpsb_prec -lpsb_base
+ LDLIBS=$(PSBLDLIBS)
+ 
+ FINCLUDES=$(FMFLAG)$(MODDIR) $(FMFLAG).

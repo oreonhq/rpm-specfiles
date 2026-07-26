@@ -1,0 +1,21 @@
+##########################################################################
+##########################################################################
+
+use Logwatch ':dates';
+
+my $Debug = $ENV{'LOGWATCH_DEBUG'} || 0;
+
+$SearchDate = TimeFilter('%d %b %H:%M:%S');
+
+if ( $Debug > 5 ) {
+   print STDERR "DEBUG: Inside ApplyXpilotDate...\n";
+   print STDERR "DEBUG: Looking For: " . $SearchDate . "\n";
+}
+
+while (defined($ThisLine = <STDIN>)) {
+   if ($ThisLine =~ m/^$SearchDate /o) {
+      print $ThisLine;
+   }
+}
+
+# vi: shiftwidth=3 syntax=perl tabstop=3 et

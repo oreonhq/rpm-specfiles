@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Khmer Oureang</target>
+    <match>
+      <family>Khmer Oureang</family>
+      <change>
+        <style>Ultra-expanded UltraBlack</style>
+        <into>UltraExpanded UltraBlack</into>
+      </change>
+    </match>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

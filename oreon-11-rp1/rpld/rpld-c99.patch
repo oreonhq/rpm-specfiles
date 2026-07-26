@@ -1,0 +1,204 @@
+diff --git a/ana.c b/ana.c
+index 9ffe224c7f99fc7d..4d99e6e361d8d355 100644
+--- a/ana.c
++++ b/ana.c
+@@ -33,6 +33,8 @@ static char *rcsid = "$Id: ana.c,v 1.5 2000/09/26 03:48:23 root Exp $";
+ 
+ #include <sys/time.h>
+ #include "nit.h"
++#include <arpa/inet.h>
++#include <stdlib.h>
+ 
+ #define ETH_ALEN 6
+ unsigned char pbuf[4096];
+@@ -68,6 +70,7 @@ pull_long (unsigned char *c)
+   return (ret);
+ }
+ 
++void
+ dump_hex (unsigned char *pp, int pl)
+ {
+   while (pl--)
+@@ -76,6 +79,7 @@ dump_hex (unsigned char *pp, int pl)
+     }
+ }
+ 
++void
+ dump_hexa (unsigned char *pp, int pl)
+ {
+   while (pl--)
+@@ -88,6 +92,7 @@ dump_hexa (unsigned char *pp, int pl)
+     }
+ }
+ 
++void
+ ana_token (int s, unsigned char *pp, int pl)
+ {
+   int i;
+@@ -151,7 +156,7 @@ ana_token (int s, unsigned char *pp, int pl)
+ 
+ }
+ 
+-int
++void
+ ana_frag (unsigned char *pp, int pl)
+ {
+   int s;
+@@ -183,7 +188,7 @@ ana_frag (unsigned char *pp, int pl)
+ int
+ main (int argc, char *argv[])
+ {
+-  int i, s;
++  int i;
+   char *pptr;
+   struct nit *n;
+   struct timeval tv;
+@@ -254,7 +259,7 @@ main (int argc, char *argv[])
+           pptr += 2;
+           plen -= 2;
+ 
+-          s = ana_frag (pptr, plen);
++          ana_frag (pptr, plen);
+ 
+ 
+           printf ("\n\n");
+diff --git a/client.c b/client.c
+index 6b14b6ff447e0d3c..e950923442a90f67 100644
+--- a/client.c
++++ b/client.c
+@@ -389,6 +389,7 @@ client_flush_cache (struct client *c)
+ 
+ }
+ 
++int
+ clients_check_status ()
+ {
+   struct client *c = clients;
+@@ -406,9 +407,10 @@ clients_check_status ()
+         }
+       c = c->next;
+     }
+-
++  return 0;
+ }
+ 
++int
+ client_dispatch (struct llcdrv *lld)
+ {
+   struct client *c = clients;
+@@ -422,5 +424,5 @@ client_dispatch (struct llcdrv *lld)
+       c = c->next;
+ 
+     }
+-
++  return 0;
+ }
+diff --git a/config.c b/config.c
+index bb68d9ad61e8b730..b32027591a072219 100644
+--- a/config.c
++++ b/config.c
+@@ -109,8 +109,10 @@ static char rcsid[] = "$Id: config.c,v 1.27 2001/11/01 15:30:29 root Exp $";
+ #include "project.h"
+ 
+ #include "rpld_conf.tab.h"
++#include <stdlib.h>
+ 
+ extern FILE *yyin;
++extern int yyparse (void);
+ 
+ void
+ do_linux_kernel (struct client *c, struct clfile *f)
+diff --git a/linux-nit.c b/linux-nit.c
+index bef3c92ca849e818..a696775485a91b56 100644
+--- a/linux-nit.c
++++ b/linux-nit.c
+@@ -82,6 +82,8 @@ static char rcsid[] = "$Id: linux-nit.c,v 1.5 2001/11/01 15:26:29 root Exp $";
+ #include <linux/if_packet.h>
+ #include <sys/ioctl.h>
+ #include <sys/uio.h>
++#include <arpa/inet.h>
++#include <stdlib.h>
+ 
+ #if 0
+ /* Dire libc5 hack */
+diff --git a/protocol.c b/protocol.c
+index 0d53d70954a8e12a..29ba55afd963157c 100644
+--- a/protocol.c
++++ b/protocol.c
+@@ -163,6 +163,7 @@ find_frame (struct llcdrv *lld, struct rpl_packet *in)
+ }
+ 
+ 
++void
+ file_data_frame (struct llcdrv *lld, struct client *c)
+ {
+   struct rpl_packet out;
+@@ -208,8 +209,6 @@ file_data_frame (struct llcdrv *lld, struct client *c)
+ 
+   rpl_send_packet (lld, c->mac, &out);
+   c->blocknum++;
+-
+-  return (i);
+ }
+ 
+ void
+diff --git a/prototypes.h b/prototypes.h
+index 7afb8897fa0eef1f..4bf823dc31904b30 100644
+--- a/prototypes.h
++++ b/prototypes.h
+@@ -1,6 +1,6 @@
+ /* protocol.c */
+ extern void find_frame(struct llcdrv *lld, struct rpl_packet *in);
+-extern int file_data_frame(struct llcdrv *lld, struct client *c);
++extern void file_data_frame(struct llcdrv *lld, struct client *c);
+ extern void send_file_frame(struct llcdrv *lld, struct rpl_packet *in);
+ extern void rpl_packet_recvd_callback(struct llcdrv *lld, struct rpl_packet *p);
+ /* rpld.c */
+diff --git a/rpl.c b/rpl.c
+index ffa9057f9cb68a72..ac581d989f12bc47 100644
+--- a/rpl.c
++++ b/rpl.c
+@@ -57,6 +57,7 @@ static char rcsid[] = "$Id: rpl.c,v 1.13 2001/11/01 15:23:59 root Exp $";
+  */
+ 
+ #include "project.h"
++#include <arpa/inet.h>
+ 
+ /* Code for recursively disembling packets */
+ 
+diff --git a/rpld.c b/rpld.c
+index 8d5c5072631577e9..6e46085fcf15f3ab 100644
+--- a/rpld.c
++++ b/rpld.c
+@@ -113,6 +113,7 @@ static char rcsid[] = "$Id: rpld.c,v 1.35 2001/11/01 15:30:29 root Exp $";
+  */
+ 
+ #include "project.h"
++#include <stdlib.h>
+ 
+ #define  DEF_IF "eth0"
+ 
+diff --git a/rpld_conf.y b/rpld_conf.y
+index df6ad50d3e0ced67..22e816ac834053fa 100644
+--- a/rpld_conf.y
++++ b/rpld_conf.y
+@@ -81,6 +81,7 @@
+ static char rcsid[]="$Id: rpld_conf.y,v 1.8 2001/11/01 15:23:59 root Exp $";
+ 
+ #include "project.h"
++#include <stdlib.h>
+ 
+ // state machine stuff
+ 
+diff --git a/util.c b/util.c
+index 9df9edff6a034566..9b0eb01b4df8c8c5 100644
+--- a/util.c
++++ b/util.c
+@@ -51,6 +51,7 @@ static char rcsid[] = "$Id: util.c,v 1.9 2001/11/01 15:24:26 root Exp $";
+  */
+ 
+ #include "project.h"
++#include <stdlib.h>
+ 
+ 
+ unsigned char ethtoaret[1024];

@@ -1,0 +1,24 @@
+diff -up xblast-2.10.4/cfg_control.h~ xblast-2.10.4/cfg_control.h
+--- xblast-2.10.4/cfg_control.h~	2006-02-09 22:21:23.000000000 +0100
++++ xblast-2.10.4/cfg_control.h	2020-02-19 22:48:34.041292637 +0100
+@@ -29,7 +29,7 @@
+ #define NUM_KEYB_CONTROLS  2
+ 
+ /* constant assignment of control to event type */
+-const XBEventCode keyEventType[NUM_KEYB_CONTROLS];
++extern const XBEventCode keyEventType[NUM_KEYB_CONTROLS];
+ 
+ /* ingame controls for editing*/
+ typedef struct
+diff -up xblast-2.10.4/network.h~ xblast-2.10.4/network.h
+--- xblast-2.10.4/network.h~	2006-02-10 16:07:42.000000000 +0100
++++ xblast-2.10.4/network.h	2020-02-17 23:47:58.022504923 +0100
+@@ -105,7 +105,7 @@ typedef enum
+ #define TEAM_UNDEF 252
+ 
+ /* team color assignment */
+-const XBColor teamColors[NUM_XBTS];
++extern const XBColor teamColors[NUM_XBTS];
+ 
+ /* results of game config receive/create */
+ typedef enum

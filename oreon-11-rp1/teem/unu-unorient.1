@@ -1,0 +1,38 @@
+.TH UNU\-UNORIENT "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-unorient \- make image orientation be axis-aligned
+.SH SYNOPSIS
+.B unu\ unorient
+.BR \-i , \-\-input
+.RI < nin >
+.RB [ \-smfo ]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Make image orientation be axis-aligned.
+Does various tricks.
+.IP \(bu +2n
+Uses
+.B nrrdOrientationReduce
+.SH OPTIONS
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+(sorry, can’t use usual default of
+.RB \(lq \- \(rq
+for
+.I stdin
+because of hest quirk)
+.TP
+.B \-smfo
+set some axis mins based on space origin (hack)
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

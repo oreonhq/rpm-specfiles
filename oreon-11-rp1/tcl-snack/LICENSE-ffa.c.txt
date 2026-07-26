@@ -1,0 +1,44 @@
+Subject: RE: Looking for the Roger Lindell who wrote "ffa.c"
+From: Roger Lindell <Roger.Lindell@proact.se>
+Date: 02/13/2013 02:09 AM
+To: Tom Callaway <tcallawa@redhat.com>
+
+Hello Tom,
+
+You found the correct Roger Lindell. I am the original author of ffa.c but it was a port of FORTRAN code from an 
+old IEEE book on Digital Signal Processing so I'm not quite sure if I'm the copyright holder or not. If I am the 
+copyright holder then you are free to use it under GPL.
+
+Best regards,
+
+Roger
+
+-----Original Message-----
+From: Tom Callaway [mailto:tcallawa@redhat.com] 
+Sent: den 12 februari 2013 21:39
+To: Roger Lindell
+Subject: Looking for the Roger Lindell who wrote "ffa.c"
+
+Hello,
+
+I apologize if I have contacted the wrong Roger Lindell, but I am
+looking for the copyright holder (and author) of "ffa.c", a source file
+included with the Snack audio utility for TCL.
+
+If this is not you, sorry to have wasted your time! However, if it is
+you, fantastic! We are trying to determine the license terms for this
+piece of source code, and no license is indicated in the file.
+
+We think it is very likely that this code is under the same license as
+the rest of Snack, which is the GNU General Public License (GPL) v2 or
+later, but we are hoping you can confirm this.
+
+Thanks in advance,
+
+Tom Callaway
+Fedora Legal
+
+==
+Fedora Project
+
+

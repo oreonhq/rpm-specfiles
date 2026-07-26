@@ -1,0 +1,22 @@
+From 6f71af94be146db5d58345012975b5fc4946a5cb Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 9 Dec 2024 11:23:34 -0500
+Subject: [PATCH] Update to py-tes 1.x
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 0118a45..22a6e48 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,7 +18,7 @@ keywords = ["snakemake", "plugin", "executor", "tes"]
+ python = "^3.11"
+ snakemake-interface-common = "^1.14.0"
+ snakemake-interface-executor-plugins = "^9.0.0"
+-py-tes = "^0.4.2"
++py-tes = "^1.0"
+ 
+ 
+ [tool.poetry.group.dev.dependencies]

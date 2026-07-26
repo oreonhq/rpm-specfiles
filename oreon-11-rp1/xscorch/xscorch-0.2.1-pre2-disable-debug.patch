@@ -1,0 +1,11 @@
+--- xscorch-0.2.1-pre2/sgame/sphysics.h.orig	2009-05-25 06:43:22.000000000 +0200
++++ xscorch-0.2.1-pre2/sgame/sphysics.h	2009-07-08 15:54:35.000000000 +0200
+@@ -29,7 +29,7 @@
+ 
+ 
+ /* Debugging control */
+-#define  SC_PHYSICS_DEBUG_ROLLER 1        /* Set to 1 to debug rollers */
++#define  SC_PHYSICS_DEBUG_ROLLER 0        /* Set to 1 to debug rollers */
+ 
+ 
+ /* Forward structure definitions */

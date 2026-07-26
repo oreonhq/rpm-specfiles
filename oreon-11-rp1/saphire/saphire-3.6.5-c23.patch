@@ -1,0 +1,71 @@
+diff --git a/headers/saphire/saphire_inner.h b/headers/saphire/saphire_inner.h
+index fa59665..4831d5a 100644
+--- a/headers/saphire/saphire_inner.h
++++ b/headers/saphire/saphire_inner.h
+@@ -592,7 +592,7 @@ sStatment* sStatment_new2_debug(sStatment* statment, const char* fname, int line
+ #else
+ sStatment* sStatment_new();
+ #define STATMENT_NEW() sStatment_new()
+-sStatment* sStatment_new2();
++sStatment* sStatment_new2(sStatment* statment);
+ #define STATMENT_NEW2(o) sStatment_new2(o)
+ #endif
+ 
+diff --git a/src/saphire_main.c b/src/saphire_main.c
+index 8dcc07d..22247f4 100644
+--- a/src/saphire_main.c
++++ b/src/saphire_main.c
+@@ -1633,7 +1633,7 @@ volatile BOOL gKitutukiSigTstp = FALSE;
+ volatile BOOL gKitutukiSigCont = FALSE;
+ volatile BOOL gSigUser = FALSE;
+ 
+-void sig_int()
++void sig_int(int signal)
+ {
+     gKitutukiSigInt = TRUE; 
+ 
+@@ -1642,7 +1642,7 @@ fprintf(stderr, "SIGINT!!\n");
+ #endif
+ }
+ 
+-void sig_int_optc()
++void sig_int_optc(int signal)
+ {
+     sigchld_block(1);
+     gKitutukiSigInt = TRUE; 
+@@ -1650,7 +1650,7 @@ fprintf(stderr, "SIGINT!!\n");
+     sigchld_block(0);
+ }
+ 
+-void sig_tstp()
++void sig_tstp(int signal)
+ {
+     gKitutukiSigInt = TRUE; 
+ #ifdef MDEBUG
+@@ -1658,7 +1658,7 @@ fprintf(stderr, "SIGTSTP!!\n");
+ #endif
+ }
+ 
+-void sig_tstp_optc()
++void sig_tstp_optc(int signal)
+ {
+     sigchld_block(1);
+     gKitutukiSigTstp = TRUE;
+@@ -1666,7 +1666,7 @@ void sig_tstp_optc()
+     sigchld_block(0);
+ }
+ 
+-void sig_cont_optc()
++void sig_cont_optc(int signal)
+ {
+     sigchld_block(1);
+     gKitutukiSigCont = TRUE;
+@@ -1674,7 +1674,7 @@ void sig_cont_optc()
+     sigchld_block(0);
+ }
+ 
+-void sig_user()
++void sig_user(int signal)
+ {
+     gSigUser = TRUE;
+ }

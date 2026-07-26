@@ -1,0 +1,26 @@
+From d65a11e44b0c5947a8f534a212a313fac6f2eec9 Mon Sep 17 00:00:00 2001
+From: Fotios Lindiakos <flindiakos@shutterstock.com>
+Date: Fri, 14 Nov 2014 13:01:20 -0500
+Subject: [PATCH 2/2] Modified user group detection to use regex
+
+---
+ wemux | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/wemux b/wemux
+index 1026e6d..8df07d1 100755
+--- a/wemux
++++ b/wemux
+@@ -696,7 +696,8 @@ user_is_a_host() {
+   # If the user is not in the host list, check their groups
+   user_groups="$(groups_for_user)";
+   for group in ${host_groups[@]}; do
+-    if [[ $user_groups =~ " $group " ]]; then
++    group_re="\\b${group}\\b"
++    if [[ $user_groups =~ $group_re ]]; then
+       return 0
+     fi
+   done
+-- 
+2.3.0
+

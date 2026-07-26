@@ -1,0 +1,21 @@
+From: Chris Lamb <lamby@debian.org>
+Date: Sun, 14 Aug 2016 13:20:07 -0700
+Subject: Make the build reproducible
+
+---
+ src/tfdefs.h.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tfdefs.h.in b/src/tfdefs.h.in
+index 40fd848..1c163a7 100644
+--- a/src/tfdefs.h.in
++++ b/src/tfdefs.h.in
+@@ -7,7 +7,7 @@
+  ************************************************************************/
+ /* $Id: tfdefs.h.in,v 35004.8 2007/01/13 23:12:39 kkeys Exp $ */
+ 
+-#define UNAME "@UNAME@"
++#define UNAME "generic"
+ #define stringify_token(s) #s
+ #define stringify_value(s) stringify_token(s)
+ #define DEFAULT_TFLIBD stringify_value(DATADIR) "/@LIBNAME@"

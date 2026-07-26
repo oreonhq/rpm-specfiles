@@ -1,0 +1,82 @@
+#!/bin/sh
+
+which xprop &>/dev/null || exit 1
+sleep 2
+
+TRIAL=0
+FOUND=0
+PROGNAME=$0
+while true ; do
+	if test $TRIAL -ge 6 ; then
+		echo "$PROGNAME: not lauching daemon_wallpapoz"
+		exit 1
+	fi
+
+	COMMAND="xprop -root _NET_NUMBER_OF_DESKTOPS 2>/dev/null"
+	RESULT=$(eval "$COMMAND")
+	RESULT=${RESULT:36}
+	if ( (test -z "$RESULT" ) || ! (echo "$RESULT" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+
+	COMMAND="xprop -root _NET_DESKTOP_GEOMETRY 2>/dev/null"
+	RESULT=$(eval "$COMMAND")
+	RESULT=${RESULT:34}
+	WIDTH=$(echo $RESULT | sed -e 's|,.*$||')
+	HEIGHT=$(echo $RESULT | sed -e 's|^.*,||' | sed -e 's|^[ \t][ \t]*||')
+	if ( (test -z "$WIDTH" ) || ! (echo "$WIDTH" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+	if ( (test -z "$HEIGHT" ) || ! (echo "$HEIGHT" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+
+	COMMAND="xprop -root _NET_DESKTOP_VIEWPORT 2>/dev/null"
+	RESULT=$(eval "$COMMAND")
+	RESULT=${RESULT:34}
+	WIDTH=$(echo $RESULT | sed -e 's|,.*$||')
+	HEIGHT=$(echo $RESULT | sed -e 's|^.*,||' | sed -e 's|^[ \t][ \t]*||')
+	if ( (test -z "$WIDTH" ) || ! (echo "$WIDTH" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+	if ( (test -z "$HEIGHT" ) || ! (echo "$HEIGHT" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+
+	COMMAND="xprop -root _NET_CURRENT_DESKTOP 2>/dev/null"
+	RESULT=$(eval "$COMMAND")
+	RESULT=${RESULT:33}
+	if ( (test -z "$RESULT" ) || ! (echo "$RESULT" | grep -q "^[0-9]" ) ) ; then
+		# xprop failed
+		echo "daemon_wallpapoz: $COMMAND failed at startup, retrying after 3 seconds..."
+		TRIAL=$((TRIAL+1))
+		sleep 3
+		continue
+	fi
+
+	# succeeded
+	break
+done
+
+exec /usr/libexec/daemon_wallpapoz "$@"
+exit 1

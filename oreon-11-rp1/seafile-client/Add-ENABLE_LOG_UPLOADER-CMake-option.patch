@@ -1,0 +1,245 @@
+From f5692b18ec116250aca46691f778cd0d15d647cc Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Wed, 27 Dec 2023 04:31:57 -0800
+Subject: [PATCH] Add ENABLE_LOG_UPLOADER CMake option
+
+The log uploader functionality along with its dependencies (QuaZip) is
+currently always built, but the only way to trigger it is commented out.
+
+If it's still required, it would be better to make that a CMake option
+to allow excluding unnecessary files and dependencies from the build.
+---
+ CMakeLists.txt       | 37 +++++++++++++++++++++++++++----------
+ src/ui/tray-icon.cpp | 15 +++++++++++----
+ src/ui/tray-icon.h   | 12 ++++++++++--
+ 3 files changed, 48 insertions(+), 16 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a3fb3fb4..6fa92ee6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,6 +59,11 @@ IF (BUILD_SPARKLE_SUPPORT)
+     ENDIF()
+ ENDIF()
+ 
++option(BUILD_LOG_UPLOADER "Enable log directory uploader" OFF)
++IF (BUILD_LOG_UPLOADER)
++    ADD_DEFINITIONS(-DHAVE_LOG_UPLOADER -DQUAZIP_STATIC)
++ENDIF()
++
+ MESSAGE("Build type: ${CMAKE_BUILD_TYPE}")
+ 
+ ## build in PIC mode
+@@ -200,8 +205,6 @@ if (APPLE)
+     SET(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+ endif()
+ 
+-ADD_DEFINITIONS(-DQUAZIP_STATIC)
+-
+ # MOC FILES
+ SET(moc_headers
+   src/seafile-applet.h
+@@ -222,7 +225,6 @@ SET(moc_headers
+   src/settings-mgr.h
+   src/traynotificationwidget.h
+   src/traynotificationmanager.h
+-  src/log-uploader.h
+   src/api/api-client.h
+   src/api/api-request.h
+   src/api/requests.h
+@@ -288,7 +290,6 @@ SET(moc_headers
+   src/filebrowser/transfer-mgr.h
+   src/filebrowser/thumbnail-service.h
+   third_party/QtAwesome/QtAwesome.h
+-  third_party/quazip/quazipfile.h
+   ${platform_specific_moc_headers}
+ )
+ 
+@@ -300,6 +301,13 @@ IF (BUILD_SHIBBOLETH_SUPPORT)
+   SET(moc_headers ${moc_headers} src/shib/shib-login-dialog.h ${SHIB_EXTRA_HEADER})
+ ENDIF()
+ 
++IF (BUILD_LOG_UPLOADER)
++  SET(moc_headers ${moc_headers}
++    src/log-uploader.h
++    third_party/quazip/quazipfile.h
++  )
++ENDIF()
++
+ # UI FILES
+ SET(ui_files
+   ui/about-dialog.ui
+@@ -419,7 +427,6 @@ SET(seafile_client_sources
+   src/traynotificationwidget.cpp
+   src/traynotificationmanager.cpp
+   src/certs-mgr.cpp
+-  src/log-uploader.cpp
+   src/sync-error-service.cpp
+   src/api/api-client.cpp
+   src/api/api-request.cpp
+@@ -508,14 +515,21 @@ IF (BUILD_SHIBBOLETH_SUPPORT)
+   SET(seafile_client_sources ${seafile_client_sources} src/shib/shib-login-dialog.cpp)
+ ENDIF()
+ 
++IF (BUILD_LOG_UPLOADER)
++  SET(seafile_client_sources ${seafile_client_sources} src/log-uploader.cpp)
++ENDIF()
++
+ INCLUDE_DIRECTORIES(
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_BINARY_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}/src
+   ${CMAKE_CURRENT_SOURCE_DIR}/third_party/QtAwesome
+-  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/quazip
+   )
+ 
++IF (BUILD_LOG_UPLOADER)
++  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/quazip)
++ENDIF()
++
+ FOREACH(USE_QT_LIBRARY ${USE_QT_LIBRARIES})
+ INCLUDE_DIRECTORIES(
+ IF(QT_VERSION_MAJOR EQUAL 6)
+@@ -613,8 +627,11 @@ ENDIF()
+ 
+ ADD_SC_LIBRARY(utils ${utils_sources})
+ 
++SET(SC_LIBS utils)
++
+ # library quazip
+-LIST(APPEND quazip_sources
++IF (BUILD_LOG_UPLOADER)
++  LIST(APPEND quazip_sources
+     third_party/quazip/JlCompress.cpp
+     third_party/quazip/quazip.cpp
+     third_party/quazip/quazipfile.cpp
+@@ -630,10 +647,10 @@ LIST(APPEND quazip_sources
+     third_party/quazip/unzip.c
+     )
+ 
+-ADD_SC_LIBRARY(quazip ${quazip_sources})
++  ADD_SC_LIBRARY(quazip ${quazip_sources})
+ 
+-SET(SC_LIBS utils quazip)
+-#SET(SC_LIBS utils)
++  SET(SC_LIBS ${SC_LIBS} quazip)
++ENDIF()
+ 
+ ####################
+ ###### end: lib
+diff --git a/src/ui/tray-icon.cpp b/src/ui/tray-icon.cpp
+index f6d40b5b..a563ba54 100644
+--- a/src/ui/tray-icon.cpp
++++ b/src/ui/tray-icon.cpp
+@@ -112,8 +112,7 @@ SeafileTrayIcon::SeafileTrayIcon(QObject *parent)
+       state_(STATE_DAEMON_UP),
+       next_message_msec_(0),
+       sync_errors_dialog_(nullptr),
+-      about_dialog_(nullptr),
+-      log_dir_uploader_(nullptr)
++      about_dialog_(nullptr)
+ {
+     setState(STATE_DAEMON_DOWN);
+     rotate_timer_ = new QTimer(this);
+@@ -182,9 +181,11 @@ void SeafileTrayIcon::createActions()
+     open_log_directory_action_->setStatusTip(tr("open %1 log folder").arg(getBrand()));
+     connect(open_log_directory_action_, SIGNAL(triggered()), this, SLOT(openLogDirectory()));
+ 
++#ifdef HAVE_LOG_UPLOADER
+     upload_log_directory_action_ = new QAction(tr("Upload log files"), this);
+     upload_log_directory_action_->setStatusTip(tr("upload %1 log files").arg(getBrand()));
+     connect(upload_log_directory_action_, SIGNAL(triggered()), this, SLOT(uploadLogDirectory()));
++#endif // HAVE_LOG_UPLOADER
+ 
+     show_sync_errors_action_ = new QAction(tr("Show file sync errors"), this);
+     show_sync_errors_action_->setStatusTip(tr("Show file sync errors"));
+@@ -215,7 +216,9 @@ void SeafileTrayIcon::createContextMenu()
+     context_menu_->addAction(shellext_fix_action_);
+  #endif
+     context_menu_->addSeparator();
+-    //context_menu_->addAction(upload_log_directory_action_);
++#ifdef HAVE_LOG_UPLOADER
++    context_menu_->addAction(upload_log_directory_action_);
++#endif // HAVE_LOG_UPLOADER
+     context_menu_->addAction(show_sync_errors_action_);
+     // context_menu_->addMenu(help_menu_);
+     context_menu_->addSeparator();
+@@ -266,7 +269,9 @@ void SeafileTrayIcon::createGlobalMenuBar()
+     global_menu_->addAction(open_seafile_folder_action_);
+     global_menu_->addAction(settings_action_);
+     global_menu_->addAction(open_log_directory_action_);
+-    //global_menu_->addAction(upload_log_directory_action_);
++#ifdef HAVE_LOG_UPLOADER
++    global_menu_->addAction(upload_log_directory_action_);
++#endif // HAVE_LOG_UPLOADER
+     global_menu_->addAction(show_sync_errors_action_);
+     global_menu_->addSeparator();
+     global_menu_->addAction(enable_auto_sync_action_);
+@@ -568,6 +573,7 @@ void SeafileTrayIcon::openLogDirectory()
+     openUrl(QUrl::fromLocalFile(log_path));
+ }
+ 
++#ifdef HAVE_LOG_UPLOADER
+ void SeafileTrayIcon::uploadLogDirectory()
+ {
+     if (!seafApplet->accountManager()->currentAccount().isValid()) {
+@@ -586,6 +592,7 @@ void SeafileTrayIcon::clearUploader()
+ {
+     log_dir_uploader_ = nullptr;
+ }
++#endif // HAVE_LOG_UPLOADER
+ 
+ void SeafileTrayIcon::showSettingsWindow()
+ {
+diff --git a/src/ui/tray-icon.h b/src/ui/tray-icon.h
+index e699142c..eaf95990 100644
+--- a/src/ui/tray-icon.h
++++ b/src/ui/tray-icon.h
+@@ -6,7 +6,9 @@
+ #include <QQueue>
+ 
+ #include "account.h"
++#ifdef HAVE_LOG_UPLOADER
+ #include "log-uploader.h"
++#endif // HAVE_LOG_UPLOADER
+ 
+ class ApiError;
+ class QAction;
+@@ -73,10 +75,12 @@ private slots:
+     void openSeafileFolder();
+     void openLogDirectory();
+     void shellExtFix();
+-    void uploadLogDirectory();
+     void about();
+     void checkTrayIconMessageQueue();
++#ifdef HAVE_LOG_UPLOADER
++    void uploadLogDirectory();
+     void clearUploader();
++#endif // HAVE_LOG_UPLOADER
+ 
+     // only used on windows
+     void onMessageClicked();
+@@ -108,7 +112,9 @@ private:
+     QAction *open_seafile_folder_action_;
+     QAction *open_log_directory_action_;
+     QAction *shellext_fix_action_;
++#ifdef HAVE_LOG_UPLOADER
+     QAction *upload_log_directory_action_;
++#endif
+     QAction *show_sync_errors_action_;
+ 
+     QAction *about_action_;
+@@ -149,7 +155,9 @@ private:
+ 
+     SyncErrorsDialog *sync_errors_dialog_;
+     AboutDialog *about_dialog_;
+-    LogDirUploader *log_dir_uploader_;
++#ifdef HAVE_LOG_UPLOADER
++    LogDirUploader *log_dir_uploader_ = nullptr;
++#endif // HAVE_LOG_UPLOADER
+     bool have_sync_errors_  = false;
+ };
+ 
+-- 
+2.47.0
+

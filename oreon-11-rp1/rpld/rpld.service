@@ -1,0 +1,10 @@
+[Unit]
+Description=RPL/RIPL remote boot server
+Requires=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/rpld
+ExecStart=/usr/sbin/rpld -f $RPLDOPTS

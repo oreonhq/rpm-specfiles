@@ -1,0 +1,7 @@
+# Number of children to spawn for Sympa WWW interface
+# Default is 5
+#WWS_FCGI_CHILDREN=5
+
+# Number of children to spawn for Sympa SOAP interface
+# Default is 2
+#SOAP_FCGI_CHILDREN=2

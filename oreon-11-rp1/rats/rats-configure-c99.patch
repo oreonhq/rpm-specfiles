@@ -1,0 +1,14 @@
+diff -ur rats-2.4.orig/configure rats-2.4/configure
+--- rats-2.4.orig/configure	2013-12-31 21:22:40.000000000 +0100
++++ rats-2.4/configure	2022-11-24 17:57:20.272225577 +0100
+@@ -2791,8 +2791,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

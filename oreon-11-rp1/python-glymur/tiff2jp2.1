@@ -1,0 +1,150 @@
+.TH TIFF2JP2 "1" "April 2025" "" "User Commands"
+.SH NAME
+.B tiff2jp2
+\(en convert TIFF to JPEG 2000
+.SH SYNOPSIS
+.B tiff2jp2
+.RB [ \-\-capture\-resolution\ \fIVRESC\fR\ \fIHRESC ]
+.RB [ \-\-display\-resolution\ \fIVRESD\fR\ \fIHRESD ]
+.RB [ \-\-cratio \  \fICRATIO \ [ \fICRATIO \ ...]]
+.RB [ \-\-psnr \  \fIPSNR \ [ \fIPSNR \ ...]]
+.RB [ \-\-codeblocksize\ \fIcblkh\fR\ \fIcblkw ]
+.RB [ \-\-numres\ \fINUMRES ]
+.RB [ \-\-prog\  { lrcp , rlcp , rpcl , prcl , cprl }]
+.RB [ \-\-irreversible ]
+.RB [ \-\-eph ]
+.RB [ \-\-plt ]
+.RB [ \-\-sop ]
+.RB [ \-\-create\-exif\-uuid ]
+.RB [ \-\-create\-xmp\-uuid ]
+.RB [ \-\-include\-icc\-profile ]
+.RB [ \-\-exclude\-tags\  [\fIEXCLUDE_TAGS\fR\ ...]]
+.RB [ \-\-tilesize\ \fINROWS\fR\ \fINCOLS ]
+.RB [ \-\-num\-threads\ \fINUM_THREADS ]
+.RB [ \-\-help ]
+.RB [ \-\-verbosity\  { critical , error , warning , info , debug }]
+.I tifffile
+.I jp2kfile
+.SH OPTIONS
+Normally you should at least provide the
+.B \-\-tilesize
+argument.
+Even if the TIFF is tiled,
+.BR tiff2jp2 (1)
+will
+.B NOT
+automatically use the TIFF tile dimensions.
+.TP
+.BR \-h ,\  \-\-help
+Show a help message and exit.
+.TP
+.BR \-\-verbosity\  { critical , error , warning , info , debug }
+Logging level, one of
+.RB \(lq critical \(rq,
+.RB \(lq error \(rq,
+.RB \(lq warning \(rq,
+.RB \(lq info \(rq,
+or
+.RB \(lq debug \(rq.
+(default:
+.BR warning )
+.SS "JP2K"
+Pass-through arguments to Jp2k.
+.TP
+.B \-\-capture\-resolution\ \fIVRESC\fR\ \fIHRESC
+Capture resolution parameters
+(default:
+.BR None )
+.TP
+.B \-\-display\-resolution\ \fIVRESD\fR\ \fIHRESD
+Display resolution parameters
+(default:
+.BR None )
+.TP
+.B \-\-cratio\ \fICRATIO\fR\ [\fICRATIO\fR\ ...]
+Compression ratio for successive layers.
+(default:
+.BR None )
+.TP
+.B \-\-psnr\ \fIPSNR\fR\ [\fIPSNR\fR\ ...]
+PSNR for successive layers.
+(default:
+.BR None )
+.TP
+.B \-\-codeblocksize\ \fIcblkh\fR\ \fIcblkw
+Codeblock size.
+(default:
+.BR None )
+.TP
+.B \-\-numres\ \fINUMRES
+Number of decomposition levels.
+(default:
+.BR 6 )
+.TP
+.BR \-\-prog\  { lrcp , rlcp , rpcl , prcl , cprl }
+Progression order.
+(default:
+.BR lrcp )
+.TP
+.B \-\-irreversible
+Use irreversible 9x7 transform.
+(default:
+.BR False )
+.TP
+.B \-\-eph
+Generate EPH markers.
+(default:
+.BR False )
+.TP
+.B \-\-plt
+Generate PLT markers.
+(default:
+.BR False )
+.TP
+.B \-\-sop
+Generate SOP markers.
+(default:
+.BR False )
+.TP
+.B \-\-num\-threads\ \fINUM_THREADS
+Use this many threads/cores.
+(default:
+.BR 1 )
+.SS "TIFF"
+Arguments specific to conversion of TIFF imagery.
+.TP
+.B \-\-create\-exif\-uuid
+Create Exif UUID box from TIFF metadata.
+(default:
+.BR True )
+.TP
+.B \-\-create\-xmp\-uuid
+Extract XMLPacket tag value from TIFF IFD and store in XMP UUID box.
+This will exclude the XMLPacket tag from the Exif UUID box.
+(default:
+.BR True )
+.TP
+.B \-\-include\-icc\-profile
+If specified, subsume any ICC profile (tag 34675) from the
+TIFF IFD into the colour specification box.
+.TP
+.B \-\-exclude\-tags\ \fR[\fIEXCLUDE_TAGS\fR\ ...]
+Exclude TIFF tag(s) from EXIF UUID.
+This option may be specified as tag numbers or names.
+(default:
+.BR None )
+.TP
+.B \-\-tilesize\ \fINROWS\fR\ \fINCOLS
+Dimensions of JP2K tile.
+If not provided, the JPEG2000 image will be written as a single tile.
+(default:
+.BR None )
+.TP
+.I tiffile
+Input TIFF file.
+.TP
+.I jp2kfile
+Output JPEG 2000 file.
+.SH "SEE ALSO"
+.BR jp2dump (1),
+.BR jpeg2jp2 (1)

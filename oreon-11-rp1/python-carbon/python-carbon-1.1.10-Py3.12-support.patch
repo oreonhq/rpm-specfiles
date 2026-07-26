@@ -1,0 +1,258 @@
+diff -up carbon-1.1.10/lib/carbon/routers.py.orig carbon-1.1.10/lib/carbon/routers.py
+--- carbon-1.1.10/lib/carbon/routers.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/routers.py	2023-08-02 19:34:36.065846924 -0600
+@@ -1,4 +1,3 @@
+-import imp
+ from carbon.hashing import ConsistentHashRing, carbonHash
+ from carbon.util import PluginRegistrar
+ from six import with_metaclass
+@@ -125,17 +124,6 @@ class ConsistentHashingRouter(DatapointR
+   def getKey(self, metric):
+     return metric
+ 
+-  def setKeyFunction(self, func):
+-    self.getKey = func
+-
+-  def setKeyFunctionFromModule(self, keyfunc_spec):
+-    module_path, func_name = keyfunc_spec.rsplit(':', 1)
+-    module_file = open(module_path, 'U')
+-    description = ('.py', 'U', imp.PY_SOURCE)
+-    module = imp.load_module('keyfunc_module', module_file, module_path, description)
+-    keyfunc = getattr(module, func_name)
+-    self.setKeyFunction(keyfunc)
+-
+ 
+ class AggregatedConsistentHashingRouter(DatapointRouter):
+   plugin_name = 'aggregated-consistent-hashing'
+diff -up carbon-1.1.10/lib/carbon/tests/test_log.py.orig carbon-1.1.10/lib/carbon/tests/test_log.py
+--- carbon-1.1.10/lib/carbon/tests/test_log.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/tests/test_log.py	2023-08-02 19:33:17.940175832 -0600
+@@ -23,4 +23,4 @@ class CarbonLogFileTest(TestCase):
+ 
+             with open(path.join(tmpdir, 'creates.log')) as logfile:
+                 read_line = logfile.readline()
+-                self.assertRegexpMatches(read_line, '.*😀😀😀😀 test !!!!')
++                self.assertRegex(read_line, '.*😀😀😀😀 test !!!!')
+diff -up carbon-1.1.10/lib/carbon/tests/test_protocols.py.orig carbon-1.1.10/lib/carbon/tests/test_protocols.py
+--- carbon-1.1.10/lib/carbon/tests/test_protocols.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/tests/test_protocols.py	2023-08-02 19:33:17.941175827 -0600
+@@ -34,7 +34,7 @@ class TestMetricReceiversHandler(TestCas
+ 
+     expected_plugins = sorted(expected_plugins)
+     plugins = sorted(MetricReceiver.plugins.keys())
+-    self.assertEquals(expected_plugins, plugins)
++    self.assertEqual(expected_plugins, plugins)
+ 
+     class _FakeService(object):
+       def addService(_, __):
+@@ -244,19 +244,19 @@ class TestMetricPickleReceiver(TestCase)
+         self.receiver.stringReceived(b"i")
+         # ImportError
+         self.receiver.stringReceived(b"iii")
+-        MetricReceiver.metricReceived.not_called()
++        MetricReceiver.metricReceived.assert_not_called()
+ 
+     def test_decode_pickle(self):
+         """ Missing timestamp/value should not call metricReceived """
+         metrics = [('foo.bar', 1)]
+         self.receiver.stringReceived(pickle.dumps(metrics))
+-        MetricReceiver.metricReceived.not_called()
++        MetricReceiver.metricReceived.assert_not_called()
+ 
+     def test_invalid_types(self):
+         """ Timestamp/value in wrong type should not call metricReceived """
+         metrics = [('foo.bar', ('a', 'b'))]
+         self.receiver.stringReceived(pickle.dumps(metrics))
+-        MetricReceiver.metricReceived.not_called()
++        MetricReceiver.metricReceived.assert_not_called()
+ 
+     def test_py2_unicode_to_string_conversion(self):
+         """ Metricname in python2 unicode type should be transformed to str """
+@@ -339,7 +339,7 @@ class TestCacheManagementHandler(TestCas
+ 
+   def test_cache_query_returns_empty_if_no_match(self):
+     self.send_request('cache-query', metric='carbon.foo')
+-    self.assertEquals({'datapoints': []}, self.response)
++    self.assertEqual({'datapoints': []}, self.response)
+ 
+   def test_cache_query_returns_cached_datapoints_if_matches(self):
+     self.cache.store('carbon.foo', (600, 1.0))
+@@ -356,7 +356,7 @@ class TestCacheManagementHandler(TestCas
+ 
+   def test_cache_bulk_query_response_returns_empty_if_no_match(self):
+     self.send_request('cache-query-bulk', metrics=[])
+-    self.assertEquals({'datapointsByMetric': {}}, self.response)
++    self.assertEqual({'datapointsByMetric': {}}, self.response)
+ 
+   def test_cache_bulk_query_response(self):
+     self.cache.store('carbon.foo', (600, 1.0))
+@@ -364,4 +364,4 @@ class TestCacheManagementHandler(TestCas
+ 
+     expected_response = {'carbon.foo': [(600, 1.0)], 'carbon.bar': [(600, 2.0)]}
+     self.send_request('cache-query-bulk', metrics=['carbon.foo', 'carbon.bar'])
+-    self.assertEquals({'datapointsByMetric': expected_response}, self.response)
++    self.assertEqual({'datapointsByMetric': expected_response}, self.response)
+diff -up carbon-1.1.10/lib/carbon/tests/test_routers.py.orig carbon-1.1.10/lib/carbon/tests/test_routers.py
+--- carbon-1.1.10/lib/carbon/tests/test_routers.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/tests/test_routers.py	2023-08-02 19:33:17.941175827 -0600
+@@ -36,7 +36,7 @@ class TestRelayRulesRouter(unittest.Test
+         router = routers.RelayRulesRouter(createSettings())
+         for destination in DESTINATIONS:
+             router.addDestination(parseDestination(destination))
+-        self.assertEquals(len(list(router.getDestinations('foo.bar'))), 1)
++        self.assertEqual(len(list(router.getDestinations('foo.bar'))), 1)
+ 
+ 
+ class TestOtherRouters(unittest.TestCase):
+@@ -48,9 +48,9 @@ class TestOtherRouters(unittest.TestCase
+                 continue
+ 
+             router = routers.DatapointRouter.plugins[plugin](settings)
+-            self.assertEquals(len(list(router.getDestinations('foo.bar'))), 0)
++            self.assertEqual(len(list(router.getDestinations('foo.bar'))), 0)
+ 
+             for destination in DESTINATIONS:
+                 router.addDestination(parseDestination(destination))
+-            self.assertEquals(len(list(router.getDestinations('foo.bar'))),
++            self.assertEqual(len(list(router.getDestinations('foo.bar'))),
+                               settings['REPLICATION_FACTOR'])
+diff -up carbon-1.1.10/lib/carbon/tests/test_storage.py.orig carbon-1.1.10/lib/carbon/tests/test_storage.py
+--- carbon-1.1.10/lib/carbon/tests/test_storage.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/tests/test_storage.py	2023-08-02 19:33:17.941175827 -0600
+@@ -21,9 +21,9 @@ from carbon.database import WhisperDatab
+ #     def test_loadAggregationSchemas_load_default_schema(self):
+ #         from carbon.storage import loadAggregationSchemas, defaultAggregation
+ #         schema_list = loadAggregationSchemas()
+-#         self.assertEquals(len(schema_list), 1)
++#         self.assertEqual(len(schema_list), 1)
+ #         schema = schema_list[0]
+-#         self.assertEquals(schema, defaultAggregation)
++#         self.assertEqual(schema, defaultAggregation)
+ 
+ #     def test_loadStorageSchemas_raise_CarbonConfigException(self):
+ #         from carbon.storage import loadStorageSchemas
+@@ -51,28 +51,28 @@ class ExistingConfigSchemaLoadingTest(Te
+     def test_loadStorageSchemas_return_schemas(self):
+         from carbon.storage import loadStorageSchemas, PatternSchema, Archive
+         schema_list = loadStorageSchemas()
+-        self.assertEquals(len(schema_list), 3)
++        self.assertEqual(len(schema_list), 3)
+         expected = [
+             PatternSchema('carbon', r'^carbon\.', [Archive.fromString('60:90d')]),
+             PatternSchema('default_1min_for_1day', '.*', [Archive.fromString('60s:1d')])
+         ]
+         for schema, expected_schema in zip(schema_list[:-1], expected):
+-            self.assertEquals(schema.name, expected_schema.name)
+-            self.assertEquals(schema.pattern, expected_schema.pattern)
++            self.assertEqual(schema.name, expected_schema.name)
++            self.assertEqual(schema.pattern, expected_schema.pattern)
+             for (archive, expected_archive) in zip(schema.archives, expected_schema.archives):
+-                self.assertEquals(archive.getTuple(), expected_archive.getTuple())
++                self.assertEqual(archive.getTuple(), expected_archive.getTuple())
+ 
+     def test_loadStorageSchemas_return_the_default_schema_last(self):
+         from carbon.storage import loadStorageSchemas, defaultSchema
+         schema_list = loadStorageSchemas()
+         last_schema = schema_list[-1]
+-        self.assertEquals(last_schema.name, defaultSchema.name)
+-        self.assertEquals(last_schema.archives, defaultSchema.archives)
++        self.assertEqual(last_schema.name, defaultSchema.name)
++        self.assertEqual(last_schema.archives, defaultSchema.archives)
+ 
+     def test_loadAggregationSchemas_return_schemas(self):
+         from carbon.storage import loadAggregationSchemas, PatternSchema
+         schema_list = loadAggregationSchemas()
+-        self.assertEquals(len(schema_list), 5)
++        self.assertEqual(len(schema_list), 5)
+         expected = [
+             PatternSchema('min', r'\.min$', (0.1, 'min')),
+             PatternSchema('max', r'\.max$', (0.1, 'max')),
+@@ -80,12 +80,12 @@ class ExistingConfigSchemaLoadingTest(Te
+             PatternSchema('default_average', '.*', (0.5, 'average'))
+         ]
+         for schema, expected_schema in zip(schema_list[:-1], expected):
+-            self.assertEquals(schema.name, expected_schema.name)
+-            self.assertEquals(schema.pattern, expected_schema.pattern)
+-            self.assertEquals(schema.archives, expected_schema.archives)
++            self.assertEqual(schema.name, expected_schema.name)
++            self.assertEqual(schema.pattern, expected_schema.pattern)
++            self.assertEqual(schema.archives, expected_schema.archives)
+ 
+     def test_loadAggregationSchema_return_the_default_schema_last(self):
+         from carbon.storage import loadAggregationSchemas, defaultAggregation
+         schema_list = loadAggregationSchemas()
+         last_schema = schema_list[-1]
+-        self.assertEquals(last_schema, defaultAggregation)
++        self.assertEqual(last_schema, defaultAggregation)
+diff -up carbon-1.1.10/lib/carbon/tests/test_util.py.orig carbon-1.1.10/lib/carbon/tests/test_util.py
+--- carbon-1.1.10/lib/carbon/tests/test_util.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/lib/carbon/tests/test_util.py	2023-08-02 19:33:17.942175823 -0600
+@@ -21,7 +21,7 @@ class UtilTest(unittest.TestCase):
+                 s.setsockopt(socket.SOL_TCP, socket.SO_KEEPALIVE, value)
+ 
+         enableTcpKeepAlive(_Transport(), True, None)
+-        self.assertEquals(s.getsockopt(socket.SOL_TCP, socket.SO_KEEPALIVE), 1)
++        self.assertEqual(s.getsockopt(socket.SOL_TCP, socket.SO_KEEPALIVE), 1)
+ 
+     def test_sanitizing_name_as_tag_value(self):
+         test_cases = [
+@@ -61,7 +61,7 @@ class UtilTest(unittest.TestCase):
+                 )
+             else:
+                 result = TaggedSeries.sanitize_name_as_tag_value(test_case['original'])
+-                self.assertEquals(result, test_case['expected'])
++                self.assertEqual(result, test_case['expected'])
+ 
+     def test_validate_tag_key_and_value(self):
+         # assert that it raises exception when sanitized name is still not valid
+@@ -114,10 +114,10 @@ class ParseDestinationsTest(unittest.Tes
+         ]
+ 
+         actual = parseDestinations(dests)
+-        self.assertEquals(len(expected), len(actual))
++        self.assertEqual(len(expected), len(actual))
+ 
+         for exp, act in zip(expected, actual):
+-            self.assertEquals(exp, act)
++            self.assertEqual(exp, act)
+ 
+     def test_valid_dest_bracketed(self):
+         # Tests valid destinations in the bracketed form of <host>.
+@@ -136,10 +136,10 @@ class ParseDestinationsTest(unittest.Tes
+         ]
+ 
+         actual = parseDestinations(dests)
+-        self.assertEquals(len(expected), len(actual))
++        self.assertEqual(len(expected), len(actual))
+ 
+         for exp, act in zip(expected, actual):
+-            self.assertEquals(exp, act)
++            self.assertEqual(exp, act)
+ 
+     def test_valid_dest_without_instance(self):
+         # Tests destinations without instance specified.
+@@ -160,10 +160,10 @@ class ParseDestinationsTest(unittest.Tes
+         ]
+ 
+         actual = parseDestinations(dests)
+-        self.assertEquals(len(expected), len(actual))
++        self.assertEqual(len(expected), len(actual))
+ 
+         for exp, act in zip(expected, actual):
+-            self.assertEquals(exp, act)
++            self.assertEqual(exp, act)
+ 
+     def test_wrong_dest(self):
+         # Some cases of invalid input, e.g. invalid/missing port.
+diff -up carbon-1.1.10/setup.py.orig carbon-1.1.10/setup.py
+--- carbon-1.1.10/setup.py.orig	2022-05-22 11:58:01.000000000 -0600
++++ carbon-1.1.10/setup.py	2023-08-02 19:33:17.942175823 -0600
+@@ -24,7 +24,7 @@ cf = ConfigParser()
+ with open('setup.cfg', 'r') as f:
+     orig_setup_cfg = f.read()
+     f.seek(0)
+-    cf.readfp(f, 'setup.cfg')
++    cf.read_file(f, 'setup.cfg')
+ 
+ if os.environ.get('GRAPHITE_NO_PREFIX'):
+     cf.remove_section('install')

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.x2go.X2GoClient</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+
+  <name>X2Go Client</name>
+  <summary>Graphical client for the X2Go system</summary>
+  <description>
+    <p>
+      X2Go Client is a graphical client (Qt5) for the X2Go system. You can use it to connect to running sessions and start new sessions.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">x2goclient.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://wiki.x2go.org/lib/exe/fetch.php/x2go1.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://wiki.x2go.org</url>
+  <url type="bugtracker">https://bugs.x2go.org</url>
+
+  <content_rating type="oars-1.1" />
+</component>

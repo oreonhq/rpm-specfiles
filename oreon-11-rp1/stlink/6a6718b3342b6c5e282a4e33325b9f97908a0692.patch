@@ -1,0 +1,649 @@
+From 6a6718b3342b6c5e282a4e33325b9f97908a0692 Mon Sep 17 00:00:00 2001
+From: nightwalker-87 <15526941+Nightwalker-87@users.noreply.github.com>
+Date: Fri, 16 Feb 2024 14:55:41 +0100
+Subject: [PATCH] Post release patch for v1.8.0
+
+- Fixed terminal screen output (Closes #1363)
+- Fixed compatibility with gcc-14 (Closes #1365)
+- Updated contact info in CODE_OF_CONDUCT
+- Updated man files & related install path
+- Updated libusb to v1.0.27 for Windows builds
+- Updated cmake_policy to CM0153 NEW
+---
+ .gitignore                                    |  1 +
+ CMakeLists.txt                                | 61 ++++++++-----------
+ CODE_OF_CONDUCT.md                            |  2 +-
+ cmake/modules/Findlibusb.cmake                | 58 ++++++++++--------
+ cmake/modules/c_flags.cmake                   |  2 +-
+ .../{packaging => modules}/cpack_config.cmake |  2 +-
+ cmake/packaging/CMakeLists.txt                |  2 +-
+ cmake_uninstall.cmake.in                      |  6 +-
+ doc/compiling.md                              |  7 +--
+ doc/man/CMakeLists.txt                        | 14 ++---
+ doc/man/st-flash.md                           |  4 +-
+ doc/man/st-info.md                            |  4 +-
+ doc/man/st-util.md                            |  4 +-
+ ...nerate_binaries.sh => generate_binaries.sh |  8 +--
+ mingw64-build.bat                             |  2 +-
+ src/stlink-lib/chipid.c                       |  2 +-
+ src/stlink-lib/common_flash.c                 |  2 +-
+ src/stlink-lib/flash_loader.c                 | 16 ++---
+ 18 files changed, 93 insertions(+), 104 deletions(-)
+ rename cmake/{packaging => modules}/cpack_config.cmake (97%)
+ rename cmake/packaging/windows/generate_binaries.sh => generate_binaries.sh (69%)
+
+diff --git a/.gitignore b/.gitignore
+index 1a5fd5ab1..382ea092f 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,6 +1,7 @@
+ build
+ build-mingw-32
+ build-mingw-64
++3rdparty
+ 
+ .project
+ .cmake/
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 59d9970a7..d3344e394 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ ###
+ 
+ cmake_minimum_required(VERSION 3.10.2)
+-cmake_policy(SET CMP0042 NEW)
++cmake_policy(SET CMP0153 NEW)
+ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+@@ -254,35 +254,22 @@ add_library(${STLINK_LIB_SHARED} SHARED ${STLINK_HEADERS} ${STLINK_SOURCE})
+ 
+ set(STLINK_SHARED_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+ message(STATUS "STLINK_LIB_SHARED: ${STLINK_LIB_SHARED}")
+-message(STATUS "PROJECT_VERSION_MAJOR: ${PROJECT_VERSION_MAJOR}")
+ message(STATUS "VERSION: ${STLINK_SHARED_VERSION}")
+ 
+ set_target_properties(${STLINK_LIB_SHARED} PROPERTIES
+-        SOVERSION ${PROJECT_VERSION_MAJOR}
+-        VERSION ${STLINK_SHARED_VERSION}
+-        OUTPUT_NAME ${PROJECT_NAME}
+-        )
++                        SOVERSION ${PROJECT_VERSION_MAJOR}
++                        VERSION ${STLINK_SHARED_VERSION}
++                        OUTPUT_NAME ${PROJECT_NAME}
++                        )
+ 
+ # Link shared library
+-if (WIN32) # ... with Windows libraries
++if (WIN32)
+     target_link_libraries(${STLINK_LIB_SHARED} ${LIBUSB_LIBRARY} ${SSP_LIB} wsock32 ws2_32)
+ else ()
+     target_link_libraries(${STLINK_LIB_SHARED} ${LIBUSB_LIBRARY} ${SSP_LIB})
+ endif()
+ 
+-install(TARGETS ${STLINK_LIB_SHARED}
+-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-        )
+-
+-# Copy libusb DLL-library to binary output folder
+-if (WIN32)
+-file(COPY ${LIBUSB_WIN_OUTPUT_FOLDER}/MinGW64/dll/libusb-1.0.dll
+-     DESTINATION ${CMAKE_INSTALL_BINDIR})
+-file(COPY ${LIBUSB_WIN_OUTPUT_FOLDER}/MinGW64/dll/libusb-1.0.dll
+-     DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})
+-endif()
++install(TARGETS ${STLINK_LIB_SHARED} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+ 
+ ###
+@@ -300,17 +287,16 @@ add_library(${STLINK_LIB_STATIC} STATIC ${STLINK_HEADERS} ${STLINK_SOURCE})
+ 
+ set(STLINK_STATIC_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+ message(STATUS "STLINK_LIB_STATIC: ${STLINK_LIB_STATIC}")
+-message(STATUS "PROJECT_VERSION_MAJOR: ${PROJECT_VERSION_MAJOR}")
+ message(STATUS "VERSION: ${STLINK_STATIC_VERSION}")
+ 
+ set_target_properties(${STLINK_LIB_STATIC} PROPERTIES
+-        SOVERSION ${PROJECT_VERSION_MAJOR}
+-        VERSION ${STLINK_STATIC_VERSION}
+-        OUTPUT_NAME ${STLINK_LIB_STATIC_OUTPUT_NAME}
+-        )
++                        SOVERSION ${PROJECT_VERSION_MAJOR}
++                        VERSION ${STLINK_STATIC_VERSION}
++                        OUTPUT_NAME ${STLINK_LIB_STATIC_OUTPUT_NAME}
++                        )
+ 
+ # Link static library
+-if (WIN32) # ... with Windows libraries
++if (WIN32)
+     target_link_libraries(${STLINK_LIB_STATIC} ${LIBUSB_LIBRARY} ${SSP_LIB} wsock32 ws2_32)
+ else ()
+     target_link_libraries(${STLINK_LIB_STATIC} ${LIBUSB_LIBRARY} ${SSP_LIB})
+@@ -341,15 +327,15 @@ add_executable(st-util ${ST-UTIL_SOURCES})
+ add_executable(st-trace ${ST-TRACE_SOURCES})
+ 
+ if (WIN32)
+-    target_link_libraries(st-flash ${STLINK_LIB_STATIC} ${SSP_LIB})
+-    target_link_libraries(st-info ${STLINK_LIB_STATIC} ${SSP_LIB})
+-    target_link_libraries(st-util ${STLINK_LIB_STATIC} ${SSP_LIB})
+-    target_link_libraries(st-trace ${STLINK_LIB_STATIC} ${SSP_LIB})
++    target_link_libraries(st-flash ${STLINK_LIB_STATIC})
++    target_link_libraries(st-info ${STLINK_LIB_STATIC})
++    target_link_libraries(st-util ${STLINK_LIB_STATIC})
++    target_link_libraries(st-trace ${STLINK_LIB_STATIC})
+ else ()
+-    target_link_libraries(st-flash ${STLINK_LIB_SHARED} ${SSP_LIB})
+-    target_link_libraries(st-info ${STLINK_LIB_SHARED} ${SSP_LIB})
+-    target_link_libraries(st-util ${STLINK_LIB_SHARED} ${SSP_LIB})
+-    target_link_libraries(st-trace ${STLINK_LIB_SHARED} ${SSP_LIB})
++    target_link_libraries(st-flash ${STLINK_LIB_SHARED})
++    target_link_libraries(st-info ${STLINK_LIB_SHARED})
++    target_link_libraries(st-util ${STLINK_LIB_SHARED})
++    target_link_libraries(st-trace ${STLINK_LIB_SHARED})
+ endif()
+ 
+ install(TARGETS st-flash DESTINATION ${CMAKE_INSTALL_BINDIR})
+@@ -380,10 +366,10 @@ endif()
+ 
+ # MCU configuration files
+ if (WIN32)
+-set(CMAKE_CHIPS_DIR ${CMAKE_INSTALL_PREFIX}/config/chips)
++    set(CMAKE_CHIPS_DIR ${CMAKE_INSTALL_PREFIX}/config/chips)
+ else ()
+-set(CMAKE_CHIPS_DIR ${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_NAME}/chips)
+-endif ()
++    set(CMAKE_CHIPS_DIR ${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_NAME}/config/chips)
++endif()
+ add_definitions( -DSTLINK_CHIPS_DIR="${CMAKE_CHIPS_DIR}" )
+ file(GLOB CHIP_FILES ${CMAKE_SOURCE_DIR}/config/chips/*.chip)
+ install(FILES ${CHIP_FILES} DESTINATION ${CMAKE_CHIPS_DIR})
+@@ -396,6 +382,7 @@ add_subdirectory(src/stlink-gui)  # contains subordinate CMakeLists to build GUI
+ add_subdirectory(tests)           # contains subordinate CMakeLists to build test executables
+ add_subdirectory(cmake/packaging) # contains subordinate CMakeLists to build packages
+ 
++
+ ###
+ # Uninstall target
+ ###
+diff --git a/CODE_OF_CONDUCT.md b/CODE_OF_CONDUCT.md
+index b0623068a..2de1cc754 100644
+--- a/CODE_OF_CONDUCT.md
++++ b/CODE_OF_CONDUCT.md
+@@ -55,7 +55,7 @@ further defined and clarified by project maintainers.
+ ## Enforcement
+ 
+ Instances of abusive, harassing, or otherwise unacceptable behavior may be
+-reported by contacting the project team at texane@gmail.com. All
++reported by contacting the project team [here](https://github.com/stlink-org/stlink/discussions). All
+ complaints will be reviewed and investigated and will result in a response that
+ is deemed necessary and appropriate to the circumstances. The project team is
+ obligated to maintain confidentiality with regard to the reporter of an incident.
+diff --git a/cmake/modules/Findlibusb.cmake b/cmake/modules/Findlibusb.cmake
+index 830060486..d26639b99 100644
+--- a/cmake/modules/Findlibusb.cmake
++++ b/cmake/modules/Findlibusb.cmake
+@@ -10,41 +10,49 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")                  # FreeBSD; libusb is integrated into the system
++if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")                       # FreeBSD; libusb is integrated into the system
++    # libusb header file
+     FIND_PATH(
+         LIBUSB_INCLUDE_DIR NAMES libusb.h
+         HINTS /usr/include
+         )
++
++    # libusb library
+     set(LIBUSB_NAME usb)
+     find_library(
+         LIBUSB_LIBRARY NAMES ${LIBUSB_NAME}
+         HINTS /usr /usr/local /opt
+         )
++
+     FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_LIBRARY LIBUSB_INCLUDE_DIR)
+     mark_as_advanced(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
+     if (NOT LIBUSB_FOUND)
+         message(FATAL_ERROR "Expected libusb library not found on your system! Verify your system integrity.")
+     endif()
+ 
+-elseif (CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")              # OpenBSD; libusb-1.0 is available from ports
++elseif (CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")                   # OpenBSD; libusb is available from ports
++    # libusb header file
+     FIND_PATH(
+         LIBUSB_INCLUDE_DIR NAMES libusb.h
+         HINTS /usr/local/include
+         PATH_SUFFIXES libusb-1.0
+         )
++    
++    # libusb library
+     set(LIBUSB_NAME usb-1.0)
+     find_library(
+         LIBUSB_LIBRARY NAMES ${LIBUSB_NAME}
+         HINTS /usr/local
+         )
++
+     FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_LIBRARY LIBUSB_INCLUDE_DIR)
+     mark_as_advanced(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
+     if (NOT LIBUSB_FOUND)
+         message(FATAL_ERROR "No libusb-1.0 library found on your system! Install libusb-1.0 from ports or packages.")
+     endif()
+ 
+-elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-toolchain on Debian
+-    # MinGW/MSYS/MSVC: 64-bit or 32-bit?
++elseif (WIN32 OR (MINGW AND EXISTS "/etc/debian_version"))      # Windows OR cross-build with MinGW-toolchain on Debian
++    # MinGW: 64-bit or 32-bit?
+     if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+         message(STATUS "=== Building for Windows (x86-64) ===")
+         set(ARCH 64)
+@@ -53,26 +61,20 @@ elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-to
+         set(ARCH 32)
+     endif()
+ 
+-    if (WIN32 AND NOT EXISTS "/etc/debian_version") # Skip this for Debian...
++    if (NOT LIBUSB_FOUND)
+         # Preparations for installing libusb library
+-        set(LIBUSB_WIN_VERSION 1.0.25)                  # set libusb version
+-        set(LIBUSB_WIN_ARCHIVE libusb-${LIBUSB_WIN_VERSION}.7z)
+-        if (WIN32 AND NOT EXISTS "/etc/debian_version") # ... on native Windows systems
+-            set(LIBUSB_WIN_ARCHIVE_PATH ${CMAKE_BINARY_DIR}/${LIBUSB_WIN_ARCHIVE})
+-            set(LIBUSB_WIN_OUTPUT_FOLDER ${CMAKE_BINARY_DIR}/3rdparty/libusb-${LIBUSB_WIN_VERSION})
+-        elseif (EXISTS "/etc/debian_version" AND MINGW)   # ... only for cross-building on Debian
+-            set(LIBUSB_WIN_ARCHIVE_PATH ${CMAKE_SOURCE_DIR}/build-mingw-${ARCH}/${LIBUSB_WIN_ARCHIVE})
+-            set(LIBUSB_WIN_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR}/build-mingw-${ARCH}/3rdparty/libusb-${LIBUSB_WIN_VERSION})
+-        endif()
++        set(LIBUSB_WIN_VERSION 1.0.27) # set libusb version
++        set(LIBUSB_WIN_ARCHIVE_PATH ${CMAKE_SOURCE_DIR}/3rdparty/libusb-${LIBUSB_WIN_VERSION}.7z)
++        set(LIBUSB_WIN_OUTPUT_FOLDER ${CMAKE_SOURCE_DIR}/3rdparty/libusb-${LIBUSB_WIN_VERSION})
+ 
+         # Get libusb package
+-        if (EXISTS ${LIBUSB_WIN_ARCHIVE_PATH})  # ... should the package be already there (for whatever reason)
++        if (EXISTS ${LIBUSB_WIN_ARCHIVE_PATH})  # ... should the package be already there
+             message(STATUS "libusb archive already in build folder")
+         else ()                                 # ... download the package
+             message(STATUS "downloading libusb ${LIBUSB_WIN_VERSION}")
+             file(DOWNLOAD
+                 https://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-${LIBUSB_WIN_VERSION}/libusb-${LIBUSB_WIN_VERSION}.7z/download
+-                ${LIBUSB_WIN_ARCHIVE_PATH} EXPECTED_MD5 aabe177bde869bfad34278335eaf8955
++                ${LIBUSB_WIN_ARCHIVE_PATH} EXPECTED_MD5 c72153fc5a32f3b942427b0671897a1a
+                 )
+         endif()
+ 
+@@ -84,7 +86,7 @@ elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-to
+             WORKING_DIRECTORY ${LIBUSB_WIN_OUTPUT_FOLDER}
+             )
+ 
+-        # Find path to libusb library
++        # libusb header file
+         FIND_PATH(
+             LIBUSB_INCLUDE_DIR NAMES libusb.h
+             HINTS ${LIBUSB_WIN_OUTPUT_FOLDER}/include
+@@ -94,6 +96,7 @@ elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-to
+             )
+ 
+         if (MINGW OR MSYS)
++            # libusb library (static)
+             set(LIBUSB_NAME usb-1.0)
+             find_library(
+                 LIBUSB_LIBRARY NAMES ${LIBUSB_NAME}
+@@ -101,8 +104,8 @@ elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-to
+                 NO_DEFAULT_PATH
+                 NO_CMAKE_FIND_ROOT_PATH
+                 )
+-
+-        elseif (MSVC)
++        else (MSVC)
++            # libusb library
+             set(LIBUSB_NAME libusb-1.0.lib)
+             find_library(
+                 LIBUSB_LIBRARY NAMES ${LIBUSB_NAME}
+@@ -111,23 +114,28 @@ elseif (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)) # Windows or MinGW-to
+                 NO_CMAKE_FIND_ROOT_PATH
+                 )
+         endif()
+-        message(STATUS "Missing libusb library has been installed")
+     endif()
+-    FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_LIBRARY LIBUSB_INCLUDE_DIR)
++
++    FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
+     mark_as_advanced(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
++    message(STATUS "Missing libusb library has been installed")
+ 
+-else ()                                                                         # all other OS (unix-based)
++else ()                                                         # all other OS (unix-based)
++    # libusb header file
+     FIND_PATH(
+         LIBUSB_INCLUDE_DIR NAMES libusb.h
+-        HINTS /usr /usr/local /opt
++        HINTS /usr/include
+         PATH_SUFFIXES libusb-1.0
+         )
++    
++    # libusb library
+     set(LIBUSB_NAME usb-1.0)
+     find_library(
+         LIBUSB_LIBRARY NAMES ${LIBUSB_NAME}
+-        HINTS /usr /usr/local /opt
++        HINTS /usr /usr/local
+         )
+-    FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_LIBRARY LIBUSB_INCLUDE_DIR)
++
++    FIND_PACKAGE_HANDLE_STANDARD_ARGS(libusb DEFAULT_MSG LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
+     mark_as_advanced(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARY)
+ 
+     if (NOT LIBUSB_FOUND)
+diff --git a/cmake/modules/c_flags.cmake b/cmake/modules/c_flags.cmake
+index d30f45ec9..e28ea2dae 100644
+--- a/cmake/modules/c_flags.cmake
++++ b/cmake/modules/c_flags.cmake
+@@ -40,7 +40,7 @@ if (NOT CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
+     add_cflag_if_supported("-Wredundant-decls")
+ endif()
+ 
+-if (NOT (WIN32 OR (EXISTS "/etc/debian_version" AND MINGW)))
++if (NOT (WIN32 OR (MINGW AND EXISTS "/etc/debian_version")))
+     add_cflag_if_supported("-fPIC")
+ endif()
+ 
+diff --git a/cmake/packaging/cpack_config.cmake b/cmake/modules/cpack_config.cmake
+similarity index 97%
+rename from cmake/packaging/cpack_config.cmake
+rename to cmake/modules/cpack_config.cmake
+index 17de607ef..d1d6ff069 100644
+--- a/cmake/packaging/cpack_config.cmake
++++ b/cmake/modules/cpack_config.cmake
+@@ -25,7 +25,7 @@ elseif (WIN32)                                                              # Wi
+     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${TOOLCHAIN_PREFIX}")
+     set(CPACK_INSTALL_PREFIX "")
+ 
+-elseif (EXISTS "/etc/debian_version" AND NOT EXISTS WIN32) # Package-build is available on Debian/Ubuntu only
++elseif (EXISTS "/etc/debian_version" AND (NOT EXISTS WIN32))                # Package-build on Debian/Ubuntu
+     message(STATUS "Debian-based Linux OS detected")
+ 
+     set(CPACK_GENERATOR "DEB;RPM") # RPM requires package `rpm`
+diff --git a/cmake/packaging/CMakeLists.txt b/cmake/packaging/CMakeLists.txt
+index 1cf640552..b50b679a9 100644
+--- a/cmake/packaging/CMakeLists.txt
++++ b/cmake/packaging/CMakeLists.txt
+@@ -2,4 +2,4 @@ add_subdirectory(deb)
+ add_subdirectory(rpm)
+ add_subdirectory(windows)
+ 
+-include(cpack_config.cmake)
++include(${CMAKE_MODULE_PATH}/cpack_config.cmake)
+diff --git a/cmake_uninstall.cmake.in b/cmake_uninstall.cmake.in
+index 0c9f6a437..1b9a48296 100644
+--- a/cmake_uninstall.cmake.in
++++ b/cmake_uninstall.cmake.in
+@@ -7,10 +7,10 @@ string(REGEX REPLACE "\n" ";" files "${files}")
+ foreach (file ${files})
+     message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
+     if (IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
+-        exec_program("@CMAKE_COMMAND@"
+-            ARGS "-E remove \"$ENV{DESTDIR}${file}\""
++        execute_process(
++            COMMAND "@CMAKE_COMMAND@" -E remove \"$ENV{DESTDIR}${file}\"
+             OUTPUT_VARIABLE rm_out
+-            RETURN_VALUE rm_retval
++            RESULT_VARIABLE rm_retval
+         )
+         if (NOT "${rm_retval}" STREQUAL 0)
+             message(FATAL_ERROR "Problem when removing $ENV{DESTDIR}${file}")
+diff --git a/doc/compiling.md b/doc/compiling.md
+index 804781faa..68fc5994e 100644
+--- a/doc/compiling.md
++++ b/doc/compiling.md
+@@ -45,12 +45,7 @@ Options:
+ Directory `<project_root>\build\Release` contains final executables.
+ (`st-util.exe` is located in `<project_root>\build\src\gdbserver\Release`).
+ 
+-**NOTE 1:**
+-
+-Executables link against libusb.dll library. It has to be placed in the same directory as binaries or in PATH.
+-It can be copied from: `<project_root>\build\3rdparty\libusb-{version}\MS{arch}\dll\libusb-1.0.dll`.
+-
+-**NOTE 2:**
++**NOTE:**
+ 
+ [ST-LINK drivers](https://www.st.com/en/development-tools/stsw-link009.html) are required for `stlink` to work.
+ 
+diff --git a/doc/man/CMakeLists.txt b/doc/man/CMakeLists.txt
+index f225c85b7..41092aae3 100644
+--- a/doc/man/CMakeLists.txt
++++ b/doc/man/CMakeLists.txt
+@@ -2,7 +2,7 @@
+ # Generate manpages
+ ###
+ 
+-set(MANPAGES st-util st-flash st-info)
++set(MANPAGES st-info st-flash st-util)
+ 
+ # Only generate manpages with pandoc in Debug builds
+ if (${STLINK_GENERATE_MANPAGES})
+@@ -12,7 +12,7 @@ if (${STLINK_GENERATE_MANPAGES})
+             ${manpage}.1
+             SOURCES ${manpage}.md
+             PANDOC_DIRECTIVES -s -t man
+-            PRODUCT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
++            PRODUCT_DIRECTORY ${CMAKE_INSTALL_FULL_DATADIR}
+             )
+     endforeach ()
+ else ()
+@@ -21,16 +21,16 @@ endif()
+ 
+ # Install from output folder or this folder
+ foreach (manpage ${MANPAGES})
+-    if (EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${manpage}.1)
+-        set(f "${CMAKE_CURRENT_BINARY_DIR}/${manpage}.1")
+-    elseif (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1")
++    if (EXISTS ${CMAKE_INSTALL_FULL_DATADIR}/${manpage}.1)
++        set(f "${CMAKE_INSTALL_FULL_DATADIR}/${manpage}.1")
++    elseif (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1)
+         set(f "${CMAKE_CURRENT_SOURCE_DIR}/${manpage}.1")
+-    else()
++    else ()
+         message(AUTHOR_WARNING "Manpage ${manpage} not generated")
+     endif()
+ 
+     if (f AND NOT WIN32)
+-        install(FILES ${f} DESTINATION ${CMAKE_INSTALL_DATADIR}/man/man1)
++        install(FILES ${f} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/man/man1)
+         unset(f)
+     endif()
+ endforeach ()
+diff --git a/doc/man/st-flash.md b/doc/man/st-flash.md
+index 9b2cfcad5..7ab86d87f 100644
+--- a/doc/man/st-flash.md
++++ b/doc/man/st-flash.md
+@@ -1,6 +1,6 @@
+-% st-flash(1) Open Source STMicroelectronics Stlink Tools  | stlink
++% st-flash(1) Open source version of the STMicroelectronics STLINK Tools | stlink
+ %
+-% Feb 2018
++% Feb 2023
+ 
+ # NAME
+ 
+diff --git a/doc/man/st-info.md b/doc/man/st-info.md
+index 2cca61f83..685e8988d 100644
+--- a/doc/man/st-info.md
++++ b/doc/man/st-info.md
+@@ -1,6 +1,6 @@
+-% st-flash(1) Open Source STMicroelectronics Stlink Tools  | stlink
++% st-flash(1) Open source version of the STMicroelectronics STLINK Tools | stlink
+ %
+-% Oct 2020
++% Feb 2023
+ 
+ # NAME
+ st-info - Provides information about connected STLink and STM32 devices
+diff --git a/doc/man/st-util.md b/doc/man/st-util.md
+index 62f850203..2c597402a 100644
+--- a/doc/man/st-util.md
++++ b/doc/man/st-util.md
+@@ -1,6 +1,6 @@
+-% st-util(1) Open Source STMicroelectronics Stlink Tools  | stlink
++% st-util(1) Open source version of the STMicroelectronics STLINK Tools | stlink
+ %
+-% Feb 2018
++% Feb 2023
+ 
+ # NAME
+ 
+diff --git a/cmake/packaging/windows/generate_binaries.sh b/generate_binaries.sh
+similarity index 69%
+rename from cmake/packaging/windows/generate_binaries.sh
+rename to generate_binaries.sh
+index f3642c316..e8efc4c8d 100644
+--- a/cmake/packaging/windows/generate_binaries.sh
++++ b/generate_binaries.sh
+@@ -3,28 +3,26 @@
+ ###
+ 
+ # Install this cross-compiler toolchain:
+-#sudo apt-get install mingw-w64
++# sudo apt-get install mingw-w64
+ 
+ # x86_64
+ mkdir build-mingw-64
+ cd build-mingw-64
+ cmake -DCMAKE_SYSTEM_NAME=Windows \
+       -DTOOLCHAIN_PREFIX=x86_64-w64-mingw32 \
+-      -DCMAKE_TOOLCHAIN_FILE=./../cmake/modules/set_toolchain.cmake ..
++      -DCMAKE_TOOLCHAIN_FILE=./cmake/modules/set_toolchain.cmake ..
+ make package
+ sudo cp dist/*.zip ../build/Release/dist
+ make clean
+ cd ..
+-rm -rf build-mingw-64
+ 
+ # i686
+ mkdir build-mingw-32
+ cd build-mingw-32
+ cmake -DCMAKE_SYSTEM_NAME=Windows \
+       -DTOOLCHAIN_PREFIX=i686-w64-mingw32 \
+-      -DCMAKE_TOOLCHAIN_FILE=./../cmake/modules/set_toolchain.cmake ..
++      -DCMAKE_TOOLCHAIN_FILE=./cmake/modules/set_toolchain.cmake ..
+ make package
+ sudo cp dist/*.zip ../build/Release/dist
+ make clean
+ cd ..
+-rm -rf build-mingw-32
+diff --git a/mingw64-build.bat b/mingw64-build.bat
+index bc50c97a3..735618405 100644
+--- a/mingw64-build.bat
++++ b/mingw64-build.bat
+@@ -4,7 +4,7 @@ mkdir build-mingw
+ cd build-mingw
+ set PATH=C:\Program Files\CMake\bin;C:\mingw-w64\x86_64-13.2.0-release-win32-seh-msvcrt-rt_v11-rev1\mingw64\bin;%PATH%
+ cmake -G "MinGW Makefiles" ..
+-mingw32-make
++mingw32-make clean
+ mingw32-make install
+ mingw32-make package
+ cd ..
+diff --git a/src/stlink-lib/chipid.c b/src/stlink-lib/chipid.c
+index c115089a4..0a6a4e9c1 100644
+--- a/src/stlink-lib/chipid.c
++++ b/src/stlink-lib/chipid.c
+@@ -65,7 +65,7 @@ void process_chipfile(char *fname) {
+     return;
+   }
+ 
+-  ts = calloc(sizeof(struct stlink_chipid_params), 1);
++  ts = calloc(1, sizeof(struct stlink_chipid_params));
+ 
+   while (fgets(buf, sizeof(buf), fp) != NULL) {
+ 
+diff --git a/src/stlink-lib/common_flash.c b/src/stlink-lib/common_flash.c
+index aa8db5bfd..73c77d090 100644
+--- a/src/stlink-lib/common_flash.c
++++ b/src/stlink-lib/common_flash.c
+@@ -1223,7 +1223,7 @@ int32_t stlink_erase_flash_section(stlink_t *sl, stm32_addr_t base_addr, uint32_
+       return (-1);
+     }
+ 
+-    fprintf(stdout, "-> Flash page at %#x erased (size: %#x)\r", addr, page_size);
++    fprintf(stdout, "-> Flash page at %#x erased (size: %#x)\n", addr, page_size);
+     fflush(stdout);
+ 
+     // check the next page is within the range to erase
+diff --git a/src/stlink-lib/flash_loader.c b/src/stlink-lib/flash_loader.c
+index 16c717ca7..57868db3c 100644
+--- a/src/stlink-lib/flash_loader.c
++++ b/src/stlink-lib/flash_loader.c
+@@ -471,7 +471,7 @@ int32_t stm32l1_write_half_pages(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+ 
+     if (sl->verbose >= 1) {
+       // show progress; writing procedure is slow and previous errors are misleading
+-      fprintf(stdout, "\r%3u/%3u halfpages written", count + 1, num_half_pages);
++      fprintf(stdout, "%3u/%3u halfpages written\n", count + 1, num_half_pages);
+       fflush(stdout);
+     }
+ 
+@@ -614,7 +614,7 @@ int32_t stlink_flashloader_start(stlink_t *sl, flash_loader_t *fl) {
+ 
+     int32_t voltage;
+     if (sl->version.stlink_v == 1) {
+-      WLOG("STLINK V1 cannot read voltage, use default voltage 3.2V\n");
++      WLOG("STLINK V1 cannot read voltage, use default voltage 3.2 V\n");
+       voltage = 3200;
+     } else {
+       voltage = stlink_target_voltage(sl);
+@@ -758,7 +758,7 @@ int32_t stlink_flashloader_write(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+       uint32_t data;
+ 
+       if ((off % sl->flash_pgsz) > (sl->flash_pgsz - 5)) {
+-        fprintf(stdout, "\r%3u/%-3u pages written", (off / sl->flash_pgsz + 1), (len / sl->flash_pgsz));
++        fprintf(stdout, "%3u/%-3u pages written\n", (off / sl->flash_pgsz + 1), (len / sl->flash_pgsz));
+         fflush(stdout);
+       }
+ 
+@@ -780,7 +780,7 @@ int32_t stlink_flashloader_write(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+     uint32_t flash_regs_base = get_stm32l0_flash_base(sl);
+     uint32_t pagesize = (flash_regs_base == FLASH_L0_REGS_ADDR)? L0_WRITE_BLOCK_SIZE : L1_WRITE_BLOCK_SIZE;
+ 
+-    DLOG("Starting %3u page write\r\n", len / sl->flash_pgsz);
++    DLOG("Starting %3u page write\n", len / sl->flash_pgsz);
+ 
+     off = 0;
+ 
+@@ -797,7 +797,7 @@ int32_t stlink_flashloader_write(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+       uint32_t data;
+ 
+       if ((off % sl->flash_pgsz) > (sl->flash_pgsz - 5)) {
+-        fprintf(stdout, "\r%3u/%-3u pages written", (off / sl->flash_pgsz + 1), (len / sl->flash_pgsz));
++        fprintf(stdout, "%3u/%-3u pages written\n", (off / sl->flash_pgsz + 1), (len / sl->flash_pgsz));
+         fflush(stdout);
+       }
+ 
+@@ -834,7 +834,7 @@ int32_t stlink_flashloader_write(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+       if (sl->verbose >= 1) {
+         // show progress; writing procedure is slow and previous errors are
+         // misleading
+-        fprintf(stdout, "\r%3u/%-3u pages written", ++write_block_count,
++        fprintf(stdout, "%3u/%-3u pages written\n", ++write_block_count,
+                 (len + sl->flash_pgsz - 1) / sl->flash_pgsz);
+         fflush(stdout);
+       }
+@@ -854,7 +854,7 @@ int32_t stlink_flashloader_write(stlink_t *sl, flash_loader_t *fl, stm32_addr_t
+ 
+       if (sl->verbose >= 1) {
+         // show progress
+-        fprintf(stdout, "\r%u/%u bytes written", off, len);
++        fprintf(stdout, "%u/%u bytes written\n", off, len);
+         fflush(stdout);
+       }
+     }
+@@ -902,7 +902,7 @@ int32_t stlink_flashloader_stop(stlink_t *sl, flash_loader_t *fl) {
+   // enable interrupt
+   if (!stlink_read_debug32(sl, STLINK_REG_DHCSR, &dhcsr)) {
+     stlink_write_debug32(sl, STLINK_REG_DHCSR, STLINK_REG_DHCSR_DBGKEY | STLINK_REG_DHCSR_C_DEBUGEN |
+-                                               (dhcsr & (~STLINK_REG_DHCSR_C_MASKINTS)));
++                         (dhcsr & (~STLINK_REG_DHCSR_C_MASKINTS)));
+   }
+ 
+   // restore DMA state

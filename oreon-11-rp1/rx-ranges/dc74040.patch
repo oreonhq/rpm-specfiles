@@ -1,0 +1,60 @@
+From 2c7be066ce2273f07dd7f4588b5207d8917b2843 Mon Sep 17 00:00:00 2001
+From: Hazurl <ricoujules69@gmail.com>
+Date: Sun, 1 Dec 2019 16:53:23 +0100
+Subject: [PATCH 1/2] Replace exception by assert
+
+---
+ include/rx/ranges.hpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/include/rx/ranges.hpp b/include/rx/ranges.hpp
+index 18fbdbb..4f09f52 100644
+--- a/include/rx/ranges.hpp
++++ b/include/rx/ranges.hpp
+@@ -1242,9 +1242,7 @@ struct in_groups_of_exactly {
+     const size_t n;
+ 
+     constexpr explicit in_groups_of_exactly(size_t n) : n(n) {
+-        if (n == 0) {
+-            throw std::runtime_error("in_groups_of_exactly(0) is not allowed");
+-        }
++        RX_ASSERT(n > 0);
+     }
+ 
+     template <class R>
+
+From 441bf3d8338a85a0e8bbf20167f55fbcbdc7b1be Mon Sep 17 00:00:00 2001
+From: Simon Ask <simon@ulsnes.dk>
+Date: Mon, 2 Dec 2019 08:33:45 +0100
+Subject: [PATCH 2/2] Add noexcept, in_groups_of_exactly
+
+---
+ include/rx/ranges.hpp | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/include/rx/ranges.hpp b/include/rx/ranges.hpp
+index 4f09f52..567ee04 100644
+--- a/include/rx/ranges.hpp
++++ b/include/rx/ranges.hpp
+@@ -1241,7 +1241,7 @@ template <class... Inputs>
+ struct in_groups_of_exactly {
+     const size_t n;
+ 
+-    constexpr explicit in_groups_of_exactly(size_t n) : n(n) {
++    constexpr explicit in_groups_of_exactly(size_t n) noexcept : n(n) {
+         RX_ASSERT(n > 0);
+     }
+ 
+@@ -1323,10 +1323,8 @@ struct in_groups_of_exactly {
+ struct in_groups_of {
+     size_t n;
+ 
+-    constexpr explicit in_groups_of(size_t n) : n(n) {
+-        if (n == 0) {
+-            throw std::runtime_error("in_groups_of(0) is not allowed");
+-        }
++    constexpr explicit in_groups_of(size_t n) noexcept : n(n) {
++        RX_ASSERT(n > 0);
+     }
+ 
+     template <class R>

@@ -1,0 +1,515 @@
+diff --git a/commhandler.cpp b/commhandler.cpp
+index 698c84e..9c985f7 100644
+--- a/commhandler.cpp
++++ b/commhandler.cpp
+@@ -15,6 +15,7 @@ commHandler::commHandler(QObject* parent) : QObject(parent)
+     stopbits = 1;
+     portName = "/dev/ttyUSB0";
+     this->PTTviaRTS = false;
++    this->PTTviaDTR = false;
+ 
+     init();
+ }
+@@ -39,6 +40,7 @@ commHandler::commHandler(QString portName, quint32 baudRate, quint8 wfFormat, QO
+     stopbits = 1;
+     this->portName = portName;
+     this->PTTviaRTS = false;
++    this->PTTviaDTR = false;
+     init();
+ 
+ }
+@@ -105,7 +107,7 @@ void commHandler::sendDataOut(const QByteArray &writeData)
+ 
+     previousSent = writeData;
+ 
+-    if(PTTviaRTS)
++    if(PTTviaRTS || PTTviaDTR)
+     {
+         // Size:    1  2  3    4    5    6    7    8
+         //index:    0  1  2    3    4    5    6    7
+@@ -117,7 +119,7 @@ void commHandler::sendDataOut(const QByteArray &writeData)
+         {
+             // Query
+             //qDebug(logSerial()) << "Looks like PTT Query";
+-            bool pttOn = this->rtsStatus();
++            bool pttOn = (PTTviaRTS && this->rtsStatus()) || (PTTviaDTR && this->dtrStatus());
+             QByteArray pttreturncmd = QByteArray("\xFE\xFE");
+             pttreturncmd.append(writeData.at(3));
+             pttreturncmd.append(writeData.at(2));
+@@ -128,28 +130,34 @@ void commHandler::sendDataOut(const QByteArray &writeData)
+             printHex(pttreturncmd, false, true);
+             emit haveDataFromPort(pttreturncmd);
+ 
+-            
++
+             mutex.unlock();
+             return;
+         } else if(writeData.endsWith(QByteArrayLiteral("\x1C\x00\x01\xFD")))
+         {
+             // PTT ON
+             //qDebug(logSerial()) << "Looks like PTT ON";
+-            setRTS(true);
++            if (PTTviaRTS)
++                setRTS(true);
++            if (PTTviaDTR)
++                setDTR(true);
+             mutex.unlock();
+             return;
+         } else if(writeData.endsWith(QByteArrayLiteral("\x1C\x00\x00\xFD")))
+         {
+             // PTT OFF
+             //qDebug(logSerial()) << "Looks like PTT OFF";
+-            setRTS(false);
++            if (PTTviaRTS)
++                setRTS(false);
++            if (PTTviaDTR)
++                setDTR(false);
+             mutex.unlock();
+             return;
+         }
+     }
+ 
+     bytesWritten = port->write(writeData);
+-    
++
+     if(bytesWritten != (qint64)writeData.size())
+     {
+     qDebug(logSerial()) << "bytesWritten: " << bytesWritten << " length of byte array: " << writeData.length()\
+@@ -304,16 +312,35 @@ void commHandler::setRTS(bool rtsOn)
+     }
+ }
+ 
++void commHandler::setDTR(bool dtrOn)
++{
++    bool success = port->setDataTerminalReady(dtrOn);
++    if(!success)
++    {
++        qInfo(logSerial()) << "Error, could not set DTR on port " << portName;
++    }
++}
++
+ bool commHandler::rtsStatus()
+ {
+     return port->isRequestToSend();
+ }
+ 
++bool commHandler::dtrStatus()
++{
++    return port->isDataTerminalReady();
++}
++
+ void commHandler::setUseRTSforPTT(bool PTTviaRTS)
+ {
+     this->PTTviaRTS = PTTviaRTS;
+ }
+ 
++void commHandler::setUseDTRforPTT(bool PTTviaDTR)
++{
++    this->PTTviaDTR = PTTviaDTR;
++}
++
+ void commHandler::openPort()
+ {
+     bool success;
+diff --git a/commhandler.h b/commhandler.h
+index 5dd24da..1ff5570 100644
+--- a/commhandler.h
++++ b/commhandler.h
+@@ -23,12 +23,15 @@ public:
+     commHandler(QString portName, quint32 baudRate, quint8 wfFormat,QObject* parent = nullptr);
+     bool serialError;
+     bool rtsStatus();
++    bool dtrStatus();
+ 
+     ~commHandler();
+ 
+ public slots:
+     void setUseRTSforPTT(bool useRTS);
++    void setUseDTRforPTT(bool useDTR);
+     void setRTS(bool rtsOn);
++    void setDTR(bool dtrOn);
+     void handleError(QSerialPort::SerialPortError error);
+     void init();
+ 
+@@ -77,6 +80,7 @@ private:
+     QString ptDevSlave;
+ 
+     bool PTTviaRTS = false;
++    bool PTTviaDTR = false;
+ 
+     bool isConnected; // port opened
+     mutable QMutex mutex;
+diff --git a/prefs.h b/prefs.h
+index 35764e3..ceb9976 100644
+--- a/prefs.h
++++ b/prefs.h
+@@ -37,6 +37,7 @@ struct preferences {
+     unsigned char radioCIVAddr;
+     bool CIVisRadioModel;
+     bool forceRTSasPTT;
++    bool forceDTRasPTT;
+     int polling_ms;
+     QString serialPortRadio;
+     quint32 serialPortBaud;
+diff --git a/rigcommander.cpp b/rigcommander.cpp
+index 881a3ed..a842187 100644
+--- a/rigcommander.cpp
++++ b/rigcommander.cpp
+@@ -41,7 +41,7 @@ rigCommander::~rigCommander()
+ }
+ 
+ 
+-void rigCommander::commSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate, QString vsp,quint16 tcpPort, quint8 wf)
++void rigCommander::commSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate, QString vsp,quint16 tcpPort, quint8 wf, bool forceRTSasPTT, bool forceDTRasPTT)
+ {
+     // construct
+     // TODO: Bring this parameter and the comm port from the UI.
+@@ -83,6 +83,7 @@ void rigCommander::commSetup(unsigned char rigCivAddr, QString rigSerialPort, qu
+         connect(comm, SIGNAL(haveDataFromPort(QByteArray)), tcp, SLOT(sendData(QByteArray)));
+     }
+     connect(this, SIGNAL(toggleRTS(bool)), comm, SLOT(setRTS(bool)));
++    connect(this, SIGNAL(toggleDTR(bool)), comm, SLOT(setDTR(bool)));
+ 
+     // data from the rig to the ptty:
+     connect(comm, SIGNAL(haveDataFromPort(QByteArray)), ptty, SLOT(receiveDataFromRigToPtty(QByteArray)));
+@@ -95,6 +96,8 @@ void rigCommander::commSetup(unsigned char rigCivAddr, QString rigSerialPort, qu
+ 
+     connect(this, SIGNAL(discoveredRigID(rigCapabilities)), ptty, SLOT(receiveFoundRigID(rigCapabilities)));
+ 
++    emit setRTSforPTT(forceRTSasPTT);
++    emit setDTRforPTT(forceDTRasPTT);
+     emit commReady();
+     sendState(); // Send current rig state to rigctld
+ 
+@@ -277,6 +280,20 @@ void rigCommander::setRTSforPTT(bool enabled)
+     }
+ }
+ 
++void rigCommander::setDTRforPTT(bool enabled)
++{
++    if(!usingNativeLAN)
++    {
++        useDTRforPTT_isSet = true;
++        useDTRforPTT_manual = enabled;
++        if(comm != NULL)
++        {
++            rigCaps.useDTRforPTT=enabled;
++            comm->setUseDTRforPTT(enabled);
++        }
++    }
++}
++
+ void rigCommander::findRigs()
+ {
+     // This function sends data to 0x00 ("broadcast") to look for any connected rig.
+@@ -3611,6 +3628,7 @@ void rigCommander::determineRigCaps()
+     rigCaps.hasTransmit = true;
+     rigCaps.hasPTTCommand = true;
+     rigCaps.useRTSforPTT = false;
++    rigCaps.useDTRforPTT = false;
+ 
+     // Common, reasonable defaults for most supported HF rigs:
+     rigCaps.bsr[band160m] = 0x01;
+@@ -4442,6 +4460,12 @@ void rigCommander::determineRigCaps()
+             rigCaps.useRTSforPTT = useRTSforPTT_manual;
+         }
+         comm->setUseRTSforPTT(rigCaps.useRTSforPTT);
++
++        if(useDTRforPTT_isSet)
++        {
++            rigCaps.useDTRforPTT = useDTRforPTT_manual;
++        }
++        comm->setUseDTRforPTT(rigCaps.useDTRforPTT);
+     }
+ 
+     if(lookingForRig)
+diff --git a/rigcommander.h b/rigcommander.h
+index dda8bec..a75983f 100644
+--- a/rigcommander.h
++++ b/rigcommander.h
+@@ -38,11 +38,12 @@ public:
+ 
+ public slots:
+     void process();
+-    void commSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate, QString vsp, quint16 tcp, quint8 wf);
++    void commSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate, QString vsp, quint16 tcp, quint8 wf, bool forceRTSasPTT, bool forceDTRasPTT);
+     void commSetup(unsigned char rigCivAddr, udpPreferences prefs, audioSetup rxSetup, audioSetup txSetup, QString vsp, quint16 tcp);
+     void closeComm();
+     void stateUpdated();
+     void setRTSforPTT(bool enabled);
++    void setDTRforPTT(bool enabled);
+ 
+     // Power:
+     void powerOn();
+@@ -282,6 +283,7 @@ signals:
+     void haveNetworkAudioLevels(const networkAudioLevels l);
+     void dataForComm(const QByteArray &outData);
+     void toggleRTS(bool rtsOn);
++    void toggleDTR(bool dtrOn);
+ 
+     // UDP:
+     void haveChangeLatency(quint16 value);
+@@ -485,6 +487,8 @@ private:
+     bool pttAllowed;
+     bool useRTSforPTT_isSet = false;
+     bool useRTSforPTT_manual = false;
++    bool useDTRforPTT_isSet = false;
++    bool useDTRforPTT_manual = false;
+ 
+ 
+     QString rigSerialPort;
+diff --git a/rigidentities.h b/rigidentities.h
+index 5d5131a..973c371 100644
+--- a/rigidentities.h
++++ b/rigidentities.h
+@@ -151,6 +151,7 @@ struct rigCapabilities {
+     bool hasTransmit;
+     bool hasPTTCommand;
+     bool useRTSforPTT;
++    bool useDTRforPTT;
+     bool hasAttenuator;
+     bool hasPreamp;
+     bool hasAntennaSel;
+diff --git a/servermain.cpp b/servermain.cpp
+index 8f51a78..1ef2805 100644
+--- a/servermain.cpp
++++ b/servermain.cpp
+@@ -99,7 +99,7 @@ void servermain::openRig()
+         {
+             //qInfo(logSystem()) << "Got rig";
+             QMetaObject::invokeMethod(radio->rig, [=]() {
+-                radio->rig->commSetup(radio->civAddr, radio->serialPort, radio->baudRate, QString("none"),0 ,radio->waterfallFormat);
++                radio->rig->commSetup(radio->civAddr, radio->serialPort, radio->baudRate, QString("none"),0 ,radio->waterfallFormat, radio->forceRTSasPTT, radio->forceDTRasPTT);
+             }, Qt::QueuedConnection);
+         }
+     }
+@@ -127,6 +127,7 @@ void servermain::makeRig()
+ 
+             // Rig comm setup:
+             connect(this, SIGNAL(setRTSforPTT(bool)), radio->rig, SLOT(setRTSforPTT(bool)));
++            connect(this, SIGNAL(setDTRforPTT(bool)), radio->rig, SLOT(setDTRforPTT(bool)));
+ 
+             connect(radio->rig, SIGNAL(haveBaudRate(quint32)), this, SLOT(receiveBaudRate(quint32)));
+ 
+@@ -425,6 +426,7 @@ void servermain::setDefPrefs()
+     defPrefs.radioCIVAddr = 0x00; // previously was 0x94 for 7300.
+     defPrefs.CIVisRadioModel = false;
+     defPrefs.forceRTSasPTT = false;
++    defPrefs.forceDTRasPTT = false;
+     defPrefs.serialPortRadio = QString("auto");
+     defPrefs.serialPortBaud = 115200;
+     defPrefs.localAFgain = 255;
+@@ -462,6 +464,7 @@ void servermain::loadSettings()
+             settings->setArrayIndex(i);
+             settings->setValue("RigCIVuInt", defPrefs.radioCIVAddr);
+             settings->setValue("ForceRTSasPTT", defPrefs.forceRTSasPTT);
++            settings->setValue("ForceDTRasPTT", defPrefs.forceDTRasPTT);
+             settings->setValue("SerialPortRadio", defPrefs.serialPortRadio);
+             settings->setValue("RigName", "<NONE>");
+             settings->setValue("SerialPortBaud", defPrefs.serialPortBaud);
+@@ -502,6 +505,7 @@ void servermain::loadSettings()
+         RIGCONFIG* tempPrefs = new RIGCONFIG();
+         tempPrefs->civAddr = (unsigned char)settings->value("RigCIVuInt", defPrefs.radioCIVAddr).toInt();
+         tempPrefs->forceRTSasPTT = (bool)settings->value("ForceRTSasPTT", defPrefs.forceRTSasPTT).toBool();
++        tempPrefs->forceDTRasPTT = (bool)settings->value("ForceDTRasPTT", defPrefs.forceDTRasPTT).toBool();
+         tempPrefs->serialPort = settings->value("SerialPortRadio", defPrefs.serialPortRadio).toString();
+         tempPrefs->rigName = settings->value("RigName", "<NONE>").toString();
+         tempPrefs->baudRate = (quint32)settings->value("SerialPortBaud", defPrefs.serialPortBaud).toInt();
+diff --git a/servermain.h b/servermain.h
+index ad866c4..210fb59 100644
+--- a/servermain.h
++++ b/servermain.h
+@@ -55,6 +55,7 @@ signals:
+     void setCIVAddr(unsigned char newRigCIVAddr);
+     void setRigID(unsigned char rigID);
+     void setRTSforPTT(bool enabled);
++    void setDTRforPTT(bool enabled);
+ 
+     // Power
+     void sendPowerOn();
+@@ -160,7 +161,7 @@ signals:
+     void sayFrequency();
+     void sayMode();
+     void sayAll();
+-    void sendCommSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate,QString vsp, quint16 tcp, quint8 wf);
++    void sendCommSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate,QString vsp, quint16 tcp, quint8 wf, bool forceRTSasPTT, bool forceDTRasPTT);
+     void sendCommSetup(unsigned char rigCivAddr, udpPreferences prefs, audioSetup rxSetup, audioSetup txSetup, QString vsp, quint16 tcp);
+     void sendCloseComm();
+     void sendChangeLatency(quint16 latency);
+@@ -242,6 +243,7 @@ private:
+         unsigned char radioCIVAddr;
+         bool CIVisRadioModel;
+         bool forceRTSasPTT;
++        bool forceDTRasPTT;
+         QString serialPortRadio;
+         quint32 serialPortBaud;
+         unsigned char localAFgain;
+diff --git a/udpserver.h b/udpserver.h
+index 3cbed99..054b6bd 100644
+--- a/udpserver.h
++++ b/udpserver.h
+@@ -49,6 +49,7 @@ struct RIGCONFIG {
+ 	unsigned char civAddr;
+ 	bool civIsRadioModel;
+ 	bool forceRTSasPTT;
++	bool forceDTRasPTT;
+ 	bool hasWiFi = false;
+ 	bool hasEthernet=false;
+ 	audioSetup rxAudioSetup;
+diff --git a/wfmain.cpp b/wfmain.cpp
+index e480e57..25aa831 100644
+--- a/wfmain.cpp
++++ b/wfmain.cpp
+@@ -325,7 +325,7 @@ void wfmain::openRig()
+             serialPortRig = prefs.serialPortRadio;
+         }
+         usingLAN = false;
+-        emit sendCommSetup(prefs.radioCIVAddr, serialPortRig, prefs.serialPortBaud,prefs.virtualSerialPort, prefs.tcpPort,prefs.waterfallFormat);
++        emit sendCommSetup(prefs.radioCIVAddr, serialPortRig, prefs.serialPortBaud,prefs.virtualSerialPort, prefs.tcpPort, prefs.waterfallFormat, prefs.forceRTSasPTT, prefs.forceDTRasPTT);
+         ui->statusBar->showMessage(QString("Connecting to rig using serial port ").append(serialPortRig), 1000);
+     }
+ 
+@@ -679,8 +679,9 @@ void wfmain::makeRig()
+         connect(selRad, SIGNAL(selectedRadio(quint8)), rig, SLOT(setCurrentRadio(quint8)));
+         // Rig comm setup:
+         connect(this, SIGNAL(sendCommSetup(unsigned char, udpPreferences, audioSetup, audioSetup, QString, quint16)), rig, SLOT(commSetup(unsigned char, udpPreferences, audioSetup, audioSetup, QString, quint16)));
+-        connect(this, SIGNAL(sendCommSetup(unsigned char, QString, quint32,QString, quint16,quint8)), rig, SLOT(commSetup(unsigned char, QString, quint32,QString, quint16,quint8)));
++        connect(this, SIGNAL(sendCommSetup(unsigned char, QString, quint32,QString, quint16,quint8, bool, bool)), rig, SLOT(commSetup(unsigned char, QString, quint32,QString, quint16, quint8, bool, bool)));
+         connect(this, SIGNAL(setRTSforPTT(bool)), rig, SLOT(setRTSforPTT(bool)));
++        connect(this, SIGNAL(setDTRforPTT(bool)), rig, SLOT(setDTRforPTT(bool)));
+ 
+         connect(rig, SIGNAL(haveBaudRate(quint32)), this, SLOT(receiveBaudRate(quint32)));
+ 
+@@ -1974,6 +1975,7 @@ void wfmain::setDefPrefs()
+     defPrefs.radioCIVAddr = 0x00; // previously was 0x94 for 7300.
+     defPrefs.CIVisRadioModel = false;
+     defPrefs.forceRTSasPTT = false;
++    defPrefs.forceDTRasPTT = false;
+     defPrefs.serialPortRadio = QString("auto");
+     defPrefs.serialPortBaud = 115200;
+     defPrefs.polling_ms = 0; // 0 = Automatic
+@@ -2128,8 +2130,10 @@ void wfmain::loadSettings()
+     }
+     prefs.CIVisRadioModel = (bool)settings->value("CIVisRadioModel", defPrefs.CIVisRadioModel).toBool();
+     prefs.forceRTSasPTT = (bool)settings->value("ForceRTSasPTT", defPrefs.forceRTSasPTT).toBool();
++    prefs.forceDTRasPTT = (bool)settings->value("ForceDTRasPTT", defPrefs.forceDTRasPTT).toBool();
+ 
+     ui->useRTSforPTTchk->setChecked(prefs.forceRTSasPTT);
++    ui->useDTRforPTTchk->setChecked(prefs.forceDTRasPTT);
+ 
+     prefs.serialPortRadio = settings->value("SerialPortRadio", defPrefs.serialPortRadio).toString();
+     int serialIndex = ui->serialDeviceListCombo->findText(prefs.serialPortRadio);
+@@ -2898,6 +2902,7 @@ void wfmain::saveSettings()
+     settings->setValue("RigCIVuInt", prefs.radioCIVAddr);
+     settings->setValue("CIVisRadioModel", prefs.CIVisRadioModel);
+     settings->setValue("ForceRTSasPTT", prefs.forceRTSasPTT);
++    settings->setValue("ForceDTRasPTT", prefs.forceDTRasPTT);
+     settings->setValue("polling_ms", prefs.polling_ms); // 0 = automatic
+     settings->setValue("SerialPortRadio", prefs.serialPortRadio);
+     settings->setValue("SerialPortBaud", prefs.serialPortBaud);
+@@ -5006,6 +5011,7 @@ void wfmain::receiveRigID(rigCapabilities rigCaps)
+         ui->tuneNowBtn->setEnabled(rigCaps.hasATU);
+ 
+         ui->useRTSforPTTchk->setChecked(prefs.forceRTSasPTT);
++        ui->useDTRforPTTchk->setChecked(prefs.forceDTRasPTT);
+ 
+         ui->audioSystemCombo->setEnabled(false);
+         ui->audioSystemServerCombo->setEnabled(false);
+@@ -8012,6 +8018,12 @@ void wfmain::on_useRTSforPTTchk_clicked(bool checked)
+     prefs.forceRTSasPTT = checked;
+ }
+ 
++void wfmain::on_useDTRforPTTchk_clicked(bool checked)
++{
++    emit setDTRforPTT(checked);
++    prefs.forceDTRasPTT = checked;
++}
++
+ void wfmain::on_wfLengthSlider_valueChanged(int value)
+ {
+     prefs.wflength = (unsigned int)(value);
+diff --git a/wfmain.h b/wfmain.h
+index caaf765..28bf7cb 100644
+--- a/wfmain.h
++++ b/wfmain.h
+@@ -109,8 +109,9 @@ signals:
+     void setCIVAddr(unsigned char newRigCIVAddr);
+     void setRigID(unsigned char rigID);
+     void setRTSforPTT(bool enabled);
++    void setDTRforPTT(bool enabled);
++
+ 
+-    
+     void sendPowerOn();
+     void sendPowerOff();
+ 
+@@ -266,7 +267,7 @@ signals:
+     void sayFrequency();
+     void sayMode();
+     void sayAll();
+-    void sendCommSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate,QString vsp, quint16 tcp, quint8 wf);
++    void sendCommSetup(unsigned char rigCivAddr, QString rigSerialPort, quint32 rigBaudRate,QString vsp, quint16 tcp, quint8 wf, bool forceRTSasPTT, bool forceDTRasPTT);
+     void sendCommSetup(unsigned char rigCivAddr, udpPreferences prefs, audioSetup rxSetup, audioSetup txSetup, QString vsp, quint16 tcp);
+     void sendCloseComm();
+     void sendChangeLatency(quint16 latency);
+@@ -667,6 +668,8 @@ private slots:
+ 
+     void on_useRTSforPTTchk_clicked(bool checked);
+ 
++    void on_useDTRforPTTchk_clicked(bool checked);
++
+     void on_radioStatusBtn_clicked();
+ 
+     void on_audioSystemCombo_currentIndexChanged(int value);
+diff --git a/wfmain.ui b/wfmain.ui
+index f625ea7..070dc23 100644
+--- a/wfmain.ui
++++ b/wfmain.ui
+@@ -2457,6 +2457,16 @@
+                      </property>
+                     </widget>
+                    </item>
++                   <item>
++                    <widget class="QCheckBox" name="useDTRforPTTchk">
++                     <property name="toolTip">
++                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This feature is for older radios that respond best to an DTR serial port signal than a PTT command.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;Do not check this box unless you really need this and have an appropriate adapter with DTR connected to the PTT line of the transceiver. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++                     </property>
++                     <property name="text">
++                      <string>Send DTR for PTT</string>
++                     </property>
++                    </widget>
++                   </item>
+                    <item>
+                     <spacer name="horizontalSpacer_4">
+                      <property name="orientation">
+diff --git a/rigctld.cpp b/rigctld.cpp
+index a693fa4..b2a4e72 100644
+--- a/rigctld.cpp
++++ b/rigctld.cpp
+@@ -410,7 +410,7 @@ void rigCtlClient::socketReadyRead()
+         else if (command.length() > 1 && (command[0] == "T" || command[0] == "set_ptt"))
+         {
+             setCommand = true;
+-            if (rigCaps.hasPTTCommand) {
++            if (rigCaps.hasPTTCommand || rigCaps.useRTSforPTT || rigCaps.useDTRforPTT) {
+                 rigState->set(PTT, (bool)command[1].toInt(), true);
+             }
+             else
+@@ -420,7 +420,7 @@ void rigCtlClient::socketReadyRead()
+         }
+         else if (command[0] == "t" || command[0] == "get_ptt")
+         {
+-            if (rigCaps.hasPTTCommand) {
++            if (rigCaps.hasPTTCommand || rigCaps.useRTSforPTT || rigCaps.useDTRforPTT) {
+                 QString resp;
+                 if (longReply) {
+                     resp.append(QString("PTT: "));
+@@ -1435,7 +1435,7 @@ void rigCtlClient::socketReadyRead()
+             {
+                 response.append(QString("Rig type:\tReceiver"));
+             }
+-            if (rigCaps.hasPTTCommand) {
++            if (rigCaps.hasPTTCommand || rigCaps.useRTSforPTT || rigCaps.useDTRforPTT) {
+                 response.append(QString("PTT type:\tRig capable"));
+             }
+             response.append(QString("DCD type:\tRig capable"));

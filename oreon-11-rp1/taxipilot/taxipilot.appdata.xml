@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>taxipilot.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>TaxiPilot</name>
+  <summary>Game where you pilot a taxi in space</summary>
+  <description>
+    <p>
+     Game where you pilot a taxi in space, the objective is to pick up
+     passengers waiting on a number of platforms and to drop them where
+     they want to go.
+    </p>
+    <p>
+     Passengers will appear from time to time. Land on the platform they wait
+     on and wait unitl they have boarded the ship. The "Destination:"-display
+     on the bottom of the window will tell you, where the passenger wants to go.
+     Passengers will pay you for their ride depending on how fast you deliver
+     them to their destination.
+    </p>
+    <p>
+     Watch your fuel! When it's empty, you will no longer be able to accelerate.
+     Most likely this means that you will crash very soon. You may fuel your
+     ship on special platforms, which will generally, but not necessarily be
+     platforms where no passengers ever appear or want to go to. Fuel does have
+     a price, though, so try not to waste it.
+    </p>
+  </description>
+  <url type="homepage">http://taxipilot.sourceforge.net</url>
+  <url type="help">http://taxipilot.sourceforge.net/doc/using-taxipilot.php</url>
+  <screenshots>
+    <screenshot type="default">http://taxipilot.sourceforge.net/screenshots/billybob.jpg</screenshot>
+    <screenshot>http://taxipilot.sourceforge.net/screenshots/crashandburn.jpg</screenshot>
+    <screenshot>http://taxipilot.sourceforge.net/screenshots/contributed.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

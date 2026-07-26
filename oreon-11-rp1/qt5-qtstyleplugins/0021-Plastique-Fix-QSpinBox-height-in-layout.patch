@@ -1,0 +1,29 @@
+From 4df109a2b83e6ca2985ac36021241d11b6f4ed88 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?B=C5=82a=C5=BCej=20Szczygie=C5=82?= <spaz16@wp.pl>
+Date: Mon, 16 Jan 2017 22:59:23 +0100
+Subject: [PATCH 21/23] Plastique: Fix QSpinBox height in layout
+
+QCommonStyle properly handles the QSpinBox size, so no need to call
+method for QLineEdit which returns incorrect height in this case.
+
+Change-Id: I3c5e8cbeb1c340f8300bdc2a8116b48c83ee40cc
+Reviewed-by: J-P Nurmi <jpnurmi@qt.io>
+---
+ src/plugins/styles/plastique/qplastiquestyle.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/plugins/styles/plastique/qplastiquestyle.cpp b/src/plugins/styles/plastique/qplastiquestyle.cpp
+index 88fbca9..fbcf766 100644
+--- a/src/plugins/styles/plastique/qplastiquestyle.cpp
++++ b/src/plugins/styles/plastique/qplastiquestyle.cpp
+@@ -4863,7 +4863,6 @@ QSize QPlastiqueStyle::sizeFromContents(ContentsType type, const QStyleOption *o
+ #ifndef QT_NO_SPINBOX
+     case CT_SpinBox:
+         // Make sure the size is odd
+-        newSize.setHeight(sizeFromContents(CT_LineEdit, option, size, widget).height());
+         newSize.rheight() -= ((1 - newSize.rheight()) & 1);
+         break;
+ #endif
+-- 
+2.9.3
+

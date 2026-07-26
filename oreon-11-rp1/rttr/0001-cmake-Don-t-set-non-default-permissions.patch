@@ -1,0 +1,50 @@
+From f51b9cec5a331ef08f525ef4b4975bda119af35d Mon Sep 17 00:00:00 2001
+From: Nicolas Chauvet <kwizart@gmail.com>
+Date: Mon, 16 Aug 2021 11:30:27 +0200
+Subject: [PATCH] cmake: Don't set non-default permissions
+
+According to cmake documentation:
+https://cmake.org/cmake/help/latest/command/install.html
+
+If no permissions are set, the default is to use OWNER_WRITE, OWNER_READ, GROUP_READ, and WORLD_READ.
+
+Currently this lead to a build error with this message:
+CMake Error at CMake/utility.cmake:168 (install):
+  install FILES given unknown argument "GROUP_READ".
+
+So don't set any permissions
+
+Signed-off-by: Nicolas Chauvet <kwizart@gmail.com>
+---
+ CMake/config.cmake  | 3 +--
+ CMake/utility.cmake | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/CMake/config.cmake b/CMake/config.cmake
+index 1b692f500a8b..a4e2e012b198 100644
+--- a/CMake/config.cmake
++++ b/CMake/config.cmake
+@@ -171,6 +171,5 @@ if (BUILD_INSTALLER)
+             COMPONENT Devel)
+ 
+     install(FILES "${LICENSE_FILE}" "${README_FILE}"
+-            DESTINATION ${RTTR_ADDITIONAL_FILES_INSTALL_DIR}
+-            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
++            DESTINATION ${RTTR_ADDITIONAL_FILES_INSTALL_DIR})
+ endif()
+diff --git a/CMake/utility.cmake b/CMake/utility.cmake
+index cd1e835cef4a..8e7a0c639e97 100644
+--- a/CMake/utility.cmake
++++ b/CMake/utility.cmake
+@@ -165,7 +165,7 @@ function(loadFolder FOLDER _HEADER_FILES _SOURCE_FILES)
+     getNameOfDir(CMAKE_CURRENT_SOURCE_DIR DIRNAME)
+     if (${shouldInstall})
+       if (NOT ${FULL_HEADER_PATH} MATCHES ".*_p.h$") # we don't want to install header files which are marked as private
+-        install(FILES ${FULL_HEADER_PATH} DESTINATION "include/${DIRNAME}/${REL_PATH}" PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
++        install(FILES ${FULL_HEADER_PATH} DESTINATION "include/${DIRNAME}/${REL_PATH}")
+       endif()
+     endif()
+   endforeach()
+-- 
+2.31.1
+

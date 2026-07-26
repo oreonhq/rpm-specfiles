@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XGalaxy-Hyperspace
+Comment=Modified version of XGalaxy
+Exec=xgalaxy-hyperspace
+Icon=xgalaxy.png
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;

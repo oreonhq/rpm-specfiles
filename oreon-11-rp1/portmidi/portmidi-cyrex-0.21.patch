@@ -1,0 +1,10 @@
+--- portmidi/pm_python/pyportmidi/_pyportmidi.pyx-orig	2010-09-26 21:32:44.000000000 +0200
++++ portmidi/pm_python/pyportmidi/_pyportmidi.pyx	2019-05-20 14:23:34.617039615 +0200
+@@ -532,6 +532,6 @@ example: Read(50) returns all the events
+         if NumEvents < 0: raise Exception, Pm_GetErrorText(NumEvents)
+         x=[]
+         if NumEvents >= 1:
+-            for loop in range(NumEvents):
++            for loop in range(<int>NumEvents):
+                  x.append([[buffer[loop].message & 0xff, (buffer[loop].message >> 8) & 0xFF, (buffer[loop].message >> 16) & 0xFF, (buffer[loop].message >> 24) & 0xFF], buffer[loop].timestamp])
+         return x

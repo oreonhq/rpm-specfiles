@@ -1,0 +1,58 @@
+#!/bin/sh
+
+if [ -f "$HOME/.xmonad/xmonad.hs" ]; then
+    XMONAD_DIR=$HOME/.xmonad
+    XMONAD_CUSTOM=$XMONAD_DIR/xmonad-$(uname -i)-linux
+else
+    XMONAD_DIR=$HOME/.config/xmonad
+    XMONAD_CUSTOM=$HOME/.cache/xmonad/xmonad-$(uname -i)-linux
+fi
+
+
+#  if no user configuration
+if [ ! -f "$XMONAD_DIR/xmonad.hs" ]; then
+    # add a desktop friendly config if possible
+    if [ -r /usr/share/xmonad/xmonad.hs ]; then
+	mkdir -p "$XMONAD_DIR"
+	cp -p /usr/share/xmonad/xmonad.hs "$XMONAD_DIR"
+    else
+        CUSTOM_INFO="xmonad, xmonad-config, or xmonad-mate to customize xmonad"
+        echo "xmonad-start: install $CUSTOM_INFO"
+    fi
+else
+    # recompile if broken shared libs after an upgrade
+    if [ -x "$XMONAD_CUSTOM" ]; then
+	if ldd "$XMONAD_CUSTOM" | grep -q "not found"; then
+	    xmonad --recompile
+	fi
+    fi
+fi
+
+XMONADSTART_CACHEDIR=$HOME/.cache/xmonad-start
+NO_DIALOG_FILE=$XMONADSTART_CACHEDIR/no-startup-dialog
+if [ -x "/usr/bin/zenity" -a ! -r "$NO_DIALOG_FILE" ]; then
+    if ! zenity --question --text="To open an terminal press: Alt-Shift-Return\n\nFor more keybindings and info see manpage: man xmonad\n\n${CUSTOM_INFO:+Install $CUSTOM_INFO.\n\n}\nShow this dialog next time?"; then
+	mkdir -p "$XMONADSTART_CACHEDIR"
+	touch "$NO_DIALOG_FILE"
+    fi
+fi
+
+if [ -r "$XMONAD_DIR/session" ]; then
+    sh "$XMONAD_DIR/session"
+fi
+
+if [ -x /usr/bin/gnome-keyring-daemon ]; then
+    eval $(gnome-keyring-daemon --start)
+    export GNOME_KEYRING_SOCKET
+    export GNOME_KEYRING_PID
+fi
+
+if [ -n "$*" ]; then
+    if [ -d "$XMONAD_DIR" -a "$(ls -t "$XMONAD_DIR" | head -1)" = "xmonad.hs" ]; then
+	xmonad --recompile
+    fi
+    xmonad &
+    $*
+else
+    xmonad
+fi

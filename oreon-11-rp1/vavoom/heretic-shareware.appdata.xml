@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>heretic-shareware.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>proprietary</project_license>
+  <name>Heretic shareware installer</name>
+  <summary>Heretic, classic dark fantasy first person shooter, shareware installer</summary>
+  <description>
+    <p>
+     Heretic is Raven's classic dark fantasy first person shooter using a
+     modified Doom engine. The Heretic engine is Open Source. The original
+     Heretic datafiles however are not Open Source. There is a gratis, but not
+     Open Source shareware version available on the internet.
+    </p>
+    <p>
+     This package contains an applications menu entry for playing Heretic
+     shareware using the vavoom engine. The first time you click this menu
+     entry, it will offer to download and install the Heretic shareware
+     datafiles for you.
+    </p>
+  </description>
+  <url type="homepage">https://en.wikipedia.org/wiki/Heretic_%28video_game%29</url>
+  <screenshots>
+    <screenshot type="default">http://vavoom-engine.com/images/shots/shot03.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

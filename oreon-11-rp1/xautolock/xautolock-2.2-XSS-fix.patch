@@ -1,0 +1,12 @@
+diff -up xautolock-2.2/src/engine.c.XSS-fix xautolock-2.2/src/engine.c
+--- xautolock-2.2/src/engine.c.XSS-fix	2007-12-28 18:15:26.000000000 +0100
++++ xautolock-2.2/src/engine.c	2008-03-17 14:24:16.000000000 +0100
+@@ -46,6 +46,8 @@ queryIdleTime (Display* d, Bool use_xidl
+     if (!mitInfo) mitInfo = XScreenSaverAllocInfo ();
+     XScreenSaverQueryInfo (d, DefaultRootWindow (d), mitInfo);
+     idleTime = mitInfo->idle;
++    if (mitInfo->state == ScreenSaverDisabled)
++	idleTime = 0;
+ #endif /* HasScreenSaver */
+   }
+ 

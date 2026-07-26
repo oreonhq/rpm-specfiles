@@ -1,0 +1,24 @@
+From 89562a761851f8a7c6669e7ddedea25f1f4f2314 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr@fedoraproject.org>
+Date: Thu, 5 Oct 2023 08:03:49 -0700
+Subject: [PATCH] Fix Python 3.12 compatibility
+
+`assertRaisesRegexp` was deprecated in Python 3.2 and removed in 3.12.
+---
+ pydiffx/tests/testcases.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pydiffx/tests/testcases.py b/pydiffx/tests/testcases.py
+index fdcbf99..8f23eb0 100644
+--- a/pydiffx/tests/testcases.py
++++ b/pydiffx/tests/testcases.py
+@@ -65,5 +65,5 @@ class TestCase(unittest.TestCase):
+ 
+     @contextmanager
+     def assertRaisesMessage(self, exception, message):
+-        with self.assertRaisesRegexp(exception, re.escape(message)):
++        with self.assertRaisesRegex(exception, re.escape(message)):
+             yield
+-- 
+2.41.0
+

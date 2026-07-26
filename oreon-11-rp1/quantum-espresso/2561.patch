@@ -1,0 +1,41 @@
+From 0ff69e23a058584feaf9d14639c1545148cd8d1a Mon Sep 17 00:00:00 2001
+From: Cristian Le <git@lecris.dev>
+Date: Sat, 1 Feb 2025 20:23:14 +0100
+Subject: [PATCH] Allow building without git
+
+---
+ CMakeLists.txt        | 2 +-
+ cmake/qeHelpers.cmake | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 41fb192915..ea03b803ad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -407,7 +407,7 @@ endif(QE_ENABLE_MPI)
+ ###########################################################
+ # Git
+ ###########################################################
+-find_package(Git 2.13 REQUIRED)
++find_package(Git 2.13)
+ if(EXISTS ${qe_SOURCE_DIR}/.git)
+   message(STATUS "Source files are cloned from a git repository.")
+   set(IS_GIT_PROJECT 1)
+diff --git a/cmake/qeHelpers.cmake b/cmake/qeHelpers.cmake
+index d7ee61fcaa..0bd63b1dee 100644
+--- a/cmake/qeHelpers.cmake
++++ b/cmake/qeHelpers.cmake
+@@ -96,6 +96,10 @@ function(_qe_add_cuda_link_flags TGT)
+ endfunction(_qe_add_cuda_link_flags)
+ 
+ function(qe_git_submodule_update PATH)
++    # If the user does not have git setup, assume they have already setup the submodules
++    if(NOT Git_FOUND)
++        return()
++    endif ()
+     # validate submodule_commit_hash_records against git database
+     get_filename_component(SUBMODULE_NAME ${PATH} NAME)
+     get_filename_component(SUBMODULE_UPPER_DIR ${PATH} DIRECTORY)
+-- 
+GitLab
+

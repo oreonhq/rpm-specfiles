@@ -1,0 +1,65 @@
+diff --git a/firmware/fx2/CMakeLists.txt b/firmware/fx2/CMakeLists.txt
+index 7a41333..10a363d 100644
+--- a/firmware/fx2/CMakeLists.txt
++++ b/firmware/fx2/CMakeLists.txt
+@@ -15,7 +15,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/config/Toolchain-sdcc.cmake)
+ project(USRP1 C)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/config/")
+diff --git a/firmware/octoclock/CMakeLists.txt b/firmware/octoclock/CMakeLists.txt
+index 4d99add..483a191 100644
+--- a/firmware/octoclock/CMakeLists.txt
++++ b/firmware/octoclock/CMakeLists.txt
+@@ -15,7 +15,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ set(CMAKE_SYSTEM_NAME Generic)
+ 
+ find_program(AVR_CC avr-gcc REQUIRED)
+diff --git a/firmware/usrp2/CMakeLists.txt b/firmware/usrp2/CMakeLists.txt
+index 693fbf9..9ec61f8 100644
+--- a/firmware/usrp2/CMakeLists.txt
++++ b/firmware/usrp2/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ ########################################################################
+ # setup project and compiler
+ ########################################################################
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ #force the compiler because the check wont use the special flag below
+ include(CMakeForceCompiler)
+ set(CMAKE_SYSTEM_NAME Generic)
+diff --git a/firmware/usrp3/CMakeLists.txt b/firmware/usrp3/CMakeLists.txt
+index 9cfbe99..bfbcb83 100644
+--- a/firmware/usrp3/CMakeLists.txt
++++ b/firmware/usrp3/CMakeLists.txt
+@@ -18,7 +18,7 @@
+ ########################################################################
+ # setup project and compiler
+ ########################################################################
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ #force the compiler because the check wont use the special flag below
+ include(CMakeForceCompiler)
+ set(CMAKE_SYSTEM_NAME Generic)
+diff --git a/tools/dissectors/CMakeLists.txt b/tools/dissectors/CMakeLists.txt
+index 8fa8542..af67ee0 100644
+--- a/tools/dissectors/CMakeLists.txt
++++ b/tools/dissectors/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ #
+ 
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ cmake_policy(SET CMP0048 NEW)
+ project(EttusDissectors VERSION 4.0.0 DESCRIPTION "Dissector Plugins" LANGUAGES C CXX)
+ 

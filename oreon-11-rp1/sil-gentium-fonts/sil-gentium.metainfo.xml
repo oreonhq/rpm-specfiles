@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>sil-gentium</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Gentium</name>
+  <summary>SIL Gentium fonts</summary>
+  <description>
+    <p>
+      SIL Gentium ("belonging to the nations" in Latin) is a Unicode typeface family
+      designed to enable the many diverse ethnic groups around the world who use
+      the Latin script to produce readable, high-quality publications. It supports
+      a wide range of Latin-based alphabets.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://scripts.sil.org/Gentium_linux</url>
+</component>
+

@@ -1,0 +1,19 @@
+diff -up z80asm-1.8/Makefile.no-bundled-libs z80asm-1.8/Makefile
+--- z80asm-1.8/Makefile.no-bundled-libs	2009-04-11 01:33:07.000000000 -0700
++++ z80asm-1.8/Makefile	2012-02-26 23:24:43.763412540 -0800
+@@ -23,11 +23,13 @@ VERSION ?= $(shell echo -n `cat VERSION
+ 
+ all:z80asm
+ 
+-z80asm: z80asm.o expressions.o Makefile gnulib/getopt.o gnulib/getopt1.o
++z80asm: z80asm.o expressions.o Makefile
+ 	$(CC) $(LDFLAGS) $(filter %.o,$^) -o $@
++
++test:	z80asm
+ 	$(MAKE) -C tests || rm $@
+ 
+-%.o:%.c z80asm.h gnulib/getopt.h Makefile
++%.o:%.c z80asm.h Makefile
+ 	$(CC) $(CFLAGS) -c $< -o $@ -DVERSION=\"$(shell cat VERSION)\"
+ 
+ clean:

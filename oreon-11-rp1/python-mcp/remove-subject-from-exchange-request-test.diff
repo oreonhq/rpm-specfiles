@@ -1,0 +1,10 @@
+--- a/tests/client/auth/extensions/test_client_credentials.py
++++ b/tests/client/auth/extensions/test_client_credentials.py
+@@ -165,7 +165,6 @@
+             key="a-string-secret-at-least-256-bits-long",
+             algorithms=["HS256"],
+             audience="https://api.example.com/",
+-            subject="1234567890",
+             issuer="foo",
+             verify=True,
+         )

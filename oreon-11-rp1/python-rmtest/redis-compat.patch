@@ -1,0 +1,33 @@
+diff --git a/rmtest/disposableredis/__init__.py b/rmtest/disposableredis/__init__.py
+index 5af5309..84c230b 100644
+--- a/rmtest/disposableredis/__init__.py
++++ b/rmtest/disposableredis/__init__.py
+@@ -138,6 +138,7 @@ class DisposableRedis(object):
+         self.args = [self.path,
+                      '--port', str(self.port),
+                      '--save', '',
++                     '--enable-debug-command', 'yes',
+                      '--dbfilename', self.dumpfile]
+         if self.use_aof:
+             self.args += ['--appendonly', 'yes',
+diff --git a/rmtest/disposableredis/cluster.py b/rmtest/disposableredis/cluster.py
+index 8d65fcf..b9d2706 100644
+--- a/rmtest/disposableredis/cluster.py
++++ b/rmtest/disposableredis/cluster.py
+@@ -13,6 +13,7 @@ class Cluster(object):
+         self.common_conf = {
+             'cluster-enabled': 'yes',
+             'cluster-node-timeout': '5000',
++            'enable-debug-command': 'yes',
+         }
+         self.common_conf.update(extra_args)
+         self.num_nodes = num_nodes
+@@ -40,7 +41,7 @@ class Cluster(object):
+ 
+         for i, node in enumerate(self.nodes):
+             conn = node.client()
+-            conn.cluster('RESET')
++            conn.cluster('RESET', 'SOFT')
+ 
+         slots_per_node = int(16384 / len(self.ports)) + 1
+         for i, node in enumerate(self.nodes):

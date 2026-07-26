@@ -1,0 +1,20 @@
+diff --git a/docs/conf.py b/docs/conf.py
+index e3fe066..f82f28c 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -78,7 +78,7 @@ pygments_style = "sphinx"
+ # The theme to use for HTML and HTML Help pages.  See the documentation for
+ # a list of builtin themes.
+ 
+-html_theme = "furo"
++html_theme = "default"
+ html_theme_options = {
+     "dark_css_variables": {
+         "admonition-font-size": "100%",
+diff --git a/docs/requirements.txt b/docs/requirements.txt
+index 70b8bab..6966869 100644
+--- a/docs/requirements.txt
++++ b/docs/requirements.txt
+@@ -1,2 +1 @@
+-furo
+ sphinx

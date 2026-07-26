@@ -1,0 +1,130 @@
+.TH SPEC2NII\-TWIX "1" "July 2024" "" "User Commands"
+.B spec2nii\ twix
+\(en convert from Siemens
+.B .dat
+twix format
+.SH SYNOPSIS
+.B spec2nii\ twix
+.RB [ \-h ]
+.RB ( \-v \ |\  \-e\ \fIEVALINFO )
+.RB [ \-m\ \fIMULTIRAID ]
+.RB [ \-q ]
+.RB [ \-d5\ \fIDIM5 ]
+.RB [ \-t5\ \fITAG5 ]
+.RB [ \-d6\ \fIDIM6 ]
+.RB [ \-t6\ \fITAG6 ]
+.RB [ \-d7\ \fIDIM7 ]
+.RB [ \-t7\ \fITAG7 ]
+.RB [ \-\-remove_os ]
+.RB [ \-j ]
+.RB [ \-f\ \fIFILEOUT ]
+.RB [ \-o\ \fIOUTDIR ]
+.RB [ \-\-nifti1 ]
+.RB [ \-\-override_nucleus\ \fIOVERRIDE_NUCLEUS\  [ \fIOVERRIDE_NUCLEUS \ ...]]
+.RB [ \-\-override_frequency\ \fIOVERRIDE_FREQUENCY\  [ \fIOVERRIDE_FREQUENCY \ ...]]
+.RB [ \-\-override_dwelltime\ \fIOVERRIDE_DWELLTIME ]
+.RB [ \-\-anon ]
+.RB [ \-\-verbose ]
+.I file
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I file
+File to convert.
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-v\fR,\ \fB\-\-view
+View contents of twix file, no files converted.
+.TP
+.B \-e\ \fIEVALINFO\fR,\ \fB\-\-evalinfo\ \fIEVALINFO
+.B evalInfo
+flag to convert.
+.TP
+.B \-m\ \fIMULTIRAID\fR,\ \fB\-\-multiraid\ \fIMULTIRAID
+Select multiraid file to load
+(default =
+.B 2
+i.e. 2nd file).
+.TP
+.B \-q\fR,\ \fB\-\-quiet
+Suppress text output.
+.TP
+.B \-d5\ \fIDIM5\fR,\ \fB\-\-dim5\ \fIDIM5
+Specify dim 5 loop counter.
+.TP
+.B \-t5\ \fITAG5\fR,\ \fB\-\-tag5\ \fITAG5
+Specify dim 5 NIfTI MRS tag.
+.TP
+.B \-d6\ \fIDIM6\fR,\ \fB\-\-dim6\ \fIDIM6
+Specify dim 6 loop counter.
+.TP
+.B \-t6\ \fITAG6\fR,\ \fB\-\-tag6\ \fITAG6
+Specify dim 6 NIfTI MRS tag.
+.TP
+.B \-d7\ \fIDIM7\fR,\ \fB\-\-dim7\ \fIDIM7
+Specify dim 7 loop counter.
+.TP
+.B \-t7\ \fITAG7\fR,\ \fB\-\-tag7\ \fITAG7
+Specify dim 7 NIfTI MRS tag.
+.TP
+.B \-\-remove_os
+Remove time-domain oversampling.
+.TP
+.B \-j\fR,\ \fB\-\-json
+Create json sidecar.
+.TP
+.B \-f\ \fIFILEOUT\fR,\ \fB\-\-fileout\ \fIFILEOUT
+Output file base name (default = input file name).
+.TP
+.B \-o\ \fIOUTDIR\fR,\ \fB\-\-outdir\ \fIOUTDIR
+Output location (default =
+.BR . ).
+.TP
+.B \-\-nifti1
+.TP
+.BR \-\-override_nucleus\ \fIOVERRIDE_NUCLEUS\  [ \fIOVERRIDE_NUCLEUS \ ...]
+Override
+.B ResonantNucleus
+field with input(s).
+E.g. \(oq\fB2H\fR\(cq.
+.TP
+.BR \-\-override_frequency\ \fIOVERRIDE_FREQUENCY\  [ \fIOVERRIDE_FREQUENCY \ ...]
+Override
+.B SpectrometerFrequency
+field with input(s).
+Input in MHz.
+.TP
+.BR \-\-override_dwelltime\ \fIOVERRIDE_DWELLTIME
+Override dwell time field with input.
+Input in seconds.
+.TP
+.B \-\-anon
+Create file without sensitive metadata.
+For greater control use
+.BR spec2nii\-anon (1).
+.TP
+.B \fB\-\-verbose
+.SH "SEE\ ALSO"
+.BR spec2nii (1)
+.P
+.BR spec2nii\-auto (1),
+.\" .BR spec2nii\-twix (1),
+.BR spec2nii\-dicom (1),
+.BR spec2nii\-rda (1),
+.BR spec2nii\-uih (1),
+.BR spec2nii\-philips (1),
+.BR spec2nii\-philips_dl (1),
+.BR spec2nii\-philips_dcm (1),
+.BR spec2nii\-ge (1),
+.BR spec2nii\-text (1),
+.BR spec2nii\-jmrui (1),
+.BR spec2nii\-raw (1),
+.BR spec2nii\-bruker (1),
+.BR spec2nii\-varian (1),
+.BR spec2nii\-anon (1),
+.BR spec2nii\-dump (1),
+.BR spec2nii\-extract (1),
+.BR spec2nii\-insert (1)

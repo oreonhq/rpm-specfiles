@@ -1,0 +1,14 @@
+========================================================================
+User Information for the Fedora **terminus-fonts** package
+========================================================================
+
+For most contemporary software, the **terminus-fonts** package will
+provide the Terminus font in the modern OpenType bitmap format.
+
+However, as of 2020-04, there is still software in widespread use
+which cannot use fonts in OpenType bitmap format like e.g. GNU Emacs
+26.
+
+If you want to use one of these software packges, you need to install
+the **terminus-fonts-legacy-x11** package to install the Terminus font
+in the legacy PCF format.

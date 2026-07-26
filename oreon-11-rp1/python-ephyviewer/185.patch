@@ -1,0 +1,80 @@
+From 9ed49b6f9b14f62f051b136ee22052acd1ae2181 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sat, 18 May 2024 14:58:55 +0200
+Subject: [PATCH] Replace deprecated matplotlib get_cmap()
+
+The function has been removed from matplotlib >= 3.9.
+Fixes #184
+---
+ ephyviewer/base.py               | 2 +-
+ ephyviewer/datasource/epochs.py  | 2 +-
+ ephyviewer/datasource/signals.py | 2 +-
+ ephyviewer/spectrogramviewer.py  | 2 +-
+ ephyviewer/timefreqviewer.py     | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/ephyviewer/base.py b/ephyviewer/base.py
+index 6888f22..e879916 100644
+--- a/ephyviewer/base.py
++++ b/ephyviewer/base.py
+@@ -324,7 +324,7 @@ def on_automatic_color(self, cmap_name = None):
+         cmap_name = str(self.combo_cmap.currentText())
+         n = np.sum(self.selected)
+         if n==0: return
+-        cmap = matplotlib.cm.get_cmap(cmap_name , n)
++        cmap = matplotlib.colormaps[cmap_name]
+ 
+         self.viewer.by_channel_params.blockSignals(True)
+         for i, c in enumerate(np.nonzero(self.selected)[0]):
+diff --git a/ephyviewer/datasource/epochs.py b/ephyviewer/datasource/epochs.py
+index 27e4da8..8c7a3bf 100644
+--- a/ephyviewer/datasource/epochs.py
++++ b/ephyviewer/datasource/epochs.py
+@@ -86,7 +86,7 @@ def __init__(self, epoch=None, possible_labels=[], color_labels=None, channel_na
+         # TODO: colors should be managed directly by EpochEncoder
+         if color_labels is None:
+             n = len(self.possible_labels)
+-            cmap = matplotlib.cm.get_cmap('Dark2' , n)
++            cmap = matplotlib.colormaps['Dark2']
+             color_labels = [ matplotlib.colors.ColorConverter().to_rgb(cmap(i)) for i in  range(n)]
+             color_labels = (np.array(color_labels)*255).astype(int)
+             color_labels = color_labels.tolist()
+diff --git a/ephyviewer/datasource/signals.py b/ephyviewer/datasource/signals.py
+index 0540bf7..e28bfc0 100644
+--- a/ephyviewer/datasource/signals.py
++++ b/ephyviewer/datasource/signals.py
+@@ -85,7 +85,7 @@ def __init__(self, signals, sample_rate, t_start, scatter_indexes, scatter_chann
+         if self.scatter_colors is None:
+             self.scatter_colors = {}
+             n = len(self._labels)
+-            colors = matplotlib.cm.get_cmap('Accent', n)
++            colors = matplotlib.colormaps['Accent']
+             for i,k in enumerate(self._labels):
+                 self.scatter_colors[k] = matplotlib.colors.to_hex(colors(i))
+ 
+diff --git a/ephyviewer/spectrogramviewer.py b/ephyviewer/spectrogramviewer.py
+index c8914dd..207b189 100644
+--- a/ephyviewer/spectrogramviewer.py
++++ b/ephyviewer/spectrogramviewer.py
+@@ -293,7 +293,7 @@ def create_grid(self):
+     def change_color_scale(self):
+         N = 512
+         cmap_name = self.params['colormap']
+-        cmap = matplotlib.cm.get_cmap(cmap_name , N)
++        cmap = matplotlib.colormaps[cmap_name]
+ 
+         lut = []
+         for i in range(N):
+diff --git a/ephyviewer/timefreqviewer.py b/ephyviewer/timefreqviewer.py
+index 204e395..c832cf2 100644
+--- a/ephyviewer/timefreqviewer.py
++++ b/ephyviewer/timefreqviewer.py
+@@ -377,7 +377,7 @@ def initialize_time_freq(self):
+     def change_color_scale(self):
+         N = 512
+         cmap_name = self.params['colormap']
+-        cmap = matplotlib.cm.get_cmap(cmap_name , N)
++        cmap = matplotlib.colormaps[cmap_name]
+ 
+         lut = []
+         for i in range(N):

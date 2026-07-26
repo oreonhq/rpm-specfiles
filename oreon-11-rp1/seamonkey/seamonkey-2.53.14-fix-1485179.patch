@@ -1,0 +1,16 @@
+#
+#  Fix changes from 1485179 part 2, by adding yet another masking to 3 bits
+#  (as commented in the code a little above, regarding the bug 1508921)
+#
+
+--- mozilla/layout/tables/nsTableFrame.cpp.orig	2022-08-24 22:55:12.000000000 +0300
++++ mozilla/layout/tables/nsTableFrame.cpp	2022-09-27 20:44:38.693506472 +0300
+@@ -5366,7 +5366,7 @@ BCCornerInfo::Update(mozilla::LogicalSid
+     bool existingWins = false;
+     tempBorder = CompareBorders(CELL_CORNER, oldBorder, aBorder, isInline, &existingWins);
+ 
+-    ownerElem  = tempBorder.owner;
++    ownerElem  = tempBorder.owner & 0x7;
+     ownerStyle = tempBorder.style;
+     ownerWidth = tempBorder.width;
+     ownerColor = tempBorder.color;

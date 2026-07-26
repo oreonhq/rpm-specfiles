@@ -1,0 +1,13 @@
+diff -up tex/latex/mentis/mentis.cls.fixme tex/latex/mentis/mentis.cls
+--- tex/latex/mentis/mentis.cls.fixme	2020-05-11 11:44:12.168603751 -0400
++++ tex/latex/mentis/mentis.cls	2020-05-11 11:44:31.344281400 -0400
+@@ -40,7 +40,8 @@
+ %%%    \end{macrocode}
+ \RequirePackage{xspace}
+ \RequirePackage{textcomp}
+-\RequirePackage{scrpage2}
++\RequirePackage{scrlfile}
++\ReplacePackage{scrpage2}{scrlayer-scrpage}
+ \RequirePackage{jurabib}
+ %%%    \begin{macrocode}
+ %%\RequirePackage{picinpar}

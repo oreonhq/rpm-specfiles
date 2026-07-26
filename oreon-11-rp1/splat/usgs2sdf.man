@@ -1,0 +1,28 @@
+.\" Man page for usgs2sdf
+.\" Created by copying text from utils/README  
+.TH man 1 "09 December 2007" "1.0" "usgs2sdf"
+.SH NAME
+usgs2sdf \- Generate SPLAT Data Files (SDFs) from uncompressed delimited Digital Elevation Model Data from the US Geological Survey
+Designated Places
+.SH SYNOPSIS
+.B usgs2sdf
+file
+.SH DESCRIPTION
+The
+.B usgs2sdf
+utility takes as an argument the name of an uncompressed delimited Digital Elevation Model Data (DEM) downloaded from the US Geological Survey, and generates a SPLAT Data File (SDF) compatible with SPLAT! Software. 
+.SH EXAMPLES
+usgs2sdf wilmington-e
+.SH FILES
+.P 
+.I /usr/bin/usgs2sdf
+.SH SEE ALSO
+.BR splat (1), 
+.SH BUGS
+No known bugs at this time. 
+.SH AUTHOR
+.nf
+Sindre Pedersen Bjordal (foolish@guezz.net)
+.fi
+.SH HISTORY
+2007 \- Text copyed from README

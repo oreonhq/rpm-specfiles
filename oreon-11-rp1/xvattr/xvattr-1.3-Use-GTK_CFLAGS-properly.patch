@@ -1,0 +1,31 @@
+From c1c1e7b0d0fccaa9b3ea9284c4e09fdc0058a1ec Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 26 Oct 2015 13:49:30 +0100
+Subject: [PATCH] Use GTK_CFLAGS properly
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Do not reset CFLAGS and do do it for gxvattr only.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 7d7ba22..81bb95a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,7 +6,7 @@ xvattr_SOURCES = xvattr.c
+ xvattr_LDADD = $(X_LIBS) $(X_PRE_LIBS) $(X_EXTRA_LIBS) -lX11 -lXext @LIBOBJS@
+ 
+ gxvattr_SOURCES = gxvattr.c
+-CFLAGS = @GTK_CFLAGS@
++gxvattr_CPPFLAGS = @CPPFLAGS@ @GTK_CFLAGS@
+ gxvattr_LDADD = @GTK_LIBS@ $(X_LIBS) $(X_PRE_LIBS) $(X_EXTRA_LIBS) -lX11 -lXext
+ noinst_HEADERS = getopt.h
+ 
+-- 
+2.4.3
+

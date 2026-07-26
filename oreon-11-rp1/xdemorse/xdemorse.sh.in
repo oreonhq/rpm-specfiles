@@ -1,0 +1,17 @@
+#!/bin/sh
+#Wrapper script for xdemorse to ensure that user configuration is present
+xdemorsebin="/usr/libexec/xdemorse-bin"
+[ ! -d ~/.xdemorse ] &&	mkdir -p ~/.xdemorse
+#check if user configuration is present
+if [ ! -e ~/.xdemorse/xdemorserc ]
+then
+echo "Creating user configuration file"
+cp /usr/share/xdemorse/xdemorserc ~/.xdemorse/
+fi
+if [ ! -e ~/.xdemorse/xdemorse.glade ]
+then
+cp /usr/share/xdemorse/xdemorse.glade ~/.xdemorse/
+fi
+#launch xdemorse
+echo "Please configure your serial device in the .xdemorserc file in your users home directory"
+$xdemorsebin

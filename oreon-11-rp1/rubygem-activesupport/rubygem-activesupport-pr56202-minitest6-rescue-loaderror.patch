@@ -1,0 +1,12 @@
+--- activesupport-8.0.3/lib/active_support/testing/autorun.rb.orig	2025-12-30 16:47:16.780346179 +0900
++++ activesupport-8.0.3/lib/active_support/testing/autorun.rb	2025-12-30 16:52:01.482400639 +0900
+@@ -8,5 +8,8 @@ require "minitest"
+ # used in some cases. This conditional can probably go after the bump
+ # is complete? ... but could still fail for developers working w/
+ # multiple versions installed.
+-Minitest.load :rails if Minitest.respond_to? :load
++begin
++  Minitest.load :rails if Minitest.respond_to? :load
++rescue LoadError
++end
+ Minitest.autorun

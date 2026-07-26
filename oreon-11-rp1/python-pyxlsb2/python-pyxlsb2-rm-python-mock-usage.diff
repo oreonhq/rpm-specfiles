@@ -1,0 +1,19 @@
+--- a/test/formula_test.py
++++ b/test/formula_test.py
+@@ -1,5 +1,5 @@
+ import unittest
+-from mock import Mock
++from unittest.mock import Mock
+ from pyxlsb2.formula import Formula
+ from pyxlsb2.ptgs import *
+ 
+--- a/test/worksheet_test.py
++++ b/test/worksheet_test.py
+@@ -1,6 +1,6 @@
+ import os.path
+ import unittest
+-from mock import Mock
++from unittest.mock import Mock
+ from pyxlsb2.worksheet import Worksheet
+ 
+ class WorksheetTestCase(unittest.TestCase):

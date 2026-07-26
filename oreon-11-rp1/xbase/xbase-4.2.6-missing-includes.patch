@@ -1,0 +1,19 @@
+diff -up xbase64-4.2.6/build/linux64/CMakeLists.txt.missing-includes xbase64-4.2.6/build/linux64/CMakeLists.txt
+--- xbase64-4.2.6/build/linux64/CMakeLists.txt.missing-includes	2025-11-06 12:25:44.626950995 -0500
++++ xbase64-4.2.6/build/linux64/CMakeLists.txt	2025-11-06 12:27:13.712443288 -0500
+@@ -889,6 +889,7 @@ ENDIF( XB_UTILS_SUPPORT )
+ 
+ install (FILES ${PROJECT_SOURCE_DIR}/include/xbase.h
+                ${PROJECT_SOURCE_DIR}/include/xbbcd.h
++               ${PROJECT_SOURCE_DIR}/include/xbbit.h
+                ${PROJECT_SOURCE_DIR}/include/xbblkread.h
+                ${PROJECT_SOURCE_DIR}/include/xbblob.h
+                ${PROJECT_BINARY_DIR}/include/xbconfig.h
+@@ -906,6 +907,7 @@ install (FILES ${PROJECT_SOURCE_DIR}/inc
+                ${PROJECT_SOURCE_DIR}/include/xblnknod.h
+                ${PROJECT_SOURCE_DIR}/include/xblog.h
+                ${PROJECT_SOURCE_DIR}/include/xbmemo.h
++               ${PROJECT_SOURCE_DIR}/include/xbrelate.h
+                ${PROJECT_SOURCE_DIR}/include/xbretcod.h
+                ${PROJECT_SOURCE_DIR}/include/xbsql.h
+                ${PROJECT_SOURCE_DIR}/include/xbstring.h

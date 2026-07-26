@@ -1,0 +1,24 @@
+From 9a0b9fa002acbf500e300e3cd2fbef3088506632 Mon Sep 17 00:00:00 2001
+From: Adrian Sampson <adrian@radbox.org>
+Date: Sat, 23 Sep 2023 16:44:46 -0400
+Subject: [PATCH 4/5] Changelog for #72
+
+---
+ docs/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/docs/index.rst b/docs/index.rst
+index 8d484dd..f9b892d 100644
+--- a/docs/index.rst
++++ b/docs/index.rst
+@@ -140,6 +140,7 @@ v0.13.0
+ 
+ - Add a mapping compatible with Plex and ffmpeg for the "original date"
+   fields.
++- Remove an unnecessary dependency on `six`.
+ 
+ v0.12.0
+ '''''''
+-- 
+2.47.0
+

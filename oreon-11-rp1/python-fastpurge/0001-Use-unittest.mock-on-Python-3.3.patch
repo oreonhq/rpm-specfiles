@@ -1,0 +1,59 @@
+From bf3df122f33401b6b1ecc8b4e9d86be559e2910a Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Mon, 23 Jun 2025 18:20:50 -0500
+Subject: [PATCH] Use unittest.mock on Python 3.3+
+
+Mock is part of the standard library since Python 3.3.  Use it when
+available, falling back to the mock from PyPI if necessary.
+---
+ test-requirements.txt | 2 +-
+ tests/test_purge.py   | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/test-requirements.txt b/test-requirements.txt
+index 9d8c11c..603325c 100644
+--- a/test-requirements.txt
++++ b/test-requirements.txt
+@@ -1,5 +1,5 @@
+ pytest
+ requests-mock
+-mock
++mock;python_version < '3.3'
+ bandit==1.7.5;python_version > '3'
+ responses
+\ No newline at end of file
+diff --git a/tests/test_purge.py b/tests/test_purge.py
+index b11ef19..8d40789 100644
+--- a/tests/test_purge.py
++++ b/tests/test_purge.py
+@@ -1,6 +1,5 @@
+ import pytest
+ import requests_mock
+-import mock
+ import responses
+ 
+ try:
+@@ -8,6 +7,11 @@ try:
+ except ImportError:
+     from monotonic import monotonic
+ 
++try:
++    from unittest.mock import patch
++except ImportError:
++    from mock import patch
++
+ from fastpurge import FastPurgeClient, FastPurgeError
+ 
+ # pylint: disable=unused-argument
+@@ -41,7 +45,7 @@ def requests_mocker():
+ def no_thread_retries():
+     """Suppress retries for the duration of this fixture."""
+ 
+-    with mock.patch('more_executors.retry.ExceptionRetryPolicy') as policy_class:
++    with patch('more_executors.retry.ExceptionRetryPolicy') as policy_class:
+         policy = policy_class.return_value
+         policy.should_retry.return_value = False
+         policy.sleep_time.return_value = 0.1
+-- 
+2.49.0
+

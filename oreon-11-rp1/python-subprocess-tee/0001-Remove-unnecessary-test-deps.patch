@@ -1,0 +1,26 @@
+From 06f4cc08cdbfef3d4e7754406e82f6e663db9288 Mon Sep 17 00:00:00 2001
+From: Maxwell G <gotmax@e.email>
+Date: Sat, 17 Dec 2022 12:47:14 -0600
+Subject: [PATCH] Remove unnecessary test deps
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 9e852e8..c3d19b2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -55,8 +55,4 @@ changelog = "https://github.com/pycontribs/subprocess-tee/releases"
+ test =[
+-    "enrich>=1.2.6",
+-    "molecule>=3.4.0",  # ansible is needed but no direct imports are made
+-    "pytest-cov>=2.12.1",
+-    "pytest-plus>=0.2",
+     "pytest-xdist>=2.3.0",
+     "pytest>=6.2.5",
+ ]
+@@ -79,3 +77,4 @@ warn_unused_configs = true
+ 
+ [tool.setuptools_scm]
+ local_scheme = "no-local-version"
++
+-- 
+2.38.1
+

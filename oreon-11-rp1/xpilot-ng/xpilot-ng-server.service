@@ -1,0 +1,11 @@
+[Unit]
+Description=xpilot-ng-server supports playing networked multi-player games
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/xpilot-ng/xpilot-ng-server-cmdline-opts
+ExecStart=/usr/bin/xpilot-ng-server $XPILOTD_OPTIONS
+
+[Install]
+WantedBy=multi-user.target

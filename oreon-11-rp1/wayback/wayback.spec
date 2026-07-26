@@ -1,0 +1,86 @@
+%global source0_hash fbe7b5f7fa68bccde2c3120ad05b3896380a2be0037b62e64fe6905573842d27
+
+%global xwlver 24.1
+
+# Allow wayback to stand as an X11 server
+%bcond xserver 0
+
+Name:           wayback
+Version:        0.3
+Release:        %autorelease
+Summary:        X11 compatibility layer built on wlroots and Xwayland
+
+License:        MIT
+URL:            https://gitlab.freedesktop.org/wayback/wayback
+Source:         %{url}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# fix wayland-session -sesscmd
+# https://gitlab.freedesktop.org/wayback/wayback/-/merge_requests/89
+Patch:          0001-wayback-session-fix-sesscmd-handling.patch
+
+BuildRequires:  meson
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  pkgconfig(wayland-server)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-cursor)
+BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(wayland-protocols) >= 1.14
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xwayland) >= %{xwlver}
+BuildRequires:  (pkgconfig(wlroots-0.19) or pkgconfig(wlroots-0.18))
+BuildRequires:  pkgconfig(scdoc)
+
+Requires:       xorg-x11-server-Xwayland%{?_isa} >= %{xwlver}
+
+%description
+%{summary}.
+
+%files
+%license LICENSE
+%doc README.md
+%{_bindir}/Xwayback
+%{_bindir}/wayback-*
+%{_libexecdir}/wayback-*
+%{_mandir}/man1/*wayback*.1*
+
+%dnl ----------------------------------------------------------------
+%if %{with xserver}
+
+%package        xserver
+Summary:        %{name} shim to provide /usr/bin/X
+Requires:       %{name} = %{version}-%{release}
+Provides:       Xserver
+Conflicts:      xorg-x11-server-Xorg
+
+%description    xserver
+This package provides the shim links for %{name} to be automatically
+used as the Xserver. This ensures that %{name} is used as the system
+provider of the Xserver.
+
+%files xserver
+%{_bindir}/X
+
+%endif
+%dnl ----------------------------------------------------------------
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -S git_am
+
+%conf
+%meson
+
+%build
+%meson_build
+
+%install
+%meson_install
+
+%if %{with xserver}
+# Allow Xwayback to be called as X
+ln -sr %{buildroot}%{_bindir}/Xwayback %{buildroot}%{_bindir}/X
+%endif
+
+%changelog
+%autochangelog

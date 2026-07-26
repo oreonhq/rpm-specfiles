@@ -1,0 +1,75 @@
+diff --git a/ExternalPrograms/Controller/Makefile b/ExternalPrograms/Controller/Makefile
+index ff747fad..19fc7065 100644
+--- a/ExternalPrograms/Controller/Makefile
++++ b/ExternalPrograms/Controller/Makefile
+@@ -1,5 +1,5 @@
+ controller: main.o Controller.o ControllerUI.o
+-	gcc -o controller *.o `fltk-config --ldflags` -lasound -lpthread -lm -lstdc++
++	gcc $(LDFLAGS) -o controller *.o `fltk-config --ldflags` -lasound -lpthread -lm -lstdc++
+ 
+ ControllerUI.h: ControllerUI.fl
+ 	fluid -c ControllerUI.fl
+@@ -8,13 +8,13 @@ ControllerUI.cxx: ControllerUI.h
+ 	echo ControllerUI.cxx
+ 
+ ControllerUI.o: ControllerUI.cxx ControllerUI.h
+-	gcc `fltk-config --cflags` -c ControllerUI.cxx -o ControllerUI.o
++	gcc $(CXXFLAGS) `fltk-config --cflags` -c ControllerUI.cxx -o ControllerUI.o
+ 
+ Controller.o: Controller.C Controller.h
+-	gcc `fltk-config --cflags` -c Controller.C -o Controller.o
++	gcc $(CXXFLAGS) `fltk-config --cflags` -c Controller.C -o Controller.o
+ 
+ main.o: main.C Controller.h ControllerUI.h
+-	gcc `fltk-config --cflags` -c main.C -o main.o
++	gcc $(CXXFLAGS) `fltk-config --cflags` -c main.C -o main.o
+ 
+ clean:
+ 	rm -f *.o controller ControllerUI.cxx ControllerUI.h 
+diff --git a/ExternalPrograms/Spliter/Makefile b/ExternalPrograms/Spliter/Makefile
+index c98fc412..c675f4a4 100644
+--- a/ExternalPrograms/Spliter/Makefile
++++ b/ExternalPrograms/Spliter/Makefile
+@@ -1,5 +1,5 @@
+ spliter: main.o Spliter.o SpliterUI.o
+-	gcc -o spliter *.o `fltk-config --ldflags` -lasound -lstdc++
++	gcc $(LDFLAGS) -o spliter *.o `fltk-config --ldflags` -lasound -lstdc++ -lpthread
+ 
+ SpliterUI.h: SpliterUI.fl
+ 	fluid -c SpliterUI.fl
+@@ -8,13 +8,13 @@ SpliterUI.cxx: SpliterUI.h
+ 	echo SpliterUI.cxx
+ 
+ SpliterUI.o: SpliterUI.cxx SpliterUI.h
+-	gcc -g `fltk-config --cflags` -c SpliterUI.cxx -o SpliterUI.o
++	gcc $(CXXFLAGS) -g `fltk-config --cflags` -c SpliterUI.cxx -o SpliterUI.o
+ 
+ Spliter.o: Spliter.C Spliter.h
+-	gcc -g `fltk-config --cflags` -c Spliter.C -o Spliter.o
++	gcc $(CXXFLAGS) -g `fltk-config --cflags` -c Spliter.C -o Spliter.o
+ 
+ main.o: main.C Spliter.h SpliterUI.h
+-	gcc -g `fltk-config --cflags` -c main.C -o main.o
++	gcc $(CXXFLAGS) -g `fltk-config --cflags` -c main.C -o main.o
+ 
+ clean:
+ 	rm -f *.o spliter SpliterUI.cxx SpliterUI.h 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8348df70..17c1b29d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -393,12 +393,12 @@ endif()
+ 
+ if (BuildForDebug)
+ 	set (CMAKE_BUILD_TYPE "Debug")
+-	set (CMAKE_CXX_FLAGS_DEBUG ${BuildOptionsDebug})
++	set (CMAKE_CXX_FLAGS_DEBUG "${BuildOptionsDebug} ${CMAKE_CXX_FLAGS}")
+ 	message (STATUS "Building for ${CMAKE_BUILD_TYPE}, flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+ else (BuildForDebug)
+ 	set (CMAKE_BUILD_TYPE "Release")
+ 	
+-	set (CMAKE_CXX_FLAGS_RELEASE ${BuildOptionsBasic})
++	set (CMAKE_CXX_FLAGS_RELEASE "${BuildOptionsDebug} ${CMAKE_CXX_FLAGS}")
+ 
+ 	if (BuildForAMD_X86_64)
+ 		set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${BuildOptions_x86_64AMD}")

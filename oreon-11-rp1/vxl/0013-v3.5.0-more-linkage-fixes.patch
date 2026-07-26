@@ -1,0 +1,25 @@
+From 2757969a8b0e55c2310d50ef4764d3f81ce1d748 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 24 Oct 2023 13:50:37 +0100
+Subject: [PATCH 13/18] v3.5.0: more linkage fixes
+
+---
+ contrib/brl/bpro/core/vil_pro/tests/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/contrib/brl/bpro/core/vil_pro/tests/CMakeLists.txt b/contrib/brl/bpro/core/vil_pro/tests/CMakeLists.txt
+index 66d543b5c9..0ffff761fd 100644
+--- a/contrib/brl/bpro/core/vil_pro/tests/CMakeLists.txt
++++ b/contrib/brl/bpro/core/vil_pro/tests/CMakeLists.txt
+@@ -8,7 +8,7 @@ if(EXPAT_FOUND)
+   test_vil_crop_image_process.cxx
+  )
+ 
+-target_link_libraries(vil_pro_test_all ${VXL_LIB_PREFIX}testlib vil_pro bprb sdet ${VXL_LIB_PREFIX}vil expat expatpp)
++target_link_libraries(vil_pro_test_all ${VXL_LIB_PREFIX}testlib vil_pro bprb brdb sdet ${VXL_LIB_PREFIX}vil expat expatpp)
+ 
+ add_test( NAME bpro_vil_test_convert_to_n_planes_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_convert_to_n_planes_process )
+ add_test( NAME bpro_vil_test_crop_image_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_crop_image_process )
+-- 
+2.46.1
+

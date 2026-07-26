@@ -1,0 +1,21 @@
+From 1cd4802de515c422fd1ed8957a69102c9caeca70 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Julian=20R=C3=BCth?= <julian.rueth@fsfe.org>
+Date: Thu, 19 Aug 2021 19:05:07 +0200
+Subject: [PATCH] include <limits> for std::numeric_limits
+
+---
+ include/rx/ranges.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/rx/ranges.hpp b/include/rx/ranges.hpp
+index b18b334..9914aec 100644
+--- a/include/rx/ranges.hpp
++++ b/include/rx/ranges.hpp
+@@ -4,6 +4,7 @@
+ #include <algorithm>
+ #include <array>
+ #include <list>
++#include <limits>
+ #include <map>
+ #include <set>
+ #include <type_traits>

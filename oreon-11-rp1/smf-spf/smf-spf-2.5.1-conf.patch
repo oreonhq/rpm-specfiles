@@ -1,0 +1,11 @@
+diff -ru smf-spf-2.5.1/smf-spf.conf smf-spf-2.5.1.new/smf-spf.conf
+--- smf-spf-2.5.1/smf-spf.conf	2020-11-12 22:44:54.000000000 +0100
++++ smf-spf-2.5.1.new/smf-spf.conf	2020-11-19 17:30:29.959048072 +0100
+@@ -103,6 +103,7 @@
+ # Default: on
+ #
+ #RefuseFail	on	# (on|off)
++RefuseFail	off
+ 
+ # When refusing e-Mail messages use a 450 SMTP code
+ #

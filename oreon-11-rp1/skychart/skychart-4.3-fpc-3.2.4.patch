@@ -1,0 +1,15 @@
+diff -rU4 skychart-4.3-4974-src--orig/skychart/cu_tz.pas skychart-4.3-4974-src--patched/skychart/cu_tz.pas
+--- skychart-4.3-4974-src--orig/skychart/cu_tz.pas	2025-03-03 03:30:14.000000000 +0100
++++ skychart-4.3-4974-src--patched/skychart/cu_tz.pas	2025-08-15 10:32:52.001369952 +0200
+@@ -41,8 +41,11 @@
+   Windows,
+   {$endif}
+   {$ifdef unix}
+   unixutil,
++    {$IF FPC_FULLVERSION > 30202} // FPC 3.2.4 moves TzSeconds from UnixUtil to Unix
++      unix,
++	{$ENDIF}
+   {$endif}
+   Classes, SysUtils, Math;
+ 
+ type

@@ -1,0 +1,17 @@
+sscanf needs <stdio.h> for the prototype.  Submitted upstream here:
+
+  <https://support.zabbix.com/browse/ZBX-21946>
+
+diff --git a/configure.ac b/configure.ac
+index 0588004f9f89cdd5..bbc60e3a28369f9f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -952,6 +952,7 @@ dnl FreeBSD 4.x does not support %llu
+ AC_MSG_CHECKING(for long long format)
+ AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ #include <sys/types.h>
++#include <stdio.h>
+ int main()
+ {
+         uint64_t i;
+

@@ -1,0 +1,40 @@
+Description: Remove the data_files from the setup.cfg file since the
+ Debian package doesn't need the colcon_terminal_notifier.app.
+Author: Dirk Thomas <web@dirk-thomas.net>
+
+--- a/setup.cfg	2022-08-31 09:33:23.000000000 -0700
++++ b/setup.cfg	2022-08-31 09:55:39.744619832 -0700
+@@ -49,19 +49,20 @@
+   pytest-cov
+   scspell3k>=2.2
+ 
+-[options.data_files]
+-# distutils replaces dashes in keys with underscores
+-share/colcon_notification/colcon_terminal_notifier.app/Contents =
+-    colcon_terminal_notifier.app/Contents/Info.plist
+-    colcon_terminal_notifier.app/Contents/PkgInfo
+-share/colcon_notification/colcon_terminal_notifier.app/Contents/MacOS =
+-    colcon_terminal_notifier.app/Contents/MacOS/colcon_terminal_notifier
+-share/colcon_notification/colcon_terminal_notifier.app/Contents/Resources =
+-    colcon_terminal_notifier.app/Contents/Resources/colcon.icns
+-share/colcon_notification/colcon_terminal_notifier.app/Contents/Resources/en.lproj =
+-    colcon_terminal_notifier.app/Contents/Resources/en.lproj/Credits.rtf
+-    colcon_terminal_notifier.app/Contents/Resources/en.lproj/InfoPlist.strings
+-    colcon_terminal_notifier.app/Contents/Resources/en.lproj/MainMenu.nib
++# the Fedora package doesn't need the colcon_terminal_notifier.app
++# [options.data_files]
++# # distutils replaces dashes in keys with underscores
++# share/colcon_notification/colcon_terminal_notifier.app/Contents =
++#     colcon_terminal_notifier.app/Contents/Info.plist
++#     colcon_terminal_notifier.app/Contents/PkgInfo
++# share/colcon_notification/colcon_terminal_notifier.app/Contents/MacOS =
++#     colcon_terminal_notifier.app/Contents/MacOS/colcon_terminal_notifier
++# share/colcon_notification/colcon_terminal_notifier.app/Contents/Resources =
++#     colcon_terminal_notifier.app/Contents/Resources/colcon.icns
++# share/colcon_notification/colcon_terminal_notifier.app/Contents/Resources/en.lproj =
++#     colcon_terminal_notifier.app/Contents/Resources/en.lproj/Credits.rtf
++#     colcon_terminal_notifier.app/Contents/Resources/en.lproj/InfoPlist.strings
++#     colcon_terminal_notifier.app/Contents/Resources/en.lproj/MainMenu.nib
+ 
+ [tool:pytest]
+ filterwarnings =

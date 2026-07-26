@@ -1,0 +1,32 @@
+From 89fac7a09ffb8d24db67e1135f0539f6eef8c7fd Mon Sep 17 00:00:00 2001
+From: Susi Lehtola <susi.lehtola@gmail.com>
+Date: Wed, 5 Aug 2020 19:52:06 +0300
+Subject: [PATCH] Add missing sanity checks for environment variables
+
+Signed-off-by: Susi Lehtola <susi.lehtola@gmail.com>
+---
+ src/type/environment.f90 | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/type/environment.f90 b/src/type/environment.f90
+index 50fe16e1..46c5260e 100644
+--- a/src/type/environment.f90
++++ b/src/type/environment.f90
+@@ -135,8 +135,17 @@ subroutine initEnvironment(self, strict)
+ 
+    call rdarg(0, self%whoami, err)
+    call rdvar('HOSTNAME', self%hostname, err)
++   if (err /= 0 .or. len(self%hostname) <= 0) then
++     call raise('E',"Parsing HOSTNAME failed!",1)
++   end if
+    call rdvar('HOME', self%home, err)
++   if (err /= 0 .or. len(self%home) <= 0) then
++     call raise('E',"Parsing HOME failed!",1)
++   end if
+    call rdvar('PATH', self%path, err)
++   if (err /= 0 .or. len(self%path) <= 0) then
++     call raise('E',"Parsing PATH failed!",1)
++   end if
+    call rdvar('XTBHOME', self%xtbhome, err)
+    if (.not.allocated(self%xtbhome)) self%xtbhome = ''
+    if (err /= 0 .or. len(self%xtbhome) <= 0) then

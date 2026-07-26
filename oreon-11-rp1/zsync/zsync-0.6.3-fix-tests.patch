@@ -1,0 +1,21 @@
+From a5cb28f923dd3cfdeb65e2930dd1faa727c2abf8 Mon Sep 17 00:00:00 2001
+From: Colin Phipps <cph@moria.org.uk>
+Date: Thu, 29 May 2025 08:33:11 +0100
+Subject: [PATCH] Update check-zsyncmake for changes in 208ef06.
+
+---
+ c/check-zsyncmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/c/check-zsyncmake b/c/check-zsyncmake
+index 3006230..08791e1 100755
+--- a/check-zsyncmake
++++ b/check-zsyncmake
+@@ -4,6 +4,6 @@ ${top_builddir-.}/zsyncmake -u foo -f foo ${srcdir-.}/INSTALL
+ 
+ # Note TAB required for Solaris cksum
+ x=`perl -pe 's/^(zsync:).*$/$1 XXX/; s/^(MTime:)(.*)$/my ($x, $y) = ($1, $2); $y =~ s![a-zA-Z0-9]!_!g; "$x$y"/e;' foo.zsync | tee foo.tr.zsync | cksum | sed -e 's/[ 	][0-9].*//'`
+-[ $x = 4103379992 ]
++[ $x = 3456223344 ]
+ rm foo.zsync
+ 

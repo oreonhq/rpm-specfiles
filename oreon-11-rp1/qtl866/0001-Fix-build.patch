@@ -1,0 +1,31 @@
+From 6eb0fd70ae4a256e196c9ba8975d9f837e89a094 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 29 Oct 2016 14:05:28 +0200
+Subject: [PATCH] Fix build
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+mainwindow.cpp: In member function ‘void MainWindow::on_editbtn_clicked()’:
+mainwindow.cpp:260:21: error: ‘settings’ was not declared in this scope
+     QString cmdline=settings->value("options/editcmd","binhexedit -r").toString() +" " + ui->filename->text();
+                     ^~~~~~~~
+Makefile:396: recipe for target 'mainwindow.o' failed
+make: *** [mainwindow.o] Error 1
+---
+ mainwindow.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mainwindow.cpp b/mainwindow.cpp
+index 4956d92..11026cb 100644
+--- a/mainwindow.cpp
++++ b/mainwindow.cpp
+@@ -257,6 +257,7 @@ void MainWindow::on_action_Options_triggered()
+ 
+ void MainWindow::on_editbtn_clicked()
+ {
+-    QString cmdline=settings->value("options/editcmd","binhexedit -r").toString() +" " + ui->filename->text();
++    QSettings settings;
++    QString cmdline=settings.value("options/editcmd","binhexedit -r").toString() +" " + ui->filename->text();
+     system(cmdline.toLatin1());
+ }

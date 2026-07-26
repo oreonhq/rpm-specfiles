@@ -1,0 +1,12 @@
+Index: scim-hangul-0.4.0/src/scim_hangul_imengine.cpp
+===================================================================
+--- scim-hangul-0.4.0.orig/src/scim_hangul_imengine.cpp
++++ scim-hangul-0.4.0/src/scim_hangul_imengine.cpp
+@@ -34,6 +34,7 @@
+ #endif
+ 
+ #include <cstring>
++#include <unistd.h>
+ #include <scim.h>
+ #include "scim_hangul_imengine.h"
+ 

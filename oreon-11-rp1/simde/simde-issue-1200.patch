@@ -1,0 +1,166 @@
+From a891834ff66c80bb9e0491d6be92c7ab7ed6362f Mon Sep 17 00:00:00 2001
+From: "Michael R. Crusoe" <michael.crusoe@gmail.com>
+Date: Fri, 13 Sep 2024 11:48:28 +0200
+Subject: [PATCH] arm crc32: define SIMDE_ARCH_ARM_CRC32 and consistently use
+ it
+
+---
+ simde/arm/neon/crc32.h | 21 +++++++++++++--------
+ simde/simde-arch.h     |  3 +++
+ simde/x86/sse4.2.h     | 11 ++++++-----
+ 3 files changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/simde/arm/neon/crc32.h b/simde/arm/neon/crc32.h
+index 1223190c1..53ae13983 100644
+--- a/simde/arm/neon/crc32.h
++++ b/simde/arm/neon/crc32.h
+@@ -29,6 +29,11 @@
+ 
+ #include "types.h"
+ 
++#if defined(__ARM_ACLE) || (defined(__GNUC__) && defined(SIMDE_ARCH_ARM_CRC32))
++  #include <arm_acle.h>
++#endif
++//                         ^^ Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70974
++
+ HEDLEY_DIAGNOSTIC_PUSH
+ SIMDE_DISABLE_UNWANTED_DIAGNOSTICS
+ SIMDE_BEGIN_DECLS_
+@@ -55,7 +60,7 @@ uint32_t simde_crc32_eor_mask(uint32_t a, uint32_t b, uint32_t mask) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32b(uint32_t a, uint8_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32b(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -81,7 +86,7 @@ simde___crc32b(uint32_t a, uint8_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32h(uint32_t a, uint16_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32h(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -107,7 +112,7 @@ simde___crc32h(uint32_t a, uint16_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32w(uint32_t a, uint32_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32w(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -132,7 +137,7 @@ simde___crc32w(uint32_t a, uint32_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32d(uint32_t a, uint64_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32d(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -167,7 +172,7 @@ simde___crc32d(uint32_t a, uint64_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32cb(uint32_t a, uint8_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32cb(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -193,7 +198,7 @@ simde___crc32cb(uint32_t a, uint8_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32ch(uint32_t a, uint16_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32ch(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -219,7 +224,7 @@ simde___crc32ch(uint32_t a, uint16_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32cw(uint32_t a, uint32_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32cw(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+@@ -244,7 +249,7 @@ simde___crc32cw(uint32_t a, uint32_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ uint32_t
+ simde___crc32cd(uint32_t a, uint64_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_ACLE)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+     return __crc32cd(a, b);
+   #else
+     uint32_t r_acc = HEDLEY_STATIC_CAST(uint32_t, simde_crc32_reverseBits(a, 32));
+diff --git a/simde/simde-arch.h b/simde/simde-arch.h
+index 306974c17..2f12e042a 100644
+--- a/simde/simde-arch.h
++++ b/simde/simde-arch.h
+@@ -130,6 +130,9 @@
+ #if defined(__ARM_FEATURE_CRYPTO) && __ARM_FEATURE_CRYPTO
+ #  define SIMDE_ARCH_ARM_CRYPTO
+ #endif
++#if defined(__ARM_FEATURE_CRC32) && __ARM_FEATURE_CRC32
++#  define SIMDE_ARCH_ARM_CRC32
++#endif
+ #if defined(__ARM_FEATURE_DOTPROD) && __ARM_FEATURE_DOTPROD
+ #  define SIMDE_ARCH_ARM_DOTPROD
+ #endif
+diff --git a/simde/x86/sse4.2.h b/simde/x86/sse4.2.h
+index 19905b2ac..c57e28e6a 100644
+--- a/simde/x86/sse4.2.h
++++ b/simde/x86/sse4.2.h
+@@ -30,9 +30,10 @@
+ 
+ #include "sse4.1.h"
+ 
+-#if defined(__ARM_ACLE) || (defined(__GNUC__) && defined(__ARM_FEATURE_CRC32))
++#if defined(__ARM_ACLE) || (defined(__GNUC__) && defined(SIMDE_ARCH_ARM_CRC32))
+   #include <arm_acle.h>
+ #endif
++//                         ^^ Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70974
+ 
+ HEDLEY_DIAGNOSTIC_PUSH
+ SIMDE_DISABLE_UNWANTED_DIAGNOSTICS
+@@ -295,7 +296,7 @@ simde_mm_crc32_u8(uint32_t prevcrc, uint8_t v) {
+   #if defined(SIMDE_X86_SSE4_2_NATIVE)
+     return _mm_crc32_u8(prevcrc, v);
+   #else
+-    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(__ARM_FEATURE_CRC32)
++    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+       return __crc32cb(prevcrc, v);
+     #else
+       uint32_t crc = prevcrc;
+@@ -328,7 +329,7 @@ simde_mm_crc32_u16(uint32_t prevcrc, uint16_t v) {
+   #if defined(SIMDE_X86_SSE4_2_NATIVE)
+     return _mm_crc32_u16(prevcrc, v);
+   #else
+-    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(__ARM_FEATURE_CRC32)
++    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+       return __crc32ch(prevcrc, v);
+     #else
+       uint32_t crc = prevcrc;
+@@ -348,7 +349,7 @@ simde_mm_crc32_u32(uint32_t prevcrc, uint32_t v) {
+   #if defined(SIMDE_X86_SSE4_2_NATIVE)
+     return _mm_crc32_u32(prevcrc, v);
+   #else
+-    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(__ARM_FEATURE_CRC32)
++    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+       return __crc32cw(prevcrc, v);
+     #else
+       uint32_t crc = prevcrc;
+@@ -368,7 +369,7 @@ simde_mm_crc32_u64(uint64_t prevcrc, uint64_t v) {
+   #if defined(SIMDE_X86_SSE4_2_NATIVE) && defined(SIMDE_ARCH_AMD64)
+     return _mm_crc32_u64(prevcrc, v);
+   #else
+-    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(__ARM_FEATURE_CRC32)
++    #if defined(SIMDE_ARM_NEON_A64V8_NATIVE) && defined(SIMDE_ARCH_ARM_CRC32)
+       return __crc32cd(HEDLEY_STATIC_CAST(uint32_t, prevcrc), v);
+     #else
+       uint64_t crc = prevcrc;

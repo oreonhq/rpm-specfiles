@@ -1,0 +1,33 @@
+diff -up stormbaancoureur-2.0.2/src-stormbaancoureur/main.cxx.snd stormbaancoureur-2.0.2/src-stormbaancoureur/main.cxx
+--- stormbaancoureur-2.0.2/src-stormbaancoureur/main.cxx.snd	2008-01-06 22:09:09.000000000 +0100
++++ stormbaancoureur-2.0.2/src-stormbaancoureur/main.cxx	2008-01-06 22:09:14.000000000 +0100
+@@ -1300,7 +1300,7 @@ int main(int argc, char *argv[]) 
+   bool nosound = getenv("PLODE_NO_SOUND");
+   if (!nosound)
+   {
+-    sengine = new SoundEngineAlsa(5000);
++    sengine = new SoundEngineAlsa(8000);
+     if (!sengine->opened)
+     {
+       delete sengine;
+diff -up stormbaancoureur-2.0.2/src-common/soundenginealsa.cxx.snd stormbaancoureur-2.0.2/src-common/soundenginealsa.cxx
+--- stormbaancoureur-2.0.2/src-common/soundenginealsa.cxx.snd	2008-01-05 04:32:34.000000000 +0100
++++ stormbaancoureur-2.0.2/src-common/soundenginealsa.cxx	2008-01-06 22:09:00.000000000 +0100
+@@ -195,12 +195,14 @@ float SoundEngineAlsa::Sustain(void)
+   snd_pcm_sframes_t delay;
+   int avail = snd_pcm_avail_update(handle);
+   int rc = snd_pcm_delay(handle, &delay);
+-  if (rc<0)
+-    snd_strerror(rc);
+   if (rc==-EPIPE)
+     fprintf(stderr,"soundenginealsa.cxx: EPIPE\n");
+-  else
++  else {
++    if (rc<0)
++      fprintf(stderr, "Unexpected error getting sound-delay: %s\n",
++        snd_strerror(rc));
+     assert(!rc);
++  }
+ 
+   // We can only trust pcm_delay if the state is running.
+   snd_pcm_state_t pcm_state = snd_pcm_state(handle);

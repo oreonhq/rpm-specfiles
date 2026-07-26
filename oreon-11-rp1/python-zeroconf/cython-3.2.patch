@@ -1,0 +1,57 @@
+From 45c3c2336e651b8948c65bc643023a28ba59c019 Mon Sep 17 00:00:00 2001
+From: "J. Nick Koston" <nick@koston.org>
+Date: Thu, 20 Nov 2025 10:35:38 +0100
+Subject: [PATCH] Fixup the Cython declaration of
+ zeroconf._handlers.record_manager.async_updates_complete
+
+...to match the Python type
+
+This avoids:
+
+      Error compiling Cython file:
+      ------------------------------------------------------------
+      ...
+              This method will be run in the event loop.
+              """
+              for listener in self.listeners:
+                  listener.async_update_records(self.zc, now, records)
+
+          def async_updates_complete(self, notify: bool) -> None:
+          ^
+      ------------------------------------------------------------
+      src/zeroconf/_handlers/record_manager.py:62:4: Signature not compatible with previous declaration
+
+      Error compiling Cython file:
+      ------------------------------------------------------------
+      ...
+          cdef public DNSCache cache
+          cdef public cython.set listeners
+
+          cpdef async_updates(self, object now, object records)
+
+          cpdef void async_updates_complete(self, object notify)
+                                           ^
+      ------------------------------------------------------------
+      src/zeroconf/_handlers/record_manager.pxd:27:37: Previous declaration is here
+
+Partially cherry-picked from 9eac0a12.
+---
+ src/zeroconf/_handlers/record_manager.pxd | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/zeroconf/_handlers/record_manager.pxd b/src/zeroconf/_handlers/record_manager.pxd
+index 8775108..4bde2e1 100644
+--- a/src/zeroconf/_handlers/record_manager.pxd
++++ b/src/zeroconf/_handlers/record_manager.pxd
+@@ -24,7 +24,7 @@ cdef class RecordManager:
+ 
+     cpdef async_updates(self, object now, object records)
+ 
+-    cpdef async_updates_complete(self, object notify)
++    cpdef async_updates_complete(self, bint notify)
+ 
+     @cython.locals(
+         cache=DNSCache,
+-- 
+2.51.1
+

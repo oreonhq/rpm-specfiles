@@ -1,0 +1,78 @@
+diff -rupN voro++-0.4.6/man/voro++.1 voro++-0.4.6-new/man/voro++.1
+--- voro++-0.4.6/man/voro++.1	2013-10-17 20:13:38.000000000 +0200
++++ voro++-0.4.6-new/man/voro++.1	2014-06-19 22:44:47.215792546 +0200
+@@ -82,7 +82,7 @@ grid size using the \-l and \-n options.
+ The utility accepts the following basic options:
+ 
+ .B
+-.IP \-c <string>
++.IP "\-c <string>"
+ This option allows the format of the output file to be customized to hold a
+ variety of statistics about the computed Voronoi cells. The specified string
+ can contain regular characters, plus control sequences beginning with
+@@ -97,7 +97,7 @@ that can be viewed using gnuplot using t
+ command. Caution: For large input files, the gnuplot output file will be
+ extremely large, so this option is best used on smaller systems.
+ .B
+-.IP \-h or \-\-help
++.IP "\-h or \-\-help"
+ This option prints out a summary of the command syntax and the available
+ options.
+ .B
+@@ -105,7 +105,7 @@ options.
+ This option prints out all the available control sequences for the customized
+ output.
+ .B
+-.IP -l <len>
++.IP "-l <len>"
+ Manually specify a typical length scale between particles, with which to
+ configure the internal grid size. For example, if the particles represent
+ densely-packed hard spheres of diameter d, then d would be an appropriate value
+@@ -114,13 +114,13 @@ this option will result in a small perfo
+ can be set up immediately, and it is not necessary to temporarily store the
+ input file contents while estimating the grid size.
+ .B
+-.IP -m <mem>
++.IP "-m <mem>"
+ Manually specify the initial number of particles that can be stored in each
+ block. By default a value of 8 is used. For any block where this limit is
+ reached, the code will dynamically allocate more memory as neccessary, so
+ usually it is not necessary to alter this.
+ .B
+-.IP -n <nx> <ny> <nz>
++.IP "-n <nx> <ny> <nz>"
+ Manually specify the internal computational grid to have nx, ny, and nz blocks
+ in the x, y, and z directions respectively, giving nx*ny*nz blocks in total.
+ Manually specifying the size will result in a small performance boost, since
+@@ -178,26 +178,26 @@ are implemented by applying extra plane
+ process. At present, four wall types are supported:
+ 
+ .B
+-.IP \-wb <x1> <x2> <x3> <x4> <x5> <x6>
++.IP "\-wb <x1> <x2> <x3> <x4> <x5> <x6>"
+ Add six plane wall objects to make a box containing the space x1<x<x2, x3<y<x4,
+ and x5<z<z6. This can be useful for embedding a smaller box within a larger
+ container, in cases when the influence of particles outside the smaller box
+ still need to be considered. This option is shorthand to avoid using the \-wp
+ option six times.
+ .B
+-.IP \-wc <x1> <x2> <x3> <x4> <x5> <x6> <x7>
++.IP "\-wc <x1> <x2> <x3> <x4> <x5> <x6> <x7>"
+ Add a cylindrical wall object, where (x1,x2,x3) is a point on the cylinder
+ axis, (x4,x5,x6) is a vector along the cylinder axis, and x7 is the cylinder
+ radius.
+ .B
+-.IP \-wo <x1> <x2> <x3> <x4> <x5> <x6> <x7>
++.IP "\-wo <x1> <x2> <x3> <x4> <x5> <x6> <x7>"
+ Add a conical wall object, with apex at (x1,x2,x3), axis along (x4,x5,x6), and
+ half angle x7 (specified in radians).
+ .B
+-.IP \-ws <x1> <x2> <x3> <x4>
++.IP "\-ws <x1> <x2> <x3> <x4>"
+ Add a spherical wall object, centered on (x1,x2,x3), with radius x4.
+ .B
+-.IP \-wp <x1> <x2> <x3> <x4>
++.IP "\-wp <x1> <x2> <x3> <x4>"
+ Add a plane wall object, with normal (x1,x2,x3), and displacement x4.
+ 
+ Each wall is accounted for using a single approximating plane; several of the

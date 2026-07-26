@@ -1,0 +1,12 @@
+diff -up rdesktop-1.9.0/tcp.c.crypto rdesktop-1.9.0/tcp.c
+--- rdesktop-1.9.0/tcp.c.crypto	2019-09-20 00:57:45.000000000 -0600
++++ rdesktop-1.9.0/tcp.c	2022-05-18 14:06:38.033248378 -0600
+@@ -58,7 +58,7 @@
+ /* Windows' self signed certificates omit the required Digital
+    Signature key usage flag, and only %COMPAT makes GnuTLS ignore
+    that violation. */
+-#define GNUTLS_PRIORITY "NORMAL:%COMPAT"
++#define GNUTLS_PRIORITY "@SYSTEM:%COMPAT"
+ 
+ #ifdef IPv6
+ static struct addrinfo *g_server_address = NULL;

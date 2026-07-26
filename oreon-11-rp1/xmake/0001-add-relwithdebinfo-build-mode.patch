@@ -1,0 +1,14 @@
+diff --git a/core/xmake.sh b/core/xmake.sh
+index b21e34efe..69b2b3c3e 100755
+--- a/core/xmake.sh
++++ b/core/xmake.sh
+@@ -21,6 +21,9 @@ fi
+ if is_mode "debug"; then
+     set_symbols "debug"
+     set_optimizes "none"
++elif is_mode "relwithdebinfo"; then
++    set_symbols "debug"
++    set_optimizes "faster" # -O2
+ else
+     set_strip "all"
+     if ! is_kind "shared"; then

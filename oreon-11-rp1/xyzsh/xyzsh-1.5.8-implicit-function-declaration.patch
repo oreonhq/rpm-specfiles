@@ -1,0 +1,128 @@
+--- xyzsh-1.5.8/src/cmd_curses.c.implicit	2022-07-24 22:39:35.894257202 +0900
++++ xyzsh-1.5.8/src/cmd_curses.c	2022-07-24 22:49:54.275644922 +0900
+@@ -1,3 +1,4 @@
++#define _GNU_SOURCE
+ #include "config.h"
+ #include "xyzsh.h"
+ #include <errno.h>
+--- xyzsh-1.5.8/src/cmd_str.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/cmd_str.c	2022-07-24 22:49:03.460613072 +0900
+@@ -1,5 +1,5 @@
+-#include "config.h"
+ #define _GNU_SOURCE
++#include "config.h"
+ #include <errno.h>
+ #include <time.h>
+ #include <stdlib.h>
+--- xyzsh-1.5.8/src/curses.c.implicit	2022-07-24 22:39:35.894257202 +0900
++++ xyzsh-1.5.8/src/curses.c	2022-07-24 23:15:39.743564132 +0900
+@@ -1,3 +1,7 @@
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include <termios.h>
+ #include <sys/ioctl.h>
+ #include <sys/types.h>
+--- xyzsh-1.5.8/src/editline.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/editline.c	2022-07-24 23:15:26.278358048 +0900
+@@ -1,3 +1,7 @@
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "config.h"
+ #include "xyzsh.h"
+ 
+@@ -20,6 +24,7 @@
+ #include <sys/types.h>
+ #include <pwd.h>
+ #include <limits.h>
++#include <time.h>
+ 
+ #if defined(HAVE_CURSES_H)
+ #include <curses.h>
+--- xyzsh-1.5.8/src/editline/chartype.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/editline/chartype.c	2022-07-24 23:20:06.356542075 +0900
+@@ -36,6 +36,10 @@
+ /*
+  * chartype.c: character classification and meta information
+  */
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "config.h"
+ #if !defined(lint) && !defined(SCCSID)
+ __RCSID("$NetBSD: chartype.c,v 1.10 2011/08/16 16:25:15 christos Exp $");
+@@ -46,6 +50,13 @@
+ #define CT_BUFSIZ ((size_t)1024)
+ 
+ #ifdef WIDECHAR
++int
++Width(wchar_t c)
++{
++	int w = wcwidth(c);
++	return w < 0 ? 0 : w;
++}
++
+ protected void
+ ct_conv_buff_resize(ct_buffer_t *conv, size_t mincsize, size_t minwsize)
+ {
+--- xyzsh-1.5.8/src/editline/chartype.h.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/editline/chartype.h	2022-07-24 23:20:32.425539915 +0900
+@@ -112,12 +112,16 @@
+ 
+ #define Strtol(p,e,b)   wcstol(p,e,b)
+ 
++#if 0
+ static inline int
+ Width(wchar_t c)
+ {
+ 	int w = wcwidth(c);
+ 	return w < 0 ? 0 : w;
+ }
++#else
++int Width(wchar_t);
++#endif
+ 
+ #else /* NARROW */
+ 
+--- xyzsh-1.5.8/src/kanji.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/kanji.c	2022-07-24 23:15:02.985922923 +0900
+@@ -1,3 +1,7 @@
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "config.h"
+ #include "kanji.h"
+ #include "debug.h"
+--- xyzsh-1.5.8/src/main.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/main.c	2022-07-24 23:22:35.521529725 +0900
+@@ -17,6 +17,7 @@
+ #include <sys/select.h>
+ #include <wchar.h>
+ #include <wctype.h>
++#include <time.h>
+ 
+ #ifndef SHELLFDMINMAX
+ #define SHELLFDMINMAX 100  /* maximum for `shellfdmin' */
+--- xyzsh-1.5.8/src/temulator.c.implicit	2013-12-24 11:20:35.000000000 +0900
++++ xyzsh-1.5.8/src/temulator.c	2022-07-24 23:14:47.670636814 +0900
+@@ -1,3 +1,7 @@
++/* for wcswidth */
++#define _XOPEN_SOURCE
++#define _DEFAULT_SOURCE
++
+ #include "config.h"
+ 
+ #include "xyzsh.h"
+@@ -17,6 +21,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <signal.h>
++#include <sys/time.h>
+ 
+ #if defined(__CYGWIN__)
+ #include <sys/time.h>

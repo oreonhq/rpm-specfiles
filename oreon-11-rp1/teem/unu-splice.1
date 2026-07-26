@@ -1,0 +1,56 @@
+.TH UNU\-SPLICE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-splice \- replace a slice with a different \fInrrd
+.SH SYNOPSIS
+.B unu\ splice
+.BR \-a , \-\-axis
+.RI < axis >
+.BR \-p , \-\-position
+.RI < pos >
+.BR \-s , \-\-slice
+.RI < nslice >
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Replace a slice with a different
+.IR nrrd .
+This is functionally the opposite of
+.RB \(lq slice \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdSplice
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to splice along
+.RI ( unsigned\ int )
+.TP
+.B \-p\fR\ <\fIpos\fR>\ ,\ \fB\-\-position\fR\ <\fIpos\fR>
+position to splice at:
+.RS +7n
+.IP \(bu 2
+.RI < int >
+gives 0-based index
+.IP \(bu 2
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.IR nrrd .
+This is the slice to insert into
+.I nin
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- (rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-slice (1)

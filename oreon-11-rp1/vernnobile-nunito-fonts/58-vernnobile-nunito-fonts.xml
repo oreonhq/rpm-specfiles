@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Nunito</target>
+    <match>
+      <family>Nunito Heavy</family>
+      <prepend-keyword>ExtraBlack</prepend-keyword>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>ExtraLight</name>
+        <value>40</value>
+      </step>
+      <step>
+        <name>Light</name>
+        <value>50</value>
+      </step>
+      <step>
+        <name>Regular</name>
+        <value>80</value>
+      </step>
+      <step>
+        <name>SemiBold</name>
+        <value>180</value>
+      </step>
+      <step>
+        <name>Bold</name>
+        <value>200</value>
+      </step>
+      <step>
+        <name>ExtraBold</name>
+        <value>205</value>
+      </step>
+      <step>
+        <name>Black</name>
+        <value>210</value>
+      </step>
+      <step>
+        <name>ExtraBlack</name>
+        <value>215</value>
+        <match>
+          <keyword>Heavy</keyword>
+        </match>
+      </step>
+    </axis>
+    <like>
+      <family>Museo Sans Rounded</family>
+      <family>Avenir</family>
+      <family>Avenir Pro</family>
+      <family>Avenir Std</family>
+      <family>Avenir Next</family>
+      <family>Avenir Next Pro</family>
+      <family>Avenir Next Std</family>
+      <family>Stone Sans</family>
+      <family>ITC Stone Sans</family>
+      <family>ITC Stone Sans Pro</family>
+      <family>ITC Stone Sans Std</family>
+      <family>ITC Stone Sans II</family>
+      <family>ITC Stone Sans II Pro</family>
+      <family>ITC Stone Sans II Std</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

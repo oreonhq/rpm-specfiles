@@ -1,0 +1,14 @@
+diff -up ./examples/hello_world/CMakeLists.txt.build_extras ./examples/hello_world/CMakeLists.txt
+--- ./examples/hello_world/CMakeLists.txt.build_extras	2025-07-30 13:32:58.472405883 -0400
++++ ./examples/hello_world/CMakeLists.txt	2025-07-30 13:33:37.697454069 -0400
+@@ -28,6 +28,10 @@ function(link_target executable)
+     add_executable(hello_world_${executable})
+     target_sources(hello_world_${executable} PRIVATE hello_world_${executable}_main.cpp)
+     target_link_libraries(hello_world_${executable} PRIVATE vsomeip_hello_world_${executable} vsomeip3 Threads::Threads)
++    install (
++      TARGETS hello_world_${executable}
++      RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
++    )
+ endfunction()
+ 
+ include_directories(${VSOMEIP_INCLUDE_DIRS})

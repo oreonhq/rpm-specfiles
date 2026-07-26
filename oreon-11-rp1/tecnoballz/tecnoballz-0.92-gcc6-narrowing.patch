@@ -1,0 +1,33 @@
+diff -durN tecnoballz-0.92/include/tiles_background.h tecnoballz-0.92.gcc6/include/tiles_background.h
+--- tecnoballz-0.92/include/tiles_background.h	2007-09-25 07:43:20.000000000 +0200
++++ tecnoballz-0.92.gcc6/include/tiles_background.h	2016-03-26 17:59:30.283777384 +0100
+@@ -47,7 +47,7 @@
+     static tiles_background* tiles_background_singleton;
+     static Sint32 table_pos1[16];
+     static Sint32 table_pos2[16];
+-    static char couleurs[448];
++    static unsigned char couleurs[448];
+     static const Sint32 TILES_32_WIDTH = 32;
+     static const Sint32 TILES_32_HEIGHT = 32;
+     static const Sint32 TILES_64_WIDTH = 64;
+diff -durN tecnoballz-0.92/src/tiles_background.cc tecnoballz-0.92.gcc6/src/tiles_background.cc
+--- tecnoballz-0.92/src/tiles_background.cc	2007-09-25 07:43:20.000000000 +0200
++++ tecnoballz-0.92.gcc6/src/tiles_background.cc	2016-03-26 18:41:12.767764934 +0100
+@@ -663,7 +663,7 @@
+ 
+     }
+   palette_index = pal_index;
+-  char *color = &couleurs[0];
++  unsigned char *color = &couleurs[0];
+   unsigned char *colPT = (unsigned char *) (color) + pal_index;
+   SDL_Color *pal = display->get_palette ();
+   SDL_Color *lighted = pal + 1;
+@@ -702,7 +702,7 @@
+  * 4 * 4    : 16 composantes by palette
+  * 112 * 4  : 448 composantes
+ */
+-char
++unsigned char
+ tiles_background::couleurs[448] = {
+                                     0x00, 0x40, 0x20, 0x40, 0x00, 0x60, 0x40, 0x60, 0x00, 0x80, 0x60, 0x80,
+                                     0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,

@@ -1,0 +1,18 @@
+diff -up xbase64-4.2.6/build/linux64/CMakeLists.txt.no-local-no-namespace xbase64-4.2.6/build/linux64/CMakeLists.txt
+--- xbase64-4.2.6/build/linux64/CMakeLists.txt.no-local-no-namespace	2025-11-06 11:56:05.142403593 -0500
++++ xbase64-4.2.6/build/linux64/CMakeLists.txt	2025-11-06 11:56:34.043999040 -0500
+@@ -942,9 +942,9 @@ SET_TARGET_PROPERTIES( ${XB_LIBNAME} PRO
+ IF( WIN32 )
+   install (TARGETS ${XB_LIBNAME}     DESTINATION bin)
+ ELSE( WIN32 )
+-  IF( EXISTS /usr/local/lib64 )
+-    install (TARGETS ${XB_LIBNAME}     DESTINATION lib64/${CMAKE_PROJECT_NAME})
+-  ELSE( EXISTS /usr/local/lib64 )
+-    install (TARGETS ${XB_LIBNAME}     DESTINATION lib/${CMAKE_PROJECT_NAME})
+-  ENDIF( EXISTS /usr/local/lib64 )
++  IF( EXISTS /usr/lib64 )
++    install (TARGETS ${XB_LIBNAME}     DESTINATION lib64)
++  ELSE( EXISTS /usr/lib64 )
++    install (TARGETS ${XB_LIBNAME}     DESTINATION lib)
++  ENDIF( EXISTS /usr/lib64 )
+ ENDIF( WIN32 )

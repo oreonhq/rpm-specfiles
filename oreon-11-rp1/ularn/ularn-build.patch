@@ -1,0 +1,261 @@
+diff -Naur Ularn/extern.h Ularn.new/extern.h
+--- Ularn/extern.h	2001-11-16 10:13:18.000000000 -0800
++++ Ularn.new/extern.h	2006-02-25 16:34:40.000000000 -0800
+@@ -88,11 +88,11 @@
+ int getcharacter(void);
+ int newgame(void);
+ /*VARARGS*/
+-int lprintf();
++int lprintf(char *, ...);
+ int lprint(long);
+ int lwrite(char *, int);
+ long lgetc1(void);
+-long lrint(void);
++long lr_int(void);
+ int lrfill(char *, int);
+ char *lgetw(void);
+ char *lgetl(void);
+@@ -441,11 +441,11 @@
+ int getcharacter();
+ int newgame();
+ /*VARARGS*/
+-int lprintf();
++int lprintf(char *, ...);
+ int lprint();
+ int lwrite();
+ long lgetc1();
+-long lrint();
++long lr_int();
+ int lrfill();
+ char *lgetw();
+ char *lgetl();
+diff -Naur Ularn/fortune.c Ularn.new/fortune.c
+--- Ularn/fortune.c	2001-11-16 10:13:19.000000000 -0800
++++ Ularn.new/fortune.c	2006-02-25 16:21:57.000000000 -0800
+@@ -16,7 +16,6 @@
+ 	int lines,tmp;
+ 	struct stat stat;
+ 	int retval;
+-	char *malloc();
+ 
+ 	if (fortune_fd==0) {
+ 		/* open the file */
+diff -Naur Ularn/header.h Ularn.new/header.h
+--- Ularn/header.h	2001-11-16 10:13:19.000000000 -0800
++++ Ularn.new/header.h	2006-02-25 16:22:58.000000000 -0800
+@@ -27,7 +27,8 @@
+ #include <pwd.h>
+ #include <signal.h>
+ #include <stdio.h>
+-#include <varargs.h>
++#include <stdlib.h>
++#include <stdarg.h>
+ #ifdef USG
+ #  include <strings.h>
+ #else
+diff -Naur Ularn/io.c Ularn.new/io.c
+--- Ularn/io.c	2001-11-16 10:13:19.000000000 -0800
++++ Ularn.new/io.c	2006-02-25 20:02:55.000000000 -0800
+@@ -19,7 +19,7 @@
+  *	FILE INPUT ROUTINES
+  *
+  *	long lgetc()			read one character from input buffer
+- *	long lrint()			read one integer from input buffer
++ *	long lr_int()			read one integer from input buffer
+  *	lrfill(address,number)		put input bytes into a buffer
+  *	char *lgetw()			get a whitespace ended word from input
+  *	char *lgetl()			get a \n or EOF ended line from input
+@@ -101,18 +101,14 @@
+  */
+ /*VARARGS*/
+ 
+-lprintf(va_alist)
+-va_dcl
++lprintf(char *fmt, ...)
+ {
+ 	va_list ap;	/* pointer for variable argument list */
+-	char *fmt;
+ 	char *outb,*tmpb;
+ 	long wide,left,cont,n;		/* data for lprintf	*/
+ 	char db[12];			/* %d buffer in lprintf	*/
+ 
+-	va_start(ap);	/* initialize the var args pointer */
+-
+-	fmt = (char *)va_arg(ap, char *);	/* pointer to format string */
++	va_start(ap, fmt);	/* initialize the var args pointer */
+ 
+ 	if (lpnt >= lpend) lflush();
+ 	outb = lpnt;
+@@ -308,7 +304,7 @@
+ }
+ 
+ /*
+- *	long lrint()			Read one integer from input buffer
++ *	long lr_int()			Read one integer from input buffer
+  *
+  *		+---------+---------+---------+---------+
+  *		|  high   |	    |	      |   low   |
+@@ -320,7 +316,7 @@
+  *	The save order is low order first, to high order (4 bytes total)
+  *	Returns the int read
+  */
+-long lrint()
++long lr_int()
+ {
+ 	long i;
+ 
+@@ -562,7 +558,7 @@
+ {
+ 	char termbuf[1024];
+ 	char *pc, *capptr = cap+10;
+-	char *malloc(), *tgetstr(), *term, *getenv();
++	char *tgetstr(), *term, *getenv();
+ 
+ 	switch (tgetent(termbuf, term = getenv("TERM"))) {
+ 	case -1:
+diff -Naur Ularn/main.c Ularn.new/main.c
+--- Ularn/main.c	2001-11-16 10:13:20.000000000 -0800
++++ Ularn.new/main.c	2006-02-25 16:33:25.000000000 -0800
+@@ -46,7 +46,7 @@
+ {
+ 	int i, hard;
+ 	char buf[BUFSIZ];
+-	char *malloc(), *getenv(), *getlogin(), *ptr=0;
++	char *getenv(), *getlogin(), *ptr=0;
+ 	struct passwd *pwe,*getpwuid();
+ 	extern char *optarg;
+ 	extern int optind, opterr;
+diff -Naur Ularn/Makefile.u.SH Ularn.new/Makefile.u.SH
+--- Ularn/Makefile.u.SH	2001-11-16 10:18:27.000000000 -0800
++++ Ularn.new/Makefile.u.SH	2006-02-25 17:20:26.000000000 -0800
+@@ -6,7 +6,7 @@
+ 	ln ../../../config.sh . || \
+ 	(echo "Can't find config.sh."; exit 1)
+     fi
+-    . config.sh
++    . ./config.sh
+     ;;
+ esac
+ : This forces SH files to create target in same directory as SH file.
+@@ -97,12 +97,12 @@
+ 
+ ##########################################################################
+ install: $(PROGRAM) $(LIBFILES)
+-	if test ! -d $(LIBDIR) ; then mkdir -p $(LIBDIR) ; fi
+-	-cp Umaps Ufortune Uhelp $(LIBDIR)
+-	-chmod 644 $(LIBDIR)/Umaps $(LIBDIR)/Ufortune \
+-		$(LIBDIR)/Uhelp
+-	if test ! -d $(BINDIR) ; then mkdir -p $(BINDIR) ; fi
+-	-cp $(PROGRAM) $(BINDIR)
++	if test ! -d $(DESTDIR)$(LIBDIR) ; then mkdir -p $(DESTDIR)$(LIBDIR) ; fi
++	-cp Umaps Ufortune Uhelp $(DESTDIR)$(LIBDIR)
++	-chmod 644 $(DESTDIR)$(LIBDIR)/Umaps $(DESTDIR)$(LIBDIR)/Ufortune \
++		$(DESTDIR)$(LIBDIR)/Uhelp
++	if test ! -d $(DESTDIR)$(BINDIR) ; then mkdir -p $(DESTDIR)$(BINDIR) ; fi
++	-cp $(PROGRAM) $(DESTDIR)$(BINDIR)
+ 
+ 
+ lint:
+diff -Naur Ularn/savelev.c Ularn.new/savelev.c
+--- Ularn/savelev.c	2001-11-16 10:13:27.000000000 -0800
++++ Ularn.new/savelev.c	2006-02-25 17:19:14.000000000 -0800
+@@ -6,14 +6,7 @@
+ #include "monst.h"
+ #include "extern.h"
+ 
+-#ifdef CYGWIN
+ #include <errno.h>
+-#define SYSERRLISTDEFINED
+-#endif
+-
+-#ifndef SYSERRLISTDEFINED
+-extern char *sys_errlist[];
+-#endif
+ 
+ extern int errno;
+ 
+@@ -216,11 +209,11 @@
+ 	unsigned int thesum, asum;
+ 	struct sphere *sp,*splast;
+ 	Saved_Level * storage;
+-	char buf[1024], *tmp="/tmp/UtmpXXXXXX", *mkstemp(); 
++	char buf[1024], *tempfilename="/tmp/UtmpXXXXXX";
+     	int fd;
+ 
+ 	if (compress) {
+-		if ((tempfilename = mkstemp(tmp)) == NULL) {
++		if (fd = (mkstemp(tempfilename)) == -1) {
+ 			fprintf(stderr,"Can't create temp file to restore game\n");
+ 			perror("mkstemp");
+ 			nosignal=0;
+@@ -241,6 +234,7 @@
+ 			unlink(tempfilename);
+ 			return;
+ 		}
++/*
+ 		if ((fd = open(tempfilename, O_RDONLY)) < 0) {
+ 			fprintf(stderr,"Can't open temp file to restore game\n");
+ 			perror("open");
+@@ -249,6 +243,7 @@
+ 			died(-265);
+ 			return;
+ 		}
++*/
+ 	} else {
+ 		if ((fd = open(fname, O_RDONLY)) <= 0) {
+ 			fprintf(stderr,"Can't open file <%s> to restore game\n", 
+@@ -454,7 +449,7 @@
+ 	ncalls++;
+ 	if ((nwrote = write(fd, buf, num)) == -1) {
+ 		fprintf(stderr, "Error writing to save file\n");
+-		fprintf(stderr, "errno = %d\t[%s]\n",errno,sys_errlist[errno]);
++		fprintf(stderr, "errno = %d\t[%s]\n",errno,strerror(errno));
+ 		fprintf(stderr, "    Wrote %d bytes so far\n", w);
+ 		fprintf(stderr, "        Call: %d\n", ncalls);
+ 		abort();
+@@ -485,7 +480,7 @@
+ 	ncalls++;
+ 	if ((nread = read(fd, buf, num)) == -1) {
+ 		fprintf(stderr, "Error reading from save file\n");
+-		fprintf(stderr, "errno = %d\t[%s]\n",errno,sys_errlist[errno]);
++		fprintf(stderr, "errno = %d\t[%s]\n",errno,strerror(errno));
+ 		fprintf(stderr, "    Read %d bytes so far\n", w);
+ 		fprintf(stderr, "        Call: %d\n", ncalls);
+ 		perror("read");
+diff -Naur Ularn/tok.c Ularn.new/tok.c
+--- Ularn/tok.c	2001-11-16 10:13:31.000000000 -0800
++++ Ularn.new/tok.c	2006-02-25 17:07:40.000000000 -0800
+@@ -3,6 +3,7 @@
+ #include "player.h"
+ #include "monst.h"
+ #include "extern.h"
++#include <unistd.h>
+ extern int nonap;
+ 
+ #define MAXUM 52	/* maximum number of user re-named monsters */
+@@ -61,11 +62,15 @@
+ 		/* shell escape */
+ 		if (cc == '!')	{
+ 			int pgrp;
++/*
+ #ifdef USG
++*/
+ 			pgrp = getpgrp();
++/*
+ #else
+ 			pgrp = getpgrp(getpid());
+-#endif /* USG */
++#endif
++*/
+ 			
+ 			resetscroll();
+ 			clear();
+@@ -75,7 +80,7 @@
+ 				settty();
+ 				setuid(geteuid());
+ 				setgid(getegid());
+-				setpgrp(getpid(), pgrp);
++				setpgid(getpid(), pgrp);
+ 				if ((sh = getenv("SHELL")) != (char *)NULL) {
+ 					execl(sh, sh, (char *)0);	
+ 					if (!strcmp(sh, "/bin/sh")) {

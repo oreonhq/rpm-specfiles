@@ -1,0 +1,64 @@
+From 9838f03ae39222135f1bd5f92b556d33f27cce3b Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 25 Apr 2019 17:10:56 +0200
+Subject: [PATCH 1/5] all: add the missing files into the dist
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ Makefile.am         |  4 ++++
+ src/Makefile.am     |  4 +++-
+ vivante/Makefile.am | 10 ++++++++--
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 24c9692..e14fd11 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -31,3 +31,7 @@ endif
+ if HAVE_ACCEL_GALCORE
+ SUBDIRS += vivante
+ endif
++
++EXTRA_DIST = \
++	conf/xorg-sample.conf \
++	FAQ
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 76c7b22..a2f99ab 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -34,7 +34,9 @@ armada_drv_la_SOURCES = armada_accel.h \
+ 			common_drm_conn.c \
+ 			common_drm_conn.h \
+ 			common_drm_helper.h \
+-			common_drm_plane.c
++			common_drm_plane.c \
++			../common/compat-drm.h
++
+ if HAVE_DRI2
+ armada_drv_la_SOURCES += \
+ 			common_drm_dri2.c \
+diff --git a/vivante/Makefile.am b/vivante/Makefile.am
+index 686dd85..bb18ce2 100644
+--- a/vivante/Makefile.am
++++ b/vivante/Makefile.am
+@@ -24,9 +24,15 @@ vivante_gpu_la_LIBADD = $(DRMARMADA_LIBS) $(LIBGAL_LIBS) \
+ 			$(top_builddir)/common/libcommon.la
+ vivante_gpu_ladir = @moduledir@/drivers
+ vivante_gpu_la_SOURCES = \
+-			vivante.c \
+ 			vivante_accel.c \
+-			vivante_utils.c
++			vivante_accel.h \
++			vivante.c \
++			vivante_compat.h \
++			vivante_dri2.h \
++			vivante.h \
++			vivante_utils.c \
++			vivante_utils.h
++
+ if HAVE_DRI2
+ vivante_gpu_la_SOURCES += vivante_dri2.c
+ vivante_gpu_la_LIBADD += $(DRI_LIBS)
+-- 
+2.21.0
+

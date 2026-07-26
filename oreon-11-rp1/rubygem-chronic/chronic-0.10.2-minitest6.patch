@@ -1,0 +1,35 @@
+diff -urp chronic-0.10.2.orig/test/test_parsing.rb chronic-0.10.2/test/test_parsing.rb
+--- chronic-0.10.2.orig/test/test_parsing.rb	2025-12-28 10:03:33.244813827 +0900
++++ chronic-0.10.2/test/test_parsing.rb	2025-12-28 10:09:55.473207123 +0900
+@@ -466,7 +466,7 @@ class TestParsing < TestCase
+     assert_equal Time.local(2007, 01, 30, 12), time
+ 
+     time = parse_now("5th tuesday in february")
+-    assert_equal nil, time
++    assert_nil time
+ 
+     %W(jan feb march april may june july aug sep oct nov dec).each_with_index do |month, index|
+       time = parse_now("5th tuesday in #{month}")
+@@ -482,7 +482,7 @@ class TestParsing < TestCase
+     assert_equal Time.local(2006, 11, 15, 12), time
+ 
+     time = parse_now("10th wednesday in november")
+-    assert_equal nil, time
++    assert_nil time
+ 
+     # time = parse_now("3rd wednesday in 2007")
+     # assert_equal Time.local(2007, 1, 20, 12), time
+@@ -1002,10 +1002,10 @@ class TestParsing < TestCase
+ 
+   def test_parse_guess_nonsense
+     time = parse_now("some stupid nonsense")
+-    assert_equal nil, time
++    assert_nil time
+ 
+     time = parse_now("Ham Sandwich")
+-    assert_equal nil, time
++    assert_nil time
+   end
+ 
+   def test_parse_span
+Only in chronic-0.10.2/test: test_parsing.rb~

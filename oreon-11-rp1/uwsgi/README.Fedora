@@ -1,0 +1,6 @@
+The build profile used to build this package is shipped along with the
+-devel subpackage and is located in the ``buildconf`` subdirectory in the
+src directory.
+A copy of the documentation can be obtained by installing the ``uwsgi-docs``
+package. The documentation is a copy as of the git SHA:
+

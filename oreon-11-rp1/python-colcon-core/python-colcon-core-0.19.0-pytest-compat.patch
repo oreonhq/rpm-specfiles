@@ -1,0 +1,141 @@
+diff -uNr a/setup.cfg b/setup.cfg
+--- a/setup.cfg	2024-06-25 14:10:14.377678508 -0500
++++ b/setup.cfg	2024-06-25 14:10:46.617920319 -0500
+@@ -72,6 +72,7 @@
+     ignore:Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated::pydocstyle
+     ignore:Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated::pyreadline
+     default:This platform does not support null-separated output:DeprecationWarning:colcon_core.shell.sh
++    ignore:@pytest.yield_fixture is deprecated
+ junit_suite_name = colcon-core
+ markers =
+     flake8
+diff -uNr a/test/test_executor_sequential.py b/test/test_executor_sequential.py
+--- a/test/test_executor_sequential.py	2024-06-24 16:08:45.000000000 -0500
++++ b/test/test_executor_sequential.py	2024-06-25 14:10:46.617920319 -0500
+@@ -161,7 +161,7 @@
+         ran_jobs.append(self.identifier)
+ 
+ 
+-@pytest.fixture
++@pytest.yield_fixture
+ def restore_sigint_handler():
+     handler = signal.getsignal(signal.SIGINT)
+     yield
+diff -uNr a/test/test_location.py b/test/test_location.py
+--- a/test/test_location.py	2024-06-24 16:08:45.000000000 -0500
++++ b/test/test_location.py	2024-06-25 14:10:46.618920296 -0500
+@@ -18,7 +18,7 @@
+ from .environment_context import EnvironmentContext
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def reset_global_variables():
+     yield
+     from colcon_core import location
+@@ -97,7 +97,7 @@
+     assert get_log_path() == Path(log_base_path) / subdirectory
+ 
+ 
+-@pytest.fixture
++@pytest.yield_fixture
+ def reset_log_path_creation_global():
+     yield
+     from colcon_core import location
+--- a/test/test_pyproject_spec.py	2024-09-27 14:01:27.000000000 -0500
++++ b/test/test_pyproject_spec.py	2024-10-02 13:03:18.536874276 -0500
+@@ -1,8 +1,16 @@
+ # Copyright 2024 Open Source Robotics Foundation, Inc.
+ # Licensed under the Apache License, Version 2.0
+ 
++from pathlib import Path
++
+ from colcon_core.package_descriptor import PackageDescriptor
+ from colcon_core.python_project.spec import load_and_cache_spec
++import pytest
++
++
++@pytest.fixture
++def tmp_path(tmpdir):
++    return Path(tmpdir)
+ 
+ 
+ def test_pyproject_missing(tmp_path):
+diff -uNr a/test/test_verb_build.py b/test/test_verb_build.py
+--- a/test/test_verb_build.py	2024-06-24 16:08:45.000000000 -0500
++++ b/test/test_verb_build.py	2024-06-25 14:13:03.126715177 -0500
+@@ -27,7 +27,7 @@
+         pass
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_other_extension_args():
+     with patch('colcon_core.verb.build.add_event_handler_arguments'), \
+             patch('colcon_core.verb.build.add_executor_arguments'), \
+@@ -36,7 +36,7 @@
+         yield
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_get_task_extension():
+     with patch(
+         'colcon_core.verb.build.get_task_extension',
+@@ -45,7 +45,7 @@
+         yield get_task_extension
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_get_packages():
+     desc1 = PackageDescriptor('foo_bar')
+     desc1.type = 'foo'
+@@ -72,7 +72,7 @@
+         yield get_packages
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_execute_jobs():
+     with patch(
+         'colcon_core.verb.build.execute_jobs',
+diff -uNr a/test/test_verb_test.py b/test/test_verb_test.py
+--- a/test/test_verb_test.py	2024-06-24 16:08:45.000000000 -0500
++++ b/test/test_verb_test.py	2024-06-25 14:10:46.618920296 -0500
+@@ -27,7 +27,7 @@
+         pass
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_other_extension_args():
+     with patch('colcon_core.verb.test.add_event_handler_arguments'), \
+             patch('colcon_core.verb.test.add_executor_arguments'), \
+@@ -36,7 +36,7 @@
+         yield
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_get_task_extension():
+     with patch(
+         'colcon_core.verb.test.get_task_extension',
+@@ -45,7 +45,7 @@
+         yield get_task_extension
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_get_packages():
+     desc1 = PackageDescriptor('foo_bar')
+     desc1.type = 'foo'
+@@ -72,7 +72,7 @@
+         yield get_packages
+ 
+ 
+-@pytest.fixture(scope='module', autouse=True)
++@pytest.yield_fixture(scope='module', autouse=True)
+ def patch_execute_jobs():
+     with patch(
+         'colcon_core.verb.test.execute_jobs',

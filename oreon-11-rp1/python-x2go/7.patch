@@ -1,0 +1,60 @@
+From 162241cfeef750336447f678468d44a9c8a2dd57 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Sat, 31 Aug 2024 16:16:38 -0600
+Subject: [PATCH] Rename SafeConfigParser to ConfigParser.  Fixes #9
+
+---
+ x2go/inifiles.py | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/x2go/inifiles.py b/x2go/inifiles.py
+index e094ba7e..61c773bb 100644
+--- a/x2go/inifiles.py
++++ b/x2go/inifiles.py
+@@ -95,11 +95,11 @@ class X2GoIniFile(object):
+         else:
+             self.defaultValues = {}
+ 
+-        # we purposefully do not inherit the SafeConfigParser class
++        # we purposefully do not inherit the ConfigParser class
+         # here as we do not want to run into name conflicts between
+         # X2Go ini file options and method / property names in
+-        # SafeConfigParser... This is a pre-cautious approach...
+-        self.iniConfig = configparser.SafeConfigParser()
++        # ConfigParser... This is a pre-cautious approach...
++        self.iniConfig = configparser.ConfigParser()
+         self.iniConfig.optionxform = str
+ 
+         _create_file = False
+@@ -148,7 +148,7 @@ class X2GoIniFile(object):
+         """\
+         Stores a value for a given section and key.
+ 
+-        This methods affects a SafeConfigParser object held in
++        This methods affects a ConfigParser object held in
+         RAM. No configuration file is affected by this
+         method. To write the configuration to disk use
+         the :func:`write()` method.
+@@ -170,8 +170,8 @@ class X2GoIniFile(object):
+ 
+     def _fill_defaults(self):
+         """\
+-        Fills a ``SafeConfigParser`` object with the default ini file
+-        values as pre-defined in Python X2Go or. This SafeConfigParser
++        Fills a ``ConfigParser`` object with the default ini file
++        values as pre-defined in Python X2Go or. This ConfigParser
+         object is held in RAM. No configuration file is affected by this
+         method.
+ 
+@@ -205,7 +205,7 @@ class X2GoIniFile(object):
+ 
+     def write(self):
+         """\
+-        Write the ini file modifications (SafeConfigParser object) from RAM to disk.
++        Write the ini file modifications (ConfigParser object) from RAM to disk.
+ 
+         For writing the first of the ``config_files`` specified on instance construction
+         that is writable will be used.
+-- 
+GitLab
+

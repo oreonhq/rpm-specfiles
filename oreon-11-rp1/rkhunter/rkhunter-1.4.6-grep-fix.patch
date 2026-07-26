@@ -1,0 +1,21 @@
+diff --color -Nur rkhunter-1.4.6.orig/files/rkhunter rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6.orig/files/rkhunter	2025-05-04 10:41:26.009520652 -0700
++++ rkhunter-1.4.6/files/rkhunter	2025-05-04 10:37:49.439199695 -0700
+@@ -6691,7 +6691,7 @@
+ 					#
+ 
+ 					if [ $ERRCODE -eq 1 -a $BINISLINK -eq 1 ]; then
+-						if [ -n "`echo \"$FNAME\" | grep '^\/usr\/'`" ]; then
++						if [ -n "`echo \"$FNAME\" | grep '^/usr/'`" ]; then
+ 							RKHTMPVAR3=`echo "$FNAMEGREP" | sed -e 's:^/usr::'`
+ 						else
+ 							RKHTMPVAR3="/usr${FNAMEGREP}"
+@@ -11005,7 +11005,7 @@
+ 						#
+ 
+ 						if [ $ERRCODE -eq 1 -a $BINISLINK -eq 1 ]; then
+-							if [ -n "`echo \"${FNAME}\" | grep '^\/usr\/'`" ]; then
++							if [ -n "`echo \"${FNAME}\" | grep '^/usr/'`" ]; then
+ 								RKHTMPVAR3=`echo "${FNAMEGREP}" | sed -e 's:^/usr::'`
+ 							else
+ 								RKHTMPVAR3="/usr${FNAMEGREP}"

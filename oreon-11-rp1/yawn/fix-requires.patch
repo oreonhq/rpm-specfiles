@@ -1,0 +1,10 @@
+diff -up yawn-20140318/setup.py.orig2 yawn-20140318/setup.py
+--- yawn-20140318/setup.py.orig2	2019-05-13 13:06:16.955524226 +0200
++++ yawn-20140318/setup.py	2019-05-13 13:06:28.152537623 +0200
+@@ -15,5 +15,5 @@ setup(
+         author_email = "miminar@redhat.com",
+         license = "GPL",
+         description = "Yet Another WBEM Navigator for Apache's mod_wsgi",
+-        install_requires=['distribute', 'werkzeug', 'mako']
++        install_requires=['werkzeug', 'mako']
+ )

@@ -1,0 +1,58 @@
+diff -ruN tinyexr-1.0.7-orig/CMakeLists.txt tinyexr-1.0.7/CMakeLists.txt
+--- tinyexr-1.0.7-orig/CMakeLists.txt	2023-09-09 00:46:23.696452535 -0300
++++ tinyexr-1.0.7/CMakeLists.txt	2023-09-09 00:46:49.224490452 -0300
+@@ -9,6 +9,7 @@
+ 
+ include(GNUInstallDirs)
+ include(CMakePackageConfigHelpers)
++include(CTest)
+ 
+ # options
+ option(TINYEXR_BUILD_SAMPLE "Build a sample" ON)
+@@ -76,29 +77,9 @@
+   set_source_files_properties(${TINYEXR_SOURCES} PROPERTIES COMPILE_FLAGS "-Weverything -Werror -Wno-padded -Wno-c++98-compat-pedantic -Wno-documentation -Wno-unused-member-function")
+ ENDIF ()
+ 
+-if (TINYEXR_BUILD_SAMPLE)
+-
+-  set(TINYEXR_SAMPLE_SOURCES
+-      ${PROJECT_SOURCE_DIR}/test_tinyexr.cc
+-      )
+-
+-  add_executable(${SAMPLE_TARGET} ${TINYEXR_SAMPLE_SOURCES})
+-  target_link_libraries(${SAMPLE_TARGET} ${TINYEXR_EXT_LIBRARIES})
+-  add_sanitizers(${SAMPLE_TARGET})
+-  if (WIN32)
+-    target_compile_definitions(${SAMPLE_TARGET} PUBLIC UNICODE)
+-    target_compile_definitions(${SAMPLE_TARGET} PUBLIC _UNICODE)
+-
+-    # Set ${SAMPLE_TARGET} as a startup project for VS IDE
+-    set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${SAMPLE_TARGET})
+-
+-    # For easier debugging in VS IDE(cmake 3.8.0 or later required) Set working
+-    # directory to ${BUILD_TARGET} git repo root.
+-    if(CMAKE_VERSION VERSION_GREATER 3.8.0)
+-      set_target_properties(${SAMPLE_TARGET}
+-              PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
+-              "${CMAKE_CURRENT_SOURCE_DIR}")
+-    endif()
+-  endif(WIN32)
+-
+-endif (TINYEXR_BUILD_SAMPLE)
++if(BUILD_TESTING)
++  add_executable(test_tinyexr test_tinyexr.cc)
++  target_link_libraries(test_tinyexr
++    tinyexr::tinyexr)
++  add_test(NAME test_tinyexr COMMAND test_tinyexr ${CMAKE_CURRENT_SOURCE_DIR}/asakusa.exr)
++endif()
+diff -ruN tinyexr-1.0.7-orig/test_tinyexr.cc tinyexr-1.0.7/test_tinyexr.cc
+--- tinyexr-1.0.7-orig/test_tinyexr.cc	2023-08-03 12:35:04.000000000 -0400
++++ tinyexr-1.0.7/test_tinyexr.cc	2023-09-08 20:55:01.888853687 -0300
+@@ -16,7 +16,6 @@
+ //#define TINYEXR_USE_MINIZ (0)
+ //#include <zlib.h>
+ 
+-#define TINYEXR_IMPLEMENTATION
+ #include "tinyexr.h"
+ 
+ #ifdef __clang__

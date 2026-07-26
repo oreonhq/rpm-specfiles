@@ -1,0 +1,25 @@
+Fixes these warnings:
+
+bitmap.c: In function ‘main’:
+bitmap.c:61:27: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+   61 |         if (mpix < 0 && w < 0 & h > 0)
+      |                         ~~^~~
+bitmap.c:64:27: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+   64 |         if (mpix < 0 && w > 0 & h < 0)
+      |                         ~~^~~
+
+--- spasm-1.2/bench/bitmap.c.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/bench/bitmap.c	2023-11-12 11:30:52.989291184 -0700
+@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
+ 		h = alpha * n;
+ 		fprintf(stderr, "[bitmap] targeting %.1f Mpixels ; w=%d, h=%d\n", mpix, w, h);
+ 	}
+-	if (mpix < 0 && w < 0 & h > 0)
++	if (mpix < 0 && w < 0 && h > 0)
+ 		w = m * (h / n);
+ 
+-	if (mpix < 0 && w > 0 & h < 0)
++	if (mpix < 0 && w > 0 && h < 0)
+ 		h = n * (w / m);
+ 
+ 	w = spasm_min(w, m);

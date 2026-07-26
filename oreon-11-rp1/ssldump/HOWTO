@@ -1,0 +1,10 @@
+You can use ssldump with tcpdump, as they use identical file formats.
+This allows you to take a tcpdump, and analyse it for SSL/TLS sessions
+and extra application data.
+
+People use `tcpdump -i interface -s 65535 -n -v -w file'. This tells
+tcpdump to snap up 65535 bytes (the maximum number in a TCP packet),
+not to resolve any addresses, be verbose and log to `file'.
+
+Then, people can use `ssldump -r file' to read the file, and interpret
+it as necessary.

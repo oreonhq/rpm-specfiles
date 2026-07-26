@@ -1,0 +1,249 @@
+.TH PUTUP "1" "April 2022" "" "User Commands"
+.SH NAME
+.B putup
+\(en PyScaffold command-line interface
+.SH SYNOPSIS
+.B putup
+.RB [ \-h ]
+.RB [ \-n\ \fINAME ]
+.RB [ \-p\ \fIPACKAGE_NAME ]
+.RB [ \-d\ \fITEXT ]
+.RB [ \-l\ \fILICENSE ]
+.RB [ \-u\ \fIURL ]
+.RB [ \-f ]
+.RB [ \-U ]
+.RB [ \-V ]
+.RB [ \-v ]
+.RB [ \-vv ]
+.RB [ \-P ]
+.RB [ \-\-list\-actions ]
+.RB [ \-\-cirrus ]
+[\fB\-\-config\ \fICONFIG_FILE\fR\ [\fICONFIG_FILE\fR\ ...]\ |\ \fB\-\-no\-config\fR]
+[\fB\-\-save\-config\ \fR[\fISAVE_CONFIG\fR]]
+.RB [ \-\-github\-actions ]
+.RB [ \-gitlab ]
+.RB [ \-i ]
+[\fB\-\-namespace\ \fINS1\fR[\fB.\fINS2\fR]]
+.RB [ \-\-no\-pyproject ]
+.RB [ \-\-no\-skeleton ]
+.RB [ \-\-no\-tox ]
+.RB [ \-\-pre\-commit ]
+[\fB\-\-venv\ \fR[\fIVENV\fR]]
+[\fB\-\-venv\-install\ \fIPACKAGE\fR\ [\fIPACKAGE\fR\ ...]]
+.I PROJECT_PATH
+.SH DESCRIPTION
+PyScaffold is a tool for easily putting up the scaffold of a Python project.
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.B PROJECT_PATH
+path where to generate/update project
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-n\ \fINAME\fR,\ \fB\-\-name\ \fINAME
+installable name (as in
+.BR pip\ install /PyPI,
+default:
+basename of
+.IR PROJECT_PATH )
+.TP
+.B \-p\ \fIPACKAGE_NAME\fR,\ \fB\-\-package\ \fIPACKAGE_NAME
+package name (as in
+.BR import ,
+default:
+.IR NAME )
+.TP
+.B \-d\ \fITEXT\fR,\ \fB\-\-description\ \fITEXT
+package description
+.TP
+.B \-l\ \fILICENSE\fR,\ \fB\-\-license\ \fILICENSE
+package license like
+.BR MIT ,
+.BR AGPL\-3.0\-or\-later ,
+.BR AGPL\-3.0\-only ,
+.BR Apache\-2.0 ,
+.BR Artistic\-2.0 ,
+.BR 0BSD ,
+.BR BSD\-2\-Clause ,
+.BR BSD\-3\-Clause ,
+.BR CC0\-1.0 ,
+.BR EPL\-1.0 ,
+.BR GPL\-2.0\-or\-later ,
+.BR GPL\-2.0\-only ,
+.BR GPL\-3.0\-or\-later ,
+.BR GPL\-3.0\-only ,
+.BR ISC ,
+.BR LGPL\-2.0\-or\-later ,
+.BR LGPL\-2.0\-only ,
+.BR LGPL\-3.0\-or\-later ,
+.BR LGPL\-3.0\-only ,
+.BR MPL\-2.0 ,
+.BR Unlicense ,
+.BR Proprietary
+(default:
+.BR MIT )
+.TP
+.B \-u\ \fIURL\fR,\ \fB\-\-url\ \fIURL
+main website/reference URL for package
+.TP
+.B \-f\fR,\ \fB\-\-force
+force overwriting an existing directory
+.TP
+.B \-U\fR,\ \fB\-\-update
+update an existing project by replacing the most important files like
+.B setup.py
+etc.
+Use additionally
+.B \-\-force
+to replace all scaffold files.
+.TP
+.B \-V\fR,\ \fB\-\-version
+show program\(cqs version number and exit
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+show additional information about current actions
+.TP
+.B \-vv\fR,\ \fB\-\-very\-verbose
+show all available information about current actions
+.TP
+.B \-P\fR,\ \fB\-\-pretend
+do not create project, but displays the log of all operations
+as if it had been created
+.TP
+.B \-\-list\-actions
+do not create project, but show a list of planned actions
+.TP
+.B \-\-cirrus
+add configuration file for 
+.UR https://cirrus-ci.org/
+Cirrus CI
+.UE
+(includes
+.BR \-\-pre\-commit )
+.TP
+.B \-\-config\ \fICONFIG_FILE\fR\ [\fICONFIG_FILE\fR\ ...]
+config file to read PyScaffold\(cqs preferences
+(see
+.B \-\-help
+output for default)
+.TP
+.B \-\-no\-config
+prevent PyScaffold from reading its default config file
+.TP
+.B \-\-save\-config\ \fR[\fISAVE_CONFIG\fR]
+save the given options in a config file
+(see
+.B \-\-help
+output for default)
+.TP
+.B \-\-github\-actions
+add configuration file for 
+.UR https://github.com/features/actions
+GitHub Actions
+.UE
+(includes
+.BR \-\-pre\-commit )
+.TP
+.B \-\-gitlab
+generate
+.UR https://docs.gitlab.com/ee/ci/
+GitLab CI
+.UE
+configuration files
+.TP
+.B \-i\fR,\ \fB\-\-interactive
+interactively choose and configure PyScaffold\(cqs parameters
+.TP
+.B \-\-namespace\ \fINS1\fR[\fB.\fINS2\fR]
+put your project inside a namespace package
+(default: use no namespace)
+.TP
+.B \-\-no\-pyproject
+do not include a
+.B pyproject.toml
+file in the project root, and thus avoid isolated builds
+as defined in
+.UR https://peps.python.org/pep-0517/
+PEP517
+.UE
+/
+.UR https://peps.python.org/pep-0518/
+518
+.UE
+.RI [ not\ recommended ]
+.TP
+.B \-\-no\-skeleton
+omit creation of
+.B skeleton.py
+and
+.B test_skeleton.py
+.TP
+.B \-\-no\-tox
+prevent a
+.B tox
+configuration file from being created
+.TP
+.B \-\-pre\-commit
+generate
+.B pre\-commit
+configuration file
+.TP
+.B \-\-venv\ \fR[\fIVENV\fR]
+create a virtual environment for the project
+(using
+.B virtualenv
+or stdlib\(cqs
+.BR venv ).
+Default location:
+.RB \(lq .venv \(rq.
+If
+.B virtualenv
+is available, it will be used,
+since it has some advantages over stdlib\(cqs
+.B venv
+(such as being faster, see
+.UR https://virtualenv.pypa.io/en/stable/
+.UE ).
+Notice that even if part of Python\(cqs stdlib,
+.B venv
+is not guaranteed to be installed;
+some OS/distributions (such as Ubuntu)
+require an explicit installation.
+If you have problems, try installing
+.B virtualenv
+with
+.BR pip (1)
+and run the command again.
+.TP
+.B \-\-venv\-install\ \fIPACKAGE\fR\ [\fIPACKAGE\fR\ ...]
+install packages inside the created venv.
+The packages can have dependency ranges
+as if they would be written to a
+.B requirements.txt
+file, but remember to use quotes to avoid messing with the terminal
+.SH "SEE ALSO"
+.BR pip (1),
+.BR python (1)
+.P
+.UR https://pre-commit.com/
+.B pre\-commit
+.UE ,
+.UR https://tox.wiki/
+.B tox
+.UE ,
+.UR https://virtualenv.pypa.io/en/latest/
+.B virtualenv
+.UE
+.P
+.UR https://cirrus-ci.org/
+Cirrus CI
+.UE ,
+.UR https://github.com/features/actions
+GitHub Actions
+.UE ,
+.UR https://docs.gitlab.com/ee/ci/
+GitLab CI
+.UE

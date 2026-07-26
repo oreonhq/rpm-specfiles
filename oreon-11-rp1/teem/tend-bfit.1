@@ -1,0 +1,72 @@
+.TH TEND\-BFIT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-bfit \- non-linear least-squares fitting of \fIb\fR-value curves
+.SH SYNOPSIS
+.B tend\ bfit
+.RI [ @file \ ...]
+.RB [ \-i
+.RI < nin >]
+.B \-b
+.RI < b1 \  b2 \ ...>
+.RB [ \-w
+.RI < w1 \  w2 \ ...>]
+.RB [ \-imax
+.RI < #\ iter >]
+.RB [ \-eps
+.RI < epsilon >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Non-linear least-squares fitting of \fIb\fR-value curves.
+Axis 0 is replaced by three values: 
+.IR amp ,\  dec ,\  err ,
+based on a non-linear least-squares fit of
+.IB amp *exp(\- b * dec )
+to the range of DWI values along input axis 0, as a function of changing
+.I b
+values. 
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-i\fR <\fInin\fR>
+Input
+.IR nrrd .
+List of DWIs from different
+.IR b -values
+must be along axis 0; default:
+.RB \(lq \- \(rq
+.TP
+.B \-b\fR <\fIb1\fR\ \fIb2\fR\ ...>
+.I b
+values across axis 0 of input
+.I nrrd
+(2 or more
+.IR double s)
+.TP
+.B \-w\fR <\fIw1\fR\ \fIw2\fR\ ...>
+weights for samples in non-linear fitting (2 or more
+.IR double s)
+.TP
+.B \-imax\fR <\fI#\ iter\fR>
+max number of iterations to use in non-linear fitting, or, use
+.B 0
+to do only initial linear fit
+.RI ( int );
+default:
+.RB \(lq 10 \(rq
+.TP
+.B \-eps\fR <\fIepsilon\fR>
+epsilon convergence threshold for non-linear fitting
+.RI ( double );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

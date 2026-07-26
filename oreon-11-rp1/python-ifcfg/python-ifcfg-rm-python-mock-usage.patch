@@ -1,0 +1,21 @@
+--- a/tests/ipconfig_tests.py
++++ b/tests/ipconfig_tests.py
+@@ -5,7 +5,7 @@ import binascii
+ import subprocess
+ 
+ import ifcfg
+-import mock
++from unittest import mock
+ from ifcfg import tools
+ from ifcfg.parser import WindowsParser
+ 
+--- a/tox.ini
++++ b/tox.ini
+@@ -26,7 +26,6 @@ usedevelop = True
+ deps =
+      coverage
+      nose
+-     mock
+ 
+ [testenv:lint]
+ basepython = python2.7

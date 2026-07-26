@@ -1,0 +1,37 @@
+From 144871ed5ec62d9b45f28774923ac83532eb1a2d Mon Sep 17 00:00:00 2001
+From: Charles Kerr <charles@charleskerr.com>
+Date: Tue, 24 Feb 2026 22:44:06 -0600
+Subject: [PATCH] fix: 4.1.0 crash when parsing some RPC responses from older
+ Transmission servers (#8607)
+
+---
+ qt/VariantHelpers.cc | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/qt/VariantHelpers.cc b/qt/VariantHelpers.cc
+index b3e1c72e6c9..19cfea70f48 100644
+--- a/qt/VariantHelpers.cc
++++ b/qt/VariantHelpers.cc
+@@ -15,6 +15,7 @@
+ #include <QUrl>
+ 
+ #include <libtransmission/serializer.h>
++#include <libtransmission/web-utils.h>
+ 
+ #include "Application.h" // qApp
+ #include "Speed.h"
+@@ -186,8 +187,12 @@ bool change(TrackerStat& setme, tr_variant const* value)
+     {
+         if (setme.sitename.isEmpty())
+         {
+-            QStringList const separated_host = QUrl{ setme.announce }.host().split(QStringLiteral("."));
+-            setme.sitename = separated_host.at(separated_host.size() - 2);
++            auto const announce_str = setme.announce.toStdString();
++            if (auto const parsed = tr_urlParse(announce_str))
++            {
++                auto const sitename = parsed->sitename;
++                setme.sitename = QString::fromUtf8(std::data(sitename), std::size(sitename));
++            }
+         }
+ 
+         setme.announce = trApp->intern(setme.announce);

@@ -1,0 +1,28 @@
+From 54d0da99478fd3fef030b40f241b5594fa81f9ef Mon Sep 17 00:00:00 2001
+From: MSP-Greg <Greg.mpls@gmail.com>
+Date: Tue, 4 Feb 2025 08:42:16 -0600
+Subject: [PATCH] CI: test_puma_server_ssl.rb -fix for 
+ `set_minmax_proto_version` removal
+
+`OpenSSL::SSL::SSLContext#set_minmax_proto_version` was removed in Ruby head/3.5.
+
+See:
+https://github.com/ruby/openssl/pull/849
+https://github.com/ruby/ruby/commit/5a14f536958d20e98c58606bd44bd2c0bed6da4b
+---
+ test/test_puma_server_ssl.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test_puma_server_ssl.rb b/test/test_puma_server_ssl.rb
+index 66e75c428b..c80a43d93d 100644
+--- a/test/test_puma_server_ssl.rb
++++ b/test/test_puma_server_ssl.rb
+@@ -31,7 +31,7 @@ class TestPumaServerSSL < PumaTest
+   include TestPuma::PumaSocket
+ 
+   PROTOCOL_USE_MIN_MAX =
+-    OpenSSL::SSL::SSLContext.private_instance_methods(false).include?(:set_minmax_proto_version)
++    OpenSSL::SSL::SSLContext.public_instance_methods(false).include?(:min_version=)
+ 
+   OPENSSL_3 = OpenSSL::OPENSSL_LIBRARY_VERSION.match?(/OpenSSL 3\.\d\.\d/)
+ 

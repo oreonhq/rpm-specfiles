@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Alkalami</target>
+    <match>
+      <family>Alkalami Light</family>
+      <prepend-keyword>Light</prepend-keyword>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Light</name>
+        <value>50</value>
+      </step>
+    </axis>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

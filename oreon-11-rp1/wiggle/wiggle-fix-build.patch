@@ -1,0 +1,25 @@
+diff -up wiggle-1.1/Makefile.build wiggle-1.1/Makefile
+--- wiggle-1.1/Makefile.build	2017-09-28 08:37:04.000000000 -0400
++++ wiggle-1.1/Makefile	2018-02-21 14:04:33.644637920 -0500
+@@ -4,9 +4,10 @@
+ #OptDbg=-O3 -march=pentium2
+ OptDbg=-ggdb
+ ifndef CWFLAGS
+-CWFLAGS=-Wall -Werror -Wstrict-prototypes -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
++#CWFLAGS=-Wall -Werror -Wstrict-prototypes -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+ endif
+-CFLAGS=$(OptDbg) -I. $(CWFLAGS)
++#CFLAGS=$(OptDbg) -I. $(CWFLAGS)
++CFLAGS+=-I.
+ 
+ PREFIX  = /usr
+ # STRIP = -s
+@@ -30,7 +31,7 @@ OBJ=wiggle.o ReadMe.o vpatch.o
+ BOBJ=$(patsubst %.o,$(O)/%.o,$(OBJ))
+ BLIBOBJ=$(patsubst %.o,$(O)/%.o,$(LIBOBJ))
+ 
+-all: $(BIN)/wiggle $(DOC)/wiggle.man test
++all: $(BIN)/wiggle $(DOC)/wiggle.man
+ lib : $(O)/libwiggle.a
+ 
+ #

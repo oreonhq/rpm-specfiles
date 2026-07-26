@@ -1,0 +1,25 @@
+From 750dfbb7d9522d07bcd7fd1920a91839e4b562c4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 25 Jul 2023 09:35:23 -0400
+Subject: [PATCH] Replace assertEquals with assertEqual
+
+This deprecated unittest.TestCase alias was removed in Python 3.12.
+---
+ tests/provider_tests.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/provider_tests.py b/tests/provider_tests.py
+index 130b552..1496850 100644
+--- a/tests/provider_tests.py
++++ b/tests/provider_tests.py
+@@ -104,5 +104,5 @@ class ProviderWithDummyResponseServer(TestCase):
+ 
+         tile_mimetype, tile_content = utils.request(config_file_content, "local_layer", "png", 0, 0, 0)
+ 
+-        self.assertEquals(tile_mimetype, self.response_mimetype)
+-        self.assertEquals(tile_content, self.response_content)
++        self.assertEqual(tile_mimetype, self.response_mimetype)
++        self.assertEqual(tile_content, self.response_content)
+-- 
+2.41.0
+

@@ -1,0 +1,57 @@
+.TH pomigrate2 1 "Translate Toolkit 1.3.0" "" "Translate Toolkit 1.3.0"
+.SH NAME
+pomigrate2 \- Migrates PO files from an old version using new POT files.
+.SH SYNOPSIS
+\fBpomigrate\fR [options] \fIfrom\fR \fIto\fR \fInew-templates\fR
+.P
+Where \fIfrom\fR is a directory of existing PO files, \fIto\fR is the
+directory where the migrated PO files will be stored, and
+\fInew-templates\fR is the directory that contains the PO Template files.
+.SH DESCRIPTION
+\fBpomigrate2\fR aims to move an existing translation to a new version based on
+updated PO Template files automatically without user intervention.
+Therefore it is ideal for when you are migrating many languages or
+migrating from related but divergent products eg Mozilla to Firefox.
+.SH OPTIONS
+.TP
+\fB\-F\fR, \fB\-\-use\-fuzzy\-matching\fR
+use fuzzy algorithms when merging to attempt to match strings
+.TP
+\fB\-C\fR, \fB\-\-use\-compendium\fR
+create and use a compendium built from the migrating files
+.TP
+\fB\-C\fR, \fB\-\-use\-compendium\fR=\fIsome-compendium.po\fR
+use an external compendium during the migration
+.TP
+\fB\-\-no\-wrap\fR
+do not wrap long lines
+.TP
+\fB\-\-locale\fR
+set locale for newly born files
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+suppress most output
+.TP
+\fB\-p\fR, \fB\-\-pot2po\fR
+use \fBpot2po\fR(1) instead of \fBmsgmerge\fR(1) to migrate (you cannot use
+compendia)
+.SH OPERATION
+\fBpomigrate2\fR makes use of the Gettext tools \fBmsgmerge\fR or Translate Toolkits
+\fBpot2po\fR to perform its merging tasks.
+
+It firstly finds all files with the same name and location in the \fIfrom\fR
+directory as in the \fInew-template\fR directory and copies these to the \fIto\fR
+directory. If there is no file in the \fIfrom\fR directory to match one
+needed by the \fInew-template\fR directory then it will \fBmsgcat\fR(1) all files in the
+\fIfrom\fR directory with the same name and copy them to the correct
+destination in the \fIto\fR directory. If all of that fails then
+\fBmsginit\fR(1) is
+used to initialise any missing PO files.
+
+Lastly all the files in <to> are merged using \fBmsgmerge\fR(1) or \fBpot2po\fR(1). This
+process updates the files to match the layout and messages in
+\fInew-templates\fR. Optionally, by using \fB\-\-use\-compendium\fR, a compendium of all
+the translations in \fIfrom\fR can be created to be used in the final merge
+process.
+.SH BUGS
+None known

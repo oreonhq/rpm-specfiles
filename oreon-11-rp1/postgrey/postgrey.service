@@ -1,0 +1,26 @@
+[Unit]
+Description=Postfix Greylisting Service
+Documentation=man:postgrey(8)
+Before=postfix.service
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/postgrey
+ExecStartPre=-/bin/rm -f /var/run/postgrey.pid
+PIDFile=/var/run/postgrey.pid
+ExecStart=/usr/sbin/postgrey \
+ $POSTGREY_TYPE \
+ $POSTGREY_PID \
+ $POSTGREY_GROUP \
+ $POSTGREY_USER \
+ '--greylist-text=Greylisted for %%s seconds' \
+ --daemonize \
+ $POSTGREY_DELAY \
+ $POSTGREY_OPTS
+
+Restart=always
+RestartSec=1
+TimeoutSec=5
+
+[Install]
+WantedBy=multi-user.target

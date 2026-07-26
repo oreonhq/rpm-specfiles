@@ -1,0 +1,22 @@
+diff --color -urN salt-lint-0.6.1_orig/tox.ini salt-lint-0.6.1/tox.ini
+--- salt-lint-0.6.1_orig/tox.ini	2021-06-01 06:07:19.000000000 -0500
++++ salt-lint-0.6.1/tox.ini	2021-10-15 17:58:52.651136346 -0500
+@@ -9,17 +9,9 @@
+ 
+ [testenv]
+ deps =
+-    coverage
+-    flake8
+     pytest
+-    pytest-cov
+ commands =
+-    {envpython} -m pytest tests/unit \
+-        {posargs:\
+-        --cov saltlint \
+-        --cov-report term-missing:skip-covered \
+-        --cov-report xml:.test-results/pytest/cov.xml \
+-        --no-cov-on-fail}
++    {envpython} -m pytest tests/unit
+ 
+ [testenv:install]
+ skip_install = True

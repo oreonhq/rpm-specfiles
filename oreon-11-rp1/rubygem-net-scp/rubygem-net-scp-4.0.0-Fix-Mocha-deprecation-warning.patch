@@ -1,0 +1,23 @@
+From 5871b93867151a1f7e6bb41bce92bdc5ae083cab Mon Sep 17 00:00:00 2001
+From: mishina <temma182008@gmail.com>
+Date: Sat, 22 Oct 2022 14:53:57 +0900
+Subject: [PATCH] Fix Mocha deprecation warning
+
+```
+Mocha deprecation warning at /.../net-scp/test/common.rb:2:in `require': Require 'mocha/test_unit', 'mocha/minitest' or 'mocha/api' instead of 'mocha/setup'.
+```
+---
+ test/common.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/common.rb b/test/common.rb
+index de620b58..123d32f9 100644
+--- a/test/common.rb
++++ b/test/common.rb
+@@ -1,5 +1,5 @@
+ require 'test/unit'
+-require 'mocha/setup'
++require 'mocha/test_unit'
+ 
+ begin
+   gem 'net-ssh', ">= 2.0.0"

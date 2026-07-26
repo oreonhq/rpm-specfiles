@@ -1,0 +1,30 @@
+From 4441fba5c677e41eee9e49485ef0a38eaa5f0b96 Mon Sep 17 00:00:00 2001
+From: serge-sans-paille <serge.guelton@telecom-bretagne.eu>
+Date: Wed, 19 Nov 2025 10:18:09 +0100
+Subject: [PATCH] Don't test float128 when it does not exist in numpy
+
+---
+ pythran/tests/test_conversion.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/pythran/tests/test_conversion.py b/pythran/tests/test_conversion.py
+index 6aa0a829b..76dae7c4e 100644
+--- a/pythran/tests/test_conversion.py
++++ b/pythran/tests/test_conversion.py
+@@ -257,12 +257,14 @@ def test_builtin_type9(self):
+ 
+     def test_simple_meta_types(self):
+         types = (complex, float, int, bool, str,
+-                 np.float128, np.float64, np.float32,
+-                 np.complex256, np.complex128, np.complex64,
++                 np.float64, np.float32,
++                 np.complex128, np.complex64,
+                  np.uint64, np.uint32, np.uint16, np.uint8,
+                  np.int64, np.int32, np.int16, np.int8,
+                  np.int64, np.int32, np.int16, np.int8,
+                  )
++        if has_float128:
++            types += np.float128, np.complex256
+         for i, ty in enumerate(types):
+             kwargs= {f"simple_meta_types_{i}": [Type[ty]]}
+             self.run_test(f"def simple_meta_types_{i}(obj): return obj()",

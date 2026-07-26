@@ -1,0 +1,584 @@
+From c5aa266b0bec5501d18c47e7b1430dce80c526b6 Mon Sep 17 00:00:00 2001
+From: "B. Baumeier" <b.baumeier@tue.nl>
+Date: Thu, 15 Jan 2026 09:43:40 +0100
+Subject: [PATCH] explicit referencing to boost::format
+
+---
+ csg/src/tools/csg_dlptopol.cc         |  7 +++--
+ csg/src/tools/csg_gmxtopol.cc         |  3 +--
+ xtp/src/libxtp/davidsonsolver.cc      |  7 ++---
+ xtp/src/libxtp/gwbse/bse.cc           | 17 ++++++------
+ xtp/src/libxtp/gwbse/gwbse.cc         | 17 ++++++------
+ xtp/src/libxtp/job.cc                 | 14 +++++-----
+ xtp/src/libxtp/jobcalculators/eqm.cc  | 28 +++++++++-----------
+ xtp/src/libxtp/jobcalculators/iqm.cc  | 38 +++++++++++++--------------
+ xtp/src/libxtp/parallelxjobcalc.cc    | 10 +++----
+ xtp/src/libxtp/tools/diabatization.cc | 17 ++++++------
+ 10 files changed, 72 insertions(+), 86 deletions(-)
+
+diff --git a/csg/src/tools/csg_dlptopol.cc b/csg/src/tools/csg_dlptopol.cc
+index d068c791f7..e1549ce005 100644
+--- a/csg/src/tools/csg_dlptopol.cc
++++ b/csg/src/tools/csg_dlptopol.cc
+@@ -27,7 +27,6 @@
+ 
+ using namespace votca::csg;
+ using namespace std;
+-using boost::format;
+ 
+ /**
+     \brief class for writing dlpoly topology files
+@@ -158,8 +157,8 @@ bool DLPTopolApp::EvaluateTopology(Topology *top, Topology *) {
+ 
+           stringstream ss_bp1, ss_bp2;
+ 
+-          ss_bp1 << format("%8s%8s") % bead_name1 % bead_name2;
+-          ss_bp2 << format("%8s%8s") % bead_name2 % bead_name1;
++          ss_bp1 << boost::format("%8s%8s") % bead_name1 % bead_name2;
++          ss_bp2 << boost::format("%8s%8s") % bead_name2 % bead_name1;
+ 
+           bool is_new_pair = true;
+ 
+@@ -234,7 +233,7 @@ void DLPTopolApp::WriteMoleculeAtoms(ostream &out, const Molecule &cg) {
+     btype = btype.substr(
+         0, btype.find_first_of("#"));  // skip #index of atom from its type
+ 
+-    out << format("%8s  %10f  %10f     1     0     1 %10d  %8s  %8s %10d \n") %
++    out << boost::format("%8s  %10f  %10f     1     0     1 %10d  %8s  %8s %10d \n") %
+                btype % b->getMass() % b->getQ() % (i + 1) % btype % bname %
+                (i + 1);
+     //% b->getType()->getName() % b->getMass() % b->getQ() % (i+1) %
+diff --git a/csg/src/tools/csg_gmxtopol.cc b/csg/src/tools/csg_gmxtopol.cc
+index f041c199cd..a1459a8ef1 100644
+--- a/csg/src/tools/csg_gmxtopol.cc
++++ b/csg/src/tools/csg_gmxtopol.cc
+@@ -27,7 +27,6 @@
+ 
+ using namespace votca::csg;
+ using namespace std;
+-using boost::format;
+ 
+ class GmxTopolApp : public CsgApplication {
+  public:
+@@ -77,7 +76,7 @@ void GmxTopolApp::WriteAtoms(ostream &out, Molecule &cg) {
+   out << "; nr type resnr residue atom cgnr charge mass\n";
+   for (votca::Index i = 0; i < cg.BeadCount(); ++i) {
+     Bead *b = cg.getBead(i);
+-    out << format("%d %s 1 RES %s %d %f %f\n") % (i + 1) % b->getType() %
++    out << boost::format("%d %s 1 RES %s %d %f %f\n") % (i + 1) % b->getType() %
+                b->getName() % (i + 1) % b->getQ() % b->getMass();
+   }
+   out << endl;
+diff --git a/xtp/src/libxtp/davidsonsolver.cc b/xtp/src/libxtp/davidsonsolver.cc
+index e4a340754f..96ed03bc64 100644
+--- a/xtp/src/libxtp/davidsonsolver.cc
++++ b/xtp/src/libxtp/davidsonsolver.cc
+@@ -23,9 +23,6 @@
+ #include "votca/xtp/davidsonsolver.h"
+ #include "votca/xtp/eigen.h"
+ 
+-using boost::format;
+-using std::flush;
+-
+ namespace votca {
+ namespace xtp {
+ 
+@@ -95,7 +92,7 @@ void DavidsonSolver::printIterationData(
+   double percent_converged = 100 * double(converged_roots) / double(neigen);
+   XTP_LOG(Log::error, log_)
+       << TimeStamp()
+-      << format(" %1$4d %2$12d \t %3$4.2e \t %4$5.2f%% converged") % i_iter_ %
++      << boost::format(" %1$4d %2$12d \t %3$4.2e \t %4$5.2f%% converged") % i_iter_ %
+              proj.search_space() % rep.res_norm().head(neigen).maxCoeff() %
+              percent_converged
+       << std::flush;
+@@ -544,7 +541,7 @@ void DavidsonSolver::storeNotConvergedData(
+   percent_converged *= 100.;
+   XTP_LOG(Log::error, log_)
+       << TimeStamp() << "- Warning : Davidson "
+-      << format("%1$5.2f%%") % percent_converged << " converged after "
++      << boost::format("%1$5.2f%%") % percent_converged << " converged after "
+       << i_iter_ << " iterations." << std::flush;
+   info_ = Eigen::ComputationInfo::NoConvergence;
+ }
+diff --git a/xtp/src/libxtp/gwbse/bse.cc b/xtp/src/libxtp/gwbse/bse.cc
+index 11ad3ba1ad..300887dda1 100644
+--- a/xtp/src/libxtp/gwbse/bse.cc
++++ b/xtp/src/libxtp/gwbse/bse.cc
+@@ -34,7 +34,6 @@
+ #include "votca/xtp/rpa.h"
+ #include "votca/xtp/vc2index.h"
+ 
+-using boost::format;
+ using std::flush;
+ 
+ namespace votca {
+@@ -276,7 +275,7 @@ void BSE::printFragInfo(const std::vector<QMFragment<BSE_Population> >& frags,
+     double dq = frag.value().H[state] + frag.value().E[state];
+     double qeff = dq + frag.value().Gs;
+     XTP_LOG(Log::error, log_)
+-        << format(
++        << boost::format(
+                "           Fragment %1$4d -- hole: %2$5.1f%%  electron: "
+                "%3$5.1f%%  dQ: %4$+5.2f  Qeff: %5$+5.2f") %
+                int(frag.getId()) % (100.0 * frag.value().H[state]) %
+@@ -292,7 +291,7 @@ void BSE::PrintWeights(const Eigen::VectorXd& weights) const {
+     double weight = weights(i_bse);
+     if (weight > opt_.min_print_weight) {
+       XTP_LOG(Log::error, log_)
+-          << format("           HOMO-%1$-3d -> LUMO+%2$-3d  : %3$3.1f%%") %
++          << boost::format("           HOMO-%1$-3d -> LUMO+%2$-3d  : %3$3.1f%%") %
+                  (opt_.homo - vc.v(i_bse)) % (vc.c(i_bse) - opt_.homo - 1) %
+                  (100.0 * weight)
+           << flush;
+@@ -329,7 +328,7 @@ void BSE::Analyze_singlets(std::vector<QMFragment<BSE_Population> > fragments,
+ 
+     double osc = oscs[i];
+     XTP_LOG(Log::error, log_)
+-        << format(
++        << boost::format(
+                "  S = %1$4d Omega = %2$+1.12f eV  lamdba = %3$+3.2f nm <FT> "
+                "= %4$+1.4f <K_x> = %5$+1.4f <K_d> = %6$+1.4f") %
+                (i + 1) % (hrt2ev * energies(i)) %
+@@ -341,7 +340,7 @@ void BSE::Analyze_singlets(std::vector<QMFragment<BSE_Population> > fragments,
+ 
+     const Eigen::Vector3d& trdip = orb.TransitionDipoles()[i];
+     XTP_LOG(Log::error, log_)
+-        << format(
++        << boost::format(
+                "           TrDipole length gauge[e*bohr]  dx = %1$+1.4f dy = "
+                "%2$+1.4f dz = %3$+1.4f |d|^2 = %4$+1.4f f = %5$+1.4f") %
+                trdip[0] % trdip[1] % trdip[2] % (trdip.squaredNorm()) % osc
+@@ -379,7 +378,7 @@ void BSE::Analyze_triplets(std::vector<QMFragment<BSE_Population> > fragments,
+     }
+ 
+     XTP_LOG(Log::error, log_)
+-        << format(
++        << boost::format(
+                "  T = %1$4d Omega = %2$+1.12f eV  lamdba = %3$+3.2f nm <FT> "
+                "= %4$+1.4f <K_d> = %5$+1.4f") %
+                (i + 1) % (tools::conv::hrt2ev * energies(i)) %
+@@ -392,7 +391,7 @@ void BSE::Analyze_triplets(std::vector<QMFragment<BSE_Population> > fragments,
+     if (fragments.size() > 0) {
+       printFragInfo(fragments, i);
+     }
+-    XTP_LOG(Log::error, log_) << format("   ") << flush;
++    XTP_LOG(Log::error, log_) << boost::format("   ") << flush;
+   }
+ 
+   return;
+@@ -597,7 +596,7 @@ void BSE::Perturbative_DynamicalScreening(const QMStateType& type,
+     for (Index i = 0; i < opt_.nmax; ++i) {
+       double osc = oscs[i];
+       XTP_LOG(Log::error, log_)
+-          << format(
++          << boost::format(
+                  "  S(dynamic) = %1$4d Omega = %2$+1.12f eV  lamdba = %3$+3.2f "
+                  "nm f "
+                  "= %4$+1.4f") %
+@@ -614,7 +613,7 @@ void BSE::Perturbative_DynamicalScreening(const QMStateType& type,
+                               << flush;
+     for (Index i = 0; i < opt_.nmax; ++i) {
+       XTP_LOG(Log::error, log_)
+-          << format(
++          << boost::format(
+                  "  T(dynamic) = %1$4d Omega = %2$+1.12f eV  lamdba = %3$+3.2f "
+                  "nm ") %
+                  (i + 1) % (hrt2ev * BSEenergies_dynamic(i)) %
+diff --git a/xtp/src/libxtp/gwbse/gwbse.cc b/xtp/src/libxtp/gwbse/gwbse.cc
+index 86ffe9d42b..14ab4a45f6 100644
+--- a/xtp/src/libxtp/gwbse/gwbse.cc
++++ b/xtp/src/libxtp/gwbse/gwbse.cc
+@@ -38,7 +38,6 @@
+ #include "votca/xtp/vxc_grid.h"
+ #include "votca/xtp/vxc_potential.h"
+ 
+-using boost::format;
+ using std::flush;
+ namespace votca {
+ namespace xtp {
+@@ -427,7 +426,7 @@ void GWBSE::addoutput(tools::Property& summary) {
+     gwbse_summary.setAttribute("units", "eV");
+     gwbse_summary.setAttribute(
+         "DFTEnergy",
+-        (format("%1$+1.6f ") % (orbitals_.getDFTTotalEnergy() * hrt2ev)).str());
++        (boost::format("%1$+1.6f ") % (orbitals_.getDFTTotalEnergy() * hrt2ev)).str());
+ 
+     tools::Property& dft_summary = gwbse_summary.add("dft", "");
+     dft_summary.setAttribute("HOMO", gwopt_.homo);
+@@ -438,16 +437,16 @@ void GWBSE::addoutput(tools::Property& summary) {
+       level_summary.setAttribute("number", state + gwopt_.qpmin);
+       level_summary.add(
+           "dft_energy",
+-          (format("%1$+1.6f ") %
++          (boost::format("%1$+1.6f ") %
+            (orbitals_.MOs().eigenvalues()(state + gwopt_.qpmin) * hrt2ev))
+               .str());
+       level_summary.add(
+           "gw_energy",
+-          (format("%1$+1.6f ") % (orbitals_.QPpertEnergies()(state) * hrt2ev))
++          (boost::format("%1$+1.6f ") % (orbitals_.QPpertEnergies()(state) * hrt2ev))
+               .str());
+ 
+       level_summary.add("qp_energy",
+-                        (format("%1$+1.6f ") %
++                        (boost::format("%1$+1.6f ") %
+                          (orbitals_.QPdiag().eigenvalues()(state) * hrt2ev))
+                             .str());
+     }
+@@ -458,7 +457,7 @@ void GWBSE::addoutput(tools::Property& summary) {
+       tools::Property& level_summary = singlet_summary.add("level", "");
+       level_summary.setAttribute("number", state + 1);
+       level_summary.add(
+-          "omega", (format("%1$+1.6f ") %
++          "omega", (boost::format("%1$+1.6f ") %
+                     (orbitals_.BSESinglets().eigenvalues()(state) * hrt2ev))
+                        .str());
+       if (orbitals_.hasTransitionDipoles()) {
+@@ -467,9 +466,9 @@ void GWBSE::addoutput(tools::Property& summary) {
+         double f = 2 * dipoles.squaredNorm() *
+                    orbitals_.BSESinglets().eigenvalues()(state) / 3.0;
+ 
+-        level_summary.add("f", (format("%1$+1.6f ") % f).str());
++        level_summary.add("f", (boost::format("%1$+1.6f ") % f).str());
+         tools::Property& dipol_summary = level_summary.add(
+-            "Trdipole", (format("%1$+1.4f %2$+1.4f %3$+1.4f") % dipoles.x() %
++            "Trdipole", (boost::format("%1$+1.4f %2$+1.4f %3$+1.4f") % dipoles.x() %
+                          dipoles.y() % dipoles.z())
+                             .str());
+         dipol_summary.setAttribute("unit", "e*bohr");
+@@ -483,7 +482,7 @@ void GWBSE::addoutput(tools::Property& summary) {
+       tools::Property& level_summary = triplet_summary.add("level", "");
+       level_summary.setAttribute("number", state + 1);
+       level_summary.add(
+-          "omega", (format("%1$+1.6f ") %
++          "omega", (boost::format("%1$+1.6f ") %
+                     (orbitals_.BSETriplets().eigenvalues()(state) * hrt2ev))
+                        .str());
+     }
+diff --git a/xtp/src/libxtp/job.cc b/xtp/src/libxtp/job.cc
+index d5cef59b56..d01f8895aa 100644
+--- a/xtp/src/libxtp/job.cc
++++ b/xtp/src/libxtp/job.cc
+@@ -31,7 +31,7 @@
+ 
+ namespace votca {
+ namespace xtp {
+-using boost::format;
++
+ Job::Job(const tools::Property &prop) {
+ 
+   // DEFINED BY USER
+@@ -124,23 +124,23 @@ void Job::ToStream(std::ofstream &ofs) const {
+                                       "\t\t");
+   std::string tab = "\t";
+   ofs << tab << "<job>\n";
+-  ofs << tab << tab << (format("<id>%1$d</id>\n") % id_).str();
+-  ofs << tab << tab << (format("<tag>%1$s</tag>\n") % tag_).str();
++  ofs << tab << tab << (boost::format("<id>%1$d</id>\n") % id_).str();
++  ofs << tab << tab << (boost::format("<tag>%1$s</tag>\n") % tag_).str();
+   ofs << iomXML << input_;
+   ofs << tab << tab
+-      << (format("<status>%1$s</status>\n") % ConvertStatus(status_)).str();
++      << (boost::format("<status>%1$s</status>\n") % ConvertStatus(status_)).str();
+ 
+   if (has_host_) {
+-    ofs << tab << tab << (format("<host>%1$s</host>\n") % host_).str();
++    ofs << tab << tab << (boost::format("<host>%1$s</host>\n") % host_).str();
+   }
+   if (has_time_) {
+-    ofs << tab << tab << (format("<time>%1$s</time>\n") % time_).str();
++    ofs << tab << tab << (boost::format("<time>%1$s</time>\n") % time_).str();
+   }
+   if (has_output_) {
+     ofs << iomXML << output_;
+   }
+   if (has_error_) {
+-    ofs << tab << tab << (format("<error>%1$s</error>\n") % error_).str();
++    ofs << tab << tab << (boost::format("<error>%1$s</error>\n") % error_).str();
+   }
+   ofs << tab << "</job>\n";
+   return;
+diff --git a/xtp/src/libxtp/jobcalculators/eqm.cc b/xtp/src/libxtp/jobcalculators/eqm.cc
+index 93e0a77cfe..2158f3ffc9 100644
+--- a/xtp/src/libxtp/jobcalculators/eqm.cc
++++ b/xtp/src/libxtp/jobcalculators/eqm.cc
+@@ -30,8 +30,6 @@
+ // Local private VOTCA includes
+ #include "eqm.h"
+ 
+-using boost::format;
+-
+ namespace votca {
+ namespace xtp {
+ 
+@@ -76,7 +74,7 @@ void EQM::WriteJobFile(const Topology& top) {
+     tools::Property Input;
+     tools::Property& pInput = Input.add("input", "");
+     tools::Property& pSegment =
+-        pInput.add("segment", (format("%1$s") % segment.getId()).str());
++        pInput.add("segment", (boost::format("%1$s") % segment.getId()).str());
+     pSegment.setAttribute<std::string>("type", segment.getType());
+     pSegment.setAttribute<Index>("id", segment.getId());
+     Job job(id, tag, Input, Job::AVAILABLE);
+@@ -136,8 +134,8 @@ Job::JobResult EQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+   std::string frame_dir =
+       "frame_" + boost::lexical_cast<std::string>(top.getStep());
+   std::string orb_file =
+-      (format("%1%_%2%%3%") % "molecule" % segId % ".orb").str();
+-  std::string mol_dir = (format("%1%%2%%3%") % "molecule" % "_" % segId).str();
++      (boost::format("%1%_%2%%3%") % "molecule" % segId % ".orb").str();
++  std::string mol_dir = (boost::format("%1%%2%%3%") % "molecule" % "_" % segId).str();
+   std::string package_append = "workdir_" + Identify();
+   std::string work_dir =
+       (arg_path / eqm_work_dir / package_append / frame_dir / mol_dir)
+@@ -154,10 +152,10 @@ Job::JobResult EQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+     XTP_LOG(Log::error, pLog) << "Running DFT" << std::flush;
+     Logger dft_logger(votca::Log::current_level);
+     dft_logger.setMultithreading(false);
+-    dft_logger.setPreface(Log::info, (format("\nDFT INF ...")).str());
+-    dft_logger.setPreface(Log::error, (format("\nDFT ERR ...")).str());
+-    dft_logger.setPreface(Log::warning, (format("\nDFT WAR ...")).str());
+-    dft_logger.setPreface(Log::debug, (format("\nDFT DBG ...")).str());
++    dft_logger.setPreface(Log::info, (boost::format("\nDFT INF ...")).str());
++    dft_logger.setPreface(Log::error, (boost::format("\nDFT ERR ...")).str());
++    dft_logger.setPreface(Log::warning, (boost::format("\nDFT WAR ...")).str());
++    dft_logger.setPreface(Log::debug, (boost::format("\nDFT DBG ...")).str());
+     std::string package = package_options_.get(".name").as<std::string>();
+     std::unique_ptr<QMPackage> qmpackage = QMPackageFactory().Create(package);
+     qmpackage->setLog(&dft_logger);
+@@ -198,7 +196,7 @@ Job::JobResult EQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+         std::string DIR = eqm_work_dir + "/molecules/" + frame_dir;
+         std::filesystem::create_directories(DIR);
+         std::string gbw_file =
+-            (format("%1%_%2%%3%") % "molecule" % segId % ".gbw").str();
++            (boost::format("%1%_%2%%3%") % "molecule" % segId % ".gbw").str();
+         std::string GBWFILE = DIR + "/" + gbw_file;
+         XTP_LOG(Log::error, pLog)
+             << "Copying MO data to " << gbw_file << std::flush;
+@@ -230,10 +228,10 @@ Job::JobResult EQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+       GWBSE gwbse = GWBSE(orbitals);
+       Logger gwbse_logger(votca::Log::current_level);
+       gwbse_logger.setMultithreading(false);
+-      gwbse_logger.setPreface(Log::info, (format("\nGWBSE INF ...")).str());
+-      gwbse_logger.setPreface(Log::error, (format("\nGWBSE ERR ...")).str());
+-      gwbse_logger.setPreface(Log::warning, (format("\nGWBSE WAR ...")).str());
+-      gwbse_logger.setPreface(Log::debug, (format("\nGWBSE DBG ...")).str());
++      gwbse_logger.setPreface(Log::info, (boost::format("\nGWBSE INF ...")).str());
++      gwbse_logger.setPreface(Log::error, (boost::format("\nGWBSE ERR ...")).str());
++      gwbse_logger.setPreface(Log::warning, (boost::format("\nGWBSE WAR ...")).str());
++      gwbse_logger.setPreface(Log::debug, (boost::format("\nGWBSE DBG ...")).str());
+       gwbse.setLogger(&gwbse_logger);
+       gwbse.Initialize(gwbse_options_);
+       gwbse.Evaluate();
+@@ -254,7 +252,7 @@ Job::JobResult EQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+       std::string ESPDIR =
+           "MP_FILES/" + frame_dir + "/" + esp2multipole.GetStateString();
+       StaticSegment seg2 = esp2multipole.Extractingcharges(orbitals);
+-      std::string mps_file = (format("%1%_%2%_%3%.mps") % segType % segId %
++      std::string mps_file = (boost::format("%1%_%2%_%3%.mps") % segType % segId %
+                               esp2multipole.GetStateString())
+                                  .str();
+       std::filesystem::create_directories(ESPDIR);
+diff --git a/xtp/src/libxtp/jobcalculators/iqm.cc b/xtp/src/libxtp/jobcalculators/iqm.cc
+index 533be1bb5c..f154e1a4d4 100644
+--- a/xtp/src/libxtp/jobcalculators/iqm.cc
++++ b/xtp/src/libxtp/jobcalculators/iqm.cc
+@@ -36,8 +36,6 @@
+ // Local private VOTCA includes
+ #include "iqm.h"
+ 
+-using boost::format;
+-
+ namespace votca {
+ namespace xtp {
+ 
+@@ -211,23 +209,23 @@ Job::JobResult IQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+ 
+   // set the folders
+   std::string pair_dir =
+-      (format("%1%%2%%3%%4%%5%") % "pair" % "_" % ID_A % "_" % ID_B).str();
++      (boost::format("%1%%2%%3%%4%%5%") % "pair" % "_" % ID_A % "_" % ID_B).str();
+ 
+   std::filesystem::path arg_path, arg_pathA, arg_pathB, arg_pathAB;
+ 
+   std::string orbFileA =
+       (arg_pathA / eqm_work_dir / "molecules" / frame_dir /
+-       (format("%1%_%2%%3%") % "molecule" % ID_A % ".orb").str())
++       (boost::format("%1%_%2%%3%") % "molecule" % ID_A % ".orb").str())
+           .generic_string();
+   ;
+   std::string orbFileB =
+       (arg_pathB / eqm_work_dir / "molecules" / frame_dir /
+-       (format("%1%_%2%%3%") % "molecule" % ID_B % ".orb").str())
++       (boost::format("%1%_%2%%3%") % "molecule" % ID_B % ".orb").str())
+           .generic_string();
+   ;
+   std::string orbFileAB =
+       (arg_pathAB / iqm_work_dir / "pairs_iqm" / frame_dir /
+-       (format("%1%%2%%3%%4%%5%") % "pair_" % ID_A % "_" % ID_B % ".orb").str())
++       (boost::format("%1%%2%%3%%4%%5%") % "pair_" % ID_A % "_" % ID_B % ".orb").str())
+           .generic_string();
+   ;
+   std::string orb_dir =
+@@ -287,10 +285,10 @@ Job::JobResult IQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+ 
+     Logger dft_logger(Log::current_level);
+     dft_logger.setMultithreading(false);
+-    dft_logger.setPreface(Log::info, (format("\nDFT INF ...")).str());
+-    dft_logger.setPreface(Log::error, (format("\nDFT ERR ...")).str());
+-    dft_logger.setPreface(Log::warning, (format("\nDFT WAR ...")).str());
+-    dft_logger.setPreface(Log::debug, (format("\nDFT DBG ...")).str());
++    dft_logger.setPreface(Log::info, (boost::format("\nDFT INF ...")).str());
++    dft_logger.setPreface(Log::error, (boost::format("\nDFT ERR ...")).str());
++    dft_logger.setPreface(Log::warning, (boost::format("\nDFT WAR ...")).str());
++    dft_logger.setPreface(Log::debug, (boost::format("\nDFT DBG ...")).str());
+     std::string package = dftpackage_options_.get("name").as<std::string>();
+     std::unique_ptr<QMPackage> qmpackage = QMPackageFactory().Create(package);
+     qmpackage->setLog(&dft_logger);
+@@ -316,12 +314,12 @@ Job::JobResult IQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+               << "Copying monomer .gbw files to pair folder" << std::flush;
+           std::string gbwFileA =
+               (arg_pathA / eqm_work_dir / "molecules" / frame_dir /
+-               (format("%1%_%2%%3%") % "molecule" % ID_A % ".gbw").str())
++               (boost::format("%1%_%2%%3%") % "molecule" % ID_A % ".gbw").str())
+                   .generic_string();
+           ;
+           std::string gbwFileB =
+               (arg_pathB / eqm_work_dir / "molecules" / frame_dir /
+-               (format("%1%_%2%%3%") % "molecule" % ID_B % ".gbw").str())
++               (boost::format("%1%_%2%%3%") % "molecule" % ID_B % ".gbw").str())
+                   .generic_string();
+           ;
+           std::string gbwFileA_workdir =
+@@ -451,10 +449,10 @@ Job::JobResult IQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+       XTP_LOG(Log::error, pLog) << "Running GWBSE" << std::flush;
+       Logger gwbse_logger(Log::current_level);
+       gwbse_logger.setMultithreading(false);
+-      gwbse_logger.setPreface(Log::info, (format("\nGWBSE INF ...")).str());
+-      gwbse_logger.setPreface(Log::error, (format("\nGWBSE ERR ...")).str());
+-      gwbse_logger.setPreface(Log::warning, (format("\nGWBSE WAR ...")).str());
+-      gwbse_logger.setPreface(Log::debug, (format("\nGWBSE DBG ...")).str());
++      gwbse_logger.setPreface(Log::info, (boost::format("\nGWBSE INF ...")).str());
++      gwbse_logger.setPreface(Log::error, (boost::format("\nGWBSE ERR ...")).str());
++      gwbse_logger.setPreface(Log::warning, (boost::format("\nGWBSE WAR ...")).str());
++      gwbse_logger.setPreface(Log::debug, (boost::format("\nGWBSE DBG ...")).str());
+       GWBSE gwbse = GWBSE(orbitalsAB);
+       gwbse.setLogger(&gwbse_logger);
+       gwbse.Initialize(gwbse_options_);
+@@ -507,13 +505,13 @@ Job::JobResult IQM::EvalJob(const Topology& top, Job& job, QMThread& opThread) {
+       Logger bsecoupling_logger(Log::current_level);
+       bsecoupling_logger.setMultithreading(false);
+       bsecoupling_logger.setPreface(Log::info,
+-                                    (format("\nBSECOU INF ...")).str());
++                                    (boost::format("\nBSECOU INF ...")).str());
+       bsecoupling_logger.setPreface(Log::error,
+-                                    (format("\nBSECOU ERR ...")).str());
++                                    (boost::format("\nBSECOU ERR ...")).str());
+       bsecoupling_logger.setPreface(Log::warning,
+-                                    (format("\nBSECOU WAR ...")).str());
++                                    (boost::format("\nBSECOU WAR ...")).str());
+       bsecoupling_logger.setPreface(Log::debug,
+-                                    (format("\nBSECOU DBG ...")).str());
++                                    (boost::format("\nBSECOU DBG ...")).str());
+       bsecoupling.setLogger(&bsecoupling_logger);
+       bsecoupling.Initialize(bsecoupling_options_);
+       bsecoupling.CalculateCouplings(orbitalsA, orbitalsB, orbitalsAB);
+diff --git a/xtp/src/libxtp/parallelxjobcalc.cc b/xtp/src/libxtp/parallelxjobcalc.cc
+index fe8b0402c4..ed48189937 100644
+--- a/xtp/src/libxtp/parallelxjobcalc.cc
++++ b/xtp/src/libxtp/parallelxjobcalc.cc
+@@ -28,8 +28,6 @@
+ // Local VOTCA includes
+ #include "votca/xtp/parallelxjobcalc.h"
+ 
+-using boost::format;
+-
+ namespace votca {
+ namespace xtp {
+ 
+@@ -124,13 +122,13 @@ void ParallelXJobCalc<JobContainer>::CustomizeLogger(QMThread &thread) {
+   log.setMultithreading(maverick_);
+ 
+   log.setPreface(Log::info,
+-                 (format("\nT%1$02d INF ...") % thread.getId()).str());
++                 (boost::format("\nT%1$02d INF ...") % thread.getId()).str());
+   log.setPreface(Log::error,
+-                 (format("\nT%1$02d ERR ...") % thread.getId()).str());
++                 (boost::format("\nT%1$02d ERR ...") % thread.getId()).str());
+   log.setPreface(Log::warning,
+-                 (format("\nT%1$02d WAR ...") % thread.getId()).str());
++                 (boost::format("\nT%1$02d WAR ...") % thread.getId()).str());
+   log.setPreface(Log::debug,
+-                 (format("\nT%1$02d DBG ...") % thread.getId()).str());
++                 (boost::format("\nT%1$02d DBG ...") % thread.getId()).str());
+ }
+ 
+ // REGISTER PARALLEL CALCULATORS
+diff --git a/xtp/src/libxtp/tools/diabatization.cc b/xtp/src/libxtp/tools/diabatization.cc
+index f9e7e256bb..33ae5eef9f 100644
+--- a/xtp/src/libxtp/tools/diabatization.cc
++++ b/xtp/src/libxtp/tools/diabatization.cc
+@@ -17,7 +17,6 @@
+ 
+ #include "diabatization.h"
+ 
+-using boost::format;
+ using std::flush;
+ 
+ namespace votca {
+@@ -145,11 +144,11 @@ bool Diabatization::Run() {
+     // Printing Output
+     if (!isQMMM_) {
+       XTP_LOG(Log::error, log_)
+-          << format("Diabatic Energy 1: %1$+1.12f eV") %
++          << boost::format("Diabatic Energy 1: %1$+1.12f eV") %
+                  (diabatic_H(0, 0) * votca::tools::conv::hrt2ev)
+           << flush;
+       XTP_LOG(Log::error, log_)
+-          << format("Diabatic Energy 2: %1$+1.12f eV") %
++          << boost::format("Diabatic Energy 2: %1$+1.12f eV") %
+                  (diabatic_H(1, 1) * votca::tools::conv::hrt2ev)
+           << flush;
+       E1_ = E1ad;
+@@ -178,7 +177,7 @@ bool Diabatization::Run() {
+     J = coupling.second * votca::tools::conv::hrt2ev;
+ 
+     XTP_LOG(Log::error, log_)
+-        << format("Unprojected diabatic Coupling: %1$+1.12f eV") % (J_unproj)
++        << boost::format("Unprojected diabatic Coupling: %1$+1.12f eV") % (J_unproj)
+         << flush;
+     std::pair<double, double> Ead = GMHDiabatization.adiabatic_energies();
+ 
+@@ -214,26 +213,26 @@ bool Diabatization::Run() {
+ 
+   // print output
+   XTP_LOG(Log::error, log_)
+-      << format("Internal adiabatic energies: %1$+1.12f eV and %2$+1.12f eV") %
++      << boost::format("Internal adiabatic energies: %1$+1.12f eV and %2$+1.12f eV") %
+              (E1ad * votca::tools::conv::hrt2ev) %
+              (E2ad * votca::tools::conv::hrt2ev)
+       << flush;
+ 
+   XTP_LOG(Log::error, log_)
+-      << format("Diabatic Coupling: %1$+1.12f eV ") % (J) << flush;
++      << boost::format("Diabatic Coupling: %1$+1.12f eV ") % (J) << flush;
+   if (isQMMM_) {
+ 
+     XTP_LOG(Log::error, log_)
+-        << format("QMMM adiabatic energies: %1$+1.12f eV and %2$+1.12f eV") %
++        << boost::format("QMMM adiabatic energies: %1$+1.12f eV and %2$+1.12f eV") %
+                (E1_ * votca::tools::conv::hrt2ev) %
+                (E2_ * votca::tools::conv::hrt2ev)
+         << flush;
+ 
+     XTP_LOG(Log::error, log_)
+-        << format("QMMM correction factor: %1$+1.12f ") % (QMMM_correction)
++        << boost::format("QMMM correction factor: %1$+1.12f ") % (QMMM_correction)
+         << flush;
+     XTP_LOG(Log::error, log_)
+-        << format("Diabatic Coupling with QMMM: %1$+1.12f eV ") % (J_QMMM)
++        << boost::format("Diabatic Coupling with QMMM: %1$+1.12f eV ") % (J_QMMM)
+         << flush;
+   }
+ 

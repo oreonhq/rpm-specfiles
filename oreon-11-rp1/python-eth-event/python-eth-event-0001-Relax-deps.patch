@@ -1,0 +1,172 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 27 Feb 2026 00:32:36 +0100
+Subject: [PATCH] Relax deps
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/benchmarks/test_benchmarks.py b/benchmarks/test_benchmarks.py
+index 8977272..36dcd98 100644
+--- a/benchmarks/test_benchmarks.py
++++ b/benchmarks/test_benchmarks.py
+@@ -1,4 +1,4 @@
+-import faster_eth_abi
++import eth_abi
+ import pytest
+ from pytest_codspeed import BenchmarkFixture
+ 
+@@ -31,7 +31,7 @@ transfer_log = {
+         "0x000000000000000000000000000000000000000000000000000000000000dead",
+         "0x000000000000000000000000000000000000000000000000000000000000beef",
+     ],
+-    "data": "0x" + faster_eth_abi.encode(["uint256"], [123456789]).hex(),
++    "data": "0x" + eth_abi.encode(["uint256"], [123456789]).hex(),
+ }
+ 
+ # 2. ERC20 Approval (address, address, uint256)
+@@ -58,7 +58,7 @@ approval_log = {
+         "0x000000000000000000000000000000000000000000000000000000000000cafe",
+         "0x000000000000000000000000000000000000000000000000000000000000babe",
+     ],
+-    "data": "0x" + faster_eth_abi.encode(["uint256"], [987654321]).hex(),
++    "data": "0x" + eth_abi.encode(["uint256"], [987654321]).hex(),
+ }
+ 
+ # 3. OwnershipTransferred (address, address)
+@@ -112,7 +112,7 @@ datastored_log = {
+         "0x" + "01".zfill(64),
+     ],
+     "data": "0x"
+-    + faster_eth_abi.encode(
++    + eth_abi.encode(
+         ["bytes32", "string", "bool"], [b"\xab" * 32, "test description", True]
+     ).hex(),
+ }
+@@ -137,7 +137,7 @@ array_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [array_event_topic],
+     "data": "0x"
+-    + faster_eth_abi.encode(
++    + eth_abi.encode(
+         ["uint256[]", "address[]"],
+         [
+             [1, 2, 3],
+@@ -178,7 +178,7 @@ nested_struct_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [nested_struct_event_topic],
+     "data": "0x"
+-    + faster_eth_abi.encode(
++    + eth_abi.encode(
+         ["(uint256,address,bytes32)", "uint256"],
+         [(42, "0x0000000000000000000000000000000000000042", b"\x01" * 32), 7],
+     ).hex(),
+@@ -203,7 +203,7 @@ dynamic_bytes_event_topic_map = {
+ dynamic_bytes_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [dynamic_bytes_event_topic],
+-    "data": "0x" + faster_eth_abi.encode(["bytes", "bytes32"], [b"\xff" * 10, b"\xab" * 32]).hex(),
++    "data": "0x" + eth_abi.encode(["bytes", "bytes32"], [b"\xff" * 10, b"\xab" * 32]).hex(),
+ }
+ 
+ # 8. FixedArrayEvent (uint8[3], address[2])
+@@ -226,7 +226,7 @@ fixed_array_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [fixed_array_event_topic],
+     "data": "0x"
+-    + faster_eth_abi.encode(
++    + eth_abi.encode(
+         ["uint8[3]", "address[2]"],
+         [
+             [1, 2, 3],
+@@ -256,7 +256,7 @@ enum_event_topic_map = {
+ enum_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [enum_event_topic],
+-    "data": "0x" + faster_eth_abi.encode(["uint8"], [2]).hex(),
++    "data": "0x" + eth_abi.encode(["uint8"], [2]).hex(),
+ }
+ 
+ # 10. OnlyIndexedEvent (address indexed, uint256 indexed)
+@@ -304,7 +304,7 @@ no_indexed_event_topic_map = {
+ no_indexed_event_log = {
+     "address": "0x0000000000000000000000000000000000000000",
+     "topics": [no_indexed_event_topic],
+-    "data": "0x" + faster_eth_abi.encode(["uint256", "string"], [42, "no indexed"]).hex(),
++    "data": "0x" + eth_abi.encode(["uint256", "string"], [42, "no indexed"]).hex(),
+ }
+ 
+ # --- Benchmarks for each event type ---
+@@ -423,7 +423,7 @@ def test_decode_logs(benchmark: BenchmarkFixture):
+ 
+ # Simulate a LOG3 opcode with the Transfer topic and ABI-encoded value in memory.
+ transfer_value = 123456789
+-transfer_data_bytes = faster_eth_abi.encode(["uint256"], [transfer_value])
++transfer_data_bytes = eth_abi.encode(["uint256"], [transfer_value])
+ transfer_data_hex = transfer_data_bytes.hex().rjust(64, "0")
+ transfer_memory = [transfer_data_hex]
+ 
+diff --git a/eth_event/main.py b/eth_event/main.py
+index fb51db9..75c5502 100644
+--- a/eth_event/main.py
++++ b/eth_event/main.py
+@@ -18,8 +18,8 @@ from typing import (
+     overload,
+ )
+ 
+-import cchecksum
+-import faster_hexbytes
++import eth_utils
++import hexbytes
+ from eth_hash import auto
+ from eth_typing import (
+     ABIComponent,
+@@ -31,8 +31,8 @@ from eth_typing import (
+     HexAddress,
+     HexStr,
+ )
+-from faster_eth_abi import decode
+-from faster_eth_abi.exceptions import (
++from eth_abi import decode
++from eth_abi.exceptions import (
+     InsufficientDataBytes,
+     InvalidPointer,
+     NoEntriesFound,
+@@ -92,9 +92,9 @@ Event = Union[DecodedEvent, NonDecodedEvent]
+ 
+ ADD_LOG_ENTRIES: Final = "logIndex", "blockNumber", "transactionIndex"
+ 
+-HexBytes: Final = faster_hexbytes.HexBytes
++HexBytes: Final = hexbytes.HexBytes
+ 
+-to_checksum_address: Final = cchecksum.to_checksum_address
++to_checksum_address: Final = eth_utils.to_checksum_address
+ keccak: Final = auto.keccak
+ lru_cache: Final = functools.lru_cache
+ _tuple_match: Final = re.compile(r"tuple(\[(\d*)\])?").match
+diff --git a/pyproject.toml b/pyproject.toml
+index 3b7ea51..1ffb855 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -2,9 +2,9 @@
+ requires = [
+     "setuptools",
+     "wheel",
+-    "mypy[mypyc]==1.19.0",
+-    "faster-eth-abi==5.2.22",
+-    "faster-hexbytes==1.3.4",
++    "mypy[mypyc]",
++    "eth-abi",
++    "hexbytes",
+ ]
+ 
+ 
+diff --git a/requirements.txt b/requirements.txt
+index 462aa73..827b78b 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,3 +1,3 @@
+-eth-hash[pycryptodome]>=0.2.0,<1.0.0
+-faster-eth-abi==5.2.22
+-faster-hexbytes==1.3.4
++eth-hash[pycryptodomex]>=0.2.0,<1.0.0
++eth-abi
++hexbytes

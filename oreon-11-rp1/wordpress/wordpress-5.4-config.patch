@@ -1,0 +1,35 @@
+diff -up wordpress/wp-config.php.rpm wordpress/wp-config.php
+--- wordpress/wp-config.php.rpm	2020-10-20 15:05:26.351765085 +0200
++++ wordpress/wp-config.php	2020-10-20 15:05:48.663684089 +0200
+@@ -66,6 +66,22 @@ define( 'NONCE_SALT',       'put your un
+ $table_prefix = 'wp_';
+ 
+ /**
++ * See http://make.wordpress.org/core/2013/10/25/the-definitive-guide-to-disabling-auto-updates-in-wordpress-3-7
++ */
++
++/* Disable all file change, as RPM base installation are read-only */
++define('DISALLOW_FILE_MODS', true);
++
++/* Please ensure that this is either 'direct', 'ssh2', 'ftpext', 'ftpsockets' or false */
++define('FS_METHOD', 'direct');
++
++/* Disable automatic updater, in case you want to allow
++   above FILE_MODS for plugins, themes, ... */
++define('AUTOMATIC_UPDATER_DISABLED', true);
++
++/* Core update is always disabled, WP_AUTO_UPDATE_CORE value is ignore */
++
++/**
+  * For developers: WordPress debugging mode.
+  *
+  * Change this to true to enable the display of notices during development.
+@@ -83,7 +99,7 @@ define( 'WP_DEBUG', false );
+ 
+ /** Absolute path to the WordPress directory. */
+ if ( ! defined( 'ABSPATH' ) ) {
+-	define( 'ABSPATH', __DIR__ . '/' );
++	define('ABSPATH', '/usr/share/wordpress');
+ }
+ 
+ /** Sets up WordPress vars and included files. */

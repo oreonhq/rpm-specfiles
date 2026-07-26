@@ -1,0 +1,44 @@
+From 675434d63e1c664c781ee34fc12fea1059cd2442 Mon Sep 17 00:00:00 2001
+From: Christopher Meng <i@cicku.me>
+Date: Thu, 3 Jul 2014 14:25:21 +0800
+Subject: [PATCH] Fix engine output and php extension
+
+---
+ engine.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/engine.c b/engine.c
+index e07e8ab..23ec066 100644
+--- a/engine.c
++++ b/engine.c
+@@ -965,7 +965,9 @@ char determine_language(char *filename, FILE *fd, int forcelang)
+         setup_python(fd);
+     else if (!strcasecmp(dot, ".pl") || !strcasecmp(dot, ".pm"))
+         setup_perl(fd);
+-    else if (!strcasecmp(dot, ".php"))
++    else if (!strcasecmp(dot, ".php")||
++	     !strcasecmp(dot, ".php3")||
++	     !strcasecmp(dot, ".php4"))
+         setup_php(fd);
+ 	else if (!strcasecmp(dot, ".rb"))
+ 		setup_ruby(fd);
+@@ -1028,6 +1030,7 @@ void process_directory(char *filename, int forcelang) {
+ 	    dirdata.cFileName);
+     process_file(buf,forcelang);
+   }
++  closedir(dir);
+ 
+   error = GetLastError();
+   if (error!=ERROR_NO_MORE_FILES) {
+@@ -1043,7 +1046,7 @@ void process_directory(char *filename, int forcelang) {
+   }
+ #else
+   if((dir=opendir(filename))==NULL) {
+-    fprintf(stderr,"There was a problem opening the directory.\n");
++    fprintf(stderr,"There was a problem opening the directory %s.\n", filename);
+     return;
+   }
+   while((dirdata=readdir(dir))!=NULL) {
+-- 
+2.0.0
+

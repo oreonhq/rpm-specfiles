@@ -1,0 +1,44 @@
+--- a/tools/install_data.orig.sh	2012-03-05 19:56:30.000000000 +0100
++++ b/tools/install_data.sh	2012-10-06 13:37:24.214119567 +0200
+@@ -4,9 +4,9 @@
+   pkg=$1.tgz
+   ddir=$2
+   pkgz=../BaseData/$pkg
+-  if [ ! -e $pkgz ]; then
+-     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
+-  fi
++#  if [ ! -e $pkgz ]; then
++#     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
++#  fi
+   tar xvzf $pkgz -C $ddir
+ }
+ 
+--- a/install_cat1.orig.sh	2012-03-05 19:56:30.000000000 +0100
++++ b/install_cat1.sh	2013-03-17 19:47:02.024214677 +0100
+@@ -6,9 +6,9 @@
+   pkg=$1.tgz
+   ddir=$2
+   pkgz=BaseData/$pkg
+-  if [ ! -e $pkgz ]; then
+-     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
+-  fi
++#  if [ ! -e $pkgz ]; then
++#     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
++#  fi
+   tar xvzf $pkgz -C $ddir
+ }
+ 
+--- a/install_cat2.orig.sh	2012-03-05 19:56:30.000000000 +0100
++++ b/install_cat2.sh	2013-03-17 19:47:02.024214677 +0100
+@@ -6,9 +6,9 @@
+   pkg=$1.tgz
+   ddir=$2
+   pkgz=BaseData/$pkg
+-  if [ ! -e $pkgz ]; then
+-     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
+-  fi
++#  if [ ! -e $pkgz ]; then
++#     wget http://sourceforge.net/projects/skychart/files/4-source_data/$pkg -O $pkgz
++#  fi
+   tar xvzf $pkgz -C $ddir
+ }

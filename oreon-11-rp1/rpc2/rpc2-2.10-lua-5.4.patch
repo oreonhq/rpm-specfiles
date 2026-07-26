@@ -1,0 +1,12 @@
+diff -up rpc2-2.10/rpc2-src/lua.c.lua54 rpc2-2.10/rpc2-src/lua.c
+--- rpc2-2.10/rpc2-src/lua.c.lua54	2020-08-10 14:14:38.591661000 -0400
++++ rpc2-2.10/rpc2-src/lua.c	2020-08-10 14:15:10.267585346 -0400
+@@ -286,7 +286,7 @@ static void l2c_totimeval(lua_State *L,
+ static int l2c_timeval_init(lua_State *L)
+ {
+     luaL_newmetatable(L, RPC2_TIMEVAL);
+-    luaL_openlib(L, NULL, timeval_m, 0);
++    luaL_newlib(L, timeval_m);
+     lua_register(L, "time", timeval_new);
+     return 1;
+ }

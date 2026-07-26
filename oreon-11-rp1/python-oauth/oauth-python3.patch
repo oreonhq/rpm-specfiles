@@ -1,0 +1,20 @@
+Index: oauth-1.0.1/oauth/oauth.py
+===================================================================
+--- oauth-1.0.1.orig/oauth/oauth.py
++++ oauth-1.0.1/oauth/oauth.py
+@@ -26,7 +26,7 @@ import cgi
+ import urllib
+ import time
+ import random
+-import urlparse
++from urllib import parse as urlparse
+ import hmac
+ import binascii
+ 
+@@ -652,4 +652,4 @@ class OAuthSignatureMethod_PLAINTEXT(OAu
+     def build_signature(self, oauth_request, consumer, token):
+         key, raw = self.build_signature_base_string(oauth_request, consumer,
+             token)
+-        return key
+\ No newline at end of file
++        return key

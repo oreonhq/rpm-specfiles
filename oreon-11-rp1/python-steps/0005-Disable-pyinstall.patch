@@ -1,0 +1,45 @@
+From c15b406e3ca409795affef95f1faab7a6a48443e Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Sun, 5 Apr 2020 12:31:39 +0100
+Subject: [PATCH 5/5] Disable pyinstall
+
+---
+ pysteps/CMakeLists.txt | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/pysteps/CMakeLists.txt b/pysteps/CMakeLists.txt
+index de83408..f018ba0 100644
+--- a/pysteps/CMakeLists.txt
++++ b/pysteps/CMakeLists.txt
+@@ -54,28 +54,5 @@ set_target_properties(cysteps
+                                  OUTPUT_NAME
+                                  ${cymodname})
+ 
+-# Pure python package
+-add_custom_target(steps_package_pure_py ALL
+-                  DEPENDS ${steps_package_timestamp}) # random file bridging
+-                                                      # target->command
+-add_custom_command(OUTPUT ${steps_package_timestamp}
+-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-                   COMMAND ${PYTHON_EXECUTABLE} ${setup_py} build
+-                           --build-base=${CMAKE_BINARY_DIR} install
+-                           --install-lib "${libdir}"
+-                           --no-compile
+-                           --force
+-                   COMMAND ${CMAKE_COMMAND} -E touch ${steps_package_timestamp}
+-                           # setup.py already tracks changed .py files. We set
+-                           # DEPENDS just to set the order: copy .py after
+-                           # building the lib
+-                   DEPENDS cysteps)
+-
+ # Install compiled lib
+ install(TARGETS cysteps LIBRARY DESTINATION "${PYTHON_INSTALL_PREFIX}/steps/")
+-
+-# Install python package, from cmake_setup.py
+-install(
+-  CODE
+-  "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${setup_py} build --build-base=${CMAKE_BINARY_DIR} install --install-lib=${PYTHON_INSTALL_PREFIX} --force WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})"
+-  )
+-- 
+2.26.0
+

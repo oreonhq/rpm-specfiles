@@ -1,0 +1,112 @@
+From 12e3f12ea427ccbb80a3666cf60cd023c49bc630 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Tue, 2 Dec 2025 13:53:47 +0100
+Subject: [PATCH] Fix `source_location` usage to support Ruby 4.0
+
+`source_location` method in Ruby 4.0+ provides more details [[1]], such
+as end of method and offsets of stars and ends. This following test
+failure, which is fixed by this patch, nicely exhibits the difference:
+
+~~~
+$ rspec -rspec_helper spec/commands/edit_spec.rb:794
+Run options: include {locations: {"./spec/commands/edit_spec.rb" => [794]}}
+
+Randomized with seed 8752
+F
+
+Failures:
+
+  1) edit --method flag should edit method context
+     Failure/Error: expect([file, line]).to eq BinkyWink.instance_method(:m2).source_location
+
+       expected: ["/builddir/build/BUILD/rubygem-pry-0.15.0-build/pry-0.15.0/usr/share/gems/gems/pry-0.15.0/spec/commands/edit_spec.rb", 783, 8, 786, 11]
+            got: ["/builddir/build/BUILD/rubygem-pry-0.15.0-build/pry-0.15.0/usr/share/gems/gems/pry-0.15.0/spec/commands/edit_spec.rb", 783]
+
+       (compared using ==)
+     # ./spec/commands/edit_spec.rb:796:in 'block (4 levels) in <top (required)>'
+     # ./lib/pry/editor.rb:63:in 'Pry::Editor#build_editor_invocation_string'
+     # ./lib/pry/editor.rb:47:in 'Pry::Editor#invoke_editor'
+     # ./lib/pry/commands/edit.rb:142:in 'Pry::Command::Edit#file_edit'
+     # ./lib/pry/commands/edit.rb:62:in 'Pry::Command::Edit#process'
+     # ./lib/pry/class_command.rb:82:in 'Pry::ClassCommand#call'
+     # ./lib/pry/command.rb:495:in 'Pry::Command#call_with_hooks'
+     # ./lib/pry/command.rb:431:in 'block in Pry::Command#call_safely'
+     # ./lib/pry/command.rb:439:in 'Pry::Command#use_unpatched_symbol'
+     # ./lib/pry/command.rb:430:in 'Pry::Command#call_safely'
+     # ./lib/pry/command.rb:404:in 'Pry::Command#process_line'
+     # ./lib/pry/command_set.rb:354:in 'Pry::CommandSet#process_line'
+     # ./lib/pry/pry_instance.rb:326:in 'Pry#process_command'
+     # ./lib/pry/testable/pry_tester.rb:62:in 'Pry::Testable::PryTester#process_command'
+     # ./spec/commands/edit_spec.rb:801:in 'block (3 levels) in <top (required)>'
+
+Finished in 0.01534 seconds (files took 0.11079 seconds to load)
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/commands/edit_spec.rb:794 # edit --method flag should edit method context
+
+Randomized with seed 8752
+~~~
+
+[1]: https://bugs.ruby-lang.org/issues/6012
+---
+ lib/pry/method.rb                      | 2 +-
+ lib/pry/method/weird_method_locator.rb | 4 ++--
+ lib/pry/wrapped_module/candidate.rb    | 8 +++++++-
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/lib/pry/method.rb b/lib/pry/method.rb
+index e771602c3..167077b4e 100644
+--- a/lib/pry/method.rb
++++ b/lib/pry/method.rb
+@@ -359,7 +359,7 @@ def source_file
+     # @return [Fixnum, nil] The line of code in `source_file` which begins
+     #   the method's definition, or `nil` if that information is unavailable.
+     def source_line
+-      source_location.nil? ? nil : source_location.last
++      source_location.nil? ? nil : source_location[1]
+     end
+ 
+     # @return [Range, nil] The range of lines in `source_file` which contain
+diff --git a/lib/pry/method/weird_method_locator.rb b/lib/pry/method/weird_method_locator.rb
+index 70a113883..474a1d9be 100644
+--- a/lib/pry/method/weird_method_locator.rb
++++ b/lib/pry/method/weird_method_locator.rb
+@@ -97,7 +97,7 @@ def target_file
+ 
+       def target_line
+         if target.respond_to?(:source_location)
+-          target.source_location.last
++          target.source_location[1]
+         else
+           target.eval('__LINE__')
+         end
+@@ -170,7 +170,7 @@ def expanded_source_location(source_location)
+         if pry_file?
+           source_location
+         else
+-          [File.expand_path(source_location.first), source_location.last]
++          [File.expand_path(source_location.first), source_location[1]]
+         end
+       end
+ 
+diff --git a/lib/pry/wrapped_module/candidate.rb b/lib/pry/wrapped_module/candidate.rb
+index c333e8e6e..da998d351 100644
+--- a/lib/pry/wrapped_module/candidate.rb
++++ b/lib/pry/wrapped_module/candidate.rb
+@@ -130,7 +130,13 @@ def last_method_source_location
+       #
+       # @return [Integer] number of lines.
+       def number_of_lines_in_first_chunk
+-        end_method_line = last_method_source_location.last
++        # Ruby 4.0+ provides more details, including end of method:
++        # https://bugs.ruby-lang.org/issues/6012
++        end_method_line = if last_method_source_location.size == 5
++          last_method_source_location[-2]
++        else
++          last_method_source_location.last
++        end
+ 
+         end_method_line - line
+       end

@@ -1,0 +1,36 @@
+diff -udHrN -- b/Makefile c/Makefile
+--- b/Makefile	2022-04-30 15:52:57.095131468 +0200
++++ c/Makefile	2022-04-30 15:55:58.530749638 +0200
+@@ -87,7 +87,7 @@
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/i2f i2f.c $(LIBS)
+ 
+ imcat: imcat.c $(LIBWCS) libwcs/fitsfile.h libwcs/wcs.h
+-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/imcat imcat.c $(LIBS)
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/imcatalog imcat.c $(LIBS)
+ 
+ imfill: imfill.c $(LIBWCS) libwcs/fitsfile.h
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/imfill imfill.c $(LIBS)
+@@ -153,7 +153,7 @@
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/newfits newfits.c $(LIBS)
+ 
+ remap: remap.c $(LIBWCS) libwcs/fitsfile.h libwcs/wcs.h
+-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/remap remap.c $(LIBS)
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/wcsremap remap.c $(LIBS)
+ 
+ scat: scat.c $(LIBWCS) libwcs/wcscat.h libwcs/wcs.h
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $(BIN)/scat scat.c $(LIBS)
+diff -udHrN -- b/man/man1/imcat.1 c/man/man1/imcat.1
+--- b/man/man1/imcat.1	2016-06-24 22:33:58.000000000 +0200
++++ c/man/man1/imcat.1	2022-04-30 15:59:00.116431139 +0200
+@@ -1,8 +1,8 @@
+-.TH imcat 1 WCSTools "30 January 2003"
++.TH imcatalog 1 WCSTools "30 January 2003"
+ .SH Name
+-imcat \- List catalog stars in FITS and IRAF image files
++imcatalog \- List catalog stars in FITS and IRAF image files
+ .SH Synopsis
+-imcat [options] FITS or IRAF file(s)
++imcatalog [options] FITS or IRAF file(s)
+ .SH Description
+ Search given catalog withing area described by the world coordinate
+ system in an image header.  May be called as imuac to search the USNO A 1.0

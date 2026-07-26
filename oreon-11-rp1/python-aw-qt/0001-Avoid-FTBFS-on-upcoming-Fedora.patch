@@ -1,0 +1,29 @@
+From 096050337371676c4079657eafe9b6cc4881029b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Sat, 29 Mar 2025 20:53:11 +0100
+Subject: [PATCH] Avoid FTBFS on upcoming Fedora
+
+An upcoming Fedora version might have higher version of Python than
+restricted by the aw-qt package. The package restricts it only for
+PyInstaller, so it should work fine without this restriction.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 158ade2..319725b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,7 +13,7 @@ packages = [
+ aw-qt = "aw_qt:main"
+ 
+ [tool.poetry.dependencies]
+-python = "^3.8,<3.14"  # PyInstaller needs <3.14
++python = "^3.8"  # PyInstaller needs <3.14
+ aw-core = "^0.5"
+ 
+ pyobjc-framework-Cocoa = { version = "*", platform = "darwin" }
+-- 
+2.48.1
+

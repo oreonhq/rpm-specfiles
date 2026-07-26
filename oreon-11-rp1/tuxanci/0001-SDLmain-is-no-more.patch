@@ -1,0 +1,24 @@
+From 2d36c2ba139ef25ad106e95c1eb850abe33f8edf Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 9 Nov 2014 23:36:12 +0100
+Subject: [PATCH 1/2] SDLmain is no more
+
+---
+ src/CMakeLists.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7f809df..7891c95 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -11,7 +11,6 @@ ELSE ( Server )
+ 	ELSE ( NO_Audio )
+ 		LINK_LIBRARIES ( ${ZZIP_LIBRARY} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} )
+ 	ENDIF ( NO_Audio )
+-	LINK_LIBRARIES ( SDLmain )
+ ENDIF ( Server )
+ 
+ ###############################################################################
+-- 
+2.1.0
+

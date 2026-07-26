@@ -1,0 +1,18 @@
+--- framework/runtime/process.cpp.orig	2020-06-18 12:46:20.668352456 +0200
++++ framework/runtime/process.cpp	2020-06-18 12:48:08.427615648 +0200
+@@ -82,6 +82,15 @@
+ 
+     log_debug("change user to " << user << '(' << pw->pw_uid << ')');
+ 
++    /* When dropping privileges from root, the `setgroups` call will
++    * remove any extraneous groups. If we don't call this, then
++    * even though our uid has dropped, we may still have groups
++    * that enable us to do super-user things. This will fail if we
++    * aren't root, so don't bother checking the return value, this
++    * is just done as an optimistic privilege dropping function.
++    */
++    setgroups(0, NULL);
++
+     int ret = ::setgroups(0, NULL);
+     if (ret != 0)
+       throw cxxtools::SystemError("setgroups");

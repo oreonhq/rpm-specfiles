@@ -1,0 +1,114 @@
+From 61c5e1dd20bd6501a0b4931e5869d19b849bd701 Mon Sep 17 00:00:00 2001
+From: Thibault Saunier <tsaunier@igalia.com>
+Date: Mon, 3 Mar 2025 09:02:13 -0300
+Subject: [PATCH 1/2] bin: Fix running on macOS in a development environment
+
+---
+ bin/pitivi.in |  7 +++++--
+ meson.build   | 11 ++++++++---
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/bin/pitivi.in b/bin/pitivi.in
+index f584679a3..4598d8b47 100755
+--- a/bin/pitivi.in
++++ b/bin/pitivi.in
+@@ -109,10 +109,13 @@ def _add_pitivi_path():
+         print("Couldn't set the gettext domain. Translations will not work.", localedir, e)
+ 
+     if CONFIGURED_LD_LIBRARY_PATH or CONFIGURED_GST_PLUGIN_PATH:
+-        _prepend_env_path("LD_LIBRARY_PATH", [CONFIGURED_LD_LIBRARY_PATH])
++        if sys.platform == 'darwin':
++            _prepend_env_path("DYLD_LIBRARY_PATH", [CONFIGURED_LD_LIBRARY_PATH])
++        else:
++            _prepend_env_path("LD_LIBRARY_PATH", [CONFIGURED_LD_LIBRARY_PATH])
+         _prepend_env_path("GST_PLUGIN_PATH", [CONFIGURED_GST_PLUGIN_PATH])
+ 
+-        if "JUMP_THROUGH_HOOPS" not in os.environ:
++        if sys.platform != 'darwin' and "JUMP_THROUGH_HOOPS" not in os.environ:
+             # ld caches LD_LIBRARY_PATH at startup so we need to execv() here. LALA.
+             jump_through_hoops()
+ 
+diff --git a/meson.build b/meson.build
+index 83a5cce7e..6a148da3c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -41,12 +41,17 @@ cdata.set('CONFIGURED_PYTHONPATH',
+           run_command(geteenvvar, 'PYTHONPATH').stdout().strip())
+ cdata.set('CONFIGURED_GI_TYPELIB_PATH',
+           run_command(geteenvvar, 'GI_TYPELIB_PATH').stdout().strip())
++ld_library_path = 'LD_LIBRARY_PATH'
++if host_system == 'darwin'
++    ld_library_path = 'DYLD_LIBRARY_PATH'
++endif
++
+ cdata.set('CONFIGURED_LD_LIBRARY_PATH',
+-          run_command(geteenvvar, 'LD_LIBRARY_PATH').stdout().strip())
++          run_command(python, geteenvvar, ld_library_path).stdout().strip())
+ cdata.set('CONFIGURED_GST_PLUGIN_PATH',
+-          run_command(geteenvvar, 'GST_PLUGIN_PATH').stdout().strip())
++          run_command(python, geteenvvar, 'GST_PLUGIN_PATH').stdout().strip())
+ cdata.set('CONFIGURED_GST_PLUGIN_SYSTEM_PATH',
+-          run_command(geteenvvar, 'GST_PLUGIN_SYSTEM_PATH').stdout().strip())
++          run_command(python, geteenvvar, 'GST_PLUGIN_SYSTEM_PATH').stdout().strip())
+ cdata.set('LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
+ cdata.set('DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+ cdata.set('PACKAGE_NAME', 'Pitivi')
+-- 
+GitLab
+
+
+From 5250466ce1e7f17a61276dc0fffcfe50a05e4e05 Mon Sep 17 00:00:00 2001
+From: Thibault Saunier <tsaunier@igalia.com>
+Date: Mon, 3 Mar 2025 09:03:41 -0300
+Subject: [PATCH 2/2] viewer: Fix a race where gtksink is started before being
+ embedded in the UI
+
+Which was leading to g_warning and an external Gtk window to pop up.
+
+We now set the preview video sink only once it has already
+been embedded in our widget avoiding that possible issue
+---
+ pitivi/utils/pipeline.py | 1 -
+ pitivi/viewer/viewer.py  | 4 +++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/pitivi/utils/pipeline.py b/pitivi/utils/pipeline.py
+index d85055665..01537271c 100644
+--- a/pitivi/utils/pipeline.py
++++ b/pitivi/utils/pipeline.py
+@@ -565,7 +565,6 @@ class Pipeline(GES.Pipeline, SimplePipeline):
+ 
+     def create_sink(self):
+         video_sink, sink_widget = SimplePipeline.create_sink(self)
+-        self._pipeline.preview_set_video_sink(video_sink)
+         return video_sink, sink_widget
+ 
+     def set_mode(self, mode):
+diff --git a/pitivi/viewer/viewer.py b/pitivi/viewer/viewer.py
+index 0ea7a183e..010ad1693 100644
+--- a/pitivi/viewer/viewer.py
++++ b/pitivi/viewer/viewer.py
+@@ -175,10 +175,10 @@ class ViewerContainer(Gtk.Box, Loggable):
+         project.connect("audio-channels-changed", self._project_audio_channels_changed_cb)
+ 
+     def __create_new_viewer(self):
+-        _, sink_widget = self.project.pipeline.create_sink()
+ 
+         self.guidelines_popover = GuidelinesPopover()
+         self.guidelines_button.set_popover(self.guidelines_popover)
++        video_sink, sink_widget = self.project.pipeline.create_sink()
+         self.overlay_stack = OverlayStack(self.app,
+                                           sink_widget,
+                                           self.guidelines_popover.overlay)
+@@ -194,6 +194,8 @@ class ViewerContainer(Gtk.Box, Loggable):
+ 
+         self.viewer_row_box.show_all()
+ 
++        self.project.pipeline.preview_set_video_sink(video_sink)
++
+         # Wait for 1s to make sure that the viewer has completely realized
+         # and then we can mark the resize status as showable.
+         GLib.timeout_add(1000, self.__viewer_realization_done_cb, None)
+-- 
+GitLab
+

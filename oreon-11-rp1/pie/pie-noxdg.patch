@@ -1,0 +1,28 @@
+diff -up ./src/Platform.php.noxdg ./src/Platform.php
+--- ./src/Platform.php.noxdg	2025-11-04 07:41:36.891311937 +0100
++++ ./src/Platform.php	2025-11-04 07:42:29.282702463 +0100
+@@ -35,6 +35,10 @@ class Platform
+ 
+     private static function useXdg(): bool
+     {
++        // As XDG is very partially implemented
++        // resulting in command/code in ~/.config
++        return false;
++
+         foreach (array_keys($_SERVER) as $key) {
+             if (strpos((string) $key, 'XDG_') === 0) {
+                 return true;
+diff -up ./vendor/composer/composer/src/Composer/Factory.php.noxdg ./vendor/composer/composer/src/Composer/Factory.php
+--- ./vendor/composer/composer/src/Composer/Factory.php.noxdg	2025-09-19 13:41:59.000000000 +0200
++++ ./vendor/composer/composer/src/Composer/Factory.php	2025-11-04 07:41:36.891444253 +0100
+@@ -707,6 +707,10 @@ class Factory
+ 
+     private static function useXdg(): bool
+     {
++        // As XDG is very partially implemented
++        // resulting in command/code in ~/.config
++        return false;
++
+         foreach (array_keys($_SERVER) as $key) {
+             if (strpos((string) $key, 'XDG_') === 0) {
+                 return true;

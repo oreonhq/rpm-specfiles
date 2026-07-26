@@ -1,0 +1,45 @@
+diff -rupN --no-dereference flask_security_too-5.6.2/PKG-INFO flask_security_too-5.6.2-new/PKG-INFO
+--- flask_security_too-5.6.2/PKG-INFO	1970-01-01 01:00:00.000000000 +0100
++++ flask_security_too-5.6.2-new/PKG-INFO	2025-05-29 19:32:34.660857217 +0200
+@@ -66,7 +66,7 @@ Requires-Dist: markupsafe==2.1.2 ; extra
+ Requires-Dist: mongoengine==0.29.1 ; extra == "low"
+ Requires-Dist: mongomock==4.1.2 ; extra == "low"
+ Requires-Dist: pony==0.7.16 ; extra == "low" and (python_version<'3.11')
+-Requires-Dist: phonenumberslite==8.13.11 ; extra == "low"
++Requires-Dist: phonenumbers==8.13.11 ; extra == "low"
+ Requires-Dist: qrcode==7.4.2 ; extra == "low"
+ Requires-Dist: requests ; extra == "low"
+ Requires-Dist: sqlalchemy==2.0.18 ; extra == "low"
+@@ -76,7 +76,7 @@ Requires-Dist: werkzeug==3.0.1 ; extra =
+ Requires-Dist: zxcvbn==4.4.28 ; extra == "low"
+ Requires-Dist: cryptography>=40.0.2 ; extra == "mfa"
+ Requires-Dist: qrcode>=7.4.2 ; extra == "mfa"
+-Requires-Dist: phonenumberslite>=8.13.11 ; extra == "mfa"
++Requires-Dist: phonenumbers>=8.13.11 ; extra == "mfa"
+ Requires-Dist: webauthn>=2.0.0 ; extra == "mfa"
+ Project-URL: Documentation, https://flask-security.readthedocs.io
+ Project-URL: Homepage, https://github.com/pallets-eco/flask-security
+diff -rupN --no-dereference flask_security_too-5.6.2/pyproject-too.toml flask_security_too-5.6.2-new/pyproject-too.toml
+--- flask_security_too-5.6.2/pyproject-too.toml	2025-05-04 21:52:25.949992000 +0200
++++ flask_security_too-5.6.2-new/pyproject-too.toml	2025-05-29 19:32:34.661122914 +0200
+@@ -55,7 +55,7 @@ dependencies = [
+ babel = ["babel>=2.12.1", "flask_babel>=4.0.0"]
+ fsqla = ["flask_sqlalchemy>=3.1.0", "sqlalchemy>=2.0.18", "sqlalchemy-utils>=0.41.1"]
+ common = ["argon2_cffi>=21.3.0", "bcrypt>=4.0.1", "flask_mailman>=0.3.0", "bleach>=6.0.0"]
+-mfa = ["cryptography>=40.0.2", "qrcode>=7.4.2", "phonenumberslite>=8.13.11", "webauthn>=2.0.0"]
++mfa = ["cryptography>=40.0.2", "qrcode>=7.4.2", "phonenumbers>=8.13.11", "webauthn>=2.0.0"]
+ low = [
+     # Lowest supported versions
+     "Flask==3.0.0",
+diff -rupN --no-dereference flask_security_too-5.6.2/requirements/tests.txt flask_security_too-5.6.2-new/requirements/tests.txt
+--- flask_security_too-5.6.2/requirements/tests.txt	2025-05-29 19:32:34.656975675 +0200
++++ flask_security_too-5.6.2-new/requirements/tests.txt	2025-05-29 19:32:34.661284859 +0200
+@@ -13,7 +13,7 @@ freezegun
+ mongoengine
+ mongomock
+ peewee
+-phonenumberslite
++phonenumbers
+ pydocstyle
+ pytest-cache
+ pytest-cov

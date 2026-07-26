@@ -1,0 +1,151 @@
+--- xzgv-0.9/src/backend.c	2007-09-09 02:37:14.000000000 +0200
++++ xzgv-0.9.new/src/backend.c	2009-01-09 17:26:29.000000000 +0100
+@@ -91,6 +91,8 @@
+ image->rgb=gdk_pixbuf_get_pixels(BACKEND_IMAGE(image));
+ image->w=gdk_pixbuf_get_width(BACKEND_IMAGE(image));
+ image->h=gdk_pixbuf_get_height(BACKEND_IMAGE(image));
++image->stride=gdk_pixbuf_get_rowstride(BACKEND_IMAGE(image));
++image->has_alpha=gdk_pixbuf_get_has_alpha(BACKEND_IMAGE(image));
+ }
+ 
+ 
+--- xzgv-0.9/src/backend.h	2007-09-09 02:49:12.000000000 +0200
++++ xzgv-0.9.new/src/backend.h	2009-01-09 17:25:47.000000000 +0100
+@@ -8,6 +8,8 @@
+   {
+   unsigned char *rgb;		/* raw RGB data */
+   int w,h;			/* width/height */
++  int stride;
++  int has_alpha;
+   void *backend_image;		/* backend's image type (opaque) */
+   void *backend_ext;		/* any extra info needed by backend (opaque) */
+   };
+--- xzgv-0.9/src/resizepic.c	2007-08-11 20:08:41.000000000 +0200
++++ xzgv-0.9.new/src/resizepic.c	2009-01-09 17:15:28.000000000 +0100
+@@ -22,7 +22,7 @@
+  * which should then be reduced more nicely for the thumbnail.
+  */
+ unsigned char *nasty_resizepic(unsigned char *theimage,
+-                               int width,int height,int *sw_ask,int *sh_ask)
++                               int width,int height,int stride, int *sw_ask,int *sh_ask)
+ {
+ int x,y,yp,yw,sw,sh,lastyp,scrnwide,scrnhigh;
+ unsigned char *rline,*outimage;
+@@ -60,9 +60,9 @@
+   rline=outimage+yp*sw*3;
+   if(yp!=lastyp)
+     {
+-    yw=y*width;
+-    for(x=0;x<width;x++,yw++)
+-      memcpy(rline+(x*sw)/width*3,theimage+yw*3,3);
++    yw=y*stride;
++    for(x=0;x<width;x++,yw+=3)
++      memcpy(rline+(x*sw)/width*3,theimage+yw,3);
+     lastyp=yp;
+     }
+   }
+@@ -80,10 +80,10 @@
+  * new width x height in put back in sw_ask and sh_ask
+  */
+ unsigned char *resizepic(unsigned char *theimage,
+-                         int width,int height,int *sw_ask,int *sh_ask,
++                         int width,int height, int stride, int *sw_ask,int *sh_ask,
+                          int allow_crunch)
+ {
+-int a,b,x,y,yp,yw,sw,sh,lastyp;
++int a,b,x,y,yp,sw,sh,lastyp;
+ int c,pixwide,pixhigh;
+ int scrnwide,scrnhigh;
+ unsigned char *rline;
+@@ -98,7 +98,7 @@
+   {
+   int our_sw_ask=TN_CRUNCH_WIDTH,our_sh_ask=TN_CRUNCH_HEIGHT;
+   
+-  crunched=nasty_resizepic(theimage,width,height,&our_sw_ask,&our_sh_ask);
++  crunched=nasty_resizepic(theimage,width,height,stride,&our_sw_ask,&our_sh_ask);
+   
+   /* if it worked, replace orig w/h with crunched pic's one, and
+    * set theimage to point to it.
+@@ -106,6 +106,7 @@
+   if(crunched)
+     {
+     width=our_sw_ask;
++    stride=our_sw_ask*3;
+     height=our_sh_ask;
+     theimage=crunched;
+     }
+@@ -142,15 +143,14 @@
+     yp=(y*sh)/height;
+     if(yp!=lastyp)
+       {
+-      yw=y*width;
+       /* we try to resample it a bit */
+-      for(x=0;x<width;x++,yw++)
++      for(x=0;x<width;x++)
+         {
+         tr=tg=tb=tn=0;
+         for(b=0;(b<pixhigh)&&(y+b<height);b++)
+           for(a=0;(a<pixwide)&&(x+a<width);a++)
+             {
+-            tmp2=(yw+a+b*width)*3;
++            tmp2=(y + b) * stride + (x + a) * 3;
+             tr+=theimage[tmp2  ];
+             tg+=theimage[tmp2+1];
+             tb+=theimage[tmp2+2];
+@@ -173,7 +173,7 @@
+   for(y=0;y<height;y++)
+     for(x=0;x<width;x++)
+       {
+-      c=(y*width+x)*3;
++      c = y * stride + x * 3;
+       rline[3*(y*scrnwide+x)  ]=theimage[c  ];
+       rline[3*(y*scrnwide+x)+1]=theimage[c+1];
+       rline[3*(y*scrnwide+x)+2]=theimage[c+2];
+--- xzgv-0.9/src/resizepic.h	2007-08-11 18:52:03.000000000 +0200
++++ xzgv-0.9.new/src/resizepic.h	2009-01-06 23:01:36.000000000 +0100
+@@ -6,4 +6,4 @@
+ 
+ 
+ extern unsigned char *resizepic(unsigned char *theimage,
+-                                int width,int height,int *sw_ask,int *sh_ask,int allow_crunch);
++                                int width,int height, int stride, int *sw_ask,int *sh_ask,int allow_crunch);
+--- xzgv-0.9/src/updatetn.c	2007-08-11 20:08:41.000000000 +0200
++++ xzgv-0.9.new/src/updatetn.c	2009-01-10 14:30:42.000000000 +0100
+@@ -77,10 +77,9 @@
+               unsigned char **xvpic_data,int *wp,int *hp,int *written_ok_ptr)
+ {
+ FILE *out;
+-int w,h,y;
++int w,h,x,y;
+ unsigned char *smallpic;
+ xzgv_image *origpic;
+-int width,height;
+ int origw,origh;
+ int allow_crunch=1;
+ int written_ok=0;
+@@ -95,10 +94,23 @@
+ if(origpic->w!=origw || origpic->h!=origh)
+   allow_crunch=0;
+ 
++if (origpic->has_alpha)
++  /* Bummer we've got RGBA pixel data but all the other code expects packed
++     RGB data, so convert it. */
++  for (y = 0; y < origh; y++)
++    for (x = 0; x < origw; x++)
++      {
++         origpic->rgb[y * origpic->stride + x * 3] =
++           origpic->rgb[y * origpic->stride + x * 4];
++         origpic->rgb[y * origpic->stride + x * 3 + 1] =
++           origpic->rgb[y * origpic->stride + x * 4 + 1];
++         origpic->rgb[y * origpic->stride + x * 3 + 2] =
++           origpic->rgb[y * origpic->stride + x * 4 + 2];
++      }
++
+ /* resize */
+ w=80; h=60;
+-smallpic=resizepic(origpic->rgb,
+-                   width=origpic->w,height=origpic->h,&w,&h,
++smallpic=resizepic(origpic->rgb, origw, origh, origpic->stride, &w,&h,
+                    allow_crunch);
+ 
+ backend_image_destroy(origpic);		/* finished with this */

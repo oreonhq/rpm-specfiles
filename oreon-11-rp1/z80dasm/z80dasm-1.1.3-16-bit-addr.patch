@@ -1,0 +1,12 @@
+diff -up z80dasm-1.1.3/src/dz80.c.16-bit-addr z80dasm-1.1.3/src/dz80.c
+--- z80dasm-1.1.3/src/dz80.c.16-bit-addr	2012-03-03 03:22:00.000000000 -0700
++++ z80dasm-1.1.3/src/dz80.c	2015-05-01 22:42:02.493594170 -0600
+@@ -90,7 +90,7 @@ int ckrange(int skip, char *str)
+ 		/* not enough data in file */
+ 		return -1;
+ 	}
+-	val=t[skip+0]+256*t[skip+1];
++	val=(t[skip+0]+256*t[skip+1]) & 0xffff;
+ 
+ 	if(pass==1 || pass==2 || (!a_labels)) {
+ 		/* on first two passes don't bother printing labels (or if

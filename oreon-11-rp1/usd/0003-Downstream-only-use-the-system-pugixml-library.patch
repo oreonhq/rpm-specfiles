@@ -1,0 +1,39 @@
+From d1e032128f9c41a763d9e0535c408ffa6642ae03 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 30 Aug 2024 09:32:08 -0400
+Subject: [PATCH 3/6] Downstream-only: use the system pugixml library
+
+---
+ third_party/renderman/plugin/rmanArgsParser/CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/third_party/renderman/plugin/rmanArgsParser/CMakeLists.txt b/third_party/renderman/plugin/rmanArgsParser/CMakeLists.txt
+index 244f27aa8..1e00413c4 100644
+--- a/third_party/renderman/plugin/rmanArgsParser/CMakeLists.txt
++++ b/third_party/renderman/plugin/rmanArgsParser/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ set(PXR_PREFIX "")
+ set(PXR_PACKAGE rmanArgsParser)
+ 
++find_library(pugixml_LIBRARY NAMES pugixml REQUIRED)
++
+ pxr_plugin(rmanArgsParser
+     LIBRARIES
+         arch
+@@ -9,12 +11,10 @@ pxr_plugin(rmanArgsParser
+         vt
+         ar
+         sdr
++	${pugixml_LIBRARY}
+ 
+     PRIVATE_CLASSES
+         rmanArgsParser
+-
+-    CPPFILES
+-        pugixml/pugixml.cpp
+     
+     PRIVATE_HEADERS
+         api.h
+-- 
+2.53.0
+

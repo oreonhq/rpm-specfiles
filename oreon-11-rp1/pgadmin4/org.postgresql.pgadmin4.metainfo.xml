@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+ <id>org.postgresql.pgadmin4-qt</id>
+ <name>pgAdmin4-qt</name>
+ <summary>Administration tool for PostgreSQL</summary>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>PostgreSQL</project_license>
+ <description>
+  <p>
+   pgAdmin is the most popular and feature rich Open Source administration and development
+   platform for PostgreSQL, the most advanced Open Source database in the world.
+   This is an unofficial Qt runtime for pgadmin4.
+  </p>
+ </description>
+
+ <url type="homepage">https://www.pgadmin.org/</url>
+ <project_group>PostgreSQL</project_group>
+ <content_rating type="oars-1.1" />
+ <screenshots>
+  <screenshot>
+   <image>https://www.pgadmin.org/static/COMPILED/assets/img/screenshots/pgadmin4-welcome-light.png</image>
+  </screenshot>
+ </screenshots>
+</component>

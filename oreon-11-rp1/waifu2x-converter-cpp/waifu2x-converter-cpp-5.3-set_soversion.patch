@@ -1,0 +1,12 @@
+diff -up waifu2x-converter-cpp-5.3.2/CMakeLists.txt.orig waifu2x-converter-cpp-5.3.2/CMakeLists.txt
+--- waifu2x-converter-cpp-5.3.2/CMakeLists.txt.orig	2019-12-05 11:10:39.000000000 +0100
++++ waifu2x-converter-cpp-5.3.2/CMakeLists.txt	2019-12-05 21:40:17.836591283 +0100
+@@ -313,6 +313,8 @@ add_library(w2xc SHARED
+ 	src/tstring.cpp
+ )
+ 
++set_target_properties(w2xc PROPERTIES SOVERSION 1)
++
+ add_dependencies(w2xc gensrcs)
+ 
+ 

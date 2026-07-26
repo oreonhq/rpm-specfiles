@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>tlomt-sniglet</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Sniglet</name>
+  <summary>A rounded, sans-serif font useful for headlines</summary>
+  <description>
+    <p>
+      Sniglet is a fun rounded, sans-serif font useful for headlines and other
+      creative treaments. The font was created by Haley Fiege, and it supports a
+      full Latin character set including diacritics (accent marks). Notably, it
+      has full coverage for Icelandic and French characters.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.theleagueofmoveabletype.com/fonts/2-sniglet</url>
+</component>

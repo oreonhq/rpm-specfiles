@@ -1,0 +1,12 @@
+diff -up sblim-cmpi-rpm-1.0.1/Makefile.in.orig sblim-cmpi-rpm-1.0.1/Makefile.in
+--- sblim-cmpi-rpm-1.0.1/Makefile.in.orig	2013-11-06 15:13:08.000000000 +0100
++++ sblim-cmpi-rpm-1.0.1/Makefile.in	2013-11-06 15:13:24.315946906 +0100
+@@ -263,7 +263,7 @@ sblimincdir = $(includedir)/sblim
+ EXTRA_DIST = $(PACKAGE).spec $(PACKAGE).rh.spec mof $(pkgdata_SCRIPTS)
+ 
+ # docdir defines where the documentation goes
+-docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
++docdir = $(datadir)/doc/$(PACKAGE)
+ 
+ #
+ # Automake instructions for documentation

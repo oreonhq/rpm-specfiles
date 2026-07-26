@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Rise of the Triad
+Comment=RotT Shareware launcher, will automatically download the needed data-files
+Exec=rott-shareware
+StartupNotify=false
+Terminal=false
+Type=Application
+Icon=rott
+Categories=Game;ActionGame;
+Keywords=game;fps;first;person;shooter;rise;triad;rott;

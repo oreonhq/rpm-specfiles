@@ -1,0 +1,258 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 16 Nov 2022 21:25:00 +0100
+Subject: [PATCH] Remove pysha3
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/eth_hash/backends/__init__.py b/eth_hash/backends/__init__.py
+index fbe00fe..d91d1be 100644
+--- a/eth_hash/backends/__init__.py
++++ b/eth_hash/backends/__init__.py
+@@ -10,5 +10,4 @@ See :ref:`Choose a hashing backend` for more.
+ 
+ SUPPORTED_BACKENDS = [
+     "pycryptodome",
+-    "pysha3",
+ ]
+diff --git a/eth_hash/backends/pysha3.py b/eth_hash/backends/pysha3.py
+deleted file mode 100644
+index 758afe7..0000000
+--- a/eth_hash/backends/pysha3.py
++++ /dev/null
+@@ -1,41 +0,0 @@
+-from typing import (
+-    Union,
+-)
+-
+-from sha3 import (
+-    keccak_256 as _keccak_256,
+-)
+-
+-from eth_hash.abc import (
+-    BackendAPI,
+-    PreImageAPI,
+-)
+-
+-
+-class Pysha3Preimage(PreImageAPI):
+-    def __init__(self, prehash: bytes) -> None:
+-        self._hash = _keccak_256(prehash)
+-
+-    def update(self, prehash: bytes) -> None:
+-        return self._hash.update(prehash)  # type: ignore
+-
+-    def digest(self) -> bytes:
+-        return self._hash.digest()  # type: ignore
+-
+-    def copy(self) -> "Pysha3Preimage":
+-        dup = Pysha3Preimage(b"")
+-        dup._hash = self._hash.copy()
+-        return dup
+-
+-
+-class PySha3Backend(BackendAPI):
+-    def keccak256(self, prehash: Union[bytearray, bytes]) -> bytes:
+-        return _keccak_256(prehash).digest()  # type: ignore
+-
+-    def preimage(self, prehash: Union[bytearray, bytes]) -> PreImageAPI:
+-        return Pysha3Preimage(prehash)
+-
+-
+-backend = PySha3Backend()
+-keccak256 = backend.keccak256
+-preimage = backend.preimage
+diff --git a/setup.py b/setup.py
+index e7878fc..6e0731e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,10 +29,6 @@ extras_require = {
+     "pycryptodomex": [
+         "pycryptodomex>=3.6.6,<4",
+     ],
+-    "pysha3": [
+-        "pysha3>=1.0.0,<2.0.0;python_version<'3.9'",
+-        "safe-pysha3>=1.0.0;python_version>='3.9'",
+-    ],
+ }
+ 
+ extras_require["dev"] = (
+diff --git a/tests/backends/pysha3/conftest.py b/tests/backends/pysha3/conftest.py
+deleted file mode 100644
+index c25ff65..0000000
+--- a/tests/backends/pysha3/conftest.py
++++ /dev/null
+@@ -1,25 +0,0 @@
+-import pytest
+-
+-
+-@pytest.fixture(params=["auto", "explicit", "env"])
+-def keccak(monkeypatch, request, keccak_auto):
+-    if request.param == "auto":
+-        return keccak_auto
+-    elif request.param == "explicit":
+-        from eth_hash import (
+-            Keccak256,
+-        )
+-        from eth_hash.backends import (
+-            pysha3,
+-        )
+-
+-        return Keccak256(pysha3)
+-    elif request.param == "env":
+-        monkeypatch.setenv("ETH_HASH_BACKEND", "pysha3")
+-        from eth_hash.auto import (
+-            keccak,
+-        )
+-
+-        return keccak
+-    else:
+-        raise AssertionError(f"Unrecognized approach to import keccak: {request.param}")
+diff --git a/tests/backends/pysha3/test_results.py b/tests/backends/pysha3/test_results.py
+deleted file mode 100644
+index 8cd1cf0..0000000
+--- a/tests/backends/pysha3/test_results.py
++++ /dev/null
+@@ -1,113 +0,0 @@
+-import pytest
+-import pickle
+-
+-# Note that this file is symlink'd in all backend folders, so a change here is
+-# automatically shared across backend tests. If you want to add a backend-specific
+-# test, add it to a new file.
+-
+-
+-@pytest.fixture
+-def keccak_auto():
+-    from eth_hash.auto import (
+-        keccak,
+-    )
+-
+-    return keccak
+-
+-
+-@pytest.mark.parametrize(
+-    "prehash, expected_result",
+-    (
+-        (
+-            b"",
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-        (
+-            bytearray(b""),
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-    ),
+-)
+-def test_keccak_256(keccak, prehash, expected_result):
+-    assert keccak(prehash) == expected_result
+-
+-
+-@pytest.mark.parametrize(
+-    "parts, expected_result",
+-    (
+-        (
+-            [b""],
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-        (
+-            [bytearray(b"")],
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-        (
+-            [b"", b"", b""],
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-        (
+-            [bytearray(b""), bytearray(b""), bytearray(b"")],
+-            b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p",  # noqa: E501
+-        ),
+-        (
+-            [b"arst", b"tsra"],
+-            b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05",  # noqa: E501
+-        ),
+-        (
+-            [bytearray(b"arst"), bytearray(b"tsra")],
+-            b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05",  # noqa: E501
+-        ),
+-        (
+-            [bytearray(b"arst"), b"tsra"],
+-            b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05",  # noqa: E501
+-        ),
+-        (
+-            [b"arst", bytearray(b"tsra")],
+-            b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05",  # noqa: E501
+-        ),
+-    ),
+-)
+-def test_keccak_256_preimage(keccak, parts, expected_result):
+-    preimage = keccak.new(parts[0])
+-    for part in parts[1:]:
+-        preimage.update(part)
+-    assert preimage.digest() == expected_result
+-
+-
+-def test_copy_keccak_256_preimage(keccak):
+-    preimage_origin = keccak.new(b"")
+-    preimage_copy = preimage_origin.copy()
+-
+-    preimage_origin.update(b"arsttsra")
+-
+-    assert (
+-        preimage_origin.digest()
+-        == b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05"  # noqa: E501
+-    )
+-    assert (
+-        preimage_copy.digest()
+-        == b"\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';\x7b\xfa\xd8\x04]\x85\xa4p"  # noqa: E501
+-    )
+-
+-
+-def test_update_digest_update(keccak):
+-    preimage = keccak.new(b"")
+-    preimage.update(b"arst")
+-    assert (
+-        preimage.digest()
+-        == b"\xc30[\xc9\xde\x12D\xe4\x80P\x96,\xedP\xb7Y4\xc3p\x06\xe9\x9e\x8bzb!>\x94\\=\xfc\xd7"  # noqa: E501
+-    )
+-    preimage.update(b"tsra")
+-    assert (
+-        preimage.digest()
+-        == b"\xb1\xf3T\xb2\x8f\xf2\x84R\xd6\xb9\xd6\x1fA\x06\x1b\xbe\x82\xbe\xb1\xfc\x98\xf33d\xa8\x05\x8d\x1a]\x16M\x05"  # noqa: E501
+-    )
+-
+-
+-def test_auto_pickleable(keccak_auto):
+-    serialized = pickle.dumps(keccak_auto)
+-    deserialized = pickle.loads(serialized)
+-
+-    assert deserialized(b"arst") == keccak_auto(b"arst")
+diff --git a/tests/core/test_import_and_version.py b/tests/core/test_import_and_version.py
+index a5df720..e88a1be 100644
+--- a/tests/core/test_import_and_version.py
++++ b/tests/core/test_import_and_version.py
+@@ -25,7 +25,7 @@ def test_import_auto_empty_crash(monkeypatch):
+         keccak,
+     )
+ 
+-    with mock.patch.dict("sys.modules", {"sha3": None, "Cryptodome.Hash": None}):
++    with mock.patch.dict("sys.modules", {"Cryptodome.Hash": None}):
+         with pytest.raises(
+             ImportError, match="None of these hashing backends are installed"
+         ):
+@@ -43,7 +43,6 @@ def test_import_and_version():
+     "backend",
+     [
+         "pycryptodome",
+-        "pysha3",
+     ],
+ )
+ def test_load_by_env(monkeypatch, backend):
+@@ -53,7 +52,7 @@ def test_load_by_env(monkeypatch, backend):
+     )
+ 
+     monkeypatch.setenv("ETH_HASH_BACKEND", backend)
+-    with mock.patch.dict("sys.modules", {"sha3": None, "Cryptodome.Hash": None}):
++    with mock.patch.dict("sys.modules", {"Cryptodome.Hash": None}):
+         with pytest.raises(ImportError) as excinfo:
+             keccak(b"triggered")
+     expected_msg = (

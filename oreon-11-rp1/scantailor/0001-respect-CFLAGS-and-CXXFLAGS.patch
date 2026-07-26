@@ -1,0 +1,45 @@
+From 6d00140f640ead5211462401442b012a4d261fe1 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Wed, 29 Jul 2015 16:32:06 -0700
+Subject: [PATCH] respect CFLAGS and CXXFLAGS
+
+Setting CMAKE_C_FLAGS and CMAKE_CXX_FLAGS without including
+their existing contents causes any provided CFLAGS and/or
+CXXFLAGS to be ignored.
+
+These should be respected, if set (distributions commonly have
+defaults they expect to be used). The $default_flags_ tweak is
+just to avoid duplication - distros will typically set CXXFLAGS
+to include all the same stuff as CFLAGS, so if you include
+CFLAGS in CMAKE_C_FLAGS then include CMAKE_C_FLAGS in CMAKE_
+CXX_FLAGS, you'll wind up with lots of flags repeated.
+---
+ cmake/SetDefaultGccFlags.cmake | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/SetDefaultGccFlags.cmake b/cmake/SetDefaultGccFlags.cmake
+index eb69e6c..66755ef 100644
+--- a/cmake/SetDefaultGccFlags.cmake
++++ b/cmake/SetDefaultGccFlags.cmake
+@@ -50,14 +50,15 @@ MACRO(ST_SET_DEFAULT_GCC_FLAGS)
+ 		ENDIF()
+ 		
+ 		IF(NOT COMPILER_FLAGS_OVERRIDDEN)
++			SET(default_flags_ "-Wall -Wno-unused -ffast-math ${no_inline_dllexport_cflags_}")
+ 			# Flags common for all build configurations.
+ 			SET(
+-				CMAKE_C_FLAGS
+-				"-Wall -Wno-unused -ffast-math ${no_inline_dllexport_cflags_}"
++				CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${default_flags_}"
+ 				CACHE STRING "Common C flags for all build configurations." FORCE
+ 			)
+ 			SET(
+-				CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${stdlibs_shared_static_}"
++				CMAKE_CXX_FLAGS
++				"${CMAKE_CXX_FLAGS} ${default_flags_} ${stdlibs_shared_static_}"
+ 				CACHE STRING "Common C++ flags for all build configurations." FORCE
+ 			)
+ 		
+-- 
+2.4.6
+

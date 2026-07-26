@@ -1,0 +1,21 @@
+From 035e9328d9d33aab110404974829c44442a825d2 Mon Sep 17 00:00:00 2001
+From: Cristian Le <github@lecris.me>
+Date: Fri, 30 Aug 2024 19:13:44 +0200
+Subject: [PATCH] Remove unnecessary pyproject optional dependency
+
+scikit-build-core made `[pyproject]` and empty optional dependency since 0.9.0
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index ce50c673f..bb1d1debf 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["scikit-build-core[pyproject]>=0.9.2"]
++requires = ["scikit-build-core>=0.9.2"]
+ build-backend = "scikit_build_core.build"
+ 
+ [project]

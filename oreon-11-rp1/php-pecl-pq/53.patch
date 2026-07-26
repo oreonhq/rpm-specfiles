@@ -1,0 +1,24 @@
+From da7fe208d67f10ed106aec33163496e42a129022 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Tue, 8 Jul 2025 15:07:07 +0200
+Subject: [PATCH] Relax text expectation (for 8.5)
+
+-Warning: fclose(): %d is not a valid stream resource in ...
++Warning: fclose(): cannot close the provided stream, as it must not be manually closed in ...
+---
+ tests/lob003.phpt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/lob003.phpt b/tests/lob003.phpt
+index f6d846e..c25dac7 100644
+--- a/tests/lob003.phpt
++++ b/tests/lob003.phpt
+@@ -25,7 +25,7 @@ Test
+ resource(%d) of type (stream)
+ resource(%d) of type (stream)
+ 
+-Warning: fclose(): %d is not a valid stream resource in %s on line %d
++Warning: fclose(): %s in %s on line %d
+ resource(%d) of type (stream)
+ string(0) ""
+ DONE

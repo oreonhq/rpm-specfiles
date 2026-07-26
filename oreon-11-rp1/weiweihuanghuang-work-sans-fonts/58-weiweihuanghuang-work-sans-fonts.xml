@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Work Sans</target>
+    <like>
+      <family>Helvetica Neue</family>
+      <family>Helvetica Neue Pro</family>
+      <family>Akkurat</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

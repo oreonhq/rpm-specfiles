@@ -1,0 +1,12 @@
+diff -ur trojita-90b417b131853553c94ff93aef62abaf301aa8f1/CMakeLists.txt trojita-90b417b131853553c94ff93aef62abaf301aa8f1-disable-gpg-tests/CMakeLists.txt
+--- trojita-90b417b131853553c94ff93aef62abaf301aa8f1/CMakeLists.txt	2019-06-18 13:02:58.000000000 +0200
++++ trojita-90b417b131853553c94ff93aef62abaf301aa8f1-disable-gpg-tests/CMakeLists.txt	2019-07-29 22:15:55.738302156 +0200
+@@ -832,7 +832,7 @@
+     trojita_test(Imap Imap_CopyAndFlagOperations)
+     trojita_test(Cryptography Cryptography_MessageModel)
+ 
+-    if(WITH_CRYPTO_MESSAGES)
++    if(FALSE)
+       find_program(GPGCONF_BINARY NAMES gpgconf)
+       if(GPGCONF_BINARY_NOTFOUND)
+         message(SEND_ERROR "The `gpgconf` binary from GnuPG not found, this is needed for crypto tests.")

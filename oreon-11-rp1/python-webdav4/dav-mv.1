@@ -1,0 +1,42 @@
+.TH DAV\-MV "1" "February 2024" "" "User Commands"
+.SH NAME
+.B dav\ mv
+\(en Moves a local file or remote file to another location
+locally or in remote
+.SH SYNOPSIS
+.B dav\ mv
+.RB [ \-h ]
+.RB [ \-\-recursive ]
+.I path1
+.I path2
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I path1
+Path to move from (locally or remotely if
+.B dav://
+url is given)
+.TP
+.I path2
+Path to move to (locally or remotely if
+.B dav://
+url is given)
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-\-recursive\fR,\ \fB\-R
+Recurse into directories
+.SH "SEE\ ALSO"
+.BR dav\-ls (1),
+.BR dav\-cp (1),
+.\" .BR dav\-mv (1),
+.BR dav\-rm (1),
+.BR dav\-mkdir (1),
+.BR dav\-run (1),
+.BR dav\-cat (1),
+.BR dav\-sync (1),
+.BR dav\-du (1)
+.P
+.BR dav (1)

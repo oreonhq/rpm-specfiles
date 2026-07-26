@@ -1,0 +1,129 @@
+From 9da4460ad0e71e5c3de32566ffbc302674b1f76e Mon Sep 17 00:00:00 2001
+From: Ryan Davis <ryand-ruby@zenspider.com>
+Date: Thu, 20 Nov 2025 12:50:33 -0800
+Subject: [PATCH 1/5] MT6: Load rails plugin
+
+---
+ activesupport/lib/active_support/testing/autorun.rb | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/activesupport/lib/active_support/testing/autorun.rb b/activesupport/lib/active_support/testing/autorun.rb
+index d5d5fc7ae8e45..068aac0b487e0 100644
+--- a/activesupport/lib/active_support/testing/autorun.rb
++++ b/activesupport/lib/active_support/testing/autorun.rb
+@@ -2,4 +2,11 @@
+ 
+ require "minitest"
+ 
++##
++# I shouldn't need this respond_to check but some tests are running
++# sub-process tests in an unbundled environment, causing MT5 to be
++# used in some cases. This conditional can probably go after the bump
++# is complete? ... but could still fail for developers working w/
++# multiple versions installed.
++Minitest.load :rails if Minitest.respond_to? :load
+ Minitest.autorun
+
+From 831f0f96d0f9c132b28d3fa22ab82806115747b0 Mon Sep 17 00:00:00 2001
+From: Ryan Davis <ryand-ruby@zenspider.com>
+Date: Thu, 20 Nov 2025 14:16:51 -0800
+Subject: [PATCH 3/5] MT6: implementation fixes
+
+MT6 changes the way assertion messages work. Now, if a proc is passed
+in for the message, it wins untouched. So for the rails assertions
+that want to have diffs shown while calling assert_equal with a
+message proc, the proc needs to call diff itself. This feels redundant
+to me, but not my call.
+
+And since the procs win now, they need to provide their own periods at
+the end of the text.
+---
+ activesupport/lib/active_support/testing/assertions.rb    | 8 +++++---
+ .../lib/active_support/testing/parallelization/worker.rb  | 6 +++++-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/activesupport/lib/active_support/testing/assertions.rb b/activesupport/lib/active_support/testing/assertions.rb
+index 178b5b350abba..4f2c6b105bc19 100644
+--- a/activesupport/lib/active_support/testing/assertions.rb
++++ b/activesupport/lib/active_support/testing/assertions.rb
+@@ -124,7 +124,8 @@ def assert_difference(expression, *args, &block)
+           actual = exp.call
+           rich_message = -> do
+             code_string = code.respond_to?(:call) ? _callable_to_source_string(code) : code
+-            error = "`#{code_string}` didn't change by #{diff}, but by #{actual - before_value}"
++            error = "`#{code_string}` didn't change by #{diff}, but by #{actual - before_value}."
++            error = "#{error}\n#{diff before_value + diff, actual}" if Minitest::VERSION > "6"
+             error = "#{message}.\n#{error}" if message
+             error
+           end
+@@ -228,7 +229,7 @@ def assert_changes(expression, message = nil, from: UNTRACKED, to: UNTRACKED, &b
+         rich_message = -> do
+           code_string = expression.respond_to?(:call) ? _callable_to_source_string(expression) : expression
+           error = "`#{code_string}` didn't change"
+-          error = "#{error}. It was already #{to.inspect}" if before == to
++          error = "#{error}. It was already #{to.inspect}." if before == to
+           error = "#{message}.\n#{error}" if message
+           error
+         end
+@@ -296,8 +297,9 @@ def assert_no_changes(expression, message = nil, from: UNTRACKED, &block)
+ 
+         rich_message = -> do
+           code_string = expression.respond_to?(:call) ? _callable_to_source_string(expression) : expression
+-          error = "`#{code_string}` changed"
++          error = "`#{code_string}` changed."
+           error = "#{message}.\n#{error}" if message
++          error = "#{error}\n#{diff before, after}" if Minitest::VERSION > "6"
+           error
+         end
+ 
+diff --git a/activesupport/lib/active_support/testing/parallelization/worker.rb b/activesupport/lib/active_support/testing/parallelization/worker.rb
+index d008277f8924c..daad6ce659103 100644
+--- a/activesupport/lib/active_support/testing/parallelization/worker.rb
++++ b/activesupport/lib/active_support/testing/parallelization/worker.rb
+@@ -49,7 +49,11 @@ def perform_job(job)
+           set_process_title("#{klass}##{method}")
+ 
+           result = klass.with_info_handler reporter do
+-            Minitest.run_one_method(klass, method)
++            if Minitest.respond_to?(:run_one_method) then
++              Minitest.run_one_method(klass, method)
++            else
++              klass.new(method).run
++            end
+           end
+ 
+           safe_record(reporter, result)
+
+From 2c1ca03402de9a5bc4e482da739e39f5bd47f0b3 Mon Sep 17 00:00:00 2001
+From: Ryan Davis <ryand-ruby@zenspider.com>
+Date: Thu, 20 Nov 2025 15:34:55 -0800
+Subject: [PATCH 4/5] MT6: test fixes
+
+Mostly minor and mostly centered around whether there are diffs.
+---
+ actionpack/test/dispatch/routing/route_set_test.rb | 4 ++--
+ activesupport/test/test_case_test.rb               | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/activesupport/test/test_case_test.rb b/activesupport/test/test_case_test.rb
+index 7e5084e4b041c..05ed8f2ae629d 100644
+--- a/activesupport/test/test_case_test.rb
++++ b/activesupport/test/test_case_test.rb
+@@ -243,7 +243,7 @@ def test_assert_changes_with_to_option_but_no_change_has_special_message
+       end
+     end
+ 
+-    assert_equal "`@object.num` didn't change. It was already 0.\nExpected 0 to not be equal to 0.", error.message
++    assert_match "`@object.num` didn't change. It was already 0.", error.message
+   end
+ 
+   def test_assert_changes_message_with_lambda
+@@ -255,7 +255,7 @@ def test_assert_changes_message_with_lambda
+       end
+     end
+ 
+-    assert_equal "`@object.num` didn't change. It was already 0.\nExpected 0 to not be equal to 0.", error.message
++    assert_match "`@object.num` didn't change. It was already 0.", error.message
+   end
+ 
+   def test_assert_changes_with_wrong_to_option

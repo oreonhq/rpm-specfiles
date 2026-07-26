@@ -1,0 +1,127 @@
+%global source0_hash fc256b8be022eb0487549cc2119c57fd12ad402e4130a05263b7aa85e2df89b9
+
+%global version 0.16.1
+%global reponame WasmEdge
+%global capi_soname 0
+%global capi_version 0.1.0
+
+Name:    wasmedge
+Version: %{version}
+Release: %autorelease
+Summary: High performance WebAssembly Virtual Machine
+# The entire source code is ASL 2.0 except LICENSE.spdx which is CC0
+# Automatically converted from old format: ASL 2.0 and CC0 - review is highly recommended.
+License: Apache-2.0 AND CC0-1.0
+URL:     https://github.com/%{reponame}/%{reponame}
+Source0: %{url}/releases/download/%{version}/%{reponame}-%{version}-src.tar.gz
+# Patch from https://github.com/WasmEdge/WasmEdge/commit/3b9c754fbe96289452ef76951e783e5a7d7eacc7
+Patch0: 0001-fix-refactor-Poller-context-handling-to-use-pointer-instead-of-wrapper.patch
+BuildRequires: cmake
+BuildRequires: gcc-c++
+BuildRequires: git
+BuildRequires: lld18-devel
+BuildRequires: llvm18-devel
+BuildRequires: ninja-build
+BuildRequires: spdlog-devel
+Requires:      lld18
+Requires:      llvm18
+Requires:      spdlog
+# Currently wasmedge could only be built on specific arches
+ExclusiveArch: x86_64 aarch64 riscv64
+Provides: %{reponame} = %{version}-%{release}
+Provides: bundled(blake3) = 1.2.0
+Provides: bundled(wasi-cpp-header) = 0.0.1
+Provides: wasm-library
+Conflicts: %{name}-rt
+
+%description
+High performance WebAssembly Virtual Machine
+
+%package rt
+Summary: %{reponame} Runtime
+Requires: spdlog
+Provides: %{reponame}-rt = %{version}-%{release}
+Provides: bundled(blake3) = 1.3.3
+Provides: bundled(wasi-cpp-header) = 0.0.1
+Provides: wasm-library
+Conflicts: %{name}
+RemovePathPostfixes: .rt
+
+%description rt
+This package contains only %{reponame} runtime without LLVM dependency.
+
+%package devel
+Summary: %{reponame} development files
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Provides: %{reponame}-devel = %{version}-%{release}
+
+%description devel
+This package contains necessary header files for %{reponame} development.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{name} -p1
+[ -f VERSION ] || echo -n %{version} > VERSION
+
+%build
+%cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DWASMEDGE_BUILD_TESTS=OFF -DLLVM_DIR=/usr/lib64/llvm18/lib/cmake/llvm
+%cmake_build
+mkdir rt
+cd rt
+%cmake -S .. -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DWASMEDGE_BUILD_TESTS=OFF -DWASMEDGE_BUILD_AOT_RUNTIME=OFF -DLLVM_DIR=/usr/lib64/llvm18/lib/cmake/llvm
+%cmake_build
+
+%install
+cd rt
+%cmake_install
+mv %{buildroot}%{_bindir}/wasmedge{,.rt}
+mv %{buildroot}%{_libdir}/lib%{name}.so.%{capi_version}{,.rt}
+mv %{buildroot}%{_libdir}/lib%{name}.so.%{capi_soname}{,.rt}
+mv %{buildroot}%{_libdir}/lib%{name}.so{,.rt}
+rm -rf %{buildroot}%{_includedir}
+cd ..
+%cmake_install
+
+%files
+%license LICENSE LICENSE.spdx
+%doc Changelog.md README.md SECURITY.md
+%{_bindir}/wasmedge
+%{_bindir}/wasmedgec
+%{_libdir}/lib%{name}.so.%{capi_version}
+%{_libdir}/lib%{name}.so.%{capi_soname}
+
+%files rt
+%license LICENSE LICENSE.spdx
+%doc Changelog.md README.md SECURITY.md
+%{_bindir}/wasmedge.rt
+%{_libdir}/lib%{name}.so.%{capi_version}.rt
+%{_libdir}/lib%{name}.so.%{capi_soname}.rt
+%{_libdir}/lib%{name}.so.rt
+
+%files devel
+%dir %{_includedir}/%{name}
+%{_includedir}/%{name}/enum.inc
+%{_includedir}/%{name}/enum_configure.h
+%{_includedir}/%{name}/enum_errcode.h
+%{_includedir}/%{name}/enum_types.h
+%{_includedir}/%{name}/int128.h
+%{_includedir}/%{name}/version.h
+%{_includedir}/%{name}/wasmedge.h
+%{_includedir}/%{name}/wasmedge_ast.h
+%{_includedir}/%{name}/wasmedge_basic.h
+%{_includedir}/%{name}/wasmedge_compiler.h
+%{_includedir}/%{name}/wasmedge_configure.h
+%{_includedir}/%{name}/wasmedge_context.h
+%{_includedir}/%{name}/wasmedge_deprecated.h
+%{_includedir}/%{name}/wasmedge_execution.h
+%{_includedir}/%{name}/wasmedge_experimental.h
+%{_includedir}/%{name}/wasmedge_instance.h
+%{_includedir}/%{name}/wasmedge_plugin.h
+%{_includedir}/%{name}/wasmedge_tools.h
+%{_includedir}/%{name}/wasmedge_value.h
+%{_includedir}/%{name}/wasmedge_vm.h
+%{_libdir}/lib%{name}.so
+
+%changelog
+%autochangelog

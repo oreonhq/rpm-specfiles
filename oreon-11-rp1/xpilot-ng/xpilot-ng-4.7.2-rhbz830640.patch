@@ -1,0 +1,12 @@
+diff -up xpilot-ng-4.7.2/src/client/meta.h~ xpilot-ng-4.7.2/src/client/meta.h
+--- xpilot-ng-4.7.2/src/client/meta.h~	2005-01-04 22:38:12.000000000 +0100
++++ xpilot-ng-4.7.2/src/client/meta.h	2012-07-29 15:50:53.137403386 +0200
+@@ -72,7 +72,7 @@ struct ServerInfo {
+ 	*playlist,
+ 	*sound,
+ 	*teambases_str,
+-	*timing, *ip_str, *freebases, *queue_str, *domain, pingtime_str[5];
++	*timing, *ip_str, *freebases, *queue_str, *domain, pingtime_str[11];
+     unsigned port,
+ 	ip, users, bases, fps, uptime, teambases, queue, pingtime;
+     struct timeval start;

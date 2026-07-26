@@ -1,0 +1,16 @@
+Fixes C99 compliance issue.
+https://sourceforge.net/p/worminator/bugs/2/
+
+diff --git a/particle_ai.h b/particle_ai.h
+index 93ac1ec..05ec08d 100644
+--- a/particle_ai.h
++++ b/particle_ai.h
+@@ -111,7 +111,7 @@ else sprites[sprite_number].timer--;
+ /*****************\
+ |** SHRAPGIB AI **|
+ \*****************/
+-void shrapgib_ai(sprite_number)
++void shrapgib_ai(int sprite_number)
+ {
+ // Update the timer and destroy sprite if time is up
+ sprites[sprite_number].timer--;

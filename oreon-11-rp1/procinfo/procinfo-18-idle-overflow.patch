@@ -1,0 +1,20 @@
+--- procinfo-18/routines.c.orig	2011-02-11 03:32:17.000000000 +0530
++++ procinfo-18/routines.c	2011-02-11 03:35:01.000000000 +0530
+@@ -392,13 +392,13 @@ 
+ 
+     t *= (100 / HZ);
+     d = (unsigned int) (t / 8640000);
+-    t -= (unsigned long) (d * 8640000);
++    t -= ((unsigned long) d * 8640000);
+     h = (unsigned int) (t / 360000);
+-    t -= (unsigned long) (h * 360000);
++    t -= ((unsigned long) h * 360000);
+     m = (unsigned int) (t / 6000);
+-    t -= (unsigned long) (m * 6000);
++    t -= ((unsigned long) m * 6000);
+     s = (unsigned int) (t / 100);
+-    t -= (unsigned long) (s * 100);
++    t -= ((unsigned long) s * 100);
+     if (d > 0)
+ 	sprintf (buf, "%3ud %2u:%02u:%02u.%02u", d, h, m, s, (unsigned int) t);
+     else

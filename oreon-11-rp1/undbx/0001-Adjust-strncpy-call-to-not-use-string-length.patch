@@ -1,0 +1,58 @@
+From 7e864c626c3fc27bf1f0e2680996888463aae684 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Mon, 11 Feb 2019 14:42:16 +0100
+Subject: [PATCH] Adjust strncpy call to not use string length
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Gcc doesn't like this:
+dbxread.c:66:5: error: ‘strncpy’ output truncated before terminating nul copying as many bytes from a string as its length [-Werror=stringop-truncation]
+     strncpy(s + n, c, l);
+     ^~~~~~~~~~~~~~~~~~~~
+dbxread.c:64:9: note: length computed here
+     l = strlen(c);
+         ^~~~~~~~~
+cc1: all warnings being treated as errors
+
+Actually the code was OK, but it's nicer to use memcpy() to make it clear
+that we don't want the NUL terminator to be copied.
+
+A different bug is corrected: the array c was not initialized, so if a
+string shorter than 255 bytes was read, and a NUL byte was was not
+present in the bytes read, strlen() would read garbage data from the
+heap, in the area between the data read and the 255th byte which was
+initalized to NUL.
+---
+ dbxread.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/dbxread.c b/dbxread.c
+index 033d43a60f..3a30e4f821 100644
+--- a/dbxread.c
++++ b/dbxread.c
+@@ -51,19 +51,18 @@ static int _dbx_info_cmp(const dbx_info_t *ia, const dbx_info_t *ib)
+ 
+ static char *_dbx_read_string(FILE *file, int offset)
+ {
+-  char c[256];
++  char c[256] = {};
+   char *s = NULL;
+   int n = 0;
+   int l = 0;
+ 
+   fseek(file, offset, SEEK_SET);
+-  c[255]='\0';
+ 
+   do {
+     sys_fread(c, 1, 255, file);
+     l = strlen(c);
+     s = realloc(s, n + l + 1);
+-    strncpy(s + n, c, l);
++    memcpy(s + n, c, l);
+     n += l;
+     s[n] = '\0';
+   } while (l == 255);
+-- 
+2.19.2
+

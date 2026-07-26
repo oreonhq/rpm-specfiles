@@ -1,0 +1,12 @@
+diff -up swatch-3.2.3/lib/Swatch/Actions.pm.fixed swatch-3.2.3/lib/Swatch/Actions.pm
+--- swatch-3.2.3/lib/Swatch/Actions.pm.fixed	2018-08-23 10:37:29.786956086 -0400
++++ swatch-3.2.3/lib/Swatch/Actions.pm	2018-08-23 10:37:53.921472894 -0400
+@@ -96,7 +96,7 @@ sub exec_command {
+ 
+  EXECFORK: {
+     if ($exec_pid = fork) {
+-      waitpid(-1, WNOHANG);
++      waitpid($exec_pid, 0);
+       return 0;
+     } elsif (defined $exec_pid) {
+       exec($command);

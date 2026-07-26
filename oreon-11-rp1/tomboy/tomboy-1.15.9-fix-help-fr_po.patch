@@ -1,0 +1,23 @@
+From 0e93886c8e35993ff46d720a92282b8745b4c51d Mon Sep 17 00:00:00 2001
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Date: Mon, 16 Jul 2018 20:29:43 +0200
+Subject: [PATCH] Update fr.po
+
+Fix typo.
+---
+ help/fr/fr.po | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/help/fr/fr.po b/help/fr/fr.po
+index 7b575814..8a516662 100644
+--- a/help/fr/fr.po
++++ b/help/fr/fr.po
+@@ -692,7 +692,7 @@ msgid ""
+ "on <gui style=\"button\">Get More Add-Ins…</gui>."
+ msgstr ""
+ "Pour télécharger d'autres greffons depuis l'Internet, dans les "
+-"<gui>Préférences de <app>Tomboy</app</gui>, dans l'onglet <gui style=\"tab"
++"<gui>Préférences de <app>Tomboy</app></gui>, dans l'onglet <gui style=\"tab"
+ "\">Greffons</gui>, cliquez sur <gui>Obtenir des greffons supplémentaires…</"
+ "gui>."
+ 

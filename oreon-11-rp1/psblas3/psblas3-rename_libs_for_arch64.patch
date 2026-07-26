@@ -1,0 +1,50 @@
+--- a/configure.orig	2020-06-23 13:02:34.000000000 +0200
++++ b/configure	2020-07-19 13:00:08.447871180 +0200
+@@ -12101,10 +12101,10 @@
+ ###############################################################################
+ 
+ LIBDIR=lib
+-BASELIBNAME=libpsb_base.a
+-PRECLIBNAME=libpsb_prec.a
+-METHDLIBNAME=libpsb_krylov.a
+-UTILLIBNAME=libpsb_util.a
++BASELIBNAME=libpsb64_base.a
++PRECLIBNAME=libpsb64_prec.a
++METHDLIBNAME=libpsb64_krylov.a
++UTILLIBNAME=libpsb64_util.a
+ 
+ ###############################################################################
+ # Variable substitutions : the Make.inc.in will have these @VARIABLES@
+--- a/Make.inc.orig.in	2021-04-13 16:54:47.000000000 +0200
++++ b/Make.inc.in	2021-04-14 19:19:17.346198652 +0200
+@@ -64,7 +64,7 @@
+ METHDMODNAME=@METHDMODNAME@
+ UTILMODNAME=@UTILMODNAME@
+ 
+-CBINDLIBNAME=libpsb_cbind.a
++CBINDLIBNAME=libpsb64_cbind.a
+ 
+ 
+ @PSBLASRULES@
+--- a/test/serial/Makefile.orig	2021-04-13 16:54:47.000000000 +0200
++++ b/test/serial/Makefile	2021-04-16 18:49:56.595706787 +0200
+@@ -6,7 +6,7 @@
+ MODDIR=$(INSTALLDIR)/modules/
+ include $(INCDIR)/Make.inc.psblas
+ LIBDIR=$(INSTALLDIR)/lib/
+-PSBLAS_LIB= -L$(LIBDIR) -lpsb_util -lpsb_krylov -lpsb_prec -lpsb_base
++PSBLAS_LIB= -L$(LIBDIR) -lpsb64_util -lpsb64_krylov -lpsb64_prec -lpsb64_base
+ LDLIBS=$(PSBLDLIBS)
+ 
+ FINCLUDES=$(FMFLAG)$(MODDIR) $(FMFLAG).
+--- a/test/hello/Makefile.orig	2021-04-13 16:54:47.000000000 +0200
++++ b/test/hello/Makefile	2021-04-16 18:53:43.607318360 +0200
+@@ -5,7 +5,7 @@
+ #
+ # Libraries used
+ LIBDIR=$(BASEDIR)/lib
+-PSBLAS_LIB= -L$(LIBDIR) -lpsb_util -lpsb_krylov -lpsb_prec -lpsb_base 
++PSBLAS_LIB= -L$(LIBDIR) -lpsb64_util -lpsb64_krylov -lpsb64_prec -lpsb64_base 
+ LDLIBS=$(PSBLDLIBS)
+ #
+ # Compilers and such

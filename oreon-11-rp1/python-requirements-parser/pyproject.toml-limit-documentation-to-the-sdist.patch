@@ -1,0 +1,33 @@
+From 1caff576688328dc16f6f51dd305aaeef10cd847 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Tue, 15 Aug 2023 01:25:12 +0000
+Subject: [PATCH] pyproject.toml: limit documentation to the sdist
+
+Without specifying `format = "sdist"`, poetry installs these files
+straight into the root site-packages directory.
+
+Signed-off-by: Maxwell G <maxwell@gtmx.me>
+---
+ pyproject.toml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 37abc64..72fc8be 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -22,9 +22,9 @@ packages = [
+     { include = "requirements" }
+ ]
+ include = [
+-    "AUTHORS.rst",
+-    "LICENSE",
+-    "README.md"
++    { path = "AUTHORS.rst", format = "sdist" },
++    { path = "LICENSE", format = "sdist" },
++    { path = "README.md", format = "sdist" },
+ ]
+ classifiers = [
+     # Trove classifiers - https://packaging.python.org/specifications/core-metadata/#metadata-classifier
+-- 
+2.41.0
+

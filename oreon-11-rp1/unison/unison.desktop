@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=unison-gui
+Name=Unison File Synchronizer
+GenericName=File Synchronizer
+Comment=Multi-master File synchronization tool
+Terminal=false
+Icon=unison
+StartupNotify=true
+Categories=Utility;

@@ -1,0 +1,17 @@
+diff -up qtbrowserplugin-2.4/qtbrowserplugin.pro.lib qtbrowserplugin-2.4/qtbrowserplugin.pro
+--- qtbrowserplugin-2.4/qtbrowserplugin.pro.lib	2013-09-05 11:38:17.000000000 -0600
++++ qtbrowserplugin-2.4/qtbrowserplugin.pro	2013-09-05 12:22:53.753281717 -0600
+@@ -1,2 +1,3 @@
+ TEMPLATE=subdirs
+ SUBDIRS=examples
++include(src/qtbrowserplugin.pri)
+diff -up qtbrowserplugin-2.4/src/qtbrowserplugin.pri.lib qtbrowserplugin-2.4/src/qtbrowserplugin.pri
+--- qtbrowserplugin-2.4/src/qtbrowserplugin.pri.lib	2013-09-05 11:38:17.000000000 -0600
++++ qtbrowserplugin-2.4/src/qtbrowserplugin.pri	2013-09-05 13:41:07.043754608 -0600
+@@ -1,5 +1,5 @@
+ TEMPLATE = lib
+-CONFIG  += dll
++CONFIG  += staticlib
+ win32 {
+   # Uncomment the following line to build a plugin that can be used also in 
+   # Internet Explorer, through ActiveX.

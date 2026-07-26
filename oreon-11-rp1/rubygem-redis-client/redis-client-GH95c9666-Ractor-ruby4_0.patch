@@ -1,0 +1,58 @@
+From 95c96666868fb60286b473abbef1daa18d827b52 Mon Sep 17 00:00:00 2001
+From: Jean Boussier <jean.boussier@gmail.com>
+Date: Tue, 3 Jun 2025 08:37:44 +0200
+Subject: [PATCH] Update Ractor tests following `#take` removal
+
+---
+ test/redis_client/ractor_test.rb | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/test/redis_client/ractor_test.rb b/test/redis_client/ractor_test.rb
+index 18bcec9..7afaa33 100644
+--- a/test/redis_client/ractor_test.rb
++++ b/test/redis_client/ractor_test.rb
+@@ -7,7 +7,7 @@ class RactorTest < Minitest::Test
+     skip("Ractors are not supported on this Ruby version") unless defined?(::Ractor)
+     skip("Hiredis is not Ractor safe") if RedisClient.default_driver.name == "RedisClient::HiredisConnection"
+     begin
+-      Ractor.new { RedisClient.default_driver.name }.take
++      ractor_value(Ractor.new { RedisClient.default_driver.name })
+     rescue Ractor::RemoteError
+       skip("Ractor implementation is too limited (MRI 3.0?)")
+     end
+@@ -20,7 +20,7 @@ class RactorTest < Minitest::Test
+       within_ractor_redis.call("GET", "foo")
+     end
+ 
+-    assert_equal("bar", ractor.take)
++    assert_equal("bar", ractor_value(ractor))
+   end
+ 
+   def test_multiple_ractors
+@@ -30,7 +30,7 @@ class RactorTest < Minitest::Test
+       within_ractor_redis.call("GET", "foo")
+     end
+ 
+-    ractor1.take # We do this to ensure that the SET has been processed
++    ractor_value(ractor1) # We do this to ensure that the SET has been processed
+ 
+     ractor2 = Ractor.new do
+       key = Ractor.receive
+@@ -39,6 +39,16 @@ class RactorTest < Minitest::Test
+     end
+     ractor2.send("foo")
+ 
+-    assert_equal("bar", ractor2.take)
++    assert_equal("bar", ractor_value(ractor2))
++  end
++
++  if defined?(Ractor) && Ractor.method_defined?(:value) # Ruby 3.5+
++    def ractor_value(ractor)
++      ractor.value
++    end
++  else
++    def ractor_value(ractor)
++      ractor.take
++    end
+   end
+ end

@@ -1,0 +1,108 @@
+Upstream:
+https://github.com/certbot/josepy/commit/8ddcaaed99a61e9277df1ec00157f0aea53378d4
+
+diff --git a/pyproject.toml b/pyproject.toml
+index c7836bc..4f05217 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -22,6 +22,7 @@ classifiers = [
+     "Programming Language :: Python :: 3.11",
+     "Programming Language :: Python :: 3.12",
+     "Programming Language :: Python :: 3.13",
++    "Programming Language :: Python :: 3.14",
+     "Topic :: Internet :: WWW/HTTP",
+     "Topic :: Security",
+ ]
+@@ -74,6 +75,7 @@ jws = "josepy.jws:CLI.run"
+ line-length = 100
+ # This should be kept in sync with the version of Python specified in poetry's
+ # dependencies above.
++# TODO add 'py314' once black supports it, see #232 for details
+ target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+ 
+ # Mypy tooling configuration
+diff --git a/src/josepy/json_util.py b/src/josepy/json_util.py
+index e692a9d..a3d3663 100644
+--- a/src/josepy/json_util.py
++++ b/src/josepy/json_util.py
+@@ -10,6 +10,7 @@ The framework presented here is somewhat based on `Go's "json" package`_
+ import abc
+ import binascii
+ import logging
++import sys
+ from typing import (
+     Any,
+     Callable,
+@@ -27,6 +28,9 @@ from cryptography.hazmat.primitives.serialization import Encoding
+ 
+ from josepy import b64, errors, interfaces, util
+ 
++if sys.version_info >= (3, 14):
++    import annotationlib
++
+ logger = logging.getLogger(__name__)
+ 
+ 
+@@ -233,7 +237,19 @@ class JSONObjectWithFieldsMeta(abc.ABCMeta):
+                 if isinstance(value, _TypedField):
+                     # Ensure the type annotation has been set for the field.
+                     # Error out if it is not the case.
+-                    if key not in namespace.get("__annotations__", {}):
++                    if "__annotations__" in namespace:
++                        annotations = namespace["__annotations__"]
++                    elif sys.version_info >= (3, 14):
++                        annotate = annotationlib.get_annotate_from_class_namespace(namespace)
++                        if annotate:
++                            annotations = annotationlib.call_annotate_function(
++                                annotate, format=annotationlib.Format.FORWARDREF
++                            )
++                        else:
++                            annotations = {}
++                    else:
++                        annotations = {}
++                    if key not in annotations:
+                         raise ValueError(
+                             f"Field `{key}` in JSONObject `{name}` has no type annotation."
+                         )
+diff --git a/src/josepy/jws.py b/src/josepy/jws.py
+index a282e38..a9a42aa 100644
+--- a/src/josepy/jws.py
++++ b/src/josepy/jws.py
+@@ -396,8 +396,8 @@ class CLI:
+     @classmethod
+     def sign(cls, args: argparse.Namespace) -> None:
+         """Sign."""
+-        key = args.alg.kty.load(args.key.read())
+-        args.key.close()
++        with open(args.key, "rb") as fp:
++            key = args.alg.kty.load(fp.read())
+         if args.protect is None:
+             args.protect = []
+         if args.compact:
+@@ -426,8 +426,8 @@ class CLI:
+ 
+         if args.key is not None:
+             assert args.kty is not None
+-            key = args.kty.load(args.key.read()).public_key()
+-            args.key.close()
++            with open(args.key, "rb") as fp:
++                key = args.kty.load(fp.read()).public_key()
+         else:
+             key = None
+ 
+@@ -459,13 +459,13 @@ class CLI:
+         subparsers = parser.add_subparsers()
+         parser_sign = subparsers.add_parser("sign")
+         parser_sign.set_defaults(func=cls.sign)
+-        parser_sign.add_argument("-k", "--key", type=argparse.FileType("rb"), required=True)
++        parser_sign.add_argument("-k", "--key", required=True)
+         parser_sign.add_argument("-a", "--alg", type=cls._alg_type, default=jwa.RS256)
+         parser_sign.add_argument("-p", "--protect", action="append", type=cls._header_type)
+ 
+         parser_verify = subparsers.add_parser("verify")
+         parser_verify.set_defaults(func=cls.verify)
+-        parser_verify.add_argument("-k", "--key", type=argparse.FileType("rb"), required=False)
++        parser_verify.add_argument("-k", "--key", required=False)
+         parser_verify.add_argument("--kty", type=cls._kty_type, required=False)
+ 
+         parsed = parser.parse_args(args)

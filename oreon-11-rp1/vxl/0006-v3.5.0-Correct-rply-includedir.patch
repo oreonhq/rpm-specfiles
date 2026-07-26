@@ -1,0 +1,114 @@
+From 2252a472803e52dd504e243593f32f4312342591 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Thu, 25 Apr 2019 23:32:15 +0100
+Subject: [PATCH 06/18] v3.5.0 Correct rply includedir
+
+---
+ contrib/brl/bbas/bvrml/pro/CMakeLists.txt      |  8 +++++++-
+ contrib/brl/bbas/bwm/exe/CMakeLists.txt        |  8 +++++++-
+ contrib/brl/bbas/volm/pro/CMakeLists.txt       |  8 +++++++-
+ contrib/brl/bseg/boxm2/pro/CMakeLists.txt      |  7 +++++++
+ contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt | 10 +++++++++-
+ 5 files changed, 37 insertions(+), 4 deletions(-)
+
+diff --git a/contrib/brl/bbas/bvrml/pro/CMakeLists.txt b/contrib/brl/bbas/bvrml/pro/CMakeLists.txt
+index c1c82d0dd4..3a82f2e050 100644
+--- a/contrib/brl/bbas/bvrml/pro/CMakeLists.txt
++++ b/contrib/brl/bbas/bvrml/pro/CMakeLists.txt
+@@ -4,7 +4,13 @@ if (HAS_GEOTIFF)
+ include_directories( ${BRL_INCLUDE_DIR}/bpro )
+ include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+ include_directories( ${BRL_INCLUDE_DIR}/bbas )
+-include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++
++FIND_PACKAGE(RPLY REQUIRED)
++if(RPLY_FOUND)
++  include_directories( ${RPLY_INCLUDE_DIR} )
++else()
++  include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++endif()
+ 
+ set(bvrml_pro_sources
+     bvrml_processes.h
+diff --git a/contrib/brl/bbas/bwm/exe/CMakeLists.txt b/contrib/brl/bbas/bwm/exe/CMakeLists.txt
+index 4b642eb232..43de7db5df 100644
+--- a/contrib/brl/bbas/bwm/exe/CMakeLists.txt
++++ b/contrib/brl/bbas/bwm/exe/CMakeLists.txt
+@@ -1,7 +1,13 @@
+ # This is brl/bbas/bwm/exe/CMakeLists.txt
+ # World Modeling GUI executables
+ 
+-include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++FIND_PACKAGE(RPLY REQUIRED)
++if(RPLY_FOUND)
++  include_directories( ${RPLY_INCLUDE_DIR} )
++else()
++  include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++endif()
++
+ include_directories( ${MUL_INCLUDE_DIR} )
+ include_directories( ${OXL_INCLUDE_DIR} )
+ 
+diff --git a/contrib/brl/bbas/volm/pro/CMakeLists.txt b/contrib/brl/bbas/volm/pro/CMakeLists.txt
+index 76c1216a4f..aa028ca71f 100644
+--- a/contrib/brl/bbas/volm/pro/CMakeLists.txt
++++ b/contrib/brl/bbas/volm/pro/CMakeLists.txt
+@@ -4,7 +4,13 @@ if(VXL_BUILD_RPL)
+ include_directories( ${BRL_INCLUDE_DIR}/bbas )
+ include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+ include_directories( ${MUL_INCLUDE_DIR} )
+-include_directories( ${VTHREEP_INCLUDE_DIR}/rply)
++
++FIND_PACKAGE(RPLY REQUIRED)
++if(RPLY_FOUND)
++  include_directories( ${RPLY_INCLUDE_DIR} )
++else()
++  include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++endif()
+ 
+   # The N-dimensional bin structure implementations use rpl/rsdl
+ 
+diff --git a/contrib/brl/bseg/boxm2/pro/CMakeLists.txt b/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
+index 7c2ec1d9c3..0536e327fd 100644
+--- a/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/pro/CMakeLists.txt
+@@ -11,7 +11,14 @@ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bbas )
+   include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+   include_directories( ${GEL_INCLUDE_DIR}/mrc )
++
++FIND_PACKAGE(RPLY REQUIRED)
++if(RPLY_FOUND)
++  include_directories( ${RPLY_INCLUDE_DIR} )
++else()
+   include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
++endif()
++
+ 
+   set(boxm2_pro_sources
+       boxm2_processes.h
+diff --git a/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt b/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
+index 265cd5d066..2ec707047f 100644
+--- a/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/boxm2/volm/pro/CMakeLists.txt
+@@ -11,8 +11,16 @@ if(EXPAT_FOUND)
+   include_directories( ${BRL_INCLUDE_DIR}/bbas )
+   include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+   include_directories( ${GEL_INCLUDE_DIR}/mrc )
++
++FIND_PACKAGE(RPLY REQUIRED)
++if(RPLY_FOUND)
++  include_directories( ${RPLY_INCLUDE_DIR} )
++else()
+   include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
+-if(OpenCL_FOUND)
++endif()
++
++if(OPENCL_FOUND)
++  include_directories( ${OPENCL_INCLUDE_PATH} )
+   set( BOXM2_VOLM_PRO_LIBS boxm2_ocl)
+ endif()
+ 
+-- 
+2.46.1
+

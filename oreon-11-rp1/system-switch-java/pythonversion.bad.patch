@@ -1,0 +1,9 @@
+--- system-switch-java.in
++++ system-switch-java.in
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ # system-switch-java - the Java toolset switcher frontend
+ # Copyright (C) 2007 Red Hat, Inc.
+ 
+

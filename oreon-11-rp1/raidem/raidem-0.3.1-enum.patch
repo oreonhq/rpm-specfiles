@@ -1,0 +1,22 @@
+--- include/gui/gui-mouse.h.orig	2005-06-06 11:19:43.000000000 -0500
++++ include/gui/gui-mouse.h	2020-02-08 14:49:53.827248724 -0600
+@@ -4,7 +4,7 @@
+ 
+ #include "gui/gui.h"
+ 
+-enum {
++typedef enum {
+     GUI_MOUSE_LMB = 0,
+     GUI_MOUSE_RMB = 1,
+     GUI_MOUSE_MMB = 2
+--- include/gui/gui-widgets.h.orig	2020-02-08 13:52:32.306099634 -0600
++++ include/gui/gui-widgets.h	2020-02-08 14:52:30.395255507 -0600
+@@ -9,7 +9,7 @@
+ /* Label.							*/
+ /*--------------------------------------------------------------*/
+ 
+-enum {
++typedef enum {
+     LEFT_JUSTIFY,
+     CENTRE_JUSTIFTY,
+     RIGHT_JUSTIFY

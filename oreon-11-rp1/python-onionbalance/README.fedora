@@ -1,0 +1,43 @@
+Notices for Fedora / RedHat / CentOS Users
+==========================================
+
+onionbalance ships with some Debian'isms, especially when it
+comes to the created example torrc for the onionbalance management
+tor daemon.
+
+For this reasons this folder contains a sample onionbalance.torrc file
+which can be used to run a dedicated tor process that onionbalance
+will use.
+
+Setting up onionbalance
+-----------------------
+
+1. create a sample configuration
+
+    $ onionbalance-config --hs-version v3 -n 2
+
+    # step through the wizard
+
+2. Get your onionservices up & running with the generated configuration in config/
+
+3. copy the master config and key to onionbalance's config and protect the config:
+
+    $ cp config/config.yaml /etc/onionbalance/
+    $ chown root:toranon /etc/onionbalance/*
+    $ chmod 0640 /etc/onionbalance/*
+
+4. Copy the supplied sample config as a multi-instance config
+
+    $ cp /usr/share/doc/python*-onionbalance*/onionbalance.torrc.example /etc/tor/onionbalance.torrc
+
+5. Start and enable the tor onionbalance service:
+
+    $ systemctl start tor@onionbalance
+    $ systemctl enable tor@onionbalance
+
+6. Start and enable onionbalance
+
+    $ systemctl start onionbalance
+    $ systemctl enable onionbalance
+
+7. Enjoy!

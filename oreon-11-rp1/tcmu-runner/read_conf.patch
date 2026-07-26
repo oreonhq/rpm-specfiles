@@ -1,0 +1,13 @@
+diff --git a/libtcmu_config.c b/libtcmu_config.c
+index 895b712..a17e74d 100644
+--- a/libtcmu_config.c
++++ b/libtcmu_config.c
+@@ -202,7 +202,7 @@ static int tcmu_read_config(int fd, char *buf, int count)
+ 
+ 	do {
+ 		len = read(fd, buf, count);
+-	} while (errno == EAGAIN);
++	} while (len < 0 && errno == EAGAIN);
+ 
+ 	errno = save;
+ 	return len;

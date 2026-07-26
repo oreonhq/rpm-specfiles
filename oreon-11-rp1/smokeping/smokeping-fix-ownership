@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+dir=/var/lib/smokeping/rrd
+
+if [ -d $dir ]; then
+    find $dir -user 0 -exec /usr/bin/chown smokeping:apache "{}" +
+fi

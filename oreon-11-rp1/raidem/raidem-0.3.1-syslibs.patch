@@ -1,0 +1,130 @@
+Index: raidem-0.3.1-src/src/map-editor/map-proc.m
+===================================================================
+--- raidem-0.3.1-src.orig/src/map-editor/map-proc.m
++++ raidem-0.3.1-src/src/map-editor/map-proc.m
+@@ -4,7 +4,7 @@
+ #include <allegro.h>
+ #include <assert.h>
+ #include <math.h>
+-#include "adime/include/adime.h"
++#include <adime.h>
+ #include "common.h"
+ #include "group.h"
+ #include "gui/gui-clip.h"
+Index: raidem-0.3.1-src/misc/Makefile.all
+===================================================================
+--- raidem-0.3.1-src.orig/misc/Makefile.all
++++ raidem-0.3.1-src/misc/Makefile.all
+@@ -30,7 +30,8 @@ ifdef NO_OGG
+ CFLAGS += -DNO_OGG
+ else
+ ifdef HAVE_ALLEGROOGG
+-LDLIBS += -lalogg
++LDLIBS += `$(pkgcfg) AllegroOGG --libs`
++CFLAGS += `$(pkgcfg) AllegroOGG --cflags`
+ else
+ CFLAGS += -Ilib/allegroogg/include
+ endif # HAVE_ALLEGROOGG
+@@ -56,11 +57,14 @@ endif # NO_FBLEND
+ # Glyph-Keeper
+ ifdef HAVE_GLYPH_KEEPER
+ LDLIBS += -lglyph-alleg
++CFLAGS += -DGLYPH_TARGET=GLYPH_TARGET_ALLEGRO
+ else
+ CFLAGS += -DGLYPH_TARGET=GLYPH_TARGET_ALLEGRO -Ilib/glyph-keeper/include
+ endif # HAVE_GLYPH_KEEPER
+ 
+-ifndef HAVE_FREETYPE
++ifdef HAVE_FREETYPE
++LDLIBS += `$(ftcfg) --libs`
++else
+ CFLAGS += -Ilib/freetype/include
+ endif
+ 
+Index: raidem-0.3.1-src/configure.ac
+===================================================================
+--- raidem-0.3.1-src.orig/configure.ac
++++ raidem-0.3.1-src/configure.ac
+@@ -53,7 +53,8 @@ AC_HAVE_LIBRARY([adime],
+                               AC_MSG_NOTICE([===== Using lib/adime =====]) &&
+                               (cd lib/adime; sh fix.sh unix --quick) &&
+                               AC_MSG_NOTICE([===== Configured adime =====]),
+-                              AC_MSG_ERROR([cannot find adime])))
++                              AC_MSG_ERROR([cannot find adime])),
++                [`$alcfg --libs`])
+ 
+ 
+ AC_HAVE_LIBRARY([glyph-alleg],
+@@ -62,7 +63,8 @@ AC_HAVE_LIBRARY([glyph-alleg],
+                               AC_MSG_NOTICE([===== Using lib/glyph-keeper =====]) &&
+                               (cd lib/glyph-keeper; cp Makefile.GNU.all Makefile) &&
+                               AC_MSG_NOTICE([===== Configured glyph-keeper =====]),
+-                              AC_MSG_ERROR([cannot file glyph keeper (allegro)])))
++                              AC_MSG_ERROR([cannot file glyph keeper (allegro)])),
++                [`$alcfg --libs`])
+                               
+ 
+ 
+@@ -87,7 +89,7 @@ have_freetype() {
+ 
+     if test $VER_MAJOR -lt 2 ||
+        test $VER_MINOR -lt 1 ||
+-       test $VER_PATCH -lt 10; then
++       test $VER_MINOR -eq 1 -a $VER_PATCH -lt 10; then
+       AC_MSG_NOTICE([installed version of Freetype < 2.1.10]) &&
+       try_local_freetype
+     else
+@@ -104,7 +106,7 @@ AC_HAVE_LIBRARY(freetype, have_freetype,
+ #----------------------------------------------------------------
+ # Optional
+ 
+-if ! ${alrand}; then
++if [ "$alrand" != "true" ]; then
+ AC_SUBST(NO_ALRAND, 1)
+ fi
+ 
+@@ -120,7 +122,7 @@ fi
+ 
+ 
+ if ${ogg}; then
+-AC_HAVE_LIBRARY([alogg],
++PKG_CHECK_MODULES(AllegroOGG, [AllegroOGG >= 1.0.0],
+                 AC_SUBST(HAVE_ALLEGROOGG, 1),
+                 AC_CHECK_FILE([lib/allegroogg/Makefile],
+                               AC_MSG_NOTICE([===== Using lib/allegroogg =====]),
+Index: raidem-0.3.1-src/Makefile.cfg.in
+===================================================================
+--- raidem-0.3.1-src.orig/Makefile.cfg.in
++++ raidem-0.3.1-src/Makefile.cfg.in
+@@ -8,6 +8,7 @@ CFLAGS = @CFLAGS@
+ INSTALL := install
+ alcfg := @alcfg@
+ ftcfg := @ftcfg@
++pkgcfg := @PKG_CONFIG@
+ 
+ # Install paths.
+ prefix := @prefix@
+Index: raidem-0.3.1-src/Makefile
+===================================================================
+--- raidem-0.3.1-src.orig/Makefile
++++ raidem-0.3.1-src/Makefile
+@@ -4,8 +4,8 @@
+ 
+ include Makefile.cfg
+ 
+-CFLAGS += -W -Wall -Werror -Wno-deprecated-declarations \
+-	-fno-strict-aliasing				\
++CFLAGS += -W -Wall -Wno-deprecated-declarations \
++	-fno-strict-aliasing			\
+ 	-Iinclude -Ilib
+ #CFLAGS += -g3
+ 
+@@ -316,7 +316,7 @@ $(ZZIPLIB) :
+ 
+ 
+ $(GAME) : $(GAME-OBJS) $(CANDIES) $(MAP-EDITOR-OBJS) $(PROJECTILES) $(SEB-OBJS) $(UNITS) $(ICON)
+-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
++	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS) -lm
+ 
+ obj/%.o : %.c
+ 	$(CC) $(CFLAGS) -o $@ -c $<

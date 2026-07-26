@@ -1,0 +1,20 @@
+Author: František Dvořák <valtri@civ.zcu.cz>
+Date:   Sat May 6 19:32:20 2017 +0200
+
+    Fixnum removed in ruby 2.4, using Integer instead
+
+diff --git a/spec/json_spec/matchers/have_json_type_spec.rb b/spec/json_spec/matchers/have_json_type_spec.rb
+index 694683d..3468c3a 100644
+--- a/spec/json_spec/matchers/have_json_type_spec.rb
++++ b/spec/json_spec/matchers/have_json_type_spec.rb
+@@ -56,8 +56,8 @@ describe JsonSpec::Matchers::HaveJsonType do
+   it "provides a failure message for negation" do
+     matcher = have_json_type(Numeric)
+     matcher.matches?(%(10))
+-    matcher.failure_message_when_negated.should   eq "Expected JSON value type to not be Numeric, got Fixnum"
+-    matcher.failure_message_for_should_not.should eq "Expected JSON value type to not be Numeric, got Fixnum" # RSpec 2 interface
++    matcher.failure_message_when_negated.should   eq "Expected JSON value type to not be Numeric, got Integer"
++    matcher.failure_message_for_should_not.should eq "Expected JSON value type to not be Numeric, got Integer" # RSpec 2 interface
+   end
+ 
+   it "provides a description message" do

@@ -1,0 +1,60 @@
+diff --git a/OPEN_ISSUES b/OPEN_ISSUES
+index 9a7c6c1c0f3c0c25a1cae09e5cfec2680c180f7b..8173ea396f27426abe27225e9f5529a43eb9f509 100644
+--- a/OPEN_ISSUES
++++ b/OPEN_ISSUES
+@@ -132,10 +132,10 @@ various Score-P components.
+     Filtering of MPI, SHMEM, and OpenMP runtime functions is always
+     ineffective.
+ 
+-  - The GCC plug-in is supported from GCC 4.9 onwards. Though due to
+-    constant changes in the plug-in API of the GNU compiler
+-    infrastructure, it is unlikely that the Score-P instrumentation
+-    plug-in builds with versions newer than GCC snapshot 11-20210307.
++  - The GCC plug-in is supported from GCC 7 onwards. Though due to constant
++    changes in the plug-in API of the GNU compiler infrastructure, it is
++    unlikely that the Score-P instrumentation plug-in builds with GCC versions
++    released after this Score-P release.
+ 
+   - The pgCC compiler versions 13.9 and higher preinclude omp.h for
+     OpenMP codes. This results in multiple defined symbols if the
+diff --git a/build-config/m4/scorep_gcc_plugin.m4 b/build-config/m4/scorep_gcc_plugin.m4
+index e331a7f358d8a8a0354a1928c8d3d9bf8c275423..f10482fcf3f53a59295db5e063d30e929e4f0b32 100644
+--- a/build-config/m4/scorep_gcc_plugin.m4
++++ b/build-config/m4/scorep_gcc_plugin.m4
+@@ -123,6 +123,7 @@ AS_IF([test "x${scorep_gcc_have_plugin_headers}" = "xyes"], [
+ #undef PACKAGE_URL
+ #include "gcc-plugin.h"
+ #include "tree.h"
++#include "diagnostic.h"
+ 
+ int plugin_is_GPL_compatible = 1;
+ 
+diff --git a/build-gcc-plugin/configure.ac b/build-gcc-plugin/configure.ac
+index 71ec57e1b49ccef1aee5e8e6cb2c85c82d9e2881..c093fe560f276494e1ecf35435a58b8f3d21ff46 100644
+--- a/build-gcc-plugin/configure.ac
++++ b/build-gcc-plugin/configure.ac
+@@ -106,7 +106,7 @@ SCOREP_GCC_PLUGIN_VENDORS
+ 
+ # Checks for programs.
+ AFS_PROG_CC([99])
+-AFS_PROG_CXX([11], [noext])
++AFS_PROG_CXX([14], [noext])
+ 
+ LT_PREREQ([2.4.6])
+ LT_INIT([shared disable-static])
+diff --git a/src/adapters/compiler/gcc-plugin/scorep_plugin_gcc_version_compatibility.h b/src/adapters/compiler/gcc-plugin/scorep_plugin_gcc_version_compatibility.h
+index 6fabf5d01c4f537b5d6638b8d464da166e15d86c..b71214e83aa4ffd85b93361f84e174991beee844 100644
+--- a/src/adapters/compiler/gcc-plugin/scorep_plugin_gcc_version_compatibility.h
++++ b/src/adapters/compiler/gcc-plugin/scorep_plugin_gcc_version_compatibility.h
+@@ -26,6 +26,11 @@
+ #define varpool_finalize_decl( decl ) varpool_node::finalize_decl( decl )
+ #define cgraph_get_node( decl ) cgraph_node::get( decl )
+ #define cgraph_function_body_availability( node ) ( node )->get_availability()
++#endif
++
++#if SCOREP_GCC_PLUGIN_TARGET_VERSION >= 16000
++#define TODO_verify_ssa 0
++#elif SCOREP_GCC_PLUGIN_TARGET_VERSION >= 5000
+ #define TODO_verify_ssa TODO_verify_il
+ #endif
+ 

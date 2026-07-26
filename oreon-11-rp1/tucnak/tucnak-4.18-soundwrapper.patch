@@ -1,0 +1,13 @@
+diff --git a/src/os_dep.c b/src/os_dep.c
+index 8a3320b..b6527cb 100644
+--- a/src/os_dep.c
++++ b/src/os_dep.c
+@@ -947,7 +947,7 @@ int init_sound(){
+     dup2(fds[0], 0);
+     closesocket(fds[0]);
+     for (i=3;i<1024;i++) close(i);
+-    execlp("soundwrapper", "soundwrappes", "-q", NULL);
++    execlp("tucnak-soundwrapper", "soundwrappes", "-q", NULL);
+ 	exit(-1);
+ #else
+ 	return 0;

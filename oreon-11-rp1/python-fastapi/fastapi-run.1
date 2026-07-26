@@ -1,0 +1,152 @@
+.TH FASTAPI\-RUN "1" "December 2025" "" "User Commands"
+.SH NAME
+.B fastapi\ run
+\(en Run a FastAPI app in production mode. \[u1F680]
+.SH SYNOPSIS
+.B fastapi\ run
+.RI [ OPTIONS ]
+.RI [ PATH ]
+.SH DESCRIPTION
+This is equivalent to
+.BR fastapi\-dev (1)
+but with reload disabled and listening on the
+.B 0.0.0.0
+address.
+.P
+It automatically detects the Python module or package
+that needs to be imported
+based on the file or directory path passed.
+.P
+If no path is passed, it tries with:
+.RS +3n
+.IP \(bu 2
+main.py
+.PD 0
+.IP \(bu 2
+app.py
+.IP \(bu 2
+api.py
+.IP \(bu 2
+app/main.py
+.IP \(bu 2
+app/app.py
+.IP \(bu 2
+app/api.py
+.PD
+.RE
+.P
+It also detects the directory
+that needs to be added to the
+.B PYTHONPATH
+to make the app importable
+and adds it.
+.P
+It detects the FastAPI app object to use.
+By default it looks in the module or package
+for an object named:
+.RS +3n
+.IP \(bu 2
+app
+.PD 0
+.IP \(bu 2
+api
+.PD
+.RE
+.P
+Otherwise, it uses the first FastAPI app
+found in the imported module or package.
+.SH OPTIONS
+.TP
+.B \-\-host\ \fITEXT
+The host to serve on.
+For local development in
+.B localhost
+use
+.BR 127.0.0.1 .
+To enable public access, e.g. in a container,
+use all the IP addresses available with
+.BR 0.0.0.0 .
+[default:
+.BR 0.0.0.0 ]
+.TP
+.B \-\-port\ \fIINTEGER
+The port to serve on.
+You would normally have a termination proxy on top (another program)
+handling HTTPS on port 443 and HTTP on port 80,
+transferring the communication to your app.
+[env var:
+.BR PORT ]
+[default:
+.BR 8000 ]
+.TP
+.B \-\-reload\fR, \fB\-\-no\-reload
+Enable auto-reload of the server when (code) files change.
+This is resource intensive, use it only during development.
+[default: no\-reload]
+.TP
+.B \-\-workers\ \fIINTEGER
+Use multiple worker processes.
+Mutually exclusive with the
+.B \-\-reload
+flag.
+[default:
+.BR None ]
+.TP
+.B \-\-root\-path\ \fITEXT
+The root path is used to tell your app
+that it is being served to the outside world
+with some path prefix
+set up in some termination proxy or similar.
+.TP
+.B \-\-app\ \fITEXT
+The name of the variable that contains the FastAPI app
+in the imported module or package.
+If not provided, it is detected automatically.
+[default:
+.BR None ]
+.TP
+.B \-\-entrypoint, \fB\-e\ \fITEXT
+The FastAPI app import string in the format
+.RB \(oq some.importable_module:app_name \(cq.
+.TP
+.B \-\-proxy\-headers\fR, \fB\-\-no\-proxy\-headers
+Enable/Disable
+.BR X\-Forwarded\-Proto ,
+.BR X\-Forwarded\-For ,
+.BR X\-Forwarded\-Port
+to populate remote address info.
+[default: proxy\-headers]
+.TP
+.B \-\-forwarded\-allow\-ips\ \fITEXT
+Comma separated list of IP Addresses to trust with proxy headers.
+The literal
+.RB \(oq * \(cq
+means trust everything.
+.TP
+.B \-\-help
+Show a help message and exit.
+.SS "ARGUMENTS"
+.TP
+.I PATH
+A path to a Python file or package directory
+(with
+.B __init__.py
+files)
+containing a FastAPI app.
+If not provided, a default set of paths will be tried.
+[default:
+.BR None ]
+.SH ENVIRONMENT
+.TP
+.B PORT
+The port to serve on; same as the
+.B \-\-port
+option.
+.SH "SEE ALSO"
+.BR fastapi\-dev (1),
+.BR fastapi\-deploy (1),
+.BR fastapi\-login (1),
+.BR fastapi\-cloud (1),
+.BR fastapi\-new (1)
+.P
+.BR fastapi (1)

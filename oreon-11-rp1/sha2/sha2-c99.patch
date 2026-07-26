@@ -1,0 +1,16 @@
+Include <string.h> for the strcmp function.  Increases compatibility
+with future compilers which are likely to reject implicit function
+declarations by default.
+
+diff --git a/sha2prog.c b/sha2prog.c
+index 012701e89898dbda..4c633a68b89501c1 100644
+--- a/sha2prog.c
++++ b/sha2prog.c
+@@ -33,6 +33,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <sysexits.h>
+ #include <sys/types.h>
+ #include <sys/uio.h>

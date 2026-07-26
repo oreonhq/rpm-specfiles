@@ -1,0 +1,138 @@
+--- spasm-1.2/configure.ac.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/configure.ac	2024-02-09 15:29:33.658955522 -0700
+@@ -16,10 +16,8 @@ AC_LANG([C])
+ # Checks for programs.
+ AC_PROG_CC
+ AC_PROG_CXX
+-AC_PROG_CC_C99
+ AC_PROG_MAKE_SET
+ AC_PROG_AWK     # for TAP
+-AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+ AM_PROG_CC_C_O
+ 
+--- spasm-1.2/m4/fflas-ffpack-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/fflas-ffpack-check.m4	2024-02-09 15:10:43.986708390 -0700
+@@ -14,7 +14,7 @@ AC_DEFUN([SPASM_CHECK_FFLAS_FFPACK],
+ [
+ 
+ AC_ARG_WITH(fflas-ffpack,
+-[AC_HELP_STRING([--with-fflas-ffpack=<path>|yes], [Use the FFLAS-FFPACK library. If argument is yes or <empty>,
++[AS_HELP_STRING([--with-fflas-ffpack=<path>|yes], [Use the FFLAS-FFPACK library. If argument is yes or <empty>,
+     that means the library is reachable with the standard
+     search path (/usr or /usr/local). Otherwise you give
+     the <path> to the directory which contains the
+@@ -39,12 +39,12 @@ for FFLAS_FFPACK_HOME in ${FFLAS_FFPACK_
+   do
+     if test -r "$FFLAS_FFPACK_HOME/bin/fflas-ffpack-config"; then
+            ffpack_found="yes"
+-           FFLAS_FFPACK_CXXFLAGS=`$FFLAS_FFPACK_HOME/bin/fflas-ffpack-config --cflags-full`
++           FFLAS_FFPACK_CXXFLAGS=`$FFLAS_FFPACK_HOME/bin/fflas-ffpack-config --cflags`
+            FFLAS_FFPACK_LIBS=`$FFLAS_FFPACK_HOME/bin/fflas-ffpack-config --libs`
+ 	   break
+     elif test -r "$FFLAS_FFPACK_HOME/fflas-ffpack-config"; then
+            ffpack_found="yes"
+-           FFLAS_FFPACK_CXXFLAGS=`$FFLAS_FFPACK_HOME/fflas-ffpack-config --cflags-full`
++           FFLAS_FFPACK_CXXFLAGS=`$FFLAS_FFPACK_HOME/fflas-ffpack-config --cflags`
+            FFLAS_FFPACK_LIBS=`$FFLAS_FFPACK_HOME/fflas-ffpack-config --libs`
+ 	   break
+     else
+--- spasm-1.2/m4/givaro-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/givaro-check.m4	2024-02-09 15:11:32.578040349 -0700
+@@ -14,7 +14,7 @@ AC_DEFUN([SPASM_CHECK_GIVARO],
+ [
+ 
+ AC_ARG_WITH(givaro,
+-[AC_HELP_STRING([--with-givaro=<path>|yes], [Use the Givaro library. If argument is yes or <empty>,
++[AS_HELP_STRING([--with-givaro=<path>|yes], [Use the Givaro library. If argument is yes or <empty>,
+     that means the library is reachable with the standard
+     search path (/usr or /usr/local). Otherwise you give
+     the <path> to the directory which contains the
+--- spasm-1.2/m4/lemon-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/lemon-check.m4	2024-02-09 15:11:48.664819196 -0700
+@@ -15,7 +15,7 @@ AC_DEFUN([SPASM_CHECK_LEMON],
+ AC_LANG_PUSH([C++])
+ 
+ AC_ARG_WITH(LEMON,
+-[AC_HELP_STRING([--with-lemon=<path>|yes], [Use the Lemon library. If argument is yes or <empty>,
++[AS_HELP_STRING([--with-lemon=<path>|yes], [Use the Lemon library. If argument is yes or <empty>,
+     that means the library is reachable with the standard
+     search path (/usr or /usr/local). Otherwise you give
+     the <path> to the directory which contains the
+@@ -41,10 +41,10 @@ do
+         if test -r "$LEMON_HOME/include/lemon/matching.h"; then
+                 if test "x$LEMON_HOME" != "x/usr"; then
+                     LEMON_CFLAGS="-I${LEMON_HOME}/include"
+-                    LEMON_LIBS="-L${LEMON_HOME}/lib -llemon"
++                    LEMON_LIBS="-L${LEMON_HOME}/lib -lemon"
+                 else
+                     LEMON_CFLAGS=
+-                    LEMON_LIBS="-llemon"
++                    LEMON_LIBS="-lemon"
+                 fi
+                 # AC_MSG_NOTICE(found include)
+                 CFLAGS="${BACKUP_CFLAGS} ${LEMON_CFLAGS}"
+--- spasm-1.2/m4/linbox-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/linbox-check.m4	2024-02-09 15:27:03.117024918 -0700
+@@ -14,7 +14,7 @@ AC_DEFUN([SPASM_CHECK_LINBOX],
+ [
+ 
+ AC_ARG_WITH(linbox,
+-[AC_HELP_STRING([--with-linbox=<path>|yes], [Use the LINBOX library. If argument is yes or <empty>,
++[AS_HELP_STRING([--with-linbox=<path>|yes], [Use the LINBOX library. If argument is yes or <empty>,
+     that means the library is reachable with the standard
+     search path (/usr or /usr/local). Otherwise you give
+     the <path> to the directory which contains the
+@@ -39,12 +39,12 @@ for LINBOX_HOME in ${LINBOX_HOME_PATH}
+   do
+     if test -r "$LINBOX_HOME/bin/linbox-config"; then
+            linbox_found="yes"
+-           LINBOX_CXXFLAGS=`$LINBOX_HOME/bin/linbox-config --cflags-full`
++           LINBOX_CXXFLAGS=`$LINBOX_HOME/bin/linbox-config --cflags`
+            LINBOX_LIBS=`$LINBOX_HOME/bin/linbox-config --libs`
+ 	   break
+     elif test -r "$LINBOX_HOME/linbox-config"; then
+            linbox_found="yes"
+-           LINBOX_CXXFLAGS=`$LINBOX_HOME/linbox-config --cflags-full`
++           LINBOX_CXXFLAGS=`$LINBOX_HOME/linbox-config --cflags`
+            LINBOX_LIBS=`$LINBOX_HOME/linbox-config --libs`
+ 	   break
+     else
+--- spasm-1.2/m4/metis-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/metis-check.m4	2024-02-09 15:13:17.951564426 -0700
+@@ -14,7 +14,7 @@ AC_DEFUN([SPASM_CHECK_METIS],
+ [
+ 
+ AC_ARG_WITH(metis,
+-[AC_HELP_STRING([--with-metis=<path>|yes], [Use the METIS library. If argument is yes or <empty>,
++[AS_HELP_STRING([--with-metis=<path>|yes], [Use the METIS library. If argument is yes or <empty>,
+     that means the library is reachable with the standard
+     search path (/usr or /usr/local). Otherwise you give
+     the <path> to the directory which contains the
+--- spasm-1.2/m4/omp-check.m4.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/m4/omp-check.m4	2024-02-09 15:14:59.471124815 -0700
+@@ -27,7 +27,7 @@ dnl turn on OpenMP if available
+ 
+ AC_DEFUN([SPASM_CHECK_OMP],
+ 	[ AC_ARG_ENABLE(openmp,
+-		[AC_HELP_STRING([--enable-openmp],
++		[AS_HELP_STRING([--enable-openmp],
+ 				[ Use OpenMP ])
+ 		],
+ 		[ avec_omp=$enable_openmp],
+@@ -39,13 +39,13 @@ AC_DEFUN([SPASM_CHECK_OMP],
+ 		BACKUP_CFLAGS=${CFLAGS}
+ 		OMPFLAGS="-fopenmp"
+ 		CFLAGS="${BACKUP_CFLAGS} ${OMPFLAGS}"
+-		AC_TRY_RUN([
++		AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ #include <omp.h>
+ 			int main() {
+ 			int p = omp_get_num_threads();
+ 			return 0;
+ 			}
+-		],
++		]])],
+ 		[ omp_found="yes" ],
+ 		[ omp_found="no" ],
+ 		[

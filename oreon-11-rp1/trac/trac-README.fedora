@@ -1,0 +1,44 @@
+
+Additional packages you might want to install
+=============================================
+
+trac has a very limited set requirements which are actually needed to run the
+application. In Fedora we only specify *mandatory* requirements so we don't 
+pull in a lot of bloat for people that don't need it.
+
+This is a list of additional packages you might want to install to get more
+functionality:
+ * subversion -- browse subversion repositories in trac
+ * pytz -- use real time zones (including summer/winter time) for date display
+ * python-pygments -- source code highlighting
+ * python-psycopg2 -- use a Postgres database (instead of sqlite)
+ * MySQL-python -- use a MySQL database (instead of sqlite)
+
+
+Additional plugins 
+=============================================
+
+Besides the packages mentioned above which extend the core trac, there are some
+plugins which are packaged for Fedora. Typically their names start with 'trac-'.
+To get a list of packaged plugins, issue:
+  yum list 'trac-*'
+
+
+Global Trac ini
+=============================================
+As of trac 0.11 a default global ini is no longer used.  The Fedora package
+still ships one for convenience.  If you want to make use of this config you
+will need to add a section in your project conf/trac.ini:
+
+[inherit]
+file = /etc/trac/trac.ini
+
+or use --inherit=/etc/trac/trac.ini when creating a new project
+
+See http://trac.edgewall.org/wiki/TracIni#GlobalConfiguration for more info.
+
+trac.*gi
+=============================================
+As of trac-0.12.2-8, we no longer ship trac.*gi files by default.
+The trac.wsgi file is now in /usr/share/doc/<NVR>/, and the config you need should
+be generated with trac-admin deploy per upstream.  See BZ 720760 for more information.

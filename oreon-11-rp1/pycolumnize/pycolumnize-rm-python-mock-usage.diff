@@ -1,0 +1,29 @@
+--- a/__pkginfo__.py
++++ b/__pkginfo__.py
+@@ -45,7 +45,7 @@ exec(
+     )
+ )
+ 
+-tests_require = ["mock"]
++tests_require = []
+ web = "https://github.com/rocky/pycolumnize"
+ # tracebacks in zip files are funky and not debuggable
+ zip_safe = False
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,3 +1,2 @@
+-mock<4.0
+ pytest
+ pytest-cov
+--- a/test_columnize.py
++++ b/test_columnize.py
+@@ -1,7 +1,8 @@
+ #!/usr/bin/env python
+ # -*- Python -*-
+ "Unit test for Columnize"
+-import mock, operator, os, sys, unittest
++from unittest import mock
++import operator, os, sys, unittest
+ 
+ top_builddir = os.path.join(os.path.dirname(__file__), os.path.pardir)
+ if top_builddir[-1] != os.path.sep:

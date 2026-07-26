@@ -1,0 +1,66 @@
+%global source0_hash 55837d29bd0edadebfa2dd117da51b44b412e1d9f6ce13f7ce06e1054abe63af
+
+Name:		stratagus
+Summary:	Real-time strategy gaming engine
+Version:	3.3.2
+Release:	%autorelease
+License:	GPL-2.0-only
+URL:		https://github.com/Wargus/Stratagus
+Source0:	https://github.com/Wargus/Stratagus/archive/v%{version}/%{name}-%{version}.tar.gz
+BuildRequires:	SDL2-devel
+BuildRequires:	SDL2_image-devel
+BuildRequires:	SDL2_mixer-devel
+BuildRequires:	bzip2-devel
+BuildRequires:	cmake
+BuildRequires:	compat-lua-devel
+BuildRequires:	compat-tolua++-devel
+BuildRequires:	dos2unix
+BuildRequires:	gcc-c++
+BuildRequires:	libmng-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libtheora-devel
+BuildRequires:	libvorbis-devel
+BuildRequires:	sqlite-devel
+BuildRequires:	zlib-devel
+Provides:	bundled(guichan)
+
+%description
+Stratagus is a free cross-platform real-time strategy gaming engine. It
+includes support for playing over the internet/LAN, or playing a
+computer opponent. The engine is configurable and can be used to create
+games with a wide-range of features specific to your needs.
+
+%package devel
+Summary:       Development files for %{name}
+BuildArch:     noarch
+Requires:      %{name} = %{version}-%{release}
+
+%description devel
+This package contains development files for %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+iconv -f iso8859-1 -t utf8 doc/guichan-copyright.txt > doc/guichan-copyright.utf8 && mv -f doc/guichan-copyright.{utf8,txt}
+
+%build
+# TODO: Please submit an issue to upstream (rhbz#2381466)
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
+%cmake -DENABLE_DEV=ON -DLUA_INCLUDE_DIR=%{_includedir}/lua-5.1 -DGAMEDIR=%{_bindir}
+%cmake_build
+
+%install
+%cmake_install
+
+%files
+%license COPYING
+%doc README.md doc/
+%{_bindir}/%{name}
+%{_bindir}/png2%{name}
+
+%files devel
+%{_includedir}/%{name}*
+
+%changelog
+%autochangelog

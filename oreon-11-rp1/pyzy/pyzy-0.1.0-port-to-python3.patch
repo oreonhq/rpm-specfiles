@@ -1,0 +1,168 @@
+From 26f563565c0f254b1fd5f64023ed586ec55abbc7 Mon Sep 17 00:00:00 2001
+From: Martin Jansa <martin.jansa@lge.com>
+Date: Thu, 12 Dec 2019 07:22:55 -0800
+Subject: [PATCH 1/3] *.py: use python3 explicitly and migrate with 2to3
+
+* python2 is EOL, use python3
+  https://python3statement.org/
+
+Signed-off-by: Martin Jansa <martin.jansa@lge.com>
+---
+ data/db/android/create_db.py     | 28 ++++++++++++++--------------
+ 1 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/data/db/android/create_db.py b/data/db/android/create_db.py
+index 4fff1d0..2da5bff 100755
+--- a/data/db/android/create_db.py
++++ b/data/db/android/create_db.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ from pydict import *
+ from id import *
+ from valid_hanzi import *
+@@ -9,7 +9,7 @@ def get_sheng_yun(pinyin):
+         return None, None
+     if pinyin == "ng":
+         return "", "en"
+-    for i in xrange(2, 0, -1):
++    for i in range(2, 0, -1):
+         t = pinyin[:i]
+         if t in SHENGMU_DICT:
+             return t, pinyin[len(t):]
+@@ -17,13 +17,13 @@ def get_sheng_yun(pinyin):
+ 
+ def read_phrases(filename):
+     buf = file(filename).read()
+-    buf = unicode(buf, "utf16")
++    buf = str(buf, "utf16")
+     buf = buf.strip()
+-    for l in buf.split(u'\n'):
+-        hanzi, freq, flag, pinyin = l.split(u' ', 3)
++    for l in buf.split('\n'):
++        hanzi, freq, flag, pinyin = l.split(' ', 3)
+         freq = float(freq)
+         pinyin = pinyin.split()
+-        if any(map(lambda c: c not in valid_hanzi, hanzi)):
++        if any([c not in valid_hanzi for c in hanzi]):
+             continue
+         yield hanzi, freq, pinyin
+ 
+@@ -33,9 +33,9 @@ def create_db(filename):
+     # con.execute ("PRAGMA synchronous = NORMAL;")
+     # con.execute ("PRAGMA temp_store = MEMORY;")
+     # con.execute ("PRAGMA default_cache_size = 5000;")
+-    print "PRAGMA synchronous = NORMAL;"
+-    print "PRAGMA temp_store = MEMORY;"
+-    print "PRAGMA default_cache_size = 5000;"
++    print("PRAGMA synchronous = NORMAL;")
++    print("PRAGMA temp_store = MEMORY;")
++    print("PRAGMA default_cache_size = 5000;")
+ 
+ 
+     sql = "CREATE TABLE py_phrase_%d (phrase TEXT, freq INTEGER, %s);"
+@@ -44,7 +44,7 @@ def create_db(filename):
+         for j in range(0, i + 1):
+             column.append ("s%d INTEGER" % j)
+             column.append ("y%d INTEGER" % j)
+-        print sql % (i, ",".join(column))
++        print(sql % (i, ",".join(column)))
+         # con.execute(sql % (i, column))
+         # con.commit()
+ 
+@@ -60,7 +60,7 @@ def create_db(filename):
+         records_new.append((hanzi, i, pinyin))
+     records_new.reverse()
+     
+-    print "BEGIN;"
++    print("BEGIN;")
+     insert_sql = "INSERT INTO py_phrase_%d VALUES (%s);"
+     for hanzi, freq, pinyin in records_new:
+         columns = []
+@@ -72,9 +72,9 @@ def create_db(filename):
+         values = "'%s', %d, %s" % (hanzi.encode("utf8"), freq, ",".join(map(str,columns)))
+             
+         sql = insert_sql % (len(hanzi) - 1, values)
+-        print sql
+-    print "COMMIT;"
+-    print "VACUUM;"
++        print(sql)
++    print("COMMIT;")
++    print("VACUUM;")
+ 
+ def main():
+     create_db(sys.argv[1])
+From 87758d9ba6fcec58d95b13f2de46d0ef1f6a8f42 Mon Sep 17 00:00:00 2001
+From: Gunnar Hjalmarsson <gunnarhj@ubuntu.com>
+Date: Mon, 4 May 2020 19:55:45 +0200
+Subject: [PATCH 2/3] More tweaks of data/db/android/create_db.py
+
+---
+ data/db/android/create_db.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/data/db/android/create_db.py b/data/db/android/create_db.py
+index 2da5bff..d6a1a27 100755
+--- a/data/db/android/create_db.py
++++ b/data/db/android/create_db.py
+@@ -3,6 +3,7 @@
+ from id import *
+ from valid_hanzi import *
+ import sys
++from functools import cmp_to_key
+ 
+ def get_sheng_yun(pinyin):
+     if pinyin == None:
+@@ -16,7 +17,7 @@ def get_sheng_yun(pinyin):
+     return "", pinyin
+ 
+ def read_phrases(filename):
+-    buf = file(filename).read()
++    buf = open(filename, 'r+b').read()
+     buf = str(buf, "utf16")
+     buf = buf.strip()
+     for l in buf.split('\n'):
+@@ -49,7 +50,7 @@ def create_db(filename):
+         # con.commit()
+ 
+     records = list(read_phrases(filename))
+-    records.sort(lambda a, b: 1 if a[1] > b[1] else -1)
++    records.sort (key = cmp_to_key (lambda a, b: 1 if a[1] > b[1] else -1))
+     records_new = []
+     i = 0
+     max_freq = 0.0
+
+From 7326d8f8f9bef18684a7d8243d422666d3560540 Mon Sep 17 00:00:00 2001
+From: Pugalendhi Ganesan <pugalendhi.ganesan@lge.com>
+Date: Wed, 29 Jul 2020 18:04:48 +0530
+Subject: [PATCH 3/3] Add "utf-16" encoding when opening the phrase file
+
+Signed-off-by: Martin Jansa <martin.jansa@lge.com>
+---
+ data/db/android/create_db.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/data/db/android/create_db.py b/data/db/android/create_db.py
+index d6a1a27..f648670 100755
+--- a/data/db/android/create_db.py
++++ b/data/db/android/create_db.py
+@@ -17,8 +17,7 @@ def get_sheng_yun(pinyin):
+     return "", pinyin
+ 
+ def read_phrases(filename):
+-    buf = open(filename, 'r+b').read()
+-    buf = str(buf, "utf16")
++    buf = open(filename,encoding='utf-16').read()
+     buf = buf.strip()
+     for l in buf.split('\n'):
+         hanzi, freq, flag, pinyin = l.split(' ', 3)
+@@ -70,8 +69,7 @@ def create_db(filename):
+             s, y = pinyin_id[s], pinyin_id[y]
+             columns.append(s)
+             columns.append(y)
+-        values = "'%s', %d, %s" % (hanzi.encode("utf8"), freq, ",".join(map(str,columns)))
+-            
++        values = "'%s', %d, %s" % (hanzi, freq, ",".join(map(str,columns)))
+         sql = insert_sql % (len(hanzi) - 1, values)
+         print(sql)
+     print("COMMIT;")

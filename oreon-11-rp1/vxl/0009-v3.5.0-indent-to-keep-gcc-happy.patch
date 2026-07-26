@@ -1,0 +1,26 @@
+From 303abcb68bcc14b04d73460d25d8e4978e5b3617 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 23 Oct 2023 13:27:34 +0100
+Subject: [PATCH 09/18] v3.5.0: indent to keep gcc happy
+
+---
+ core/vpgl/vpgl_tri_focal_tensor.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/core/vpgl/vpgl_tri_focal_tensor.h b/core/vpgl/vpgl_tri_focal_tensor.h
+index 21a96688fb..e3f8929767 100644
+--- a/core/vpgl/vpgl_tri_focal_tensor.h
++++ b/core/vpgl/vpgl_tri_focal_tensor.h
+@@ -186,7 +186,8 @@ protected:
+ 
+ 
+   virtual bool get_epipoles(vgl_homg_point_2d<Type>& e12, vgl_homg_point_2d<Type>& e13)  {
+-    if (!epipoles_valid_) compute_epipoles(); e12 = e12_; e13 = e13_; return epipoles_valid_;
++    if (!epipoles_valid_) compute_epipoles();
++    e12 = e12_; e13 = e13_; return epipoles_valid_;
+   }
+ 
+   bool compute_epipoles();
+-- 
+2.46.1
+

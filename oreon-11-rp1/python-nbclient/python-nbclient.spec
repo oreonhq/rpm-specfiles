@@ -1,0 +1,76 @@
+%global source0_hash 90b7fc6b810630db87a6d0c2250b1f0ab4cf4d3c27a299b0cde78a4ed3fd9193
+
+# Unset -s on python shebang - ensure that extensions installed with pip
+# to user locations are seen and properly loaded
+%global py3_shebang_flags %(echo %py3_shebang_flags | sed s/s//)
+
+%global pypi_name nbclient
+
+%global _description %{expand:
+NBClient, a client library for programmatic notebook execution, is a tool for 
+running Jupyter Notebooks in different execution contexts. NBClient was spun 
+out of nbconvert (formerly ExecutePreprocessor). NBClient lets you execute notebooks.
+}
+
+Name:           python-%{pypi_name}
+Version:        0.10.2
+Release:        %autorelease
+Summary:        A client library for executing notebooks
+
+License:        BSD-3-Clause
+URL:            https://jupyter.org
+Source0:        %{pypi_source}
+
+# Makes tests compatible with ipython 9.8.0+
+Patch:          https://github.com/jupyter/nbclient/commit/b42ad03acc0bb1ed26db65ab72ac617679cbbb62.patch
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+
+%bcond bootstrap 0
+%bcond check %{without bootstrap}
+
+%description
+%_description
+
+%package -n     python3-%{pypi_name}
+Summary:        %{summary}
+%py_provides python3-%{pypi_name}
+
+%description -n python3-%{pypi_name}
+%_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{pypi_name}-%{version}
+# Remove bundled egg-info
+rm -rf %{pypi_name}.egg-info
+# Drop version limit from pytest
+sed -i "/pytest/s/,<8//" pyproject.toml
+# Remove unused dependency on pytest-cov
+sed -Ei '/"pytest-cov>=.+",/d' pyproject.toml
+
+%generate_buildrequires
+%pyproject_buildrequires %{?with_check:-x test}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files %{pypi_name}
+
+%if %{with check}
+%check
+# For now ignore DeprecationWarnings from python-pytest-asyncio for Python 3.14
+%pytest -vv -W ignore::DeprecationWarning
+%endif
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%doc README.md
+%{_bindir}/jupyter-execute
+
+%changelog
+%autochangelog

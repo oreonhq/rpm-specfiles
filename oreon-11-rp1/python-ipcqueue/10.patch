@@ -1,0 +1,52 @@
+From da1a040a54dc2d285569fab92396035c7765a5f8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Sun, 5 Oct 2025 09:24:11 +0200
+Subject: [PATCH] doc: update sphinx config to work with newer sphinx
+
+The config didn't work with Sphinx 8.x:
+
+$ make html
+Running Sphinx v8.1.3
+WARNING: Calling get_html_theme_path is deprecated. If you are calling it to define html_theme_path, you are safe to remove that code.
+WARNING: Invalid configuration value found: 'language = None'. Update your configuration to a valid language code. Falling back to 'en' (English).
+loading translations [en]... done
+making output directory... done
+Converting `source_suffix = '.rst'` to `source_suffix = {'.rst': 'restructuredtext'}`.
+ERROR: Invalid value `None` in intersphinx_mapping['https://docs.python.org/3/']. Expected a two-element tuple or list.
+
+Configuration error:
+Invalid `intersphinx_mapping` configuration (1 error).
+make: *** [Makefile:20: html] Error 2
+---
+ doc/conf.py | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/doc/conf.py b/doc/conf.py
+index 3b4598c..f87734c 100644
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -67,7 +67,7 @@
+ #
+ # This is also used if you do content translation via gettext catalogs.
+ # Usually you set "language" from the command line for these cases.
+-language = None
++language = 'en'
+ 
+ # List of patterns, relative to source directory, that match files and
+ # directories to ignore when looking for source files.
+@@ -88,7 +88,6 @@
+ try:
+     import sphinx_rtd_theme
+     html_theme = 'sphinx_rtd_theme'
+-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+ except ImportError:
+     html_theme = 'classic'
+ 
+@@ -162,6 +161,6 @@
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'https://docs.python.org/3/': None}
++intersphinx_mapping = {'python': ('https://docs.python.org/3/', None) }
+ 
+ autoclass_content = 'both'

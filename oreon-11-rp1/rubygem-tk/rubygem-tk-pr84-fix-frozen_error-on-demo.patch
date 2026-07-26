@@ -1,0 +1,71 @@
+From 817418916bdb418cba46a2b5aaa2aecb40889a63 Mon Sep 17 00:00:00 2001
+From: Jeremy Evans <code@jeremyevans.net>
+Date: Fri, 20 Mar 2026 19:52:05 -0700
+Subject: [PATCH] Avoid frozen error in _toUTF8 (Fixes #83)
+
+This happens when attempting to set an encoding on the string. If
+the string is frozen, use +@ to duplicate it (so that chilled
+strings are handled correctly).
+
+This happens at least in sample/figmemo_sample.rb on Tcl/Tk 9.0.
+
+Backtrace:
+
+```
+lib/tk.rb:2813:in 'TclTkIp#_toUTF8': can't modify frozen String: "10c" (FrozenError)
+        from lib/tk.rb:2813:in 'TclTkIp#_toUTF8'
+        from lib/tk.rb:676:in 'TkComm#_toUTF8'
+        from lib/tk.rb:1962:in 'TkUtil#_conv_args'
+        from lib/tk.rb:1962:in 'TkCore#_tk_call_core'
+        from lib/tk.rb:1990:in 'TkCore#tk_call'
+        from lib/tk.rb:3920:in 'TkConfigMethod#__configure_core'
+        from lib/tk.rb:3943:in 'TkConfigMethod#configure'
+        from lib/tk/composite.rb:329:in 'TkComposite#configure'
+        from lib/tk.rb:4841:in 'TkObject#method_missing'
+        from sample/figmemo_sample.rb:96:in 'PhotoCanvas#initialize'
+        from sample/figmemo_sample.rb:415:in 'TkKernel.new'
+        from sample/figmemo_sample.rb:415:in '<main>'
+
+```
+---
+ ext/tk/tcltklib.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/ext/tk/tcltklib.c b/ext/tk/tcltklib.c
+index 1d2b0368..fab633b2 100644
+--- a/ext/tk/tcltklib.c
++++ b/ext/tk/tcltklib.c
+@@ -239,6 +239,7 @@ static VALUE eTkCallbackThrow;
+ 
+ static VALUE tcltkip_class;
+ 
++static ID ID_plus_at;
+ static ID ID_at_enc;
+ static ID ID_at_interp;
+ 
+@@ -7598,6 +7599,7 @@ lib_toUTF8_core(VALUE ip_obj, VALUE src, VALUE encodename)
+     if (NIL_P(encodename)) {
+         if (RB_TYPE_P(str, T_STRING)) {
+             volatile VALUE enc;
++            str = rb_funcall(str, ID_plus_at, 0);
+ 
+ #ifdef HAVE_RUBY_ENCODING_H
+             enc = rb_funcallv(rb_obj_encoding(str), ID_to_s, 0, 0);
+@@ -7649,6 +7651,9 @@ lib_toUTF8_core(VALUE ip_obj, VALUE src, VALUE encodename)
+     } else {
+         StringValue(encodename);
+ 	if (strcmp(RSTRING_PTR(encodename), "binary") == 0) {
++          if (RB_TYPE_P(str, T_STRING)) {
++            str = rb_funcall(str, ID_plus_at, 0);
++          }
+ #ifdef HAVE_RUBY_ENCODING_H
+ 	  rb_enc_associate_index(str, ENCODING_INDEX_BINARY);
+ #endif
+@@ -10299,6 +10304,7 @@ Init_tcltklib(void)
+ 
+     /* --------------------------------------------------------------- */
+ 
++    ID_plus_at = rb_intern("+@");
+     ID_at_enc = rb_intern("@encoding");
+     ID_at_interp = rb_intern("@interp");
+     ID_encoding_name = rb_intern("encoding_name");

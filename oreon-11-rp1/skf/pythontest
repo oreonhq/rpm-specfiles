@@ -1,0 +1,57 @@
+#!/usr/bin/python3 -
+import skf
+# euc-jp binary string
+strobj=b'\xa5\xc6\xa5\xb9\xa5\xc8'
+# convert binary to binarray
+resbin1=skf.convert("-s",strobj)
+print (resbin1)
+# convert binarray to binarray
+resbin2=skf.convert("-s",resbin1)
+print (resbin2)
+# convert binary to utf8
+# after PEP 393, the following line convert to UCS1 string
+resobj2=skf.convert("-z",strobj)
+print (resobj2)
+# forced to binarray
+resbin3=skf.convert("-z --py-out-binary",strobj)
+print (resbin3)
+# convert binary to utf16
+resobj3=skf.convert("-q ",strobj)
+print (resobj3)
+# forced to binarray
+resbin4=skf.convert("-q --py-out-binary",strobj)
+print (resbin4)
+# switch back from utf16 to binarray
+resobj4=skf.convert("-s",resobj3)
+print (resobj4)
+resobj5=skf.convert("-e",resobj3)
+print (resobj5)
+#utf-8 binary to back to sjis
+resobj6=skf.convert("-s",resobj2)
+print (resobj6)
+# utf32, 16 endian variants
+resobja=skf.convert("--oc=utf32be",resobj4)
+print (resobja)
+resobj7=skf.convert("--oc=utf16be",resobj4)
+print (resobj7)
+resobj8=skf.convert("--oc=utf16le",resobj4)
+print (resobj8)
+resobj9=skf.convert("--oc=utf32le",resobj4)
+print (resobj9)
+# code detect result
+resguess=skf.convert("--inquiry",strobj)
+print (resguess)
+resguess=skf.convert("--inquiry",resobj3)
+print (resguess)
+nbmpobj=b'020010:\xf0\xa0\x80\x93\x20'
+print (nbmpobj)
+nbmpres0=skf.convert("--oc=utf16be -Z",nbmpobj)
+print (nbmpres0)
+nbmpres1=skf.convert("--oc=utf-7  ",strobj)
+print (nbmpres1)
+nbmpres2=skf.convert("--oc=utf16be -Z --encode=mimeb",nbmpobj)
+print (nbmpres2)
+nbmpres3=skf.convert("--oc=utf16be -Z --encode=ace",strobj)
+print (nbmpres3)
+nbmpres4=skf.convert("--oc=jis  --encode=mimeb",strobj)
+print (nbmpres4)

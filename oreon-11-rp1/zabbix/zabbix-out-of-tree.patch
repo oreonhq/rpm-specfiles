@@ -1,0 +1,161 @@
+diff --git a/src/go/Makefile.am b/src/go/Makefile.am
+index 3e24aa0..308e34b 100644
+--- a/src/go/Makefile.am
++++ b/src/go/Makefile.am
+@@ -89,9 +90,9 @@ install-bin/zabbix_agent2: bin/zabbix_agent2
+ 	$(INSTALL) -d "$(DESTDIR)$(sbindir)"
+ 	$(INSTALL_PROGRAM) bin/zabbix_agent2 "$(DESTDIR)$(sbindir)"
+ 	$(INSTALL) -d "$(DESTDIR)$(AGENT2_PLUGIN_CONFIG_DIR)"
+-	$(INSTALL_DATA) conf/zabbix_agent2.conf "$(DESTDIR)$(sysconfdir)"
++	$(INSTALL_DATA) $(top_srcdir)/src/go/conf/zabbix_agent2.conf "$(DESTDIR)$(sysconfdir)"
+ 	$(INSTALL) -d "$(DESTDIR)$(AGENT2_PLUGIN_CONFIG_DIR)"
+-	(cd conf/zabbix_agent2.d/plugins.d && \
++	(cd $(top_srcdir)/conf/zabbix_agent2.d/plugins.d && \
+ 	for _f in *.conf; do \
+ 		$(INSTALL_DATA) $${_f} "$(DESTDIR)$(AGENT2_PLUGIN_CONFIG_DIR)"; \
+ 	done)
+diff --git a/src/zabbix_agent/Makefile.am b/src/zabbix_agent/Makefile.am
+index b217fb5..945a673 100644
+--- a/src/zabbix_agent/Makefile.am
++++ b/src/zabbix_agent/Makefile.am
+@@ -69,4 +69,4 @@ zabbix_agentd_CFLAGS = \
+ install-data-hook:
+ 	$(MKDIR_P) "$(DESTDIR)$(AGENT_CONFIG_FILE).d"
+ 	$(MKDIR_P) "$(DESTDIR)$(LOAD_MODULE_PATH)"
+-	test -f "$(DESTDIR)$(AGENT_CONFIG_FILE)" || cp "../../conf/zabbix_agentd.conf" "$(DESTDIR)$(AGENT_CONFIG_FILE)"
++	test -f "$(DESTDIR)$(AGENT_CONFIG_FILE)" || cp "$(top_srcdir)/conf/zabbix_agentd.conf" "$(DESTDIR)$(AGENT_CONFIG_FILE)"
+diff --git a/src/zabbix_java/Makefile.am b/src/zabbix_java/Makefile.am
+index 43f8f19..48214c9 100644
+--- a/src/zabbix_java/Makefile.am
++++ b/src/zabbix_java/Makefile.am
+@@ -9,23 +9,23 @@ EXTRA_DIST = \
+ 	startup.sh
+ 
+ ZJG = bin/zabbix-java-gateway-$(VERSION).jar
+-LIB = lib/android-json-4.3_r3.1.jar:lib/logback-core-1.5.16.jar:lib/logback-classic-1.5.16.jar:lib/slf4j-api-2.0.16.jar
++LIB = $(srcdir)/lib/android-json-4.3_r3.1.jar:$(srcdir)/lib/logback-core-1.5.16.jar:$(srcdir)/lib/logback-classic-1.5.16.jar:$(srcdir)/lib/slf4j-api-2.0.16.jar
+
+-JUNIT = tests/junit-4.8.2.jar
++JUNIT = $(srcdir)/tests/junit-4.8.2.jar
+ 
+ ZJG_DEST = $(DESTDIR)$(sbindir)/zabbix_java
+ 
+ all: $(ZJG)
+ 
+-$(ZJG): class src/com/zabbix/gateway/*.java
+-	$(JAVAC) -d class/src -classpath $(LIB) src/com/zabbix/gateway/*.java
++$(ZJG): class $(srcdir)/src/com/zabbix/gateway/*.java
++	$(JAVAC) -d class/src -classpath $(LIB) $(srcdir)/src/com/zabbix/gateway/*.java
+ 	$(JAR) cf $(ZJG) -C class/src .
+ 
+ test: class
+ 	echo "badger useruser" > tests/com/zabbix/gateway/jmx_test_beans/jmxremote.password
+ 	chmod 600 tests/com/zabbix/gateway/jmx_test_beans/jmxremote.password
+-	$(JAVAC) tests/com/zabbix/gateway/jmx_test_beans/*.java
+-	$(JAVAC) -d class/tests -classpath class/src:$(JUNIT) tests/com/zabbix/gateway/*.java
++	$(JAVAC) tests/com/zabbix/gateway/jmx_$(srcdir)/test_beans/*.java
++	$(JAVAC) -d class/tests -classpath class/src:$(JUNIT) $(srcdir)/tests/com/zabbix/gateway/*.java
+ 	java -classpath class/tests:$(LIB):$(ZJG):$(JUNIT) com.zabbix.gateway.AllTestRunner
+ 
+ class:
+diff --git a/src/zabbix_js/Makefile.am b/src/zabbix_js/Makefile.am
+index 1e4fd93..2110656 100644
+--- a/src/zabbix_js/Makefile.am
++++ b/src/zabbix_js/Makefile.am
+@@ -5,30 +5,30 @@
+ zabbix_js_SOURCES = zabbix_js.c
+ 
+ zabbix_js_LDADD = \
+-	$(top_srcdir)/src/libs/zbxlog/libzbxlog.a \
+-	$(top_srcdir)/src/libs/zbxembed/libzbxembed.a \
+-	$(top_srcdir)/src/libs/zbxjson/libzbxjson.a \
+-	$(top_srcdir)/src/libs/zbxregexp/libzbxregexp.a \
+-	$(top_srcdir)/src/libs/zbxalgo/libzbxalgo.a \
+-	$(top_srcdir)/src/libs/zbxthreads/libzbxthreads.a \
+-	$(top_srcdir)/src/libs/zbxmutexs/libzbxmutexs.a \
+-	$(top_srcdir)/src/libs/zbxprof/libzbxprof.a \
+-	$(top_srcdir)/src/libs/zbxnix/libzbxnix.a \
+-	$(top_srcdir)/src/libs/zbxcomms/libzbxcomms.a \
+-	$(top_srcdir)/src/libs/zbxip/libzbxip.a \
+-	$(top_srcdir)/src/libs/zbxgetopt/libzbxgetopt.a \
+-	$(top_srcdir)/src/libs/zbxhash/libzbxhash.a \
+-	$(top_srcdir)/src/libs/zbxcrypto/libzbxcrypto.a \
+-	$(top_srcdir)/src/libs/zbxcompress/libzbxcompress.a \
+-	$(top_srcdir)/src/libs/zbxhttp/libzbxhttp.a \
+-	$(top_srcdir)/src/libs/zbxvariant/libzbxvariant.a \
+-	$(top_srcdir)/src/libs/zbxxml/libzbxxml.a \
+-	$(top_srcdir)/src/libs/zbxstr/libzbxstr.a \
+-	$(top_srcdir)/src/libs/zbxnum/libzbxnum.a \
+-	$(top_srcdir)/src/libs/zbxtime/libzbxtime.a \
+-	$(top_srcdir)/src/libs/zbxcommon/libzbxcommon.a \
+-	$(top_srcdir)/src/libs/zbxbincommon/libzbxbincommon.a \
+-	$(top_srcdir)/src/libs/zbxcurl/libzbxcurl.a
++	$(top_builddir)/src/libs/zbxlog/libzbxlog.a \
++	$(top_builddir)/src/libs/zbxembed/libzbxembed.a \
++	$(top_builddir)/src/libs/zbxjson/libzbxjson.a \
++	$(top_builddir)/src/libs/zbxregexp/libzbxregexp.a \
++	$(top_builddir)/src/libs/zbxalgo/libzbxalgo.a \
++	$(top_builddir)/src/libs/zbxthreads/libzbxthreads.a \
++	$(top_builddir)/src/libs/zbxmutexs/libzbxmutexs.a \
++	$(top_builddir)/src/libs/zbxprof/libzbxprof.a \
++	$(top_builddir)/src/libs/zbxnix/libzbxnix.a \
++	$(top_builddir)/src/libs/zbxcomms/libzbxcomms.a \
++	$(top_builddir)/src/libs/zbxip/libzbxip.a \
++	$(top_builddir)/src/libs/zbxgetopt/libzbxgetopt.a \
++	$(top_builddir)/src/libs/zbxhash/libzbxhash.a \
++	$(top_builddir)/src/libs/zbxcrypto/libzbxcrypto.a \
++	$(top_builddir)/src/libs/zbxcompress/libzbxcompress.a \
++	$(top_builddir)/src/libs/zbxhttp/libzbxhttp.a \
++	$(top_builddir)/src/libs/zbxvariant/libzbxvariant.a \
++	$(top_builddir)/src/libs/zbxxml/libzbxxml.a \
++	$(top_builddir)/src/libs/zbxstr/libzbxstr.a \
++	$(top_builddir)/src/libs/zbxnum/libzbxnum.a \
++	$(top_builddir)/src/libs/zbxtime/libzbxtime.a \
++	$(top_builddir)/src/libs/zbxcommon/libzbxcommon.a \
++	$(top_builddir)/src/libs/zbxbincommon/libzbxbincommon.a \
++	$(top_builddir)/src/libs/zbxcurl/libzbxcurl.a
+ 
+ zabbix_js_LDADD += @ZBXJS_LIBS@ $(LIBXML2_LIBS)
+ 
+diff --git a/src/zabbix_proxy/Makefile.am b/src/zabbix_proxy/Makefile.am
+index b56f8a8..44800a0 100644
+--- a/src/zabbix_proxy/Makefile.am
++++ b/src/zabbix_proxy/Makefile.am
+@@ -151,4 +151,4 @@ install-data-hook:
+ 	$(MKDIR_P) "$(DESTDIR)$(PROXY_CONFIG_FILE).d"
+ 	$(MKDIR_P) "$(DESTDIR)$(EXTERNAL_SCRIPTS_PATH)"
+ 	$(MKDIR_P) "$(DESTDIR)$(LOAD_MODULE_PATH)"
+-	test -f "$(DESTDIR)$(PROXY_CONFIG_FILE)" || cp "../../conf/zabbix_proxy.conf" "$(DESTDIR)$(PROXY_CONFIG_FILE)"
++	test -f "$(DESTDIR)$(PROXY_CONFIG_FILE)" || cp "$(top_srcdir)/conf/zabbix_proxy.conf" "$(DESTDIR)$(PROXY_CONFIG_FILE)"
+diff --git a/src/zabbix_server/Makefile.am b/src/zabbix_server/Makefile.am
+index 0a55934..a7f6a28 100644
+--- a/src/zabbix_server/Makefile.am
++++ b/src/zabbix_server/Makefile.am
+@@ -186,4 +186,4 @@ install-data-hook:
+ 	$(MKDIR_P) "$(DESTDIR)$(EXTERNAL_SCRIPTS_PATH)"
+ 	$(MKDIR_P) "$(DESTDIR)$(ALERT_SCRIPTS_PATH)"
+ 	$(MKDIR_P) "$(DESTDIR)$(LOAD_MODULE_PATH)"
+-	test -f "$(DESTDIR)$(SERVER_CONFIG_FILE)" || cp "../../conf/zabbix_server.conf" "$(DESTDIR)$(SERVER_CONFIG_FILE)"
++	test -f "$(DESTDIR)$(SERVER_CONFIG_FILE)" || cp "$(top_srcdir)/conf/zabbix_server.conf" "$(DESTDIR)$(SERVER_CONFIG_FILE)"
+diff -up zabbix-7.2.0/configure.ac.out-of-tree zabbix-7.2.0/configure.ac
+--- zabbix-7.2.0/configure.ac.out-of-tree	2024-12-09 04:53:54.274588489 -0700
++++ zabbix-7.2.0/configure.ac	2024-12-11 20:31:44.684746169 -0700
+@@ -22,7 +22,7 @@ AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_SRCDIR([src/zabbix_server/server.c])
+ AC_CONFIG_HEADERS([include/common/config.h])
+ 
+-AC_SUBST(DEFAULT_INCLUDES, ['-I$(top_srcdir)/include/common -I$(top_srcdir)/include'])
++AC_SUBST(DEFAULT_INCLUDES, ['-I$(top_builddir)/include/common -I$(top_srcdir)/include/common -I$(top_srcdir)/include'])
+ 
+ AC_CANONICAL_BUILD
+ AC_CANONICAL_HOST
+--- zabbix-7.4.3/src/go/Makefile.am~	2025-10-01 09:49:27.351910250 -0500
++++ zabbix-7.4.3/src/go/Makefile.am	2025-10-01 10:33:26.662210424 -0500
+@@ -64,6 +64,7 @@
+ clean-go-build:
+ 	-$(GO) clean ./...
+ 	-$(GO) clean -cache
++	-$(GO) clean $(srcdir)/...
+ 	-rm -f bin/mock_server
+ 	-rm -f bin/zabbix_agent2
+ 	-rm -f bin/zabbix_web_service

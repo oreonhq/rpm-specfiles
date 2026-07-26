@@ -1,0 +1,129 @@
+Various tweaks to port to C99.  Obtaining the sigset definition
+is tricky; introducing e.g. -D_GNU_SOURCE everywhere seems risky.
+
+diff --git a/configure b/configure
+index bb2d78f589572ad1..85c59cf27452f32a 100755
+--- a/configure
++++ b/configure
+@@ -761,7 +761,7 @@ cat > conftest.$ac_ext << EOF
+ #line 762 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:767: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -880,7 +880,7 @@ if eval "test \"`echo '$''{'ac_cv_lbl_static_flag'+set}'`\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_cv_lbl_static_flag=unknown
+-    echo 'main() {}' > conftest.c
++    echo 'int main() {}' > conftest.c
+     if test "$GCC" != yes ; then
+ 	    trial_flag="-Bstatic"
+ 	    test=`$CC $trial_flag -o conftest conftest.c 2>&1`
+@@ -913,6 +913,7 @@ else
+   cat > conftest.$ac_ext <<EOF
+ #line 915 "configure"
+ #include "confdefs.h"
++#include <stdio.h>
+ 
+ int main() {
+ extern char *__progname; 
+@@ -2046,13 +2047,14 @@ else
+ #include <sys/types.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
++#include <stdlib.h>
++
++#ifdef HAVE_UNISTD_H
++# include <unistd.h>
++#endif
+ 
+ /* This mess was copied from the GNU getpagesize.h.  */
+ #ifndef HAVE_GETPAGESIZE
+-# ifdef HAVE_UNISTD_H
+-#  include <unistd.h>
+-# endif
+-
+ /* Assume that all systems that can run configure have sys/param.h.  */
+ # ifndef HAVE_SYS_PARAM_H
+ #  define HAVE_SYS_PARAM_H 1
+@@ -2088,12 +2090,6 @@ else
+ 
+ #endif /* no HAVE_GETPAGESIZE */
+ 
+-#ifdef __cplusplus
+-extern "C" { void *malloc(unsigned); }
+-#else
+-char *malloc();
+-#endif
+-
+ int
+ main()
+ {
+@@ -2111,7 +2107,6 @@ main()
+ 		exit(1);
+ 	for (i = 0; i < pagesize; ++i)
+ 		*(data + i) = rand();
+-	umask(0);
+ 	fd = creat("conftestmmap", 0600);
+ 	if (fd < 0)
+ 		exit(1);
+diff --git a/configure.in b/configure.in
+index 1209ddc4ac993d7a..a15398d55a6c63f1 100644
+--- a/configure.in
++++ b/configure.in
+@@ -27,7 +27,7 @@ dnl
+ AC_MSG_CHECKING(how to link static binaries)
+ AC_CACHE_VAL(ac_cv_lbl_static_flag,
+     ac_cv_lbl_static_flag=unknown
+-    echo 'main() {}' > conftest.c
++    echo 'int main() {}' > conftest.c
+     if test "$GCC" != yes ; then
+ 	    trial_flag="-Bstatic"
+ 	    test=`$CC $trial_flag -o conftest conftest.c 2>&1`
+@@ -52,7 +52,7 @@ fi
+ 
+ AC_MSG_CHECKING(for __progname)
+ AC_CACHE_VAL(ac_cv_extern__progname,
+-    AC_TRY_LINK([],
++    AC_TRY_LINK([#include <stdio.h>],
+ 	[extern char *__progname; 
+ 	puts(__progname)],
+ 	ac_cv_extern__progname=yes,
+diff --git a/libhttpd.c b/libhttpd.c
+index 6a985f8601d0ccfc..7c3ae74d0cda56d1 100644
+--- a/libhttpd.c
++++ b/libhttpd.c
+@@ -47,7 +47,12 @@
+ #include <memory.h>
+ #endif /* HAVE_MEMORY_H */
+ #include <pwd.h>
++
+ #include <signal.h>
++/* Not available with glibc default feature test macros.  Kludge to
++   avoid extensive changes.  */
++extern __typeof (signal) sigset;
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/thttpd.c b/thttpd.c
+index bfb57bacd955cd1b..25ad5d4cd47dc094 100644
+--- a/thttpd.c
++++ b/thttpd.c
+@@ -44,7 +44,12 @@
+ #ifdef HAVE_GRP_H
+ #include <grp.h>
+ #endif
++
+ #include <signal.h>
++/* Not available with glibc default feature test macros.  Kludge to
++   avoid extensive changes.  */
++extern __typeof (signal) sigset;
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>

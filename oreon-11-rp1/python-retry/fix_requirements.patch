@@ -1,0 +1,15 @@
+diff -uNr retry-0.9.4.orig/requirements.txt retry-0.9.4/requirements.txt
+--- retry-0.9.4.orig/requirements.txt	2023-01-02 17:19:00.363407803 -0600
++++ retry-0.9.4/requirements.txt	2023-01-02 17:20:13.244275050 -0600
+@@ -1,2 +1 @@
+ decorator>=3.4.2
+-py>=1.4.26,<2.0.0
+diff -uNr retry-0.9.4.orig/test-requirements.txt retry-0.9.4/test-requirements.txt
+--- retry-0.9.4.orig/test-requirements.txt	2023-01-02 17:19:00.363407803 -0600
++++ retry-0.9.4/test-requirements.txt	2023-01-02 17:20:06.176192006 -0600
+@@ -1,5 +1,4 @@
+ -r requirements.txt
+-mock
+ pbr
+ pytest
+ tox

@@ -1,0 +1,13 @@
+--- stripesnoop-1.5/parser.h.BAD	2005-08-05 14:32:06.000000000 -0500
++++ stripesnoop-1.5/parser.h	2005-08-05 14:32:39.000000000 -0500
+@@ -50,8 +50,8 @@
+ 
+ //define the field seperators, and filenames for the DB
+ #define TRACK2DELIM ":<>=?"
+-#define VISADATABASE "visa-pre.txt"
+-#define AAMVADATABASE "dl-iin.csv"
++#define VISADATABASE "/usr/share/stripesnoop/visa-pre.txt"
++#define AAMVADATABASE "/usr/share/stripesnoop/dl-iin.csv"
+ 
+ /*
+  * bool isDelim(char ch, char* delim)

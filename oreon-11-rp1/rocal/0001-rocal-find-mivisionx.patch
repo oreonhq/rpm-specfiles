@@ -1,0 +1,49 @@
+From f93bfa0d79983a745e0c1dc859ece202bd6e734a Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Thu, 6 Nov 2025 11:53:57 -0800
+Subject: [PATCH] rocal find mivisionx
+
+---
+ cmake/FindMIVisionX.cmake | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/FindMIVisionX.cmake b/cmake/FindMIVisionX.cmake
+index a1bddf268175..a9a0d3e9548d 100644
+--- a/cmake/FindMIVisionX.cmake
++++ b/cmake/FindMIVisionX.cmake
+@@ -36,6 +36,7 @@ find_path(MIVisionX_INCLUDE_DIRS
+     PATHS
+     ${MIVisionX_PATH}/include/mivisionx
+     /usr/include
++    /usr/include/mivisionx
+     ${ROCM_PATH}/include/mivisionx
+ )
+ mark_as_advanced(MIVisionX_INCLUDE_DIRS)
+@@ -47,7 +48,7 @@ find_library(OPENVX_LIBRARIES
+     $ENV{MIVisionX_PATH}/lib
+     PATHS
+     ${MIVisionX_PATH}/lib
+-    /usr/lib
++    /usr/lib64
+     ${ROCM_PATH}/lib
+ )
+ mark_as_advanced(OPENVX_LIBRARIES)
+@@ -59,7 +60,7 @@ find_library(VXRPP_LIBRARIES
+     $ENV{MIVisionX_PATH}/lib
+     PATHS
+     ${MIVisionX_PATH}/lib
+-    /usr/lib
++    /usr/lib64
+     ${ROCM_PATH}/lib
+ )
+ mark_as_advanced(VXRPP_LIBRARIES)
+@@ -108,4 +109,4 @@ else()
+         message(FATAL_ERROR "{Red}FindMIVisionX -- NOT FOUND${ColourReset}")
+     endif()
+     message( "-- ${Yellow}NOTE: FindMIVisionX failed to find -- openvx${ColourReset}" )
+-endif()
+\ No newline at end of file
++endif()
+-- 
+2.51.0
+

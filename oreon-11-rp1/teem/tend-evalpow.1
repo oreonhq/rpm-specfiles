@@ -1,0 +1,31 @@
+.TH TEND\-EVALPOW "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-evalpow \- modify shape by raising eigenvalues to some power
+.SH SYNOPSIS
+.B tend\ evalpow
+.B \-p
+.RI < power >
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Modify shape by raising eigenvalues to some power.
+The orientation of the tensor is unchanged.
+.SH OPTIONS
+.TP
+.B \-p\fR <\fIpower\fR>
+Power to which to raise all the eigenvalues.
+.RI ( float )
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

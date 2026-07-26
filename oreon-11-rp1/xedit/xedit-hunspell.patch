@@ -1,0 +1,17 @@
+diff -up xedit-1.2.2/app-defaults/Xedit.orig xedit-1.2.2/app-defaults/Xedit
+--- xedit-1.2.2/app-defaults/Xedit.orig	2023-07-25 17:48:22.479734767 -0300
++++ xedit-1.2.2/app-defaults/Xedit	2023-07-25 17:49:34.826200853 -0300
+@@ -259,10 +259,10 @@ c<Key>G:	cancel-find-file()\n\
+ <Message>WM_PROTOCOLS:	ispell(end)
+ 
+ ! Sample dictionary, word chars and text mode resources setup
+-!*ispell.dictionary:			br
+-!*ispell.dictionaries:			br american americanmed+ english
++*ispell.dictionary:			en_US
++*ispell.dictionaries:			en_US
+ !*ispell*br.wordChars:			áéíóúçÁÉÍÓÚÇàÀâêôÂÊÔüÜãõÃÕ-
+-*ispell.ispellCommand:			/usr/bin/aspell -B -m
++*ispell.ispellCommand:			/usr/bin/hunspell
+ *ispell.lookCommand:			/bin/egrep
+ !*ispell*text.skipLines:		.#
+ 

@@ -1,0 +1,12 @@
+--- pygrib-2.1.8.unchanged/setup.py	2025-10-23 17:42:09.000000000 +0200
++++ pygrib-2.1.8/setup.py	2025-11-07 08:51:52.593580471 +0100
+@@ -93,7 +93,8 @@ ext_modules = [
+         ["src/pygrib/_pygrib.pyx"],
+         include_dirs=incdirs,
+         library_dirs=libdirs,
+-        runtime_library_dirs=runtime_lib_dirs,
++        # dont use this; it causes an rpath definition in the *.so files
++        # runtime_library_dirs=runtime_lib_dirs,
+         libraries=["eccodes"],
+     )
+ ]

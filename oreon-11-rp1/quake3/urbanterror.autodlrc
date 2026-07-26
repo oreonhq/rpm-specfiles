@@ -1,0 +1,27 @@
+[MESSAGELIST]
+[MESSAGE]
+	[TITLE]Please click 'Accept' to allow internet access.[/TITLE]
+	[TEXT]In order to play the free multiplayer first person shooter: Urban Terror, the Urban Terror datafiles are needed. Urban Terror is a mod/total conversion based on the Quake 3 engine.
+
+Click Accept, to download the Urban Terror datafiles, which can be freely downloaded from the internet. The Urban Terror zip is around 1.8GB, so you need a minimum of 4GB free space on your HOME partition!
+[/TEXT]
+[/MESSAGE]
+[MESSAGE]
+	[TITLE]License Information[/TITLE]
+	[TEXT]Urban Terror is distributed free over the Internet and is covered by the Quake 3SDK licence agreement [EULA]. The mod files may not be sold [in any form] or distributed on physical media unless with permission from iD Software.
+
+For further information on legal use of programs derived from Quake 3 source code, please contact their respective authors.[/TEXT]
+[/MESSAGE]
+[/MESSAGELIST]
+
+[FILELIST]
+[FILE]
+	[FILENAME]UrbanTerror42_full023.zip[/FILENAME]
+	[MD5]20b4e2d10d9e1e76a6b050f1df3a3669[/MD5]
+	[PATH]$HOME/.q3ut4[/PATH]
+	[MIRRORS]
+		[URL]http://mirror.urtstats.net/urbanterror/UrbanTerror42_full023.zip[/URL]
+		[URL]https://up.barbatos.fr/urt/UrbanTerror42_full023.zip[/URL]
+	[/MIRRORS]
+[/FILE]
+[/FILELIST]

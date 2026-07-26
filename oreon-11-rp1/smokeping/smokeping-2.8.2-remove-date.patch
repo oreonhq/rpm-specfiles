@@ -1,0 +1,12 @@
+diff --git a/lib/Smokeping.pm b/lib/Smokeping.pm
+index b9b2aa4..087bc25 100644
+--- a/lib/Smokeping.pm
++++ b/lib/Smokeping.pm
+@@ -2070,7 +2070,6 @@ DOC
+                     sendmail $cfg->{Alerts}{from},$to, <<ALERT;
+ To: $to
+ From: $cfg->{Alerts}{from}
+-Date: $rfc2822stamp
+ $mail
+ ALERT
+                     }

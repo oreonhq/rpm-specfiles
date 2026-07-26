@@ -1,0 +1,41 @@
+diff -U 3 -dHrN -- a/skychart/u_satellite.pas b/skychart/u_satellite.pas
+--- a/skychart/u_satellite.pas	2020-01-26 16:24:19.000000000 +0100
++++ b/skychart/u_satellite.pas	2020-02-01 11:46:01.224703002 +0100
+@@ -100,36 +100,8 @@
+ end;
+ 
+ function CheckWine: boolean;
+-var
+-  cmd, buf, msg: string;
+-  i, j: integer;
+-  r: TStringList;
+ begin
+-  r := TStringList.Create;
+-  cmd := 'wine --version';
+-  i := execprocess(cmd, r);
+-  Result := (i = 0);
+-
+-  if not Result then
+-  begin
+-
+-    if r.Count > 0 then
+-    begin
+-      buf := '';
+-      for j := 0 to r.Count - 1 do
+-        buf := buf + r[j];
+-    end
+-    else
+-      buf := '';
+-
+-    msg := rsPleaseInstWine;
+-   {$ifdef linux}
+-    msg := msg + crlf + rsIfItIsNotIns + crlf + 'apt-get install wine' +
+-      crlf + 'yum install wine';
+-   {$endif}
+-    ShowMessage(msg + crlf + 'wine return: ' + buf);
+-  end;
+-  r.Free;
++  ShowMessage('Artificial satellites calculation has been removed due to Fedora policies.'+crlf+'If you need it, please uninstall Skychart provided by Fedora repositories and download Skychart rpms from the author site.');
+ end;
+ 
+ procedure SatelliteList(y, m, startd, endd, maglimit, tle, tmpdir,

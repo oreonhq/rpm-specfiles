@@ -1,0 +1,58 @@
+From a60b23d1257bfaaf5a036bb654f8129a9eed7260 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Tue, 23 Dec 2025 17:31:17 +0100
+Subject: [PATCH] Fix compatibility with minitest 6
+
+This fixes minitest 5 warnings such as:
+
+~~~
+$ bundle exec rake test
+  shell: /usr/bin/bash -e {0}
+/home/runner/.rubies/ruby-head/bin/ruby -w -I"lib:test" -w /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/vendor/bundle/ruby/4.0.0+0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb "test/bcrypt_pnkdf/engine_test.rb"
+MiniTest::Unit::TestCase is now Minitest::Test. From /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/test/bcrypt_pnkdf/engine_test.rb:58:in '<top (required)>'
+
+... snip ...
+~~~
+
+as well as minitest 6 error:
+
+~~~
+$ bundle exec rake test
+  shell: /usr/bin/bash -e {0}
+/home/runner/.rubies/ruby-head/bin/ruby -w -I"lib:test" -w /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/vendor/bundle/ruby/4.0.0+0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb "test/bcrypt_pnkdf/engine_test.rb"
+/home/runner/.rubies/ruby-head/lib/ruby/4.0.0+0/bundled_gems.rb:60:in 'Kernel.require': cannot load such file -- minitest/unit (LoadError)
+	from /home/runner/.rubies/ruby-head/lib/ruby/4.0.0+0/bundled_gems.rb:60:in 'block (2 levels) in Kernel#replace_require'
+	from /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/test/bcrypt_pnkdf/engine_test.rb:2:in '<top (required)>'
+	from /home/runner/.rubies/ruby-head/lib/ruby/4.0.0+0/bundled_gems.rb:60:in 'Kernel.require'
+	from /home/runner/.rubies/ruby-head/lib/ruby/4.0.0+0/bundled_gems.rb:60:in 'block (2 levels) in Kernel#replace_require'
+	from /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/vendor/bundle/ruby/4.0.0+0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb:21:in 'block in <main>'
+	from /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/vendor/bundle/ruby/4.0.0+0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb:6:in 'Array#select'
+	from /home/runner/work/bcrypt_pbkdf-ruby/bcrypt_pbkdf-ruby/vendor/bundle/ruby/4.0.0+0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb:6:in '<main>'
+~~~
+
+Where tha latter is caused by:
+
+https://github.com/minitest/minitest/commit/0bec7a106412d6dd6643980da71ce70134f1b3f4
+---
+ test/bcrypt_pnkdf/engine_test.rb | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/test/bcrypt_pnkdf/engine_test.rb b/test/bcrypt_pnkdf/engine_test.rb
+index e14f591..5023528 100644
+--- a/test/bcrypt_pnkdf/engine_test.rb
++++ b/test/bcrypt_pnkdf/engine_test.rb
+@@ -1,5 +1,4 @@
+ require 'minitest/autorun'
+-require 'minitest/unit'
+ require 'test_helper'
+ 
+ # bcrypt_pbkdf in ruby
+@@ -55,7 +54,7 @@ def bcrypt_pbkdf(password, salt, keylen, rounds)
+ end
+ 
+ 
+-class TestExt < Minitest::Unit::TestCase
++class TestExt < Minitest::Test
+   def test_table
+     assert_equal table, table.map{ |p,s,l,r| [p,s,l,r,BCryptPbkdf::Engine::__bc_crypt_pbkdf(p,s,l,r).bytes] }
+   end

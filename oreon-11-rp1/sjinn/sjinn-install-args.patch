@@ -1,0 +1,12 @@
+diff -up sjinn/Makefile.orig sjinn/Makefile
+--- sjinn/Makefile.orig	2011-04-18 16:56:48.092152282 -0400
++++ sjinn/Makefile	2011-04-18 16:56:55.179063684 -0400
+@@ -29,7 +29,7 @@ install:
+ 	$(INSTALL) $(TARGET) ${bindir}
+ 	rm -f ${bindir}/$(S_LINK)
+ 	ln -s ${bindir}/$(TARGET) ${bindir}/$(S_LINK)
+-	$(INSTALL) $(TARGET).1.gz ${mandir}/$(TARGET).1.gz
++	$(INSTALL) -m 0644 $(TARGET).1.gz ${mandir}/$(TARGET).1.gz
+ 	rm -f ${mandir}/$(S_LINK).1.gz
+ 	ln -s ${mandir}/$(TARGET).1.gz ${mandir}/$(S_LINK).1.gz
+ 

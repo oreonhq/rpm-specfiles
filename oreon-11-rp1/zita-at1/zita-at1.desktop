@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=zita-at1
+Comment=Auto-tuner for JACK
+GenericName=Auto-tuner
+Icon=zita-at1
+Type=Application
+Exec=zita-at1
+Terminal=false
+Categories=Audio;AudioVideo;X-Jack;

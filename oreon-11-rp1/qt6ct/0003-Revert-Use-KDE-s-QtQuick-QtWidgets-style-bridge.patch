@@ -1,0 +1,74 @@
+From 968c1f1f9125f036d27cb58e5953eaea2bcda308 Mon Sep 17 00:00:00 2001
+From: Zephyr Lykos <git@mochaa.ws>
+Date: Tue, 9 Sep 2025 06:14:19 +0800
+Subject: [PATCH 3/3] Revert "Use KDE's QtQuick-QtWidgets style bridge"
+
+This reverts commit 06a58d44f2da5590879ea143006a32e571159561.
+
+This breaks some application's styling, like nheko, which relies on
+Fusion's default component size & padding.
+
+The style bridge was only applied to applications initializing
+QtWidgets. Since there is QT_QUICK_CONTROLS_CONF, leave configuration
+logic to there.
+---
+ CMakeLists.txt                            | 2 +-
+ src/qt6ct-qtplugin/CMakeLists.txt         | 2 +-
+ src/qt6ct-qtplugin/qt6ctplatformtheme.cpp | 9 ---------
+ 3 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 366c3df..5601065 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,7 +36,7 @@ add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DUSE_WIDGETS -D
+ add_compile_options(-Wall -Wextra)
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+ 
+-find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets LinguistTools OPTIONAL_COMPONENTS QuickControls2)
++find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets LinguistTools)
+ find_package(KF6 COMPONENTS Config ColorScheme IconThemes)
+ 
+ include(ECMQueryQt)
+diff --git a/src/qt6ct-qtplugin/CMakeLists.txt b/src/qt6ct-qtplugin/CMakeLists.txt
+index d986c7b..b7ebf8a 100644
+--- a/src/qt6ct-qtplugin/CMakeLists.txt
++++ b/src/qt6ct-qtplugin/CMakeLists.txt
+@@ -5,6 +5,6 @@ set(lib_SRCS
+ 
+ add_library(qt6ct-qtplugin MODULE ${lib_SRCS})
+ set_target_properties(qt6ct-qtplugin PROPERTIES OUTPUT_NAME qt6ct)
+-target_link_libraries(qt6ct-qtplugin PRIVATE Qt6::Widgets Qt6::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt6::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF6::IconThemes> qt6ct-common)
++target_link_libraries(qt6ct-qtplugin PRIVATE Qt6::Widgets Qt6::GuiPrivate $<TARGET_NAME_IF_EXISTS:KF6::IconThemes> qt6ct-common)
+ target_compile_definitions(qt6ct-qtplugin PRIVATE $<$<TARGET_EXISTS:KF6::IconThemes>:KF_ICONTHEMES_LIB>)
+ install(TARGETS qt6ct-qtplugin DESTINATION ${QT_INSTALL_PLUGINS}/platformthemes)
+diff --git a/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp b/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
+index 3ed3c64..99b523f 100644
+--- a/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
++++ b/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
+@@ -44,9 +44,6 @@
+ #endif
+ #include <QFile>
+ #include <QFileSystemWatcher>
+-#ifdef QT_QUICKCONTROLS2_LIB
+-#include <QQuickStyle>
+-#endif
+ #include <private/qiconloader_p.h>
+ 
+ #include "qt6ct.h"
+@@ -78,12 +75,6 @@ Qt6CTPlatformTheme::Qt6CTPlatformTheme()
+         //must be applied before Q_COREAPP_STARTUP_FUNCTION execution
+         if(Qt6CT::isKColorScheme(m_schemePath))
+             qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
+-#if defined QT_WIDGETS_LIB && defined QT_QUICKCONTROLS2_LIB
+-        if(hasWidgets())
+-            //don't override the value explicitly set by the user
+-            if(QQuickStyle::name().isEmpty() || QQuickStyle::name() == QLatin1String("Fusion"))
+-                QQuickStyle::setStyle(QLatin1String("org.kde.desktop"));
+-#endif
+     }
+     qCDebug(lqt6ct) << "using qt6ct plugin";
+ #ifdef QT_WIDGETS_LIB
+-- 
+2.51.0
+

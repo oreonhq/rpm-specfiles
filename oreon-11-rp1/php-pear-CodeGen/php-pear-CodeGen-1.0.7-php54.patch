@@ -1,0 +1,420 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for PHP PEAR CodeGen <= 1.0.7 to avoid
+run-time notices, deprecation warnings and/or errors with PHP 5.4 (and 7.2, 8.0).
+
+--- package.xml						2010-09-27 13:47:50.000000000 +0200
++++ package.xml.php54					2022-06-16 15:08:59.347490730 +0200
+@@ -40,23 +40,23 @@
+    <file baseinstalldir="/" md5sum="55923f49761b783fe8b9a1ea56dc88bf" name="CodeGen/License/LGPL21.php" role="php" />
+    <file baseinstalldir="/" md5sum="de2c0246848f64c86bddf55c7013e43a" name="CodeGen/License/LGPL3.php" role="php" />
+    <file baseinstalldir="/" md5sum="93012be7b7bd85b1cf1420f0cd630345" name="CodeGen/License/PHP.php" role="php" />
+-   <file baseinstalldir="/" md5sum="4369751c6ea7c456654212b6e5a125a1" name="CodeGen/Tools/Code.php" role="php" />
++   <file baseinstalldir="/" md5sum="a132a88bc0294e84f1ea7a7dc7c87136" name="CodeGen/Tools/Code.php" role="php" />
+    <file baseinstalldir="/" md5sum="abe2dc7df48e471307ce887c0e07cacd" name="CodeGen/Tools/FileReplacer.php" role="php" />
+-   <file baseinstalldir="/" md5sum="32c59bbab498ddc1f47a0aacc4a2cb45" name="CodeGen/Tools/Getopt.php" role="php" />
++   <file baseinstalldir="/" md5sum="c33d9784d75258e7d67b29c731473797" name="CodeGen/Tools/Getopt.php" role="php" />
+    <file baseinstalldir="/" md5sum="dff17cea3d83704923b338e5c8db4e17" name="CodeGen/Tools/Group.php" role="php" />
+-   <file baseinstalldir="/" md5sum="e871be09b7dbbfcec0d4ac7c55eda11b" name="CodeGen/Tools/Indent.php" role="php" />
++   <file baseinstalldir="/" md5sum="78c41d2d8863edd9d231fe44dbb40e5f" name="CodeGen/Tools/Indent.php" role="php" />
+    <file baseinstalldir="/" md5sum="820cbe7015e278a7dd5bf141cb89d1e7" name="CodeGen/Tools/IndentC.php" role="php" />
+-   <file baseinstalldir="/" md5sum="172c29b7a3fb89cbbba8b95160cf00d8" name="CodeGen/Tools/Outbuf.php" role="php" />
++   <file baseinstalldir="/" md5sum="a9589f2b6432f162cb8dd4b740be4fb6" name="CodeGen/Tools/Outbuf.php" role="php" />
+    <file baseinstalldir="/" md5sum="6de8b189b3dddce7593b871169659a92" name="CodeGen/Tools/Platform.php" role="php" />
+-   <file baseinstalldir="/" md5sum="0fd0eb6d21397fbbc28fef8cee098b1c" name="CodeGen/Tools/Tokenizer.php" role="php" />
+-   <file baseinstalldir="/" md5sum="34f6aaba17d093842d904343948df5a5" name="CodeGen/Command.php" role="php" />
+-   <file baseinstalldir="/" md5sum="3e55f170969c65a5bc8d4dc6cc16c725" name="CodeGen/Element.php" role="php" />
+-   <file baseinstalldir="/" md5sum="3e02c6ab35f9f4c8869ef2b9b5d62fcf" name="CodeGen/Extension.php" role="php" />
+-   <file baseinstalldir="/" md5sum="b75a7fc7af742b7f63438b92b45d4d32" name="CodeGen/ExtensionParser.php" role="php" />
++   <file baseinstalldir="/" md5sum="1d9074a35ddf03748bd4d669ddc2a978" name="CodeGen/Tools/Tokenizer.php" role="php" />
++   <file baseinstalldir="/" md5sum="eb988c8ab1c5931252c267164a9369e8" name="CodeGen/Command.php" role="php" />
++   <file baseinstalldir="/" md5sum="b4c00b93b34b66008f6027c1c996a92b" name="CodeGen/Element.php" role="php" />
++   <file baseinstalldir="/" md5sum="c17cfc03f27a8efac931c24349395c5d" name="CodeGen/Extension.php" role="php" />
++   <file baseinstalldir="/" md5sum="a6a743dd9382696b52c1691a430c7365" name="CodeGen/ExtensionParser.php" role="php" />
+    <file baseinstalldir="/" md5sum="aab02ab124cfe97ddedd61ff4270abb6" name="CodeGen/License.php" role="php" />
+    <file baseinstalldir="/" md5sum="438f9cd563c59a470ca3e8fc39816d99" name="CodeGen/Maintainer.php" role="php" />
+    <file baseinstalldir="/" md5sum="d1e398ec78cbbdda60d92aa8ebd959f7" name="CodeGen/Release.php" role="php" />
+-   <file baseinstalldir="/" md5sum="ff4a66a410b5f532d0f3e2b4617a6c53" name="CodeGen/XmlParser.php" role="php" />
++   <file baseinstalldir="/" md5sum="d46c4ea20b53260324bd3ef1d92ee829" name="CodeGen/XmlParser.php" role="php" />
+   </dir>
+  </contents>
+  <dependencies>
+--- CodeGen-1.0.7/CodeGen/Command.php			2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Command.php.php54		2022-06-16 15:04:16.020583206 +0200
+@@ -239,13 +239,13 @@
+         
+         // create parser for extension specs
+         $err = $parser->setInputFile($xmlfile);
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->message);
+         }
+         
+         // do the actual parsing
+         $err = $parser->parse();
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->getMessage()." ".$err->getUserInfo());
+         } else if (is_string($err)) {
+             $this->terminate($err);
+@@ -257,7 +257,7 @@
+         
+         // and now create the actual extension from the collected specs
+         $err = $this->extension->createExtension($this->options->value("d", "dir"), $this->options->have("f", "force"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             $this->terminate($err->getMessage()." ".$err->getUserInfo());
+         }
+         
+--- CodeGen-1.0.7/CodeGen/Element.php			2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Element.php.php54		2022-06-16 15:05:19.070003106 +0200
+@@ -135,12 +135,12 @@
+         if (strlen($if) == 0) {
+           return $this->setIfCondition($code);
+         }
+-        if (($if{0} != '(') && strstr($if, ' ')) {
++        if (($if[0] != '(') && strstr($if, ' ')) {
+             $if = "( $if )";
+         }
+ 
+         $code = trim($code);
+-        if (($code{0} != '(')  && strstr($code, ' ')) {
++        if (($code[0] != '(')  && strstr($code, ' ')) {
+             $code = "( $code )";
+         }
+ 
+--- CodeGen-1.0.7/CodeGen/ExtensionParser.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/ExtensionParser.php.php54	2022-06-16 15:04:16.021583213 +0200
+@@ -139,7 +139,7 @@
+     function tagstart_extension($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "prefix", "version"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -147,20 +147,20 @@
+             return PEAR::raiseError("needed attribute 'name' for <extension> not given");
+         }
+         $err = $this->extension->setName(trim($attr["name"]));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+ 
+         if (isset($attr["prefix"])) {
+             $err = $this->extension->setPrefix(trim($attr["prefix"]));
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+ 
+         if (isset($attr["version"])) {
+             $err = $this->extension->setVersion($attr["version"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         } else {
+@@ -206,7 +206,7 @@
+      */
+     function tagend_extension_summary($attr, $data)
+     {
+-        return $this->extension->setSummary(CodeGen_Tools_Indent::linetrim($data));
++        return $this->extension->setSummary((new CodeGen_Tools_Indent)->linetrim($data));
+     }
+     
+     /**
+@@ -231,7 +231,7 @@
+      */
+     function tagend_extension_description($attr, $data)
+     {
+-        return $this->extension->setDescription(CodeGen_Tools_Indent::linetrim($data));
++        return $this->extension->setDescription((new CodeGen_Tools_Indent)->linetrim($data));
+     }
+ 
+     function tagstart_extension_maintainer($attr)
+@@ -350,7 +350,7 @@
+ 
+     function tagend_release_notes($attr, $data)
+     {
+-        return $this->helper->setNotes(CodeGen_Tools_Indent::linetrim($data));
++        return $this->helper->setNotes((new CodeGen_Tools_Indent)->linetrim($data));
+     }
+ 
+     function tagend_release($attr, $data)
+@@ -373,7 +373,7 @@
+ 
+     function tagend_changelog($attr, $data) 
+     {
+-        return $this->extension->setChangelog(CodeGen_Tools_Indent::linetrim($data));
++        return $this->extension->setChangelog((new CodeGen_Tools_Indent)->linetrim($data));
+     }
+ 
+         
+@@ -381,7 +381,7 @@
+     {
+         $license = CodeGen_License::factory(trim($data));
+         
+-        if (PEAR::isError($license)) {
++        if ((new PEAR)->isError($license)) {
+             return $license;
+         }
+         
+@@ -396,7 +396,7 @@
+     function tagend_extension_code($attr, $data) 
+     {
+         $err = $this->checkAttributes($attr, array("role", "position"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -404,9 +404,9 @@
+         $position = isset($attr["position"]) ? $attr["position"] : "bottom";
+ 
+         if (isset($attr["src"])) {
+-            return $this->extension->addCode($role, $position, CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
++            return $this->extension->addCode($role, $position, (new CodeGen_Tools_Indent)->linetrim(file_get_contents($attr["src"])));
+         } else {
+-            return $this->extension->addCode($role, $position, CodeGen_Tools_Indent::linetrim($data));
++            return $this->extension->addCode($role, $position, (new CodeGen_Tools_Indent)->linetrim($data));
+         }
+     }
+ 
+@@ -418,20 +418,20 @@
+     function tagstart_extension_deps($attr)
+     {
+         $err = $this->checkAttributes($attr, array("platform", "language"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+         if (isset($attr["platform"])) {
+             $err = $this->extension->setPlatform($attr["platform"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+ 
+         if (isset($attr["language"])) {
+             $err = $this->extension->setLanguage($attr["language"]);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 return $err;
+             }
+         }
+@@ -446,7 +446,7 @@
+     function tagstart_deps_file($attr) 
+     {
+         $err = $this->checkAttributes($attr, array("name", "dir"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -464,7 +464,7 @@
+     function tagstart_deps_lib($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "platform", "function"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -480,7 +480,7 @@
+             $platform = new CodeGen_Tools_Platform("all");
+         }
+ 
+-        if (PEAR::isError($platform)) {
++        if ((new PEAR)->isError($platform)) {
+             return $platform;
+         }
+ 
+@@ -491,7 +491,7 @@
+     function tagstart_deps_header($attr)
+     {
+         $err = $this->checkAttributes($attr, array("name", "prepend", "path"));
+-        if (PEAR::isError($err)) {
++        if ((new PEAR)->isError($err)) {
+             return $err;
+         }
+                                       
+@@ -518,7 +518,7 @@
+     }
+ 
+     function tagend_extension_makefile($attr, $data) {
+-        return $this->extension->addMakeFragment(CodeGen_Tools_IndentC::linetrim($data));
++        return $this->extension->addMakeFragment((new CodeGen_Tools_IndentC)->linetrim($data));
+     }
+ 
+     function tagend_group_makefile($attr, $data)
+@@ -537,7 +537,7 @@
+     }
+     
+     function tagend_deps_configm4($attr, $data) {
+-        return $this->extension->addConfigFragment(CodeGen_Tools_IndentC::linetrim($data), 
++        return $this->extension->addConfigFragment((new CodeGen_Tools_IndentC)->linetrim($data), 
+                                                    isset($attr['position']) ? $attr['position'] : "top");
+     }
+ 
+--- CodeGen-1.0.7/CodeGen/Extension.php			2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Extension.php.php54		2022-06-16 15:04:44.156770258 +0200
+@@ -372,7 +372,7 @@
+     function setPlatform($type)
+     {
+         $this->platform = new CodeGen_Tools_Platform($type);
+-        if (PEAR::isError($this->platform)) {
++        if ((new PEAR)->isError($this->platform)) {
+             return $this->platform;
+         }
+         
+@@ -619,7 +619,7 @@
+     {
+         $targetpath = basename($path);
+         if ($dir) {
+-            if ($dir{0} == "/") {
++            if ($dir[0] == "/") {
+                 return PEAR::raiseError("only relative pathes are allowed as target dir");
+             }
+             $targetpath = $dir."/".$targetpath;
+--- CodeGen-1.0.7/CodeGen/Tools/Code.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Tools/Code.php.php54		2022-06-16 15:04:16.022583219 +0200
+@@ -87,7 +87,7 @@
+      */
+     function block($code, $indent = 1) 
+     {
+-        return CodeGen_Tools_IndentC::indent($indent*$this->indentSteps, $code);     
++        return (new CodeGen_Tools_IndentC)->indent($indent*$this->indentSteps, $code);     
+     }
+ 
+ 
+@@ -101,14 +101,14 @@
+     function varblock($code, $indent = 1) 
+     {    
+         if ($this->language == 'c') {
+-            $head = CodeGen_Tools_IndentC::indent($indent * $this->indentSteps, "do {\n");   
+-            $foot = CodeGen_Tools_IndentC::indent($indent * $this->indentSteps, "} while (0);\n");   
++            $head = (new CodeGen_Tools_IndentC)->indent($indent * $this->indentSteps, "do {\n");   
++            $foot = (new CodeGen_Tools_IndentC)->indent($indent * $this->indentSteps, "} while (0);\n");   
+             $indent++;
+         } else {
+             $head = $foot = "";
+         }
+ 
+-        $code = CodeGen_Tools_IndentC::indent($indent * $this->indentSteps, $code); 
++        $code = (new CodeGen_Tools_IndentC)->indent($indent * $this->indentSteps, $code); 
+         return $head . $code . $foot;
+     }
+ 
+--- CodeGen-1.0.7/CodeGen/Tools/Getopt.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Tools/Getopt.php.php54	2022-06-16 15:04:16.023583226 +0200
+@@ -59,7 +59,7 @@
+         // use parent methods for actual parsing, store result internaly
+         $argv = parent::readPHPArgv();
+         $this->options = parent::getopt($argv, $short_options, $long_options);
+-        if (PEAR::isError($this->options)) {
++        if ((new PEAR)->isError($this->options)) {
+             if (!is_null($usage) && is_callable($usage)) {
+                 call_user_func($usage, $this->options->message);
+                 exit(3);
+--- CodeGen-1.0.7/CodeGen/Tools/Indent.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Tools/Indent.php.php54	2022-06-16 15:04:57.059856218 +0200
+@@ -47,9 +47,10 @@
+      */
+     function tabify($text, $tabsize = 4) 
+     {
+-        return preg_replace_callback("/^(".str_repeat(" ", $tabsize).")+/m", 
+-            create_function('$matches', 'return str_repeat("\t", strlen($matches[0])/'.$tabsize.');'), 
+-            $text);
++        return preg_replace_callback("/^(".str_repeat(" ", $tabsize).")+/m",
++            function ($matches) use ($tabsize) {
++                return str_repeat("\t", strlen($matches[0])/$tabsize);
++            }, $text);
+     }
+ 
+ 
+@@ -66,9 +67,10 @@
+      */
+     function untabify($text, $tabsize = 4) 
+     {
+-        return preg_replace_callback("/^(\t)*/m", 
+-            create_function('$matches', 'return str_repeat(" ", strlen($matches[0])*'.$tabsize.');'), 
+-            $text);
++        return preg_replace_callback("/^(\t)*/m",
++            function ($matches) use ($tabsize) {
++                return str_repeat(" ", strlen($matches[0])*$tabsize);
++            }, $text);
+     }
+ 
+     /**
+@@ -94,7 +96,7 @@
+         $minIndent = 999;
+         foreach ($lines as $line) {
+             if (trim($line)=="") continue; // ignore blank lines
+-            if ($line{0} == '#') continue; // ignore preprocessor instructions
++            if ($line[0] == '#') continue; // ignore preprocessor instructions
+             preg_match("|^ *|", $line, $matches); // detect leading blanks
+             $minIndent = min($minIndent, strlen($matches[0]));
+         }
+--- CodeGen-1.0.7/CodeGen/Tools/Outbuf.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Tools/Outbuf.php.php54	2022-06-16 15:04:16.024583232 +0200
+@@ -97,13 +97,13 @@
+             $fp = new CodeGen_Tools_FileReplacer($this->path);
+             
+             if ($this->flags && self::OB_TABIFY) {
+-                $text = CodeGen_Tools_Indent::tabify($text);
++                $text = (new CodeGen_Tools_Indent)->tabify($text);
+             } else if ($this->flags && self::OB_UNTABIFY) {
+-                $text = CodeGen_Tools_Indent::untabify($text);
++                $text = (new CodeGen_Tools_Indent)->untabify($text);
+             }
+             
+             if ($this->flags && self::OB_DOSIFY) {
+-                $text = CodeGen_Tools_Indent::tabify($text);
++                $text = (new CodeGen_Tools_Indent)->tabify($text);
+             }
+             
+             $fp->puts($text);
+--- CodeGen-1.0.7/CodeGen/Tools/Tokenizer.php		2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/Tools/Tokenizer.php.php54	2022-06-16 15:05:36.062116728 +0200
+@@ -99,7 +99,7 @@
+             return "";
+         }
+ 
+-        return ($this->string{$this->pos++});
++        return ($this->string[$this->pos++]);
+     }
+ 
+     /**
+--- CodeGen-1.0.7/CodeGen/XmlParser.php			2010-09-27 13:47:50.000000000 +0200
++++ CodeGen-1.0.7/CodeGen/XmlParser.php.php54		2022-06-16 15:06:36.291521009 +0200
+@@ -247,7 +247,7 @@
+      */
+     public function parse() 
+     {
+-        if (!is_resource($this->parser)) {
++        if (!is_resource($this->parser) && !is_object($this->parser)) {
+             return PEAR::raiseError("Can't create XML parser");
+         }
+ 
+@@ -365,7 +365,7 @@
+         $method = $this->findHandler("tagstart");
+         if ($method) {
+             $err = $this->$method($attr);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 $this->error = $err;
+                 $this->error->addUserInfo($this->posString());
+             }
+@@ -413,7 +413,7 @@
+ 
+         if ($method) {
+             $err = $this->$method($attr, $this->data, $this->dataLine, $this->filename);
+-            if (PEAR::isError($err)) {
++            if ((new PEAR)->isError($err)) {
+                 $this->error = $err;
+                 $this->error->addUserInfo($this->posString());                                   
+             }

@@ -1,0 +1,24 @@
+Fixes this warning:
+
+/usr/lib/python3.14/site-packages/setuptools/config/_apply_pyprojecttoml.py:55: SetuptoolsDeprecationWarning: 'tool.setuptools.license-files' is deprecated in favor of 'project.license-files' (available on setuptools>=77.0.0).
+!!
+
+        ********************************************************************************
+
+        By 2026-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license-files for details.
+        ********************************************************************************
+
+!!
+
+--- JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/pyproject.toml.orig	2023-12-04 02:58:10.000000000 -0700
++++ JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/pyproject.toml	2025-09-30 11:28:08.787676878 -0600
+@@ -9,6 +9,4 @@ description = "A simple interface to Pol
+ authors = [{name = "Sebastian Gutsche", email = "sebastian.gutsche@gmail.com"}]
+ urls = {Homepage = "https://github.com/sebasguts/JuPyMake"}
+ readme = "README.md"
+-
+-[tool.setuptools]
+ license-files = ["COPYING", "GPLv2"]

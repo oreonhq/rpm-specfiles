@@ -1,0 +1,12 @@
+diff --color -Nur rkhunter-1.4.6/files/rkhunter rkhunter-1.4.6-build/rkhunter-1.4.6/files/rkhunter
+--- rkhunter-1.4.6/files/rkhunter	2026-01-03 10:15:00.159046977 -0800
++++ rkhunter-1.4.6/files/rkhunter	2026-01-03 10:18:12.190029798 -0800
+@@ -17615,7 +17615,7 @@
+ 		#
+ 
+ 		if [ -z "${SYSLOG_CONFIG_FILE}" ]; then
+-			SYSLOG_CONFIG_FILE="/etc/syslog.conf /etc/rsyslog.conf /etc/syslog-ng/syslog-ng.conf /etc/systemd/journald.conf /etc/systemd/systemd-journald.conf"
++			SYSLOG_CONFIG_FILE="/etc/syslog.conf /etc/rsyslog.conf /etc/syslog-ng/syslog-ng.conf /etc/systemd/journald.conf /etc/systemd/systemd-journald.conf /usr/lib/systemd/journald.conf"
+ 		fi
+ 
+ 		if [ "${SYSLOG_CONFIG_FILE}" = "NONE" ]; then

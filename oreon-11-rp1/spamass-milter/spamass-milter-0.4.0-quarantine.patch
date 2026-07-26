@@ -1,0 +1,162 @@
+Add the ability to request sendmail to quarantine a message rather than
+reject the message.
+
+--- spamass-milter.1.in
++++ spamass-milter.1.in
+@@ -19,6 +19,7 @@
+ .Op Fl m
+ .Op Fl M
+ .Op Fl P Ar pidfile
++.Op Fl Q Ar nn
+ .Op Fl r Ar nn
+ .Op Fl r rejectmsg
+ .Op Fl u Ar defaultuser
+@@ -47,6 +48,8 @@ Redirects tagged spam to the specified e
+ All envelope recipients are removed, and inserted into the message as
+ .Ql X-Spam-Orig-To:
+ headers.
++It does not apply to message that are quarantined with
++.Fl Q .
+ .It Fl B Ar spamaddress
+ Same as
+ .Fl b ,
+@@ -157,6 +160,7 @@ headers as well.
+ Both tagged and untagged mail gets passed through unchanged.
+ To be useful, this option should be used with the
+ .Fl r ,
++.Fl Q ,
+ .Fl b , 
+ or
+ .Fl B
+@@ -170,6 +174,21 @@ headers will still be added.
+ Create the file
+ .Ar pidfile ,
+ containing the processid of the milter.
++.It Fl Q Ar nn
++Quarantine scanned email in sendmail's quarantine queue,
++if it greater than or equal to
++.Ar nn .
++If 
++.Ar -1 ,
++quarantine scanned email if SpamAssassin tags it as spam (useful if you
++are also using the
++.Fl u
++flag, and users have changed their required_hits value).
++.Pp
++This can be used with
++.Fl r ,
++but reject takes precedence, so the value given here should have a lower
++value.
+ .It Fl r Ar nn
+ Reject scanned email if it greater than or equal to
+ .Ar nn .
+--- spamass-milter.cpp
++++ spamass-milter.cpp
+@@ -137,7 +137,7 @@ struct smfiDesc smfilter =
+   {
+     FilterName, // filter name
+     SMFI_VERSION,   // version code -- leave untouched
+-    SMFIF_ADDHDRS|SMFIF_CHGHDRS|SMFIF_CHGBODY,  // flags
++    SMFIF_ADDHDRS|SMFIF_CHGHDRS|SMFIF_CHGBODY|SMFIF_QUARANTINE,  // flags
+     mlfi_connect, // info filter callback
+     mlfi_helo, // HELO filter callback
+     mlfi_envfrom, // envelope sender filter callback
+@@ -159,6 +159,8 @@ const char *const debugstrings[] = {
+ int flag_debug = (1<<D_ALWAYS);
+ bool flag_reject = false;
+ int reject_score = -1;
++bool flag_quarant = false;
++int quarant_score = -1;
+ bool dontmodifyspam = false;    // Don't modify/add body or spam results headers
+ bool dontmodify = false;        // Don't add SA headers, ever.
+ bool flag_sniffuser = false;
+@@ -185,7 +187,7 @@ int
+ main(int argc, char* argv[])
+ {
+    int c, err = 0;
+-   const char *args = "afd:mMp:P:r:u:D:i:b:B:e:xS:R:C:g:";
++   const char *args = "afd:mMp:P:r:u:D:i:b:B:e:xS:R:C:g:Q:";
+    char *sock = NULL;
+    char *group = NULL;
+    bool dofork = false;
+@@ -244,6 +246,10 @@ main(int argc, char* argv[])
+                 flag_reject = true;
+                 reject_score = atoi(optarg);
+                 break;
++            case 'Q':
++                flag_quarant = true;
++                quarant_score = atoi(optarg);
++                break;
+             case 'S':
+                 path_to_sendmail = strdup(optarg);
+                 break;
+@@ -287,6 +293,12 @@ main(int argc, char* argv[])
+         }
+     }
+ 
++   if ((flag_quarant && flag_reject) && (quarant_score >= reject_score))
++   {
++	fprintf(stderr, "If both -r and -Q are used, -r score must be higher than -Q score\n");
++	err = 1;
++   }
++
+    if (flag_full_email && !flag_sniffuser)
+    {
+    	  fprintf(stderr, "-e flag requires -u\n");
+@@ -321,6 +333,8 @@ main(int argc, char* argv[])
+       cout << "   -m: don't modify body, Content-type: or Subject:" << endl;
+       cout << "   -M: don't modify the message at all" << endl;
+       cout << "   -P pidfile: Put processid in pidfile" << endl;
++      cout << "   -Q nn: quarantine messages with a score >= nn\n"
++              "          use -1 to quarantine any messages tagged by SA." << endl;
+       cout << "   -r nn: reject messages with a score >= nn with an SMTP error.\n"
+               "          use -1 to reject any messages tagged by SA." << endl;
+       cout << "   -R RejectText: using this Reject Text." << endl;
+@@ -481,13 +495,16 @@ assassinate(SMFICTX* ctx, SpamAssassin*
+   update_or_insert(assassin, ctx, assassin->spam_status(), &SpamAssassin::set_spam_status, "X-Spam-Status");
+ 
+   /* Summarily reject the message if SA tagged it, or if we have a minimum
+-     score, reject if it exceeds that score. */
+-  if (flag_reject)
++     score, reject if it exceeds that score. Same for quarantine. */
++  if (flag_reject || flag_quarant)
+   {
+ 	bool do_reject = false;
+-	if (reject_score == -1 && !assassin->spam_flag().empty())
++	bool do_quarant = false;
++	if (reject_score == -1 && !assassin->spam_flag().empty() && flag_reject)
+ 		do_reject = true;
+-	if (reject_score != -1)
++	if (quarant_score == -1 && !assassin->spam_flag().empty() && flag_quarant)
++		do_quarant = true;
++	if ((reject_score != -1) || (quarant_score != -1))
+ 	{
+ 		int score, rv;
+ 		const char *spam_status = assassin->spam_status().c_str();
+@@ -503,8 +520,10 @@ assassinate(SMFICTX* ctx, SpamAssassin*
+ 		else 
+ 		{
+ 			debug(D_MISC, "SA score: %d", score);
+-			if (score >= reject_score)
++			if ((score >= reject_score) && flag_reject)
+ 				do_reject = true;
++			if ((score >= quarant_score) && flag_quarant)
++				do_quarant = true;
+ 		}
+ 	}
+ 	if (do_reject)
+@@ -542,6 +561,14 @@ assassinate(SMFICTX* ctx, SpamAssassin*
+ 		}
+ 		return SMFIS_REJECT;
+ 	}
++	if (do_quarant)
++	{
++		debug(D_MISC, "Quarantining");
++		if ( smfi_quarantine( ctx, const_cast<char *>("SPAM") ) != MI_SUCCESS) {
++			throw string( "Failed to quarantine" );
++		}
++		return SMFIS_CONTINUE;
++	}
+   }
+ 
+   /* Drop the message into the spam bucket if it's spam */

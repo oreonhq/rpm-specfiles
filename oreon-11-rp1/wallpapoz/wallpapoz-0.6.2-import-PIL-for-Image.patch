@@ -1,0 +1,132 @@
+diff -ruN wallpapoz-0.6.2.orig/setup.py wallpapoz-0.6.2/setup.py
+--- wallpapoz-0.6.2.orig/setup.py	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/setup.py	2013-01-14 15:57:08.902128603 -0500
+@@ -123,7 +123,7 @@
+       print "    !!! Python Glade ............. ", _("Not found")
+       required_found = False
+   try:
+-    import Image
++    from PIL import Image
+     print "    Python Imaging Library ....... OK"
+   except ImportError:
+     print "    !!! Python Imaging Library ... ", _("Not found")
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz wallpapoz-0.6.2/src/wallpapoz
+--- wallpapoz-0.6.2.orig/src/wallpapoz	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz	2013-01-14 16:00:16.960947005 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.anime wallpapoz-0.6.2/src/wallpapoz.anime
+--- wallpapoz-0.6.2.orig/src/wallpapoz.anime	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.anime	2013-01-14 15:58:53.632027371 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.deletefirst wallpapoz-0.6.2/src/wallpapoz.deletefirst
+--- wallpapoz-0.6.2.orig/src/wallpapoz.deletefirst	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.deletefirst	2013-01-14 15:59:32.240990119 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.deletelastone wallpapoz-0.6.2/src/wallpapoz.deletelastone
+--- wallpapoz-0.6.2.orig/src/wallpapoz.deletelastone	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.deletelastone	2013-01-14 15:59:20.417001528 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.dircheck wallpapoz-0.6.2/src/wallpapoz.dircheck
+--- wallpapoz-0.6.2.orig/src/wallpapoz.dircheck	2013-01-14 15:56:24.057172107 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.dircheck	2013-01-14 15:57:32.238106009 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.noitem wallpapoz-0.6.2/src/wallpapoz.noitem
+--- wallpapoz-0.6.2.orig/src/wallpapoz.noitem	2013-01-14 15:56:24.057172107 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.noitem	2013-01-14 15:57:47.354091394 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.nonutf8 wallpapoz-0.6.2/src/wallpapoz.nonutf8
+--- wallpapoz-0.6.2.orig/src/wallpapoz.nonutf8	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.nonutf8	2013-01-14 15:59:04.928016478 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.patch_init wallpapoz-0.6.2/src/wallpapoz.patch_init
+--- wallpapoz-0.6.2.orig/src/wallpapoz.patch_init	2013-01-14 15:56:24.057172107 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.patch_init	2013-01-14 15:58:33.808046499 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.workspace_img wallpapoz-0.6.2/src/wallpapoz.workspace_img
+--- wallpapoz-0.6.2.orig/src/wallpapoz.workspace_img	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.workspace_img	2013-01-14 15:59:54.968968202 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome
+diff -ruN wallpapoz-0.6.2.orig/src/wallpapoz.workspace_num_incr wallpapoz-0.6.2/src/wallpapoz.workspace_num_incr
+--- wallpapoz-0.6.2.orig/src/wallpapoz.workspace_num_incr	2013-01-14 15:56:24.058172106 -0500
++++ wallpapoz-0.6.2/src/wallpapoz.workspace_num_incr	2013-01-14 16:00:08.673954992 -0500
+@@ -35,7 +35,7 @@
+ import sys
+ import stat
+ import gettext
+-import Image
++from PIL import Image
+ 
+ try:
+   import gnome

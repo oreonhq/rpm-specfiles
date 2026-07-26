@@ -1,0 +1,12 @@
+[Unit]
+Description=small, efficient HTTP/SSL proxy daemon
+Documentation=man:tinyproxy(8)
+After=network.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/tinyproxy -d
+ExecReload=/usr/bin/kill -USR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,423 @@
+--- tth/tools/choice.c.orig	2011-01-24 18:20:04.000000000 -0700
++++ tth/tools/choice.c	2025-01-15 14:34:31.710841538 -0700
+@@ -1,4 +1,7 @@
+ /* Direct implementation of dos choice, since e.g. WinNT does not have it. */
++#include <stdio.h>
++
++int
+ main(int argc, char *argv[])
+ {
+   int i;
+@@ -10,4 +13,5 @@ main(int argc, char *argv[])
+   }else{
+     return 2;
+   }
++  return 0;
+ }
+--- tth/tools/tthsplit.c.orig	2011-01-24 18:20:04.000000000 -0700
++++ tth/tools/tthsplit.c	2025-01-15 14:33:05.775985149 -0700
+@@ -7,11 +7,9 @@ Copyright 2004 I.H.Hutchinson.
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+-main(argc,argv)
+-int argc;
+-char *argv[];
++int
++main(int argc, char *argv[])
+ {
+-int slen;
+ char *ch,*ch2;
+ char bound[LINELEN]={0};
+ char buff[LINELEN]={0};
+@@ -55,6 +53,7 @@ while(fgets(buff,LINELEN,stdin) != NULL)
+   } else fputs(buff,file);
+ }
+ fclose(file);
++return 0;
+ }
+ 
+ 
+--- tth/tthg.lex.orig	2022-11-18 11:30:09.000000000 -0700
++++ tth/tthg.lex	2025-01-15 14:26:45.358043870 -0700
+@@ -117,8 +117,8 @@ Bit 16. 32768 Silence unknown command wa
+ #define YY_NO_TOP_STATE
+ 
+     /* lex Globals */
+-void tth_push(),tth_pop();
+-char* tth_symbol_point();
++void tth_push(char *arg), tth_pop(char *arg);
++char* tth_symbol_point(const char *chsym);
+ int tth_root_len[TTH_MAXDEPTH] ={0};
+ char tth_root_index[TTH_MAXDEPTH][TTH_CHARLEN]={{0}};
+ int tth_root_depth=0;
+@@ -313,14 +313,18 @@ char *tth_builtins = "\\def\\bye{\\vfill
+ \\def\\nolinkurl#1{\\verb!#1!}";
+ 
+  /* static functions */
+-static int indexkey();
+-static void mkkey(),rmkey(),rmdef(),mkdef();
+-static void delimit();
+-static int b_align();
+-static int roman();
+-static int scaledpoints();
+-static void tagpurge();
+-static int adddimen();
++static int indexkey(const char *key, char *keys[], const int *nkeys);
++static void mkkey(const char *key, char *keys[], int *nkeys);
++static void rmkey(char *keys[], int *nkeys);
++static void rmdef(char *keys[], char *defs[], int *nkeys);
++static void mkdef(const char *key, char *keys[], const char *def,
++		  char *defs[], const int *narg, int nargs[], int *nkeys);
++static void delimit(const char *type, int heightin, char *codes);
++static int b_align(char *thestring, int tth_debug);
++static int roman(int num, char *rm);
++static int scaledpoints(float thenumber, const char *thedimension);
++static void tagpurge(char *eqstr);
++static int adddimen(float *number1, char *unit1, float *number2, char *unit2);
+ 
+ %}
+ 
+@@ -551,7 +555,10 @@ BRCG    \{[^\}]*\}
+     include_stack[tth_stack_ptr++] = YY_CURRENT_BUFFER;
+ char *buffdeep="**** Error: FATAL. Scan buffers nested too deeply. Infinite loop? Line %d.\n";
+ #define TTH_SCAN_STRING TTH_PUSH_BUFF(0);yy_scan_string
+-extern void tth_epsf(),tth_symext(),tth_encode(),tth_undefine();
++extern void tth_epsf(char *arg, int epsftype);
++extern void tth_symext(const char *charin, char *charout);
++extern void tth_encode(char *code, int num);
++extern void tth_undefine(char *keys[], int *nkeys, int udkey, int *lkeys);
+  /*Not static except for tthfunc*/
+ #define STATIC
+ STATIC char closing[TTH_CHARLEN]={0};
+@@ -645,7 +652,8 @@ STATIC char *margkeys[NARMAX]={0};
+ STATIC char *margs[NARMAX]={0};
+ STATIC int margn[NARMAX]={0};
+ /* Fractions and math */
+-extern void tth_enclose(),tth_prefix();
++extern void tth_enclose(const char *str0, char *str1, const char *str2, char *store);
++extern void tth_prefix(const char *str0, char *str1, char *store);
+ STATIC int eqdepth=0;
+ STATIC char *eqstrs[NFNMAX];
+ STATIC char eqstr[4*TTH_DLEN]={0};
+@@ -720,7 +728,7 @@ STATIC int tthglue=0;
+ STATIC int tth_eqwidth=100;
+ STATIC int dimadvstate=0;
+ #define TTH_INDPC 5
+-extern int tth_group();
++extern int tth_group(char *group, const char *text, int len);
+  /* Number of scaledpoints per screen pixel. 100 pixels per inch. */
+ #define SCALEDPERPIXEL (65536*72/100)
+  /* Guess of the screen width in pixels larger than real is usually the best
+@@ -728,7 +736,7 @@ extern int tth_group();
+ #define DEFAULTHSIZEPIX 1000
+ /* extern int tth_halcode(); */
+ STATIC int boxborder=0;
+-extern int tth_cmykcolor();
++extern int tth_cmykcolor(const char *ch, float *c, float *m, float *y, float *k);
+ STATIC char xpndstring[2]={0};
+ STATIC int bibliogs=0;
+ STATIC int verbinput=0;
+@@ -5996,9 +6004,7 @@ maybe insert the following in the preamb
+ %%
+  /********************************** CODE ******************************/
+ 
+-int main(argc,argv)
+-int argc;
+-char *argv[];
++int main(int argc, char *argv[])
+ {
+ int raw=0,httpcont=0;
+ int i,ilatex=0,ititle=1;
+@@ -6189,8 +6195,7 @@ version %s.<br />%s</small>\n",TTH_SMALL
+   return 0;
+ } /* end main */
+ 
+-void tth_push(arg)
+-char arg[];
++void tth_push(char *arg)
+ {
+ 	if(tth_debug&16) fprintf(stderr,"tth_push:%s depth:%d\n",\
+ 			arg,tth_push_depth);	
+@@ -6210,8 +6215,7 @@ char arg[];
+ 	arg[0]=0;
+ }
+ 
+-void tth_pop(arg)
+-char arg[];
++void tth_pop(char *arg)
+ {
+   if(tth_push_depth < 1){ 
+     fprintf(stderr,"**** Error: Fatal. Apparently too many }s.\nCheck for TeX errors or incompatibilities before line %d,\nnext material      ",tth_num_lines);
+@@ -6230,9 +6234,7 @@ char arg[];
+    Process epsbox. If epsftype=0 put link. Arg is the file name.
+    epsftype=1 Convert the ps or eps file to a gif reference. 
+    epsftype=2 Ditto but inline it. epsftype=3 inline an iconized version.*/
+-void tth_epsf(arg,epsftype)
+-char *arg;
+-int epsftype;
++void tth_epsf(char *arg, int epsftype)
+ {
+ #define NCONV 2
+ #define NGTYPES 4
+@@ -6363,10 +6365,7 @@ if(epsftype==0){
+ /**************************************************************************/
+ /* handling code for defs */
+ 
+-static int indexkey(key,keys,nkeys)
+-char *key;
+-char *keys[];
+-int *nkeys;
++static int indexkey(const char *key, char *keys[], const int *nkeys)
+ {
+   int i, j;
+   j=-1;
+@@ -6379,10 +6378,7 @@ int *nkeys;
+   return j;
+ }
+ 
+-static void mkkey(key,keys,nkeys)
+-char *key;
+-char *keys[];
+-int *nkeys;
++static void mkkey(const char *key, char *keys[], int *nkeys)
+ {
+   size_t size;
+   size=strlen(key)+1;
+@@ -6391,14 +6387,8 @@ int *nkeys;
+   (*nkeys)++;
+ }
+ 
+-static void mkdef(key,keys,def,defs,narg,nargs,nkeys)
+-char *key;
+-char *keys[];
+-char *def;
+-char *defs[];
+-int *narg;
+-int nargs[];
+-int *nkeys;
++static void mkdef(const char *key, char *keys[], const char *def,
++		  char *defs[], const int *narg, int nargs[], int *nkeys)
+ {
+   size_t size;
+   size=strlen(key)+1;
+@@ -6411,9 +6401,7 @@ int *nkeys;
+   (*nkeys)++;
+ }
+ 
+-static void rmkey(keys,nkeys)
+-char *keys[];
+-int *nkeys;
++static void rmkey(char *keys[], int *nkeys)
+ {
+   if((*nkeys) > 0){
+     (*nkeys)--;
+@@ -6424,10 +6412,7 @@ int *nkeys;
+   }
+ }
+ 
+-static void rmdef(keys,defs,nkeys)
+-char *keys[];
+-char *defs[];
+-int *nkeys;
++static void rmdef(char *keys[], char *defs[], int *nkeys)
+ {
+   if((*nkeys) > 0){
+     (*nkeys)--;
+@@ -6440,11 +6425,7 @@ int *nkeys;
+   }
+ }
+ 
+-void tth_undefine(keys,nkeys,udkey,lkeys)
+-char *keys[];
+-int *nkeys;
+-int udkey;
+-int lkeys[];
++void tth_undefine(char *keys[], int *nkeys, int udkey, int *lkeys)
+      /* Undefine all local keys (lkeys(n)=1) from udkey to nkeys-1 */
+ {
+   /*static void rmkey();*/
+@@ -6465,8 +6446,8 @@ int lkeys[];
+   }
+ }
+ 
+-void tth_enclose(str0,str1,str2,store) /* Enclose str1 with str0, str2 */
+-char *str0, *str2, *str1, *store;
++void tth_enclose(const char *str0, char *str1, const char *str2, char *store)
++/* Enclose str1 with str0, str2 */
+ { /* Exit if string gets more than 3.5 of the 4*max */
+   int lost;
+   strcpy(store,str1);
+@@ -6489,8 +6470,8 @@ char *str0, *str2, *str1, *store;
+   }
+ }
+ 
+-void tth_prefix(str0,str1,store)  /* Prefix str1 by str0, in str1 */
+-char *str0, *str1, *store;
++void tth_prefix(const char *str0, char *str1, char *store)
++/* Prefix str1 by str0, in str1 */
+ {
+   int lost;
+   strcpy(store,str1);
+@@ -6508,7 +6489,7 @@ char *str0, *str1, *store;
+ }
+ /************************************************************************/
+ /* start delimit */
+-static void delimit(char *type, int heightin, char *codes)
++static void delimit(const char *type, int heightin, char *codes)
+      /* Return codes corresponding to a delimiter of given type and height*/
+ {
+ #define notypes 14
+@@ -6649,8 +6630,7 @@ static void delimit(char *type, int heig
+   /* end delimit */
+   /*start symext*/
+ /**************** Construct large, possibly extended, character. */
+-void tth_symext(charin,charout)
+-char *charin,*charout;
++void tth_symext(const char *charin, char *charout)
+ {
+   int horizmode=1; /* In equations use font tags not divs */
+   char chr1[2]={0};
+@@ -6689,9 +6669,7 @@ char *charin,*charout;
+ }
+   /*end symext*/
+ /***************** Encode 3-digit integers *************************/
+-void tth_encode(code,num)
+-char *code;
+-int num;
++void tth_encode(char *code, int num)
+ {
+ int i;
+ sprintf(code,"%03d",num);
+@@ -6701,9 +6679,7 @@ for (i=0;i<3;i++) *(code+i)=*(code+i) +
+ /*******************************************************************/
+ /* Find the first brace group in the string "text" and copy it to the
+    string group, whose maximum length is len, value returned 0 if successful.*/
+-int tth_group(group,text,len)
+-char *text,*group;
+-int len;
++int tth_group(char *group, const char *text, int len)
+ {
+   int i,j;
+   int brace;
+@@ -6770,9 +6746,7 @@ static int roman(int num, char *rm)
+  */
+ #define BMAXLEN 1000
+ #define NSTS 20
+-static int b_align(thestring,tth_debug)
+-     char *thestring;
+-     int tth_debug;
++static int b_align(char *thestring, int tth_debug)
+ {
+   char buff1[BMAXLEN];
+   char *chr,*chr1,*chr2;
+@@ -6830,9 +6804,7 @@ This needs 4 byte integers.
+ #define EMPOINTS 12
+ #define ENPOINTS 6
+ #define EXPOINTS 10
+-static int scaledpoints(thenumber,thedimension)
+-     float thenumber;
+-     char *thedimension;
++static int scaledpoints(float thenumber, const char *thedimension)
+ {
+ int dimval;
+ if(strstr(thedimension,"pt")==thedimension)dimval=65536;
+@@ -6852,9 +6824,7 @@ return ((int) (dimval*thenumber));
+ }
+ 
+ /* Add dimension 2 into dimension 1*/
+-static int adddimen(number1,unit1,number2,unit2)
+-     float *number1,*number2;
+-     char *unit1,*unit2;
++static int adddimen(float *number1, char *unit1, float *number2, char *unit2)
+ {
+   if(*unit1=='%'){/* hsize supercedes others */
+     if(*unit2=='%') {
+@@ -6968,9 +6938,7 @@ struct tth_ct tth_colortable[N_COLORS] =
+ };
+ 
+ /********************************  Return a named color if it exists.*/
+-int tth_cmykcolor(ch,c,m,y,k)
+-char *ch;
+-float *c,*m,*y,*k;
++int tth_cmykcolor(const char *ch, float *c, float *m, float *y, float *k)
+ {
+ extern struct tth_ct tth_colortable[N_COLORS];
+ int i;
+@@ -6999,12 +6967,11 @@ containing the unicode HTML numeric ref(
+ 
+ char tth_chuni[TTH_CHARLEN];
+ 
+-char* tth_symbol_point(chsym)
+-     char *chsym;
++char* tth_symbol_point(const char *chsym)
+ {
+   /* this table is based on the test/symbols.html file of MathML*/
+   /* It is used if the global tth_unicode == 1 */
+-char *tth_sympoint[256]={
++static const char *tth_sympoint[256]={
+ /*0*/ "&nbsp;",/*1*/ "&nbsp;",/*2*/ "&nbsp;",/*3*/ "&nbsp;",
+ /*4*/ "&nbsp;",/*5*/ "&nbsp;",/*6*/ "&nbsp;",/*7*/ "&nbsp;",
+ /*8*/ "&nbsp;",/*9*/ "&nbsp;",/*10*/ "&nbsp;",/*11*/ "&nbsp;",
+@@ -7071,7 +7038,7 @@ char *tth_sympoint[256]={
+ /*252*/ "&#63740;",/*253*/ "&#63741;",/*254*/ "&#63742;",/*255*/ "&nbsp;"
+ };
+   /* this table is based on Unicode 3.2*/
+-char *tth_sympoint2[256]={
++static const char *tth_sympoint2[256]={
+ /*0*/ "&nbsp;",/*1*/ "&nbsp;",/*2*/ "&nbsp;",/*3*/ "&nbsp;"
+ ,/*4*/ "&nbsp;",/*5*/ "&nbsp;",/*6*/ "&nbsp;",/*7*/ "&nbsp;"
+ ,/*8*/ "&nbsp;",/*9*/ "&nbsp;",/*10*/ "&nbsp;",/*11*/ "&nbsp;",
+@@ -7161,8 +7128,7 @@ char *tth_sympoint2[256]={
+  return tth_chuni;
+ }
+ /*************************************/
+-void tagpurge(eqstr)
+-     char *eqstr;
++void tagpurge(char *eqstr)
+ {
+   char *position;
+   char eqpurge[4*TTH_DLEN];
+--- tth/tthgold/tthrfcat.c.orig	2011-01-24 18:20:04.000000000 -0700
++++ tth/tthgold/tthrfcat.c	2025-01-15 14:49:16.436044571 -0700
+@@ -12,13 +12,13 @@ Copyright 2000 I.H.Hutchinson.
+ 
+ #define LINELEN 256
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ #define TEMPFILE "refs.temp"
+-main(argc,argv)
+-int argc;
+-char *argv[];
++int
++main(int argc, char *argv[])
+ {
+-int ifile,ifinal;
++int ifile,ifinal = 0;
+ char *ch,*ch2;
+ char cmdline[LINELEN];
+ char bound[LINELEN];
+@@ -49,12 +49,13 @@ FILE *tempfile, *reffile;
+      } while (ch2!=NULL && ch == NULL); /* in header lines down to </title> */
+ 
+      while(fgets(buff,LINELEN,reffile) != NULL){
+-       if(!strstr(buff,"</head>") && !strstr(buff,"<body>") || !ifile) 
++       if((!strstr(buff,"</head>") && !strstr(buff,"<body>")) || !ifile) {
+ 	 if(strstr(buff,"</html>") || strstr(buff,"</body>") ){
+ 	   break; /*from while*/
+ 	 }else{
+ 	   fputs(buff,tempfile);
+ 	 }
++       }
+      }
+      fclose(reffile);
+      if(ifile) {
+@@ -80,6 +81,7 @@ FILE *tempfile, *reffile;
+    sprintf(bound,"%s %s",RMCMD,TEMPFILE);
+    system(bound);
+  }
++ return 0;
+ }
+ 
+ 

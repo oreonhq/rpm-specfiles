@@ -1,0 +1,45 @@
+From 089840dbe3d44363e55e319ff8f478c28c974e8b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 6 Apr 2020 16:24:42 +0200
+Subject: [PATCH] Respect a system crypto policy
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Software is not allowed to override system-wide cryptographic policy.
+<https://fedoraproject.org/wiki/Packaging:CryptoPolicies#C.2FC.2B.2B_applications>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/enc.h       | 1 -
+ src/sslhelper.c | 3 ---
+ 2 files changed, 4 deletions(-)
+
+diff --git a/src/enc.h b/src/enc.h
+index 9d580e5..d8ffb63 100644
+--- a/src/enc.h
++++ b/src/enc.h
+@@ -1626,7 +1626,6 @@ static void show_cert(int sock) {
+ 	SSL_CTX_set_mode(ctx, mode);
+ 
+ 	if (getenv("ULTRAVNC_DSM_HELPER_SHOWCERT_ADH")) {
+-		SSL_CTX_set_cipher_list(ctx, "ADH:@STRENGTH");
+ 		SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, NULL);
+ 	}
+ 
+diff --git a/src/sslhelper.c b/src/sslhelper.c
+index 1a3e747..a145a70 100644
+--- a/src/sslhelper.c
++++ b/src/sslhelper.c
+@@ -1601,9 +1601,6 @@ static int switch_to_anon_dh(void) {
+ 	/* Security level must be set to 0 for unauthenticated suites. */
+ 	SSL_CTX_set_security_level(ctx, 0);
+ #endif
+-	if (!SSL_CTX_set_cipher_list(ctx, "ADH:@SECLEVEL=0")) {
+-		return 0;
+-	}
+ 	if (!add_anon_dh()) {
+ 		return 0;
+ 	}
+-- 
+2.21.1

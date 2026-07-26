@@ -1,0 +1,27 @@
+From febce73af0b529b99b8e0e05c257ec1209e968c8 Mon Sep 17 00:00:00 2001
+From: Toshio Kuratomi <a.badger@gmail.com>
+Date: Sun, 12 Jun 2022 19:23:55 -0700
+Subject: [PATCH] Remove the import of imp.find_module.
+
+Usage of find_module has been replaced by importlib.
+
+The imp module is going to be removed in python 3.12
+---
+ straight/plugin/loaders.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/straight/plugin/loaders.py b/straight/plugin/loaders.py
+index 8d628c2..1de996c 100644
+--- a/straight/plugin/loaders.py
++++ b/straight/plugin/loaders.py
+@@ -4,7 +4,6 @@ import sys
+ import os
+ 
+ from importlib import import_module
+-from imp import find_module
+ 
+ from straight.plugin.manager import PluginManager
+ 
+-- 
+2.41.0
+

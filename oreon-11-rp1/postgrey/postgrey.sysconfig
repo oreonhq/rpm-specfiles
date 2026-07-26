@@ -1,0 +1,25 @@
+# Postgrey offers 2 listening types, --inet and --unix. As default, Fedora
+# postgrey works under UNIX socket, but, changing to TCP socket on user's own
+# is also available, for instance, let it work at 10023 port of localhost:
+#   --inet=10023
+# To be more detailed, there is another way if you still run it at localhost:
+#   --inet=127.0.0.1:10023
+POSTGREY_TYPE="--unix=/var/spool/postfix/postgrey/socket"
+
+# If postgrey works under UNIX socket way, PID file can be specified to
+# custom location, note that no need to set this if postgrey is working
+# under TCP socket way.
+POSTGREY_PID="--pidfile=/var/run/postgrey.pid"
+
+# Name of group which postgrey belongs, default is postgrey
+POSTGREY_GROUP="--group=postgrey"
+
+# Name of user which postgrey belongs, default is postgrey
+POSTGREY_USER="--user=postgrey"
+
+# DELAY
+POSTGREY_DELAY="--delay=60"
+
+# For more options can be used, please read manpage or execute `postgrey -h`.
+# Custom options.
+POSTGREY_OPTS=""

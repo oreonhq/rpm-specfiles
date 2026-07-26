@@ -1,0 +1,12 @@
+diff -ru pyhunspell-0.5.5.orig/setup.py pyhunspell-0.5.5/setup.py
+--- pyhunspell-0.5.5.orig/setup.py	2018-08-06 22:57:28.000000000 +0200
++++ pyhunspell-0.5.5/setup.py	2022-11-28 09:44:26.244218217 +0100
+@@ -40,7 +40,7 @@
+     main_module_kwargs['extra_compile_args'] = ['-Wall']
+ else:
+     main_module_kwargs['define_macros'] = [('_LINUX', None)]
+-    main_module_kwargs['libraries'] = ['hunspell']
++    main_module_kwargs['libraries'] = ['hunspell-1.7']
+     main_module_kwargs['include_dirs'] = get_linux_include_dirs() + ['/usr/include/hunspell']
+     main_module_kwargs['extra_compile_args'] = ['-Wall']
+ 

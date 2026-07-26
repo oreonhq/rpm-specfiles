@@ -1,0 +1,197 @@
+From 17d205a01470edc169e9140f3b8709038758e560 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Jul 31 2023 11:46:30 +0000
+Subject: port from rust2rpm.metadata to cargo2rpm.metadata
+
+
+---
+
+diff --git a/rust_update_set/dependency_check.py b/rust_update_set/dependency_check.py
+index 427333c..c8f9039 100644
+--- a/rust_update_set/dependency_check.py
++++ b/rust_update_set/dependency_check.py
+@@ -13,7 +13,7 @@ import subprocess
+ import re
+ from typing import List
+ from bodhi.client.bindings import BodhiClient
+-from rust2rpm.core.metadata import CargoSemVer, Metadata
++from cargo2rpm.metadata import Metadata, Version, VersionReq
+ 
+ CRATE_API_URL = "https://crates.io/api/v1/"
+ 
+@@ -25,18 +25,6 @@ class DChecker:
+         # (crate, version) -> {dep.name: (dep.req, dep.nor_vers, dep.features)}
+         self.dependecies_from_crateio_cache = {}
+ 
+-    def parse_compose_req(self, req):
+-        """Parse compose req like '>=0.1.0, <0.2' to normalized reqs [(kind, version), (kind, version)]"""
+-        reqs = req.split(",")
+-        parsed_reqs = [
+-            CargoSemVer.parse(reqs[0].strip()),
+-            CargoSemVer.parse(reqs[1].strip()),
+-        ]
+-        return [
+-            (parsed_reqs[0].kind, CargoSemVer.coerce(parsed_reqs[0].version)),
+-            (parsed_reqs[1].kind, CargoSemVer.coerce(parsed_reqs[1].version)),
+-        ]
+-
+     def get_versions(self, crate):
+         """Get all existing version for a crate from crate.io"""
+         url = requests.compat.urljoin(CRATE_API_URL, f"crates/{crate}/versions")
+@@ -58,26 +46,17 @@ class DChecker:
+         """
+         versions = self.get_versions(crate)
+         latest_version = None
+-        compare_version = CargoSemVer.parse_version(version)
++        compare_version = Version.parse(version)
+         for md in versions:
+-            cur_version = CargoSemVer.parse_version(md["num"])
++            cur_version = Version.parse(md["num"])
+             # ignore prerelease version like cursive 0.17.0-alpha.0
+-            if cur_version.pre_release:
++            if cur_version.pre:
+                 continue
+-            # TODO: simplify once https://pagure.io/fedora-rust/rust2rpm/pull-request/229
+-            # is merged and released
+-            if not md["yanked"] and (
+-                CargoSemVer.eval_(cur_version, CargoSemVer.KIND_GT, compare_version)
+-                or CargoSemVer.eval_(
+-                    cur_version, CargoSemVer.KIND_SHORTEQ, compare_version
+-                )
+-            ):
++            if not md["yanked"] and (cur_version > compare_version):
+                 latest_version = cur_version
+-            if not md["yanked"] and CargoSemVer.eval_(
+-                cur_version, "<", compare_version
+-            ):
++            if not md["yanked"] and (cur_version < compare_version):
+                 break
+-        return CargoSemVer.unparse_version(latest_version)
++        return str(latest_version)
+ 
+     def get_unwanted_features(self) -> List[str]:
+         """
+@@ -146,59 +125,23 @@ class DChecker:
+         self.package_version_cache[crate] = version
+         return True, version
+ 
+-    def eval(self, v1, op, v2):
+-        """Rewrite CargoSemVer.eval_() function to compare two versions"""
+-        v1 = (int(v1.major), int(v1.minor), int(v1.patch))
+-        v2 = (int(v2.major), int(v2.minor), int(v2.patch))
+-        if op == "<=":
+-            return v1 <= v2
+-        elif op == ">=":
+-            return v1 >= v2
+-        elif op == "=":
+-            return v1 == v2
+-        elif op == ">":
+-            return v1 > v2
+-        elif op == "<":
+-            return v1 < v2
+-        else:
+-            raise ValueError(f"Cannot evaluate operator: {op}")
+-
+     def get_missing_old_dependencies(self, crate, version):
+         """Filter all dependencies and return missing dependencies and old dependencies with old version"""
+         all_dependencies = self.get_dependencies_from_local(crate, version)
+         dependencies = []
+         for dependency in all_dependencies:
+             name, req = dependency[0], dependency[1]
+-            if "," in req:
+-                normalized_vers = self.parse_compose_req(req)
+-            else:
+-                normalized_vers = CargoSemVer.normalize(CargoSemVer.parse(req))
+-            req_version = normalized_vers[0][1]  # lower bound of required versions
++            normalized_vers = VersionReq.parse(req).normalize().comparators[0]
++            req_version = Version(normalized_vers.major, normalized_vers.minor, normalized_vers.patch, normalized_vers.pre)
+             exist, latest_version = self.check_exist(name)
+             if exist:
+                 latest_version_no_tilde = latest_version.replace("~", "-")
+-                latest_version_obj = CargoSemVer.parse_version(latest_version_no_tilde)
+-                if not self.eval(latest_version_obj, ">=", req_version):
+-                    updated_version = self.get_cloest_crate_version(
+-                        name,
+-                        str(req_version.major)
+-                        + "."
+-                        + str(req_version.minor)
+-                        + "."
+-                        + str(req_version.patch),
+-                    )
+-                    dependencies.append(
+-                        (name, latest_version, updated_version, "existing")
+-                    )
++                latest_version_obj = Version.parse(latest_version_no_tilde)
++                if not latest_version_obj >= req_version:
++                    updated_version = self.get_cloest_crate_version(name, str(req_version))
++                    dependencies.append((name, latest_version, updated_version, "existing"))
+             if not exist:
+-                updated_version = self.get_cloest_crate_version(
+-                    name,
+-                    str(req_version.major)
+-                    + "."
+-                    + str(req_version.minor)
+-                    + "."
+-                    + str(req_version.patch),
+-                )
++                updated_version = self.get_cloest_crate_version(name, str(req_version))
+                 dependencies.append((name, -1, updated_version, "new"))
+         return dependencies
+ 
+@@ -267,15 +210,12 @@ class DChecker:
+                 if crate not in dependencies:
+                     # should not happen
+                     continue
+-                parsed_version = CargoSemVer.coerce(CargoSemVer.parse_version(version))
++                parsed_version = Version.parse(version)
+                 normalized_reqs = dependencies[crate][1]
+                 is_compat = self.is_compatible(normalized_reqs, parsed_version)
+                 if not is_compat:
+                     for ver in compat_versions:
+-                        if self.is_compatible(
+-                            normalized_reqs,
+-                            CargoSemVer.coerce(CargoSemVer.parse_version(ver)),
+-                        ):
++                        if self.is_compatible(normalized_reqs, Version.parse(ver)):
+                             is_compat = True
+                             break
+                 if not is_compat:
+@@ -387,9 +327,7 @@ class DChecker:
+                 name = name[6:-1]
+             if "~" in version:
+                 version = version[:-1]
+-            normalized_reqs.append(
+-                (kind, CargoSemVer.coerce(CargoSemVer.parse(version).version))
+-            )
++            normalized_reqs.append((kind, Version.parse(version)))
+         return name, normalized_reqs
+ 
+     def get_dependencies_from_repoquery(self, name):
+diff --git a/rust_update_set/tests/dependency_check_test.py b/rust_update_set/tests/dependency_check_test.py
+index dad8d33..accf1c6 100644
+--- a/rust_update_set/tests/dependency_check_test.py
++++ b/rust_update_set/tests/dependency_check_test.py
+@@ -10,7 +10,7 @@ sys.path.append("..")
+ from rust_update_set.dependency_check import DChecker
+ from dataclasses import dataclass
+ from unittest import mock
+-from rust2rpm.core.metadata import Version
++from cargo2rpm.metadata import Version
+ 
+ class DependencyCheckTest(unittest.TestCase):
+ 
+diff --git a/setup.cfg b/setup.cfg
+index 5fc97b4..dc3f342 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -25,8 +25,8 @@ classifiers =
+ [options]
+ install_requires =
+   bodhi-client
++  cargo2rpm >= 0.1.7
+   requests
+-  rust2rpm
+ packages = find:
+ include_package_data = True
+ 
+

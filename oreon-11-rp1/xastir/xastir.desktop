@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=xastir
+GenericName=Xastir
+Comment=Amateur Station Tracking and Reporting system for amateur radio
+Exec=xastir
+Icon=xastir
+Terminal=false
+Type=Application
+Categories=Network;HamRadio;
+Version=1.0

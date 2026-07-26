@@ -1,0 +1,109 @@
+From cf097286627786460fe70d5f472e6652e8322d4c Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Mon, 5 May 2025 23:03:25 -0500
+Subject: [PATCH] Drop monotonic dependency
+
+Since Python 3.3, monotonic.monotonic is an alias for the standard
+library time.monotonic.
+---
+ bravado/http_future.py | 8 ++++----
+ bravado/response.py    | 4 ++--
+ setup.py               | 1 -
+ tests/response_test.py | 2 +-
+ 4 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/bravado/http_future.py b/bravado/http_future.py
+index 3122a69..67fcab7 100644
+--- a/bravado/http_future.py
++++ b/bravado/http_future.py
+@@ -1,12 +1,12 @@
+ # -*- coding: utf-8 -*-
+ import logging
+ import sys
++import time
+ import traceback
+ import typing
+ from functools import wraps
+ from itertools import chain
+ 
+-import monotonic
+ import six
+ from bravado_core.content_type import APP_JSON
+ from bravado_core.content_type import APP_MSGPACK
+@@ -157,7 +157,7 @@ class HttpFuture(typing.Generic[T]):
+         request_config=None,  # type: typing.Optional[RequestConfig]
+     ):
+         # type: (...) -> None
+-        self._start_time = monotonic.monotonic()
++        self._start_time = time.monotonic()
+         self.future = future
+         self.response_adapter = response_adapter
+         self.operation = operation
+@@ -201,7 +201,7 @@ class HttpFuture(typing.Generic[T]):
+ 
+         try:
+             incoming_response = self._get_incoming_response(timeout)
+-            request_end_time = monotonic.monotonic()
++            request_end_time = time.monotonic()
+ 
+             swagger_result = self._get_swagger_result(incoming_response)
+ 
+@@ -221,7 +221,7 @@ class HttpFuture(typing.Generic[T]):
+ 
+         except exceptions_to_catch as e:
+             if request_end_time is None:
+-                request_end_time = monotonic.monotonic()
++                request_end_time = time.monotonic()
+             exc_info = []
+             # the return values of exc_info are annotated as Optional, but we know they are set in this case.
+             # additionally, we can't use a cast() since that caused a runtime exception on some older versions
+diff --git a/bravado/response.py b/bravado/response.py
+index 712c06b..3b18f47 100644
+--- a/bravado/response.py
++++ b/bravado/response.py
+@@ -1,7 +1,7 @@
+ # -*- coding: utf-8 -*-
++import time
+ import typing
+ 
+-import monotonic
+ from bravado_core.response import IncomingResponse
+ 
+ if getattr(typing, 'TYPE_CHECKING', False):  # Needed to avoid cyclic import.
+@@ -75,7 +75,7 @@ class BravadoResponseMetadata(typing.Generic[T]):
+         self._incoming_response = incoming_response
+         self.start_time = start_time
+         self.request_end_time = request_end_time
+-        self.processing_end_time = monotonic.monotonic()
++        self.processing_end_time = time.monotonic()
+         self.handled_exception_info = handled_exception_info
+         self.request_config = request_config
+ 
+diff --git a/setup.py b/setup.py
+index d1e2e9e..1814d3a 100755
+--- a/setup.py
++++ b/setup.py
+@@ -41,7 +41,6 @@ setup(
+         'requests >= 2.17',
+         'six',
+         'simplejson',
+-        'monotonic',
+         'typing_extensions',
+     ],
+     extras_require={
+diff --git a/tests/response_test.py b/tests/response_test.py
+index 4998217..0f2b74b 100644
+--- a/tests/response_test.py
++++ b/tests/response_test.py
+@@ -9,7 +9,7 @@ from bravado.response import BravadoResponseMetadata
+ 
+ 
+ def test_response_metadata_times():
+-    with mock.patch('monotonic.monotonic', return_value=11):
++    with mock.patch('time.monotonic', return_value=11):
+         metadata = BravadoResponseMetadata(
+             incoming_response=None,
+             swagger_result=None,
+-- 
+2.49.0
+

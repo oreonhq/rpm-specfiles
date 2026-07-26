@@ -1,0 +1,24 @@
+From b3a0e3fa1a8eff372a6b7ab5b330e61d370f9d49 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 24 Jan 2023 10:14:02 -0500
+Subject: [PATCH] Add a missing #include directive
+
+- <cstdint> for (u)int*_t
+
+Fixes failure to compile with GCC 13.
+---
+ src/steps/geom/fwd.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/steps/geom/fwd.hpp b/src/steps/geom/fwd.hpp
+index 5403ac6..792e0d9 100644
+--- a/src/steps/geom/fwd.hpp
++++ b/src/steps/geom/fwd.hpp
+@@ -1,6 +1,7 @@
+ #ifndef STEPS_GEOM_FWD_HPP
+ #define STEPS_GEOM_FWD_HPP
+ 
++#include <cstdint>
+ #include <limits>
+ #include <iosfwd>
+ #include <type_traits>

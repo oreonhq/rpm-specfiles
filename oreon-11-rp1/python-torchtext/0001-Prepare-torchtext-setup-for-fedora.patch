@@ -1,0 +1,28 @@
+From 682f34982235496b209933b23dc55a44ef0b824a Mon Sep 17 00:00:00 2001
+From: Tom Rix <trix@redhat.com>
+Date: Sat, 14 Oct 2023 08:52:53 -0700
+Subject: [PATCH] Prepare torchtext setup for fedora
+
+Do not initialize git repos
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index d008cb9c9091..f4d455a65781 100644
+--- a/setup.py
++++ b/setup.py
+@@ -93,7 +93,7 @@ class clean(distutils.command.clean.clean):
+                 shutil.rmtree(str(path), ignore_errors=True)
+ 
+ 
+-_init_submodule()
++# _init_submodule()
+ setup_info = dict(
+     # Metadata
+     name="torchtext",
+-- 
+2.44.0
+

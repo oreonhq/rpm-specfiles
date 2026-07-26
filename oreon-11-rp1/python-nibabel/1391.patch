@@ -1,0 +1,26 @@
+From bc216da7c35267f18bf3da4ae3122d56052cc168 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 26 Nov 2024 11:03:12 -0500
+Subject: [PATCH] Adapt to functools.partial becoming a method descriptor in
+ Python 3.14
+
+https://docs.python.org/dev/whatsnew/3.14.html#changes-in-the-python-api
+
+Fixes https://github.com/nipy/nibabel/issues/1390.
+---
+ nibabel/tests/test_deprecator.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nibabel/tests/test_deprecator.py b/nibabel/tests/test_deprecator.py
+index dfff78658..0fdaf2014 100644
+--- a/nibabel/tests/test_deprecator.py
++++ b/nibabel/tests/test_deprecator.py
+@@ -161,7 +161,7 @@ def test_dep_func(self):
+ class TestDeprecatorMaker:
+     """Test deprecator class creation with custom warnings and errors"""
+ 
+-    dep_maker = partial(Deprecator, cmp_func)
++    dep_maker = staticmethod(partial(Deprecator, cmp_func))
+ 
+     def test_deprecator_maker(self):
+         dec = self.dep_maker(warn_class=UserWarning)

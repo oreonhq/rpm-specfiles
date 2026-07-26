@@ -1,0 +1,11 @@
+--- apps/polytope/rules/latte.rules.orig	2021-05-18 02:50:05.000000000 -0600
++++ apps/polytope/rules/latte.rules	2021-05-21 08:30:28.246214105 -0600
+@@ -24,7 +24,7 @@ CREDIT latte
+ custom $latte_count;
+ 
+ CONFIGURE {
+-   find_program($latte_count, "count", {
++   find_program($latte_count, "latte-count", {
+                    prompt => "the program `count' from the LattE package",
+                    check => sub { `$_[0] 2>&1` !~ /LattE/ && "this is not LattE's count" }
+                 }) or return;

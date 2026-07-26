@@ -1,0 +1,21 @@
+From f9458dcf96a5d46baaa565b2c69e2ae3609ddea1 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Fri, 4 Apr 2025 15:38:56 -0600
+Subject: [PATCH] Explicitly include cmath for std::sqrt
+
+---
+ test/test_ranges.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/test/test_ranges.cpp b/test/test_ranges.cpp
+index 7339569..3c19740 100644
+--- a/test/test_ranges.cpp
++++ b/test/test_ranges.cpp
+@@ -1,6 +1,7 @@
+ #include <rx/ranges.hpp>
+ 
+ #include <algorithm>
++#include <cmath>
+ #include <string>
+ #include <unordered_map>
+ 

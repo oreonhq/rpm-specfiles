@@ -1,0 +1,16 @@
+diff -rupN --no-dereference flask_security_too-5.6.2/pyproject-too.toml flask_security_too-5.6.2-new/pyproject-too.toml
+--- flask_security_too-5.6.2/pyproject-too.toml	2025-05-29 19:32:34.741308309 +0200
++++ flask_security_too-5.6.2-new/pyproject-too.toml	2025-05-29 19:32:34.744646250 +0200
+@@ -43,10 +43,9 @@ dependencies = [
+     "Flask-WTF>=1.1.2",
+     "email-validator>=2.0.0",
+     "markupsafe>=2.1.0",
+-    "passlib>=1.7.4;python_version<'3.13'",
++    "passlib>=1.7.4",
+     # passlib requires setuptools
+-    "setuptools;python_version<'3.13'",
+-    "libpass>=1.9.0;python_version>='3.13'",
++    "setuptools",
+     "wtforms>=3.0.0",  # for form-level errors
+     "importlib_resources>=5.10.0",
+ ]

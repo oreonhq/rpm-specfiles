@@ -1,0 +1,18 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 17 Oct 2025 20:04:54 +0200
+Subject: [PATCH] A correct version
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6ed5a94..8fea239 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,6 @@
+ [project]
+ name = "lru-dict"
+-version = "1.4.1"
++version = "1.5.0"
+ description = "An Dict like LRU container."
+ authors = [
+     {name = "Amit Dev"},

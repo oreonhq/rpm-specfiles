@@ -1,0 +1,29 @@
+diff -up ./docs/conf.py.orig ./docs/conf.py
+--- ./docs/conf.py.orig	2025-12-14 19:07:02.000000000 +0100
++++ ./docs/conf.py	2026-01-03 15:03:59.621995745 +0100
+@@ -155,3 +155,5 @@ man_pages = [
+ ]
+ 
+ man_make_section_directory = False
++
++intersphinx_mapping.clear()
+diff -up ./script/build-shell-completions.sh.orig ./script/build-shell-completions.sh
+--- ./script/build-shell-completions.sh.orig	2025-12-14 19:07:02.000000000 +0100
++++ ./script/build-shell-completions.sh	2026-01-03 15:04:32.270782978 +0100
+@@ -13,14 +13,14 @@ declare -A COMPLETIONS=(
+ )
+ 
+ for dep in "${PYTHON_DEPS[@]}"; do
+-  python -c "import ${dep}" 2>&1 >/dev/null \
++  python3 -c "import ${dep}" 2>&1 >/dev/null \
+     || { echo >&2 "${dep} could not be found in your python environment"; exit 1; }
+ done
+ 
+ for shell in "${!COMPLETIONS[@]}"; do
+   mkdir -p "${DIST}/${shell}"
+   dist="${DIST}/${shell}/${COMPLETIONS[${shell}]}"
+-  python -m shtab \
++  python3 -m shtab \
+     "--shell=${shell}" \
+     --error-unimportable \
+     streamlink_cli._parser.get_parser \

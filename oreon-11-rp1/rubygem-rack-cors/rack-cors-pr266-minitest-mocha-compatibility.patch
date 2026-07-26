@@ -1,0 +1,56 @@
+From 7516bd4aa1994282f8a7250d7efcbe1d859eb209 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Wed, 2 Aug 2023 14:35:02 +0200
+Subject: [PATCH 1/2] Mocha 2.0+ compatibility
+
+The support for `require 'mocha/setup'` is long time deprecated and was
+removed in Mocha 2.0:
+
+https://github.com/freerange/mocha/commit/642a0ff4
+---
+ test/unit/cors_test.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/unit/cors_test.rb b/test/unit/cors_test.rb
+index 5360613..5aecf70 100644
+--- a/test/unit/cors_test.rb
++++ b/test/unit/cors_test.rb
+@@ -1,6 +1,6 @@
+ require 'minitest/autorun'
+ require 'rack/test'
+-require 'mocha/setup'
++require 'mocha/minitest'
+ require 'rack/cors'
+ require 'ostruct'
+ 
+
+From 5532a5c994cb3cd9bffaeab3ceaffb60579227b8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=ADt=20Ondruch?= <vondruch@redhat.com>
+Date: Thu, 3 Aug 2023 12:20:38 +0200
+Subject: [PATCH 2/2] Fix compatibility with Minitest 5.19+
+
+The `MiniTest` was renamed to `Minitest`:
+
+https://github.com/minitest/minitest/commit/9a57c520ceac76abfe6105866f8548a94eb357b6
+
+And the `MiniTest` constant is now loaded just when `MT_COMPAT`
+environment variable is set:
+
+https://github.com/minitest/minitest/commit/a2c6c18570f6f0a1bf6af70fe3b6d9599a13fdd6
+---
+ test/unit/cors_test.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/unit/cors_test.rb b/test/unit/cors_test.rb
+index 5aecf70..00d6431 100644
+--- a/test/unit/cors_test.rb
++++ b/test/unit/cors_test.rb
+@@ -17,7 +17,7 @@ def options(uri, params = {}, env = {}, &block)
+   def_delegator :current_session, :options
+ end
+ 
+-module MiniTest::Assertions
++module Minitest::Assertions
+   def assert_cors_success(response)
+     assert !response.headers['Access-Control-Allow-Origin'].nil?, "Expected a successful CORS response"
+   end

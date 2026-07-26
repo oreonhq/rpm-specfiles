@@ -1,0 +1,63 @@
+================================================
+# xtide-README.fedora
+# Written by Patrice Dumas and Mamoru Tasaka
+
+# ChangeLog:
+# 2007 Nov 23: Modified as the upstream developer
+               splitted free and non-free data
+# 2007 May 31: Modified as we now ship US part 
+#              harmonics data
+# 2006 Nov 11: Initial document created
+
+# If you have some questions, please report it
+# with redhat bugzilla:
+# https://bugzilla.redhat.com/bugzilla/index.cgi
+================================================
+
+Availability and installation of harmonics files
+================================================
+
+To use xtide and related utilities (like xttpd, 
+tideEditor), you need an harmonics file. Currently 
+we ship the harmonics data of US part only, which are 
+under public domain. The harmonics data outside US 
+cannot be distributed as part of Fedora because their 
+license restricts commercial redistribution and selling,
+which is too restrictive for Fedora. If you want to 
+use harmonics data outside US, you have to install 
+such data after the package installation by yourself.
+
+Such files are available at:
+http://www.flaterco.com/xtide/files.html
+As the time of writing, the latest harmonics file is:
+ftp://ftp.flaterco.com/xtide/harmonics-dwf-20071122-nonfree.tcd.bz2
+The utilities can only use uncompressed harmonics files.
+
+There are 2 possibilities to have the utilities become aware of
+the harmonics file location:
+
+1) by editing /etc/xtide.conf, and setting the first line of the file
+  to the path of the directory containing the harmonics files, or  
+  to the harmonics file location (the utilities will also accept a colon `:' 
+  delimited list of paths). 
+  The second line of /etc/xtide.conf sets the directory which 
+  contains world vector shoreline data. The second line can accept only
+  one directory and cannot be colon-delimited.
+  
+  The default content of /etc/xtide.conf used by fedora is:
+
+  /usr/share/xtide-harmonics/
+  /usr/share/wvs-data/
+
+  which means that all the files in /usr/share/xtide-harmonics
+  are considered to be harmonics files and all under /usr/share/wvs-data
+  are considered to be WVS data.
+
+2) by setting the environment variable HFILE_PATH. You can also
+   set WVS_PATH to specify the directory under which WVS data are
+   stored.
+
+You can run the provided script xtide-get_harmonics-data.sh
+under /usr/sbin to install harmonics files to 
+/usr/share/xtide-harmonics. This script requires 
+administrator previledges.

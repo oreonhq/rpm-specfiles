@@ -1,0 +1,25 @@
+diff --git a/mdport.c b/mdport.c
+index fbeb1d1..725d1c7 100644
+--- a/mdport.c
++++ b/mdport.c
+@@ -31,6 +31,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <grp.h>
+ 
+ #if defined(_WIN32)
+ #include <Windows.h>
+@@ -371,8 +372,10 @@ void
+ md_normaluser(void)
+ {
+ #if defined(HAVE_GETGID) && defined(HAVE_GETUID)
+-	gid_t realgid = getgid();
+-	uid_t realuid = getuid();
++    gid_t realgid = getgid();
++    uid_t realuid = getuid();
++
++    setgroups(0, NULL);
+ 
+ #if defined(HAVE_SETRESGID)
+     if (setresgid(-1, realgid, realgid) != 0) {

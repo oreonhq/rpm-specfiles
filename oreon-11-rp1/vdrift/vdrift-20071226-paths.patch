@@ -1,0 +1,13 @@
+--- SConstruct~	2014-08-04 07:43:04.000000000 -0500
++++ SConstruct	2015-06-29 06:29:31.549810839 -0500
+@@ -29,8 +29,8 @@
+ # define a list of CPPDEFINES so they don't get mangled...
+ cppdefines = []
+ default_settingsdir = ".vdrift"
+-default_prefix = "/usr/local"
+-default_datadir = "share/games/vdrift/data"
++default_prefix = "/usr"
++default_datadir = "share/vdrift"
+ default_localedir = "share/locale"
+ default_bindir = "bin"
+ 

@@ -1,0 +1,204 @@
+diff -Nrbu -U 4 comm/suite/components/pref/content/pref-appearance.js comm-OK/suite/components/pref/content/pref-appearance.js
+--- comm/suite/components/pref/content/pref-appearance.js	2022-12-14 04:26:37.942413485 +0300
++++ comm-OK/suite/components/pref/content/pref-appearance.js	2022-12-14 03:29:45.260371540 +0300
+@@ -5,14 +5,32 @@
+ 
+ // Load spell-checker module to properly determine language strings
+ ChromeUtils.import("resource://gre/modules/InlineSpellChecker.jsm");
+ 
++var selectedLocale;
++
+ function Startup()
+ {
+   SwitchLocales_Load();
+   NumberLocales_Load();
+ }
+ 
++function EnableSwitchLocales(aEnable)
++{
++  document.getElementById("switchLocales").disabled = !aEnable;
++}
++
++function setLocaleMatchOS(aValue)
++{
++  if (aValue) {
++    Services.locale.setRequestedLocales([]);
++  } else {
++    Services.locale.setRequestedLocales([selectedLocale]);
++  }
++
++  EnableSwitchLocales(!aValue);
++}
++
+ /**
+  * From locale switcher's switch.js:
+  * Load available locales into selection menu
+  */
+@@ -24,10 +42,28 @@
+ 
+   var langNames = document.getElementById("languageNamesBundle");
+   var regNames  = document.getElementById("regionNamesBundle");
+ 
+-  var matched = false;
+   var currentLocale = Services.locale.getRequestedLocale() || undefined;
++  var currentLang = undefined;
++
++  var localePref = document.getElementById("intl.locale.requested");
++  var localeMatchOS = localePref && localePref.value.length == 0;
++
++  if (localeMatchOS && currentLocale) {
++    var parts = currentLocale.split(/-/);
++
++    // For system "C" locale, "en-US-u-va-posix" returned.
++    if (parts.length > 2) {
++      currentLocale = parts[0] + "-" + parts[1];
++    }
++
++    // Most package locales have only the lang part.
++    currentLang = parts[0];
++  }
++
++  var matched = false;
++  var count = 0;
+   var locales = cr.getLocalesForPackage("global");
+ 
+   while (locales.hasMore()) {
+     var locale = locales.getNext();
+@@ -50,28 +86,41 @@
+       displayName = locale;
+     }
+ 
+     var item = menulist.appendItem(displayName, locale);
+-    if (!matched && currentLocale && currentLocale == locale) {
++    if (!matched && currentLocale && (currentLocale == locale || currentLang == locale)) {
+       matched = true;
+       menulist.selectedItem = item;
++      selectedLocale = locale;
+     }
++
++    count++;
+   }
++
+   // If somehow we have not found the current locale, select the first in list.
+   if (!matched) {
+-    menulist.selectedIndex = 1;
++    menulist.selectedIndex = 0;
++    selectedLocale = menulist.getItemAtIndex(0).value;
+   }
++
++  document.getElementById("localeMatchOS").checked = localeMatchOS;
++#ifndef XP_UNIX
++  //  Don't confuse one-lang non-unix users
++  document.getElementById("localeMatchOS").hidden = count <= 1;
++#endif
++
++  EnableSwitchLocales(!localeMatchOS);
+ }
+ 
+ /**
+  * Determine the appropriate value to set and set it.
+  */
+ function SelectLocale(aElement) {
+   var locale = aElement.value;
+-  var currentLocale = Services.locale.getRequestedLocale() || undefined;
+-  if (!currentLocale || (currentLocale && currentLocale != locale)) {
++  if (selectedLocale != locale) {
+     Services.locale.setRequestedLocales([locale]);
+   }
++  selectedLocale = locale;
+ }
+ 
+ /**
+  * When starting up, determine application and regional locale settings
+@@ -84,21 +133,31 @@
+       .getService(Ci.mozIOSPreferences);
+ 
+   let appLocale = Services.locale.getAppLocalesAsBCP47()[0];
+   let rsLocale = osprefs.getRegionalPrefsLocales()[0];
++  let sysLocale = osprefs.getSystemLocales()[0];
++
+   let spellChecker = new InlineSpellChecker();
+   appLocale = spellChecker.getDictionaryDisplayName(appLocale);
+   rsLocale = spellChecker.getDictionaryDisplayName(rsLocale);
++  sysLocale = spellChecker.getDictionaryDisplayName(sysLocale);
+ 
+   let appLocaleRadio = document.getElementById("appLocale");
+   let rsLocaleRadio = document.getElementById("rsLocale");
++  let sysLocaleCheckbox = document.getElementById("localeMatchOS");
++
+   let prefutilitiesBundle = document.getElementById("bundle_prefutilities");
+ 
+   let appLocaleLabel = prefutilitiesBundle.getFormattedString("appLocale.label",
+                                                               [appLocale]);
+   let rsLocaleLabel = prefutilitiesBundle.getFormattedString("rsLocale.label",
+                                                              [rsLocale]);
++  let sysLocaleLabel = prefutilitiesBundle.getFormattedString("sysLocale.label",
++                                                             [sysLocale]);
+   appLocaleRadio.setAttribute("label", appLocaleLabel);
+   rsLocaleRadio.setAttribute("label", rsLocaleLabel);
++  sysLocaleCheckbox.setAttribute("label", sysLocaleLabel);
++
+   appLocaleRadio.accessKey = prefutilitiesBundle.getString("appLocale.accesskey");
+   rsLocaleRadio.accessKey = prefutilitiesBundle.getString("rsLocale.accesskey");
++  sysLocaleCheckbox.accessKey = prefutilitiesBundle.getString("sysLocale.accesskey");
+ }
+diff -Nrbu -U 4 comm/suite/components/pref/content/pref-appearance.xul comm-OK/suite/components/pref/content/pref-appearance.xul
+--- comm/suite/components/pref/content/pref-appearance.xul	2022-12-14 04:26:37.942413485 +0300
++++ comm-OK/suite/components/pref/content/pref-appearance.xul	2022-12-14 03:29:45.260371540 +0300
+@@ -26,8 +26,11 @@
+                   type="bool"/>
+       <preference id="browser.toolbars.grippyhidden"
+                   name="browser.toolbars.grippyhidden"
+                   type="bool"/>
++      <preference id="intl.locale.requested"
++                  name="intl.locale.requested"
++                  type="string"/>
+       <preference id="intl.regional_prefs.use_os_locales"
+                   name="intl.regional_prefs.use_os_locales"
+                   type="bool"/>
+     </preferences>
+@@ -78,10 +81,13 @@
+     <groupbox id="switchLocaleBox" align="start">
+       <caption label="&pref.locales.title;"/>
+       <description>&selectLocale.label;</description>
+ 
++      <checkbox id="localeMatchOS"
++                oncommand="setLocaleMatchOS(this.checked);"/>
++                <!-- label and accesskey will be set dynamically -->
+       <menulist id="switchLocales"
+-                onselect="SelectLocale(this);"/>
++                oncommand="SelectLocale(this);"/>
+ 
+     </groupbox>
+ 
+     <groupbox id="dateTimeFormatting" align="start">
+diff -Nrbu -U 4 comm/suite/components/pref/jar.mn comm-OK/suite/components/pref/jar.mn
+--- comm/suite/components/pref/jar.mn	2021-10-26 19:51:22.000000000 +0300
++++ comm-OK/suite/components/pref/jar.mn	2022-12-14 04:27:22.068181209 +0300
+@@ -8,9 +8,9 @@
+    content/communicator/pref/prefpanels.css                         (content/prefpanels.css)
+    content/communicator/pref/prefpanels.xml                         (content/prefpanels.xml)
+    content/communicator/pref/pref-advanced.js                       (content/pref-advanced.js)
+    content/communicator/pref/pref-advanced.xul                      (content/pref-advanced.xul)
+-   content/communicator/pref/pref-appearance.js                     (content/pref-appearance.js)
++*  content/communicator/pref/pref-appearance.js                     (content/pref-appearance.js)
+ *  content/communicator/pref/pref-appearance.xul                    (content/pref-appearance.xul)
+ *  content/communicator/pref/pref-applications.xul                  (content/pref-applications.xul)
+    content/communicator/pref/pref-applications.js                   (content/pref-applications.js)
+    content/communicator/pref/pref-applicationManager.js             (content/pref-applicationManager.js)
+diff -Nrbu -U 4 comm/suite/locales/en-US/chrome/common/pref/prefutilities.properties comm-OK/suite/locales/en-US/chrome/common/pref/prefutilities.properties
+--- comm/suite/locales/en-US/chrome/common/pref/prefutilities.properties	2022-12-14 04:26:37.943413480 +0300
++++ comm-OK/suite/locales/en-US/chrome/common/pref/prefutilities.properties	2022-12-14 03:29:45.260371540 +0300
+@@ -38,8 +38,12 @@
+ # LOCALIZATION NOTE (rsLocale.label): %S = Name of the locale chosen in regional settings,
+ # e.g. German (Germany)
+ rsLocale.label=Regional settings locale: %S
+ rsLocale.accesskey=R
++# LOCALIZATION NOTE (sysLocale.label): %S = Name of the system locale,
++# e.g. Russian (Russia)
++sysLocale.label=Use system locale: %S
++sysLocale.accesskey=s
+ 
+ syncUnlink.title=Do you want to unlink your device?
+ syncUnlink.label=This device will no longer be associated with your Sync account. All of your personal data, both on this device and in your Sync account, will remain intact.
+ syncUnlinkConfirm.label=Unlink

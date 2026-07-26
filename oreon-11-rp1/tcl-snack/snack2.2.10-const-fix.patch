@@ -1,0 +1,21 @@
+diff -up snack2.2.10/generic/jkCanvSpeg.c.const-fix snack2.2.10/generic/jkCanvSpeg.c
+--- snack2.2.10/generic/jkCanvSpeg.c.const-fix	2024-02-10 12:34:16.249363280 -0500
++++ snack2.2.10/generic/jkCanvSpeg.c	2024-02-10 12:33:35.790759924 -0500
+@@ -92,7 +92,7 @@ static int ParseColorMap(ClientData clie
+ 			 Tk_Window tkwin, CONST84 char *value, char *recordPtr,
+ 			 int offset);
+ 
+-static char *PrintColorMap(ClientData clientData, Tk_Window tkwin,
++static const char *PrintColorMap(ClientData clientData, Tk_Window tkwin,
+ 			   char *recordPtr, int offset,
+ 			   Tcl_FreeProc **freeProcPtr);
+ 
+@@ -1797,7 +1797,7 @@ ParseColorMap(ClientData clientData, Tcl
+   return TCL_OK;
+ }
+ 
+-static char*
++static const char*
+ PrintColorMap(ClientData clientData, Tk_Window tkwin, char *recordPtr,
+ 	      int offset, Tcl_FreeProc **freeProcPtr)
+ {

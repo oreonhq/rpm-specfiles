@@ -1,0 +1,30 @@
+diff -up udis86-56ff6c8/scripts/ud_opcode.py.ud_opcode udis86-56ff6c8/scripts/ud_opcode.py
+--- udis86-56ff6c8/scripts/ud_opcode.py.ud_opcode	2014-12-25 07:00:50.000000000 -0500
++++ udis86-56ff6c8/scripts/ud_opcode.py	2019-05-01 11:57:38.643255204 -0400
+@@ -24,6 +24,8 @@
+ # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ import os
++import struct
++import binascii
+ 
+ # Some compatibility stuff for supporting python 2.x as well as python 3.x
+ def itemslist(dict):
+@@ -549,11 +551,15 @@ class UdOpcodeTables(object):
+         def printWalk(tbl, indent=""):
+             entries = tbl.entries()
+             for k, e in entries:
++                if type(k) == float:
++                    val = "0x" + binascii.hexlify(struct.pack('<f', k)).decode('ascii')
++                else:
++                    val = "%02x" % k
+                 if isinstance(e, UdOpcodeTable):
+-                    self.log("%s    |-<%02x> %s" % (indent, k, e))
++                    self.log("%s    |-<%s> %s" % (indent, val, e))
+                     printWalk(e, indent + "    |")
+                 elif isinstance(e, UdInsnDef):
+-                    self.log("%s    |-<%02x> %s" % (indent, k, e))
++                    self.log("%s    |-<%s> %s" % (indent, val, e))
+         printWalk(self.root)
+ 
+ 

@@ -1,0 +1,33 @@
+From d83874e6ab92ee4142cc7672da226a9091f7211a Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Tue, 31 Dec 2024 02:00:17 -0500
+Subject: [PATCH 4/5] Normalize expected path for chdir tests
+
+The expected path comes from a simple string concatenation in shell, but
+`os.Getwd` appears to have the normalized working directory, so this can
+fail if any parent directory is a symlink.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ tests/testing/chdir/chdir.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tests/testing/chdir/chdir.go b/tests/testing/chdir/chdir.go
+index 75281c21..660b25ac 100644
+--- a/tests/testing/chdir/chdir.go
++++ b/tests/testing/chdir/chdir.go
+@@ -20,6 +20,11 @@ func main() {
+ 	}
+ 	if runtime.GOOS == "windows" {
+ 		cwd = filepath.ToSlash(cwd)
++	} else {
++		expectDir, err = filepath.EvalSymlinks(expectDir)
++		if err != nil {
++			log.Fatal(err)
++		}
+ 	}
+ 	if cwd != expectDir {
+ 		log.Fatalf("expected:\"%v\" != os.Getwd():\"%v\"", expectDir, cwd)
+-- 
+2.50.0
+

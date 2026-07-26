@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RoboCup 2D Soccer Simulation
+Comment=Runs a 2D Soccer Simulation on local machine
+Exec=rcsoccersim
+Icon=rcssmonitor
+Terminal=true
+Type=Application
+Categories=Education;Science;Robotics;
+

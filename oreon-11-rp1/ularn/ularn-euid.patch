@@ -1,0 +1,26 @@
+diff -Naur Ularn/main.c Ularn.new/main.c
+--- Ularn/main.c	2006-03-16 07:58:03.000000000 -0800
++++ Ularn.new/main.c	2006-03-16 12:37:51.000000000 -0800
+@@ -55,15 +55,13 @@
+ /*
+  *	first task is to identify the player
+  */
+-	if ((ptr = getlogin()) == (char *)NULL) {
+-	  	if (pwe=getpwuid(geteuid()))
+-			ptr = pwe->pw_name;
+-	  	else if ((ptr = getenv("LOGNAME")) == (char *)NULL)
+-	  	if ((ptr = getenv("USER")) == (char *)NULL) {
+-noone:		    	fprintf(stderr,"Who *are* you?\n");
+-			exit(1);
+-		 }
+-	}
++       if (pwe=getpwuid(geteuid()))
++               ptr = pwe->pw_name;
++       else if ((ptr = getenv("LOGNAME")) == (char *)NULL)
++       if ((ptr = getenv("USER")) == (char *)NULL) {
++noone:	    	fprintf(stderr,"Who *are* you?\n");
++               exit(1);
++        }
+ 	if (ptr==(char *)NULL)
+ 		goto noone;
+ 	if (strlen(ptr)==0)

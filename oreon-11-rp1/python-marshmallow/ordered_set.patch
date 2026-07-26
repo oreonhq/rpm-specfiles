@@ -1,0 +1,12 @@
+diff -Naur marshmallow-3.21.0.orig/src/marshmallow/schema.py marshmallow-3.21.0/src/marshmallow/schema.py
+--- marshmallow-3.21.0.orig/src/marshmallow/schema.py	2024-02-26 20:43:44.000000000 +0100
++++ marshmallow-3.21.0/src/marshmallow/schema.py	2024-02-27 21:54:51.917914969 +0100
+@@ -26,7 +26,7 @@
+ )
+ from marshmallow.error_store import ErrorStore
+ from marshmallow.exceptions import StringNotCollectionError, ValidationError
+-from marshmallow.orderedset import OrderedSet
++from ordered_set import OrderedSet
+ from marshmallow.utils import (
+     EXCLUDE,
+     INCLUDE,

@@ -1,0 +1,25 @@
+From 28a4ddcf1ade05760aac0ace5119418d5dbf880f Mon Sep 17 00:00:00 2001
+From: Robert O'Callahan <robert@ocallahan.org>
+Date: Fri, 25 Apr 2025 15:15:51 +1200
+Subject: [PATCH] Update CMake minimum version to avoid warnings
+
+Resolves #3950
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ebbbaaf0..bd9c9f22 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ # *-* Mode: cmake; *-*
+ 
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.12)
+ project(rr C CXX ASM)
+ 
+ # "Do not add flags to export symbols from executables without the ENABLE_EXPORTS target property."
+-- 
+2.50.1
+

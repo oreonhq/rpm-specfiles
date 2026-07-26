@@ -1,0 +1,13 @@
+diff -urp color-1.8.orig/test/test_css.rb color-1.8/test/test_css.rb
+--- color-1.8.orig/test/test_css.rb	2025-12-28 12:34:03.316385790 +0900
++++ color-1.8/test/test_css.rb	2025-12-28 12:40:34.425081586 +0900
+@@ -13,7 +13,7 @@ module TestColor
+     end
+ 
+     def test_index_with_unknown_name
+-      assert_equal(nil, Color::CSS['redx'])
++      assert_nil Color::CSS['redx']
+     end
+   end
+ end
+color-1.8/test のみに存在: test_css.rb~

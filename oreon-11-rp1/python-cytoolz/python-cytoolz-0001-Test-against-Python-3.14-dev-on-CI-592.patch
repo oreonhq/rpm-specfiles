@@ -1,0 +1,35 @@
+From: Hendrik Makait <hendrik@makait.com>
+Date: Sat, 21 Jun 2025 22:12:46 +0200
+Subject: [PATCH] Test against Python 3.14-dev on CI (#592)
+
+* Test against 3.14-dev on CI
+
+* Fixes to support Python 3.14-dev
+
+diff --git a/cytoolz/curried/operator.py b/cytoolz/curried/operator.py
+index 9597305..f5b04ac 100644
+--- a/cytoolz/curried/operator.py
++++ b/cytoolz/curried/operator.py
+@@ -9,7 +9,7 @@ from cytoolz.functoolz import curry
+ IGNORE = {
+     "__abs__", "__index__", "__inv__", "__invert__", "__neg__", "__not__",
+     "__pos__", "_abs", "abs", "attrgetter", "index", "inv", "invert",
+-    "itemgetter", "neg", "not_", "pos", "truth"
++    "is_none", "is_not_none", "itemgetter", "neg", "not_", "pos", "truth"
+ }
+ 
+ locals().update(
+diff --git a/cytoolz/tests/test_inspect_args.py b/cytoolz/tests/test_inspect_args.py
+index 0dc0156..eb06dac 100644
+--- a/cytoolz/tests/test_inspect_args.py
++++ b/cytoolz/tests/test_inspect_args.py
+@@ -286,7 +286,8 @@ def test_has_keywords():
+     assert has_keywords(int)
+     assert has_keywords(sorted)
+     assert has_keywords(max)
+-    assert has_keywords(map) is False
++    # map gained `strict=False` keyword in Python 3.14
++    assert has_keywords(map) == (sys.version_info[1] >= 14)
+     assert has_keywords(bytearray) is None
+ 
+ 

@@ -1,0 +1,21 @@
+From c481418413c4d91e024eab0b1839a915b4afef38 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 22 Jan 2025 14:49:07 -0500
+Subject: [PATCH] Add missing #include for GCC 15
+
+---
+ object.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/object.cc b/object.cc
+index 0bbf481..1a84bdd 100644
+--- a/object.cc
++++ b/object.cc
+@@ -26,6 +26,7 @@
+ #include <cstdlib>
+ #include "pkcs11test.h"
+ 
++#include <iomanip>
+ #include <set>
+ #include <vector>
+ 

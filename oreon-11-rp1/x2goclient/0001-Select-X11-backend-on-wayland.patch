@@ -1,0 +1,25 @@
+From b53b8d654c73420fc5cc12e42717ac75a824c974 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Fri, 13 Dec 2019 19:22:13 -0700
+Subject: [PATCH] Select X11 backend on wayland
+
+---
+ desktop/x2goclient.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/desktop/x2goclient.desktop b/desktop/x2goclient.desktop
+index fbb396d..eeb7c7b 100644
+--- a/desktop/x2goclient.desktop
++++ b/desktop/x2goclient.desktop
+@@ -2,7 +2,7 @@
+ Version=1.0
+ Type=Application
+ Name=X2Go Client
+-Exec=x2goclient
++Exec=env QT_QPA_PLATFORM=xcb x2goclient
+ Icon=x2goclient
+ StartupWMClass=x2goclient
+ X-Window-Icon=x2goclient
+-- 
+1.8.3.1
+

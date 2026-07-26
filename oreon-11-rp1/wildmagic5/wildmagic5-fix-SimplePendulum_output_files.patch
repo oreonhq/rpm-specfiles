@@ -1,0 +1,91 @@
+--- WildMagic5/SamplePhysics/SimplePendulum/SimplePendulum.orig.cpp	2014-01-05 15:38:32.000000000 +0100
++++ WildMagic5/SamplePhysics/SimplePendulum/SimplePendulum.cpp	2015-04-21 17:41:33.364134113 +0200
+@@ -131,8 +131,7 @@
+     float h = 0.1f;
+ 
+     float* output = method(x0, y0, h);
+-    std::string path = Environment::GetPathW(outText);
+-    std::ofstream outFile(path.c_str());
++    std::ofstream outFile(outText);
+     int i;
+     for (i = 0; i < SIZE; ++i)
+     {
+@@ -156,8 +155,7 @@
+         iY0 = iY1;
+     }
+ 
+-    path = Environment::GetPathW(outImage);
+-    msImage->Save(path.c_str());
++    msImage->Save(outImage);
+ 
+     delete1(output);
+ }
+@@ -197,7 +195,7 @@
+         y0 = y1;
+     }
+ 
+-    std::string path = Environment::GetPathW("Data/stiff1.txt");
++    std::string path = "stiff1.txt";
+     std::ofstream outFile(path.c_str());
+     for (i = 0; i < maxIterations; ++i)
+     {
+@@ -222,7 +220,7 @@
+         iY0 = iY1;
+     }
+ 
+-    path = Environment::GetPathW("Data/stiff1_true.im");
++    path = "stiff1_true.im";
+     msImage->Save(path.c_str());
+ 
+     // Set image to white.
+@@ -243,7 +241,7 @@
+         iY0 = iY1;
+     }
+ 
+-    path = Environment::GetPathW("Data/stiff1_appr.im");
++    path = "stiff1_appr.im";
+     msImage->Save(path.c_str());
+ 
+     delete1(approx);
+@@ -267,7 +265,7 @@
+     float t0 = 0.0f;
+ 
+     // true solution
+-    std::string path = Environment::GetPathW("Data/stiff2_true.txt");
++    std::string path = "stiff2_true.txt";
+     std::ofstream outFile(path.c_str());
+     char message[512];
+     const int maxIterations = 20;
+@@ -326,7 +324,7 @@
+         t0 += h;
+     }
+ 
+-    std::string path = Environment::GetPathW("Data/stiff2_appr_h0.05.txt");
++    std::string path = "stiff2_appr_h0.05.txt";
+     std::ofstream outFile(path.c_str());
+     char message[512];
+     for (i = 0; i <= maxIterations; ++i)
+@@ -374,7 +372,7 @@
+         t0 += h;
+     }
+ 
+-    path = Environment::GetPathW("Data/stiff2_appr_h0.10.txt");
++    path = "stiff2_appr_h0.10.txt";
+     outFile.open(path.c_str());
+     for (i = 0; i <= maxIterations/2; ++i)
+     {
+@@ -392,10 +390,10 @@
+ {
+     msImage = new0 ImageRGB82D(SIZE, SIZE);
+ 
+-    SolveMethod(ExplicitEuler, "Data/explicit.im", "Data/explicit.txt");
+-    SolveMethod(ImplicitEuler, "Data/implicit.im", "Data/implicit.txt");
+-    SolveMethod(RungeKutta, "Data/runge.im", "Data/runge.txt");
+-    SolveMethod(LeapFrog, "Data/leapfrog.im", "Data/leapfrog.txt");
++    SolveMethod(ExplicitEuler, "explicit.im", "explicit.txt");
++    SolveMethod(ImplicitEuler, "implicit.im", "implicit.txt");
++    SolveMethod(RungeKutta, "runge.im", "runge.txt");
++    SolveMethod(LeapFrog, "leapfrog.im", "leapfrog.txt");
+     Stiff1();
+     Stiff2True();
+     Stiff2Approximate();

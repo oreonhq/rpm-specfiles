@@ -1,0 +1,10 @@
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
+ 
+     QCoreApplication::setApplicationName("SpeedCrunch");
+     QCoreApplication::setOrganizationDomain("speedcrunch.org");
++    QApplication::setDesktopFileName("org.speedcrunch.SpeedCrunch");
+ 
+     MainWindow window;
+     window.show();

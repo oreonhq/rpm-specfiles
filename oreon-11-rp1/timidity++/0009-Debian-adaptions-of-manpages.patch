@@ -1,0 +1,54 @@
+From d36182a1060bdb95889eacb9a68aa57e23367240 Mon Sep 17 00:00:00 2001
+From: Reiner Herrmann <reiner@reiner-h.de>
+Date: Tue, 26 Jun 2018 22:31:23 +0200
+Subject: Debian adaptions of manpages
+
+ - drop references to /usr/local
+ - link only to manpages available in Debian
+Forwarded: not-needed
+---
+ doc/C/timidity.1               | 3 +--
+ doc/C/timidity.cfg.5           | 2 --
+ doc/ja_JP.eucJP/timidity.cfg.5 | 2 --
+ 3 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/doc/C/timidity.1 b/doc/C/timidity.1
+index bdc6c2c..cf164b1 100644
+--- a/doc/C/timidity.1
++++ b/doc/C/timidity.1
+@@ -1081,8 +1081,7 @@ Reserved for \fBTiMidity++\fP specification purposes
+ \fBTiMidity++\fP Debug
+ .RE
+ .SH SEE ALSO
+-lsmidiprog(1), mididump(1), patinfo(1), sf2text(1), wav2pat(1),
+-timidity.cfg(5)
++sf2text(1), timidity.cfg(5)
+ .SH COPYRIGHT
+ Copyright (C) 1999\-2004 Masanao Izumo <iz@onicos.co.jp>
+ .br
+diff --git a/doc/C/timidity.cfg.5 b/doc/C/timidity.cfg.5
+index 7df31a2..c7a704c 100644
+--- a/doc/C/timidity.cfg.5
++++ b/doc/C/timidity.cfg.5
+@@ -471,8 +471,6 @@ will read from the output of cat fild.mid.
+ .SH FILES
+ .TP
+ .B /etc/timidity.cfg
+-.TP
+-.B /usr/local/share/timidity/timidity.cfg
+ .SH SEE ALSO
+ timidity(1), lsmidiprog(1), mididump(1), patinfo(1), sf2text(1), wav2pat(1)
+ .SH COPYRIGHT
+diff --git a/doc/ja_JP.eucJP/timidity.cfg.5 b/doc/ja_JP.eucJP/timidity.cfg.5
+index 6935896..010496b 100644
+--- a/doc/ja_JP.eucJP/timidity.cfg.5
++++ b/doc/ja_JP.eucJP/timidity.cfg.5
+@@ -466,8 +466,6 @@ timidity 'cat fild.mid|'
+ .SH ファイル
+ .TP
+ .B /etc/timidity.cfg
+-.TP
+-.B /usr/local/share/timidity/timidity.cfg
+ .SH 関連項目
+ timidity(1), lsmidiprog(1), mididump(1), patinfo(1), sf2text(1), wav2pat(1)
+ .SH 著作権

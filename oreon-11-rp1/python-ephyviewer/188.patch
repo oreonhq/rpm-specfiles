@@ -1,0 +1,22 @@
+From b6fb0d027d572d576768b747b26e9819fecba73b Mon Sep 17 00:00:00 2001
+From: Samuel Garcia <sam.garcia.die@gmail.com>
+Date: Mon, 18 Nov 2024 13:45:34 +0100
+Subject: [PATCH] remove copy
+
+---
+ ephyviewer/tests/test_traceviewer.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ephyviewer/tests/test_traceviewer.py b/ephyviewer/tests/test_traceviewer.py
+index 1af26dd..6b33a62 100644
+--- a/ephyviewer/tests/test_traceviewer.py
++++ b/ephyviewer/tests/test_traceviewer.py
+@@ -71,7 +71,7 @@ def test_traceviewer_cls_method_neo(interactive=False):
+     sample_rate = 1000.
+     t_start = 0.
+ 
+-    neo_anasig = neo.AnalogSignal(sigs*pq.mV, sampling_rate=sample_rate*pq.Hz, t_start=0*pq.s, copy=True)
++    neo_anasig = neo.AnalogSignal(sigs*pq.mV, sampling_rate=sample_rate*pq.Hz, t_start=0*pq.s)
+     print(neo_anasig)
+ 
+ 

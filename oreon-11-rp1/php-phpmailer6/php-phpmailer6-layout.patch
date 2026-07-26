@@ -1,0 +1,11 @@
+diff -up ./src/PHPMailer.php.rpm ./src/PHPMailer.php
+--- ./src/PHPMailer.php.rpm	2021-09-01 12:46:30.267656729 +0200
++++ ./src/PHPMailer.php	2021-09-01 12:47:43.003485872 +0200
+@@ -2253,6 +2253,7 @@ class PHPMailer
+         if (empty($lang_path)) {
+             //Calculate an absolute path so it can work if CWD is not here
+             $lang_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
++            $lang_path = __DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
+         }
+ 
+         //Validate $langcode

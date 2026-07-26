@@ -1,0 +1,50 @@
+From 0d6aa5bbcaa0d9a4c2625a33cd2bf7abd154d159 Mon Sep 17 00:00:00 2001
+From: Sandro Mani <manisandro@gmail.com>
+Date: Wed, 4 Oct 2023 21:24:32 -0500
+Subject: [PATCH 6/7] Add s390 detection
+
+---
+ pjlib/include/pj/config.h                | 12 ++++++++++++
+ third_party/webrtc/src/webrtc/typedefs.h |  3 +++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/pjlib/include/pj/config.h b/pjlib/include/pj/config.h
+index 68ef340b6..dac287414 100644
+--- a/pjlib/include/pj/config.h
++++ b/pjlib/include/pj/config.h
+@@ -338,6 +338,18 @@
+ #   define PJ_IS_LITTLE_ENDIAN  1
+ #   define PJ_IS_BIG_ENDIAN     0
+                 
++#elif defined (PJ_M_S390) || defined(__s390) || defined(__s390__) || \
++      defined(__S390__) || defined(_M_S390)
++    /*
++     * S390, big endian
++     */
++#   undef PJ_M_S390
++#   define PJ_M_S390		1
++#   define PJ_M_NAME		"s390"
++#   define PJ_HAS_PENTIUM	0
++#   define PJ_IS_LITTLE_ENDIAN	0
++#   define PJ_IS_BIG_ENDIAN	1
++
+ #else
+ #   error "Please specify target machine."
+ #endif
+diff --git a/third_party/webrtc/src/webrtc/typedefs.h b/third_party/webrtc/src/webrtc/typedefs.h
+index 76552a581..a59412c40 100644
+--- a/third_party/webrtc/src/webrtc/typedefs.h
++++ b/third_party/webrtc/src/webrtc/typedefs.h
+@@ -58,6 +58,9 @@
+ # elif (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+ #  define WEBRTC_ARCH_BIG_ENDIAN
+ # endif
++#elif defined(__s390__)
++# define WEBRTC_ARCH_32_BITS
++# define WEBRTC_ARCH_BIG_ENDIAN
+ #else
+ #error Please add support for your architecture in typedefs.h
+ #endif
+-- 
+2.41.0
+

@@ -1,0 +1,28 @@
+From 854d529d40992f50a70ed818275a96fd94c39d06 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Mon, 7 Jul 2025 15:27:59 +0200
+Subject: [PATCH] fix: simplify error formatting to satisfy Go 1.24 vet
+
+Signed-off-by: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+---
+ internal/txlib/delete.go | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/internal/txlib/delete.go b/internal/txlib/delete.go
+index 78a08c3..a310547 100644
+--- a/internal/txlib/delete.go
++++ b/internal/txlib/delete.go
+@@ -180,9 +180,7 @@ func deleteResource(
+ 				return err
+ 			}
+ 			if remoteStatAttributes.TranslatedStrings > 0 {
+-				msg := fmt.Sprintf("Aborting due to translations in %s",
+-					cfgResource.ResourceSlug)
+-				return fmt.Errorf(msg)
++				return fmt.Errorf("Aborting due to translations in %s", cfgResource.ResourceSlug)
+ 			}
+ 		}
+ 	}
+-- 
+2.50.0
+

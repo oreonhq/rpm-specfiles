@@ -1,0 +1,33 @@
+From a9a74618f0b00f6e7c2efa60f4550132b73bca2d Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Mon, 25 Apr 2022 15:59:59 +0200
+Subject: [PATCH] recutils-1.9-mdbtools-0.9.patch
+
+---
+ utils/mdb2rec.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/utils/mdb2rec.c b/utils/mdb2rec.c
+index 1e25397..c272925 100644
+--- a/utils/mdb2rec.c
++++ b/utils/mdb2rec.c
+@@ -428,14 +428,13 @@ process_mdb (void)
+     recutl_out_of_memory ();
+ 
+   /* Initialize libmdb and open the input file.  */
+-  mdb_init();
+-  mdb_set_date_fmt ("%Y-%m-%dT%H:%M:%S%z"); /* ISO 8601 */
+-
+   mdb = mdb_open (mdb2rec_mdb_file, MDB_NOFLAGS);
+   if (!mdb)
+     recutl_fatal (_("could not open file %s\n"),
+                   mdb2rec_mdb_file);
+ 
++  mdb_set_date_fmt (mdb, "%Y-%m-%dT%H:%M:%S%z"); /* ISO 8601 */
++
+   /* Read the catalog.  */
+   if (!mdb_read_catalog (mdb, MDB_TABLE))
+     recutl_fatal (_("file does not appear to be an Access database\n"));
+-- 
+2.35.1
+

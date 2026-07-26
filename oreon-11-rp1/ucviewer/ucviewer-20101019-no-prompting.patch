@@ -1,0 +1,67 @@
+diff -up ucviewer-20101019/UnicodeViewer.pro.no-prompting ucviewer-20101019/UnicodeViewer.pro
+--- ucviewer-20101019/UnicodeViewer.pro.no-prompting	2010-10-19 16:44:15.876522001 -0400
++++ ucviewer-20101019/UnicodeViewer.pro	2010-10-19 16:50:33.419522003 -0400
+@@ -97,35 +97,34 @@ unix:!macx { 
+     
+     # Install only for release.
+     CONFIG(release, debug|release) { 
+-        INSTALL = $$prompt("Do you want to install Unicode Viewer? y=Yes, n=No")
+-        contains(INSTALL,y|yes|yEs|yES|yeS|Y|Yes|YeS|YES|YEs) { 
+-            message("Configured for install.")
+-            DEFINES += LINUX
+-            HELP = /usr/local/share/UnicodeViewer/help
+-            DEFINES += HELPPATH=\\\"$$HELP\\\"
+-            RESOURCEPATH = /usr/local/share/UnicodeViewer
+-            DEFINES += RESOURCEPATH=\\\"$$RESOURCEPATH\\\"
+-            TRANSLATIONPATH = /usr/local/share/UnicodeViewer/
+-            DEFINES += TRANSLATIONPATH=\\\"$$TRANSLATIONPATH\\\"
+-            target.path = /usr/local/bin
+-            help.path = $$HELP
+-            help.files = help/*
+-            lua.path = $$RESOURCEPATH
+-            lua.files = lua/init.lua \
+-                lua/de_DE.lua \
+-                lua/en_EN.lua
+-            resource.path = $$TRANSLATIONPATH
+-            resource.files = resource/*.ts \
+-                resource/*.qm
+-            icon.path = /usr/local/share/UnicodeViewer/icon
+-            icon.files = icon/uc-book.ico \
+-                icon/uc-book.png
+-            INSTALLS += help \
+-                lua \
+-                resource \
+-                icon \
+-                target
+-        }
++        message("Configured for install.")
++        DEFINES += LINUX
++        LIBS += -llua -lm -ldl
++        DESTDIR = 
++        HELP = /usr/share/UnicodeViewer/help
++        DEFINES += HELPPATH=\\\"$$HELP\\\"
++        RESOURCEPATH = /usr/share/UnicodeViewer
++        DEFINES += RESOURCEPATH=\\\"$$RESOURCEPATH\\\"
++        TRANSLATIONPATH = /usr/share/UnicodeViewer/
++        DEFINES += TRANSLATIONPATH=\\\"$$TRANSLATIONPATH\\\"
++        target.path = /usr/bin
++        help.path = $$HELP
++        help.files = help/*
++        lua.path = $$RESOURCEPATH
++        lua.files = lua/init.lua \
++           lua/de_DE.lua \
++           lua/en_EN.lua
++        resource.path = $$TRANSLATIONPATH
++        resource.files = resource/*.ts \
++            resource/*.qm
++        icon.path = /usr/share/UnicodeViewer/icon
++        icon.files = icon/uc-book.ico \
++            icon/uc-book.png
++        INSTALLS += help \
++            lua \
++            resource \
++            icon \
++            target
+     }
+ }
+ 

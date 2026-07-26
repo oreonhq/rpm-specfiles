@@ -1,0 +1,55 @@
+From d29fd2cf84ea386c67ecb0302adebc0700088d94 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>
+Date: Sat, 8 Oct 2022 00:16:20 +0100
+Subject: [PATCH] Use avformat_alloc_output_context2() to create the out
+ context.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This simplifies the API usage quite a bit, while maintaining the same
+logic as previously.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ file.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/file.c b/file.c
+index d9c239e..fc24a4c 100644
+--- a/file.c
++++ b/file.c
+@@ -127,7 +127,6 @@ void loadImage(const char *filename, AVFrame **image) {
+  * @return true on success, false on failure
+  */
+ void saveImage(char *filename, AVFrame *input, int outputPixFmt) {
+-  const AVOutputFormat *fmt = NULL;
+   enum AVCodecID output_codec = -1;
+   const AVCodec *codec;
+   AVFormatContext *out_ctx;
+@@ -138,20 +137,11 @@ void saveImage(char *filename, AVFrame *input, int outputPixFmt) {
+   int ret;
+   char errbuff[1024];
+ 
+-  fmt = av_guess_format("image2", NULL, NULL);
+-
+-  if (!fmt) {
+-    errOutput("could not find suitable output fmt.");
+-  }
+-
+-  out_ctx = avformat_alloc_context();
+-  if (!out_ctx) {
++  if (avformat_alloc_output_context2(&out_ctx, NULL, "image2", filename) < 0 ||
++    out_ctx == NULL) {
+     errOutput("unable to allocate output context.");
+   }
+ 
+-  out_ctx->oformat = fmt;
+-  out_ctx->url = av_strdup(filename);
+-
+   switch (outputPixFmt) {
+   case AV_PIX_FMT_RGB24:
+     output_codec = AV_CODEC_ID_PPM;
+-- 
+2.37.3
+

@@ -1,0 +1,152 @@
+%global source0_hash 53cd9923f43a3b0772a40e3561f74655adc8038f90261ab3de05b6211d12edcb
+
+%{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
+%global sources_gpg_sign 0xf8675126e2411e7748dd46662fc2093e4682645f
+%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
+# we are excluding some BRs from automatic generator
+%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order
+# Exclude sphinx from BRs if docs are disabled
+%if ! 0%{?with_doc}
+%global excluded_brs %{excluded_brs} sphinx openstackdocstheme
+%endif
+# Exclude some BRs for Fedora
+%if 0%{?fedora}
+%global excluded_brs %{excluded_brs} tempest osprofiler
+%endif
+%global with_doc 1
+
+%global cname neutron
+%global sname %{cname}client
+
+%global common_desc \
+Client library and command line utility for interacting with OpenStack \
+Neutron's API.
+
+Name:       python-neutronclient
+Version:    11.3.1
+Release:    6%{?dist}
+Summary:    Python API and CLI for OpenStack Neutron
+
+License:    Apache-2.0
+URL:        http://launchpad.net/%{name}/
+Source0:    https://tarballs.openstack.org/%{name}/%{name}-%{upstream_version}.tar.gz
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+Source101:        https://tarballs.openstack.org/%{name}/%{name}-%{upstream_version}.tar.gz.asc
+Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
+%endif
+
+BuildArch:  noarch
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+BuildRequires:  /usr/bin/gpgv2
+%endif
+
+%description
+%{common_desc}
+
+%package -n python3-%{sname}
+Summary:    Python API and CLI for OpenStack Neutron
+
+BuildRequires: git-core
+BuildRequires: python3-devel
+BuildRequires: pyproject-rpm-macros
+BuildRequires: python3-osc-lib-tests
+
+%description -n python3-%{sname}
+%{common_desc}
+
+%package -n python3-%{sname}-tests
+Summary:    Python API and CLI for OpenStack Neutron - Unit tests
+Requires: python3-%{sname} == %{version}-%{release}
+Requires: python3-osc-lib-tests
+Requires: python3-oslotest
+Requires: python3-stestr
+Requires: python3-testtools
+Requires: python3-testscenarios
+
+%description -n python3-%{sname}-tests
+%{common_desc}
+
+This package containts the unit tests.
+
+%if 0%{?with_doc}
+%package doc
+Summary:          Documentation for OpenStack Neutron API Client
+
+%description      doc
+%{common_desc}
+%endif
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+# Required for tarball sources verification
+%if 0%{?sources_gpg} == 1
+%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
+%endif
+%autosetup -n %{name}-%{upstream_version} -S git
+
+sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
+sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
+sed -i /^minversion.*/d tox.ini
+sed -i /^requires.*virtualenv.*/d tox.ini
+sed -i '/sphinx-build/ s/-W//' tox.ini
+
+# Exclude some bad-known BRs
+for pkg in %{excluded_brs}; do
+  for reqfile in doc/requirements.txt test-requirements.txt; do
+    if [ -f $reqfile ]; then
+      sed -i /^${pkg}.*/d $reqfile
+    fi
+  done
+done
+
+# Automatic BR generation
+%generate_buildrequires
+%if 0%{?with_doc}
+  %pyproject_buildrequires -t -e %{default_toxenv},docs
+%else
+  %pyproject_buildrequires -t -e %{default_toxenv}
+%endif
+
+%build
+%pyproject_wheel
+
+%if 0%{?with_doc}
+# Build HTML docs
+%tox -e docs
+
+# Fix hidden-file-or-dir warnings
+rm -rf doc/build/html/.doctrees doc/build/html/.buildinfo
+%endif
+
+%install
+%pyproject_install
+
+%check
+%if 0%{?fedora}
+# test_http.py imports osprofiler
+rm neutronclient/tests/unit/test_http.py
+%endif
+%tox -e %{default_toxenv}
+
+%files -n python3-%{sname}
+%doc README.rst
+%license LICENSE
+%{python3_sitelib}/%{sname}
+%{python3_sitelib}/*.dist-info
+%exclude %{python3_sitelib}/%{sname}/tests
+
+%files -n python3-%{sname}-tests
+%{python3_sitelib}/%{sname}/tests
+
+%if 0%{?with_doc}
+%files doc
+%doc doc/build/html
+%license LICENSE
+%endif
+
+%changelog
+%autochangelog

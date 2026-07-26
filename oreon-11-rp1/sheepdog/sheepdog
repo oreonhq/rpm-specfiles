@@ -1,0 +1,11 @@
+# use stdout for journal; other possibilities include "default" and "syslog"
+SHEEPDOG_LOGDEST=stdout
+SHEEPDOG_LOGLEVEL=info
+SHEEPDOG_LOGFMT=default
+
+SHEEPDOG_PORT=7000
+
+# --no-sync, --directio, --gateway, --journal, --wq-threads, ...
+SHEEPDOG_EXTRA_OPTS=
+
+SHEEPDOG_PATH=/var/lib/sheepdog

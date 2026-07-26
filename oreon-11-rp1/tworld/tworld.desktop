@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Tile World
+Comment=Intellectually engaging puzzle game
+Exec=tworld
+Icon=tworld
+Terminal=false
+Categories=Game;
+StartupNotify=false

@@ -1,0 +1,19 @@
+#
+# Revert back the changes introduced by the bug 1406821 (plus bug 1411476 part 3)
+# regarding MediaDecoderStateMachine::DecodeError(), since it produces a lot of extra
+# stderr messages on practice when switching between network media streams etc.
+#
+
+--- mozilla/dom/media/MediaDecoderStateMachine.cpp.orig	2023-06-10 13:40:55.000000000 +0300
++++ mozilla/dom/media/MediaDecoderStateMachine.cpp	2023-06-18 20:33:37.547152055 +0300
+@@ -3441,9 +3441,9 @@ MediaDecoderStateMachine::HasLowBuffered
+ void
+ MediaDecoderStateMachine::DecodeError(const MediaResult& aError)
+ {
+   MOZ_ASSERT(OnTaskQueue());
+-  LOGE("Decode error: %s", aError.Description().get());
++  LOGW("Decode error: %s", aError.Description().get());
+   // Notify the decode error and MediaDecoder will shut down MDSM.
+   mOnPlaybackErrorEvent.Notify(aError);
+ }
+ 

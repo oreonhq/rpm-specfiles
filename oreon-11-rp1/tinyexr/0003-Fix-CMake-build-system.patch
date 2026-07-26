@@ -1,0 +1,80 @@
+diff -ruN tinyexr-1.0.7-orig/CMakeLists.txt tinyexr-1.0.7/CMakeLists.txt
+--- tinyexr-1.0.7-orig/CMakeLists.txt	2023-09-08 16:53:50.598915062 -0300
++++ tinyexr-1.0.7/CMakeLists.txt	2023-09-09 00:41:05.721019924 -0300
+@@ -1,11 +1,14 @@
+-# this cmake file is for compile tests.
+-# Not usable for your cmake app.
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.14)
+ 
+ set(BUILD_TARGET "tinyexr")
+ set(SAMPLE_TARGET "test_tinyexr")
+ 
+-project(${BUILD_TARGET} CXX)
++project(${BUILD_TARGET}
++  VERSION 1.0.7
++  LANGUAGES C CXX)
++
++include(GNUInstallDirs)
++include(CMakePackageConfigHelpers)
+ 
+ # options
+ option(TINYEXR_BUILD_SAMPLE "Build a sample" ON)
+@@ -28,18 +31,45 @@
+     )
+ 
+ if(TINYEXR_USE_MINIZ)
+-  enable_language(C)
+-  add_library(miniz STATIC deps/miniz/miniz.c)
+-  target_include_directories(miniz PUBLIC deps/miniz)
+-  set_target_properties(miniz PROPERTIES FOLDER "deps")
+-  list(APPEND TINYEXR_EXT_LIBRARIES miniz)
++  find_library(MINIZ miniz REQUIRED)
++  list(APPEND TINYEXR_EXT_LIBRARIES -lminiz)  
+ endif()
+ 
+-add_library(${BUILD_TARGET} ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
++add_library(${BUILD_TARGET} SHARED ${TINYEXR_SOURCES} ${TINYEXR_DEP_SOURCES})
+ add_sanitizers(${BUILD_TARGET})
++target_compile_features(${BUILD_TARGET} PRIVATE cxx_auto_type)
+ 
+ target_include_directories(${BUILD_TARGET} PRIVATE ${PROJECT_SOURCE_DIR})
+ target_link_libraries(${BUILD_TARGET} ${TINYEXR_EXT_LIBRARIES} ${CMAKE_DL_LIBS})
++set_target_properties(${BUILD_TARGET} PROPERTIES
++  VERSION ${PROJECT_VERSION} SOVERSION 1
++  CXX_VISIBILITY_PRESET hidden
++  VISIBILITY_INLINES_HIDDEN ON
++)
++
++add_library(tinyexr::tinyexr ALIAS tinyexr)
++
++configure_package_config_file(tinyexrConfig.cmake.in
++  ${CMAKE_CURRENT_BINARY_DIR}/tinyexrConfig.cmake
++  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/tinyexr
++  NO_SET_AND_CHECK_MACRO NO_CHECK_REQUIRED_COMPONENTS_MACRO
++)
++write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/tinyexrConfigVersion.cmake
++  COMPATIBILITY SameMinorVersion
++  ARCH_INDEPENDENT
++)
++
++install(FILES tinyexr.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(FILES
++  ${CMAKE_CURRENT_BINARY_DIR}/tinyexrConfig.cmake
++  ${CMAKE_CURRENT_BINARY_DIR}/tinyexrConfigVersion.cmake
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/tinyexr
++)
++install(TARGETS tinyexr EXPORT tinyexrTargets DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(EXPORT tinyexrTargets
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/tinyexr
++  NAMESPACE tinyexr::
++)
+ 
+ # Increase warning level for clang.
+ IF (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+diff -ruN tinyexr-1.0.7-orig/tinyexrConfig.cmake.in tinyexr-1.0.7/tinyexrConfig.cmake.in
+--- tinyexr-1.0.7-orig/tinyexrConfig.cmake.in	1969-12-31 21:00:00.000000000 -0300
++++ tinyexr-1.0.7/tinyexrConfig.cmake.in	2023-09-08 15:48:36.642556638 -0300
+@@ -0,0 +1,2 @@
++@PACKAGE_INIT@
++include(${CMAKE_CURRENT_LIST_DIR}/tinyexrTargets.cmake)

@@ -1,0 +1,21 @@
+--- warsow_21_sdk/source/source/CMakeLists.txt.build	2016-03-26 20:22:10.000000000 +0100
++++ warsow_21_sdk/source/source/CMakeLists.txt	2016-06-07 23:47:20.556429419 +0200
+@@ -120,7 +120,7 @@
+ 
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe -Wall -Wno-unused-function -fvisibility=hidden -Winvalid-pch")
+     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -D_DEBUG")
+-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing -ffast-math -funroll-loops -msse2 -O2")
++    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-strict-aliasing -ffast-math -funroll-loops")
+ 
+     set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++0x")
+     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+@@ -131,9 +131,6 @@
+     # -Wl,--as-needed
+     add_common_link_flags("-Wl,--as-needed")
+ 
+-    # -s in release link flags
+-    add_release_link_flags("-s")
+-
+     if (MINGW)
+         add_definitions(-D_WIN32_WINNT=_WIN32_WINNT_VISTA)
+         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unknown-pragmas")

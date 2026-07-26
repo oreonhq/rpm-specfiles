@@ -1,0 +1,26 @@
+This is required to avoid build failures with future compilers which
+do not support implicit function declarations (such as exit and perror
+in this file).
+
+Submitted upstream: <https://github.com/pontaoski/taigo/pull/7>
+
+diff --git a/src/gdb.c b/src/gdb.c
+index e261bec52bb980ac..64903d637b485fd0 100644
+--- a/src/gdb.c
++++ b/src/gdb.c
+@@ -6,6 +6,8 @@
+ #include <sys/ptrace.h>
+ #include <sys/wait.h>
+ #include <signal.h>
++#include <stdlib.h>
++#include <stdio.h>
+ 
+ void seg() {
+     raise(SIGSEGV);
+@@ -53,4 +55,4 @@ gdb_check()
+       res = WEXITSTATUS(status);
+     }
+   return res;
+-}
+\ No newline at end of file
++}

@@ -1,0 +1,71 @@
+# Upgrading poweradmin from 2.1.6 to 2.1.7 requires the following manual steps:
+
+## Updating instructions for 2.1.6:
+
+ 1. dnf upgrade to 2.1.7
+ 2. Backup your database
+ 3. Update database structure (see below)
+ 4. Execute migration script http://YOUR_HOSTNAME/migrations/201405302318_add_relations_to_zone_templates.php. 
+      Later you can remove this file.
+
+## Database Update Instructions
+
+### MySQL
+
+ALTER TABLE users ADD use_ldap BOOLEAN NOT NULL;
+
+ALTER TABLE users ENGINE=InnoDB;
+ALTER TABLE perm_items ENGINE=InnoDB;
+ALTER TABLE perm_templ ENGINE=InnoDB;
+ALTER TABLE perm_templ_items ENGINE=InnoDB;
+ALTER TABLE zones ENGINE=InnoDB;
+ALTER TABLE zone_templ ENGINE=InnoDB;
+ALTER TABLE zone_templ_records ENGINE=InnoDB;
+ALTER TABLE domainmetadata ENGINE=InnoDB;
+ALTER TABLE cryptokeys ENGINE=InnoDB;
+ALTER TABLE tsigkeys ENGINE=InnoDB;
+ALTER TABLE domains ENGINE=InnoDB;
+ALTER TABLE records ENGINE=InnoDB;
+ALTER TABLE supermasters ENGINE=InnoDB;
+
+CREATE TABLE records_zone_templ (
+    domain_id INTEGER NOT NULL,
+    record_id INTEGER NOT NULL,
+    zone_templ_id INTEGER NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE migrations (
+    version VARCHAR(255) NOT NULL,
+    apply_time INTEGER NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+### PostgreSQL
+
+ALTER TABLE users ADD COLUMN use_ldap smallint NOT NULL DEFAULT 0;
+
+CREATE TABLE records_zone_templ (
+    domain_id integer NOT NULL,
+    record_id integer NOT NULL,
+    zone_templ_id integer NOT NULL
+);
+
+CREATE TABLE migrations (
+    version varchar(255) NOT NULL,
+    apply_time integer NOT NULL
+);
+
+### SQLite
+
+ALTER TABLE users ADD use_ldap BOOLEAN NOT NULL DEFAULT 0;
+
+CREATE TABLE records_zone_templ (
+    domain_id int(11) NOT NULL,
+    record_id int(11) NOT NULL,
+    zone_templ_id int(11) NOT NULL
+);
+
+CREATE TABLE migrations (
+    version varchar(255) NOT NULL,
+    apply_time int(11) NOT NULL
+);
+

@@ -1,0 +1,82 @@
+.TH YTE "1" "November 2025" "" "User Commands"
+.SH NAME
+.B yte
+\(en Process a YAML file given at
+.I STDIN
+with YTE,
+and print the result to
+.I STDOUT
+.SH SYNOPSIS
+.B yte
+.RB [ \-h ]
+.RB [ \-\-template\ \fITEMPLATE ]
+.RB [ \-\-output\ \fIOUTPUT ]
+.RB [ \-\-require\-use\-yte ]
+.RB [ \-\-variable\-file\ \fIVARIABLE_FILE ]
+.RB [ \-\-variables\  [ \fIVARIABLES \ ...]]
+.RB [ \-\-version ]
+.SH DESCRIPTION
+Process a YAML file given at
+.I STDIN
+with YTE, and print the result to
+.IR STDOUT .
+.P
+.B Note:
+if nothing is provided at
+.IR STDIN ,
+this will wait forever.
+.SH OPTIONS
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit.
+.TP
+.B \-\-template\ \fITEMPLATE
+Path to the template file.
+If
+.B \-
+is given, read from
+.IR STDIN .
+.TP
+.B \-\-output\ \fIOUTPUT
+Path to the output file.
+If
+.B \-
+is given, write to
+.IR STDOUT .
+.TP
+.B \-r\fR, \fB\-\-require\-use\-yte
+Require that the document contains a
+.in +7n
+.EX
+.B __use_yte__: true
+.EE
+.in
+statement at the top level.
+If the statement is not present or
+.BR false ,
+return document unprocessed (except removing the
+.in +7n
+.EX
+.B __use_yte__: false
+.EE
+.in
+statement if present)
+.TP
+.B \-\-variable\-file\ \fIVARIABLE_FILE
+ Path to a file containing map of variables for the template
+.RB ( .json
+or
+.B .yaml
+format).
+Values given here are overwritten by values with the same names in the
+.B \-\-variables
+option.
+.TP
+.B \-\-variables \fR[\fIVARIABLES\fR\ ...]
+Space separated list of variables to use in the template,
+given as
+.IB name = value
+pairs.
+.TP
+.B \-\-version
+Print version and exit.

@@ -1,0 +1,51 @@
+From d9e75d0162bed4797e1b631a80c2b75c615bc66d Mon Sep 17 00:00:00 2001
+From: Eric Anderson <ejona86@gmail.com>
+Date: Mon, 27 May 2024 11:56:39 -0700
+Subject: [PATCH] Replace configparser readfp with read_file
+
+readfp() was [deprecated in Python 3.2][1] and [removed in Python
+3.12][2]. read_file() is a drop-in replacement.
+
+[1]: https://github.com/python/cpython/blob/dd0e8a62df8be2a09ef6035b4c92bd9a68a7b918/Lib/configparser.py#L757-L764
+[2]: https://github.com/python/cpython/commit/1fc41ae8709e20d741bd86c2345173688a5e84b0
+
+Fixes this error with Python 3.12:
+```
+Traceback (most recent call last):
+  File "/usr/bin/pronterface.py", line 62, in <module>
+    app = PronterApp(False)
+          ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 2596, in __init__
+    self.mainwindow = PronterWindow(self)
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 220, in __init__
+    self.reload_ui()
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 288, in reload_ui
+    self.create_menu()
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 862, in create_menu
+    self.load_slic3r_configs(menus)
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 2517, in load_slic3r_configs
+    config = self.read_slic3r_config(configfile)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/printrun/pronterface.py", line 2562, in read_slic3r_config
+    parser.readfp(add_header(open(configfile)), configfile)
+    ^^^^^^^^^^^^^
+AttributeError: 'RawConfigParser' object has no attribute 'readfp'. Did you mean: 'read'?
+```
+---
+ printrun/pronterface.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/printrun/pronterface.py b/printrun/pronterface.py
+index 84489bc21..29e6be180 100644
+--- a/printrun/pronterface.py
++++ b/printrun/pronterface.py
+@@ -2559,7 +2559,7 @@ def __iter__(self):
+                 import itertools
+                 return itertools.chain([self.header], iter(self.f))
+ 
+-        parser.readfp(add_header(open(configfile)), configfile)
++        parser.read_file(add_header(open(configfile)), configfile)
+         return parser
+ 
+     def set_slic3r_config(self, configfile, cat, file):

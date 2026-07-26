@@ -1,0 +1,22 @@
+From 08be800aba312ea69015a1bc301c0eb670c3e185 Mon Sep 17 00:00:00 2001
+From: Christoph Junghans <christoph.junghans@gmail.com>
+Date: Mon, 11 Aug 2025 00:52:36 +0000
+Subject: [PATCH] cmake: bump to newer version
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5d2ad73..fe05257 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.16)
+ 
+ project(TNG_IO C)
+ 
+-- 
+GitLab
+

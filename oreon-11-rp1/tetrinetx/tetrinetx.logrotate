@@ -1,0 +1,6 @@
+/var/log/tetrinetx/game.log {
+    missingok
+    notifempty
+    size 30k
+    create 0644 tetrinetx tetrinetx
+}

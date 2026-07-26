@@ -1,0 +1,58 @@
+%global source0_hash f4394e27f251a9852df736a5d081fcacbd3258593af4cfc4281635e64474559e
+
+%global pypi_name propcache
+
+Name:           python-%{pypi_name}
+Version:        0.4.1
+Release:        %autorelease
+Summary:        Module for fast property caching
+
+License:        Apache-2.0
+URL:            https://github.com/aio-libs/propcache
+Source:        https://github.com/aio-libs/propcache/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+
+BuildRequires:  gcc
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython)
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(pytest-xdist)
+
+%global debug_package %{nil}
+
+%global _description %{expand:
+Module for fast property caching.}
+
+%description %_description
+
+%package -n python3-%{pypi_name}
+Summary:        %{summary}
+
+%description -n python3-%{pypi_name} %_description
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{pypi_name}-%{version} -p1
+# Disable coverage
+sed -r -e 's/(-.*cov.*$)/#\1/g' -i pytest.ini
+# Remove Cython's upper version pin
+sed -i 's/Cython ~= 3\.1\.0/Cython >= 3.1.0/g' packaging/pep517_backend/_backend.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l %{pypi_name}
+
+%check
+%pytest
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%doc CHANGES.rst README.rst
+
+%changelog
+%autochangelog

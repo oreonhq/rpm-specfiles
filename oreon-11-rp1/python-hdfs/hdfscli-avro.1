@@ -1,0 +1,102 @@
+.TH HDFSCLI "1" "October 2021" "" "User Commands"
+.SH NAME
+.B hdfscli\-avro
+\(en an Avro extension for HdfsCLI
+.SH SYNOPSIS
+.B hdfscli\-avro schema
+.RB [ \-a\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.I HDFS_PATH
+.P
+.B hdfscli\-avro read
+.RB [ \-a\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.RB [ \-F\fR\ \fIFREQ \ |\  \-n\fR\ \fINUM ]
+.RB [ \-p\fR\ \fIPARTS ]
+.I HDFS_PATH
+.P
+.B hdfscli write
+.RB [ \-fa\fR\ \fIALIAS ]
+.RB [ \-v ...]
+.RB [ \-C\fR\ \fICODEC ]
+.RB [ \-S\fR\ \fISCHEMA ]
+.I HDFS_PATH
+.P
+.B hdfscli\-avro
+.BR \-L \ |\  \-h
+.SH OPTIONS
+.SS COMMANDS
+.TP
+.B schema
+Pretty print schema.
+.TP
+.B read
+Read an Avro file from HDFS and output records as JSON to standard out.
+.TP
+.B write
+Read JSON records from standard in and serialize them into a single Avro file
+on HDFS.
+.SS ARGUMENTS
+.TP
+.I HDFS_PATH
+Remote path to Avro file or directory containing Avro part-files.
+.SS OPTIONS
+.TP
+.BR \-C\fR\ \fICODEC \  \-\-codec=\fICODEC
+Compression codec.
+Available values are among:
+.BR null ,
+.BR deflate ,
+.BR snappy .
+[default:
+.BR deflate ]
+.TP
+.BR \-F\fR\ \fIFREQ \  \-\-freq=\fIFREQ
+Probability of sampling a record.
+.TP
+.BR \-L \  \-\-log
+Show path to current log file and exit.
+.TP
+.BR \-S\fR\ \fISCHEMA \  \-\-schema=\fISCHEMA
+Schema for serializing records.
+If not passed, it will be inferred from the first record.
+.TP
+.BR \-a \ \fIALIAS \-\-alias=\fIALIAS
+Alias of namenode to connect to.
+.TP
+.BR \-f \  \-\-force
+Overwrite any existing file.
+.TP
+.BR \-h \  \-\-help
+Show a usage message and exit.
+.TP
+.BR \-n \ \fINUM \-\-num=\fINUM
+Cap number of records to output.
+.TP
+.BR \-p \ \fIPARTS \-\-parts=\fIPARTS
+Part-files to read.
+Specify a number to randomly select that many, or a comma-separated list of
+numbers to read only these.
+Use a number followed by a comma (e.g.
+.BR 1, )
+to get a unique part-file.
+The default is to read all part-files.
+.TP
+.BR \-v \  \-\-verbose
+Enable log output.
+Can be specified up to three times (increasing verbosity each time).
+.SH EXAMPLES
+.EX
+.B hdfscli\-avro\ schema\ /data/impressions.avro
+.EE
+.EX
+.B hdfscli\-avro\ read\ \-a\ dev\ snapshot.avro\ >snapshot.jsonl
+.EE
+.EX
+.B hdfscli\-avro\ read\ \-F\ 0.1\ \-p\ 2,3\ clicks.avro
+.EE
+.EX
+.B hdfscli\-avro\ write\ \-f\ positives.avro\ <positives.jsonl\ \-S\ "$(cat\ schema.avsc)"
+.EE
+.SH "SEE\ ALSO"
+.BR hdfscli (1)

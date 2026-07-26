@@ -1,0 +1,66 @@
+Index: SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d/CMakeLists.txt
+===================================================================
+--- SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d.orig/CMakeLists.txt
++++ SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d/CMakeLists.txt
+@@ -8,6 +8,8 @@ option(OPT_BACKEND_ANDROID "Use the Andr
+ # Compatibility Options
+ option(OPT_OVERRIDE_STD_FILESYSTEM "Use a local version of std::filesystem on systems that don't have it yet" OFF)
+ 
++add_compile_definitions(SPDLOG_FMT_EXTERNAL)
++
+ # Sources
+ option(OPT_BUILD_AIRSPY_SOURCE "Build Airspy Source Module (Dependencies: libairspy)" ON)
+ option(OPT_BUILD_AIRSPYHF_SOURCE "Build Airspy HF+ Source Module (Dependencies: libairspyhf)" ON)
+@@ -388,7 +390,7 @@ endif ()
+ configure_file(${CMAKE_SOURCE_DIR}/sdrpp_module.cmake ${CMAKE_CURRENT_BINARY_DIR}/sdrpp_module.cmake @ONLY)
+ 
+ # Install directives
+-install(TARGETS sdrpp DESTINATION bin)
++install(TARGETS sdrpp RUNTIME)
+ install(DIRECTORY ${CMAKE_SOURCE_DIR}/root/res/bandplans DESTINATION share/sdrpp)
+ install(DIRECTORY ${CMAKE_SOURCE_DIR}/root/res/colormaps DESTINATION share/sdrpp)
+ install(DIRECTORY ${CMAKE_SOURCE_DIR}/root/res/fonts DESTINATION share/sdrpp)
+Index: SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d/core/CMakeLists.txt
+===================================================================
+--- SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d.orig/core/CMakeLists.txt
++++ SDRPlusPlus-aa2b4b1c5814cc2f832898a9e4a1bdfc38e7ac8d/core/CMakeLists.txt
+@@ -33,6 +33,13 @@ add_library(sdrpp_core SHARED ${SRC} ${B
+ # Set compiler options
+ target_compile_options(sdrpp_core PRIVATE ${SDRPP_COMPILER_FLAGS})
+ 
++# Set soversion
++set_target_properties(sdrpp_core PROPERTIES VERSION 1.2.1 SOVERSION 1.2.1)
++
++# Set LIB_SUFFIX needed by core.cpp
++target_compile_definitions(sdrpp_core PRIVATE LIB_SUFFIX="${LIB_SUFFIX}")
++
++
+ # Set the install prefix
+ target_compile_definitions(sdrpp_core PUBLIC INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+ 
+@@ -67,6 +74,8 @@ endif (OPT_BACKEND_ANDROID)
+ if (USE_INTERNAL_LIBCORRECT)
+     target_include_directories(sdrpp_core PUBLIC "libcorrect/include")
+     target_link_libraries(sdrpp_core PUBLIC correct_static)
++else (USE_INTERNAL_LIBCORRECT)
++	target_link_libraries(sdrpp_core PUBLIC correct)
+ endif (USE_INTERNAL_LIBCORRECT)
+ 
+ if (OPT_OVERRIDE_STD_FILESYSTEM)
+@@ -150,7 +159,7 @@ else()
+     )
+ 
+     if (NOT USE_INTERNAL_LIBCORRECT)
+-        pkg_check_modules(CORRECT REQUIRED libcorrect)
++        find_library(CORRECT correct REQUIRED)
+         target_include_directories(sdrpp_core PUBLIC ${CORRECT_INCLUDE_DIRS})
+         target_link_directories(sdrpp_core PUBLIC ${CORRECT_LIBRARY_DIRS})
+         target_link_libraries(sdrpp_core PUBLIC ${CORRECT_LIBRARIES})
+@@ -167,4 +176,5 @@ set(CORE_FILES ${RUNTIME_OUTPUT_DIRECTOR
+ # cmake .. "-DCMAKE_TOOLCHAIN_FILE=C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
+ 
+ # Install directives
+-install(TARGETS sdrpp_core DESTINATION lib)
+\ No newline at end of file
++include(GNUInstallDirs)
++install(TARGETS sdrpp_core DESTINATION ${CMAKE_INSTALL_LIBDIR})

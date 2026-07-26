@@ -1,0 +1,15 @@
+compress
+
+/var/log/resallocserver/main.log {
+    missingok
+    notifempty
+    rotate 4
+    weekly
+    copytruncate
+}
+
+/var/log/resallocserver/hooks.log {
+    missingok
+    rotate 7
+    daily
+}

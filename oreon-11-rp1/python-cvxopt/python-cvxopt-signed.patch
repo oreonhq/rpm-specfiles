@@ -1,0 +1,47 @@
+--- cvxopt-1.3.3/src/C/cholmod.c.orig	2026-02-09 04:16:53.000000000 -0700
++++ cvxopt-1.3.3/src/C/cholmod.c	2026-02-09 08:24:36.759585625 -0700
+@@ -528,9 +528,9 @@ static PyObject* solve(PyObject *self, P
+     if (nrhs < 0) nrhs = MAT_NCOLS(B);
+     if (n == 0 || nrhs == 0) return Py_BuildValue("");
+     if (ldB == 0) ldB = MAX(1,MAT_NROWS(B));
+-    if (ldB < MAX(1,n)) err_ld("ldB");
++    if (ldB < 0 || (size_t)ldB < MAX(1,n)) err_ld("ldB");
+     if (oB < 0) err_nn_int("offsetB");
+-    if (oB + (nrhs-1)*ldB + n > MAT_LGT(B)) err_buf_len("B");
++    if (oB + (nrhs-1)*ldB + n > (size_t)MAT_LGT(B)) err_buf_len("B");
+ 
+     cholmod_dense *x;
+     cholmod_dense *b = CHOL(allocate_dense)(n, 1, n,
+@@ -619,7 +619,7 @@ static PyObject* spsolve(PyObject *self,
+     if (L->xtype == CHOLMOD_PATTERN)
+         PY_ERR(PyExc_ValueError, "called with symbolic factor");
+     n = L->n;
+-    if (L->minor<n) PY_ERR(PyExc_ArithmeticError, "singular matrix");
++    if (L->minor<(size_t)n) PY_ERR(PyExc_ArithmeticError, "singular matrix");
+ 
+     if (sys < 0 || sys > 8)
+          PY_ERR(PyExc_ValueError, "invalid value for sys");
+@@ -783,7 +783,7 @@ static PyObject* linsolve(PyObject *self
+             PyErr_Warn(PyExc_UserWarning, "");
+     }
+ 
+-    if (L->minor<n) {
++    if (L->minor<(size_t)n) {
+         CHOL(free_factor)(&L, &Common);
+         PY_ERR(PyExc_ArithmeticError, "singular matrix");
+     }
+@@ -864,12 +864,12 @@ static PyObject* splinsolve(PyObject *se
+ 
+     if (!SpMatrix_Check(B) || SP_ID(A) != SP_ID(B))
+         PY_ERR_TYPE("B must be a sparse matrix of the same type as A");
+-    if (SP_NROWS(B) != n)
++    if (SP_NROWS(B) != (Py_ssize_t)n)
+         PY_ERR(PyExc_ValueError, "incompatible dimensions for B");
+ 
+     if (P) {
+         if (!Matrix_Check(P) || MAT_ID(P) != INT) err_int_mtrx("p");
+-        if (MAT_LGT(P) != n) err_buf_len("p");
++        if (MAT_LGT(P) != (int)n) err_buf_len("p");
+         if (!CHOL(check_perm)(P->buffer, n, n, &Common))
+             PY_ERR(PyExc_ValueError, "not a valid permutation");
+     }

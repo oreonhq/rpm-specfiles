@@ -1,0 +1,74 @@
+diff -up ./roca/detect.py.pkcs7 ./roca/detect.py
+--- ./roca/detect.py.pkcs7	2021-03-12 17:34:45.847428925 -0500
++++ ./roca/detect.py	2021-03-12 17:41:53.760529589 -0500
+@@ -1170,11 +1170,11 @@ class RocaFingerprinter(object):
+         :param name:
+         :return:
+         """
+-        is_ssh_file = startswith(data, 'ssh-rsa') or contains(data, 'ssh-rsa ')
+-        is_pgp_file = startswith(data, '-----BEGIN PGP')
+-        is_pkcs7_file = startswith(data, '-----BEGIN PKCS7')
+-        is_pem_file = startswith(data, '-----BEGIN') and not is_pgp_file
+-        is_ldiff_file = contains(data, 'binary::')
++        is_ssh_file = startswith(data, b'ssh-rsa') or contains(data, b'ssh-rsa ')
++        is_pgp_file = startswith(data, b'-----BEGIN PGP')
++        is_pkcs7_file = startswith(data, b'-----BEGIN PKCS7')
++        is_pem_file = startswith(data, b'-----BEGIN') and not is_pgp_file
++        is_ldiff_file = contains(data, b'binary::')
+ 
+         is_pgp = is_pgp_file or (self.file_matches_extensions(name, ['pgp', 'gpg', 'key', 'pub', 'asc'])
+                                  and not is_ssh_file
+@@ -1198,7 +1198,7 @@ class RocaFingerprinter(object):
+         is_mod |= not is_pem and not is_der and not is_pgp and not is_ssh_file and not is_apk
+         is_mod |= self.args.file_mod
+ 
+-        is_json = self.file_matches_extensions(name, ['json', 'js']) or startswith(data, '{') or startswith(data, '[')
++        is_json = self.file_matches_extensions(name, ['json', 'js']) or startswith(data, b'{') or startswith(data, b'[')
+         is_json |= self.args.file_json
+ 
+         is_ldiff = self.file_matches_extensions(name, ['ldiff', 'ldap']) or is_ldiff_file
+@@ -2060,8 +2060,7 @@ class RocaFingerprinter(object):
+         :param name:
+         :return:
+         """
+-        from cryptography.hazmat.backends.openssl.backend import backend
+-        from cryptography.hazmat.backends.openssl.x509 import _Certificate
++        from cryptography.hazmat.primitives.serialization import pkcs7 
+ 
+         # DER conversion
+         is_pem = startswith(data, '-----')
+@@ -2069,27 +2068,15 @@ class RocaFingerprinter(object):
+             is_pem = True
+ 
+         try:
+-            der = data
+             if is_pem:
+-                data = data.decode('utf8')
+-                data = re.sub(r'\s*-----\s*BEGIN\s+PKCS7\s*-----', '', data)
+-                data = re.sub(r'\s*-----\s*END\s+PKCS7\s*-----', '', data)
+-                der = base64.b64decode(data)
+-
+-            bio = backend._bytes_to_bio(der)
+-            pkcs7 = backend._lib.d2i_PKCS7_bio(bio.bio, backend._ffi.NULL)
+-            backend.openssl_assert(pkcs7 != backend._ffi.NULL)
+-            signers = backend._lib.PKCS7_get0_signers(pkcs7, backend._ffi.NULL, 0)
+-            backend.openssl_assert(signers != backend._ffi.NULL)
+-            backend.openssl_assert(backend._lib.sk_X509_num(signers) > 0)
+-            x509_ptr = backend._lib.sk_X509_value(signers, 0)
+-            backend.openssl_assert(x509_ptr != backend._ffi.NULL)
+-            x509_ptr = backend._ffi.gc(x509_ptr, backend._lib.X509_free)
+-            x509 = _Certificate(backend, x509_ptr)
+-
+-            self.num_pkcs7_cert += 1
++              signers = pkcs7.load_pem_pkcs7_certificates(data)
++            else:
++              signers = pkcs7.load_der_pkcs7_certificates(data)
+ 
+-            return [self.process_x509(x509, name=name, pem=False, source='pkcs7-cert', aux='')]
++            self.num_pkcs7_cert += len(signers)
++            return [ self.process_x509(
++                x509, name=name, pem=False, source='pkcs7-cert', aux='')
++              for x509 in signers ]
+ 
+         except Exception as e:
+             logger.debug('Error in PKCS7 processing %s: %s' % (name, e))

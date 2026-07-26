@@ -1,0 +1,181 @@
+diff -ru powermanga-0.93.1.orig/data/curves/Makefile.am powermanga-0.93.1.new/data/curves/Makefile.am
+--- powermanga-0.93.1.orig/data/curves/Makefile.am	2023-11-26 17:11:05.290325721 +0100
++++ powermanga-0.93.1.new/data/curves/Makefile.am	2023-11-26 17:11:44.401748073 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/data/curves
++pkgdatadir = $(datadir)/powermanga/data/curves
+ 
+ dist_pkgdata_DATA = \
+   bezier_curve_000.bin \
+diff -ru powermanga-0.93.1.orig/data/levels/curves_phase/Makefile.am powermanga-0.93.1.new/data/levels/curves_phase/Makefile.am
+--- powermanga-0.93.1.orig/data/levels/curves_phase/Makefile.am	2023-11-26 17:11:05.280325357 +0100
++++ powermanga-0.93.1.new/data/levels/curves_phase/Makefile.am	2023-11-26 17:11:44.402748109 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/data/levels/curves_phase
++pkgdatadir = $(datadir)/powermanga/data/levels/curves_phase
+ 
+ dist_pkgdata_DATA = \
+   curves_00.bin \
+diff -ru powermanga-0.93.1.orig/data/levels/grids_phase/Makefile.am powermanga-0.93.1.new/data/levels/grids_phase/Makefile.am
+--- powermanga-0.93.1.orig/data/levels/grids_phase/Makefile.am	2023-11-26 17:11:05.274325139 +0100
++++ powermanga-0.93.1.new/data/levels/grids_phase/Makefile.am	2023-11-26 17:11:44.403748145 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/data/levels/grids_phase
++pkgdatadir = $(datadir)/powermanga/data/levels/grids_phase
+ 
+ dist_pkgdata_DATA = \
+  grid_00.bin \
+diff -ru powermanga-0.93.1.orig/data/Makefile.am powermanga-0.93.1.new/data/Makefile.am
+--- powermanga-0.93.1.orig/data/Makefile.am	2023-11-26 17:11:05.267324884 +0100
++++ powermanga-0.93.1.new/data/Makefile.am	2023-11-26 17:11:44.404748182 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/data
++pkgdatadir = $(datadir)/powermanga/data
+ 
+ dist_pkgdata_DATA = \
+   menu_order_keystrokes.bin 
+diff -ru powermanga-0.93.1.orig/graphics/bitmap/fonts/Makefile.am powermanga-0.93.1.new/graphics/bitmap/fonts/Makefile.am
+--- powermanga-0.93.1.orig/graphics/bitmap/fonts/Makefile.am	2023-11-26 17:11:05.297325975 +0100
++++ powermanga-0.93.1.new/graphics/bitmap/fonts/Makefile.am	2023-11-26 17:11:44.405748218 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/bitmap/fonts
++pkgdatadir = $(datadir)/powermanga/graphics/bitmap/fonts
+ 
+ dist_pkgdata_DATA = \
+   font_big.spr \
+diff -ru powermanga-0.93.1.orig/graphics/bitmap/Makefile.am powermanga-0.93.1.new/graphics/bitmap/Makefile.am
+--- powermanga-0.93.1.orig/graphics/bitmap/Makefile.am	2023-11-26 17:11:05.296325939 +0100
++++ powermanga-0.93.1.new/graphics/bitmap/Makefile.am	2023-11-26 17:11:44.406748255 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/bitmap
++pkgdatadir = $(datadir)/powermanga/graphics/bitmap
+ 
+ dist_pkgdata_DATA = \
+   main_menu.spr \
+diff -ru powermanga-0.93.1.orig/graphics/Makefile.am powermanga-0.93.1.new/graphics/Makefile.am
+--- powermanga-0.93.1.orig/graphics/Makefile.am	2023-11-26 17:11:05.294325866 +0100
++++ powermanga-0.93.1.new/graphics/Makefile.am	2023-11-26 17:11:44.407748291 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics
++pkgdatadir = $(datadir)/powermanga/graphics
+ 
+ dist_pkgdata_DATA = \
+   256_colors_palette.bin \
+diff -ru powermanga-0.93.1.orig/graphics/sprites/guardians/Makefile.am powermanga-0.93.1.new/graphics/sprites/guardians/Makefile.am
+--- powermanga-0.93.1.orig/graphics/sprites/guardians/Makefile.am	2023-11-26 17:11:05.303326193 +0100
++++ powermanga-0.93.1.new/graphics/sprites/guardians/Makefile.am	2023-11-26 17:11:44.407748291 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/sprites/guardians
++pkgdatadir = $(datadir)/powermanga/graphics/sprites/guardians
+ 
+ dist_pkgdata_DATA = \
+   guardian_00.spr \
+diff -ru powermanga-0.93.1.orig/graphics/sprites/Makefile.am powermanga-0.93.1.new/graphics/sprites/Makefile.am
+--- powermanga-0.93.1.orig/graphics/sprites/Makefile.am	2023-11-26 17:11:05.301326121 +0100
++++ powermanga-0.93.1.new/graphics/sprites/Makefile.am	2023-11-26 17:11:44.408748327 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/sprites
++pkgdatadir = $(datadir)/powermanga/graphics/sprites
+ 
+ dist_pkgdata_DATA = \
+   all_enemies.spr \
+diff -ru powermanga-0.93.1.orig/graphics/sprites/meteors/Makefile.am powermanga-0.93.1.new/graphics/sprites/meteors/Makefile.am
+--- powermanga-0.93.1.orig/graphics/sprites/meteors/Makefile.am	2023-11-26 17:11:05.309326412 +0100
++++ powermanga-0.93.1.new/graphics/sprites/meteors/Makefile.am	2023-11-26 17:11:44.408748327 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/sprites/meteors
++pkgdatadir = $(datadir)/powermanga/graphics/sprites/meteors
+ 
+ dist_pkgdata_DATA = \
+   meteor_00.spr \
+diff -ru powermanga-0.93.1.orig/graphics/sprites/spaceships/Makefile.am powermanga-0.93.1.new/graphics/sprites/spaceships/Makefile.am
+--- powermanga-0.93.1.orig/graphics/sprites/spaceships/Makefile.am	2023-11-26 17:11:05.312326521 +0100
++++ powermanga-0.93.1.new/graphics/sprites/spaceships/Makefile.am	2023-11-26 17:11:44.409748364 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/sprites/spaceships
++pkgdatadir = $(datadir)/powermanga/graphics/sprites/spaceships
+ 
+ dist_pkgdata_DATA = \
+   spaceship_1_frame_0.spr \
+diff -ru powermanga-0.93.1.orig/graphics/sprites/stars/Makefile.am powermanga-0.93.1.new/graphics/sprites/stars/Makefile.am
+--- powermanga-0.93.1.orig/graphics/sprites/stars/Makefile.am	2023-11-26 17:11:05.305326266 +0100
++++ powermanga-0.93.1.new/graphics/sprites/stars/Makefile.am	2023-11-26 17:11:44.410748400 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/graphics/sprites/stars
++pkgdatadir = $(datadir)/powermanga/graphics/sprites/stars
+ 
+ dist_pkgdata_DATA = \
+   star_big_0.spr \
+diff -ru powermanga-0.93.1.orig/sounds/handheld_console/Makefile.am powermanga-0.93.1.new/sounds/handheld_console/Makefile.am
+--- powermanga-0.93.1.orig/sounds/handheld_console/Makefile.am	2023-11-26 17:11:05.323326921 +0100
++++ powermanga-0.93.1.new/sounds/handheld_console/Makefile.am	2023-11-26 17:12:00.749342580 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/sound/handheld_console
++pkgdatadir = $(datadir)/powermanga/sound/handheld_console
+ dist_pkgdata_DATA = \
+   music_congratulations.ogg \
+   music_game.ogg \
+diff -ru powermanga-0.93.1.orig/sounds/Makefile.am powermanga-0.93.1.new/sounds/Makefile.am
+--- powermanga-0.93.1.orig/sounds/Makefile.am	2023-11-26 17:11:05.321326848 +0100
++++ powermanga-0.93.1.new/sounds/Makefile.am	2023-11-26 17:12:00.750342617 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/sounds
++pkgdatadir = $(datadir)/powermanga/sounds
+ 
+ dist_pkgdata_DATA = \
+   music_congratulations.zik \
+diff -ru powermanga-0.93.1.orig/src/Makefile.am powermanga-0.93.1.new/src/Makefile.am
+--- powermanga-0.93.1.orig/src/Makefile.am	2023-11-26 17:11:05.317326703 +0100
++++ powermanga-0.93.1.new/src/Makefile.am	2023-11-26 17:13:18.617174374 +0100
+@@ -1,5 +1,5 @@
+ 
+-gamesdir = $(prefix)/games
++gamesdir = $(bindir)
+ scoredir = /var/games/powermanga
+ score = powermanga.hi
+ 
+diff -ru powermanga-0.93.1.orig/texts/Makefile.am powermanga-0.93.1.new/texts/Makefile.am
+--- powermanga-0.93.1.orig/texts/Makefile.am	2023-11-26 17:11:05.293325830 +0100
++++ powermanga-0.93.1.new/texts/Makefile.am	2023-11-26 17:12:00.753342726 +0100
+@@ -1,5 +1,5 @@
+ 
+-pkgdatadir = $(datadir)/games/powermanga/texts
++pkgdatadir = $(datadir)/powermanga/texts
+ 
+ dist_pkgdata_DATA = \
+   about_en.txt \
+diff -ru powermanga-0.93.1/src/tools.c powermanga-0.93.1.new/src/tools.c
+--- powermanga-0.93.1/src/tools.c	2015-01-10 19:06:28.000000000 +0100
++++ powermanga-0.93.1.new/src/tools.c	2023-11-26 19:26:30.342806751 +0100
+@@ -534,7 +534,7 @@
+ static const char *data_directories[] = {
+   /* normally unused, except when running from the source directory... */
+   ".",
+-  /* special value meaning "$(PREFIX)/share/games/powermanga/" */
++  /* special value meaning "$(PREFIX)/share/powermanga/" */
+   /* also marks end of list */
+   0
+ };
+@@ -622,7 +622,7 @@
+ #else
+   struct stat s;
+ #endif
+-  const char *subdir = "/share/games/powermanga/";
++  const char *subdir = "/share/powermanga/";
+ 
+   if (name == NULL)
+     {

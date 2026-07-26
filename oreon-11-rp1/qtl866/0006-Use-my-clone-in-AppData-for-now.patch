@@ -1,0 +1,22 @@
+From 6a4fe19771b66bab2062d44a002238f86eda53d7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 29 Oct 2016 14:25:59 +0200
+Subject: [PATCH] Use my clone in AppData for now
+
+---
+ qtl866.appdata.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qtl866.appdata.xml b/qtl866.appdata.xml
+index 082c947..060e1c9 100644
+--- a/qtl866.appdata.xml
++++ b/qtl866.appdata.xml
+@@ -21,7 +21,7 @@
+   </keywords>
+   <screenshots>
+     <screenshot type="default">
+-      <image>https://raw.githubusercontent.com/wd5gnr/qtl866/master/screenshot.png</image>
++      <image>https://raw.githubusercontent.com/lkundrak/qtl866/master/screenshot.png</image>
+     </screenshot>
+   </screenshots>
+   <url type="homepage">https://github.com/wd5gnr/qtl866</url>

@@ -1,0 +1,27 @@
+diff --git a/datadir/Common_Content/common-db5/xsl/html-single-plain.xsl b/datadir/Common_Content/common-db5/xsl/html-single-plain.xsl
+index 74fac496..ce49525c 100644
+--- a/datadir/Common_Content/common-db5/xsl/html-single-plain.xsl
++++ b/datadir/Common_Content/common-db5/xsl/html-single-plain.xsl
+@@ -12,7 +12,7 @@
+ <xsl:param name="generate.legalnotice.link" select="0"/>
+ <xsl:param name="generate.revhistory.link" select="0"/>
+ <xsl:param name="suppress.navigation">1</xsl:param>
+-<xsl:param name="manual.toc" select="' '"/>
++<xsl:param name="manual.toc" select="''"/>
+ <xsl:param name="highlight.source" select="0"/>
+ <xsl:param name="use.extensions" select="0"/>
+ <xsl:param name="callouts.extension" select="0"/>
+diff --git a/datadir/xsl/html-single-plain.xsl b/datadir/xsl/html-single-plain.xsl
+index 519383d7..259fa021 100644
+--- a/datadir/xsl/html-single-plain.xsl
++++ b/datadir/xsl/html-single-plain.xsl
+@@ -12,7 +12,7 @@
+ <xsl:param name="generate.legalnotice.link" select="0"/>
+ <xsl:param name="generate.revhistory.link" select="0"/>
+ <xsl:param name="suppress.navigation">1</xsl:param>
+-<xsl:param name="manual.toc" select="' '"/>
++<xsl:param name="manual.toc" select="''"/>
+ <xsl:param name="highlight.source" select="0"/>
+ <xsl:param name="use.extensions" select="0"/>
+ <xsl:param name="callouts.extension" select="0"/>
+

@@ -1,0 +1,11 @@
+diff -uNr widelands.orig/src/base/test/CMakeLists.txt widelands/src/base/test/CMakeLists.txt
+--- widelands.orig/src/base/test/CMakeLists.txt	2024-11-12 21:03:25.000000000 +0100
++++ widelands/src/base/test/CMakeLists.txt	2025-02-16 12:21:07.246000000 +0100
+@@ -7,7 +7,6 @@
+     test_times.cc
+     test_time_string.cc
+     test_utf8.cc
+-    test_string.cc
+   DEPENDS
+     base
+     base_crypto

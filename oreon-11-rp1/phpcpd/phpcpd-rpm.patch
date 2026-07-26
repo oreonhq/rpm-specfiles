@@ -1,0 +1,27 @@
+diff -up ./phpcpd.rpm ./phpcpd
+--- ./phpcpd.rpm	2020-08-13 11:00:53.656423265 +0200
++++ ./phpcpd	2020-08-13 11:01:28.205352474 +0200
+@@ -23,22 +23,6 @@ if (version_compare('7.3.0', PHP_VERSION
+     die(1);
+ }
+ 
+-$loaded = false;
+-
+-foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
+-    if (file_exists($file)) {
+-        require $file;
+-        $loaded = true;
+-        break;
+-    }
+-}
+-
+-if (!$loaded) {
+-    die(
+-        'You need to set up the project dependencies using the following commands:' . PHP_EOL .
+-        'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+-        'php composer.phar install' . PHP_EOL
+-    );
+-}
++require '/usr/share/php/SebastianBergmann/PHPCPD/autoload.php';
+ 
+ exit((new \SebastianBergmann\PHPCPD\Application)->run($_SERVER['argv']));

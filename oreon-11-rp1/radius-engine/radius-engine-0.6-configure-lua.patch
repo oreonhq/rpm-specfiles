@@ -1,0 +1,65 @@
+diff -up radius-engine-0.6/acinclude.m4.lua radius-engine-0.6/acinclude.m4
+--- radius-engine-0.6/acinclude.m4.lua	2011-01-03 11:50:24.590542013 -0500
++++ radius-engine-0.6/acinclude.m4	2011-01-03 11:50:30.646542003 -0500
+@@ -393,7 +393,7 @@ AC_DEFUN([AM_PATH_LUA],
+   LUA_CFLAGS=''
+   LUA_LIBS=''
+ 
+-  PKG_CHECK_MODULES([LUA], [lua5.1], [HAVE_LUA=yes])
++  PKG_CHECK_MODULES([LUA], [lua], [HAVE_LUA=yes])
+ 
+   AC_LANG_PUSH([C])
+   AC_LANG_POP()
+diff -up radius-engine-0.6/configure.lua radius-engine-0.6/configure
+--- radius-engine-0.6/configure.lua	2010-12-12 14:02:16.000000000 -0500
++++ radius-engine-0.6/configure	2011-01-03 11:46:37.459542002 -0500
+@@ -5311,12 +5311,12 @@ if test -n "$PKG_CONFIG"; then
+         pkg_cv_LUA_CFLAGS="$LUA_CFLAGS"
+     else
+         if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"lua5.1\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "lua5.1") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"lua\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "lua") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_LUA_CFLAGS=`$PKG_CONFIG --cflags "lua5.1" 2>/dev/null`
++  pkg_cv_LUA_CFLAGS=`$PKG_CONFIG --cflags "lua" 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+@@ -5329,12 +5329,12 @@ if test -n "$PKG_CONFIG"; then
+         pkg_cv_LUA_LIBS="$LUA_LIBS"
+     else
+         if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"lua5.1\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "lua5.1") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"lua\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "lua") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_LUA_LIBS=`$PKG_CONFIG --libs "lua5.1" 2>/dev/null`
++  pkg_cv_LUA_LIBS=`$PKG_CONFIG --libs "lua" 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+@@ -5353,14 +5353,14 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        LUA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "lua5.1"`
++	        LUA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "lua"`
+         else
+-	        LUA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "lua5.1"`
++	        LUA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "lua"`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+ 	echo "$LUA_PKG_ERRORS" >&5
+ 
+-	as_fn_error "Package requirements (lua5.1) were not met:
++	as_fn_error "Package requirements (lua) were not met:
+ 
+ $LUA_PKG_ERRORS
+ 

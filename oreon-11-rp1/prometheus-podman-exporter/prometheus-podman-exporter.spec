@@ -1,0 +1,126 @@
+%global source0_hash 4366eabe998e5be4e18d36c6787e0ce4a2456cc6021072224b431bf1b1cac509
+
+%bcond check 0
+%bcond_without bundled
+%if 0%{?rhel}
+%bcond_without bundled
+%endif
+
+%if %{defined rhel} && 0%{?rhel} < 10
+%define gobuild(o:) go build -buildmode pie -compiler gc -tags="rpm_crashtraceback ${BUILDTAGS:-}" -ldflags "-linkmode=external -compressdwarf=false ${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '%__global_ldflags'" -a -v -x %{?**};
+%endif
+
+%if %{with bundled}
+%global gomodulesmode   GO111MODULE=on
+%endif
+
+# https://github.com/containers/prometheus-podman-exporter
+%global goipath         github.com/containers/prometheus-podman-exporter
+Version:                1.20.0
+
+%gometa -f
+
+%global goname prometheus-podman-exporter
+
+%global common_description %{expand:
+Prometheus exporter for podman environments exposing containers, pods, images,
+volumes and networks information.}
+
+%global golicenses      LICENSE
+%global godocs          CODE_OF_CONDUCT.md CONTRIBUTING.md MAINTAINERS.md\\\
+                        README.md SECURITY.md
+
+Name:           %{goname}
+Release:        %autorelease
+Summary:        Prometheus exporter for podman environment
+
+License:        Apache-2.0 AND MPL-2.0 AND BSD-3-Clause AND BSD-2-Clause AND MIT AND Unlicense AND CC-BY-SA-4.0 AND ISC
+URL:            %{gourl}
+Source:         %{gosource}
+Source:         vendor-%{version}.tar.gz
+Source:         bundle_go_deps_for_rpm.sh
+
+%if 0%{?fedora} && ! 0%{?rhel}
+BuildRequires: pkgconfig(libbtrfsutil)
+%endif
+BuildRequires: gcc
+BuildRequires: glibc-devel
+BuildRequires: glibc-static
+BuildRequires: git-core
+%if 0%{?rhel} >= 9
+BuildRequires: go-rpm-macros
+%endif
+BuildRequires: golang
+BuildRequires: make
+BuildRequires: pkgconfig(devmapper)
+BuildRequires: pkgconfig(glib-2.0)
+BuildRequires: pkgconfig(gpgme)
+BuildRequires: pkgconfig(libassuan)
+%if 0%{?fedora} >= 37
+BuildRequires: shadow-utils-subid-devel
+%endif
+
+%description %{common_description}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%goprep %{?with_bundledc:-k}
+%if %{with bundled}
+%setup -q -T -D -a 1 -n %{name}-%{version}
+%endif
+
+%if %{without bundled}
+%generate_buildrequires
+%go_generate_buildrequires
+%endif
+
+%build
+%if %{with bundled}
+export GOFLAGS="-mod=vendor"
+%endif
+
+%if 0%{?rhel} >= 9
+export BUILDTAGS="exclude_graphdriver_btrfs btrfs_noversion systemd libtrust_openssl"
+%endif
+
+%if 0%{?fedora}
+export BUILDTAGS="systemd"
+%endif
+
+export LDFLAGS="-X %{goipath}/cmd.buildVersion=%{version} -X %{goipath}/cmd.buildRevision=%{release} -X %{goipath}/cmd.buildBranch=main"
+
+%gobuild -o %{gobuilddir}/bin/prometheus-podman-exporter %{goipath}
+
+%install
+install -m 0755 -vd                     %{buildroot}%{_bindir}
+install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
+install -m 0755 -vd                     %{buildroot}%{_unitdir}
+install -m 0755 -vd                     %{buildroot}%{_userunitdir}
+install -m 0755 -vd                     %{buildroot}%{_sysconfdir}/sysconfig/
+install -m 0644 -vp ./contrib/systemd/system/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -m 0644 -vp ./contrib/systemd/system/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
+install -m 0644 -vp ./contrib/systemd/user/%{name}.service %{buildroot}%{_userunitdir}/%{name}.service
+
+%post
+%systemd_user_post %{name}.service
+%systemd_post %{name}.service
+
+%preun
+%systemd_user_preun %{name}.service
+%systemd_preun %{name}.service
+
+%if %{with check}
+%check
+%endif
+
+%files
+%license LICENSE
+%doc CODE_OF_CONDUCT.md CONTRIBUTING.md MAINTAINERS.md README.md SECURITY.md
+%{_bindir}/%{name}
+%{_unitdir}/%{name}.service
+%{_userunitdir}/%{name}.service
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+
+%changelog
+%autochangelog

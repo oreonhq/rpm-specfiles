@@ -1,0 +1,12 @@
+diff -ur a/astropy/cosmology/_src/setup_package.py b/astropy/cosmology/_src/setup_package.py
+--- a/astropy/cosmology/_src/setup_package.py	2025-12-22 21:29:04.042809695 +0100
++++ b/astropy/cosmology/_src/setup_package.py	2025-12-22 21:29:30.722287115 +0100
+@@ -16,7 +16,7 @@
+     # be extra careful with this extension as it calls PyErr_WarnEx
+     # with a formatted message whose size cannot be determined at compile time,
+     # which is never done within the standard library
+-    extra_compile_args = ["-Werror", "-Wall"]
++    extra_compile_args = []
+ 
+ 
+ def get_extensions():

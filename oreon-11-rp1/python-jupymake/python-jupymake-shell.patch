@@ -1,0 +1,10 @@
+--- JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp.orig	2023-12-04 02:58:10.000000000 -0700
++++ JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp	2025-09-30 08:47:12.798012318 -0600
+@@ -78,6 +78,7 @@ static PyObject* InitializePolymake(PyOb
+             initialized = true;
+             if(!shell_enabled){
+                 main_polymake_session->shell_enable();
++                main_polymake_session->shell_execute("add Core::Application($_) foreach @User::start_applications;");
+                 main_polymake_session->set_application("polytope");
+             }
+         }

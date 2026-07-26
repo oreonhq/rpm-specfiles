@@ -1,0 +1,43 @@
+From 2c0d8dcd70a153a9cf492d803ea7ac70868c85c9 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Wed, 6 Aug 2025 16:47:20 -0500
+Subject: [PATCH] Remove coverage test requirement
+
+---
+ requirements/mintest | 1 -
+ requirements/tests   | 1 -
+ tox.ini              | 2 +-
+ 3 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/requirements/mintest b/requirements/mintest
+index a245ecd..e079f8a 100644
+--- a/requirements/mintest
++++ b/requirements/mintest
+@@ -1,2 +1 @@
+-coverage>=4.1
+ pytest
+diff --git a/requirements/tests b/requirements/tests
+index a95ec96..79b4298 100644
+--- a/requirements/tests
++++ b/requirements/tests
+@@ -1,4 +1,3 @@
+-coverage >= 4.1
+ pytest >= 7.0
+ pyyaml
+ requests
+diff --git a/tox.ini b/tox.ini
+index f78191c..24c7070 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -63,7 +63,7 @@ setenv =
+     PYTHONASYNCIODEBUG=0
+     FALCON_DISABLE_CYTHON=Y
+ deps = -r{toxinidir}/requirements/mintest
+-commands = coverage run -m pytest tests -k 'not slow' []
++commands = pytest tests -k 'not slow' []
+ 
+ [testenv:pytest]
+ deps = {[testenv]deps}
+-- 
+2.50.1
+

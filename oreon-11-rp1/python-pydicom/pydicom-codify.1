@@ -1,0 +1,69 @@
+.TH PYDICOM\-CODIFY "1" "September 2024" "" "User Commands"
+.SH NAME
+.B pydicom\-codify
+\(en Read a DICOM file and produce the pydicom (Python) code
+which can create that file
+.SH SYNOPSIS
+.B pydicom codify
+.RB [ \-h ]
+.RB [ \-e\ \fIEXCLUDE_SIZE ]
+.RB [ \-p ]
+.RB [ \-s\ \fISAVE_AS ]
+.I filespec
+.RI [ outfile ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I filespec
+File specification, in format
+.RB [ pydicom:: ] \fIfilename [ ::element ].
+If
+.B pydicom::
+prefix is present, then use the pydicom test file with that name.
+If
+.B element
+is given, use only that data element within the file.
+.IP
+.I Examples:
+.BR path/to/your_file.dcm ,
+.BR your_file.dcm::StudyDate ,
+.BR pydicom::rtplan.dcm::BeamSequence[0] ,
+.B yourplan.dcm::BeamSequence[0].BeamNumber
+.TP
+.I outfile
+Filename to write Python code to;
+if not specified then code is written to
+.I stdout
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.TP
+.B \-e\ \fIEXCLUDE_SIZE\fR, \fB\-\-exclude\-size\ \fIEXCLUDE_SIZE
+Exclude binary data larger than specified
+(default:
+.B 100
+bytes)
+.TP
+.B \-p, \fB\-\-include\-private
+Include private data elements
+(default is to exclude them)
+.TP
+.B \-s\ \fISAVE_AS\fR, \fB\-\-save\-as\ \fISAVE_AS
+Specify the filename for
+.BI ds.save_as( save_filename )\fR;
+otherwise the input name\ +
+.B _from_codify
+will be used.
+.SH NOTES
+Binary data (e.g. pixels) larger than
+.B \-\-exclude\-size
+(default 100 bytes) is not included.
+A dummy line with a syntax error is produced.
+Private data elements are not included by default.
+.SH "SEE\ ALSO"
+.BR pydicom (1)
+.P
+.BR pydicom\-help (1),
+.\" .BR pydicom\-codify (1),
+.BR pydicom\-show (1)

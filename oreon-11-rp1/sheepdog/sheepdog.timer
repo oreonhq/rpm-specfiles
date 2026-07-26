@@ -1,0 +1,12 @@
+[Unit]
+Description=Sheepdog QEMU/KVM Block Storage
+After=network.target
+Requires=corosync.service
+
+[Timer]
+OnActiveSec=2s
+AccuracySec=100ms
+Unit=sheepdog.service
+
+[Install]
+WantedBy=multi-user.target

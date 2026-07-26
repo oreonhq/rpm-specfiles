@@ -1,0 +1,27 @@
+Fixes this warning:
+
+/builddir/build/BUILD/polymake-4.5/include/core/polymake/internal/AVL.h:52:6: warning: type ‘pm::AVL::Ptr_flags’ violates the C++ One Definition Rule [-Wodr]
+   52 | enum Ptr_flags : size_t {
+      |      ^
+/builddir/build/BUILD/polymake-4.5/include/core/polymake/internal/AVL.h:52:6: note: an enum with different value name is defined in another translation unit
+   52 | enum Ptr_flags : size_t {
+      |      ^
+/builddir/build/BUILD/polymake-4.5/include/core/polymake/internal/AVL.h:53:4: note: name ‘NONE’ differs from name ‘END_RING’ defined in another translation unit
+   53 |    NONE=0,
+      |    ^
+/builddir/build/BUILD/polymake-4.5/include/core/polymake/internal/AVL.h:53:4: note: mismatching definition
+   53 |    NONE=0,
+      |    ^
+
+--- lib/core/include/internal/AVL.h.orig	2021-09-29 06:13:35.000000000 -0600
++++ lib/core/include/internal/AVL.h	2021-10-04 06:41:35.414976853 -0600
+@@ -33,6 +33,9 @@
+ #include <algorithm>
+ #include <cassert>
+ 
++// Avoid name clash with Singular
++#undef NONE
++
+ namespace pm {
+ 
+ /// special tags for find_nearest denoting the first and last occurrence of a given key in a multi-set

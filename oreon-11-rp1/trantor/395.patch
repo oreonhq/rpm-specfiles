@@ -1,0 +1,34 @@
+From ba0765b5c37f40d58320b6865841f7a80dadb1c4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 10 Feb 2026 12:36:15 +0000
+Subject: [PATCH] Remove spurious executable permissions from non-script
+ sources
+
+---
+ CMakeLists.txt                        | 0
+ README.md                             | 0
+ trantor/net/inner/Socket.cc           | 0
+ trantor/tests/SerialTaskQueueTest1.cc | 0
+ trantor/utils/AsyncFileLogger.cc      | 0
+ 5 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 CMakeLists.txt
+ mode change 100755 => 100644 README.md
+ mode change 100755 => 100644 trantor/net/inner/Socket.cc
+ mode change 100755 => 100644 trantor/tests/SerialTaskQueueTest1.cc
+ mode change 100755 => 100644 trantor/utils/AsyncFileLogger.cc
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+old mode 100755
+new mode 100644
+diff --git a/README.md b/README.md
+old mode 100755
+new mode 100644
+diff --git a/trantor/net/inner/Socket.cc b/trantor/net/inner/Socket.cc
+old mode 100755
+new mode 100644
+diff --git a/trantor/tests/SerialTaskQueueTest1.cc b/trantor/tests/SerialTaskQueueTest1.cc
+old mode 100755
+new mode 100644
+diff --git a/trantor/utils/AsyncFileLogger.cc b/trantor/utils/AsyncFileLogger.cc
+old mode 100755
+new mode 100644

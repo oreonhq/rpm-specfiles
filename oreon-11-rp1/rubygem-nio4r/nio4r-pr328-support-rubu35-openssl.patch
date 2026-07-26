@@ -1,0 +1,29 @@
+From 235692c3bde5ec4752fff97a2435629602103e55 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Thu, 30 Oct 2025 10:54:12 +0900
+Subject: [PATCH] support ruby35 openssl change
+
+With the following commit:
+https://github.com/ruby/openssl/pull/849
+https://github.com/ruby/ruby/commit/5a14f536958d20e98c58606bd44bd2c0bed6da4b
+ruby3.5.0dev removes SSLContext#set_minmax_proto_version .
+
+So use max_version= instead.
+Closes #326 .
+---
+ spec/nio/selectables/ssl_socket_spec.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/spec/nio/selectables/ssl_socket_spec.rb b/spec/nio/selectables/ssl_socket_spec.rb
+index a8c394d..97c66da 100644
+--- a/spec/nio/selectables/ssl_socket_spec.rb
++++ b/spec/nio/selectables/ssl_socket_spec.rb
+@@ -39,7 +39,7 @@
+       ctx.cert = ssl_cert
+       ctx.key = ssl_key
+       unless @tls.empty?
+-        if ctx.respond_to? :set_minmax_proto_version, true
++        if ctx.respond_to? :max_version=, true
+           ctx.max_version = @tls[0]
+         else
+           ctx.ssl_version = @tls[1]

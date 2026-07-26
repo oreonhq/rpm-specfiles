@@ -1,0 +1,76 @@
+From 30b0460635b46ce71f22586273afb370075d7db8 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 1 Sep 2024 21:30:11 -0400
+Subject: [PATCH 5/6] Downstream-only: use the system libdeflate
+
+---
+ pxr/imaging/hio/CMakeLists.txt                       |  7 +++++++
+ .../hioOpenEXR/OpenEXR/OpenEXRCore/compression.c     |  3 +--
+ .../plugin/hioOpenEXR/OpenEXR/OpenEXRCoreUnity.h     | 12 ------------
+ 3 files changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/pxr/imaging/hio/CMakeLists.txt b/pxr/imaging/hio/CMakeLists.txt
+index e61fc7c54..7cfbe9d70 100644
+--- a/pxr/imaging/hio/CMakeLists.txt
++++ b/pxr/imaging/hio/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ set(PXR_PREFIX pxr/imaging)
+ set(PXR_PACKAGE hio)
+ 
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(DEFLATE REQUIRED libdeflate)
++
+ pxr_library(hio
+     LIBRARIES
+         arch
+@@ -11,6 +14,10 @@ pxr_library(hio
+         trace
+         ar
+         hf
++	${DEFLATE_LIBRARIES}
++
++    INCLUDE_DIRS
++	${DEFLATE_INCLUDE_DIRS}
+ 
+     PUBLIC_CLASSES
+         fieldTextureData
+diff --git a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/compression.c b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/compression.c
+index a672e833b..1d2eaea56 100644
+--- a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/compression.c
++++ b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCore/compression.c
+@@ -8,8 +8,7 @@
+ #include "internal_memory.h"
+ #include "internal_structs.h"
+ 
+-// pxr #include <libdeflate.h>
+-#include "../deflate/libdeflate.h"
++#include <libdeflate.h>
+ 
+ #if (                                                                          \
+     LIBDEFLATE_VERSION_MAJOR > 1 ||                                            \
+diff --git a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCoreUnity.h b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCoreUnity.h
+index 7481a346e..71bdde9cc 100644
+--- a/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCoreUnity.h
++++ b/pxr/imaging/plugin/hioOpenEXR/OpenEXR/OpenEXRCoreUnity.h
+@@ -8,18 +8,6 @@
+ 
+ #include "OpenEXRCore/openexr_config.h"
+ 
+-#include "deflate/lib/lib_common.h"
+-#include "deflate/common_defs.h"
+-#include "deflate/lib/utils.c"
+-#include "deflate/lib/arm/cpu_features.c"
+-#include "deflate/lib/x86/cpu_features.c"
+-#include "deflate/lib/deflate_compress.c"
+-#undef BITBUF_NBITS
+-#include "deflate/lib/deflate_decompress.c"
+-#include "deflate/lib/adler32.c"
+-#include "deflate/lib/zlib_compress.c"
+-#include "deflate/lib/zlib_decompress.c"
+-
+ #include "openexr-c.h"
+ 
+ #include "OpenEXRCore/attributes.c"
+-- 
+2.53.0
+

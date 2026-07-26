@@ -1,0 +1,162 @@
+This patch adds missing #include directives, prototypes, and int types,
+to improve compatibility with strict(er) C99 compilers
+
+Submitted upstream: <https://sourceforge.net/p/amide/mailman/message/37743362/>
+
+diff --git a/examples/classifyvolume.c b/examples/classifyvolume.c
+index 59e1353ed48cfdd0..2333fe055239f5a5 100644
+--- a/examples/classifyvolume.c
++++ b/examples/classifyvolume.c
+@@ -37,6 +37,11 @@
+ 
+ #include "volume.h"
+ 
++#include <fcntl.h>
++#include <string.h>
++#include <unistd.h>
++
++int
+ main(argc, argv)
+ int argc;
+ char **argv;
+diff --git a/examples/denfile.c b/examples/denfile.c
+index 91d5ea19d6b52c87..750e9c186d30bcd3 100644
+--- a/examples/denfile.c
++++ b/examples/denfile.c
+@@ -8,6 +8,9 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
++#include <fcntl.h>
++#include <unistd.h>
++
+ #ifndef MIN
+ #define MIN(a, b) ((a) > (b) ? (b) : (a))
+ #endif
+@@ -18,6 +21,11 @@
+ 
+ #define MAX_READ_SIZE	8192	/* maximum # of bytes per read(2) call */
+ 
++int read_bytes(int fd, char *buf, int bytecount);
++int read_shorts(int fd, short *sbuf, int shortcount, int swap);
++int read_words(int fd, int *wbuf, int wordcount, int swap);
++int write_bytes(int fd, char *buf, int bytecount);
++
+ /*
+  * read_den
+  *
+@@ -211,6 +219,7 @@ int xlen, ylen, zlen;	/* volume dimensions */
+  * error or the full number of bytes could not be read.
+  */
+ 
++int
+ read_bytes(fd, buf, bytecount)
+ int fd;		/* file descriptor to read from */
+ char *buf;	/* memory in which to store data */
+@@ -239,6 +248,7 @@ int bytecount;	/* number of bytes to read */
+  * error or the full number of shorts could not be read.
+  */
+ 
++int
+ read_shorts(fd, sbuf, shortcount, swap)
+ int fd;		/* file descriptor to read from */
+ short *sbuf;	/* memory in which to store data */
+@@ -287,6 +297,7 @@ int swap;	/* if nonzero then swap bytes */
+  * error or the full number of words could not be read.
+  */
+ 
++int
+ read_words(fd, wbuf, wordcount, swap)
+ int fd;		/* file descriptor to read from */
+ int *wbuf;	/* memory in which to store data */
+@@ -335,6 +346,7 @@ int swap;	/* if nonzero then swap bytes */
+  * Return value is 1 if the write was succesful or 0 if there was an error.
+  */
+ 
++int
+ write_bytes(fd, buf, bytecount)
+ int fd;		/* file descriptor to write to */
+ char *buf;	/* memory containing data */
+diff --git a/examples/makeoctree.c b/examples/makeoctree.c
+index b605d26605471f04..dba9e8dd27704415 100644
+--- a/examples/makeoctree.c
++++ b/examples/makeoctree.c
+@@ -37,6 +37,10 @@
+ 
+ #include "volume.h"
+ 
++#include <fcntl.h>
++#include <unistd.h>
++
++int
+ main()
+ {
+     vpContext *vpc;	/* rendering context */
+diff --git a/examples/makevolume.c b/examples/makevolume.c
+index 86484584c396e40c..f58c50fde38a23fa 100644
+--- a/examples/makevolume.c
++++ b/examples/makevolume.c
+@@ -38,6 +38,9 @@
+ #include <sys/types.h>
+ #include "volume.h"
+ 
++#include <fcntl.h>
++#include <unistd.h>
++
+ int main()
+ {
+     vpContext *vpc;	/* rendering context */
+diff --git a/examples/rendervolume.c b/examples/rendervolume.c
+index a2173d30e894cc62..88fe162e8c84e152 100644
+--- a/examples/rendervolume.c
++++ b/examples/rendervolume.c
+@@ -38,6 +38,12 @@
+ #include <string.h>
+ #include "volume.h"
+ 
++#include <fcntl.h>
++#include <unistd.h>
++
++void StorePGM(char *image, int width, int height, char *filename);
++
++int
+ main(argc, argv)
+ int argc;
+ char **argv;
+@@ -210,6 +216,7 @@ char **argv;
+     return(0);
+ }
+ 
++void
+ StorePGM(image, width, height, filename)
+ char *image;
+ int width, height;
+diff --git a/examples/scalevolume.c b/examples/scalevolume.c
+index a326f6aaab140871..0773c7a7d394e7c9 100644
+--- a/examples/scalevolume.c
++++ b/examples/scalevolume.c
+@@ -44,8 +44,12 @@
+ 
+ #include <stdlib.h>
+ #include <stdio.h>
++#include <string.h>
+ #include <volpack.h>
+ 
++int write_den(char *filename, unsigned char *, int xlen, int ylen, int zlen);
++
++int
+ main(argc, argv)
+ int argc;
+ char **argv;
+diff --git a/src/makeopts.c b/src/makeopts.c
+index 5cb954b1e7cdf04f..cf7794ed6f2df0c6 100644
+--- a/src/makeopts.c
++++ b/src/makeopts.c
+@@ -43,6 +43,7 @@
+  * Usage: makeopts output_file [compiler_options ...]
+  */
+ 
++int
+ main(argc, argv)
+ int argc;
+ char **argv;

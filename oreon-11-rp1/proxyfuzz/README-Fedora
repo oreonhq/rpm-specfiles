@@ -1,0 +1,33 @@
+ProxyFuzz is a man-in-the-middle non-deterministic network fuzzer written in
+Python. ProxyFuzz randomly changes (fuzzes) contents on the network traffic.
+It supports TCP and UDP protocols and can also be configured to fuzz only one
+side of the communication. ProxyFuzz is protocol agnostic so it can randomly
+fuzz any network communication.
+
+ProxyFuzz is a good tool for quickly testing network protocols and provide with
+basic proof of concepts. Using this tool you will be amazed by the poor quality
+of software and you will see clients and servers dying upon unexpected input,
+just be prepared to see the very weird behaviours.
+
+Syntax of ProxyFuzz:
+
+
+ProxyFuzz 0.1, Simple fuzzing proxy by Rodrigo Marcos
+
+usage():
+
+python3 proxyfuzz -l  -r  -p  [options]
+
+ [options]
+
+                -w: Number of requests to send before start fuzzing
+
+                -c: Fuzz only client side (both otherwise)
+
+                -s: Fuzz only server side (both otherwise)
+
+                -u: UDP protocol (otherwise TCP is used)
+
+                -v: Verbose (outputs network traffic)
+
+                -h: Help page

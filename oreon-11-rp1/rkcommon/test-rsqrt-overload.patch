@@ -1,0 +1,24 @@
+--- a/tests/math/test_rkmath.cpp	2025-07-31 23:01:33.552407134 +0300
++++ b/tests/math/test_rkmath.cpp	2025-07-31 23:05:33.998886574 +0300
+@@ -49,8 +49,8 @@
+ template <typename T>
+ inline void test_rsqrt()
+ {
+-  REQUIRE(CmpT<T>(rsqrt(T(1)), T(1)));
+-  REQUIRE(CmpT<T>(rsqrt(T(4)), T(.5)));
++  REQUIRE(CmpT<T>(rkcommon::math::rsqrt(static_cast<T>(1)), T(1)));
++  REQUIRE(CmpT<T>(rkcommon::math::rsqrt(static_cast<T>(4)), T(.5)));
+ }
+ 
+ TEST_CASE("rkmath rsqrt function", "[rkmath]")
+--- a/tests/math/test_Quaternion.cpp	2025-07-31 23:11:28.293774976 +0300
++++ b/tests/math/test_Quaternion.cpp	2025-07-31 23:15:06.229875126 +0300
+@@ -187,7 +187,7 @@
+ inline void test_slerp()
+ {
+   typename T::Scalar two = 2;
+-  REQUIRE(CmpT(slerp(.5f, T(1, 0, 0, 0), T(0, 1, 0, 0)), T(rsqrt(two), rsqrt(two), 0, 0)));
++  REQUIRE(CmpT(slerp(.5f, T(1, 0, 0, 0), T(0, 1, 0, 0)), T(static_cast<typename T::Scalar>(rkcommon::math::rsqrt(two)), static_cast<typename T::Scalar>(rkcommon::math::rsqrt(two)), 0, 0)));
+ }
+ 
+ TEST_CASE("Quaternion functions", "[quat]")

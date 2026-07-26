@@ -1,0 +1,310 @@
+From af6d03be77d66119df57a1d38c1a88c5d6def891 Mon Sep 17 00:00:00 2001
+From: William Wang <williamlw@fb.com>
+Date: Mon, 10 Apr 2023 14:49:32 -0400
+Subject: [PATCH 1/2] Updating Testslide to typeguard 3.02
+
+---
+ pytest-testslide/requirements.txt      |  2 +-
+ requirements.txt                       |  2 +-
+ tests/lib_testslide.py                 | 23 ++++-----
+ tests/mock_async_callable_testslide.py | 10 ++--
+ testslide/lib.py                       | 66 +++++++++++---------------
+ 5 files changed, 40 insertions(+), 63 deletions(-)
+
+diff --git a/pytest-testslide/requirements.txt b/pytest-testslide/requirements.txt
+index fd68145..b69b75d 100644
+--- a/pytest-testslide/requirements.txt
++++ b/pytest-testslide/requirements.txt
+@@ -1,2 +1,2 @@
+-pytest~=6.2
++pytest~=7.3
+ pytest-asyncio>=0.14.0
+diff --git a/requirements.txt b/requirements.txt
+index 9e51142..a87cb58 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+ psutil>=5.6.7
+ Pygments>=2.2.0
+-typeguard<3.0
++typeguard~=3.0
+ dataclasses>=0.6; python_version < "3.7"
+diff --git a/tests/lib_testslide.py b/tests/lib_testslide.py
+index 44746f4..9f9375a 100644
+--- a/tests/lib_testslide.py
++++ b/tests/lib_testslide.py
+@@ -42,9 +42,7 @@ def _validate_callable_arg_types(context):
+     def assert_fails(self, *args, **kwargs):
+         with self.assertRaisesRegex(
+             testslide.lib.TypeCheckError,
+-            "Call to "
+-            + self.callable_template.__name__
+-            + " has incompatible argument types",
++            f"Call to {self.callable_template.__name__} has incompatible argument types",
+         ):
+             testslide.lib._validate_callable_arg_types(
+                 self.skip_first_arg, self.callable_template, args, kwargs
+@@ -208,7 +206,7 @@ def _validate_callable_arg_types(context):
+                 return sample_module.test_union
+ 
+             @context.example
+-            def passes_with_StritMock_without_template(self):
++            def passes_with_StrictMock_without_template(self):
+                 self.assert_passes({"StrictMock": StrictMock()})
+ 
+             @context.example("it works with unittest.mock.Mock without spec")
+@@ -216,7 +214,7 @@ def _validate_callable_arg_types(context):
+                 self.assert_passes({"Mock": unittest.mock.Mock()})
+ 
+             @context.example
+-            def passes_with_StritMock_with_valid_template(self):
++            def passes_with_StrictMock_with_valid_template(self):
+                 self.assert_passes(
+                     {"StrictMock(template=str)": StrictMock(template=str)}
+                 )
+@@ -226,7 +224,7 @@ def _validate_callable_arg_types(context):
+                 self.assert_passes({"Mock(spec=str)": unittest.mock.Mock(spec=str)})
+ 
+             @context.example
+-            def fails_with_StritMock_with_invalid_template(self):
++            def fails_with_StrictMock_with_invalid_template(self):
+                 self.assert_fails(
+                     {"StrictMock(template=dict)": StrictMock(template=dict)}
+                 )
+@@ -242,7 +240,7 @@ def _validate_callable_arg_types(context):
+                 return sample_module.test_tuple
+ 
+             @context.example
+-            def passes_with_StritMock_without_template(self):
++            def passes_with_StrictMock_without_template(self):
+                 self.assert_passes(
+                     {
+                         "StrictMock": (
+@@ -264,7 +262,7 @@ def _validate_callable_arg_types(context):
+                 )
+ 
+             @context.example
+-            def passes_with_StritMock_with_valid_template(self):
++            def passes_with_StrictMock_with_valid_template(self):
+                 self.assert_passes(
+                     {
+                         "StrictMock(template=int)": (
+@@ -286,7 +284,7 @@ def _validate_callable_arg_types(context):
+                 )
+ 
+             @context.example
+-            def fails_with_StritMock_with_invalid_template(self):
++            def fails_with_StrictMock_with_invalid_template(self):
+                 self.assert_fails(
+                     {
+                         "StrictMock(template=dict)": (
+@@ -366,11 +364,6 @@ def _validate_return_type(context):
+     @context.example
+     def fails_for_wrong_type(self):
+         self.assert_fails(42)
+-        # assert_regex = r"(?s)type of return must be .+; got .+ instead: .+Defined"
+-        # with self.assertRaisesRegex(TypeError, assert_regex):
+-        #    testslide.lib._validate_return_type(
+-        #        self.callable_template, 42, self.caller_frame_info
+-        #    )
+ 
+     @context.example
+     def fails_for_mock_with_wrong_template(self):
+@@ -386,7 +379,7 @@ def _validate_return_type(context):
+     def fails_for_valid_forward_reference_but_bad_type_passed(self):
+         with self.assertRaisesRegex(
+             testslide.lib.TypeCheckError,
+-            "type of return must be one of .*; got int instead:",
++            "type of return must be .*; got <class 'int'> instead:",
+         ):
+             testslide.lib._validate_return_type(
+                 Foo.get_maybe_foo, 33, self.caller_frame_info
+diff --git a/tests/mock_async_callable_testslide.py b/tests/mock_async_callable_testslide.py
+index 313c0e4..6162838 100644
+--- a/tests/mock_async_callable_testslide.py
++++ b/tests/mock_async_callable_testslide.py
+@@ -169,7 +169,7 @@ def mock_async_callable_tests(context):
+ 
+                 with self.assertRaisesRegex(
+                     TypeCheckError,
+-                    "^type of return must be a list; got (asyncio|coroutine)",
++                    "^type of return must be typing.List\[str\]; got .+(asyncio|coroutine)",
+                 ):
+                     await self.callable_target(*self.call_args, **self.call_kwargs)
+ 
+@@ -622,12 +622,8 @@ def mock_async_callable_tests(context):
+                     self.target_arg, self.callable_arg
+                 ).to_call_original()
+                 self.assertEqual(
+-                    id(await self.callable_target(*self.call_args, **self.call_kwargs)),
+-                    id(
+-                        await self.original_callable(
+-                            *self.call_args, **self.call_kwargs
+-                        )
+-                    ),
++                    await self.callable_target(*self.call_args, **self.call_kwargs),
++                    await self.original_callable(*self.call_args, **self.call_kwargs),
+                 )
+ 
+         else:
+diff --git a/testslide/lib.py b/testslide/lib.py
+index 2370879..df90240 100644
+--- a/testslide/lib.py
++++ b/testslide/lib.py
+@@ -80,7 +80,7 @@ class WrappedMock(unittest.mock.NonCallableMock):
+     """Needed to be able to show the useful qualified name for mock specs"""
+ 
+     def get_qualified_name(self) -> str:
+-        return typeguard.qualified_name(self._spec_class)
++        return typeguard._utils.qualified_name(self._spec_class)
+ 
+ 
+ def _extract_NonCallableMock_template(mock_obj: Mock) -> Optional[Any]:
+@@ -159,6 +159,8 @@ def _validate_callable_signature(
+     # python stdlib tests have to exempt some builtins for signature validation tests
+     # they use a giant alloy/deny list, which is impractical here so just ignore
+     # all builtins.
++
++    # Ugly hack to make mock objects not be subclass of Mock
+     if _is_a_builtin(callable_template):
+         return False
+     if skip_first_arg and not inspect.ismethod(callable_template):
+@@ -183,8 +185,8 @@ def _validate_argument_type(expected_type: Type, name: str, value: Any) -> None:
+         # TODO: #165
+         return
+ 
+-    original_check_type = typeguard.check_type
+-    original_qualified_name = typeguard.qualified_name
++    original_check_type_internal = typeguard._checkers.check_type_internal
++    original_qualified_name = typeguard._utils.qualified_name
+ 
+     def wrapped_qualified_name(obj: object) -> str:
+         """Needed to be able to show the useful qualified name for mock specs"""
+@@ -193,48 +195,35 @@ def _validate_argument_type(expected_type: Type, name: str, value: Any) -> None:
+ 
+         return original_qualified_name(obj)
+ 
+-    def wrapped_check_type(
+-        argname: str,
+-        inner_value: Any,
+-        inner_expected_type: Type,
+-        *args: Any,
+-        globals: Optional[Dict[str, Any]] = None,
+-        locals: Optional[Dict[str, Any]] = None,
+-        **kwargs: Any,
++    # We wrap the internal check because this is recursively called
++    # in typeguard for nested types like Dict[str, Union[str, int]]
++    def wrapped_check_type_internal(
++        inner_value: Any, inner_expected_type: Type, memo: typeguard.TypeCheckMemo
+     ) -> None:
+         if _is_a_mock(inner_value):
+             inner_type = _extract_mock_template(inner_value)
+             if inner_type is None:
+                 return
+-
+             # Ugly hack to make mock objects not be subclass of Mock
+             inner_value = WrappedMock(spec=inner_type)
+ 
+-        # typeguard only checks the previous caller stack, so in order to be
+-        # able to do forward type references we have to extract the caller
+-        # stack ourselves.
+-        if kwargs.get("memo") is None and globals is None and locals is None:
+-            globals, locals = _get_caller_vars()
+-
+-        return original_check_type(
+-            argname,
+-            inner_value,
+-            inner_expected_type,
+-            *args,
+-            globals=globals,
+-            locals=locals,
+-            **kwargs,
+-        )
++        return original_check_type_internal(inner_value, inner_expected_type, memo)
++
++    # typeguard only checks the previous caller stack, so in order to be
++    # able to do forward type references we have to extract the caller
++    # stack ourselves.
++    globals, locals = _get_caller_vars()
++    memo = typeguard.TypeCheckMemo(globals, locals)
+ 
+     with unittest.mock.patch.object(
+-        typeguard, "check_type", new=wrapped_check_type
++        typeguard._checkers, "check_type_internal", new=wrapped_check_type_internal
+     ), unittest.mock.patch.object(
+-        typeguard, "qualified_name", new=wrapped_qualified_name
++        typeguard._utils, "qualified_name", new=wrapped_qualified_name
+     ):
+         try:
+-            typeguard.check_type(name, value, expected_type)
+-        except TypeError as type_error:
+-            raise TypeCheckError(str(type_error))
++            typeguard._checkers.check_type_internal(value, expected_type, memo)
++        except typeguard.TypeCheckError as type_error:
++            raise TypeCheckError(type_error)
+ 
+ 
+ def _validate_callable_arg_types(
+@@ -257,7 +246,6 @@ def _validate_callable_arg_types(
+                 expected_type = argspec.annotations.get(argname)
+                 if not expected_type:
+                     continue
+-
+                 _validate_argument_type(expected_type, argname, args[idx])
+             except TypeCheckError as type_error:
+                 type_errors.append(f"{repr(argname)}: {type_error}")
+@@ -273,11 +261,11 @@ def _validate_callable_arg_types(
+             type_errors.append(f"{repr(argname)}: {type_error}")
+ 
+     if type_errors:
++        separator = "\n  "
+         raise TypeCheckError(
+-            "Call to "
+-            + callable_template.__name__
+-            + " has incompatible argument types:\n  "
+-            + "\n  ".join(type_errors)
++            f"Call to {callable_template.__name__} "
++            "has incompatible argument types:\n  "
++            f"{separator.join(type_errors)}"
+         )
+ 
+ 
+@@ -383,10 +371,10 @@ def _validate_return_type(
+             _validate_argument_type(expected_type, "return", value)
+         except TypeCheckError as runtime_type_error:
+             raise TypeCheckError(
+-                f"{str(runtime_type_error)}: {repr(value)}\n"
++                f"type of return must be {repr(expected_type)}; got {repr(type(value))} instead: {repr(value)}\n"
+                 f"Defined at {caller_frame_info.filename}:"
+                 f"{caller_frame_info.lineno}"
+-            )
++            ) from runtime_type_error
+ 
+ 
+ ##
+-- 
+2.39.2
+
+
+From 9bab56bfef460215e1858da70e376df9504844f1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 12 May 2023 10:19:02 -0400
+Subject: [PATCH 2/2] Allow typeguard 4.x
+
+---
+ requirements.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index a87cb58..07698d7 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+ psutil>=5.6.7
+ Pygments>=2.2.0
+-typeguard~=3.0
++typeguard>=3.0,<5.0
+ dataclasses>=0.6; python_version < "3.7"
+-- 
+2.39.2
+

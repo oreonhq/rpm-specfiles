@@ -1,0 +1,134 @@
+From 3ff5899891d83d815c7fb100f4f4e9b32194604c Mon Sep 17 00:00:00 2001
+From: Rex Dieter <rdieter@math.unl.edu>
+Date: Tue, 20 Oct 2015 12:12:50 -0500
+Subject: [PATCH 10/10] parallel installable prison-qt5
+
+Make Qt4 and Qt5 prison builds fully parallel-installable
+
+REVIEW: 125944
+
+---
+ CMakeLists.txt            |  2 ++
+ lib/prison/CMakeLists.txt | 28 ++++++++++++----------------
+ testapp/CMakeLists.txt    |  2 +-
+ tools/CMakeLists.txt      |  2 +-
+ 4 files changed, 16 insertions(+), 18 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ca39df5..8aec35c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,6 +27,8 @@ if(QT5_BUILD)
+   find_package(Qt5Widgets REQUIRED)
+   find_package(Qt5Test REQUIRED)
+ 
++  set(PRISON_SUFFIX "-qt5")
++
+   include("cmake/modules/ECMQt4To5Porting.cmake")
+   include_directories(${QT_INCLUDES}) # TODO: Port away from this.
+ 
+diff --git a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+index 57f350a..0384375 100644
+--- a/lib/prison/CMakeLists.txt
++++ b/lib/prison/CMakeLists.txt
+@@ -1,10 +1,6 @@
+ include(CMakePackageConfigHelpers)
+ 
+-if(QT5_BUILD)
+-   set(PRISON_VERSION_MAJOR "1")
+-else()
+-   set(PRISON_VERSION_MAJOR "0")
+-endif()
++set(PRISON_VERSION_MAJOR "0")
+ set(PRISON_VERSION_MINOR "2")
+ set(PRISON_VERSION_PATCH "0")
+ 
+@@ -25,10 +21,10 @@ SET(    prison_SRC
+         qrcodebarcode.cpp
+         )
+ 
+-add_library(prison SHARED ${prison_SRC})
+-target_link_libraries(prison ${DMTX_LIBRARIES} ${QRENCODE_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
++add_library(prison${PRISON_SUFFIX} SHARED ${prison_SRC})
++target_link_libraries(prison${PRISON_SUFFIX} ${DMTX_LIBRARIES} ${QRENCODE_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+ 
+-set_target_properties(prison PROPERTIES VERSION "${PRISON_VERSION_STRING}" SOVERSION "${PRISON_VERSION_MAJOR}" LINK_INTERFACE_LIBRARIES "" DEFINE_SYMBOL BUILDING_PRISON)
++set_target_properties(prison${PRISON_SUFFIX} PROPERTIES VERSION "${PRISON_VERSION_STRING}" SOVERSION "${PRISON_VERSION_MAJOR}" LINK_INTERFACE_LIBRARIES "" DEFINE_SYMBOL BUILDING_PRISON)
+ 
+ set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+ 
+@@ -47,7 +43,7 @@ if (CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
+ endif (CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
+ 
+ if(QT5_BUILD)
+-  install(TARGETS prison ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
++  install(TARGETS prison${PRISON_SUFFIX} ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+ else()
+   install( TARGETS prison DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
+ endif()
+@@ -68,35 +64,35 @@ install( FILES
+          qrcodebarcode.h
+          QRCodeBarcode
+          prison_export.h
+-         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/prison COMPONENT devel
++         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/prison${PRISON_SUFFIX} COMPONENT devel
+          )
+ 
+ set(INCLUDE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
+-get_target_property(LIB_OUT_NAME prison LOCATION)
++get_target_property(LIB_OUT_NAME prison${PRISON_SUFFIX} LOCATION)
+ get_filename_component(LIB_OUT_NAME ${LIB_OUT_NAME} NAME)
+ 
+ if(QT5_BUILD)
+   set(LIBPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+-  set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Prison")
++  set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Prison${PRISON_SUFFIX}")
+ else()
+   set(LIBPATH ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+   set(CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cmake/Prison")
+ endif()
+ 
+ configure_file(
+-   PrisonConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfig.cmake @ONLY
++   PrisonConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Prison${PRISON_SUFFIX}Config.cmake @ONLY
+ )
+ 
+ # this file is used by to check if the installed version can be used.
+-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/PrisonConfigVersion.cmake
++write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/Prison${PRISON_SUFFIX}ConfigVersion.cmake
+                                  VERSION "${PRISON_VERSION_STRING}"
+                                  COMPATIBILITY SameMajorVersion
+                                 )
+ 
+ 
+ install( FILES
+-         ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfig.cmake
+-         ${CMAKE_CURRENT_BINARY_DIR}/PrisonConfigVersion.cmake
++         ${CMAKE_CURRENT_BINARY_DIR}/Prison${PRISON_SUFFIX}Config.cmake
++         ${CMAKE_CURRENT_BINARY_DIR}/Prison${PRISON_SUFFIX}ConfigVersion.cmake
+ 	 DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+ )
+ 
+diff --git a/testapp/CMakeLists.txt b/testapp/CMakeLists.txt
+index 95d3403..f1f5450 100644
+--- a/testapp/CMakeLists.txt
++++ b/testapp/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ 
+ set(prison_SRCS prison.cpp main.cpp)
+ add_executable(test-prison ${prison_SRCS})
+-target_link_libraries(test-prison ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} prison)
++target_link_libraries(test-prison ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} prison${PRISON_SUFFIX})
+diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
+index ea5132e..8f0423e 100644
+--- a/tools/CMakeLists.txt
++++ b/tools/CMakeLists.txt
+@@ -2,4 +2,4 @@
+ #find_package(Qt4 COMPONENTS QtGui QtCore REQUIRED)
+ 
+ add_executable(prison-datamatrix prison-datamatrix.cpp)
+-target_link_libraries(prison-datamatrix prison ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARY})
++target_link_libraries(prison-datamatrix prison${PRISON_SUFFIX} ${QT_QTGUI_LIBRARIES} ${QT_QTCORE_LIBRARY})
+-- 
+2.5.0
+

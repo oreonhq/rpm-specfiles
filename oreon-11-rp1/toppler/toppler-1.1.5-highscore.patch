@@ -1,0 +1,468 @@
+diff -up toppler-1.1.5/decl.cc.p4 toppler-1.1.5/decl.cc
+--- toppler-1.1.5/decl.cc.p4	2011-03-06 19:24:10.000000000 +0100
++++ toppler-1.1.5/decl.cc	2011-05-03 09:48:34.760013551 +0200
+@@ -101,34 +101,13 @@ char * homedir()
+ {
+ 
+ #ifndef WIN32
+-
+-  return getenv("HOME");
+-
+-#else
+-
+-  return "./";
+-
+-#endif
+-
+-}
+-
+-/* checks if home/.toppler exists and creates it, if not */
+-static void checkdir(void) {
+-
+-#ifndef WIN32
+-
+-  char *n=acat(homedir(),"/.toppler");
+-
+-  DIR *d = opendir(n);
+-
+-  if (!d) {
+-    mkdir(n, S_IRWXU);
+-  }
+-
+-  free(n);
++  char *home = getenv("HOME");
++  if (home)
++    return home;
+ 
+ #endif
+ 
++  return "./";
+ }
+ 
+ FILE *open_data_file(const char *name) {
+@@ -221,9 +200,6 @@ FILE *open_local_config_file(const char 
+ 
+ FILE *create_local_config_file(const char *name) {
+ 
+-
+-  checkdir();
+-
+   char *n=topplername(name);
+   FILE *f=fopen(n,"wb+");
+   free(n);
+@@ -235,8 +211,6 @@ FILE *create_local_config_file(const cha
+ 
+ FILE *open_local_data_file(const char *name) {
+ 
+-  checkdir();
+-
+   char *n = topplername(name);
+   FILE *f = fopen(n, "rb");
+   free(n);
+@@ -245,8 +219,6 @@ FILE *open_local_data_file(const char *n
+ 
+ FILE *create_local_data_file(const char *name) {
+ 
+-  checkdir();
+-
+   char *n=topplername(name);
+   FILE *f=fopen(n,"wb+");
+   free(n);
+diff -up toppler-1.1.5/highscore.cc.p4 toppler-1.1.5/highscore.cc
+--- toppler-1.1.5/highscore.cc.p4	2011-03-06 19:21:41.000000000 +0100
++++ toppler-1.1.5/highscore.cc	2011-05-03 09:48:34.762013551 +0200
+@@ -26,6 +26,12 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ 
++#ifndef WIN32
++   #include <sys/stat.h>
++   #include <sys/file.h>
++   #include <errno.h>
++#endif
++
+ #ifdef __QNXNTO__
+    #include <strings.h>
+ #endif // __QNXNTO__
+@@ -38,18 +44,6 @@
+ 
+ #define SCOREFNAME "toppler.hsc"
+ 
+-/* the group ids of the game */
+-static gid_t UserGroupID, GameGroupID;
+-
+-/* true, if we use the global highscore table, false if not */
+-static bool globalHighscore;
+-
+-/* the name of the highscore table we use the name because the
+- * file might change any time and so it's better to close and reopen
+- * every time we need access
+- */
+-static char highscoreName[200];
+-
+ typedef struct {
+   Uint32 points;
+   char name[SCORENAMELEN+1];
+@@ -61,52 +55,61 @@ static _scores scores[NUMHISCORES];
+ /* this is the name of the surrenlty selected mission */
+ static char missionname[100];
+ 
+-#ifdef WIN32
+-#define setegid(x)
+-#endif
++/* File pointer to the highscore file, we keep this open till the game exits,
++   as we need special rights to open it, and drop those immediately after
++   opening it. */
++static FILE *scores_f = NULL;
+ 
+-static void savescores(FILE *f) {
++static void savescores(void) {
+ 
+   unsigned char len;
+   char mname[256];
++  
++  if (scores_f == NULL)
++    return;
+ 
+-  while (!feof(f)) {
++  fseek(scores_f, 0, SEEK_SET);
++  while (!feof(scores_f)) {
+ 
+-    if ((fread(&len, 1, 1, f) == 1) &&
+-        (fread(mname, 1, len, f) == len)) {
++    if ((fread(&len, 1, 1, scores_f) == 1) &&
++        (fread(mname, 1, len, scores_f) == len)) {
+       mname[len] = 0;
+       if (strcasecmp(mname, missionname) == 0) {
+ 
+         // this is necessary because some system can not switch
+         // on the fly from reading to writing
+-        fseek(f, ftell(f), SEEK_SET);
++        fseek(scores_f, ftell(scores_f), SEEK_SET);
+ 
+-        fwrite(scores, sizeof(_scores)*NUMHISCORES, 1, f);
++        fwrite(scores, sizeof(_scores)*NUMHISCORES, 1, scores_f);
+         return;
+       }
+     } else
+       break;
+ 
+-    fseek(f, ftell(f) + sizeof(_scores)*NUMHISCORES, SEEK_SET);
++    fseek(scores_f, ftell(scores_f) + sizeof(_scores)*NUMHISCORES, SEEK_SET);
+   }
+ 
+   unsigned char tmp = strlen(missionname);
+ 
+-  fwrite(&tmp, 1, 1, f);
+-  fwrite(missionname, 1, tmp, f);
+-  fwrite(scores, sizeof(_scores)*NUMHISCORES, 1, f);
++  fwrite(&tmp, 1, 1, scores_f);
++  fwrite(missionname, 1, tmp, scores_f);
++  fwrite(scores, sizeof(_scores)*NUMHISCORES, 1, scores_f);
+ }
+ 
+-static void loadscores(FILE *f) {
++static void loadscores(void) {
+ 
+   unsigned char len;
+   char mname[256];
++  
++  if (scores_f == NULL)
++    return;
+ 
+-  while (f && !feof(f)) {
++  fseek(scores_f, 0, SEEK_SET);
++  while (!feof(scores_f)) {
+ 
+-    if ((fread(&len, 1, 1, f) == 1) &&
+-        (fread(mname, 1, len, f) == len) &&
+-        (fread(scores, 1, sizeof(_scores) * NUMHISCORES, f) == sizeof(_scores) * NUMHISCORES)) {
++    if ((fread(&len, 1, 1, scores_f) == 1) &&
++        (fread(mname, 1, len, scores_f) == len) &&
++        (fread(scores, 1, sizeof(_scores) * NUMHISCORES, scores_f) == sizeof(_scores) * NUMHISCORES)) {
+       mname[len] = 0;
+       if (strcasecmp(mname, missionname) == 0)
+         return;
+@@ -123,29 +126,22 @@ static bool hsc_lock(void) {
+ 
+ #ifndef WIN32
+ 
+-  if (globalHighscore) {
++  if (scores_f == NULL)
++    return false;
+ 
+-    setegid(GameGroupID);
+-    int lockfd;
+-    
+-    while ((lockfd = open(HISCOREDIR "/" SCOREFNAME ".lck", O_CREAT | O_RDWR | O_EXCL, S_IRUSR | S_IWUSR)) == -1) {
+-      dcl_wait();
+-      scr_swap();
++  while (1) {  
++    int res = flock(fileno(scores_f), LOCK_EX);
++    if (res) {
++      if (errno == EINTR)
++        continue;
++      perror("Error locking highscore file");
++      return false;
+     }
+-    close(lockfd);
+-    setegid(UserGroupID);
++    return true;
+   }
+ 
+ #endif
+ 
+-  if (globalHighscore) setegid(GameGroupID);
+-  FILE *f = fopen(highscoreName, "rb");
+-  if (globalHighscore) setegid(UserGroupID);
+-
+-  loadscores(f);
+-
+-  if (f) fclose(f);
+-
+   return true;
+ }
+ 
+@@ -153,11 +149,7 @@ static void hsc_unlock(void) {
+ 
+ #ifndef WIN32
+ 
+-  if (globalHighscore) {
+-    setegid(GameGroupID);
+-    unlink(HISCOREDIR "/" SCOREFNAME ".lck");
+-    setegid(UserGroupID);
+-  }
++  flock(fileno(scores_f), LOCK_UN);
+ 
+ #endif
+ }
+@@ -172,86 +164,71 @@ void hsc_init(void) {
+ 
+ #ifndef WIN32
+ 
+-  /* fine at first save the group ids and drom group privileges */
+-  UserGroupID = getgid ();
+-  GameGroupID = getegid ();
+-
+-  setegid(UserGroupID);
+-
+-  /* asume we use local highscore table */ 
+-  globalHighscore = false;
+-  snprintf(highscoreName, 199, "%s/.toppler/%s", homedir(), SCOREFNAME);
+-
+-  /* now check if we have access to a global highscore table */
+-
+ #ifdef HISCOREDIR
+ 
+-  /* ok the dir is given, we need to be able to do 2 things: */
+-
+-  /* 1. get read and write access to the file */
+-
+-  char fname[200];
+-  snprintf(fname, 200, HISCOREDIR "/" SCOREFNAME);
+-
+-  setegid(GameGroupID);
+-  FILE * f = fopen(fname, "a+");
+-  setegid(UserGroupID);
+-
+-  if (f) {
+-
+-    fclose(f);
+-
+-    /* 2. get write access to the directory to create the lock file
+-     * to check this we try to chreate a file with a random name
+-     */
+-    snprintf(fname, 200, HISCOREDIR "/" SCOREFNAME "%i", rand());
+-
+-    setegid(GameGroupID);
+-    f = fopen(fname, "w+");
+-    setegid(UserGroupID);
+-
+-    if (f) {
+-
+-      fclose(f);
+-      setegid(GameGroupID);
+-      unlink(fname);
+-      setegid(UserGroupID);
+-
+-      /* ok, we've got all the rights we need */
+-      snprintf(highscoreName, 200, HISCOREDIR "/" SCOREFNAME);
+-      globalHighscore = true;
+-    }
++  /* Try to open the global scoreboard file, while we still have the rights */
++  scores_f = fopen(HISCOREDIR "/" SCOREFNAME, "r+");
++  /* If we cannot open it, try creating it */
++  if (!scores_f)
++    scores_f = fopen(HISCOREDIR "/" SCOREFNAME, "w+");
++
++  /* Figure out who we really are. */
++  gid_t realgid = getgid();
++  uid_t realuid = getuid();
++
++  /* This is where we drop our setuid/setgid privileges. */
++  if (setresgid(-1, realgid, realgid) != 0) {
++    perror("Could not drop setgid privileges.  Aborting.");
++    exit(1);
++  }
++  if (setresuid(-1, realuid, realuid) != 0) {
++    perror("Could not drop setuid privileges.  Aborting.");
++    exit(1);
+   }
+ 
+ #endif
+ 
+-  /* no dir to the global highscore table -> not global highscore table */
++  /* Ensure $HOME/.toppler exists */
++  char name[PATH_MAX];
+ 
+-  if (globalHighscore)
+-    debugprintf(2, "using global highscore at %s\n", highscoreName);
+-  else
+-    debugprintf(2, "using local highscore at %s\n", highscoreName);
+-
+-#else // ifdef WIN32
+-
+-  /* for non unix systems we use only local highscore tables */
+-  globalHighscore = false;
+-  snprintf(highscoreName, 200, SCOREFNAME);
++  snprintf(name, sizeof(name), "%s/.toppler", homedir());
++  if (access(name, F_OK) != 0)
++    mkdir(name, 0775);
++
++  /* Did opening the global highscore file succeed? */
++  if (scores_f)
++    return; /* All done */
++
++  /* Fall back to using a highscore file in $HOME/.toppler */
++  snprintf(name, sizeof(name), "%s/.toppler/%s", homedir(), SCOREFNAME);
++  scores_f = fopen(name, "r+");
++  if (!scores_f)
++    scores_f = fopen(name, "w+");
++  if (scores_f)
++    return; /* All done */
+ 
+ #endif
+ 
++  /* Fall back to using a highscore file in the cwd */
++  scores_f = fopen(SCOREFNAME, "r+");
++  if (!scores_f)
++    scores_f = fopen(SCOREFNAME, "w+");
++}
++
++void hsc_cleanup(void)
++{
++  if (scores_f) {
++    fclose(scores_f);
++    scores_f = NULL;
++  }
+ }
+ 
+ void hsc_select(const char * mission) {
+   strncpy(missionname, mission, 100);
+-
+-  if (globalHighscore) setegid(GameGroupID);
+-  FILE *f = fopen(highscoreName, "rb");
+-  if (globalHighscore) setegid(UserGroupID);
+-
+-  loadscores(f);
+-
+-  if (f) fclose(f);
++  bool locked = hsc_lock();
++  loadscores();
++  if (locked)
++    hsc_unlock();
+ }
+ 
+ Uint8 hsc_entries(void) { return NUMHISCORES; }
+@@ -275,9 +252,11 @@ bool hsc_canEnter(Uint32 points) {
+ 
+ Uint8 hsc_enter(Uint32 points, Uint8 tower, char *name) {
+ 
+-  if (hsc_lock()) {
+-
+     int t = NUMHISCORES;
++    
++    bool locked = hsc_lock();
++
++    loadscores();
+       
+     while ((t > 0) && (points > scores[t-1].points)) {
+       if (t < NUMHISCORES)
+@@ -290,31 +269,15 @@ Uint8 hsc_enter(Uint32 points, Uint8 tow
+       strncpy(scores[t].name, name, SCORENAMELEN);
+       scores[t].points = points;
+       scores[t].tower = tower;
+-  
+-      FILE *f;
+-  
+-      if (globalHighscore) {
+-        if (globalHighscore) setegid(GameGroupID);
+-        f = fopen(highscoreName, "r+b");
+-        if (globalHighscore) setegid(UserGroupID);
+-      } else {
+-  
+-        /* local highscore: this one might require creating the file */
+-        fclose(fopen(highscoreName, "a+"));
+-        f = fopen(highscoreName, "r+b");
+-      }
+-  
+-      savescores(f);
+-      fclose(f);
+ 
+-      hsc_unlock();
+-  
+-      return t;
++      savescores();
++    } else {
++      t = 0xff;
+     }
+ 
+-    hsc_unlock();
+-  }
++    if (locked)
++      hsc_unlock();
+ 
+-  return 0xff;
++    return t;
+ }
+ 
+diff -up toppler-1.1.5/highscore.h.p4 toppler-1.1.5/highscore.h
+--- toppler-1.1.5/highscore.h.p4	2007-07-19 16:26:35.000000000 +0200
++++ toppler-1.1.5/highscore.h	2011-05-03 09:48:34.762013551 +0200
+@@ -34,6 +34,7 @@
+  * complete running time
+  */
+ void hsc_init(void);
++void hsc_cleanup(void);
+ 
+ /* selects one mission by name, if there is currently no table
+  * for this mission the table is assumed to be empty
+diff -up toppler-1.1.5/main.cc.p4 toppler-1.1.5/main.cc
+--- toppler-1.1.5/main.cc.p4	2011-03-06 19:10:16.000000000 +0100
++++ toppler-1.1.5/main.cc	2011-05-03 09:50:12.419013658 +0200
+@@ -94,6 +94,8 @@ static void QuitFunction(void) {
+ 
+ int main(int argc, char *argv[]) {
+   
++  hsc_init();
++
+   // The following line was moved from a global variable to a pointer. 
+   // This was to allow the Mac OS X version of SDL to reposition the current
+   // working directory so that the hardcoded paths in the binary to point
+@@ -124,8 +126,6 @@ int main(int argc, char *argv[]) {
+   printf(_("Nebulous version %s"), VERSION);
+   printf("\n");
+ 
+-  hsc_init();
+-
+   if (parse_arguments(argc, argv)) {
+     SDL_InitSubSystem(SDL_INIT_VIDEO);
+     SDL_WM_SetCaption(_("Nebulous"), NULL);
+@@ -134,6 +134,7 @@ int main(int argc, char *argv[]) {
+     atexit(QuitFunction);
+     srand(time(0));
+     startgame();
++    hsc_cleanup();
+     printf(_("Thanks for playing!\n"));
+     SDL_ShowCursor(mouse);
+     SDL_Quit();

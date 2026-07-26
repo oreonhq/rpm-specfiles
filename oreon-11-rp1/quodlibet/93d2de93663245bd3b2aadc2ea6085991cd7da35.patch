@@ -1,0 +1,51 @@
+From 93d2de93663245bd3b2aadc2ea6085991cd7da35 Mon Sep 17 00:00:00 2001
+From: luk1337 <priv.luk@gmail.com>
+Date: Wed, 27 Aug 2025 20:39:50 +0200
+Subject: [PATCH] test_formats_xiph: Workaround gdk-pixbuf 2.43 issues (#4741)
+
+* test_formats_xiph: Make _get_jpeg() read file from disk instead of fd
+
+It seems like some Gdk behavior got changed and now h.read() returns
+empty list when trying to read back the JPEG image.
+
+This incidentally makes code match TCoverManagerBuiltin::setUp(), so I
+guess it's ok anyway.
+
+* test_formats_xiph: Bump JPEG size to 16/32
+
+See: https://gitlab.gnome.org/GNOME/glycin/-/issues/175
+---
+ tests/test_formats_xiph.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/tests/test_formats_xiph.py b/tests/test_formats_xiph.py
+index 2f8b5e7242..95598828da 100644
+--- a/tests/test_formats_xiph.py
++++ b/tests/test_formats_xiph.py
+@@ -22,13 +22,14 @@
+ from .helper import get_temp_copy
+ 
+ 
+-def _get_jpeg(size=5):
++def _get_jpeg(size=16):
+     from gi.repository import GdkPixbuf
+ 
+-    pb = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, False, 8, size, size)
+     fd, fn = mkstemp()
++    os.close(fd)
++    pb = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, False, 8, size, size)
+     pb.savev(fn, "jpeg", [], [])
+-    with os.fdopen(fd, "rb") as h:
++    with open(fn, "rb") as h:
+         data = h.read()
+     os.unlink(fn)
+     return data
+@@ -403,7 +404,7 @@ def test_handle_picture_block(self):
+         b64pic_cover = base64.b64encode(pic.write()).decode("ascii")
+ 
+         pic2 = Picture()
+-        pic2.data = _get_jpeg(size=6)
++        pic2.data = _get_jpeg(size=32)
+         pic2.type = APICType.COVER_BACK
+         b64pic_other = base64.b64encode(pic2.write()).decode("ascii")
+ 

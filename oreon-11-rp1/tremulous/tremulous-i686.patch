@@ -1,0 +1,12 @@
+diff -up tremulous-1.2.beta1/src/qcommon/vm_x86.c.orig tremulous-1.2.beta1/src/qcommon/vm_x86.c
+--- tremulous-1.2.beta1/src/qcommon/vm_x86.c.orig	2015-09-12 00:37:59.955511408 +0100
++++ tremulous-1.2.beta1/src/qcommon/vm_x86.c	2015-09-12 00:37:59.976511408 +0100
+@@ -91,7 +91,7 @@ void AsmCall(void);
+ static void (*const asmCallPtr)(void) = AsmCall;
+ 
+ 
+-static	int		callMask = 0;
++	int		callMask = 0;
+ 
+ static	int	instruction, pass;
+ static	int	lastConst = 0;

@@ -1,0 +1,53 @@
+diff --git a/Makefile b/Makefile
+index 4d6f9ee..cb2b7e3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -148,31 +148,26 @@ distclean : clean
+ 
+ install: $(PROGRAM)
+ 	@echo "Installing QIV..."
+-	@if [ ! -e $(PREFIX)/bin ]; then \
+-	  $(INSTALL) -d -m 0755 $(PREFIX)/bin; \
+-	  echo install -d -m 0755 $(PREFIX)/bin; \
++	@if [ ! -e $(DESTDIR)$(PREFIX)/bin ]; then \
++	  $(INSTALL) -d -m 0755 $(DESTDIR)$(PREFIX)/bin; \
++	  echo install -d -m 0755 $(DESTDIR)$(PREFIX)/bin; \
+         fi
+-	$(INSTALL) -s -m 0755 $(PROGRAM) $(PREFIX)/bin
+-	@if [ ! -e $(PREFIX)/share/man/man1 ]; then \
+-	  echo install -d -m 0755 $(PREFIX)/share/man/man1; \
+-	  $(INSTALL) -d -m 0755 $(PREFIX)/share/man/man1; \
++	$(INSTALL) -m 0755 $(PROGRAM) $(DESTDIR)$(PREFIX)/bin
++	@if [ ! -e $(DESTDIR)$(PREFIX)/share/man/man1 ]; then \
++	  echo install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man1; \
++	  $(INSTALL) -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man1; \
+ 	fi
+-	$(INSTALL) -m 0644 $(PROGRAM).1 $(PREFIX)/share/man/man1
+-	$(COMPRESS_PROG) $(PREFIX)/share/man/man1/$(PROGRAM).1
+-	@if [ ! -e $(PREFIX)/share/pixmaps ]; then \
+-	  echo install -d -m 0755 $(PREFIX)/share/pixmaps; \
+-	  $(INSTALL) -d -m 0755 $(PREFIX)/share/pixmaps; \
++	$(INSTALL) -m 0644 $(PROGRAM).1 $(DESTDIR)$(PREFIX)/share/man/man1
++	$(COMPRESS_PROG) $(DESTDIR)$(PREFIX)/share/man/man1/$(PROGRAM).1
++	@if [ ! -e $(DESTDIR)$(PREFIX)/share/pixmaps ]; then \
++	  echo install -d -m 0755 $(DESTDIR)$(PREFIX)/share/pixmaps; \
++	  $(INSTALL) -d -m 0755 $(DESTDIR)$(PREFIX)/share/pixmaps; \
+ 	fi
+-	$(INSTALL) -m 0644 qiv.png $(PREFIX)/share/pixmaps/qiv.png
+-	@if [ ! -e $(PREFIX)/share/applications ]; then \
+-	  echo install -d -m 0755 $(PREFIX)/share/applications; \
+-	  $(INSTALL) -d -m 0755 $(PREFIX)/share/applications; \
++	$(INSTALL) -m 0644 qiv.png $(DESTDIR)$(PREFIX)/share/pixmaps/qiv.png
++	@if [ ! -e $(DESTDIR)$(PREFIX)/share/applications ]; then \
++	  echo install -d -m 0755 $(DESTDIR)$(PREFIX)/share/applications; \
++	  $(INSTALL) -d -m 0755 $(DESTDIR)$(PREFIX)/share/applications; \
+ 	fi
+-	$(INSTALL) -m 0644 qiv.desktop $(PREFIX)/share/applications/qiv.desktop
+-	@if ./qiv -f ./intro.jpg ; \
+-	then echo "-- Test Passed --" ; \
+-	else echo "-- Test Failed --" ; \
+-	fi
+-	@echo "\nDont forget to look into the \"qiv-command\" file and install it!\n-> cp qiv-command.example $(PREFIX)/bin/qiv-command\n\n"
++	$(INSTALL) -m 0644 qiv.desktop $(DESTDIR)$(PREFIX)/share/applications/qiv.desktop
+ 
+ # the end... ;-)

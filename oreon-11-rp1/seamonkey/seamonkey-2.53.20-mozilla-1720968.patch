@@ -1,0 +1,22 @@
+--- mozilla/dom/events/EventStateManager.cpp.orig	2024-12-18 23:23:50.500528954 +0300
++++ mozilla/dom/events/EventStateManager.cpp	2024-12-18 23:27:44.674803430 +0300
+@@ -645,16 +645,19 @@ EventStateManager::PreHandleEvent(nsPres
+   case eMouseUp: {
+     switch (mouseEvent->button) {
+       case WidgetMouseEvent::eLeftButton:
+         if (Prefs::ClickHoldContextMenu()) {
+           KillClickHoldTimer();
+         }
+         mInTouchDrag = false;
+         StopTrackingDragGesture();
++        if (sActiveESM && sActiveESM != this) {
++          sActiveESM->StopTrackingDragGesture();
++        }
+         sNormalLMouseEventInProcess = false;
+         // then fall through...
+         MOZ_FALLTHROUGH;
+       case WidgetMouseEvent::eRightButton:
+       case WidgetMouseEvent::eMiddleButton:
+         RefPtr<EventStateManager> esm = ESMFromContentOrThis(aOverrideClickTarget);
+         esm->SetClickCount(mouseEvent, aStatus, aOverrideClickTarget);
+         NotifyTargetUserActivation(aEvent, aTargetContent);

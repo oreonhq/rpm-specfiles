@@ -1,0 +1,121 @@
+diff --git a/src/gc.c b/src/gc.c
+index cf434f2..144a2c8 100644
+--- a/src/gc.c
++++ b/src/gc.c
+@@ -370,7 +370,7 @@ int gc_free_objects_num()
+ int gc_used_objects_num()
+ {
+     //return SLOT_SIZE*gPoolSize - gc_free_objects_num();
+-    return mark(NULL, NULL);
++    return mark();
+ }
+ 
+ int gc_slot_size()
+diff --git a/src/load.c b/src/load.c
+index 92e8d37..436bdba 100644
+--- a/src/load.c
++++ b/src/load.c
+@@ -123,7 +123,7 @@ BOOL load_so_file(char* fname, sObject* nextin, sObject* nextout, sRunInfo* runi
+             return FALSE;
+         }
+ 
+-        if(init_func(NULL) != 0) {
++        if(init_func() != 0) {
+             err_msg("false in initialize the dynamic library", runinfo->mSName, runinfo->mSLine);
+             dlclose(handle);
+             return FALSE;
+diff --git a/src/xyzsh.c b/src/xyzsh.c
+index 0d33d6a..48cdc17 100644
+--- a/src/xyzsh.c
++++ b/src/xyzsh.c
+@@ -206,7 +206,7 @@ void err_msg_adding(char* msg, char* sname, int line)
+     FREE(tmp);
+ }
+ 
+-void sig_int()
++void sig_int(int signum)
+ {
+     gXyzshSigInt = TRUE; 
+ 
+@@ -215,7 +215,7 @@ fprintf(stderr, "SIGINT!!\n");
+ #endif
+ }
+ 
+-void sig_tstp()
++void sig_tstp(int signum)
+ {
+     gXyzshSigInt = TRUE; 
+ #ifdef MDEBUG
+@@ -223,7 +223,7 @@ fprintf(stderr, "SIGTSTP!!\n");
+ #endif
+ }
+ 
+-void sig_int_optc()
++void sig_int_optc(int signum)
+ {
+     sigchld_block(1);
+     gXyzshSigInt = TRUE; 
+@@ -234,7 +234,7 @@ void sig_int_optc()
+     sigchld_block(0);
+ }
+ 
+-void sig_tstp_optc()
++void sig_tstp_optc(int signum, siginfo_t* info, void* ctx)
+ {
+     sigchld_block(1);
+ #ifdef MDEBUG
+@@ -245,18 +245,21 @@ fprintf(stderr, "SIGTSTP!!\n");
+     sigchld_block(0);
+ }
+ 
+-void sig_cont_optc()
++void sig_cont_optc(int signum, siginfo_t* info, void* ctx)
+ {
+     sigchld_block(1);
+     //mrestore_ttysettings();
+     sigchld_block(0);
+ }
+ 
+-void sig_user()
++void sig_user(void)
+ {
+     gXyzshSigUser = TRUE;
+ }
+ 
++void sig_user_sigaction(int signum, siginfo_t* info, void* ctx) { sig_user(); }
++void sig_user_handler(int signum) { sig_user(); }
++
+ void sigchld_action(int signum, siginfo_t* info, void* ctx)
+ {
+ }
+@@ -410,7 +413,7 @@ void xyzsh_set_signal()
+     }
+ 
+     memset(&sa, 0, sizeof(sa));
+-    sa.sa_sigaction = sig_user;
++    sa.sa_sigaction = sig_user_sigaction;
+     sa.sa_flags = SA_RESTART;
+     if(sigaction(SIGUSR1, &sa, NULL) < 0) {
+         perror("sigaction9");
+@@ -504,7 +507,7 @@ void xyzsh_set_signal_optc()
+     }
+ 
+     memset(&sa, 0, sizeof(sa));
+-    sa.sa_handler = sig_user;
++    sa.sa_handler = sig_user_handler;
+     sa.sa_flags = 0;
+     if(sigaction(SIGUSR1, &sa, NULL) < 0) {
+         perror("sigaction9");
+diff --git a/src/xyzsh.h b/src/xyzsh.h
+index dab2516..61aa29e 100644
+--- a/src/xyzsh.h
++++ b/src/xyzsh.h
+@@ -751,7 +751,7 @@ uobject_it* uobject_loop_next(uobject_it* it);
+ int uobject_count(sObject* self);
+ 
+ sObject* external_prog_new_on_gc(char* path, BOOL user_object);
+-void external_prog_delete_on_gc();
++void external_prog_delete_on_gc(sObject* self);
+ 
+ #define EXTPROG_NEW_GC(o, o2) external_prog_new_on_gc(o, o2)
+ 

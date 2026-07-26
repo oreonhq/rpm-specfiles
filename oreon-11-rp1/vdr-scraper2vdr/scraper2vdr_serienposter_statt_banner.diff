@@ -1,0 +1,15 @@
+--- a/scrapmanager.c	2020-12-28 18:38:53.850634334 +0100
++++ b/scrapmanager.c.new	2020-12-28 18:44:09.536615518 +0100
+@@ -698,11 +698,7 @@ bool cScrapManager::GetPosterBannerV2(Sc
+ 		if (hitSeries == series.end())
+ 			return false;
+ 		cTVDBSeries *s = hitSeries->second;
+-		bool found = s->GetRandomBanner(&call->banner);
+-		if (v.episodeId > 0) {
+-			s->GetSeasonPoster(v.episodeId, &call->poster);
+-		}
+-		return found;
++		return s->GetPoster(&call->banner);
+ 	} else if (v.movieId > 0) {
+ 		call->type = tMovie;
+ 		map<int, cMovieDbMovie*>::iterator hitMovies = movies.find(v.movieId);

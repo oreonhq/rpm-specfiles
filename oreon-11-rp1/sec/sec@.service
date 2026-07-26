@@ -1,0 +1,12 @@
+[Unit]
+Description=Simple Event Correlator (instance %I)
+After=syslog.target
+
+[Service]
+Type=forking
+PIDFile=/run/sec-%I.pid
+ExecStart=/usr/bin/sec --detach --pid=/run/sec-%I.pid $OPTIONS_%I
+EnvironmentFile=/etc/sysconfig/sec
+
+[Install]
+WantedBy=multi-user.target

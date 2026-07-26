@@ -1,0 +1,29 @@
+diff -uNr widelands-1.3.orig/src/logic/map_objects/tribes/requirements.h widelands-1.3/src/logic/map_objects/tribes/requirements.h
+--- widelands-1.3.orig/src/logic/map_objects/tribes/requirements.h	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/logic/map_objects/tribes/requirements.h	2025-12-21 13:36:41.437000000 +0100
+@@ -20,6 +20,7 @@
+ #define WL_LOGIC_MAP_OBJECTS_TRIBES_REQUIREMENTS_H
+ 
+ #include <climits>
++#include <cstdint>
+ #include <map>
+ #include <memory>
+ #include <vector>
+diff -uNr widelands-1.3.orig/src/third_party/eris/eris.c widelands-1.3/src/third_party/eris/eris.c
+--- widelands-1.3.orig/src/third_party/eris/eris.c	2025-12-18 19:19:33.000000000 +0100
++++ widelands-1.3/src/third_party/eris/eris.c	2025-12-21 13:37:22.685000000 +0100
+@@ -27,13 +27,7 @@
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <string.h>
+-
+-/* Not using stdbool because Visual Studio lives in the past... */
+-#ifndef __cplusplus
+-typedef int bool;
+-#define false 0
+-#define true 1
+-#endif
++#include <stdbool.h>
+ 
+ /* Mark us as part of the Lua core to get access to what we need. */
+ #define LUA_CORE

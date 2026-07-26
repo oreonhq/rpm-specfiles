@@ -1,0 +1,32 @@
+.TH TEND\-SHRINK "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-shrink \- converts a 9-value DT volume to a 7-value DT volume
+.SH SYNOPSIS
+.B tend\ shrink
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Converts a 9-value DT volume to a 7-value DT volume.
+The confidence value is set to
+.B 1.0
+everywhere.
+You can
+.BR unu\-splice (1)
+or
+.B nrrdSplice()
+something else in its place later.
+.SH OPTIONS
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume, with 9 matrix components per sample; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor volume, with the 7 values per sample
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR tend (1),
+.BR tend\-expand (1),
+.BR unu\-splice (1)

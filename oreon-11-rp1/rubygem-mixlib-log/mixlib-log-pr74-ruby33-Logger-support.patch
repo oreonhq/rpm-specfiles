@@ -1,0 +1,38 @@
+From 715f956dad627f3dd4171a7b5fa568d5e9ddf339 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Tue, 26 Sep 2023 22:03:55 +0900
+Subject: [PATCH] Support ruby3.3 Logger by properly initialize super class
+
+Upcoming ruby3.3 will have enhanced Logger class:
+https://github.com/ruby/ruby/commit/194520f80e1cdb71faa055d731450855a1ddb8d1
+which initializes newly added instance variables.
+Without initializing such variables (in super class), now using
+subclass of Logger will cause exception.
+
+To avoid this, first call super, then execute additional subclass
+initialization.
+
+Fixes #73.
+
+Signed-off-by: Mamoru TASAKA <mtasaka@fedoraproject.org>
+---
+ lib/mixlib/log/logger.rb | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/lib/mixlib/log/logger.rb b/lib/mixlib/log/logger.rb
+index 378c6b9..c0cb998 100644
+--- a/lib/mixlib/log/logger.rb
++++ b/lib/mixlib/log/logger.rb
+@@ -33,11 +33,7 @@ def trace?; @level <= TRACE; end
+       # Create an instance.
+       #
+       def initialize(logdev)
+-        @progname = nil
+-        @level = DEBUG
+-        @default_formatter = Formatter.new
+-        @formatter = nil
+-        @logdev = nil
++        super(nil)
+         if logdev
+           @logdev = LocklessLogDevice.new(logdev)
+         end

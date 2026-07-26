@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5601065..bd9397e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,7 +36,7 @@ add_compile_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DUSE_WIDGETS -D
+ add_compile_options(-Wall -Wextra)
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+ 
+-find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets LinguistTools)
++find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core GuiPrivate Widgets WidgetsPrivate LinguistTools)
+ find_package(KF6 COMPONENTS Config ColorScheme IconThemes)
+ 
+ include(ECMQueryQt)

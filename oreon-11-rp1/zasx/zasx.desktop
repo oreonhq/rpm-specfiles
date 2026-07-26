@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Zasx
+Comment=Asteroids with powerups!
+Exec=zasx
+Icon=zasx
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=Game;Arcade;Asteroids;Retro;Powerups;

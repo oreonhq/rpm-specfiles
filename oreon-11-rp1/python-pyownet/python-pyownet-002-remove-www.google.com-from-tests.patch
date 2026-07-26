@@ -1,0 +1,25 @@
+From 2e52d70267fad748f8194eb3c2f8c7858fe41af9 Mon Sep 17 00:00:00 2001
+From: Tomasz Torcz <tomek@pipebreaker.pl>
+Date: Thu, 28 Dec 2023 19:32:42 +0100
+Subject: [PATCH] remove 'www.google.com' from tests
+
+---
+ tests/test_protocol.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tests/test_protocol.py b/tests/test_protocol.py
+index 543a4ff..e0f6c83 100644
+--- a/tests/test_protocol.py
++++ b/tests/test_protocol.py
+@@ -142,8 +142,6 @@ class Test_misc(unittest.TestCase):
+                           host='nonexistent.fake')
+         self.assertRaises(protocol.ConnError, protocol.proxy,
+                           host=HOST, port=-1)
+-        self.assertRaises(protocol.ProtocolError, protocol.proxy,
+-                          host='www.google.com', port=80)
+         self.assertRaises(TypeError, protocol.clone, 1)
+         self.assertRaises(TypeError, protocol._FromServerHeader, bad=0)
+         self.assertRaises(TypeError, protocol._ToServerHeader, bad=0)
+-- 
+2.43.0
+

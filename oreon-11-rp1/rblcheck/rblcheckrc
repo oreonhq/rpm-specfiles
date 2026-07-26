@@ -1,0 +1,28 @@
+-c
+-t
+-s sbl.spamhaus.org
+-s xbl.spamhaus.org
+-s dnsbl.njabl.org
+-s unconfirmed.dsbl.org
+-s multihop.dsbl.org
+-s list.dsbl.org
+-s opm.blitzed.org
+-s relays.ordb.org
+-s dul.dnsbl.sorbs.net
+-s spam.dnsbl.sorbs.net
+-s cbl.abuseat.org
+-s blackholes.brainerd.net
+-s blackholes.five-ten-sg.com
+-s blackholes.intersil.net
+-s block.blars.org
+-s t1.dnsbl.net.au
+-s t2.dnsbl.net.au
+-s t3.dnsbl.net.au
+-s bl.spamcop.net
+-s flowgoaway.com
+-s korea.services.net
+-s pm0-no-more.compu.net
+-s spamguard.leadmon.net
+-s spamsources.fabel.dk
+-s work.drbl.croco.net
+-s relays.linux-kernel.at

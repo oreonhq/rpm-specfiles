@@ -1,0 +1,28 @@
+From 7894e252d192c8fa2e0f9e66ad0c69a086670b05 Mon Sep 17 00:00:00 2001
+From: J-P Nurmi <jpnurmi@theqtcompany.com>
+Date: Wed, 2 Sep 2015 18:22:06 +0200
+Subject: [PATCH 04/12] QGtkStyle: fix spinbox arrows
+
+Change-Id: I24b94f677a87411637cceaa82f1b47b84cdfb20a
+Task-number: QTBUG-23346
+Reviewed-by: Dmitry Shachnev <mitya57@gmail.com>
+Reviewed-by: J-P Nurmi <jpnurmi@theqtcompany.com>
+---
+ src/plugins/styles/gtk2/qgtkstyle.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/plugins/styles/gtk2/qgtkstyle.cpp b/src/plugins/styles/gtk2/qgtkstyle.cpp
+index 20ee2ed..ee1fefe 100644
+--- a/src/plugins/styles/gtk2/qgtkstyle.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle.cpp
+@@ -2432,6 +2432,7 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
+ 
+                 arrowRect.moveCenter(downRect.center());
+ 
++                state = GTK_STATE_NORMAL;
+                 if (!(option->state & State_Enabled) || !(spinBox->stepEnabled & QAbstractSpinBox::StepDownEnabled))
+                     state = GTK_STATE_INSENSITIVE;
+ 
+-- 
+2.7.4
+

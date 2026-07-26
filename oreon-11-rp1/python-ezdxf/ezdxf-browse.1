@@ -1,0 +1,221 @@
+.TH EZDXF\-BROWSE "1" "May 2024" "" "User Commands"
+.B ezdxf\ browse
+\(en PyQt DXF structure browser for DXF debugging and curious people
+.SH SYNOPSIS
+.B ezdxf\ browse
+.RB [ \-h ]
+.RB [ \-l\ \fILINE ]
+.RB [ \-g\ \fIHANDLE ]
+.RI [ FILE ]
+.SH DESCRIPTION
+The browse command opens a DXF structure browser
+to investigate the internals of a DXF file
+without interpreting the content.
+The intended usage is debugging invalid DXF files,
+which cannot be loaded by the
+.B ezdxf.readfile()
+or the
+.B ezdxf.recover.readfile()
+functions.
+.SS "LINE\ NUMBERS"
+The low level tag loader ignores DXF comments (group code 999).
+If there are comments in the DXF file
+the line numbers displayed in the DXF browser are not synchronized,
+use the
+.BR ezdxf\-strip (1)
+command beforehand to remove all comments from the DXF file
+in order to keep the line numbers synchronized.
+.SS "GUI\ FEATURES"
+The tree view on the left shows the outline of the DXF file.
+The number in round brackets on the right side of each item shows
+the count of structure entities within the structure layer,
+the value in angle brackets on the left side is the entity handle.
+.P
+The right list view shows the entity content as DXF tags.
+Structure tags (data type
+.BR <ctrl> )
+are shown in blue, a double click on a reference handle (datatype
+.BR <ref> )
+jumps to the referenced entity,
+reference handles of non-existent targets are shown in red.
+.P
+Clicking on the first structure tag in the list opens the DXF
+reference provided by Autodesk in the standard web browser.
+.SS "AUTO\ RELOAD"
+The browser automatically displays a dialog for reloading DXF files
+if they have been modified by an external application.
+.SS "MENUS\ AND\ SHORTCUTS"
+.TP
+.B File Menu
+.RS +7n
+.IP \(bu 2n
+.B Open DXF file...
+.I Ctrl+O
+.IP \(bu 2n
+.B Reload DXF file
+.I Ctrl+R
+.IP \(bu 2n
+.B Open in Text Editor
+.IR Ctrl+T ,
+open the DXF file in the associated text editor
+at the current location
+.IP \(bu 2n
+.B Export DXF Entity...
+.IR Ctrl+E ,
+export the current DXF entity shown in the list view as text file
+.IP \(bu 2n
+.B Copy selected DXF Tags to Clipboard
+.IR Ctrl+C ,
+copy the current selected DXF tags into the clipboard
+.IP \(bu 2n
+.B Copy DXF Entity to Clipboard
+.IR Ctrl+Shift+C ,
+copy all DXF tags of the current DXF entity
+shown in the list view into the clipboard
+.IP \(bu 2n
+.B Quit
+.I Ctrl+Q
+.RE
+.TP
+.B Navigate Menu
+.RS +7n
+.IP \(bu 2n
+.B Go to Handle...
+.I Ctrl+G
+.IP \(bu 2n
+.B Go to Line...
+.I Ctrl+L
+.IP \(bu 2n
+.B Find Text...
+.IR Ctrl+F ,
+opens the find text dialog
+.IP \(bu 2n
+.B Next Entity
+.IR Ctrl+Right ,
+go to the next entity in the DXF structure
+.IP \(bu 2n
+.B Previous Entity
+.IR Ctrl+Right ,
+go to the previous entity in the DXF structure
+.IP \(bu 2n
+.B Show Entity in TreeView
+.IR Ctrl+Down ,
+expand the left tree view to the currently displayed entity
+in the list view \(en this does not happen automatically
+for performance reasons
+.IP \(bu 2n
+.B Entity History Back
+.I Alt+Left
+.IP \(bu 2n
+.B Entity History Forward
+.I Alt+Right
+.IP \(bu 2n
+.B Go to HEADERS Section Shift+H
+.IP \(bu 2n
+.B Go to BLOCKS Section Shift+B
+.IP \(bu 2n
+.B Go to ENTITIES Section Shift+E
+.IP \(bu 2n
+.B Go to OBJECTS Section Shift+O
+.RE
+.TP
+.B Bookmarks Menu
+.RS +7n
+.IP \(bu 2n
+.B Store Bookmark...
+.IR Ctrl+Shift+B ,
+store current location as named bookmark
+.IP \(bu 2n
+.B Go to Bookmark...
+.IR Ctrl+B ,
+go to stored location
+.RE
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to browse
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-l\ \fILINE\fR,\ \fB\-\-line\ \fILINE
+go to line number
+.TP
+.B \-g\ \fIHANDLE\fR,\ \fB\-\-handle\ \fIHANDLE
+go to entity by
+.IR HANDLE ,
+.I HANDLE
+has to be a hex value without any prefix like
+.RB \(oq fefe \(cq
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.P
+The browse command stores options in the config file,
+e.g. for the Notepad++ on Windows:
+.P
+.in +7n
+.EX
+.B [browse\-command]
+.B \:
+.B text_editor\ =\ "C:\[rs]Program Files\[rs]Notepad++\[rs]notepad++.exe"\ "{filename}"\ \-n{num}
+.B icon_size\ =\ 32
+.EE
+.in
+.P
+.B text_editor
+is a simple format string:
+.B text_editor.format(filename="test.dxf",\ num=100)
+.P
+Quote commands including spaces and always quote the filename argument!
+.P
+For
+.BR xed (1)
+on Linux Mint use (note: absolute path to executable):
+.P
+.in +7n
+.EX
+.B [browse\-command]
+.B \:
+.B text_editor\ =\ /usr/bin/xed\ "{filename}"\ +{num}
+.B icon_size\ =\ 32
+.EE
+.in
+.P
+For
+.BR gedit (1)
+use (untested):
+.P
+.in +7n
+.EX
+.B [browse\-command]
+.B \:
+.B text_editor\ =\ /usr/bin/gedit\ +{num}\ "{filename}"
+.B icon_size\ =\ 32
+.EE
+.in
+.SH EXAMPLES
+.P
+Browse the internal structure of a DXF file like a file system:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ browse\ gear.dxf
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

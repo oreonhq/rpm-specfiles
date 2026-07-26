@@ -1,0 +1,462 @@
+.TH TEND\-GLYPH "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-glyph \- generate postscript or ray-traced renderings of 3D glyphs
+.SH SYNOPSIS
+.B tend\ glyph
+.RI [ @file \ ...]
+.RB [ \-rt ]
+.RB [ \-v
+.RI < level >]
+.RB [ \-ctr
+.RI < conf\ thresh >]
+.RB [ \-a
+.RI < aniso >]
+.RB [ \-atr
+.RI < aniso\ thresh >]
+.RB [ \-p
+.RI < pos\ array >]
+.RB [ \-m
+.RI < mask\ vol >]
+.RB [ \-mtr
+.RI < mask\ thresh >]
+.RB [ \-g
+.RI < glyph\ shape >]
+.RB [ \-sh
+.RI < sharpness >]
+.RB [ \-gsc
+.RI < scale >]
+.RB [ \-c
+.RI < evector\ # >]
+.RB [ \-sat
+.RI < saturation >]
+.RB [ \-ga
+.RI < aniso >]
+.RB [ \-am
+.RI < aniso\ mod >]
+.RB [ \-gg
+.RI < gray >]
+.RB [ \-gam
+.RI < gamma >]
+.RB [ \-emap
+.RI < env\ map >]
+.RB [ \-adsp
+.RI < phong >]
+.RB [ \-bg
+.RI < background >]
+.RB [ \-ec
+.RI < edge\ rgb >]
+.RB [ \-slc
+.RI < axis\ pos >]
+.RB [ \-si
+.RI < slice\ image >]
+.RB [ \-off
+.RI < slice\ offset >]
+.RB [ \-sg
+.RI < slice\ gamma >]
+.RB [ \-sb
+.RI < slice\ bias >]
+.B \-fr
+.RI < from\ point >
+.RB [ \-at
+.RI < at\ point >]
+.RB [ \-up
+.RI < up\ vector >]
+.RB [ \-rh ]
+.RB [ \-dn
+.RI < near\ clip >]
+.RB [ \-df
+.RI < far\ clip >]
+.RB [ \-or ]
+.RB [ \-ur
+.RI < uMin \  uMax >]
+.RB [ \-vr
+.RI < vMin \  vMax >]
+.RB [ \-fv
+.RI < fov >]
+.RB [ \-gr
+.RI < glyph\ res >]
+.RB [ \-wd
+.RI < 3\ widths >]
+.RB [ \-psc
+.RI < scale >]
+.RB [ \-ca
+.RI < angle >]
+.RB [ \-nobg ]
+.RB [ \-concave ]
+.RB [ \-is
+.RI < nx \  ny >]
+.RB [ \-ns
+.RI < #\ samp >]
+.RB [ \-nt
+.RI < #\ threads >]
+.RB [ \-al
+.RI < B \  U \  V \  N \  E >]
+.RB [ \-ao ]
+.RB [ \-shadow
+.RI < s >]
+.RB [ \-hack
+.RI < hack >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Generate postscript or ray-traced renderings of 3D glyphs.
+Whether the output is postscript or a ray-traced image is controlled by the
+initial
+.RB \(lq \-rt \(rq
+flag (by default, the output is postscript).
+Because this is doing viz/graphics, many parameters need to be set.
+Use a response file to simplify giving the command-line options which aren\(cqt
+changing between invocations.
+The postscript output is an EPS file, suitable for including as a figure in
+LaTeX, or viewing with ghostview, or distilling into PDF.
+The
+ray-traced output is a 5 channel
+.RI ( R , G , B , A , T )
+.I float
+.IR nrrd ,
+suitable for
+.RB \(lq unu\ crop\ \-min\ 0\ 0\ 0\ \-max\ 2\ M\ M \(rq
+followed by
+.RB \(lq unu\ gamma \(rq
+and/or
+.RB \(lq unu\ quantize\ \-b\ 8 \(rq.
+.SH OPTIONS
+.TP
+.IR @file \ ...\:
+response file(s) containing command-line arguments
+.TP
+.B \-rt
+generate ray-traced output.
+By default (not using this option), postscript output is generated.
+.TP
+.B \-v\fR <\fIlevel\fR>
+verbosity level
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-ctr\fR <\fIconf\ thresh\fR>
+Glyphs will be drawn only for tensors with confidence values greater than this
+threshold
+.RI ( float )
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-a\fR <\fIaniso\fR>
+Which anisotropy metric to use for thresholding the data points to be drawn;
+default:
+.RB \(lq fa \(rq
+.TP
+.B \-p\fR <\fIpos\ array\fR>
+Instead of being on a grid, tensors are at arbitrary locations, as defined by
+this 3-by-N array of floats.
+Doing this makes various other options moot; default: \(lq\(rq
+.TP
+.B \-m\fR <\fImask\ vol\fR>
+Scalar volume (if any) for masking region in which glyphs are drawn, in
+conjunction with
+.RB \(lq \-mtr \(rq
+flag; default: \(lq\(rq
+.TP
+.B \-mtr\fR <\fImask\ thresh\fR>
+Glyphs will be drawn only for tensors with mask value greater than this
+threshold
+.RI ( float )
+default:
+.RB \(lq 0.5 \(rq
+.TP
+.B \-g\fR <\fIglyph\ shape\fR>
+shape of glyph to use for display. Possibilities include
+.RB \(lq box \(rq,
+.RB \(lq sphere \(rq,
+.RB \(lq cylinder \(rq,
+and
+.RB \(lq superquad \(rq;
+default:
+.RB \(lq box \(rq
+.TP
+.B \-sh\fR <\fIsharpness\fR>
+for superquadric glyphs, how much to sharp edges form as a function of
+differences between eigenvalues.
+Higher values mean that edges form more easily
+.RI ( float )
+default:
+.RB \(lq 3.0 \(rq
+.TP
+.B \-gsc\fR <\fIscale\fR>
+over-all glyph size in world-space
+.RI ( float )
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-c\fR <\fIevector\ #\fR>
+which eigenvector should determine coloring. (formally
+.RB \(lq v \(rq)
+.RB \(lq 0 \(rq,
+.RB \(lq 1 \(rq,
+.RB \(lq 2 \(rq,
+are principal, medium, and minor
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-sat\fR <\fIsaturation\fR>
+maximal saturation to use on glyph colors (use
+.B 0.0
+to create a black and white image)
+.RI ( float )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-ga\fR <\fIaniso\fR>
+Which anisotropy metric to use for modulating the saturation of the glyph
+color; default:
+.RB \(lq fa \(rq
+.TP
+.B \-am\fR <\fIaniso\ mod\fR>
+How much to modulate glyph color saturation by anisotropy (as chosen by
+.RB \(lq \-ga \(rq.
+If
+.BR 1.0 ,
+then glyphs for zero anisotropy data points will have no hue.
+.RI ( float )
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-gg\fR <\fIgray\fR>
+desaturating glyph color due to low anisotropy tends towards this gray level
+.RI ( float )
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-gam\fR <\fIgamma\fR>
+gamma to use on color components (after saturation)
+.RI ( float )
+default:
+.RB \(lq 0.7 \(rq
+.TP
+.B \-emap\fR <\fIenv\ map\fR>
+environment map to use for shading glyphs.
+By default, there is no shading; default: \(lq\(rq
+.TP
+.B \-adsp\fR <\fIphong\fR>
+phong ambient, diffuse, specular components, and specular power (4
+.IR float s);
+default:
+.RB \(lq 0\ 1\ 0\ 30 \(rq
+.TP
+.B \-bg\fR <\fIbackground\fR>
+background RGB color; each component in range
+.B [0.0,1.0]
+(3
+.IR float s);
+default:
+.RB \(lq 1\ 1\ 1 \(rq
+.TP
+.B \-ec\fR <\fIedge\ rgb\fR>
+edge RGB color; each component in range
+.B [0.0,1.0]
+(3
+.IR float s);
+default:
+.RB \(lq 0\ 0\ 0 \(rq
+.TP
+.B \-slc\fR <\fIaxis\ pos\fR>
+For showing a gray-scale slice of anisotropy: the axis and position along which
+to slice.
+Use
+.RB \(lq \-1\ \-1 \(rq
+to signify that no slice should be shown (2
+.IR int s);
+default:
+.RB \(lq \-1\ \-1 \(rq
+.TP
+.B \-si\fR <\fIslice\ image\fR>
+Instead of showing a slice of the anisotropy used to cull glyphs, show
+something else; default: \(lq\(rq
+.TP
+.B \-off\fR <\fIslice\ offset\fR>
+Offset from slice position to render slice at (so that it doesn\(cqt occlude
+glyphs).
+.RI ( float )
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-sg\fR <\fIslice\ gamma\fR>
+Gamma to apply to values on slice.
+.RI ( float )
+default:
+.RB \(lq 1.7 \(rq
+.TP
+.B \-sb\fR <\fIslice\ bias\fR>
+amount by which to bump up slice gray values prior to gamma.
+.RI ( float )
+default:
+.RB \(lq 0.05 \(rq
+.TP
+.B \-fr\fR <\fIfrom\ point\fR>
+position of camera, used to determine view vector (3
+.IR double s)
+.TP
+.B \-at\fR <\fIat\ point\fR>
+camera look-at point, used to determine view vector (3
+.IR double s)
+.TP
+.B \-up\fR <\fIup\ vector\fR>
+camera pseudo-up vector, used to determine view coordinates (3
+.IR double s);
+default:
+.RB \(lq 0\ 0\ 1 \(rq
+.TP
+.B \-rh
+use a right-handed UVN frame (V points down)
+.TP
+.B \-dn\fR <\fInear\ clip\fR>
+position of near clipping plane, relative to look-at point
+.RI ( double );
+default:
+.RB \(lq \-2 \(rq
+.TP
+.B \-df\fR <\fIfar\ clip\fR>
+position of far clipping plane, relative to look-at point
+.RI ( double );
+default:
+.RB \(lq 2 \(rq
+.TP
+.B \-or
+use orthogonal projection
+.TP
+.B \-ur\fR <\fIuMin\fR\ \fIuMax\fR>
+range in U direction of image plane (2
+.IR double s);
+default:
+.RB \(lq \-1\ 1 \(rq
+.TP
+.B \-vr\fR <\fIvMin\fR\ \fIvMax\fR>
+range in V direction of image plane (2
+.IR double s);
+default:
+.RB \(lq \-1\ 1 \(rq
+.TP
+.B \-fv\fR <\fIfov\fR>
+if not
+.BR NaN ,
+vertical field-of-view, in degrees
+.RI ( double )
+.TP
+.B \-gr\fR <\fIglyph\ res\fR>
+.B postscript only
+.IP
+resolution of polygonalization of glyphs (all glyphs other than the default
+box)
+.RI ( int );
+default:
+.RB \(lq 10 \(rq
+.TP
+.B \-wd\fR <\fI3\ widths\fR>
+.B postscript only
+.IP
+width of edges drawn for three kinds of glyph edges: silohuette, crease,
+non-crease (3
+.IR float s);
+default:
+.RB \(lq 0.8\ 0.4\ 0.0 \(rq
+.TP
+.B \-psc\fR <\fIscale\fR>
+.B postscript only
+.IP
+scaling from screen space units to postscript units (in points)
+.RI ( float );
+default:
+.RB \(lq 300 \(rq
+.TP
+.B \-ca\fR <\fIangle\fR>
+.B postscript only
+.IP
+minimum crease angle
+.RI ( float );
+default:
+.RB \(lq 70 \(rq
+.TP
+.B \-nobg
+.B postscript only
+.IP
+don\(cqt initially fill with background color
+.TP
+.B \-concave
+use slightly buggy rendering method suitable for concave or self-occluding
+objects
+.TP
+.B \-is\fR <\fInx\fR\ \fIny\fR>
+.B ray-traced only
+.IP
+image size (resolution) to render (2
+.IR int s);
+default:
+.RB \(lq 256\ 256 \(rq
+.TP
+.B \-ns\fR <\fI#\ samp\fR>
+.B ray-traced only
+.IP
+number of samples per pixel (must be a square number)
+.RI ( int );
+default:
+.RB \(lq 4 \(rq
+.TP
+.B \-nt\fR <\fI#\ threads\fR>
+.B ray-traced only
+.IP
+number of threads to be used for rendering
+.RI ( int );
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-al\fR <\fIB\fR\ \fIU\fR\ \fIV\fR\ \fIN\fR\ \fIE\fR>
+.B ray-traced only
+.IP
+brightness
+.RI ( B ),
+view-space location
+.RI ( U \  V \  N ),
+and length of edge
+.RI ( E )
+of a square area light source, for getting soft shadows.
+Requires lots more samples
+.RB \(lq \-ns \(rq
+to converge.
+Use brightness
+.B 0
+(the default) to turn this off, and use environment map-based shading
+.RB (\(lq \-emap \(rq)
+instead.
+(5
+.IR float s);
+default:
+.RB \(lq 0\ \-1\ \-1\ \-4\ 0.7 \(rq
+.TP
+.B \-ao
+set up 6 area lights in a box to approximate ambient occlusion
+.TP
+.B \-shadow\fR <\fIs\fR>
+the extent to which shadowing occurs
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-hack\fR <\fIhack\fR>
+don\(cqt mind me
+.RI ( string )
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output file
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

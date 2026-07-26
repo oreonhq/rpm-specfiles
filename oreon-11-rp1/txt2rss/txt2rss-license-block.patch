@@ -1,0 +1,31 @@
+--- txt2rss.org	2008-08-28 00:25:39.000000000 +0530
++++ txt2rss	2008-08-28 00:41:00.000000000 +0530
+@@ -1,11 +1,21 @@
+ #!/bin/bash
+-
+-#############################################################
+-# txt2rss - convert a simple txt file to a rss feed file    #
+-# Authors:                                                  #
+-# Carlos Roberto do Nascimento Costa (crncosta@gmail.com)   #
+-# Paulo Ricardo Paz Vital (pvital@gmail.com                 #
+-#############################################################
++#
++# txt2rss - convert a simple txt file to a rss feed file
++# Authors:   
++# Carlos Roberto do Nascimento Costa (crncosta@gmail.com)
++# Paulo Ricardo Paz Vital (pvital@gmail.com)
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License version 3, as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+ 
+ genDescription(){
+     LINES=$@

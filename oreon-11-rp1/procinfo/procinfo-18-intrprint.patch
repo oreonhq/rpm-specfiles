@@ -1,0 +1,18 @@
+diff -up procinfo-18/procinfo.c.intrprint procinfo-18/procinfo.c
+--- procinfo-18/procinfo.c.intrprint	2010-10-12 13:37:18.000000000 +0200
++++ procinfo-18/procinfo.c	2010-10-12 13:44:25.500001055 +0200
+@@ -498,11 +498,11 @@ first_page (long sl)
+ 	    for (i = 0; i < rows; i++) {
+ 		/* The last row may be incomplete if howmany is odd, hence: */
+ 		if (i == rows - 1 && howmany & 1) {
+-		    printf ("irq%4d:%10lu %-21s\n",
++		    printf ("irq%4d:%10lu %-20s\n",
+ 			    squirqs[i].nr, squirqs[i].count, squirqs[i].label);
+ 		} else {
+-		    printf ("irq%4d:%10lu %-21s "
+-			    "irq%4d:%10lu %-21s\n",
++		    printf ("irq%4d:%10lu %-20s "
++			    "irq%4d:%10lu %-20s\n",
+ 			    squirqs[i].nr, squirqs[i].count, squirqs[i].label,
+ 			    squirqs[i+rows].nr,
+ 			    squirqs[i+rows].count,

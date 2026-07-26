@@ -1,0 +1,113 @@
+.TH TEND\-SATIN "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-satin \- generate a pretty synthetic DT volume
+.SH SYNOPSIS
+.B tend\ satin
+.RI [ \-t ]
+.B \-p
+.RI < aniso\ param >
+.RB [ \-max
+.RI < max\ cal >]
+.RB [ \-min
+.RI < min\ cal >]
+.RB [ \-b
+.RI < boundary >]
+.RB [ \-br
+.RI < ramp >]
+.RB [ \-th
+.RI < thickness >]
+.RB [ \-evsc
+.RI < eval\ scale >]
+.RB [ \-s
+.RI < size >]
+.RB [ \-o
+.RI < nout >]
+.SH DESCRIPTION
+Generate a pretty synthetic DT volume.
+The surface of a sphere or torus is covered with either linear or planar
+anisotropic tensors, or somewhere in between.
+.SH OPTIONS
+.TP
+.B \-t
+generate a torus dataset, instead of the default spherical
+.TP
+.B \-p\fR <\fIaniso\ param\fR>
+anisotropy parameter.
+.B 0.0
+for one direction of linear (along the equator for spheres, or along the larger
+circumference for toruses),
+.B 1.0
+for planar,
+.B 2.0
+for the other direction of linear (from pole to pole for spheres, or along the
+smaller circumference for toruses)
+.RI ( float )
+.TP
+.B \-max\fR <\fImax\ cal\fR>
+maximum anisotropy in dataset, according to the
+.RB \(lq ca1 \(rq
+anisotropy metric.
+.RB \(lq 1.0 \(rq
+means completely linear or completely planar anisotropy
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-min\fR <\fImin\ cal\fR>
+minimum anisotropy in dataset
+.RI ( float );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-b\fR <\fIboundary\fR>
+parameter governing how fuzzy the boundary between high and low anisotropy is.
+Use
+.RB \(lq \-b\ 0 \(rq
+for no fuzziness
+.RI ( float );
+default:
+.RB \(lq 0.05 \(rq
+.TP
+.B \-br\fR <\fIramp\fR>
+how much to ramp up effective
+.RI \(lq \-b \(rq
+along Y axis.
+Use
+.RB \(lq \-b\ 0 \(rq
+for no such ramping.
+.RI ( float );
+default:
+.RB \(lq 0.0 \(rq
+.TP
+.B \-th\fR <\fIthickness\fR>
+parameter governing how thick region of high anisotropy is
+.RI ( float );
+default:
+.RB \(lq 0.3 \(rq
+.TP
+.B \-evsc\fR <\fIeval\ scale\fR>
+scaling of eigenvalues
+.RI ( float );
+default:
+.RB \(lq 1.0 \(rq
+.TP
+.B \-s\fR <\fIsize\fR>
+dimensions of output volume.
+For size
+.IR N ,
+the output is
+.IB N \ x\  N \ x\  N
+for spheres, and
+.BI 2 N \ x\ 2 N \ x\  N
+for toruses
+.RI ( int );
+default:
+.RB \(lq 32 \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output filename
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

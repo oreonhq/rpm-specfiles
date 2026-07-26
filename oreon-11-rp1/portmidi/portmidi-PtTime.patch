@@ -1,0 +1,55 @@
+diff -rupN portmidi-orig/pm_linux/pmlinuxalsa.c portmidi/pm_linux/pmlinuxalsa.c
+--- portmidi-orig/pm_linux/pmlinuxalsa.c	2009-11-20 06:41:09.000000000 +0100
++++ portmidi/pm_linux/pmlinuxalsa.c	2025-01-18 21:29:16.756446199 +0100
+@@ -201,7 +201,7 @@ static PmError alsa_write_byte(PmInterna
+             /* compute relative time of event = timestamp - now + latency */
+             PmTimestamp now = (midi->time_proc ? 
+                                midi->time_proc(midi->time_info) : 
+-                               Pt_Time(NULL));
++                               Pt_Time());
+             int when = timestamp;
+             /* if timestamp is zero, send immediately */
+             /* otherwise compute time delay and use delay if positive */
+diff -rupN portmidi-orig/pm_test/latency.c portmidi/pm_test/latency.c
+--- portmidi-orig/pm_test/latency.c	2023-03-29 16:05:42.068076470 +0200
++++ portmidi/pm_test/latency.c	2025-01-18 21:30:21.472028653 +0100
+@@ -116,7 +116,7 @@ void pt_callback(PtTimestamp timestamp,
+     /* send a note on/off if user requested it */
+     if (test_out && (iteration % output_period == 0)) {
+         PmEvent buffer[1];
+-        buffer[0].timestamp = Pt_Time(NULL);
++        buffer[0].timestamp = Pt_Time();
+         if (note_on) {
+             /* note off */
+             buffer[0].message = Pm_Message(0x90, 60, 0);
+@@ -241,7 +241,7 @@ int main()
+     /* courteously turn off the last note, if necessary */
+     if (note_on) {
+        PmEvent buffer[1];
+-       buffer[0].timestamp = Pt_Time(NULL);
++       buffer[0].timestamp = Pt_Time();
+        buffer[0].message = Pm_Message(0x90, 60, 0);
+        Pm_Write(out, buffer, 1);
+     }
+diff -rupN portmidi-orig/pm_python/pyportmidi/_pyportmidi.pyx portmidi/pm_python/pyportmidi/_pyportmidi.pyx
+--- portmidi-orig/pm_python/pyportmidi/_pyportmidi.pyx	2023-03-29 16:05:42.082076578 +0200
++++ portmidi/pm_python/pyportmidi/_pyportmidi.pyx	2025-01-19 00:26:29.910843366 +0100
+@@ -69,7 +69,8 @@ cdef extern from "portmidi.h":
+                           PmDeviceID inputDevice,
+                           void *inputDriverInfo,
+                           long bufferSize,
+-                          long (*PmPtr) (), # long = PtTimestamp
++                          # long (*PmPtr) (), # long = PtTimestamp
++                          PmTimeProcPtr time_proc, # long = PtTimestamp
+                           void *time_info )
+     PmError Pm_OpenOutput( PortMidiStream** stream,
+                            PmDeviceID outputDevice,
+@@ -405,7 +406,7 @@ class Input:
+         cdef PmError err
+         self.i = InputDevice
+         self.debug = 0
+-        err= Pm_OpenInput(&(self.midi),self.i,NULL,buffersize,&Pt_Time,NULL)
++        err= Pm_OpenInput(&(self.midi),self.i,NULL,buffersize,<PmTimeProcPtr>&Pt_Time,NULL)
+         if err < 0: raise Exception, Pm_GetErrorText(err)
+         if self.debug: print "MIDI input opened."
+ 

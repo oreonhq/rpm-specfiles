@@ -1,0 +1,130 @@
+diff -Nurp shunit2-2.1.6.orig/doc/Makefile shunit2-2.1.6/doc/Makefile
+--- shunit2-2.1.6.orig/doc/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ shunit2-2.1.6/doc/Makefile	2011-05-04 11:19:48.149344760 +0800
+@@ -0,0 +1,33 @@
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++#
++#   Name: Makefile
++#   Description: The Makefile, install docs
++#
++#		Author: Hushan Jia <hjia@redhat.com>
++#
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++FILES=README.txt\
++      coding_standards.txt\
++      contributors.txt\
++      design_doc.txt\
++      LGPL-2.1\
++      CHANGES-2.1.txt\
++      RELEASE_NOTES-2.1.6.txt\
++      shunit2.txt\
++      TODO.txt
++
++DOCDIR=/usr/share/doc/$(PKGNAME)-$(PKGVERSION)
++
++.PHONY: clean
++
++build:
++	@echo "Nothing to build"
++
++install: $(FILES)
++	mkdir -p $(DESTDIR)$(DOCDIR)
++	install -p -m 644 $(FILES) $(DESTDIR)$(DOCDIR)/
++
++clean:
++	rm -f *.tar.gz *.tgz
++
+diff -Nurp shunit2-2.1.6.orig/examples/Makefile shunit2-2.1.6/examples/Makefile
+--- shunit2-2.1.6.orig/examples/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ shunit2-2.1.6/examples/Makefile	2011-05-04 11:19:48.149344760 +0800
+@@ -0,0 +1,30 @@
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++#
++#   Name: Makefile
++#   Description: The Makefile, install examples
++#
++#		Author: Hushan Jia <hjia@redhat.com>
++#
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++FILES=equality_test.sh\
++      	math_test.sh\
++	party_test.sh\
++	lineno_test.sh\
++	math.inc\
++	mkdir_test.sh
++
++DOCDIR=/usr/share/doc/$(PKGNAME)-$(PKGVERSION)
++
++.PHONY: clean
++
++build:
++	@echo "Nothing to build"
++
++install: $(FILES)
++	mkdir -p $(DESTDIR)$(DOCDIR)/examples
++	install -p -m 644 $(FILES) $(DESTDIR)$(DOCDIR)/examples/
++
++clean:
++	rm -f *.tar.gz *.tgz
++
+diff -Nurp shunit2-2.1.6.orig/Makefile shunit2-2.1.6/Makefile
+--- shunit2-2.1.6.orig/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ shunit2-2.1.6/Makefile	2011-05-04 11:19:48.149344760 +0800
+@@ -0,0 +1,25 @@
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++#
++#   Name: Makefile
++#   Description: The Makefile, install shunit2 to system libdir
++#
++#		Author: Hushan Jia <hjia@redhat.com>
++#
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++export PKGNAME=shunit2
++export PKGVERSION=2.1.6
++
++SUBDIRS := src doc examples
++
++build:
++	for i in $(SUBDIRS); do $(MAKE) -C $$i; done
++
++install:
++	for i in $(SUBDIRS); do $(MAKE) -C $$i install; done
++
++clean:
++	rm -f *.tar.gz *.tgz
++	for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
++
++
+diff -Nurp shunit2-2.1.6.orig/src/Makefile shunit2-2.1.6/src/Makefile
+--- shunit2-2.1.6.orig/src/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ shunit2-2.1.6/src/Makefile	2011-05-04 11:20:25.426220280 +0800
+@@ -0,0 +1,26 @@
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++#
++#   Name: Makefile
++#   Description: The Makefile, install shunit2 to system libdir
++#
++#		Author: Hushan Jia <hjia@redhat.com>
++#
++# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++FILES=shunit2 shunit2_test_helpers
++
++MANDIR=
++
++.PHONY: clean
++
++build:
++	@echo "Nothing to build"
++
++install: $(FILES)
++	mkdir -p $(DESTDIR)/usr/share/shunit2
++	install -p -m 755 shunit2 $(DESTDIR)/usr/share/shunit2
++	install -p -m 644 shunit2_test_helpers $(DESTDIR)/usr/share/shunit2
++
++clean:
++	rm -f *.tar.gz *.tgz
++

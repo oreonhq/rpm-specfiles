@@ -1,0 +1,25 @@
+--- src/SDL/i_main.c~	2008-11-09 11:15:41.000000000 -0600
++++ src/SDL/i_main.c	2024-02-06 10:33:38.208547100 -0600
+@@ -356,7 +356,7 @@
+ #endif
+ 
+   myargc = argc;
+-  myargv = argv;
++  myargv = (const char * const*)argv;
+ 
+ #ifdef _WIN32
+   if (!M_CheckParm("-nodraw")) {
+--- src/m_misc.c~	2008-11-09 11:13:04.000000000 -0600
++++ src/m_misc.c	2024-02-06 10:50:26.642351654 -0600
+@@ -358,9 +358,9 @@
+    def_int,ss_none},
+   {"gl_depthbuffer_bits",{&gl_depthbuffer_bits},{16},16,32,
+    def_int,ss_none},
+-  {"gl_tex_filter_string", {NULL,&gl_tex_filter_string}, {0,"GL_LINEAR"},UL,UL,
++  {"gl_tex_filter_string", {NULL,(const char **)&gl_tex_filter_string}, {0,"GL_LINEAR"},UL,UL,
+    def_str,ss_none},
+-  {"gl_tex_format_string", {NULL,&gl_tex_format_string}, {0,"GL_RGB5_A1"},UL,UL,
++  {"gl_tex_format_string", {NULL,(const char **)&gl_tex_format_string}, {0,"GL_RGB5_A1"},UL,UL,
+    def_str,ss_none},
+   {"gl_drawskys",{&gl_drawskys},{1},0,1,
+    def_bool,ss_none},

@@ -1,0 +1,12 @@
+diff -up vatnumber-1.2/vatnumber/__init__.py.py3 vatnumber-1.2/vatnumber/__init__.py
+--- vatnumber-1.2/vatnumber/__init__.py.py3	2016-04-22 10:38:57.000000000 +0200
++++ vatnumber-1.2/vatnumber/__init__.py	2016-04-22 10:39:01.000000000 +0200
+@@ -80,7 +80,7 @@ def check_vat_ar(vat):
+         return False
+     base = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+     aux = 0
+-    for i in xrange(10):
++    for i in range(10):
+         aux += int(vat[i]) * base[i]
+     aux = 11 - (aux - (int(aux / 11) * 11))
+     if aux == 11:

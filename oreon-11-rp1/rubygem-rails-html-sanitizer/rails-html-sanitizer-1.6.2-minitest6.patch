@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' rails-html-sanitizer-1.6.2.orig/test/rails_api_test.rb rails-html-sanitizer-1.6.2/test/rails_api_test.rb
+--- rails-html-sanitizer-1.6.2.orig/test/rails_api_test.rb	2025-12-30 23:14:14.031991560 +0900
++++ rails-html-sanitizer-1.6.2/test/rails_api_test.rb	2025-12-30 23:31:07.876799860 +0900
+@@ -1,6 +1,7 @@
+ # frozen_string_literal: true
+ 
+ require "minitest/autorun"
++require "minitest/mock"
+ require "rails-html-sanitizer"
+ 
+ class RailsApiTest < Minitest::Test

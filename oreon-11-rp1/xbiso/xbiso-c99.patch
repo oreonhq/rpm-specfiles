@@ -1,0 +1,26 @@
+Add prototype for handlefile, so that it is possible to call it before it
+is defined.  Future compilers are likely not to accept implicit function
+declarations by default.
+
+Submitted upstream: <https://sourceforge.net/p/xbiso/patches/3/>
+
+diff --git a/xbiso.c b/xbiso.c
+index 6372944f7ec91120..c472c040d96e48a9 100644
+--- a/xbiso.c
++++ b/xbiso.c
+@@ -93,6 +93,7 @@ typedef off_t OFFT;
+ typedef off64_t OFFT;
+ #endif
+ 
++int handlefile(OFFT offset, int dtable);
+ 
+ int main(int argc, char *argv[]) {
+   char *dbuf,*fname;
+@@ -269,6 +270,7 @@ int main(int argc, char *argv[]) {
+   exit(0);
+ }
+ 
++int
+ handlefile(OFFT offset, int dtable) {
+   TABLE dirent;
+     

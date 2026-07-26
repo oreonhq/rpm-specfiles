@@ -1,0 +1,130 @@
+commit be870f2b2dac0c6a13881583034e41b0a22e21b9
+Author: David Howells <dhowells@redhat.com>
+Date:   Thu Feb 20 18:25:31 2014 +0000
+
+    Change "xtrace" to "x11trace"
+    
+    Change "xtrace" to "x11trace" within the sources without renaming any files to
+    confuse things.  That's done in a later commit.  Unfortunately, the name
+    "xtrace" conflicts with a utility program provided by glibc.
+
+diff --git a/Makefile.am b/Makefile.am
+index 163f5df..7d9bb2e 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,8 +1,8 @@
+-bin_PROGRAMS = xtrace
++bin_PROGRAMS = x11trace
+ 
+ AM_CPPFLAGS = -DPKGDATADIR='"$(pkgdatadir)"'
+ 
+-xtrace_SOURCES = main.c x11common.c x11client.c x11server.c parse.c copyauth.c atoms.c translate.c stringlist.c
++x11trace_SOURCES = main.c x11common.c x11client.c x11server.c parse.c copyauth.c atoms.c translate.c stringlist.c
+ 
+ noinst_HEADERS = xtrace.h parse.h stringlist.h translate.h
+ 
+diff --git a/README b/README
+index 3942968..1dc3475 100644
+--- a/README
++++ b/README
+@@ -1,13 +1,13 @@
+-		XTRACE 1.1
+-		----------
++		X11TRACE 1.3.1
++		--------------
+ 
+-What strace is for system calls, xtrace is for X11 connections:
++What strace is for system calls, x11trace is for X11 connections:
+ you hook it between one or more X11 clients and an X server and
+ it prints the requests going from client to server and the replies,
+ events and errors going the other way.
+ 
+ Short howto:
+-Run xtrace, which defaults to listening at :9 and forwarding to
++Run x11trace, which defaults to listening at :9 and forwarding to
+ your current $DISPLAY.
+ 
+ Then simply start other clients after setting DISPLAY=:9 or
+diff --git a/configure.ac b/configure.ac
+index 5277115..b0ab0e3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,7 @@ dnl
+ dnl Process this file with autoconf to produce a configure script
+ dnl
+ 
+-AC_INIT(xtrace, 1.3.1, brlink@debian.org)
++AC_INIT(x11trace, 1.3.1, brlink@debian.org)
+ AC_CONFIG_SRCDIR(main.c)
+ AC_CONFIG_AUX_DIR(ac)
+ AC_CONFIG_HEADERS(config.h)
+diff --git a/main.c b/main.c
+index 06cb56e..c203e5e 100644
+--- a/main.c
++++ b/main.c
+@@ -507,7 +507,7 @@ int main(int argc, char *argv[]) {
+ 	         		case LO_HELP:
+ 					 printf(
+ "%s: Dump all X protocol data being tunneled from a fake X display to a real one.\n"
+-"usage: xtrace [options] [[--] command args ...]\n"
++"usage: x11trace [options] [[--] command args ...]\n"
+ "--display, -d <display to connect to>\n"
+ "--fakedisplay, -D <display to fake>\n"
+ "--copyauthentication, -c	Copy credentials\n"
+diff --git a/xtrace.1 b/xtrace.1
+index 60f75b5..51be998 100644
+--- a/xtrace.1
++++ b/xtrace.1
+@@ -1,19 +1,19 @@
+-.TH XTRACE 1 "26 June 2009" "xtrace" XTRACE
++.TH X11TRACE 1 "26 June 2009" "x11trace" X11TRACE
+ .SH NAME
+-xtrace \- trace communication between X11 client and server
++x11trace \- trace communication between X11 client and server
+ .SH SYNOPSIS
+-.BR xtrace " [ " \fIoptions\fP " ] [ " \-s " | " \-k " ] [ [ " \-W " ] [ " -- " ] " "\fIcommand args ...\fP" " ]"
++.BR x11trace " [ " \fIoptions\fP " ] [ " \-s " | " \-k " ] [ [ " \-W " ] [ " -- " ] " "\fIcommand args ...\fP" " ]"
+ .SH DESCRIPTION
+-Xtrace fakes an X server and forwards all connections to
++x11trace fakes an X server and forwards all connections to
+ a real X server, displaying the communication between clients
+ in (well, theoretically) human readable form.
+ If a command is given,
+-.B xtrace
++.B x11trace
+ executes the named command with
+ .B $DISPLAY
+ set to the faked X server. If that command exits before any connections
+ are made,
+-.B xtrace
++.B x11trace
+ exits immediately unless
+ .B \-W
+ is specified.
+@@ -63,7 +63,7 @@ them.
+ The commands run are roughly equivalent to:
+ \fBxauth add $FAKEDISPLAY . `xauth list $DISPLAY | awk '$2=="MIT-MAGIC-COOKIE-1" {print $3}'`\fP
+ 
+-Not that only \fBMIT-MAGIC-COOKIE-1\fP tokens are copied as xtrace does not yet
++Not that only \fBMIT-MAGIC-COOKIE-1\fP tokens are copied as x11trace does not yet
+ support to change the authentication tokens so that \fBXDM-AUTHORIZATION-1\fP
+ would be possible.
+ .TP
+@@ -73,7 +73,7 @@ leave that to the user to handle.
+ .TP
+ .B \-e \fR|\fP \-\-denyextensions
+ Modify all server replies to say there are no extensions available.
+-(As xtrace does supports only a small number of extensions
++(As x11trace does supports only a small number of extensions
+ anyway and calls all extended requests "unknown" and all replies to such
+ requests "unexpected").
+ .TP
+@@ -144,7 +144,7 @@ to \fBxauth\fP to get the authentication tokens for this display.)
+ Without \fB\-\-fakedisplay\fP the content of this variable is used to
+ determine how to listen for clients. (And without \fB\-n\fP given
+ to \fBxauth\fP to set the authentication tokens for this display.)
+-If neither is given, \fBxtrace\fP will try \fB:9\fP
++If neither is given, \fBx11trace\fP will try \fB:9\fP
+ .TP
+ .B XAUTHORITY
+ Without \fB-n\fP and without \fB-f\fP or \fB-F\fP your \fBxauth\fP

@@ -1,0 +1,12 @@
+--- configure.ac~	2024-08-19 22:20:19.000000000 -0500
++++ configure.ac	2024-08-26 15:29:46.294017388 -0500
+@@ -1,3 +1,9 @@
++m4_pattern_allow([AC_LIBTOOL_WIN32_DLL])
++m4_pattern_allow([AC_LIBTOOL_DLOPEN])
++m4_pattern_allow([AC_DISABLE_STATIC])
++m4_pattern_allow([AC_ENABLE_SHARED])
++m4_pattern_allow([AC_PROG_LIBTOOL])
++
+ # -- I N I T --------------------------------------------------
+ 
+ AC_PREREQ([2.60])

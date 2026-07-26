@@ -1,0 +1,11 @@
+diff --git a/tox.ini b/tox.ini
+index 61c6de6..8ab184f 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,5 +1,5 @@
+ [tox]
+-requires = virtualenv<20.22.0
++requires = virtualenv<21.00.0
+ envlist = py27, py310
+ 
+ [testenv]

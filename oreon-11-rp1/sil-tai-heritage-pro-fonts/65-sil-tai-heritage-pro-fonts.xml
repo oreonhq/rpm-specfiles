@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Tai Heritage Pro</target>
+    <like>
+      <family>Tai Heritage Std</family>
+      <family>Tai Heritage</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

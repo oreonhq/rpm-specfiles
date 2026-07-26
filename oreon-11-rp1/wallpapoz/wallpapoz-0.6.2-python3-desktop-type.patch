@@ -1,0 +1,114 @@
+--- wallpapoz-0.6.2/src/wallpapoz.py3.01	2019-11-25 15:36:39.502763400 +0900
++++ wallpapoz-0.6.2/src/wallpapoz	2019-11-28 13:16:27.404156561 +0900
+@@ -220,7 +220,7 @@
+   def get_selected_iter_of_treeview(self, type_selection):
+ 
+     # treeselection give 2-tuple.... ( model, path )
+-    pathlist = self.treeselection.get_selected_rows()[1]
++    model, pathlist = self.treeselection.get_selected_rows()
+ 
+     # how many of selection do we have
+     length_of_path_list = len(pathlist)
+@@ -883,7 +883,14 @@
+     for copy_iter in copy_iter_list:
+ 
+       # get the parent and child number
+-      copy_iter_parent_number, copy_iter_child_number = self.store.get_path(copy_iter)
++      if type(self.store) == gtk.TreeStore:
++        copy_iter_parent_number, copy_iter_child_number = self.store.get_path(copy_iter)
++      elif type(self.store) == gtk.ListStore:
++        # "desktop" type xml, workaround
++        copy_iter_child_number = self.store.get_path(copy_iter)[0]
++        copy_iter_parent_number = 0
++      else:
++        raise
+ 
+       # we are in new workspace
+       if copy_iter_parent_number != parent_number_index:
+@@ -931,7 +938,11 @@
+           # it is not in the same block but still in the same workspace
+           else:
+ 
+-            lowest_iter_list.append(
++            if type(self.store) == gtk.ListStore:
++              lowest_iter_list.append(
++                self.store.get_iter(iter_workspace_index+1))
++            else:
++              lowest_iter_list.append(
+                 self.store.get_iter( (copy_iter_parent_number, iter_workspace_index+1) ) )
+ 
+             done_workspace = True
+@@ -943,8 +954,13 @@
+       # a wallpaper from a workspace, if only one wallpaper existed.
+       # Need further investigation, however anyway workaround...
+       new_iter = []
++      if type(self.store) == gtk.ListStore:
++        parent_number_index = 0
+       try:
+-        new_iter = self.store.get_iter((parent_number_index, iter_workspace_index + 1))
++        if type(self.store) == gtk.ListStore:
++          new_iter = self.store.get_iter(iter_workspace_index + 1)
++        else:
++          new_iter = self.store.get_iter((parent_number_index, iter_workspace_index + 1))
+       except ValueError:
+         pass
+       if new_iter:
+@@ -970,8 +986,8 @@
+       if self.store.get_path(single_iter)[0] != parent_number:
+         temp_iter_list = []
+         parent_number = self.store.get_path(single_iter)[0]
+-        temp_iter_list.append(single_iter)
+-        prev_iter = single_iter
++      temp_iter_list.append(single_iter)
++      prev_iter = single_iter
+ 
+     # do the remaining job
+     if self.store.iter_n_children( self.store.iter_parent(prev_iter) ) == len(temp_iter_list) and self.work_on_tree == "cut":
+@@ -986,11 +1002,17 @@
+     #   if type(self.store) == gtk.TreeStore:
+     parent = self.store.iter_parent(position_iter)
+     new_index = self.store.get_value(position_iter, 0) + 1
+-    # if it is child node
+-    if parent != None:
++
++    # if it is child node in "workspace" xml or "desktop" type xml
++    if (type(self.store) == gtk.ListStore) or (parent != None):
+       for single_iter in self.selected_iter:
+         node_value = self.store.get_value(single_iter, 1)
+-        position_iter = self.store.insert_after(parent, position_iter, [new_index, node_value, False])
++        if type(self.store) == gtk.ListStore:
++          # desktop type
++          position_iter = self.store.insert_after(position_iter, [new_index, node_value, False])
++        else:
++          # child node in workspace xml
++          position_iter = self.store.insert_after(parent, position_iter, [new_index, node_value, False])
+         new_index = new_index + 1
+ 
+       # after inserting new row, we must sort out the index number after it
+@@ -1108,6 +1130,7 @@
+       self.order_treeiter_from_lowest_iter(lowest_iter)
+ 
+     # select something after deleting treenodes
++    self.treeselection.unselect_all()
+     self.treeselection.select_path(0)
+ 
+   # create configuration file ( we call this method when we click save button )
+@@ -1274,6 +1297,18 @@
+       # Nothing left
+       return
+ 
++    if type(self.store) == gtk.ListStore:
++      #self.builder.get_object("rename_workspace").set_sensitive(False)
++      #self.rename_workspace_menu.set_sensitive(False)
++      self.builder.get_object("change_wallpaper").set_sensitive(True)
++      self.change_wallpaper_menu.set_sensitive(True)
++      self.builder.get_object("cut").set_sensitive(True)
++      self.cut_menu.set_sensitive(True)
++      self.builder.get_object("copy").set_sensitive(True)
++      self.copy_menu.set_sensitive(True)
++      self.builder.get_object("delete_wallpapers").set_sensitive(True)
++      self.delete_wallpapers_menu.set_sensitive(True)
++
+     if type(self.store) == gtk.TreeStore:
+       parent = self.store.iter_parent(position_iter)
+       # parent node, enable: rename_workspace

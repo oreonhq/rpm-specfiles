@@ -1,0 +1,180 @@
+.TH UNU\-2OP "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-2op \- binary operation on two
+.IR nrrd s,
+or on a
+.I nrrd
+and a constant
+.SH SYNOPSIS
+.B unu\ 2op
+.RI < operator >
+.RI < in1 >
+.RI < in2 >
+.RB [ \-s , \-\-seed
+.RI < seed >]
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-w , \-\-which
+.RI < arg >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Binary operation on two
+.IR nrrd s,
+or on a
+.I nrrd
+and a constant.
+Either the first or second operand can be a
+.I float
+constant, but not both.
+Use
+.RB \(lq \- \(rq
+for an operand to signify a
+.I nrrd
+to be read from
+.I stdin
+(a pipe).
+Note, however, that
+.RB \(lq \- \(rq
+can probably only be used once (reliably).
+.IP \(bu +2n
+Uses
+.B nrrdArithIterBinaryOp
+or (with
+.BR \-w )
+.B nrrdArithIterBinaryOpSelect
+.SH OPTIONS
+.TP
+.I operator
+Binary operator.
+Possibilities include:
+.RS +7n
+.IP \(bu +2n
+.RB \(lq + \(rq,
+.RB \(lq \- \(rq
+.RB \(lq x \(rq
+.RB \(lq / \(rq:
+add, subtract, multiply, divide
+.IP \(bu +2n
+.RB \(lq ^ \(rq:
+exponentiation
+.RB ( pow (3))
+.IP \(bu +2n
+.RB \(lq spow \(rq:
+signed exponentiation:
+.BI sgn( x )pow(abs( x ), p )
+.IP \(bu +2n
+.RB \(lq fpow \(rq:
+like spow but with curves flipped
+.IP \(bu +2n
+.RB \(lq % \(rq:
+integer modulo
+.IP \(bu +2n
+.RB \(lq fmod \(rq:
+same as
+.BR fmod (3)
+in C
+.IP \(bu +2n
+.RB \(lq atan2 \(rq:
+same as
+.BR atan2 (3)
+in C
+.IP \(bu +2n
+.RB \(lq min \(rq
+.RB \(lq max \(rq:
+minimum, maximum
+.IP \(bu +2n
+.RB \(lq lt \(rq
+.RB \(lq lte \(rq
+.RB \(lq gt \(rq
+.RB \(lq gte \(rq:
+same as C's
+.BR < ,
+.BR <= ,
+.BR > ,
+.B <=
+.IP \(bu +2n
+.RB \(lq eq \(rq
+.RB \(lq neq \(rq:
+same as C's
+.B ==
+and
+.B !=
+.IP \(bu +2n
+.RB \(lq comp \(rq:
+.BR \-1 ,
+.BR 0 ,
+or
+.B 1
+if 1st value is less than, equal to, or greater than 2nd value
+.IP \(bu +2n
+.RB \(lq if \(rq:
+if 1st value is non-zero, use it, else use 2nd value
+.IP \(bu +2n
+.RB \(lq exists \(rq:
+if 1st value exists, use it, else use 2nd value
+.IP \(bu +2n
+.RB \(lq nrand \(rq:
+scale unit-stdv Gaussian noise by 2nd value and add to first value
+.IP \(bu +2n
+.RB \(lq rrand \(rq:
+sample Rician distribution with 1st value for \(lqtrue\(rq mean, and 2nd value
+for sigma
+.RE
+.TP
+.I in1
+First input.
+Can be a single value or a
+.IR nrrd .
+.TP
+.I in2
+Second input.
+Can be a single value or a
+.IR nrrd .
+.TP
+.B \-s\fR\ <\fIseed\fR>\ ,\ \fB\-\-seed\fR\ <\fIseed\fR>
+seed value for RNG for
+.BR nrand ,
+so that you can get repeatable results between runs, or, by not using this
+option, the RNG seeding will be based on the current time
+.RI ( string )
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to convert all
+.B INPUT
+.IR nrrd s
+to, prior to doing operation, useful for doing, for instance, the difference
+between two
+.I unsigned\ char
+.IR nrrd s.
+This will also determine output type.
+By default (not using this option), the types of the input
+.IR nrrd s
+are left unchanged.
+.TP
+.B \-w\fR\ <\fIarg\fR>\ ,\ \fB\-\-which\fR\ <\fIarg\fR>
+Which argument
+.RB ( 0
+or
+.BR 1 )
+should be used to determine the shape of the output
+.IR nrrd .
+By default (not using this option), the first non-constant argument is used.
+.RI ( int );
+default:
+.RB \(lq \-1 \(rq
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)
+.P
+.BR abs (1),
+.BR atan2 (1),
+.BR fabs (1),
+.BR fmod (1),
+.BR pow (1)

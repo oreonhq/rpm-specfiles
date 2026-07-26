@@ -1,0 +1,32 @@
+From 2df4e31e5ff526b8871adb0bb62d1b6a8e289255 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sat, 7 Jun 2025 21:28:19 +0100
+Subject: [PATCH] src/lua/LuaSocketDefault.cpp: add missing <climits> include
+ (#1007)
+
+Without the change the build fails on upcoming `gcc-16` as:
+
+    ../src/lua/LuaSocketDefault.cpp: In function 'void LuaSocket::Timeout(double)':
+    ../src/lua/LuaSocketDefault.cpp:21:31: error: 'INT_MAX' was not declared in this scope
+       21 |                 if (timeout > INT_MAX) timeout = INT_MAX;
+          |                               ^~~~~~~
+    ../src/lua/LuaSocketDefault.cpp:6:1: note: 'INT_MAX' is defined in header '<climits>'; this is probably fixable by adding '#include <climits>'
+        5 | #include <sys/time.h>
+      +++ |+#include <climits>
+        6 | #include <time.h>
+---
+ src/lua/LuaSocketDefault.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lua/LuaSocketDefault.cpp b/src/lua/LuaSocketDefault.cpp
+index b9f0536a11..cb06ab1761 100644
+--- a/src/lua/LuaSocketDefault.cpp
++++ b/src/lua/LuaSocketDefault.cpp
+@@ -2,6 +2,7 @@
+ #include "Misc.h"
+ #include <stdint.h>
+ #include <algorithm>
++#include <climits>
+ #include <sys/time.h>
+ #include <time.h>
+ 

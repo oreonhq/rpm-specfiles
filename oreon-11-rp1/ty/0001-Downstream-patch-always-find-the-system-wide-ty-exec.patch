@@ -1,0 +1,40 @@
+From 20ae7b44eac5ff8485f02b237723fdc3d18d3739 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 23 Sep 2025 13:33:43 +0100
+Subject: [PATCH] Downstream patch: always find the system-wide ty executable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The following issue is for uv, but the situation is exactly the same.
+
+“Should uv.find_uv_bin() be able to find /usr/bin/uv?”
+https://github.com/astral-sh/uv/issues/4451
+---
+ python/ty/_find_ty.py | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/python/ty/_find_ty.py b/python/ty/_find_ty.py
+index 1a87c88..6f2384f 100644
+--- a/python/ty/_find_ty.py
++++ b/python/ty/_find_ty.py
+@@ -36,6 +36,16 @@ def find_ty_bin() -> str:
+         sysconfig.get_path("scripts", scheme=_user_scheme()),
+     ]
+ 
++    # Downstream patch: always find the system-wide ty executable
++    #
++    # The following issue is for uv, but the situation is exactly the same.
++    #
++    # “Should uv.find_uv_bin() be able to find /usr/bin/uv?”
++    #  https://github.com/astral-sh/uv/issues/4451
++    bindir_path = sysconfig.get_config_var("BINDIR")
++    if bindir_path is not None:
++        targets.insert(0, bindir_path)
++
+     seen = []
+     for target in targets:
+         if not target:
+-- 
+2.53.0
+

@@ -1,0 +1,16 @@
+diff -up xkbset-0.5/Makefile.install xkbset-0.5/Makefile
+--- xkbset-0.5/Makefile.install	2012-10-03 09:30:23.322309774 +0200
++++ xkbset-0.5/Makefile	2012-10-03 09:32:40.491731457 +0200
+@@ -50,9 +50,11 @@ INSTALL_SCRIPT=	${INSTALL}
+ INSTALL_PROGRAM=${INSTALL} -s
+ 
+ install: all
++	${INSTALL} -d ${INSTALL_BIN}
++	${INSTALL} -d ${INSTALL_MAN1}
+ 	${INSTALL_PROGRAM} xkbset ${INSTALL_BIN}
+ 	${INSTALL_SCRIPT} xkbset-gui ${INSTALL_BIN}
+-	${INSTALL_DATA} xkbset.1 ${INSTALL_MAN1}
++	${INSTALL_DATA} -m 644 xkbset.1 ${INSTALL_MAN1}
+ 
+ clean:
+ 	rm -f *.o getargs.c print.c usage.c *.core xkbset config_usage xkbset.1

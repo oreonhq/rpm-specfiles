@@ -1,0 +1,35 @@
+--- configure~	2022-09-04 19:34:41.000000000 +1000
++++ configure	2024-06-07 14:38:40.286864534 +1000
+@@ -789,6 +789,7 @@
+ oldincludedir
+ includedir
+ localstatedir
++runstatedir
+ sharedstatedir
+ sysconfdir
+ datadir
+@@ -944,6 +945,7 @@
+ sysconfdir='${prefix}/etc'
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
++runstatedir='${localstatedir}/run'
+ includedir='${prefix}/include'
+ oldincludedir='/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE}'
+@@ -1120,6 +1122,16 @@
+   | --localstate=* | --localstat=* | --localsta=* | --localst=* | --locals=*)
+     localstatedir=$ac_optarg ;;
+ 
++  -runstatedir | --runstatedir | --runstatedi | --runstated \
++  | --runstate | --runstat | --runsta | --runst | --runs \
++  | --run | --ru | --r)
++    ac_prev=runstatedir ;;
++  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
++  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
++  | --run=* | --ru=* | --r=*)
++    runstatedir=$ac_optarg ;;
++
++
+   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
+     ac_prev=mandir ;;
+   -mandir=* | --mandir=* | --mandi=* | --mand=* | --man=* | --ma=* | --m=*)

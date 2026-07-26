@@ -1,0 +1,12 @@
+diff -up x2goclient-4.1.2.2/Makefile.optflags x2goclient-4.1.2.2/Makefile
+--- x2goclient-4.1.2.2/Makefile.optflags	2020-02-13 20:59:14.722337773 -0700
++++ x2goclient-4.1.2.2/Makefile	2020-02-13 21:00:58.499404703 -0700
+@@ -68,7 +68,7 @@ build: build_man
+ 
+ build_client:
+ 	$(LRELEASE_BINARY) x2goclient.pro
+-	mkdir -p $(CLIENT_DIR) && cd $(CLIENT_DIR) && $(QMAKE_BINARY) QMAKE_CFLAGS="${CPPFLAGS} ${CFLAGS}" QMAKE_CXXFLAGS="${CPPFLAGS} ${CXXFLAGS}" QMAKE_LFLAGS="${LDFLAGS}" QMAKE_LIBS="${LIBS}" $(QMAKE_OPTS) ../x2goclient.pro
++	mkdir -p $(CLIENT_DIR) && cd $(CLIENT_DIR) && $(QMAKE_BINARY) QMAKE_CFLAGS="${CPPFLAGS} ${RPM_OPT_FLAGS} ${CFLAGS}" QMAKE_CXXFLAGS="${CPPFLAGS} ${RPM_OPT_FLAGS} ${CXXFLAGS}" QMAKE_LFLAGS="${RPM_LD_FLAGS} ${LDFLAGS}" QMAKE_LIBS="${LIBS}" $(QMAKE_OPTS) ../x2goclient.pro
+ 	cd $(CLIENT_DIR) && $(MAKE)
+ 
+ build_man:

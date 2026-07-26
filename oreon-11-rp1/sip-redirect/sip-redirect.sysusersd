@@ -1,0 +1,2 @@
+#Type  Name  ID  GECOS                  Home directory  Shell
+u      sip   -   "SIP redirect server"  -               /sbin/nologin

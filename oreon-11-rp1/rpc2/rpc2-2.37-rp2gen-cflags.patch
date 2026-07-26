@@ -1,0 +1,12 @@
+diff -up rpc2-2.37/rp2gen/Makefile.am.cflags rpc2-2.37/rp2gen/Makefile.am
+--- rpc2-2.37/rp2gen/Makefile.am.cflags	2025-03-13 14:02:43.918453553 -0400
++++ rpc2-2.37/rp2gen/Makefile.am	2025-03-13 14:03:23.691314669 -0400
+@@ -11,7 +11,7 @@ LDFLAGS=
+ LIBS=
+ 
+ .c.o:
+-	$(NATIVECC) $(AM_CPPFLAGS) -c $<
++	$(NATIVECC) $(CFLAGS) $(AM_CPPFLAGS) -c $<
+ 
+ bin_PROGRAMS = rp2gen
+ 

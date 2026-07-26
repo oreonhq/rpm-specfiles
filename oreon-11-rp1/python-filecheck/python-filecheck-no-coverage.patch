@@ -1,0 +1,39 @@
+diff -up FileCheck.py-0.0.24/tasks.py.orig FileCheck.py-0.0.24/tasks.py
+--- FileCheck.py-0.0.24/tasks.py.orig	2023-11-26 19:08:38.000000000 +0100
++++ FileCheck.py-0.0.24/tasks.py	2024-03-21 11:29:49.559564462 +0100
+@@ -132,34 +132,12 @@ def test_unit(context):
+         context,
+         (
+             """
+-            coverage run
+-                --rcfile=.coveragerc
+-                --branch
++            python
+                 -m pytest
+                 tests/unit/
+             """
+         ),
+     )
+-    run_invoke_cmd(
+-        context,
+-        (
+-            """
+-            coverage report --sort=cover
+-            """
+-        ),
+-    )
+-
+-
+-@task(test_unit)
+-def test_coverage_report(context):
+-    run_invoke_cmd(
+-        context,
+-        (
+-            """
+-            coverage html
+-            """
+-        ),
+-    )
+ 
+ 
+ @task

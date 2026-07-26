@@ -1,0 +1,16 @@
+# Fedora-specific notes
+
+## vmlinux
+For full retsnoop functionality, you want the uncompressed kernel image (`vmlinux`).
+
+If you are on the latest available kernel, you can simply invoke
+
+```
+# debuginfo-install kernel
+```
+
+If you are on an older kernel, this would not work, as only the latest
+debuginfo subpackage is kept per package.
+
+Instead, go to https://koji.fedoraproject.org/, search for `kernel`, find the
+build matching `uname -r` and download the `kernel-debuginfo` for your arch.

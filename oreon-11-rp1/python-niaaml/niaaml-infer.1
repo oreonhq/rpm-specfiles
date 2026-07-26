@@ -1,0 +1,37 @@
+.TH NIAAML\-INFER "1" "September 2024" "" "User Commands"
+.SH NAME
+.B niaaml\-infer
+\(en \[u1F9BE] use an optimized NiaAML pipeline to make predictions
+.SH SYNOPSIS
+.B niaaml infer
+.RI [ OPTIONS ]
+.I DATA_CSV_FILE
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I data_csv_file
+.I PATH
+.RB [default:\  None ]
+[required]
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-\-has\-header\fR, \fB\-\-no\-has\-header
+.RB [default:\  has-header ]
+.TP
+.B \-\-ignore\-columns
+.I INTEGER
+.TP
+.B \-\-pipeline\-file
+.I PATH
+.RB [default:\  pipeline.ppln ]
+.TP
+.B \-\-predictions\-csv\-file
+.I PATH
+.RB [default:\  preds.csv ]
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE\ ALSO"
+.BR niaaml (1)
+.P
+.BR niaaml\-optimize (1)

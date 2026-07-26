@@ -1,0 +1,154 @@
+diff -rupN --no-dereference tetgen1.5.0/CMakeLists.txt tetgen1.5.0-new/CMakeLists.txt
+--- tetgen1.5.0/CMakeLists.txt	2013-11-06 21:26:21.000000000 +0100
++++ tetgen1.5.0-new/CMakeLists.txt	2025-07-18 09:53:48.760215430 +0200
+@@ -1,14 +1,14 @@
+ # Set  the minimum  required version  of cmake  for a  project.
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
++project(tetgen)
++include(GNUInstallDirs)
+ 
+-# Add an executable to the project using the specified source files.
+-add_executable(tetgen tetgen.cxx predicates.cxx)
++add_library(tet SHARED tetgen.cxx predicates.cxx)
++set_target_properties(tet PROPERTIES VERSION 1.5.0 SOVERSION 0)
+ 
+-#Add a library to the project using the specified source files. 
+-# In Linux/Unix, it will creates the libtet.a
+-add_library(tet STATIC tetgen.cxx predicates.cxx)
++add_executable(tetgen main.cxx)
++target_link_libraries(tetgen tet)
+ 
+-#Set properties on a target. 
+-#We use this here to set -DTETLIBRARY for when compiling the
+-#library
+-set_target_properties(tet PROPERTIES "COMPILE_DEFINITIONS" TETLIBRARY)
+\ No newline at end of file
++install(TARGETS tetgen DESTINATION ${CMAKE_INSTALL_BINDIR})
++install(TARGETS tet LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(FILES tetgen.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+diff -rupN --no-dereference tetgen1.5.0/main.cxx tetgen1.5.0-new/main.cxx
+--- tetgen1.5.0/main.cxx	1970-01-01 01:00:00.000000000 +0100
++++ tetgen1.5.0-new/main.cxx	2025-07-18 09:53:48.755827105 +0200
+@@ -0,0 +1,44 @@
++#include "tetgen.h"
++
++///////////////////////////////////////////////////////////////////////////////
++//                                                                           //
++// main()    The command line interface of TetGen.                           //
++//                                                                           //
++///////////////////////////////////////////////////////////////////////////////
++
++int main(int argc, char *argv[])
++{
++  tetgenbehavior b;
++  tetgenio in, addin, bgmin;
++  
++  if (!b.parse_commandline(argc, argv)) {
++    terminatetetgen(NULL, 10);
++  }
++
++  // Read input files.
++  if (b.refine) { // -r
++    if (!in.load_tetmesh(b.infilename, (int) b.object)) {
++      terminatetetgen(NULL, 10);
++    }
++  } else { // -p
++    if (!in.load_plc(b.infilename, (int) b.object)) {
++      terminatetetgen(NULL, 10);
++    }
++  }
++  if (b.insertaddpoints) { // -i
++    // Try to read a .a.node file.
++    addin.load_node(b.addinfilename);
++  }
++  if (b.metric) { // -m
++    // Try to read a background mesh in files .b.node, .b.ele.
++    bgmin.load_tetmesh(b.bgmeshfilename, (int) b.object);
++  }
++
++  tetrahedralize(&b, &in, NULL, &addin, &bgmin);
++
++  return 0;
++}
++
++////                                                                       ////
++////                                                                       ////
++//// main_cxx /////////////////////////////////////////////////////////////////
+diff -rupN --no-dereference tetgen1.5.0/tetgen.cxx tetgen1.5.0-new/tetgen.cxx
+--- tetgen1.5.0/tetgen.cxx	2013-11-06 21:26:09.000000000 +0100
++++ tetgen1.5.0-new/tetgen.cxx	2025-07-18 09:53:48.757896904 +0200
+@@ -31171,18 +31171,6 @@ void tetrahedralize(tetgenbehavior *b, t
+   }
+ }
+ 
+-#ifndef TETLIBRARY
+-
+-///////////////////////////////////////////////////////////////////////////////
+-//                                                                           //
+-// main()    The command line interface of TetGen.                           //
+-//                                                                           //
+-///////////////////////////////////////////////////////////////////////////////
+-
+-int main(int argc, char *argv[])
+-
+-#else // with TETLIBRARY
+-
+ ///////////////////////////////////////////////////////////////////////////////
+ //                                                                           //
+ // tetrahedralize()    The library interface of TetGen.                      //
+@@ -31191,54 +31179,10 @@ int main(int argc, char *argv[])
+ 
+ void tetrahedralize(char *switches, tetgenio *in, tetgenio *out, 
+                     tetgenio *addin, tetgenio *bgmin)
+-
+-#endif // not TETLIBRARY
+-
+ {
+   tetgenbehavior b;
+-
+-#ifndef TETLIBRARY
+-
+-  tetgenio in, addin, bgmin;
+-  
+-  if (!b.parse_commandline(argc, argv)) {
+-    terminatetetgen(NULL, 10);
+-  }
+-
+-  // Read input files.
+-  if (b.refine) { // -r
+-    if (!in.load_tetmesh(b.infilename, (int) b.object)) {
+-      terminatetetgen(NULL, 10);
+-    }
+-  } else { // -p
+-    if (!in.load_plc(b.infilename, (int) b.object)) {
+-      terminatetetgen(NULL, 10);
+-    }
+-  }
+-  if (b.insertaddpoints) { // -i
+-    // Try to read a .a.node file.
+-    addin.load_node(b.addinfilename);
+-  }
+-  if (b.metric) { // -m
+-    // Try to read a background mesh in files .b.node, .b.ele.
+-    bgmin.load_tetmesh(b.bgmeshfilename, (int) b.object);
+-  }
+-
+-  tetrahedralize(&b, &in, NULL, &addin, &bgmin);
+-
+-  return 0;
+-
+-#else // with TETLIBRARY
+-
+   if (!b.parse_commandline(switches)) {
+     terminatetetgen(NULL, 10);
+   }
+   tetrahedralize(&b, in, out, addin, bgmin);
+-
+-#endif // not TETLIBRARY
+ }
+-
+-////                                                                       ////
+-////                                                                       ////
+-//// main_cxx /////////////////////////////////////////////////////////////////
+-

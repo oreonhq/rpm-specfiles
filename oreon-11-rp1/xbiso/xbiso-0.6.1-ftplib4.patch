@@ -1,0 +1,69 @@
+diff -up xbiso-0.6.1/xbiso.c.ftplib4 xbiso-0.6.1/xbiso.c
+--- xbiso-0.6.1/xbiso.c.ftplib4	2015-11-02 14:49:06.580909082 -0500
++++ xbiso-0.6.1/xbiso.c	2015-11-02 14:56:08.534623087 -0500
+@@ -189,16 +189,17 @@ int main(int argc, char *argv[]) {
+   
+   
+ #ifdef USE_FTP
++  netbuf *DefaultNetbuf;
+   if(ftp) {
+-    if (!ftpOpen(host)) {
+-      fprintf(stderr,"Unable to connect to node. %s",ftplib_lastresp);
++    if (!FtpConnect(host, &DefaultNetbuf)) {
++      fprintf(stderr,"Unable to connect to node. %s",FtpLastResponse(DefaultNetbuf));
+       exit(-1);
+     }
+-    if (!ftpLogin(user,pass)) {
++    if (!FtpLogin(user,pass,DefaultNetbuf)) {
+       fprintf(stderr,"Login failure\n");
+       exit(-1);
+     }
+-    if (ftpChdir(initdir)!=1) {
++    if (FtpChdir(initdir,DefaultNetbuf)!=1) {
+       fprintf(stderr,"Login failure\n");
+       exit(-1);
+     }
+@@ -221,9 +222,9 @@ int main(int argc, char *argv[]) {
+     
+ #ifdef USE_FTP
+   if(ftp) {
+-    if ( ftpMkdir(dbuf) != 1)  err("Failed to create root directory on FTP\n");
++    if ( FtpMkdir(dbuf, DefaultNetbuf) != 1)  err("Failed to create root directory on FTP\n");
+     /* it may already exist, try chdir into it */
+-    if ( ftpChdir(dbuf) != 1)  err("Failed to change into root directory on FTP\n");
++    if ( FtpChdir(dbuf, DefaultNetbuf) != 1)  err("Failed to change into root directory on FTP\n");
+   } else {
+ #endif
+ 	
+@@ -347,8 +348,9 @@ handlefile(OFFT offset, int dtable) {
+       handlefile((OFFT)dirent.sector*2048, dirent.sector);
+ 	  
+ #ifdef USE_FTP
++      netbuf *DefaultNetbuf;
+       if(ftp) {
+-	ftpChdir("..");
++	FtpChdir("..", DefaultNetbuf);
+       } else {
+ #endif
+ #ifdef _WIN32
+@@ -406,9 +408,10 @@ void err(char *error) {
+ void procdir(TABLE *dirent) {
+   printf("Creating directory %s\n", dirent->fname);
+ #ifdef USE_FTP
++  netbuf *DefaultNetbuf;
+   if(ftp) {
+-    if (ftpMkdir(dirent->fname) != 1) err ("Failed to create directory.\n");
+-    if (ftpChdir(dirent->fname) != 1) err ("Failed to change directory.\n");
++    if (FtpMkdir(dirent->fname, DefaultNetbuf) != 1) err ("Failed to create directory.\n");
++    if (FtpChdir(dirent->fname, DefaultNetbuf) != 1) err ("Failed to change directory.\n");
+   } else {
+ #endif
+ 
+@@ -434,6 +437,7 @@ void extract(TABLE *dirent) {
+ #ifdef USE_FTP
+   int c;
+   netbuf *nData;
++  netbuf *DefaultNetbuf;
+ #endif
+ 
+ 

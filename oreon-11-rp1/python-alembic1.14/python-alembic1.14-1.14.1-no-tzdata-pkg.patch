@@ -1,0 +1,11 @@
+diff -up alembic-1.14.1/setup.cfg.no-tzdata-pkg alembic-1.14.1/setup.cfg
+--- alembic-1.14.1/setup.cfg.no-tzdata-pkg	2025-01-20 00:14:50.753531700 +0100
++++ alembic-1.14.1/setup.cfg	2025-02-05 11:38:55.272656977 +0100
+@@ -46,7 +46,6 @@ install_requires =
+ [options.extras_require]
+ tz = 
+ 	backports.zoneinfo;python_version<"3.9"
+-	tzdata
+ 
+ [options.package_data]
+ alembic = *.pyi, py.typed

@@ -1,0 +1,52 @@
+diff --git a/xs/src/libslic3r/ClipperUtils.hpp b/xs/src/libslic3r/ClipperUtils.hpp
+index ddd551c..8149366 100644
+--- a/xs/src/libslic3r/ClipperUtils.hpp
++++ b/xs/src/libslic3r/ClipperUtils.hpp
+@@ -2,7 +2,7 @@
+ #define slic3r_ClipperUtils_hpp_
+ 
+ #include <libslic3r.h>
+-#include "clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ #include "ExPolygon.hpp"
+ #include "Polygon.hpp"
+ #include "Surface.hpp"
+diff --git a/xs/src/libslic3r/Geometry.cpp b/xs/src/libslic3r/Geometry.cpp
+index 7bcb644..5258485 100644
+--- a/xs/src/libslic3r/Geometry.cpp
++++ b/xs/src/libslic3r/Geometry.cpp
+@@ -3,7 +3,7 @@
+ #include "ExPolygon.hpp"
+ #include "Line.hpp"
+ #include "PolylineCollection.hpp"
+-#include "clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ #include <algorithm>
+ #include <cassert>
+ #include <cmath>
+diff --git a/xs/src/libslic3r/SVG.hpp b/xs/src/libslic3r/SVG.hpp
+index fbb5e37..bb9f4cc 100644
+--- a/xs/src/libslic3r/SVG.hpp
++++ b/xs/src/libslic3r/SVG.hpp
+@@ -2,7 +2,7 @@
+ #define slic3r_SVG_hpp_
+ 
+ #include "libslic3r.h"
+-#include "clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ #include "ExPolygon.hpp"
+ #include "Line.hpp"
+ #include "TriangleMesh.hpp"
+diff --git a/xs/xsp/Clipper.xsp b/xs/xsp/Clipper.xsp
+index 7bbbdb8..8b52133 100644
+--- a/xs/xsp/Clipper.xsp
++++ b/xs/xsp/Clipper.xsp
+@@ -2,7 +2,7 @@
+ 
+ %{
+ #include <xsinit.h>
+-#include "clipper.hpp"
++#include <polyclipping/clipper.hpp>
+ #include "libslic3r/ClipperUtils.hpp"
+ %}
+ 

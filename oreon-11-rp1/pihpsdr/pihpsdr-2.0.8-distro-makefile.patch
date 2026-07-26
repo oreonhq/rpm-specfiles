@@ -1,0 +1,50 @@
+diff --git a/Makefile b/Makefile
+index 0f4ee1d..68b5011 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,6 +5,9 @@ UNAME_S := $(shell uname -s)
+ GIT_DATE := $(firstword $(shell git --no-pager show --date=short --format="%ai" --name-only))
+ GIT_VERSION := $(shell git describe --abbrev=0 --tags)
+ 
++PREFIX=/usr/local
++BINDIR=$(DESTDIR)$(PREFIX)/bin
++
+ # uncomment the following line to force 480x320 screen
+ #SMALL_SCREEN_OPTIONS=-D SMALL_SCREEN
+ 
+@@ -456,7 +459,7 @@ toolbar_menu.o
+ $(PROGRAM):  $(OBJS) $(AUDIO_OBJS) $(REMOTE_OBJS) $(USBOZY_OBJS) $(SOAPYSDR_OBJS) \
+ 		$(LOCALCW_OBJS) $(PURESIGNAL_OBJS) \
+ 		$(MIDI_OBJS) $(STEMLAB_OBJS) $(SERVER_OBJS)
+-	$(LINK) -o $(PROGRAM) $(OBJS) $(AUDIO_OBJS) $(REMOTE_OBJS) $(USBOZY_OBJS) \
++	$(LINK) -o $(PROGRAM) $(LDFLAGS) $(OBJS) $(AUDIO_OBJS) $(REMOTE_OBJS) $(USBOZY_OBJS) \
+ 		$(SOAPYSDR_OBJS) $(LOCALCW_OBJS) $(PURESIGNAL_OBJS) \
+ 		$(MIDI_OBJS) $(STEMLAB_OBJS) $(SERVER_OBJS) $(LIBS)
+ 
+@@ -503,7 +506,8 @@ DESTDIR?= /usr/local/bin
+ 
+ .PHONY:	install
+ install: $(PROGRAM)
+-	cp $(PROGRAM) $(DESTDIR)
++	mkdir -p $(BINDIR); \
++	cp -a $(PROGRAM) $(BINDIR)
+ 
+ .PHONY:	release
+ release: $(PROGRAM)
+@@ -542,13 +546,13 @@ controller2v2: clean $(PROGRAM)
+ #############################################################################
+ 
+ hpsdrsim.o:	hpsdrsim.c hpsdrsim.h
+-	$(CC) -c -O hpsdrsim.c
++	$(CC) $(CFLAGS) -c -O hpsdrsim.c
+ 
+ newhpsdrsim.o:	newhpsdrsim.c hpsdrsim.h
+-	$(CC) -c -O newhpsdrsim.c
++	$(CC) $(CFLAGS) -c -O newhpsdrsim.c
+ 
+ hpsdrsim:	hpsdrsim.o newhpsdrsim.o
+-	$(LINK) -o hpsdrsim hpsdrsim.o newhpsdrsim.o -lm -lpthread
++	$(LINK) $(LDFLAGS) -o hpsdrsim hpsdrsim.o newhpsdrsim.o -lm -lpthread
+ 
+ 
+ debian:

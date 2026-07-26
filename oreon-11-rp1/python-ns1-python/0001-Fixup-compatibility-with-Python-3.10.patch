@@ -1,0 +1,24 @@
+From bdaa2ef163d205e57838dc142747588f1490d569 Mon Sep 17 00:00:00 2001
+From: Igor Raits <i.gnatenko.brain@gmail.com>
+Date: Sun, 18 Jul 2021 08:52:03 +0200
+Subject: [PATCH] Fixup compatibility with Python 3.10
+
+collections.Iterable was moved to collections.abc.Iterable in Python 3.8
+but compatibility was preserved. In Python 3.10, old path was removed.
+---
+ ns1/rest/records.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ns1/rest/records.py b/ns1/rest/records.py
+index 5bc3a04..4938d0e 100644
+--- a/ns1/rest/records.py
++++ b/ns1/rest/records.py
+@@ -40,7 +40,7 @@ def _getAnswersForBody(self, answers):
+         if isinstance(answers, py_str):
+             answers = [answers]
+         # otherwise, we need an iterable
+-        elif not isinstance(answers, collections.Iterable):
++        elif not isinstance(answers, collections.abc.Iterable):
+             raise Exception("invalid answers format (must be str or iterable)")
+         # at this point we have a list. loop through and build out the answer
+         # entries depending on contents

@@ -1,0 +1,18 @@
+--- a/src/docket/execution.py
++++ b/src/docket/executin.py
+@@ -328,6 +328,7 @@
+                         # KEYS: stream_key, known_key, parked_key, queue_key, stream_id_key, runs_key
+                         # ARGV: task_key, when_timestamp, is_immediate, replace, reschedule_message_id, worker_group_name, ...message_fields
+                         """
++                            local unpack = unpack or table.unpack
+                             local stream_key = KEYS[1]
+                             -- TODO: Remove in next breaking release (v0.14.0) - legacy key locations
+                             local known_key = KEYS[2]
+@@ -671,6 +672,7 @@
+                     # ARGV[1]: generation, ARGV[2]: state, ARGV[3]: completed_at
+                     # ARGV[4]: ttl_seconds, ARGV[5..]: extra field pairs
+                     """
++                    local unpack = unpack or table.unpack
+                     local runs_key = KEYS[1]
+                     local generation = tonumber(ARGV[1])
+                     local state = ARGV[2]

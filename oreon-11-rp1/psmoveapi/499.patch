@@ -1,0 +1,35 @@
+From ec875e51252dc9df2e8e6107f8d5c4aee576adfe Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Thu, 23 Jan 2025 16:56:17 -0800
+Subject: [PATCH] Add missing include
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes the following build issue with GCC 15
+
+```
+/builddir/build/BUILD/psmoveapi-4.0.12_20240424git26e1446-build/psmoveapi-26e1446fc9b5996192a1f406d289e64e4e97a195/examples/c/test_navcon.cpp:48:13: error: ‘strcmp’ was not declared in this scope
+   48 |         if (strcmp(name, "Sony Navigation Controller") == 0) {
+      |             ^~~~~~
+/builddir/build/BUILD/psmoveapi-4.0.12_20240424git26e1446-build/psmoveapi-26e1446fc9b5996192a1f406d289e64e4e97a195/examples/c/test_navcon.cpp:40:1: note: ‘strcmp’ is defined in header ‘<cstring>’; this is probably fixable by adding ‘#include <cstring>’
+   39 | #include "psmove.h"
+  +++ |+#include <cstring>
+   40 |
+```
+---
+ examples/c/test_navcon.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/examples/c/test_navcon.cpp b/examples/c/test_navcon.cpp
+index e1d39479..e497eed8 100644
+--- a/examples/c/test_navcon.cpp
++++ b/examples/c/test_navcon.cpp
+@@ -34,6 +34,7 @@
+ #include <limits.h>
+ 
+ #include <algorithm>
++#include <cstring>
+ 
+ #include "SDL.h"
+ #include "psmove.h"

@@ -1,0 +1,221 @@
+The swipl project is released under the BSD-2-Clause license.  Exceptions are
+noted below.  The status of each file is indicated with the following codes:
+
+BD = in the swi-prolog-bdb package
+CL = in the swi-prolog-cli package
+CP = in the swi-prolog-core-packages package
+CR = in the swi-prolog-core package
+DC = in the swi-prolog-doc package
+FL = in the swi-prolog-full package
+JV = in the swi-prolog-java pacakge
+MN = in the main package, swi-prolog
+NP = not packaged; these files do not influence the package License field
+OD = in the swi-prolog-odbc package
+TS = in the swi-prolog-test package
+WN = in the swi-prolog-win package
+
+bcrypt-Solar-Designer
+---------------------
+CL packages/ssl/crypt_blowfish.{c,h}
+
+Beerware
+--------
+CP packages/clib/md5passwd.c
+
+Brian-Gladman-3-Clause OR GPL-1.0-or-later
+------------------------------------------
+CP packages/clib/sha1/brg_endian.h
+CP packages/clib/sha1/brg_types.h
+CP packages/clib/sha1/hmac.{c,h}
+CP packages/clib/sha1/pwd2key.{c,h}
+CP packages/clib/sha1/sha*
+CR src/pl-termhash.{c,h}
+
+BSD-2-Clause AND BSD-3-Clause
+-----------------------------
+CL packages/libedit/libedit4pl.c
+
+BSD-2-Clause AND FBM AND HPND-Pbmplus
+-------------------------------------
+WN packages/xpce/src/img/gifwrite.c
+
+BSD-2-Clause AND GPL-2.0-or-later
+---------------------------------
+TS src/Tests/core/test_coroutining.pl
+
+BSD-2-Clause AND IJG
+--------------------
+WN packages/xpce/src/img/jdatadst.c
+WN packages/xpce/src/img/jdatasrc.c
+
+BSD-2-Clause AND LicenseRef-Fedora-Public-Domain
+------------------------------------------------
+CR library/aggregate.pl
+WN packages/xpce/src/gra/colour.c
+
+BSD-2-Clause AND MIT
+--------------------
+CP packages/http/http_stream.pl
+CP packages/http/multipart.c
+
+BSD-2-Clause AND Unicode-DFS-2016
+---------------------------------
+CR library/blocks.pl
+
+BSD-2-Clause OR Artistic-2.0
+----------------------------
+CP library/ugraphs.pl
+
+BSD-3-Clause
+------------
+CP packages/clib/bsd-crypt.c
+NP packages/libedit/libedit/*
+NP packages/odbc/cmake/FindODBC.cmake
+NP packages/protobufs/interop/google/protobuf/unittest*
+CL packages/tipc/tipcutils/tipc-config.c
+NP packages/xpce/cmake/FindFontConfig.cmake
+CR src/libbf/mersenne-twister.{c,h}
+
+CC-BY-SA-3.0
+------------
+DC man/main.doc
+WN packages/xpce/man/course/doc.doc
+WN packages/xpce/man/info/titlepage.def
+
+dtoa
+----
+CR src/os/dtoa.c
+
+Free for non-commercial use
+---------------------------
+NP bench/unify.pl (removed from tarball)
+NP bench/simple_analyzer.pl (removed from tarball)
+
+GFDL-1.3-no-invariants-or-later
+-------------------------------
+CP packages/sweep/sweep.texi
+
+GPL-1.0-or-later OR Artistic-1.0-Perl
+-------------------------------------
+CP packages/nlp/double_metaphone.c
+
+GPL-2.0-or-later
+----------------
+NP repackage.sh (not included in the upstream tarball)
+NP packages/xpce/man/info/texinfo.tex
+
+GPL-2.0-or-later WITH Bison-exception-2.2 AND LicenseRef-Fedora-Public-Domain
+-----------------------------------------------------------------------------
+WN packages/xpce/src/gnu/getdate.c
+
+GPL-2.0-or-later with SWI-exception
+-----------------------------------
+CP packages/clpqr/*
+CP packages/http/http_server_health.pl
+TS src/Tests/compile/test_autoload.pl
+TS tests/library/test_pio.pl
+
+GPL-3.0-or-later
+----------------
+CP packages/sweep/emacs-module.h
+
+Knuth-CTAN
+----------
+DC man/name.bst
+WN packages/xpce/TeX/name.bst
+
+LGPL-2.0-only
+-------------
+NP cmake/TestSignalType.cmake
+
+LGPL-2.0-or-later
+-----------------
+CP packages/nlp/isub.c
+
+LGPL-2.1-or-later
+-----------------
+TS src/Tests/core/test_arith.pl
+TS src/Tests/core/test_bips.pl
+TS src/Tests/core/test_dcg.pl
+TS src/Tests/core/test_sort.pl
+TS src/Tests/core/test_subsumes.pl
+
+LicenseRef-Fedora-Public-Domain
+-------------------------------
+NP bench/programs/derive.pl
+NP bench/programs/divide10.pl
+NP bench/programs/eval.pl
+NP bench/programs/fib.pl
+NP bench/programs/log10.pl
+NP bench/programs/nreverse.pl
+NP bench/programs/ops8.pl
+NP bench/programs/qsort.pl
+NP bench/programs/queens_clpfd.pl
+NP bench/programs/query.pl
+NP bench/programs/serialise.pl
+NP bench/programs/sieve.pl
+NP bench/programs/times10.pl
+CR library/dialect/bim.pl
+NP packages/clib/demo/*
+NP packages/cpp/likes.cpp
+NP packages/http/examples/demo_body.pl
+NP packages/http/examples/demo_daemon.pl
+CP packages/semweb/murmur.{c,h}
+NP packages/ssl/https.pl
+NP packages/stomp/examples/*
+NP packages/swipy/tests/russel.pl
+WN packages/xpce/man/course/bib.pl
+WN packages/xpce/man/course/fam.pl
+WN packages/xpce/man/course/ftp.pl
+WN packages/xpce/man/course/learner.pl
+WN packages/xpce/man/course/lib/prompt.pl
+WN packages/xpce/man/info/dialog.pl
+WN packages/xpce/man/info/which.pl
+WN packages/xpce/man/info/window.pl
+WN packages/xpce/man/reference/class/image.doc
+WN packages/xpce/man/userguide/examples/graphedit.pl
+WN packages/xpce/src/gnu/getdate-source.y
+WN packages/xpce/src/gnu/y.tab
+NP scripts/swipl-bt
+CR src/pl-hash.{c,h}
+CR src/libtai/*
+NP src/tools/functions.pm
+NP src/tools/update-deps
+
+LPPL-1.3c
+---------
+DC man/bk9.clo
+DC man/swipl.cls
+
+MIT
+---
+NP bench/programs/chat_parser.pl
+NP packages/http/web/js/jquery*
+CP packages/mqi/python/*
+NP packages/pcre/cmake/FindPCRE.cmake
+NP packages/swipy/test_xsb_janus.pl
+NP packages/swipy/xsb_tests/*
+CR src/libbf/cutils.{c,h}
+CR src/libbf/libbf.{c,h}
+
+MIT AND Unicode-DFS-2015
+------------------------
+CP packages/utf8proc/*
+
+Spencer-99 AND TCL AND PostgreSQL
+---------------------------------
+WN packages/xpce/src/rgx/*
+
+W3C
+---
+CP packages/sgml/DTD/*
+
+X11
+---
+NP packages/xpce/deps/xpm/*
+
+Zlib
+----
+CP packages/clib/md5.{c,h}
+CP packages/semweb/md5.{c,h}
+CR src/minizip/*

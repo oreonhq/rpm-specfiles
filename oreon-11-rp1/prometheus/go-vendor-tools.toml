@@ -1,0 +1,39 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+exclude_directories = [
+    "compliance",
+    "documentation/examples/remote_storage",
+    "internal",
+    "web",
+]
+
+[[licensing.licenses]]
+path = "vendor/github.com/alecthomas/kingpin/v2/COPYING"
+sha256sum = "ed76298aa9c218e9010aa186c1107ceb6c7618db50ae0222b9a1b4196101a411"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/alecthomas/units/COPYING"
+sha256sum = "ed76298aa9c218e9010aa186c1107ceb6c7618db50ae0222b9a1b4196101a411"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v2/LICENSE.libyaml"
+sha256sum = "a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/miekg/dns/COPYRIGHT"
+sha256sum = "66550c0ad5ca7ec1e08683e5f872cc45c741f311eee3b8ee484206ecbf9c740d"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/digitalocean/godo/LICENSE.txt"
+sha256sum = "946d0e939f736a9d7061ea06591818107fb12d3cddad70ee81667b85f7f24c22"
+expression = "MIT AND BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"

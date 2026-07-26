@@ -1,0 +1,12 @@
+diff -durN zaz-1.0.1.orig/src/Makefile.in zaz-1.0.1/src/Makefile.in
+--- zaz-1.0.1.orig/src/Makefile.in	2021-01-31 02:41:45.000000000 +0100
++++ zaz-1.0.1/src/Makefile.in	2021-03-16 17:11:17.855913419 +0100
+@@ -408,7 +408,7 @@
+ 	splash.cpp 
+ 
+ zaz_CXXFLAGS = $(ZAZ_CFLAGS)
+-zaz_LDADD = $(ZAZ_LIBS) $(FTGL_LIBS) $(GL_LIBS) @LIBINTL@
++zaz_LDADD = $(ZAZ_LIBS) -lvorbis $(FTGL_LIBS) $(GL_LIBS) @LIBINTL@
+ all: all-am
+ 
+ .SUFFIXES:

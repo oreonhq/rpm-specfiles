@@ -1,0 +1,12 @@
+[Unit]
+Description=Periodically run OpenBSD rpki-client
+Documentation=man:rpki-client(8)
+Wants=network-online.target
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=10min
+Unit=rpki-client.service
+
+[Install]
+WantedBy=timers.target

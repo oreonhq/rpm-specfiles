@@ -1,0 +1,50 @@
+From 15692170aa17cd971751256f379ecf1c86499310 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 28 Feb 2025 08:25:03 -0500
+Subject: [PATCH 1/2] Remove pytest-runner from setup_requires
+
+The `pytest-runner` package has been deprecated upstream for some time,
+and the project is now archived:
+https://github.com/pytest-dev/pytest-runner/tree/v6.0.1?tab=readme-ov-file#deprecation-notice
+
+Furthermore, the "setup.py test" command was removed in setuptools 72:
+https://github.com/pypa/setuptools/blob/v75.8.0/NEWS.rst#v7200
+
+This does not affect running the tests with pytest or tox.
+
+Fixes #57.
+---
+ setup.py | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index ef1026e..90f43a8 100755
+--- a/setup.py
++++ b/setup.py
+@@ -144,14 +144,6 @@ with open(os.path.join(src_dir, "ssdeep", "__about__.py")) as f:
+ with open(os.path.join(base_dir, "README.rst")) as f:
+     long_description = f.read()
+ 
+-# On some systems(e.g. Debian 8, CentOS 7) the setuptools package is very old.
+-# We try to install an old version of pytest-runner without setuptools_scm dependency.
+-# See: https://github.com/pytest-dev/pytest-runner/blob/master/CHANGES.rst
+-if parse_version(setuptools.__version__) < parse_version("12"):
+-    setup_requires = ["pytest-runner<2.4"]
+-else:
+-    setup_requires = ["pytest-runner"]
+-
+ 
+ setup(
+     name=about["__title__"],
+@@ -191,7 +183,7 @@ setup(
+     setup_requires=[
+         "cffi>=1.0.0",
+         "six>=1.4.1",
+-    ] + setup_requires,
++    ],
+     tests_require=[
+         "pytest",
+     ],
+-- 
+2.48.1
+

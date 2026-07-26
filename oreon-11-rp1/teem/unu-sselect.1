@@ -1,0 +1,52 @@
+.TH UNU\-SSELECT "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-sselect \- select subset of slices along an axis
+.SH SYNOPSIS
+.B unu\ sselect
+.RB [ \-i , \-\-input
+.RI < nin >]
+.BR \-a , \-\-axis
+.RI < axis >
+.BR \-s , \-\-selector
+.RI < nline >
+.BR \-th
+.RI < thresh >
+.RB [ \-o , \-\-output
+.RI < above \  below >]
+.SH DESCRIPTION
+Select subset of slices along an axis.
+The choice to keep or nix a slice is determined by whether the values in a
+given 1\-D line of values is above or below a given threshold.
+.IP \(bu +2n
+Uses
+.B nrrdSliceSelect
+.SH OPTIONS
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to slice along
+.RI ( unsigned\ int )
+.TP
+.B \-s\fR\ <\fInline\fR>\ ,\ \fB\-\-selector\fR\ <\fInline\fR>
+the 1\-D
+.I nrrd
+of values to compare with threshold
+.TP
+.B \-th\fR\ <\fIthresh\fR>
+threshold on selector line
+.RI ( double )
+.TP
+.B \-o\fR\ <\fIabove\fR\ \fIbelow\fR>\ ,\ \fB\-\-output\fR\ <\fIabove\fR\ \fIbelow\fR>
+outputs for slices corresponding to values above (first) and below (second) given threshold.
+Use
+.RB \(lq x \(rq
+to say that no output is desired.
+(2
+.IR string s);
+default:
+.RB \(lq \-\ x \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

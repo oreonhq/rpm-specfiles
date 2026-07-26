@@ -1,0 +1,22 @@
+From 627c956e362b3bbb6e51a9491b9b3d17a711c16e Mon Sep 17 00:00:00 2001
+From: Scott K Logan <logans@cottsay.net>
+Date: Wed, 28 Aug 2019 14:24:42 -0700
+Subject: [PATCH] Fix an escape character in a string
+
+---
+ TileStache/Core.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/TileStache/Core.py b/TileStache/Core.py
+index 2dcabd4e..219e69b8 100644
+--- a/TileStache/Core.py
++++ b/TileStache/Core.py
+@@ -776,7 +776,7 @@ def _preview(layer):
+         var map = L.map('map').setView([%(lat).6f, %(lon).6f], %(zoom)d),
+             hash = new L.Hash(map);
+         
+-        if('%(mimetype)s'.match(/^application\/json/))
++        if('%(mimetype)s'.match(/^application\\/json/))
+         {
+             L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                 attribution: '...',

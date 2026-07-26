@@ -1,0 +1,108 @@
+From 0e224309c6c135bfbe75be780dca5a07624cab57 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Mon, 4 Aug 2025 22:10:40 +0200
+Subject: [PATCH 1/2] Make test_genetic_selection compatible with scikit-learn
+ >= 1.7
+
+On scikit-learn >= 1.7, using  the liblinear solver for multiclass
+classification with a one-versus-rest (ovr) scheme is deprecated.
+
+See: https://github.com/scikit-learn/scikit-learn/pull/31241
+---
+ genetic_selection/tests/test_selection.py | 4 ++--
+ setup.py                                  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/genetic_selection/tests/test_selection.py b/genetic_selection/tests/test_selection.py
+index 8bf0435..13db828 100644
+--- a/genetic_selection/tests/test_selection.py
++++ b/genetic_selection/tests/test_selection.py
+@@ -2,7 +2,7 @@ import random
+ 
+ import numpy as np
+ import pytest
+-from sklearn import datasets, linear_model
++from sklearn import datasets, linear_model, multiclass
+ from genetic_selection import GeneticSelectionCV
+ 
+ 
+@@ -20,7 +20,7 @@ def test_genetic_selection(data):
+     np.random.seed(42)
+     X = data[0]
+     y = data[1]
+-    estimator = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
++    estimator = multiclass.OneVsRestClassifier(linear_model.LogisticRegression(solver="liblinear"))
+     selector = GeneticSelectionCV(
+         estimator,
+         cv=5,
+diff --git a/setup.py b/setup.py
+index 62bf9a3..7079b60 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,5 +39,5 @@ setup(
+     ],
+     packages=find_packages(),
+     python_requires=">=3.7",
+-    install_requires=["scikit-learn>=1.4", "deap>=1.0.2", "numpy", "multiprocess"],
++    install_requires=["scikit-learn>=1.7", "deap>=1.0.2", "numpy", "multiprocess"],
+ )
+-- 
+2.50.1
+
+
+From afc91a31db7c3a293b26d93a810d7991a451bc67 Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Mon, 4 Aug 2025 22:17:08 +0200
+Subject: [PATCH 2/2] Rely on the joblib package instead of
+ sklearn/utils/_joblib
+
+The vendored joblib was removed in favor of using the external package
+in scikit-learn. Hence we should rely on the external package as well.
+
+See: https://github.com/scikit-learn/scikit-learn/pull/31105
+---
+ genetic_selection/gscv.py | 2 +-
+ requirements.txt          | 1 +
+ setup.py                  | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/genetic_selection/gscv.py b/genetic_selection/gscv.py
+index da10735..8bab5a2 100644
+--- a/genetic_selection/gscv.py
++++ b/genetic_selection/gscv.py
+@@ -27,11 +27,11 @@ from sklearn.base import is_classifier
+ from sklearn.model_selection import check_cv, cross_val_score
+ from sklearn.metrics import check_scoring
+ from sklearn.feature_selection import SelectorMixin
+-from sklearn.utils._joblib import cpu_count
+ from deap import algorithms
+ from deap import base
+ from deap import creator
+ from deap import tools
++from joblib import cpu_count
+ 
+ 
+ creator.create("Fitness", base.Fitness, weights=(1.0, -1.0, -1.0))
+diff --git a/requirements.txt b/requirements.txt
+index c7843ec..6ac2cf7 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,3 +2,4 @@ scikit-learn>=1.4
+ deap>=1.0.2
+ numpy
+ multiprocess
++joblib>=1.2.0
+diff --git a/setup.py b/setup.py
+index 7079b60..9441a9e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,5 +39,5 @@ setup(
+     ],
+     packages=find_packages(),
+     python_requires=">=3.7",
+-    install_requires=["scikit-learn>=1.7", "deap>=1.0.2", "numpy", "multiprocess"],
++    install_requires=["scikit-learn>=1.7", "deap>=1.0.2", "numpy", "multiprocess", "joblib>=1.2.0"],
+ )
+-- 
+2.50.1
+

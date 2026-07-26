@@ -1,0 +1,13 @@
+--- xzgv-0.9/doc/Makefile~	2008-01-05 23:25:21.000000000 +0100
++++ xzgv-0.9/doc/Makefile	2008-01-05 23:26:10.000000000 +0100
+@@ -37,9 +37,8 @@
+ 	/bin/sh ../mkinstalldirs $(INFODIR) $(MANDIR)
+ 
+ install: installdirs
+-	install xzgv.1 $(MANDIR)
++	install -m 644 xzgv.1 $(MANDIR)
+ 	install -m 644 xzgv.info.gz $(INFODIR)
+-	install-info --infodir=$(INFODIR) xzgv.info.gz
+ 
+ uninstall:
+ 	$(RM) $(MANDIR)/xzgv.1

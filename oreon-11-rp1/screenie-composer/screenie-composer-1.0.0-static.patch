@@ -1,0 +1,65 @@
+diff --git a/src/Kernel/Kernel.pro b/src/Kernel/Kernel.pro
+index c37367d..3c75100 100644
+--- a/src/Kernel/Kernel.pro
++++ b/src/Kernel/Kernel.pro
+@@ -4,6 +4,7 @@ include(Sources.pri)
+ 
+ TEMPLATE = lib
+ DEFINES += KERNEL_EXPORT
++CONFIG += staticlib
+ 
+ win32 {
+   LIBS += -L$${DESTDIR} \
+diff --git a/src/Model/Model.pro b/src/Model/Model.pro
+index 3fa2742..c98c58b 100644
+--- a/src/Model/Model.pro
++++ b/src/Model/Model.pro
+@@ -4,6 +4,7 @@ include(Sources.pri)
+ 
+ TEMPLATE = lib
+ DEFINES += MODEL_EXPORT
++CONFIG += staticlib
+ 
+ win32 {
+   LIBS += -L$${DESTDIR} \
+diff --git a/src/Resources/Resources.pro b/src/Resources/Resources.pro
+index 54c8247..a70e8fc 100644
+--- a/src/Resources/Resources.pro
++++ b/src/Resources/Resources.pro
+@@ -4,7 +4,7 @@ include(Sources.pri)
+ 
+ TEMPLATE = lib
+ DEFINES += RESOURCES_EXPORT
+-
++CONFIG += staticlib
+ 
+ 
+ 
+diff --git a/src/Screenie/Screenie.pro b/src/Screenie/Screenie.pro
+index dac6bd3..0e7fe7b 100644
+--- a/src/Screenie/Screenie.pro
++++ b/src/Screenie/Screenie.pro
+@@ -28,10 +28,10 @@ win32 {
+           -lResources$${VERSION_MAJ} \
+           -lKernel$${VERSION_MAJ}
+ } else {
+-  LIBS += -lUtils \
++  LIBS += -lKernel\
+           -lModel \
+-          -lResources \
+-          -lKernel
++          -lUtils\
++          -lResources 
+ }
+ 
+ macx {
+diff --git a/src/Utils/Utils.pro b/src/Utils/Utils.pro
+index 4e8e348..d0f71a4 100644
+--- a/src/Utils/Utils.pro
++++ b/src/Utils/Utils.pro
+@@ -4,4 +4,5 @@ include(Sources.pri)
+ 
+ TEMPLATE = lib
+ DEFINES += UTILS_EXPORT
++CONFIG += staticlib
+ 

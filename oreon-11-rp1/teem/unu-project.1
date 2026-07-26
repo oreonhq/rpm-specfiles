@@ -1,0 +1,103 @@
+.TH UNU\-PROJECT "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-project \- collapse scanlines to scalars along some axis
+.SH SYNOPSIS
+.B unu\ project
+.BR \-a , \-\-axis
+.RI < axis >
+.BR \-m , \-\-measure
+.RI < measr >
+.RB [ \-t , \-\-type
+.RI < type >]
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Collapse scanlines to scalars along some axis.
+The scanline is reduced to a single scalar by \(lqmeasuring\(rq all the values
+in the scanline with some measure.
+The output
+.I nrrd
+has dimension one less than input (except when the input is itself 1\-D); the
+output type depends on the measure in a non-trivial way, or it can be set
+explicitly with the
+.RB \(lq \-t \(rq
+option.
+.IP \(bu +2n
+Uses
+.B nrrdProject
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR>
+axis to project along
+.RI ( unsigned\ int )
+.TP
+.B \-m\fR\ <\fImeasr\fR>\ ,\ \fB\-\-measure\fR\ <\fImeasr\fR>
+How to \(lqmeasure\(rq a scanline, by summarizing all its values with a single
+scalar.
+Possibilities include:
+.RS +7n
+.IP \(bu 2
+.RB \(lq min \(rq,
+.RB \(lq max \(rq,
+.RB \(lq mean \(rq,
+.RB \(lq median \(rq,
+.RB \(lq mode \(rq,
+.RB \(lq variance \(rq,
+.RB \(lq skew \(rq:
+(self-explanatory)
+.IP \(bu 2
+.RB \(lq intc \(rq,
+.RB \(lq slope \(rq,
+.RB \(lq error \(rq:
+intercept, slope, and error from line fitting
+.IP \(bu 2
+.RB \(lq stdv \(rq:
+standard deviation
+.IP \(bu 2
+.RB \(lq cov \(rq:
+coefficient of variation
+.IP \(bu 2
+.RB \(lq product \(rq,
+.RB \(lq sum \(rq:
+product or sum of all values
+.IP \(bu 2
+.RB \(lq L1 \(rq,
+.RB \(lq L2 \(rq,
+.RB \(lq NL2 \(rq,
+.RB \(lq RMS \(rq,
+.RB \(lq Linf \(rq:
+different norms
+.IP \(bu 2
+.RB \(lq histo-min \(rq,
+.RB \(lq histo-max \(rq,
+.RB \(lq histo-mean \(rq,
+.RB \(lq histo-median \(rq,
+.RB \(lq histo-mode \(rq,
+.RB \(lq histo-product \(rq,
+.RB \(lq histo-l2 \(rq,
+.RB \(lq histo-sum \(rq,
+.RB \(lq histo-variance \(rq,
+.RB \(lq histo-sd \(rq:
+same measures, but for situations where we\(cqre given not the original values,
+but a histogram of them.
+.RE
+.TP
+.B \-t\fR\ <\fItype\fR>\ ,\ \fB\-\-type\fR\ <\fItype\fR>
+type to use for output.
+By default (not using this option), the output type is determined
+auto-magically.
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

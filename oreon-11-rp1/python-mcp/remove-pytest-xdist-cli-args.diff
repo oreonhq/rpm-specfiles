@@ -1,0 +1,10 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -149,7 +149,6 @@
+ addopts = """
+     --color=yes
+     --capture=fd
+-    --numprocesses auto
+ """
+ filterwarnings = [
+     "error",

@@ -1,0 +1,65 @@
+Author: František Dvořák <valtri@civ.zcu.cz>
+Date:   Wed Nov 4 20:25:16 2015 +0100
+
+    Update Makefile:
+    * install target: headers, static library
+    * add missing header
+    * kill bundled kissfft
+
+diff --git a/build/general/Makefile.inc b/build/general/Makefile.inc
+index da0644b..b3a7319 100644
+--- a/build/general/Makefile.inc
++++ b/build/general/Makefile.inc
+@@ -4,9 +4,10 @@ CXX	?= g++
+ CC	?= gcc
+ AR	?= ar
+ RANLIB	?= ranlib
++INSTALL	?= install -p
+ 
+-CFLAGS	:= $(CFLAGS) -I. -Iext/kissfft -Iext/kissfft/tools -Dkiss_fft_scalar=double
+-CXXFLAGS	:= $(CXXFLAGS) -I. -Iext/kissfft -Iext/kissfft/tools -Dkiss_fft_scalar=double
++CFLAGS	:= $(CFLAGS) -I. -Dkiss_fft_scalar=double
++CXXFLAGS	:= $(CXXFLAGS) -I. -Dkiss_fft_scalar=double
+ 
+ HEADERS := base/Pitch.h \
+            base/Window.h \
+@@ -47,13 +48,12 @@ HEADERS := base/Pitch.h \
+            maths/MathAliases.h \
+            maths/MathUtilities.h \
+ 	   maths/MedianFilter.h \
++           maths/nan-inf.h \
+            maths/Polyfit.h \
+            maths/pca/pca.h \
+            thread/AsynchronousTask.h \
+            thread/BlockAllocator.h \
+-           thread/Thread.h \
+-           ext/kissfft/kiss_fft.h \
+-           ext/kissfft/tools/kiss_fftr.h
++           thread/Thread.h
+ 
+ SOURCES := base/Pitch.cpp \
+            base/KaiserWindow.cpp \
+@@ -91,9 +91,7 @@ SOURCES := base/Pitch.cpp \
+            maths/KLDivergence.cpp \
+            maths/MathUtilities.cpp \
+            maths/pca/pca.c \
+-           thread/Thread.cpp \
+-           ext/kissfft/kiss_fft.c \
+-           ext/kissfft/tools/kiss_fftr.c
++           thread/Thread.cpp
+ 
+ OBJECTS := $(SOURCES:.cpp=.o)
+ OBJECTS := $(OBJECTS:.c=.o)
+@@ -106,6 +104,12 @@ $(LIBRARY):	$(OBJECTS)
+ depend:
+ 		makedepend -fbuild/general/Makefile.inc -Y -- $(CFLAGS) -- $(SOURCES)
+ 
++install:
++		$(INSTALL) -D -m 0644 $(LIBRARY) $(DESTDIR)$(LIBDIR)/$(LIBRARY)
++		for h in $(HEADERS); do \
++			$(INSTALL) -D -m 0644 $$h $(DESTDIR)$(PREFIX)/include/qm-dsp/$$h; \
++		done
++
+ clean:		
+ 		rm -f $(OBJECTS)
+ 

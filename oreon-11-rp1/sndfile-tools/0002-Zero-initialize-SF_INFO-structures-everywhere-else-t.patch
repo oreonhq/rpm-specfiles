@@ -1,0 +1,95 @@
+From 3d91cc9abea5745d9814e501a8a5b3cba3497f70 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 30 Apr 2021 12:34:54 -0400
+Subject: [PATCH 2/3] Zero-initialize SF_INFO structures everywhere else, too
+
+---
+ src/common.c         | 2 +-
+ src/generate-chirp.c | 2 +-
+ src/jackplay.c       | 2 +-
+ src/mix-to-mono.c    | 2 +-
+ src/spectrogram.c    | 2 +-
+ src/waveform.c       | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/common.c b/src/common.c
+index a8ff138..a9f27f1 100644
+--- a/src/common.c
++++ b/src/common.c
+@@ -31,7 +31,7 @@ const char *font_family = "DejaVu Sans Mono" ;
+ sf_count_t
+ sfx_mix_mono_read_double (SNDFILE * file, double * data, sf_count_t datalen)
+ {
+-	SF_INFO info ;
++	SF_INFO info = {} ;
+ 
+ 	sf_command (file, SFC_GET_CURRENT_SF_INFO, &info, sizeof (info)) ;
+ 
+diff --git a/src/generate-chirp.c b/src/generate-chirp.c
+index ed004e7..c7f3f89 100644
+--- a/src/generate-chirp.c
++++ b/src/generate-chirp.c
+@@ -200,7 +200,7 @@ generate_file (const char * filename, const PARAMS * params)
+ {
+ 	char buffer [1024] ;
+ 	SNDFILE * file ;
+-	SF_INFO info ;
++	SF_INFO info = {} ;
+ 	double w0, w1 ;
+ 
+ 	memset (&info, 0, sizeof (info)) ;
+diff --git a/src/jackplay.c b/src/jackplay.c
+index 8fede30..41857c7 100644
+--- a/src/jackplay.c
++++ b/src/jackplay.c
+@@ -257,7 +257,7 @@ int
+ main (int argc, char * argv [])
+ {	pthread_t thread_id ;
+ 	SNDFILE *sndfile ;
+-	SF_INFO sfinfo ;
++	SF_INFO sfinfo = {} ;
+ 	const char * filename ;
+ 	jack_client_t *client ;
+ 	jack_status_t status = 0 ;
+diff --git a/src/mix-to-mono.c b/src/mix-to-mono.c
+index b248f34..80b13b5 100644
+--- a/src/mix-to-mono.c
++++ b/src/mix-to-mono.c
+@@ -29,7 +29,7 @@ int
+ main (int argc, char ** argv)
+ {
+ 	SNDFILE *infile, *outfile ;
+-	SF_INFO sfinfo ;
++	SF_INFO sfinfo = {} ;
+ 
+ 	if (argc != 3)
+ 		usage_exit () ;
+diff --git a/src/spectrogram.c b/src/spectrogram.c
+index 8db4963..52bfff6 100644
+--- a/src/spectrogram.c
++++ b/src/spectrogram.c
+@@ -898,7 +898,7 @@ static void
+ render_sndfile (RENDER * render)
+ {
+ 	SNDFILE *infile ;
+-	SF_INFO info ;
++	SF_INFO info = {} ;
+ 
+ 	memset (&info, 0, sizeof (info)) ;
+ 
+diff --git a/src/waveform.c b/src/waveform.c
+index 96f81a1..d8d8d80 100644
+--- a/src/waveform.c
++++ b/src/waveform.c
+@@ -945,7 +945,7 @@ static void
+ render_sndfile (RENDER * render)
+ {
+ 	SNDFILE *infile ;
+-	SF_INFO info ;
++	SF_INFO info = {} ;
+ 	sf_count_t max_width ;
+ 
+ 	memset (&info, 0, sizeof (info)) ;
+-- 
+2.30.2
+

@@ -1,0 +1,70 @@
+.TH GENERATE\-SLURM\-PARTITION\-CONFIG "1" "February 2026" "" "User Commands"
+.B generate\-slurm\-partition\-config
+\(en Generate SLURM partition configuration for Snakemake
+.SH SYNOPSIS
+.B generate\-slurm\-partition\-config
+.RB [ \-h ]
+.RB [ \-o\ \fIOUTPUT ]
+.RI [ clusters ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I clusters
+Comma-separated list of cluster names for multi-cluster setups.
+If omitted, queries the current/default cluster.
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-o\fR,\ \fB\-\-output\ \fIOUTPUT
+Output file path.
+If not specified, writes to
+.IR stdout .
+.SH EXAMPLES
+.P
+.in +7n
+.EX
+.B #\ Query\ current\ cluster\ and\ output\ to\ stdout
+.B generate\-slurm\-partition\-config
+.EE
+.in
+.P
+.in +7n
+.EX
+.B #\ Query\ specific\ cluster
+.B generate\-slurm\-partition\-config\ cluster1
+.EE
+.in
+.P
+.in +7n
+.EX
+.B #\ Query\ multiple\ clusters
+.B generate\-slurm\-partition\-config\ cluster1,cluster2
+.EE
+.in
+.P
+.in +7n
+.EX
+.B #\ Save\ to\ file
+.B generate\-slurm\-partition\-config\ \-o\ partitions.yaml
+.B generate\-slurm\-partition\-config\ cluster1,cluster2\ \-o\ partitions.yaml
+.EE
+.in
+.P
+The generated YAML file can be used with:
+.in +7n
+.EX
+.B snakemake\ \-\-executor\ slurm\ \-\-slurm\-partition\-config\ partitions.yaml
+.EE
+.in
+.I OR
+for permanent use, copy the
+.B partitions.yaml
+to a location
+.RB (e.g.\  ~/.config/snakemake/
+or
+.BR /etc/xdg/snakemake ).
+Be sure to set
+.BR $SNAKEMAKE_SLURM_PARTITIONS ,
+accordingly.

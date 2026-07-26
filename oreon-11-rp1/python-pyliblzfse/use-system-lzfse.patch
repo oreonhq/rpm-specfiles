@@ -1,0 +1,26 @@
+diff -Naur a/setup.py b/setup.py
+--- a/setup.py	2020-07-09 03:22:18.000000000 +0100
++++ b/setup.py	2022-09-05 17:20:25.204819226 +0100
+@@ -24,13 +24,10 @@
+ import os
+ from setuptools import setup, Extension
+ 
+-lzfse_dir = os.path.join('lzfse', 'src')
+-lzfse_srcs = [os.path.join(lzfse_dir, x) for x in os.listdir(lzfse_dir) if x.endswith('.c') and x != 'lzfse_main.c']
+-
+ lzfse = Extension('liblzfse',
+-                   sources=lzfse_srcs + ['pylzfse.c'],
++                   sources=['pylzfse.c'],
+                    extra_compile_args=['-std=c99'],
+-                   include_dirs=[lzfse_dir],
++                   libraries = ['lzfse'],
+                    language='c')
+                    
+ f = open('README', 'r')
+@@ -46,4 +43,4 @@
+       long_description=description_from_readme,
+       long_description_content_type='text/markdown',
+       url='https://github.com/ydkhatri/pyliblzfse',
+-      ext_modules=[lzfse])
+\ No newline at end of file
++      ext_modules=[lzfse])

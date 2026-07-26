@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+<id>vim-perl-support</id>
+<extends>gvim.desktop</extends>
+<name>Perl Support</name>
+<summary>Perl IDE - Write and run Perl scripts using menus and hotkeys</summary>
+<url type="homepage">http://www.vim.org/scripts/script.php?script_id=556</url>
+<metadata_license>CC0-1.0</metadata_license>
+<project_license>GPL-2.0-only</project_license>
+<updatecontact>dmaphy@fedoraproject.org</updatecontact>
+</component>

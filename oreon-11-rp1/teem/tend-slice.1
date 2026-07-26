@@ -1,0 +1,45 @@
+.TH TEND\-SLICE "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-slice \- slice 3D tensors to get slab/image of 3D/2D tensors
+.SH SYNOPSIS
+.B tend\ slice
+.B \-a
+.RI < axis >
+.B \-p
+.RI < pos >
+.RB [ \-d
+.RI < dim >]
+.RB [ \-i
+.RI < nin >]
+.RB [ \-o
+.RI < nout >]
+.SH OPTIONS
+.TP
+.B \-a\fR <\fIaxis\fR>
+axis along which to slice
+.RI ( int )
+.TP
+.B \-p\fR <\fIpos\fR>
+position to slice at
+.RI ( int )
+.TP
+.B \-d\fR <\fIdim\fR>
+dimension of desired tensor output, can be either
+.B 2
+or
+.B 3
+.RI ( int );
+default:
+.RB \(lq 3 \(rq
+.TP
+.B \-i\fR <\fInin\fR>
+input diffusion tensor volume; default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output tensor slice
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR tend (1)

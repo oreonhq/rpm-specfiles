@@ -1,0 +1,24 @@
+--- scip-10.0.0/CMakeLists.txt.orig	2025-11-23 02:06:47.000000000 -0700
++++ scip-10.0.0/CMakeLists.txt	2025-11-25 14:55:21.139744656 -0700
+@@ -221,9 +221,8 @@ if(SYM STREQUAL "bliss" OR SYM STREQUAL
+     endif()
+ elseif(SYM STREQUAL "nauty" OR SYM STREQUAL "snauty")
+     if(NAUTY_DIR)
+-        include_directories(${NAUTY_DIR})
+-        set(SYM_LIBRARIES ${NAUTY_DIR}/nauty/nauty.a)
+-        set(SYM_PIC_LIBRARIES ${NAUTY_DIR}/nauty/nauty.a)
++        set(SYM_LIBRARIES nauty)
++        set(SYM_PIC_LIBRARIES nauty)
+     else()
+         include_directories(src/nauty)
+         set(sym nauty/nauty.c nauty/nautil.c nauty/nausparse.c nauty/schreier.c nauty/naurng.c)
+@@ -252,9 +251,6 @@ endif()
+ if(SYM STREQUAL "sbliss" OR SYM STREQUAL "snauty" OR SYM STREQUAL "dejavu")
+   install(FILES ${PROJECT_SOURCE_DIR}/src/dejavu/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/scip/dejavu)
+ endif()
+-if(SYM STREQUAL "nauty" OR SYM STREQUAL "snauty")
+-  install(FILES ${PROJECT_SOURCE_DIR}/src/nauty/COPYRIGHT DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/scip/nauty)
+-endif()
+ 
+ # if changing these flags, also update GCCWARN/GXXWARN in make/make.project
+ set(ADD_C_AND_CXX_FLAGS -pedantic -Wall -W -Wpointer-arith -Wcast-align -Wwrite-strings -Wshadow  -Wredundant-decls -Wdisabled-optimization -Wno-long-long -Wno-unknown-pragmas -Wno-unused-parameter)

@@ -1,0 +1,94 @@
+--- wallpapoz-0.6.2/share/wallpapoz/lib/wallpapoz_system.py.kill_nox	2012-03-06 11:59:53.171834985 +0900
++++ wallpapoz-0.6.2/share/wallpapoz/lib/wallpapoz_system.py	2012-03-06 14:02:32.087891881 +0900
+@@ -24,9 +24,11 @@
+ ## wallpapoz_system.py -- finds current desktop and changes wallpaper
+ # achieve goal by calling external program
+ 
++import subprocess
+ import os
+ import sys
+ import string
++import signal
+ 
+ class WallpapozSystem:
+ 
+@@ -46,12 +48,48 @@
+       print "daemon_wallpapoz: respawning daemon_wallpapoz."
+       self.respawn_system()
+ 
++  def exec_cmd_under_X(self, cmd):
++    try:
++      p = subprocess.Popen(
++        cmd,
++        stdout = subprocess.PIPE,
++        stderr = subprocess.PIPE,
++        shell = True
++        )
++    except OSError:
++      print "daemon_wallpapoz: fork failed for %s, exiting." %cmd
++      sys.exit(1)
++
++    pstdout = p.stdout.read()
++    pstderr = p.stderr.read()
++    ret = p.wait()
++
++    kill_daemon = False
++
++    if (ret != 0) and (ret & 0xFF):
++        print "daemon_wallpapoz: %s returned status %i." %(cmd, ret)
++        print "daemon_wallpapoz: error message: %s" %pstderr
++        kill_daemon = True
++
++    if (cmd.find('xprop') >= 0) and (pstdout.find('no such atom') >= 0):
++        kill_daemon = True
++    if (cmd.find('xprop') >= 0) and (pstdout.find('not') >= 0):
++        kill_daemon = True
++
++    if kill_daemon:
++        ## No X resource available, kill daemon_wallpapoz
++        print "daemon_wallpapoz: X resource seems no longer available."
++        print "daemon_wallpapoz: killing daemon_wallpapoz."
++        sys.exit(1)
++
++    return pstdout
++
+   def set_style(self, style):
+     self.wallpaper_style = style
+ 
+   ## class method to find monitor resolution
+   def finding_screen_resolution(self):
+-    raw_resolution = os.popen('xwininfo -root').read()
++    raw_resolution = self.exec_cmd_under_X('xwininfo -root')
+     start_width = raw_resolution.find('Width')
+     end_width = raw_resolution.find('\n',start_width)
+     start_height = raw_resolution.find('Height')
+@@ -61,9 +99,9 @@
+ 
+   ## class method to find which desktop environment user uses
+   def finding_desktop_environment(self):
+-    raw_window_id = os.popen('xprop -root _NET_SUPPORTING_WM_CHECK').read()
++    raw_window_id = self.exec_cmd_under_X('xprop -root _NET_SUPPORTING_WM_CHECK')
+     window_id = raw_window_id[46:raw_window_id.find("\n")]
+-    raw_wm_name = os.popen('xprop -id ' + window_id + ' 8s _NET_WM_NAME').read()
++    raw_wm_name = self.exec_cmd_under_X('xprop -id ' + window_id + ' 8s _NET_WM_NAME')
+     wm_name = raw_wm_name[29:raw_wm_name.rfind('"')]
+     # default is Gnome3.
+     self.window_manager = 'Gnome3'
+@@ -80,7 +118,7 @@
+ 
+   ## class method to find amount of workspaces in user desktop
+   def finding_total_workspaces(self):
+-    self.total_workspaces = int(os.popen("xprop -root _NET_NUMBER_OF_DESKTOPS").read()[36:38])
++    self.total_workspaces = int(self.exec_cmd_under_X("xprop -root _NET_NUMBER_OF_DESKTOPS")[36:38])
+ 
+     # Save this total_workspaces value
+     if not WallpapozSystem.static_finding_total_workspaces_called_p:
+@@ -98,7 +136,7 @@
+ 
+   ## class method to know what workspace we are in now
+   def current_desktop(self):
+-    raw_workspace = os.popen('xprop -root _NET_CURRENT_DESKTOP').read()
++    raw_workspace = self.exec_cmd_under_X('xprop -root _NET_CURRENT_DESKTOP')
+     workspace = int(raw_workspace[33] + raw_workspace[34])
+     return workspace
+ 

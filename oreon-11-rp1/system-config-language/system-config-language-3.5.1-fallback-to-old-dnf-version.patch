@@ -1,0 +1,21 @@
+diff -urN system-config-language-3.5.0.old/src/install_packages3.py system-config-language-3.5.0/src/install_packages3.py
+--- system-config-language-3.5.0.old/src/install_packages3.py	2018-12-04 19:31:56.000000000 +0530
++++ system-config-language-3.5.0/src/install_packages3.py	2025-04-21 13:27:30.218412895 +0530
+@@ -118,7 +118,7 @@
+     def get_language_packages(cls, lang):
+         """ Find package list required to install the requested langpack """
+         lang_pkgs = []
+-        cmd = "dnf repoquery --debuglevel=0 --queryformat '%{{name}}' --whatsupplements langpacks-{0}".format(lang)
++        cmd = "dnf-3 repoquery --debuglevel=0 --queryformat '%{{name}}' --whatsupplements langpacks-{0}".format(lang)
+         cmdoutput = subprocess.check_output(cmd, shell=True)
+         for line in cmdoutput.decode('UTF-8').splitlines():
+             lang_pkgs.append(line)
+@@ -197,7 +197,7 @@
+     @classmethod
+     def install_language_packages(cls, langcode):
+         """ Install package list for a given langcode """
+-        cmd = "dnf install -y langpacks-{0}".format(langcode)
++        cmd = "dnf-3 install -y langpacks-{0}".format(langcode)
+         try:
+             subprocess.check_output(cmd, shell=True)
+             return "LangSupportInstalled"

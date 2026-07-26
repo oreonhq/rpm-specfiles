@@ -1,0 +1,786 @@
+diff -urp wallpapoz-0.6.2.py2/setup.py wallpapoz-0.6.2.py3/setup.py
+--- wallpapoz-0.6.2.py2/setup.py	2019-09-02 14:04:36.124389528 +0900
++++ wallpapoz-0.6.2.py3/setup.py	2019-09-02 14:50:57.162142691 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ #=============================================================================
+@@ -62,7 +62,7 @@ Options:
+ """)
+ 
+ def info():
+-  print usage_info
++  print (usage_info)
+   sys.exit(1)
+ 
+ def install(src, dst):
+@@ -73,9 +73,9 @@ def install(src, dst):
+     if not os.path.isdir(os.path.dirname(dst)):
+       os.makedirs(os.path.dirname(dst))
+     shutil.copy2(src, dst)
+-    print _("Installed"), dst
++    print (_("Installed"), dst)
+   except:
+-    print _("Error while installing"), dst
++    print (_("Error while installing"), dst)
+ 
+ def uninstall(path):
+   try:
+@@ -86,71 +86,75 @@ def uninstall(path):
+       shutil.rmtree(path)
+     else:
+       return
+-    print _("Removed"), path
++    print (_("Removed"), path)
+   except:
+-    print _("Error while removing"), path
++    print (_("Error while removing"), path)
+ 
+ def check_dependencies():
+   required_found = True
+   recommended_found = True
+-  print _("Checking dependencies...")
++  print (_("Checking dependencies..."))
+   print
+-  print _("Required dependencies:")
++  print (_("Required dependencies:"))
+   print
+   # Should also check the PyGTK version. To do that we have to load the
+   # gtk module though, which normally can't be done while using `sudo`.
+   try:
+-    import pygtk
+-    print "    PyGTK ........................ OK"
++    #import pygtk
++    import gi
++    gi.require_version("Gtk", "3.0")
++    from gi.repository import Gtk
++    print ("    PyGTK ........................ OK")
+   except ImportError:
+-    print "    !!! PyGTK .................... ", _("Not found")
++    print ("    !!! PyGTK .................... ", _("Not found"))
+     required_found = False
+   try:
+     # shutdown the warnings
+     import warnings
+     warnings.simplefilter("ignore", Warning)
+-    import gtk.glade
+-    print "    Python Glade ................. OK"
+-  except ImportError:
+-    print "    !!! Python Glade ............. ", _("Not found")
++    #import gtk.glade
++    Gtk.Builder()
++    print ("    Python Glade ................. OK")
++  except (ImportError, AttributeError):
++    print ("    !!! Python Glade ............. ", _("Not found"))
+     required_found = False
+   except RuntimeError:
+     # so we can check dependency when there is no DISPLAY
+     warnings.simplefilter("default", Warning)
+     if not os.environ.get("DISPLAY"):
+-      print "    Python Glade ................. SKIP"
++      print ("    Python Glade ................. SKIP")
+     else:
+-      print "    !!! Python Glade ............. ", _("Not found")
+-      required_found = False
++      print ("    !!! Python Glade ............. ", _("Not found"))
++      #required_found = False
+   try:
+     from PIL import Image
+-    print "    Python Imaging Library ....... OK"
++    print ("    Python Imaging Library ....... OK")
+   except ImportError:
+-    print "    !!! Python Imaging Library ... ", _("Not found")
++    print ("    !!! Python Imaging Library ... ", _("Not found"))
+     required_found = False
+   try:
+     import gnome
+-    print "    Gnome Python ................. OK"
++    print ("    Gnome Python ................. OK")
+   except ImportError:
+-    print "    !!! Gnome Python ............. ", _("Not found")
++    print ("    !!! Gnome Python ............. ", _("Not found"))
+     recommended_found = False
+   out = os.popen('which xwininfo').readlines
+   if out == []:
+-    print "    Xwininfo tool ................ ", _("Not found")
++    print ("    Xwininfo tool ................ ", _("Not found"))
+     required_found = False
+   else:
+-    print "    Xwininfo tool ................ OK"
++    print ("    Xwininfo tool ................ OK")
+ 
+   if not required_found:
+     print
+-    print _("Could not find all required dependencies!")
+-    print _("Please install them and try again.")
++    print (_("Could not find all required dependencies!"))
++    print (_("Please install them and try again."))
+     print
+     sys.exit(1)
+   if not recommended_found:
+     print
+-    print _("Gnome Python is not found. Wallpapoz still could be used and it has been installed.")
+-    print _("But it means you can not access help documentation in your native language if it is available.")
++    print (_("Gnome Python is not found. Wallpapoz still could be used and it has been installed."))
++    print (_("But it means you can not access help documentation in your native language if it is available."))
+     print
+ 
+ install_dir = "/usr/local/"
+@@ -166,12 +170,12 @@ for opt, value in opts:
+   if opt == "--installdir":
+     install_dir = value
+     if not os.path.isdir(install_dir):
+-      print _("\n*** Error:"), install_dir, _("does not exist.\n" )
++      print (_("\n*** Error:"), install_dir, _("does not exist.\n" ))
+       info()
+ 
+ if args == ["install"]:
+   check_dependencies()
+-  print _("Installing Wallpapoz in"), install_dir, "...\n"
++  print (_("Installing Wallpapoz in"), install_dir, "...\n")
+   install("src/wallpapoz", "bin/wallpapoz")
+   install("src/daemon_wallpapoz", "bin/daemon_wallpapoz")
+   install("src/launcher_wallpapoz.sh", "bin/launcher_wallpapoz.sh")
+@@ -193,7 +197,7 @@ if args == ["install"]:
+       "share/gnome/help/wallpapoz/" + lang + "/legal.xml")
+ 
+ elif args == ["uninstall"]:
+-  print _("Uninstalling Wallpapoz from"), install_dir, "...\n"
++  print (_("Uninstalling Wallpapoz from"), install_dir, "...\n")
+   uninstall("bin/wallpapoz")
+   uninstall("bin/daemon_wallpapoz")
+   uninstall("bin/launcher_wallpapoz.sh")
+@@ -211,11 +215,11 @@ elif args == ["uninstall"]:
+     uninstall("share/gnome/help/wallpapoz/" + lang + "/wallpapoz.xml")
+     uninstall("share/gnome/help/wallpapoz/" + lang + "/legal.xml")
+   print
+-  print _("""
++  print (_("""
+ There might still be files in ~/.wallpapoz/ left on your system.
+ Please remove that directory manually if you do not plan to
+ install Wallpapoz again later.
+-""")
++"""))
+ 
+ else:
+   info()
+diff -urp wallpapoz-0.6.2.py2/share/wallpapoz/lib/wallpapoz_system.py wallpapoz-0.6.2.py3/share/wallpapoz/lib/wallpapoz_system.py
+--- wallpapoz-0.6.2.py2/share/wallpapoz/lib/wallpapoz_system.py	2019-09-02 14:04:36.105389275 +0900
++++ wallpapoz-0.6.2.py3/share/wallpapoz/lib/wallpapoz_system.py	2019-09-01 21:08:35.000000000 +0900
+@@ -44,8 +44,8 @@ class WallpapozSystem:
+ 
+     # Check if total_workspaces changed only here
+     if WallpapozSystem.static_total_workspaces != self.total_workspaces:
+-      print "daemon_wallpapoz: the number of total workspaces changed during initialization process."
+-      print "daemon_wallpapoz: respawning daemon_wallpapoz."
++      print ("daemon_wallpapoz: the number of total workspaces changed during initialization process.")
++      print ("daemon_wallpapoz: respawning daemon_wallpapoz.")
+       self.respawn_system()
+ 
+   def exec_cmd_under_X(self, cmd):
+@@ -57,32 +57,35 @@ class WallpapozSystem:
+         shell = True
+         )
+     except OSError:
+-      print "daemon_wallpapoz: fork failed for %s, exiting." %cmd
++      print ("daemon_wallpapoz: fork failed for %s, exiting." %cmd)
+       sys.exit(1)
+ 
+     pstdout = p.stdout.read()
+     pstderr = p.stderr.read()
+     ret = p.wait()
++    # FIXME
++    pstdout_str = pstdout.decode('utf-8')
+ 
+     kill_daemon = False
+ 
+     if (ret != 0) and (ret & 0xFF):
+-        print "daemon_wallpapoz: %s returned status %i." %(cmd, ret)
+-        print "daemon_wallpapoz: error message: %s" %pstderr
++        print ("daemon_wallpapoz: %s returned status %i." %(cmd, ret))
++        print ("daemon_wallpapoz: error message: %s" %pstderr)
+         kill_daemon = True
+ 
+-    if (cmd.find('xprop') >= 0) and (pstdout.find('no such atom') >= 0):
++    if (cmd.find('xprop') >= 0) and (pstdout_str.find('no such atom') >= 0):
+         kill_daemon = True
+-    if (cmd.find('xprop') >= 0) and (pstdout.find('not') >= 0):
++    if (cmd.find('xprop') >= 0) and (pstdout_str.find('not') >= 0):
+         kill_daemon = True
+ 
+     if kill_daemon:
+         ## No X resource available, kill daemon_wallpapoz
+-        print "daemon_wallpapoz: X resource seems no longer available."
+-        print "daemon_wallpapoz: killing daemon_wallpapoz."
++        print ("daemon_wallpapoz: X resource seems no longer available.")
++        print ("daemon_wallpapoz: killing daemon_wallpapoz.")
+         sys.exit(1)
+ 
+-    return pstdout
++    #FIXME
++    return pstdout_str
+ 
+   def set_style(self, style):
+     self.wallpaper_style = style
+@@ -209,7 +212,7 @@ class WallpapozSystem:
+     new_argv = []
+     new_argv.extend(sys.argv)
+     os.execvp('daemon_wallpapoz', new_argv)
+-    print "os.execvp failed, exiting..."
++    print ("os.execvp failed, exiting...")
+     sys.exit(1)
+ 
+   def prevent_multiple_start(self):
+diff -urp wallpapoz-0.6.2.py2/share/wallpapoz/lib/xml_processing.py wallpapoz-0.6.2.py3/share/wallpapoz/lib/xml_processing.py
+--- wallpapoz-0.6.2.py2/share/wallpapoz/lib/xml_processing.py	2012-02-20 03:57:12.000000000 +0900
++++ wallpapoz-0.6.2.py3/share/wallpapoz/lib/xml_processing.py	2019-09-01 21:23:33.000000000 +0900
+@@ -28,7 +28,9 @@ import xml
+ import os
+ import sys
+ import gettext
+-import gtk
++import gi
++gi.require_version("Gtk", "3.0")
++from gi.repository import Gtk, GObject
+ from wallpapoz_system import WallpapozSystem
+ 
+ # i18n
+@@ -36,8 +38,8 @@ APP = "wallpapoz"
+ DIR = "../../locale"
+ gettext.bindtextdomain(APP, DIR)
+ gettext.textdomain(APP)
+-gtk.glade.bindtextdomain(APP, DIR)
+-gtk.glade.textdomain(APP)
++#gtk.glade.bindtextdomain(APP, DIR)
++#gtk.glade.textdomain(APP)
+ _ = gettext.gettext
+ 
+ ## XMLProcessing -- class for processing wallpapoz xml file
+@@ -64,7 +66,7 @@ class XMLProcessing:
+     # if wallpapoz run for the first time ( no configuration file )
+     # we make default list, for every workspace, we give one wallpaper that is our current wallpaper
+     if not os.path.exists(self.config_file):
+-      print _("No configuration file. Use default configuration.")
++      print (_("No configuration file. Use default configuration."))
+       home = os.environ['HOME']
+       if not os.path.exists(home + '/.wallpapoz'):
+         os.makedirs(home + '/.wallpapoz')
+@@ -75,7 +77,7 @@ class XMLProcessing:
+     try:
+       self.xmldoc = minidom.parse(self.config_file)
+     except xml.parsers.expat.ExpatError:
+-      print _("The configuration file is corrupted. Remove it then create a new one again with Wallpapoz!")
++      print (_("The configuration file is corrupted. Remove it then create a new one again with Wallpapoz!"))
+       sys.exit()
+ 
+     # wallpapoz node
+@@ -101,7 +103,7 @@ class XMLProcessing:
+     try:
+       self.xmldoc = minidom.parse(self.config_file)
+     except xml.parsers.expat.ExpatError:
+-      print _("The configuration file is corrupted. Remove it then create a new one again with Wallpapoz!")
++      print (_("The configuration file is corrupted. Remove it then create a new one again with Wallpapoz!"))
+       sys.exit()
+ 
+     # wallpapoz node
+@@ -287,7 +289,7 @@ class XMLProcessing:
+   # save the xml file
+   def save(self):
+     xml_file = open(self.config_file, "w")
+-    xml_file.write( self.xmldoc.toxml("utf-8") )
++    xml_file.write( self.xmldoc.toxml("utf-8").decode("utf-8") )
+ 
+   # fill list with default value
+   def default_fill_list(self, type):
+@@ -406,4 +408,4 @@ class XMLProcessing:
+ 
+     # create it
+     xml_file = open(self.config_file, "w")
+-    xml_file.write( newdoc.toxml("utf-8") )
++    xml_file.write( newdoc.toxml("utf-8").decode("utf-8") )
+diff -urp wallpapoz-0.6.2.py2/src/daemon_wallpapoz wallpapoz-0.6.2.py3/src/daemon_wallpapoz
+--- wallpapoz-0.6.2.py2/src/daemon_wallpapoz	2019-09-02 14:04:36.168390114 +0900
++++ wallpapoz-0.6.2.py3/src/daemon_wallpapoz	2019-09-01 20:59:43.000000000 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ #================================================
+@@ -33,7 +33,7 @@ import array
+ import time
+ import threading
+ import random
+-import gtk.glade
++#import gtk.glade
+ import string
+ 
+ # so we can call from anywhere
+@@ -133,7 +133,7 @@ if __name__ == "__main__":
+     total_workspaces = wallpapoz_system.get_total_workspaces()
+ 
+     # create the index for wallpaper list thread
+-    number.fromlist( range( total_workspaces ) )
++    number.fromlist( list(range( total_workspaces ) ) )
+ 
+     # previous workspace
+     previous_desktop = -1
+diff -urp wallpapoz-0.6.2.py2/src/wallpapoz wallpapoz-0.6.2.py3/src/wallpapoz
+--- wallpapoz-0.6.2.py2/src/wallpapoz	2019-09-02 14:04:36.159389994 +0900
++++ wallpapoz-0.6.2.py3/src/wallpapoz	2019-09-02 14:13:50.533772653 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ #=============================================================================
+@@ -27,10 +27,10 @@
+ ## wallpapoz.py -- the gui tool for creating configuration file and
+ # calling daemon program
+ 
+-import pygtk
+-pygtk.require('2.0')
+-import gtk.glade
+-import gobject
++import gi
++gi.require_version("Gtk", "3.0")
++from gi.repository import Gtk as gtk, GObject as gobject, Gdk as gdk
++from gi.repository import GdkPixbuf
+ import os
+ import sys
+ import stat
+@@ -55,8 +55,8 @@ APP = "wallpapoz"
+ DIR = "../share/locale"
+ gettext.bindtextdomain(APP, DIR)
+ gettext.textdomain(APP)
+-gtk.glade.bindtextdomain(APP, DIR)
+-gtk.glade.textdomain(APP)
++#gtk.glade.bindtextdomain(APP, DIR)
++#gtk.glade.textdomain(APP)
+ _ = gettext.gettext
+ 
+ # main class for the gui. This gui will contruct the configuration file that will be used by daemon
+@@ -69,25 +69,32 @@ class Wallpapoz:
+   # the contructor
+   def __init__(self):
+     # wallpapoz glade file
+-    self.wallpapoz_glade_file = "../share/wallpapoz/glade/wallpapoz.glade"
++    #self.wallpapoz_glade_file = "../share/wallpapoz/glade/wallpapoz.glade"
++    self.wallpapoz_builder_file = "../share/wallpapoz/glade/wallpapoz-builder-wallpapoz_window.glade"
+ 
+     # call the xmlprocessing class to read it later on method related to treeview
+     self.wallpapozxml = XMLProcessing()
+ 
+     # Load the glade
+-    self.main_window = gtk.glade.XML(self.wallpapoz_glade_file, "wallpapoz_window", APP)
++    self.builder = gtk.Builder()
++    self.builder.set_translation_domain(APP)
++    self.builder.add_from_file(self.wallpapoz_builder_file)
++    #self.main_window = gtk.glade.XML(self.wallpapoz_glade_file, "wallpapoz_window", APP)
++    self.main_window = self.builder.get_object("wallpapoz_window")
+ 
+     # window widget
+-    self.main_window_widget = self.main_window.get_widget("wallpapoz_window")
++    self.main_window_widget = self.builder.get_object("wallpapoz_window")
+ 
+     # treeview widget
+-    self.treeview_widget = self.main_window.get_widget("treeview")
++    self.treeview_widget = self.builder.get_object("treeview")
++    # FIXME set here
++    self.treeselection = self.treeview_widget.get_selection()
+ 
+     # image widget
+-    self.image_widget = self.main_window.get_widget("wallpaper_image")
++    self.image_widget = self.builder.get_object("wallpaper_image")
+ 
+     # image filename widget
+-    self.wallpaper_filename = self.main_window.get_widget("wallpaper_name_label")
++    self.wallpaper_filename = self.builder.get_object("wallpaper_name_label")
+ 
+     # create the pop up menu when we right click the treeview widget
+     self.set_up_popup_menu()
+@@ -121,7 +128,7 @@ class Wallpapoz:
+             "on_move_up_activate" : self.move_up_node,
+             "on_move_down_activate" : self.move_down_node,
+             "on_treeview_button_press_event" : self.right_click_menu }
+-    self.main_window.signal_autoconnect(dic)
++    self.builder.connect_signals(dic)
+ 
+     # show treeview
+     self.load_treeview()
+@@ -132,16 +139,16 @@ class Wallpapoz:
+   # set up popup menu when we right click the treeview widget
+   def set_up_popup_menu(self):
+     self.popup_menu = gtk.Menu()
+-    add_wallpapers_files_menu = gtk.MenuItem(_("Add Wallpapers (Files)"))
+-    add_wallpapers_directory_menu = gtk.MenuItem(_("Add Wallpapers (Directory)"))
+-    self.cut_menu = gtk.MenuItem(_("Cut"))
+-    self.copy_menu = gtk.MenuItem(_("Copy"))
+-    paste_menu = gtk.MenuItem(_("Paste"))
+-    self.rename_workspace_menu = gtk.MenuItem(_("Rename Workspace"))
+-    self.change_wallpaper_menu = gtk.MenuItem(_("Change Wallpaper"))
+-    self.delete_wallpapers_menu = gtk.MenuItem(_("Delete Wallpapers"))
+-    move_up_menu = gtk.MenuItem(_("Move Up"))
+-    move_down_menu = gtk.MenuItem(_("Move Down"))
++    add_wallpapers_files_menu = gtk.MenuItem(label=_("Add Wallpapers (Files)"))
++    add_wallpapers_directory_menu = gtk.MenuItem(label=_("Add Wallpapers (Directory)"))
++    self.cut_menu = gtk.MenuItem(label=_("Cut"))
++    self.copy_menu = gtk.MenuItem(label=_("Copy"))
++    paste_menu = gtk.MenuItem(label=_("Paste"))
++    self.rename_workspace_menu = gtk.MenuItem(label=_("Rename Workspace"))
++    self.change_wallpaper_menu = gtk.MenuItem(label=_("Change Wallpaper"))
++    self.delete_wallpapers_menu = gtk.MenuItem(label=_("Delete Wallpapers"))
++    move_up_menu = gtk.MenuItem(label=_("Move Up"))
++    move_down_menu = gtk.MenuItem(label=_("Move Down"))
+     add_wallpapers_files_menu.connect("activate", self.add_wallpapers_files)
+     add_wallpapers_directory_menu.connect("activate", self.add_wallpapers_directory)
+     self.cut_menu.connect("activate", self.cut_treenode)
+@@ -175,8 +182,8 @@ class Wallpapoz:
+ 
+   # popup menu when user right-click the treeview widget
+   def right_click_menu(self, widget, event):
+-    if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
+-      self.popup_menu.popup(None, None, None, event.button, event.time)
++    if event.type == gdk.EventType.BUTTON_PRESS and event.button == 3:
++      self.popup_menu.popup(None, None, None, None, event.button, event.time)
+ 
+   def restart_daemon(self, widget):
+     self.stop_daemon(None)
+@@ -201,8 +208,12 @@ class Wallpapoz:
+ 
+   # when user click about menu item, show about dialog
+   def display_about(self, widget):
+-    about_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "wallpapoz_about_dialog", APP)
+-    aboutdlg_widget = about_dialog.get_widget("wallpapoz_about_dialog")
++    #about_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "wallpapoz_about_dialog", APP)
++    self.about_dialog_builder_file = "../share/wallpapoz/glade/wallpapoz-builder-wallpapoz_about_dialog.glade"
++    self.about_dialog_builder = gtk.Builder()
++    self.about_dialog_builder.set_translation_domain(APP)
++    self.about_dialog_builder.add_from_file(self.about_dialog_builder_file)
++    aboutdlg_widget = self.about_dialog_builder.get_object("wallpapoz_about_dialog")
+     aboutdlg_widget.connect('response', lambda w, e: aboutdlg_widget.destroy())
+ 
+   # get the selection iter
+@@ -326,15 +337,17 @@ class Wallpapoz:
+       dialog_title = _("Choose Wallpapers")
+ 
+     # our filechooser dialog
+-    filechooser_dialog = gtk.FileChooserDialog(dialog_title, self.main_window_widget, gtk.FILE_CHOOSER_ACTION_OPEN)
++    filechooser_dialog = gtk.FileChooserDialog(dialog_title, self.main_window_widget, gtk.FileChooserAction.OPEN)
+ 
+     # our button
+-    cancel_button = filechooser_dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
++    cancel_button = filechooser_dialog.add_button(gtk.STOCK_CANCEL, gtk.ResponseType.CANCEL)
+     if type_of_ok_button == "change":
+-      ok_button = filechooser_dialog.add_button(_("Change"), gtk.RESPONSE_OK)
++      ok_button = filechooser_dialog.add_button(_("Change"), gtk.ResponseType.OK)
+     elif type_of_ok_button == "add":
+-      ok_button = filechooser_dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+-      gtk.Tooltips().set_tip(ok_button, _("Add wallpapers"))
++      ok_button = filechooser_dialog.add_button(gtk.STOCK_OK, gtk.ResponseType.OK)
++      # FIXME
++      #gtk.Tooltips().set_tip(ok_button, _("Add wallpapers"))
++      ok_button.set_tooltip_text(_("Add wallpapers"))
+ 
+     # cancel will quit the filechooser dialog
+     cancel_button.connect("clicked", lambda w: filechooser_dialog.destroy())
+@@ -379,7 +392,7 @@ class Wallpapoz:
+     filechooser_dialog.set_select_multiple(True)
+ 
+     # if user choose the file, add his choice to treeview
+-    if filechooser_dialog.run() == gtk.RESPONSE_OK:
++    if filechooser_dialog.run() == gtk.ResponseType.OK:
+       # get the list of filename that we choose to add
+       filenames = filechooser_dialog.get_filenames()
+ 
+@@ -436,15 +449,21 @@ class Wallpapoz:
+ 
+   # show up the preferences dialog
+   def preferences_option(self, widget):
+-    self.preferences_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "preferences_dialog", APP)
+-    preferences_dialog_widget = self.preferences_dialog.get_widget("preferences_dialog")
++    #self.preferences_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "preferences_dialog", APP)
++    self.preferences_dialog_builder_file =  "../share/wallpapoz/glade/wallpapoz-builder-preferences_dialog.glade"
++    self.preferences_dialog_builder = gtk.Builder()
++    self.preferences_dialog_builder.set_translation_domain(APP)
++    self.preferences_dialog_builder.add_from_file(self.preferences_dialog_builder_file)
++    # FIXME
++    self.preferences_dialog = self.preferences_dialog_builder
++    preferences_dialog_widget = self.preferences_dialog.get_object("preferences_dialog")
+ 
+     # input widgets
+-    time_changed_widget = self.preferences_dialog.get_widget("preferences_dialog_spin_button_time")
+-    random_order_widget = self.preferences_dialog.get_widget("preferences_dialog_show_wallpaper_random_order")
+-    changing_workspace_widget = self.preferences_dialog.get_widget("preferences_dialog_change_wallpaper_changing_workspace")
+-    style_widget = self.preferences_dialog.get_widget("preferences_dialog_style_combobox")
+-    size_widget = self.preferences_dialog.get_widget("preferences_dialog_size_combobox")
++    time_changed_widget = self.preferences_dialog.get_object("preferences_dialog_spin_button_time")
++    random_order_widget = self.preferences_dialog.get_object("preferences_dialog_show_wallpaper_random_order")
++    changing_workspace_widget = self.preferences_dialog.get_object("preferences_dialog_change_wallpaper_changing_workspace")
++    style_widget = self.preferences_dialog.get_object("preferences_dialog_style_combobox")
++    size_widget = self.preferences_dialog.get_object("preferences_dialog_size_combobox")
+ 
+     # load value from xml file
+     time_changed_widget.set_value(float(self.wallpapozxml.delay()))
+@@ -458,19 +477,19 @@ class Wallpapoz:
+     changing_workspace_widget.set_active(self.wallpapozxml.change_wallpaper_when_changing_workspace())
+ 
+     # button
+-    cancel_button = self.preferences_dialog.get_widget("preferences_cancel_button")
++    cancel_button = self.preferences_dialog.get_object("preferences_cancel_button")
+     cancel_button.connect("clicked", lambda w: preferences_dialog_widget.destroy())
+ 
+-    ok_button = self.preferences_dialog.get_widget("preferences_ok_button")
++    ok_button = self.preferences_dialog.get_object("preferences_ok_button")
+     ok_button.connect("clicked", self.ok_preferences_dialog)
+ 
+   def ok_preferences_dialog(self, widget):
+-    time_changed_widget = self.preferences_dialog.get_widget("preferences_dialog_spin_button_time")
+-    random_order_widget = self.preferences_dialog.get_widget("preferences_dialog_show_wallpaper_random_order")
+-    changing_workspace_widget = self.preferences_dialog.get_widget("preferences_dialog_change_wallpaper_changing_workspace")
+-    style_widget = self.preferences_dialog.get_widget("preferences_dialog_style_combobox")
+-    size_widget = self.preferences_dialog.get_widget("preferences_dialog_size_combobox")
+-    preferences_dialog_widget = self.preferences_dialog.get_widget("preferences_dialog")
++    time_changed_widget = self.preferences_dialog.get_object("preferences_dialog_spin_button_time")
++    random_order_widget = self.preferences_dialog.get_object("preferences_dialog_show_wallpaper_random_order")
++    changing_workspace_widget = self.preferences_dialog.get_object("preferences_dialog_change_wallpaper_changing_workspace")
++    style_widget = self.preferences_dialog.get_object("preferences_dialog_style_combobox")
++    size_widget = self.preferences_dialog.get_object("preferences_dialog_size_combobox")
++    preferences_dialog_widget = self.preferences_dialog.get_object("preferences_dialog")
+ 
+     # user change option for changing_workspace
+     if changing_workspace_widget.get_active():
+@@ -508,10 +527,17 @@ class Wallpapoz:
+     if iter == None:
+       return
+ 
+-    choose_directory_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "add_wallpapers_directory_dialog", APP)
+-    choose_directory_dialog_widget = choose_directory_dialog.get_widget("add_wallpapers_directory_dialog")
+-    filechooser_widget = choose_directory_dialog.get_widget("filechooserwidget")
+-    recursive_widget = choose_directory_dialog.get_widget("recursive_checkbutton")
++    #choose_directory_dialog = gtk.glade.XML(self.wallpapoz_glade_file, "add_wallpapers_directory_dialog", APP)
++    self.choose_directory_dialog_file = "../share/wallpapoz/glade/wallpapoz-builder-add_wallpapers_directory_dialog.glade"
++    self.choose_directory_dialog_builder = gtk.Builder()
++    self.choose_directory_dialog_builder.set_translation_domain(APP)
++    self.choose_directory_dialog_builder.add_from_file(self.choose_directory_dialog_file)
++    # FIXME
++    choose_directory_dialog = self.choose_directory_dialog_builder
++
++    choose_directory_dialog_widget = choose_directory_dialog.get_object("add_wallpapers_directory_dialog")
++    filechooser_widget = choose_directory_dialog.get_object("filechooserwidget")
++    recursive_widget = choose_directory_dialog.get_object("recursive_checkbutton")
+ 
+     # set it to last directory
+     if self.last_directory == None:
+@@ -528,7 +554,7 @@ class Wallpapoz:
+ 
+     dic = { "on_cancel_add_wallpapers_directory_button_clicked" : (self.cancel_button_add_wallpapers_directory, choose_directory_dialog_widget),
+             "on_add_wallpapers_directory_button_clicked" : (self.ok_button_add_wallpapers_directory, filechooser_widget, recursive_widget, choose_directory_dialog_widget, iter) }
+-    choose_directory_dialog.signal_autoconnect(dic)
++    choose_directory_dialog.connect_signals(dic)
+ 
+   # ok, if we choose the directory ( accept filechooser, recursive checkbutton, iter pointing treenode ), function add_wallpapers_directory call this function
+   def ok_button_add_wallpapers_directory(self, widget, filechooser_widget, recursive_widget, choose_directory_dialog_widget, iter):
+@@ -735,7 +761,7 @@ class Wallpapoz:
+         ii = ii + 1
+ 
+       # enable rename workspace menu
+-      self.main_window.get_widget("rename_workspace").set_sensitive(True)
++      self.builder.get_object("rename_workspace").set_sensitive(True)
+ 
+       # name of our left column
+       left_tvcolumn_name = _("Workspace")
+@@ -746,12 +772,12 @@ class Wallpapoz:
+       self.store = gtk.ListStore(gobject.TYPE_INT, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
+ 
+       # disable cut, copy, paste, rename menu item
+-      self.main_window.get_widget("cut").set_sensitive(False)
+-      self.main_window.get_widget("copy").set_sensitive(False)
+-      self.main_window.get_widget("paste").set_sensitive(False)
++      self.builder.get_object("cut").set_sensitive(False)
++      self.builder.get_object("copy").set_sensitive(False)
++      self.builder.get_object("paste").set_sensitive(False)
+ 
+       # enable change wallpaper menu item
+-      self.main_window.get_widget("change_wallpaper").set_sensitive(True)
++      self.builder.get_object("change_wallpaper").set_sensitive(True)
+ 
+       # make the wallpaper list
+       for i in range(len(worklist)):
+@@ -786,7 +812,7 @@ class Wallpapoz:
+ 
+     # set mode to multiple selection
+     self.treeselection = self.treeview_widget.get_selection()
+-    self.treeselection.set_mode(gtk.SELECTION_MULTIPLE)
++    self.treeselection.set_mode(gtk.SelectionMode.MULTIPLE)
+     self.treeselection.select_path(0)
+ 
+     # show image for liststore
+@@ -814,7 +840,7 @@ class Wallpapoz:
+     # status, copy or cut
+     self.work_on_tree = "copy"
+     # enable the paste menu item
+-    self.main_window.get_widget("paste").set_sensitive(True)
++    self.builder.get_object("paste").set_sensitive(True)
+ 
+   # we call this method when we click cut menu action
+   def cut_treenode(self, widget):
+@@ -829,7 +855,7 @@ class Wallpapoz:
+     # status, copy or cut
+     self.work_on_tree = "cut"
+     # enable the paste menu item
+-    self.main_window.get_widget("paste").set_sensitive(True)
++    self.builder.get_object("paste").set_sensitive(True)
+ 
+   # helper function for reordering node after cut&paste, returning list of all lowest not selected iter from the related workspace
+   def reordering_node_after_cut_and_paste(self, copy_iter_list):
+@@ -942,10 +968,10 @@ class Wallpapoz:
+     parent_number = self.store.get_path(self.selected_iter[0])[0]
+     for single_iter in self.selected_iter:
+       if self.store.get_path(single_iter)[0] != parent_number:
+-	temp_iter_list = []
+-	parent_number = self.store.get_path(single_iter)[0]
+-      temp_iter_list.append(single_iter)
+-      prev_iter = single_iter
++        temp_iter_list = []
++        parent_number = self.store.get_path(single_iter)[0]
++        temp_iter_list.append(single_iter)
++        prev_iter = single_iter
+ 
+     # do the remaining job
+     if self.store.iter_n_children( self.store.iter_parent(prev_iter) ) == len(temp_iter_list) and self.work_on_tree == "cut":
+@@ -990,7 +1016,7 @@ class Wallpapoz:
+       # make sure the status is reset
+       self.work_on_tree = None
+       # disable the paste menu item
+-      self.main_window.get_widget("paste").set_sensitive(False)
++      self.builder.get_object("paste").set_sensitive(False)
+ 
+       self.cut_and_reordering_treeiter()
+ 
+@@ -1001,7 +1027,7 @@ class Wallpapoz:
+     # workaround for the case that trying to remove a wallpaper from
+     # the workspace where only one wallpaper exists
+     if not lowest_iter_list:
+-	return
++      return
+ 
+     # iterate to cut ( really!!! ) the iter from selected iter list
+     for single_iter in self.selected_iter:
+@@ -1212,7 +1238,7 @@ class Wallpapoz:
+     # make the chooser dialog
+     filechooser_dialog = self.make_chooser_dialog("change")
+     # if user okay with his choice, then change the value
+-    if filechooser_dialog.run() == gtk.RESPONSE_OK:
++    if filechooser_dialog.run() == gtk.ResponseType.OK:
+       # we interested in image file
+       if self.is_image_file(filechooser_dialog.get_filename()):
+         self.store.set_value(iter, 1, filechooser_dialog.get_filename())
+@@ -1235,15 +1261,15 @@ class Wallpapoz:
+ 
+     if not position_iter:
+       # Nothing is selected, unfortunately this can happen
+-      self.main_window.get_widget("rename_workspace").set_sensitive(False)
++      self.builder.get_object("rename_workspace").set_sensitive(False)
+       self.rename_workspace_menu.set_sensitive(False)
+-      self.main_window.get_widget("change_wallpaper").set_sensitive(False)
++      self.builder.get_object("change_wallpaper").set_sensitive(False)
+       self.change_wallpaper_menu.set_sensitive(False)
+-      self.main_window.get_widget("cut").set_sensitive(False)
++      self.builder.get_object("cut").set_sensitive(False)
+       self.cut_menu.set_sensitive(False)
+-      self.main_window.get_widget("copy").set_sensitive(False)
++      self.builder.get_object("copy").set_sensitive(False)
+       self.copy_menu.set_sensitive(False)
+-      self.main_window.get_widget("delete_wallpapers").set_sensitive(False)
++      self.builder.get_object("delete_wallpapers").set_sensitive(False)
+       self.delete_wallpapers_menu.set_sensitive(False)
+       # Nothing left
+       return
+@@ -1255,13 +1281,13 @@ class Wallpapoz:
+ 
+       # child node
+       if parent != None:
+-        self.main_window.get_widget("rename_workspace").set_sensitive(False)
++        self.builder.get_object("rename_workspace").set_sensitive(False)
+         self.rename_workspace_menu.set_sensitive(False)
+-        self.main_window.get_widget("change_wallpaper").set_sensitive(True)
++        self.builder.get_object("change_wallpaper").set_sensitive(True)
+         self.change_wallpaper_menu.set_sensitive(True)
+-        self.main_window.get_widget("cut").set_sensitive(True)
++        self.builder.get_object("cut").set_sensitive(True)
+         self.cut_menu.set_sensitive(True)
+-        self.main_window.get_widget("copy").set_sensitive(True)
++        self.builder.get_object("copy").set_sensitive(True)
+         self.copy_menu.set_sensitive(True)
+ 
+         # See create_configuration_file
+@@ -1272,23 +1298,23 @@ class Wallpapoz:
+         # Only show "Delete wallpapers" menu if there are at least 2 wallpapers
+         # in a workspace
+         if childiter:
+-          self.main_window.get_widget("delete_wallpapers").set_sensitive(True)
++          self.builder.get_object("delete_wallpapers").set_sensitive(True)
+           self.delete_wallpapers_menu.set_sensitive(True)
+         else:
+-          self.main_window.get_widget("delete_wallpapers").set_sensitive(False)
++          self.builder.get_object("delete_wallpapers").set_sensitive(False)
+           self.delete_wallpapers_menu.set_sensitive(False)
+ 
+       # parent node
+       else:
+-        self.main_window.get_widget("rename_workspace").set_sensitive(True)
++        self.builder.get_object("rename_workspace").set_sensitive(True)
+         self.rename_workspace_menu.set_sensitive(True)
+-        self.main_window.get_widget("change_wallpaper").set_sensitive(False)
++        self.builder.get_object("change_wallpaper").set_sensitive(False)
+         self.change_wallpaper_menu.set_sensitive(False)
+-        self.main_window.get_widget("cut").set_sensitive(False)
++        self.builder.get_object("cut").set_sensitive(False)
+         self.cut_menu.set_sensitive(False)
+-        self.main_window.get_widget("copy").set_sensitive(False)
++        self.builder.get_object("copy").set_sensitive(False)
+         self.copy_menu.set_sensitive(False)
+-        self.main_window.get_widget("delete_wallpapers").set_sensitive(False)
++        self.builder.get_object("delete_wallpapers").set_sensitive(False)
+         self.delete_wallpapers_menu.set_sensitive(False)
+ 
+     filename = self.store.get_value(position_iter, 1)
+@@ -1297,19 +1323,19 @@ class Wallpapoz:
+     # files' list (i.e. not pointing to desktop name)
+     if ( (type(self.store) == gtk.TreeStore) and
+ 	( parent == None ) ):
+-	self.image_widget.clear()
++      self.image_widget.clear()
+     else:
+-     from glib import GError as glib_GError
++     from gi.repository.GLib import GError as glib_GError
+      try:
+-      anime = gtk.gdk.PixbufAnimation(filename)
++      anime = GdkPixbuf.PixbufAnimation.new_from_file(filename)
+ 
+       if anime.is_static_image() :
+         im = Image.open(filename)
+         # keep image proportions
+         if im.size[0] > im.size[1]:
+-          self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, 400, int((float(im.size[1])/im.size[0]) * 400)))
++          self.image_widget.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_size(filename, 400, int((float(im.size[1])/im.size[0]) * 400)))
+         else:
+-          self.image_widget.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(filename, int(float(im.size[1])/im.size[0] * 300), 300))
++          self.image_widget.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_size(filename, int(float(im.size[1])/im.size[0] * 300), 300))
+ 
+       else:
+         width = anime.get_width()
+@@ -1322,8 +1348,8 @@ class Wallpapoz:
+ 
+      except IOError:
+       self.image_widget.clear()
+-     except glib_GError, (msg):
+-      print msg
++     except glib_GError as msg:
++      print (msg)
+       self.image_widget.clear()
+ 
+     # display image filename

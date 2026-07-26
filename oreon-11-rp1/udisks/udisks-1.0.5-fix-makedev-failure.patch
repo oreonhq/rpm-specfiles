@@ -1,0 +1,77 @@
+From b0fe2367874fa0e84f4b91497c374ad7898df731 Mon Sep 17 00:00:00 2001
+From: David King <amigadave@amigadave.com>
+Date: Sat, 27 Apr 2019 08:27:12 +0100
+Subject: [PATCH] Fix build with newer glibc versions
+
+makedev() requires that sys/sysmacros.h is included.
+---
+ src/daemon.c          | 1 +
+ src/device.c          | 1 +
+ src/mount-monitor.c   | 1 +
+ tools/udisks.c        | 1 +
+ tools/umount-udisks.c | 1 +
+ 5 files changed, 5 insertions(+)
+
+diff --git a/src/daemon.c b/src/daemon.c
+index fafcf9a..ada2964 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -43,6 +43,7 @@
+ #include <sys/time.h>
+ #include <sys/resource.h>
+ #include <sys/socket.h>
++#include <sys/sysmacros.h>
+ #include <sys/un.h>
+ #include <sys/utsname.h>
+ #include <net/if_arp.h>
+diff --git a/src/device.c b/src/device.c
+index 2ae7f38..20920df 100644
+--- a/src/device.c
++++ b/src/device.c
+@@ -33,6 +33,7 @@
+ #include <sys/stat.h>
+ #include <sys/time.h>
+ #include <sys/resource.h>
++#include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <pwd.h>
+ #include <grp.h>
+diff --git a/src/mount-monitor.c b/src/mount-monitor.c
+index 573a69c..0cfa167 100644
+--- a/src/mount-monitor.c
++++ b/src/mount-monitor.c
+@@ -29,6 +29,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <mntent.h>
+ 
+ #include <glib.h>
+diff --git a/tools/udisks.c b/tools/udisks.c
+index 97e80d7..599d469 100644
+--- a/tools/udisks.c
++++ b/tools/udisks.c
+@@ -30,6 +30,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <sys/wait.h>
+ #include <fcntl.h>
+ #include <pwd.h>
+diff --git a/tools/umount-udisks.c b/tools/umount-udisks.c
+index 2813fe0..d915660 100644
+--- a/tools/umount-udisks.c
++++ b/tools/umount-udisks.c
+@@ -30,6 +30,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <pwd.h>
+ #include <grp.h>
+-- 
+2.21.0
+

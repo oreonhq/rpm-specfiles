@@ -1,0 +1,14 @@
+diff -up procinfo-18/procinfo.8~ procinfo-18/procinfo.8
+--- procinfo-18/procinfo.8~	2010-10-12 15:42:48.999001121 +0200
++++ procinfo-18/procinfo.8	2010-10-12 15:42:49.007001089 +0200
+@@ -178,8 +178,8 @@ or
+ option). Modules with a use count larger than 0 are marked with an
+ asterisk.
+ 
+-." Deleted modules are marked with a `d', uninitialized
+-." modules with a `u', and modules with a bad state flag with a `b'.
++.\" Deleted modules are marked with a `d', uninitialized
++.\" modules with a `u', and modules with a bad state flag with a `b'.
+ 
+ .TP
+ .BI Character\ and\ Block\ Devices:

@@ -1,0 +1,54 @@
+%global source0_hash 9d42754243d3eed44426b0e9efab92a40277df691e592ae990b4733f2243a841
+
+%global forgeurl https://github.com/WayfireWM/wcm
+
+Name:           wayfire-config-manager
+Version:        0.10.0
+%forgemeta
+Release:        %autorelease
+Summary:        Wayfire Config Manager
+
+License:        MIT
+URL:            %{forgeurl}
+Source:         %{forgesource}
+
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  glm-devel
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gtkmm-3.0)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(wayfire) >= 0.10.0
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(wf-config) >= 0.10.0
+BuildRequires:  pkgconfig(wf-shell) >= 0.10.0
+Requires:       hicolor-icon-theme
+
+%description
+%{summary}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%forgeautosetup -p1
+
+%build
+%meson
+%meson_build
+
+%install
+%meson_install
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
+
+%files
+%license LICENSE
+%{_bindir}/wcm
+%{_datadir}/applications/*.desktop
+%{_datadir}/icons/*.svg
+%{_datadir}/wcm/icons/
+
+%changelog
+%autochangelog

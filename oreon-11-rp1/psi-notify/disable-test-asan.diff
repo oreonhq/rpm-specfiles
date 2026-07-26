@@ -1,0 +1,23 @@
+Description: Disable address sanitization when compiling tests
+ This recently started failing in CI:
+ https://salsa.debian.org/michel/psi-notify/-/jobs/3098906#L1035
+ but not when compiling locally (one notable difference is in CI libasan is
+ pulled in locally as a dependency).
+ .
+ One fix would be to compile the main executable with address sanitization too
+ but that results in a runtime performance hit, so just disable for now.
+Author: Michel Alexandre Salim <michel@michel-slm.name>
+Forwarded: not-needed
+Last-Update: 2022-08-12
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Makefile
++++ b/Makefile
+@@ -70,7 +70,6 @@ install: all
+ 	$(INSTALL) -Dp -m 644 psi-notify.service $(DESTDIR)$(prefix)/lib/systemd/user/psi-notify.service
+ 	$(INSTALL) -Dp -m 644 psi-notify.1 $(DESTDIR)$(mandir)/man1/psi-notify.1
+ 
+-test: CFLAGS+=-D_FORTIFY_SOURCE=2 -fsanitize=address -fsanitize=undefined -Og -ggdb -fno-omit-frame-pointer
+ test:
+ 	$(CC) $(CFLAGS) test/test.c -o test/test $(LIBS) $(LDFLAGS)
+ 	test/test

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Gentium Plus Compact</target>
+    <like>
+      <family>Gentium Plus Literacy Compact</family>
+      <family>Gentium Plus</family>
+      <family>Gentium Plus AmArea</family>
+      <family>Gentium Plus Mali</family>
+      <family>Gentium Plus Tat</family>
+      <family>Gentium Plus Literacy</family>
+      <family>Gentium Plus Literacy AmArea</family>
+      <family>Gentium Basic</family>
+      <family>Gentium Book Basic</family>
+      <family>Gentium</family>
+      <family>GentiumAlt</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

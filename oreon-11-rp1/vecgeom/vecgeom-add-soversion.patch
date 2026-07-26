@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c75d548..6a4aa61 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -818,6 +818,10 @@ cuda_rdc_add_library(vecgeom
+   ${VECGEOM_COMMON_SRCS}
+   ${VECGEOM_CPPONLY_SRCS}
+   ${VECGEOM_CUDA_SRCS})
++set_target_properties(vecgeom
++  PROPERTIES
++    VERSION ${PROJECT_VERSION}
++    SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+ target_compile_features(vecgeom PUBLIC cxx_std_${CMAKE_CXX_STANDARD})
+ 
+ # Add compile options that vecgeom clients must compile their code using Vecgeom
+diff --git a/persistency/gdml/source/CMakeLists.txt b/persistency/gdml/source/CMakeLists.txt
+index 2af3e52..37ab409 100644
+--- a/persistency/gdml/source/CMakeLists.txt
++++ b/persistency/gdml/source/CMakeLists.txt
+@@ -19,7 +19,10 @@ add_library(vgdml
+   src/Helper.cpp
+   src/Middleware.cpp
+ )
+-
++set_target_properties(vgdml
++  PROPERTIES
++    VERSION ${PROJECT_VERSION}
++    SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+ target_include_directories(vgdml PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>

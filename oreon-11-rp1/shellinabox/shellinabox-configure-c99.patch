@@ -1,0 +1,21 @@
+Define _GNU_SOURCE when probing for updwtmpx.  Otherwise, glibc's
+<utmpx.h> will not declare this function, and the configure probe
+fails with compilers which do not support implicit function
+declarations.
+
+Submitted upstream: <https://github.com/shellinabox/shellinabox/pull/514>
+
+diff --git a/configure.ac b/configure.ac
+index 56e3b6a2b510851f..d05d1216dd4a397f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -154,7 +154,8 @@ if test "x$enable_utmp" != xno; then
+               [updwtmp(0, 0);],
+               [AC_DEFINE(HAVE_UPDWTMP, 1,
+                          Define to 1 if you have support for updwtmp)])
+-  AC_TRY_LINK([#include <utmpx.h>],
++  AC_TRY_LINK([#define _GNU_SOURCE
++	      #include <utmpx.h>],
+               [updwtmpx(0, 0);],
+               [AC_DEFINE(HAVE_UPDWTMPX, 1,
+                          Define to 1 if you have support for updwtmpx)])

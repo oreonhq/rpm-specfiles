@@ -1,0 +1,12 @@
+diff -Nur sylpheed-2.5.0-orig/libsylph/ssl.c sylpheed-2.5.0/libsylph/ssl.c
+--- sylpheed-2.5.0-orig/libsylph/ssl.c	2008-02-15 08:25:05.000000000 +0100
++++ sylpheed-2.5.0/libsylph/ssl.c	2008-08-28 18:17:10.000000000 +0200
+@@ -83,7 +83,7 @@
+ 					"etc" G_DIR_SEPARATOR_S
+ 					"ssl" G_DIR_SEPARATOR_S "certs", NULL);
+ #else
+-		certs_dir = g_strdup("/etc/ssl/certs");
++		certs_dir = g_strdup("/etc/pki/tls/certs");
+ #endif
+ 		if (!is_dir_exist(certs_dir)) {
+ 			debug_print("ssl_init(): %s doesn't exist, or not a directory.\n",

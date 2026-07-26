@@ -1,0 +1,42 @@
+From 0d8c7cfb4f29d6662fbcd19e5ae25073f0554609 Mon Sep 17 00:00:00 2001
+From: Marc Siegel <marc@usainnov.com>
+Date: Wed, 24 Jul 2024 18:09:54 -0400
+Subject: [PATCH] Support Ruby 3.3
+
+Update CI test coverage matrix to: 2.7 - 3.3
+  - Add 3.2 and 3.3 to testing matrix
+  - Remove rubies prior to 2.7
+  - Remove truffleruby due to occasional failures
+    (Open to adding back if a user requests it)
+  - Update CI to run rubucop on ruby 3.3
+
+Changes
+  - Handle the changes to NoMethodError messages in 3.3
+
+Additional maintenance
+  - Load rubocop-rake in rubocop.yml to eliminate warning
+  - Fix rubocop warning about whitespace in docile.gemspec
+  - Fix rubocop warning about remove_const in spec_helper.rb
+  - Fix rubocop warning about unnecessary super params in chaining_fallback_context_proxy.rb
+---
+ .github/workflows/main.yml                    |  6 +++---
+ .rubocop.yml                                  |  3 +++
+ docile.gemspec                                | 10 +++++-----
+ lib/docile/chaining_fallback_context_proxy.rb |  2 +-
+ spec/docile_spec.rb                           |  4 ++--
+ spec/spec_helper.rb                           |  2 +-
+ 6 files changed, 15 insertions(+), 12 deletions(-)
+
+diff --git a/spec/docile_spec.rb b/spec/docile_spec.rb
+index b9e3ea8..0ee1b75 100644
+--- a/spec/docile_spec.rb
++++ b/spec/docile_spec.rb
+@@ -128,7 +128,7 @@ def push_element
+     context 'when DSL have NoMethod error inside' do
+       it 'raise error from nil' do
+         Docile.dsl_eval(DSLWithNoMethod.new(nil)) do
+-          expect { push_element }.to raise_error(NoMethodError, /undefined method `push' (for|on) nil/)
++          expect { push_element }.to raise_error(NoMethodError, /undefined method (`|')push' (for|on) nil/)
+         end
+       end
+     end

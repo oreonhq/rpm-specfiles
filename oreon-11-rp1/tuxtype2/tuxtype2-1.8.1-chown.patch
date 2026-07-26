@@ -1,0 +1,24 @@
+diff -up tuxtype_w_fonts-1.8.1/Makefile.am.patch tuxtype_w_fonts-1.8.1/Makefile.am
+--- tuxtype_w_fonts-1.8.1/Makefile.am.patch	2010-05-01 11:40:44.000000000 +0200
++++ tuxtype_w_fonts-1.8.1/Makefile.am	2010-05-01 11:41:08.000000000 +0200
+@@ -48,8 +48,6 @@ install-data-hook:
+ # Global sites for game state data (e.g. /var/games/tuxtype):
+ 	$(MKDIR_P) -m 2755 $(DESTDIR)$(pkglocalstatedir)
+ 	$(MKDIR_P) -m 2755 $(DESTDIR)$(pkglocalstatedir)/words
+-#	chown root:games $(DESTDIR)$(pkglocalstatedir)
+-	chown root:games $(DESTDIR)$(pkglocalstatedir)/words
+ 
+ 
+ uninstall-hook:
+diff -up tuxtype_w_fonts-1.8.1/Makefile.in.nochown tuxtype_w_fonts-1.8.1/Makefile.in
+--- tuxtype_w_fonts-1.8.1/Makefile.in.nochown	2012-08-16 16:55:42.256157148 -0400
++++ tuxtype_w_fonts-1.8.1/Makefile.in	2012-08-16 16:55:45.504157197 -0400
+@@ -780,7 +780,7 @@ install-data-hook:
+ 	$(MKDIR_P) -m 2755 $(DESTDIR)$(pkglocalstatedir)
+ 	$(MKDIR_P) -m 2755 $(DESTDIR)$(pkglocalstatedir)/words
+ #	chown root:games $(DESTDIR)$(pkglocalstatedir)
+-	chown root:games $(DESTDIR)$(pkglocalstatedir)/words
++#	chown root:games $(DESTDIR)$(pkglocalstatedir)/words
+ 
+ uninstall-hook:
+ 	rm -rf $(DESTDIR)$(pkglocalstatedir)/words

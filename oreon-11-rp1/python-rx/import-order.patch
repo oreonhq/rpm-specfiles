@@ -1,0 +1,14 @@
+--- RxPY-4.0.4/tests/test_scheduler/test_mainloop/test_gtkscheduler.py~	2022-07-16 02:08:28.000000000 -0500
++++ RxPY-4.0.4/tests/test_scheduler/test_mainloop/test_gtkscheduler.py	2025-08-14 09:50:57.543970275 -0500
+@@ -10,10 +10,10 @@
+ from reactivex.scheduler.mainloop import GtkScheduler
+ 
+ gi = pytest.importorskip("gi")
++gi.require_version("Gtk", "3.0")
+ from gi.repository import GLib, Gtk  # isort: skip
+ 
+ 
+-gi.require_version("Gtk", "3.0")
+ 
+ 
+ # Removing GNOME_DESKTOP_SESSION_ID from environment

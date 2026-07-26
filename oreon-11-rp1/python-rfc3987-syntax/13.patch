@@ -1,0 +1,29 @@
+From 5561bf3fff9939ceaf4f46910eb312f7eeb0b6b4 Mon Sep 17 00:00:00 2001
+From: Benson Muite <bkmgit@users.noreply.github.com>
+Date: Tue, 3 Mar 2026 14:57:51 +0300
+Subject: [PATCH] Remove incorrect license data
+
+Conform to PEP639 metadata specifications
+---
+ pyproject.toml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e0e1c16..2bb86d8 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -22,7 +22,6 @@ classifiers = [
+     "Intended Audience :: Information Technology",
+     "Intended Audience :: Science/Research",
+     "Intended Audience :: System Administrators",
+-    "License :: OSI Approved :: Apache Software License",
+     "Natural Language :: English",
+     "Programming Language :: Python",
+     "Programming Language :: Python :: 3",
+@@ -50,4 +49,4 @@ pythonpath = [
+ ]
+ 
+ [tool.hatch.build.targets.sdist.force-include]
+-"CITATION.cff" = "src/rfc3987_syntax/CITATION.cff"
+\ No newline at end of file
++"CITATION.cff" = "src/rfc3987_syntax/CITATION.cff"

@@ -1,0 +1,37 @@
+From db5bfd15f2303db509d97c7b3167a7a52c280b50 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Mar 2018 14:58:19 +0100
+Subject: [PATCH 3/3] Do not unset variables by setenv()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Glibc declares setenv() as that it does not accept NULL second
+argument (the variable value). Thus invocing setenv() in this way
+triggers an undefined behavior.
+
+This patch fixes it by using unsetenv().
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/main.c b/src/main.c
+index 0cb6e8a..82bae27 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -567,8 +567,8 @@ void executeActions(struct rule *this_rule, struct ra_info *data)
+ 	}
+ 	else
+ 	{
+-		setenv("PREFIX", NULL, 1);
+-		setenv("PREFIX_LEN", NULL, 1);
++		unsetenv("PREFIX");
++		unsetenv("PREFIX_LEN");
+ 	}
+ 
+ 	setenv("SOURCE_ADDR", data->from_str, 1);
+-- 
+2.13.6
+

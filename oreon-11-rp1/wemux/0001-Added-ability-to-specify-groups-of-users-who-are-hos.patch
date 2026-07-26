@@ -1,0 +1,70 @@
+From c3e4b164f1ede05f54ce47f1257f828f91492ec5 Mon Sep 17 00:00:00 2001
+From: Fotios Lindiakos <flindiakos@shutterstock.com>
+Date: Tue, 14 Oct 2014 11:06:40 -0400
+Subject: [PATCH 1/2] Added ability to specify groups of users who are hosts
+
+---
+ wemux              | 16 ++++++++++++++++
+ wemux.conf.example |  4 +++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/wemux b/wemux
+index 9aaa46f..1026e6d 100755
+--- a/wemux
++++ b/wemux
+@@ -48,6 +48,7 @@ version="3.2.0"
+ # Setup and Configuration Files.
+ # Default settings, modify them in the /usr/local/etc/wemux.conf file:
+ host_list=(change_this_in_wemux_conf)
++host_groups=()
+ socket_prefix="/tmp/wemux"
+ options="-u"
+ allow_pair_mode="true"
+@@ -681,14 +682,29 @@ client_mode() {
+   fi
+ }
+ 
++# Determine the groups the user belongs to
++groups_for_user() {
++  echo $(groups $username | awk -F: "{print \$NF}");
++}
++
+ # Check if current user is listed in the host_list.
+ user_is_a_host() {
+   for user in "${host_list[@]}"; do
+     [[ "$user" == "$username" ]] && return 0
+   done
++
++  # If the user is not in the host list, check their groups
++  user_groups="$(groups_for_user)";
++  for group in ${host_groups[@]}; do
++    if [[ $user_groups =~ " $group " ]]; then
++      return 0
++    fi
++  done
++
+   return 1
+ }
+ 
++
+ allowed_nested_command() {
+   commands=(togglemirrored setmirrored summon summon_all send users u list l display_users
+   status_users list-clients kill-sesssion kick version v)
+diff --git a/wemux.conf.example b/wemux.conf.example
+index bbc80c9..981495d 100644
+--- a/wemux.conf.example
++++ b/wemux.conf.example
+@@ -10,7 +10,9 @@
+ ## them to create wemux servers for other users to attach to.
+ ## Add the usernames of users who should use wemux in host mode:
+ ## example: host_list=(zolrath csagan brocksamson)
+-host_list=(change_this)
++
++## All users in any of the groups in host_groups will also use wemux in host mode.
++## example: host_groups=(wheel wemux)
+ 
+ ####### CLIENT OPTIONS #######
+ 
+-- 
+2.3.0
+

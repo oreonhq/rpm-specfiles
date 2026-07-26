@@ -1,0 +1,12 @@
+diff -wbBur sim/PDP11/pdp11_ch.c sim.q/PDP11/pdp11_ch.c
+--- sim/PDP11/pdp11_ch.c	2024-05-05 11:03:00.000000000 +0300
++++ sim.q/PDP11/pdp11_ch.c	2024-11-17 00:33:07.981278910 +0300
+@@ -271,7 +271,7 @@
+   CONST uint8 *p;
+ 
+   tmxr_poll_rx (&ch_tmxr);
+-  if (tmxr_get_packet_ln (&ch_lines[0], &p, &count) != SCPE_OK) {
++  if (tmxr_get_packet_ln (&ch_lines[0], (void*)&p, &count) != SCPE_OK) {
+     sim_debug (DBG_ERR, &ch_dev, "TMXR error receiving packet\n");
+     return 0;
+   }

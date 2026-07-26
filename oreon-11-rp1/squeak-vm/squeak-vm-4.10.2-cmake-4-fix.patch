@@ -1,0 +1,60 @@
+diff --git a/unix/CMakeLists.txt b/unix/CMakeLists.txt
+index b8f3203..2321bf1 100644
+--- a/unix/CMakeLists.txt
++++ b/unix/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ 
+ PROJECT (squeak)
+ 
+-CMAKE_MINIMUM_REQUIRED (VERSION 2.6.2)
++CMAKE_MINIMUM_REQUIRED (VERSION 3.5)
+ 
+ IF (NOT DEFINED VM_HOST OR NOT DEFINED VM_VERSION)
+   MESSAGE (FATAL_ERROR "
+@@ -159,8 +159,6 @@ INCLUDE (${unix}/vm/build.cmake)
+ 
+ BUILD_PLUGINS ()
+ 
+-ADD_SUBDIRECTORY (${unix}/npsqueak)
+-
+ SET (cmake ${unix}/../../cmake)
+ 
+ IF (EXISTS ${cmake}/Packages.cmake)
+diff --git a/unix/cmake/Plugins.cmake b/unix/cmake/Plugins.cmake
+index b6155b4..d65c669 100644
+--- a/unix/cmake/Plugins.cmake
++++ b/unix/cmake/Plugins.cmake
+@@ -94,11 +94,11 @@ MACRO (CONFIGURE_PLUGIN_LIST plugins_list)
+       FILE_APPEND (${bld}/${plugin}/config.cmake ${dir}/${plugin}/config.cmake)
+     ENDFOREACH (dir)
+     #MESSAGE ("-- plugin ${plugin}")
+-    IF (${plugins_list} STREQUAL "plugins_int")
++    IF ("${plugins_list}" STREQUAL "plugins_int")
+       SET (plugin_target "vm")
+     ELSE ()
+       SET (plugin_target "${plugin}")
+-    ENDIF (${plugins_list} STREQUAL "plugins_int")
++    ENDIF ("${plugins_list}" STREQUAL "plugins_int")
+     SET (plugin_disabled)
+     INCLUDE (${bld}/${plugin}/config.cmake)
+     IF (without-${plugin})
+@@ -106,15 +106,15 @@ MACRO (CONFIGURE_PLUGIN_LIST plugins_list)
+     ENDIF ()
+     IF (DEFINED plugin_disabled)
+       LIST (REMOVE_ITEM ${plugins_list} ${plugin})
+-      IF (${plugins_list} STREQUAL "plugins_int")
++      IF ("${plugins_list}" STREQUAL "plugins_int")
+         LIST (APPEND plugins_dis ${plugin})
+-      ENDIF (${plugins_list} STREQUAL "plugins_int")
++      ENDIF ("${plugins_list}" STREQUAL "plugins_int")
+       MESSAGE ("!! ${plugin} disabled")
+       SET (${plugin}_disabled 1)
+     ELSE (DEFINED plugin_disabled)
+-      IF (${plugins_list} STREQUAL "plugins_int")
++      IF ("${plugins_list}" STREQUAL "plugins_int")
+         USE_LIBRARY (${plugin})
+-      ENDIF (${plugins_list} STREQUAL "plugins_int")
++      ENDIF ("${plugins_list}" STREQUAL "plugins_int")
+       SET (${plugin}_disabled)
+     ENDIF (DEFINED plugin_disabled)
+   ENDFOREACH (plugin)

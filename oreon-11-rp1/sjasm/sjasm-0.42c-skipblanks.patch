@@ -1,0 +1,37 @@
+From d53c6c38d5ccf176b02da048dc76d38b728da742 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 22 Nov 2022 04:21:03 +0100
+Subject: [PATCH 1/3] Uninline skipblanks
+
+  /usr/bin/ld: datastructures.o: in function `MacroTable::emit(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, RawSource*, bool)':
+  datastructures.cpp:(.text+0x57ec): undefined reference to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)'
+  /usr/bin/ld: directives.o: in function `dirERROR(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, RawSource*)':
+  directives.cpp:(.text+0x28a): undefined reference to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)'
+  /usr/bin/ld: directives.o: in function `dirINCDIR(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, RawSource*)':
+  directives.cpp:(.text+0x17c2): undefined reference to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)'
+  /usr/bin/ld: expressions.o: in function `ParseExpPrim(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, int&)':
+  expressions.cpp:(.text+0x182f): undefined reference to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)'
+  /usr/bin/ld: output.o: in function `Rout::set(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+  output.cpp:(.text+0x505): undefined reference to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)'
+  /usr/bin/ld: pimsx.o:pimsx.cpp:(.text+0xeec): more undefined references to `skipblanks(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)' follow
+  collect2: error: ld returned 1 exit status
+---
+ reader.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sjasmsrc42c/reader.cpp b/sjasmsrc42c/reader.cpp
+index eb17a33..7f14f8d 100644
+--- a/sjasmsrc42c/reader.cpp
++++ b/sjasmsrc42c/reader.cpp
+@@ -76,7 +76,7 @@ string tolower(string b) {
+   return bp;
+ }
+ 
+-inline void skipblanks(string &p) {
++void skipblanks(string &p) {
+   int pos=(int)p.find_first_not_of(' ');
+   if (pos==string::npos) p.clear();
+   else p=p.substr(pos);
+-- 
+2.38.1
+

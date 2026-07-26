@@ -1,0 +1,33 @@
+From 484f264d0c8e2bd1643a2f52c03dd490e9a75ced Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Tue, 31 Dec 2024 16:26:19 +0100
+Subject: [PATCH] Fix shebangs
+
+---
+ import.bash             | 2 +-
+ pass_import/__main__.py | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/import.bash b/import.bash
+index 13a69c1..67ebd9d 100755
+--- a/import.bash
++++ b/import.bash
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!/usr/bin/bash
+ # pass import - Password Store Extension (https://www.passwordstore.org/)
+ # Copyright (C) 2017-2024 Alexandre PUJOL <alexandre@pujol.io>.
+ # SPDX-License-Identifier: GPL-3.0-or-later
+diff --git a/pass_import/__main__.py b/pass_import/__main__.py
+index 72ab640..8c5f5ea 100644
+--- a/pass_import/__main__.py
++++ b/pass_import/__main__.py
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python3
+ # -*- coding: utf-8 -*
+ # pass import - Passwords importer swiss army knife
+ # Copyright (C) 2017-2024 Alexandre PUJOL <alexandre@pujol.io>.
+-- 
+2.47.1
+

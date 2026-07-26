@@ -1,0 +1,14 @@
+--- a/tests/unit/Makefile.in
++++ b/tests/unit/Makefile.in
+@@ -94,10 +94,7 @@ XFAIL_TESTS =
+ @CONFIGFILE_ENABLED_TRUE@am__append_3 = unit-ext-ini.sh
+ @FILTERING_ENABLED_TRUE@am__append_4 = unit-filterregistry.sh
+ @DATASOURCE_ENABLED_systemd_unit_name_TRUE@am__append_5 = unit-util-systemd.sh
+-@DATASOURCE_ENABLED_ipaddr_TRUE@am__append_6 = unit-util-utmp-entry-missing.sh \
+-@DATASOURCE_ENABLED_ipaddr_TRUE@	unit-util-utmp-entry-without-ip-address.sh \
+-@DATASOURCE_ENABLED_ipaddr_TRUE@	unit-util-utmp-ipv4.sh \
+-@DATASOURCE_ENABLED_ipaddr_TRUE@	unit-util-utmp-ipv6.sh
++@DATASOURCE_ENABLED_ipaddr_TRUE@am__append_6 = unit-util-utmp-entry-missing.sh
+ @DATASOURCE_ENABLED_ipaddr_TRUE@am__append_7 = unit-util-utmp-testUtmpFile
+ subdir = tests/unit
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

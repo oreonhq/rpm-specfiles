@@ -1,0 +1,35 @@
+.TH sfnt2woff "1" "November 2020" sfnt2woff\-zopfli "User Commands"
+.SH NAME
+sfnt2woff \- package OpenType
+.I otffile
+as WOFF, creating
+.IR otffile .woff
+.SH SYNOPSIS
+sfnt2woff
+.RB [ \-v
+.IR maj . min ]
+.RB [ \-m
+.IR metadata.xml ]
+.RB [ \-p
+.IR private.dat ]
+.I otffile
+.SH DESCRIPTION
+.PP
+Packages OpenType
+.I otffile
+as WOFF, creating
+.IR otffile .woff.
+.SH OPTIONS
+.TP
+\fB\-v\fR \fImaj\fR.\fImin
+set font version number (major and minor, both integers)
+.TP
+\fB\-m\fR \fImetadata.xml
+include metadata from
+.I metadata.xml
+(not validated)
+.TP
+\fB\-p\fR \fIprivate.dat
+include private data block
+.SH "SEE ALSO"
+.BR woff2sfnt (1)

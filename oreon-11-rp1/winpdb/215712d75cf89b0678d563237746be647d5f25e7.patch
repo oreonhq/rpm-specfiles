@@ -1,0 +1,51 @@
+From 215712d75cf89b0678d563237746be647d5f25e7 Mon Sep 17 00:00:00 2001
+From: Philippe F <phil.fremy@free.fr>
+Date: Tue, 17 Nov 2020 15:16:44 +0100
+Subject: [PATCH] Fixes undefined variable
+
+---
+ rpdb/session_manager.py |  9 +++++++++
+ rpdb2.py                | 10 ----------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/rpdb/session_manager.py b/rpdb/session_manager.py
+index 3d1701a..f9ef51c 100644
+--- a/rpdb/session_manager.py
++++ b/rpdb/session_manager.py
+@@ -29,6 +29,15 @@
+ 
+ g_fFirewallTest = True
+ 
++RPDBTERM = 'RPDBTERM'
++COLORTERM = 'COLORTERM'
++TERM = 'TERM'
++KDE_PREFIX = 'KDE'
++GNOME_PREFIX = 'GNOME'
++
++KDE_DEFAULT_TERM_QUERY = "kreadconfig --file kdeglobals --group General --key TerminalApplication --default konsole"
++XTERM = 'xterm'
++RXVT = 'rxvt'
+ GNOME_DEFAULT_TERM = 'gnome-terminal'
+ GNOME_DEFAULT_TERM_BEFORE_3_8 = 'gnome-terminal --disable-factory'
+ GNOME_DEFAULT_TERM_BEFORE_3_8_CHECK_FILE = "/../share/gnome-terminal/profile-manager.ui" #this glade-related file present for only gnome terminal versions 2.24-3.6
+diff --git a/rpdb2.py b/rpdb2.py
+index 015cfd9..d970fed 100644
+--- a/rpdb2.py
++++ b/rpdb2.py
+@@ -365,16 +365,6 @@ def is_py3k():
+ # According to PEP-8: "Use 4 spaces per indentation level."
+ #
+ 
+-RPDBTERM = 'RPDBTERM'
+-COLORTERM = 'COLORTERM'
+-TERM = 'TERM'
+-KDE_PREFIX = 'KDE'
+-GNOME_PREFIX = 'GNOME'
+-
+-KDE_DEFAULT_TERM_QUERY = "kreadconfig --file kdeglobals --group General --key TerminalApplication --default konsole"
+-XTERM = 'xterm'
+-RXVT = 'rxvt'
+-
+ FORK_CHILD = 'child'
+ FORK_PARENT = 'parent'
+ FORK_MANUAL = 'manual'

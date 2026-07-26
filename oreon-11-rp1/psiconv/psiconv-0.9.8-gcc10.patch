@@ -1,0 +1,24 @@
+diff -up psiconv-0.9.8/program/psiconv/psiconv.c.me psiconv-0.9.8/program/psiconv/psiconv.c
+--- psiconv-0.9.8/program/psiconv/psiconv.c.me	2020-02-24 15:34:30.817159188 +0100
++++ psiconv-0.9.8/program/psiconv/psiconv.c	2020-02-24 15:35:12.055538713 +0100
+@@ -48,6 +48,8 @@ static void print_help(void);
+ static void print_version(void);
+ static void strtoupper(char *str);
+ 
++psiconv_list fileformat_list; /* of struct psiconv_fileformat */
++
+ void print_help(void)
+ {
+   fileformat ff;
+diff -up psiconv-0.9.8/program/psiconv/psiconv.h.me psiconv-0.9.8/program/psiconv/psiconv.h
+--- psiconv-0.9.8/program/psiconv/psiconv.h.me	2020-02-24 15:33:41.433704713 +0100
++++ psiconv-0.9.8/program/psiconv/psiconv.h	2020-02-24 15:34:05.254923935 +0100
+@@ -52,7 +52,7 @@ typedef struct fileformat_s {
+   output_function *output;
+ } *fileformat;
+ 
+-psiconv_list fileformat_list; /* of struct psiconv_fileformat */
++extern psiconv_list fileformat_list; /* of struct psiconv_fileformat */
+ 
+ 
+ #endif /* PSICONV_H */

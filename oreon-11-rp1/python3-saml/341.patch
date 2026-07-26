@@ -1,0 +1,30 @@
+From 231a7e19543138fdd7424c01435dfe3f82bbe9ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Wed, 28 Dec 2022 08:46:29 +0100
+Subject: [PATCH] Fix build-system in pyproject.toml
+
+Fix the `build-system.requires` key to specify `poetry-core` rather
+than `poetry` as the correct package providing `poetry.core.*` backend.
+Remove `setuptools` and `wheel` requirements since they are not used
+when building via the PEP517 backend.
+---
+ pyproject.toml | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6b60e493..de3b9f92 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -77,11 +77,7 @@ test = ["flake8", "freezegun", "pytest", "coverage"]
+ #sphinx = "*"
+ 
+ [build-system]
+-requires = [
+-  "poetry>=1.1.15",
+-  "setuptools >= 40.1.0",
+-  "wheel"
+-]
++requires = ["poetry-core"]
+ build-backend = "poetry.core.masonry.api"
+ 
+ [tool.pytest.ini_options]

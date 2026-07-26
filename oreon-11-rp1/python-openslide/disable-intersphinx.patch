@@ -1,0 +1,12 @@
+diff -up openslide-python-1.0.1/doc/conf.py.orig openslide-python-1.0.1/doc/conf.py
+--- openslide-python-1.0.1/doc/conf.py.orig	2014-03-09 19:58:46.626800990 -0400
++++ openslide-python-1.0.1/doc/conf.py	2014-03-09 19:58:54.867852067 -0400
+@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath('.'))
+ # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+ extensions = [
+     'sphinx.ext.coverage',
+-    'sphinx.ext.intersphinx',
++#   'sphinx.ext.intersphinx',
+     'jekyll_fix',
+ ]
+ 

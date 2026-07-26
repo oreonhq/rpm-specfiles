@@ -1,0 +1,25 @@
+From 8a379a970ceb2ce080ddb80d28dc2de009273064 Mon Sep 17 00:00:00 2001
+From: Galileo Sartor <galileo.sartor@gmail.com>
+Date: Wed, 26 Feb 2025 21:41:04 +0000
+Subject: [PATCH] Set r prefix in regex
+
+Setting "r" string prefix in the regex removes the following warning, visible e.g. when installing from apt on ubuntu:
+
+`<stdin>:1: SyntaxWarning: invalid escape sequence '\('`
+---
+ alttoolbar_plugins.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/alttoolbar_plugins.py b/alttoolbar_plugins.py
+index 457af3c..b833eb5 100644
+--- a/alttoolbar_plugins.py
++++ b/alttoolbar_plugins.py
+@@ -168,7 +168,7 @@ def __init__(self, parent_window, has_headerbar):
+         def extract_text(str):
+             # remove _ and (_A) type expressions
+             translation = gettext.gettext(str)
+-            translation = re.sub('\(..\)', '', translation, flags=re.DOTALL)
++            translation = re.sub(r'\(..\)', '', translation, flags=re.DOTALL)
+             translation = translation.replace('_', '')
+             return translation
+ 

@@ -1,0 +1,11 @@
+--- torcs-1.3.8/src/linux/linuxspec.cpp~	2024-10-27 04:08:52.625897429 -0500
++++ torcs-1.3.8/src/linux/linuxspec.cpp	2025-08-25 12:57:28.351141658 -0500
+@@ -458,7 +458,7 @@
+ 		} else {
+ 			strncpy(dname, curMod->sopath, soNameSize);
+ 		}
+-		strncpy(&dname[strlen(dname) - 3], "Shut", soNameSize); /* cut .so */
++		strncpy(&dname[strlen(dname) - 3], "Shut", soNameSize-(strlen(dname) - 3)); /* cut .so */
+ 		if ((fModShut = (tfModShut)dlsym(curMod->handle, dname)) != NULL) {
+ 			GfOut("Call %s\n", dname);
+ 			fModShut();

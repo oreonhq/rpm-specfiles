@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt~	2024-07-10 07:12:58.000000000 -0500
++++ b/CMakeLists.txt	2024-07-19 16:11:01.851760226 -0500
+@@ -431,9 +431,6 @@
+ 	message(WARNING "No modelcompiler provided, models won't be optimized!")
+ endif(MODELCOMPILER)
+ 
+-install(TARGETS ${PROJECT_NAME} editor modelcompiler savegamedump
+-	RUNTIME DESTINATION ${PIONEER_INSTALL_BINDIR}
+-)
+ 
+ if (MSVC)
+ 	file(GLOB win_libs ${CMAKE_SOURCE_DIR}/../pioneer-thirdparty/win32/bin/${MSVC_ARCH}/vs2019/*.dll)

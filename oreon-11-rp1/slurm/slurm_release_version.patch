@@ -1,0 +1,37 @@
+diff --git a/src/api/Makefile.am b/src/api/Makefile.am
+index 53af7f8d7f..81d41c1161 100644
+--- a/src/api/Makefile.am
++++ b/src/api/Makefile.am
+@@ -46,14 +46,7 @@ current = $(SLURM_API_CURRENT)
+ age     = $(SLURM_API_AGE)
+ rev     = $(SLURM_API_REVISION)
+ 
+-lib_LTLIBRARIES = libslurm.la
+-
+-# The ABI of libslurmfull can easily change from 1 micro version to another.
+-# To avoid issue we will install this lib alongside the plugins to protect
+-# from version issues.
+-#
+-# The unversioned libslurm_pmi is hidden there as well.
+-pkglib_LTLIBRARIES = libslurmfull.la libslurm_pmi.la
++lib_LTLIBRARIES = libslurm.la libslurmfull.la libslurm_pmi.la
+ 
+ # BUILT_SOURCES tells automake that when "make" is called, these targets
+ # need to be built before anything else.
+@@ -158,14 +151,14 @@ libslurmfull_la_SOURCES =
+ libslurmfull_la_LIBADD = $(convenience_libs)
+ libslurmfull_la_LDFLAGS        = \
+         $(LIB_LDFLAGS) \
+-	-avoid-version \
++	-release $(SLURM_VERSION_STRING) \
+         $(FULL_OTHER_FLAGS)
+ 
+ libslurm_pmi_la_SOURCES =
+ libslurm_pmi_la_LIBADD = $(convenience_libs)
+ libslurm_pmi_la_LDFLAGS        = \
+         $(LIB_LDFLAGS) \
+-	-avoid-version \
++	-release $(SLURM_VERSION_STRING) \
+         $(SLURM_PMI_OTHER_FLAGS)
+ 
+ # This was made so we could export all symbols from libcommon

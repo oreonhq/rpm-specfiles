@@ -1,0 +1,69 @@
+From 58bd3fd8e5445c40c2c8d8714a4cc7561c43168d Mon Sep 17 00:00:00 2001
+From: Delgan <4193924+Delgan@users.noreply.github.com>
+Date: Thu, 13 Feb 2025 19:10:32 +0100
+Subject: [PATCH] Fix deprecation warning raised by tests with Python 3.14
+ (#1298)
+
+---
+ pyproject.toml               | 4 +++-
+ tests/conftest.py            | 8 +++++++-
+ tests/test_coroutine_sink.py | 1 +
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 4ea6eb8..0c17351 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -52,7 +52,7 @@ dev = [
+   "pytest-cov==5.0.0 ; python_version>='3.8' and python_version<'3.9'",
+   "pytest-cov==6.0.0 ; python_version>='3.9'",
+   "pytest-mypy-plugins==1.9.3 ; python_version>='3.6' and python_version<'3.8'",
+-  "pytest-mypy-plugins==3.1.0 ; python_version>='3.8'",
++  "pytest-mypy-plugins==3.1.0 ; python_version>='3.8' and python_version<'3.14'",
+   # Testing utils.
+   "colorama==0.4.5 ; python_version<'3.8'",
+   "colorama==0.4.6 ; python_version>='3.8'",
+@@ -99,6 +99,8 @@ filterwarnings = [
+   'error',
+   # Mixing threads and "fork()" is deprecated, but we need to test it anyway.
+   'ignore:.*use of fork\(\) may lead to deadlocks in the child.*:DeprecationWarning',
++  # Using "set_event_loop()" is deprecated, but no alternative is provided.
++  "ignore:.*'asyncio.set_event_loop' is deprecated.*:DeprecationWarning",
+ ]
+ testpaths = ["tests"]
+ 
+diff --git a/tests/conftest.py b/tests/conftest.py
+index a2db04f..7d1c5ca 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -47,8 +47,14 @@ if sys.version_info < (3, 6):
+         return pathlib.Path(str(tmp_path))
+ 
+ 
+-if sys.version_info >= (3, 6):
++try:
+     from pytest_mypy_plugins.item import YamlTestItem
++except ImportError:
++    # The plugin is only available starting with Python 3.6.
++    # Additionally, it has dependencies that are not compatible with Python versions in development.
++    # In both cases, the Mypy tests will be skipped.
++    pass
++else:
+ 
+     def _fix_positional_only_args(item: YamlTestItem):
+         """Remove forward-slash marker from the expected output for Python 3.6."""
+diff --git a/tests/test_coroutine_sink.py b/tests/test_coroutine_sink.py
+index 177fe88..214280a 100644
+--- a/tests/test_coroutine_sink.py
++++ b/tests/test_coroutine_sink.py
+@@ -162,6 +162,7 @@ def test_using_sink_without_running_loop_none(capsys):
+     assert out == ""
+ 
+ 
++@pytest.mark.skipif(sys.version_info >= (3, 16), reason="The 'set_event_loop' function is removed")
+ def test_global_loop_not_used(capsys):
+     with new_event_loop_context() as loop:
+         with set_event_loop_context(loop):
+-- 
+2.48.1
+

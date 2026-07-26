@@ -1,0 +1,48 @@
+Index: raidem-0.3.1-src/src/seborrhea/dirlist-zzip.m
+===================================================================
+--- raidem-0.3.1-src.orig/src/seborrhea/dirlist-zzip.m
++++ raidem-0.3.1-src/src/seborrhea/dirlist-zzip.m
+@@ -68,9 +68,16 @@
+ 
+ - (void *) openFile:(const char *)filename
+ {
++    ZZIP_FILE *fp;
+     assert(filename);
+-    zfp = zzip_freopen(filename, "rti", zfp);
+-    return zfp;
++
++    if (zfp == NULL) {
++        zfp = zzip_fopen(filename, "rti");
++        return zfp;
++    }
++
++    fp = zzip_freopen(filename, "rtiq", zfp);
++    return fp;
+ }
+ 
+ - (void) closeFile:(void *)file
+@@ -85,19 +92,21 @@
+ 
+ - (void *) openFile:(const char *)filename :(unsigned int)index :(void **)buffer :(unsigned int *)buffer_size
+ {
++    ZZIP_FILE *fp;
+     zzip_size_t read_size;
+     assert(filename && buffer && buffer_size);
+ 
+-    zfp = zzip_freopen(filename, "rbi", zfp);
+-    if (not zfp)
++    fp = [self openFile:filename];
++    if (not fp)
+ 	return NULL;
+ 
+     *buffer_size = entries[index].st_size;
+     *buffer = malloc(*buffer_size);
+     assert(*buffer);
+ 
+-    read_size = zzip_fread(*buffer, 1, *buffer_size, zfp);
++    read_size = zzip_fread(*buffer, 1, *buffer_size, fp);
+     assert(read_size == *buffer_size);
++    [self closeFile:fp];
+     return *buffer;
+ }
+ @end

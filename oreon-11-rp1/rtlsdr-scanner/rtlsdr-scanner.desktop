@@ -1,0 +1,9 @@
+[Desktop Entry]
+Icon=rtlsdr_scan
+Name=rtlsdr-scanner
+Comment=Frequency scanning GUI for RTL2832 based DVB-T dongles
+Exec=/usr/bin/rtlsdr_scan
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true

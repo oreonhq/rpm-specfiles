@@ -1,0 +1,31 @@
+diff -up xa-2.4.0/Makefile.orig xa-2.4.0/Makefile
+--- xa-2.4.0/Makefile.orig	2024-03-05 17:27:55.563481964 +0100
++++ xa-2.4.0/Makefile	2024-03-05 17:28:10.411717189 +0100
+@@ -17,11 +17,12 @@ LDFLAGS = -lc
+ #CFLAGS =
+ #LD = ld
+ 
+-DESTDIR = /usr/local
++DESTDIR =
++PREFIX = /usr/local
+ 
+-BINDIR = $(DESTDIR)/bin
+-MANDIR = $(DESTDIR)/share/man/man1
+-DOCDIR = $(DESTDIR)/share/doc
++BINDIR = $(DESTDIR)$(PREFIX)/bin
++MANDIR = $(DESTDIR)$(PREFIX)/share/man/man1
++DOCDIR = $(DESTDIR)$(PREFIX)/share/doc
+ 
+ MKDIR = mkdir -p
+ INSTALL = install
+@@ -63,8 +63,8 @@ clean:
+ install: all
+ 	$(MKDIR) $(BINDIR)
+ 	$(MKDIR) $(MANDIR)
+-	$(INSTALL) xa reloc65 ldo65 file65 printcbm uncpk $(BINDIR)
+-	$(INSTALL) man/file65.1 man/ldo65.1 man/printcbm.1 man/reloc65.1 man/uncpk.1 man/xa.1 $(MANDIR)
++	$(INSTALL) -m 0755 xa reloc65 ldo65 file65 printcbm uncpk $(BINDIR)
++	$(INSTALL) -m 0644 man/file65.1 man/ldo65.1 man/printcbm.1 man/reloc65.1 man/uncpk.1 man/xa.1 $(MANDIR)
+ 	#$(MKDIR) $(DOCDIR)/xa65
+ 
+ dist: clean

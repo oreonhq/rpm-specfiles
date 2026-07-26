@@ -1,0 +1,23 @@
+Fix for compilation on (among maybe others) s390x arch:
+
+...
+pulse-output.c: In function 'pulse_new':
+pulse-output.c:509:2: error: invalid preprocessing directive #elde; did you mean #else?
+  509 | #elde
+      |  ^~~~
+      |  else
+make[3]: *** [Makefile:393: pulse-output.o] Error 1
+...
+
+diff -uNr soundtracker-1.0.2.1.orig/app/drivers/pulse-output.c soundtracker-1.0.2.1/app/drivers/pulse-output.c
+--- soundtracker-1.0.2.1.orig/app/drivers/pulse-output.c	2021-03-04 19:14:19.000000000 +0100
++++ soundtracker-1.0.2.1/app/drivers/pulse-output.c	2022-01-09 21:35:41.242000000 +0100
+@@ -506,7 +506,7 @@
+     d->rate = d->native_rate = 0;
+ #ifdef WORDS_BIGENDIAN
+     d->format = ST_MIXER_FORMAT_U16_BE | ST_MIXER_FORMAT_STEREO;
+-#elde
++#else
+     d->format = ST_MIXER_FORMAT_U16_LE | ST_MIXER_FORMAT_STEREO;
+ #endif
+ 

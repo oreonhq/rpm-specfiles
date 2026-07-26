@@ -1,0 +1,52 @@
+.TH XALAN "1" "April 2024" "" "User Commands"
+.SH NAME
+.B Xalan
+\(en Transform XML documents using a stylesheet
+.SH SYNOPSIS
+.B Xalan
+.RI [ OPTIONS ]
+.I source
+.I stylesheet
+.SH DESCRIPTION
+Transform XML documents using a stylesheet
+that conforms to XSLT 1.0 standards.
+.SH OPTIONS
+A dash as the
+.I source
+argument reads from stdin.
+.RB ( \-
+cannot be used for both arguments.)
+.TP
+.B \-a
+Use xml-stylesheet PI, not the
+.I stylesheet
+argument.
+.TP
+.B \-e\ \fIencoding
+Force the specified encoding for the output.
+.TP
+.B \-i\ \fIinteger
+Indent the specified amount.
+.TP
+.B \-m
+Omit the
+.B META
+tag in HTML output.
+.TP
+.B \-o\ \fIfilename
+Write output to the specified file.
+.TP
+.B \-p\ \fIname\ expression
+Sets a stylesheet parameter.
+.TP
+.B \-t
+Display timing information.
+.TP
+.B \-u
+Disable escaping of URLs in HTML output.
+.TP
+.B \-?
+Display a help message.
+.TP
+.B \-v
+Validates source documents.

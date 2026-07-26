@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=XBlast
+Comment=Lay bombs and Blast the other players of the field
+Exec=xblast
+Icon=xblast
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;ActionGame;

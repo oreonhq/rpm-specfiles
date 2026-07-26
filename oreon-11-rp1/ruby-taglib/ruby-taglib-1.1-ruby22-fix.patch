@@ -1,0 +1,20 @@
+--- a/setup.rb
++++ b/setup.rb
+@@ -256,7 +256,7 @@
+ 
+ end
+ 
+-c = ::Config::CONFIG
++c = ::RbConfig::CONFIG
+ 
+ rubypath = c['bindir'] + '/' + c['ruby_install_name']
+ 
+@@ -1246,7 +1246,7 @@
+ 
+   def ruby_extentions(dir)
+     Dir.open(dir) {|d|
+-      ents = d.select {|fname| /\.#{::Config::CONFIG['DLEXT']}\z/ =~ fname }
++      ents = d.select {|fname| /\.#{::RbConfig::CONFIG['DLEXT']}\z/ =~ fname }
+       if ents.empty?
+         setup_rb_error "no ruby extention exists: 'ruby #{$0} setup' first"
+       end

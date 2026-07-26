@@ -1,0 +1,38 @@
+From 16b0e061c4cedb0570e3e55a64353ce8caf1f0b0 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 25 Apr 2019 18:06:14 +0200
+Subject: [PATCH 3/5] build: fix --enable-etnadrm handling
+
+The default was "auto", that was unconditionally turned into "yes",
+while everything else (even "yes") became "no". That is somewhat
+unexpected.
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ configure.ac | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 160796f..d564899 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -128,7 +128,7 @@ AC_ARG_ENABLE(etnadrm,
+ 	      AC_HELP_STRING([--disable-etnadrm],
+ 			     [Disable Etnaviv (DRM kernel driver) acceleration support [[default=enabled]]]),
+ 	      [ACCEL_ETNADRM="$enableval"],
+-	      [ACCEL_ETNADRM=auto])
++	      [ACCEL_ETNADRM=yes])
+ 
+ AC_ARG_ENABLE(etnaviv,
+ 	      AC_HELP_STRING([--enable-etnaviv],
+@@ -188,7 +188,6 @@ AS_IF([test x$ACCEL_ETNAVIV != xno || test x$ACCEL_ETNADRM != xno],
+    saved_CFLAGS="$CFLAGS"
+    LDFLAGS="$LDFLAGS $ETNAVIV_LIBS"
+    CFLAGS="$CFLAGS $ETNAVIV_CFLAGS"
+-   AS_IF([test x$ACCEL_ETNADRM = xauto], [ACCEL_ETNADRM=yes], [ACCEL_ETNADRM=no])
+    AS_IF([test x$ACCEL_ETNAVIV != xno],
+          [
+       AC_CHECK_LIB([etnaviv], [viv_open],
+-- 
+2.21.0
+

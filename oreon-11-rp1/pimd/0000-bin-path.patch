@@ -1,0 +1,27 @@
+diff --git a/Makefile b/Makefile
+index 41f2e54..8518668 100644
+--- a/Makefile
++++ b/Makefile
+@@ -59,11 +59,11 @@ vers.c:
+ 	@echo $(VERSION) | sed -e 's/.*/char todaysversion[]="&";/' > vers.c
+ 
+ install: $(EXEC)
+-	@install -d $(DESTDIR)$(prefix)/sbin
++	@install -d $(DESTDIR)$(prefix)/bin
+ 	@install -d $(DESTDIR)$(sysconfdir)
+ 	@install -d $(DESTDIR)$(datadir)
+ 	@install -d $(DESTDIR)$(mandir)
+-	@install -m 0755 $(EXEC) $(DESTDIR)$(prefix)/sbin/$(EXEC)
++	@install -m 0755 $(EXEC) $(DESTDIR)$(prefix)/bin/$(EXEC)
+ 	@install -b -m 0644 $(CONFIG) $(DESTDIR)$(sysconfdir)/$(CONFIG)
+ 	@for file in $(DISTFILES); do \
+ 		install -m 0644 $$file $(DESTDIR)$(datadir)/$$file; \
+@@ -73,7 +73,7 @@ install: $(EXEC)
+ 	done
+ 
+ uninstall:
+-	-@$(RM) $(DESTDIR)$(prefix)/sbin/$(EXEC)
++	-@$(RM) $(DESTDIR)$(prefix)/bin/$(EXEC)
+ 	-@$(RM) $(DESTDIR)$(sysconfdir)/$(CONFIG)
+ 	-@$(RM) -r $(DESTDIR)$(datadir)
+ 	@for file in $(DISTFILES); do \

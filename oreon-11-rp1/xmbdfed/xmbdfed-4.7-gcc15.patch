@@ -1,0 +1,12 @@
+diff -up xmbdfed-4.7/bdfgrab.c.c23 xmbdfed-4.7/bdfgrab.c
+--- xmbdfed-4.7/bdfgrab.c.c23	2025-02-21 18:20:45.990604573 -0500
++++ xmbdfed-4.7/bdfgrab.c	2025-02-21 18:21:00.166078557 -0500
+@@ -276,7 +276,7 @@ void *data;
+     XCharStruct *cp;
+     bdf_property_t *pp, prop;
+     bdf_callback_struct_t cb;
+-    int (*old_error_handler)();
++    int (*old_error_handler)(Display *d, XErrorEvent *event);
+ 
+     if (f == 0)
+       return 0;

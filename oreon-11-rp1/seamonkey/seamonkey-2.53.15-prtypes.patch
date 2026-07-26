@@ -1,0 +1,15 @@
+#
+#  RedHat system hasht.h header does not include prtypes.h for some reason,
+#  see https://bugzilla.mozilla.org/show_bug.cgi?id=1093069 for more info.
+#
+
+--- mozilla/security/certverifier/OCSPCache.h.orig	2020-02-18 02:38:00.000000000 +0300
++++ mozilla/security/certverifier/OCSPCache.h	2022-12-11 21:57:53.579843978 +0300
+@@ -25,6 +25,7 @@
+ #ifndef mozilla_psm_OCSPCache_h
+ #define mozilla_psm_OCSPCache_h
+ 
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "mozilla/Mutex.h"
+ #include "mozilla/Vector.h"

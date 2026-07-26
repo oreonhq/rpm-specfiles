@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' '--exclude=*.log' '--exclude=*.pid' redis-client-0.22.2.orig/test/test_helper.rb redis-client-0.22.2/test/test_helper.rb
+--- redis-client-0.22.2.orig/test/test_helper.rb	2025-12-27 23:36:00.711760848 +0900
++++ redis-client-0.22.2/test/test_helper.rb	2025-12-27 23:39:34.018703616 +0900
+@@ -7,6 +7,7 @@ Servers::SENTINEL_TESTS.shutdown
+ Servers::TESTS.prepare
+ 
+ require "minitest/autorun"
++require "minitest/mock"
+ 
+ at_exit { $stderr.puts "Running test suite with driver: #{RedisClient.default_driver}" }
+ 

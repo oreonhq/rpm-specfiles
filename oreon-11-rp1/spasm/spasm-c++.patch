@@ -1,0 +1,49 @@
+--- spasm-1.2/bench/lemon.cpp.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/bench/lemon.cpp	2025-07-24 10:47:38.142816149 -0600
+@@ -1,9 +1,7 @@
+ #include <assert.h>
+ #include <stdio.h>
+ 
+-extern "C" {
+ #include "spasm.h"
+-}
+ 
+ #include <lemon/smart_graph.h>
+ #include <lemon/matching.h>
+--- spasm-1.2/src/spasm.h.orig	2023-03-20 01:04:43.000000000 -0600
++++ spasm-1.2/src/spasm.h	2025-07-24 10:47:21.383870349 -0600
+@@ -1,6 +1,14 @@
+ #ifndef _SPASM_H
+ #define _SPASM_H
+ 
++#ifdef _OPENMP
++#include <omp.h>
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ #define SPASM_TIMING
+ #ifdef SPASM_TIMING
+ #include "cycleclock.h"
+@@ -15,10 +23,6 @@
+ #include <stdint.h>
+ #include <assert.h>
+ 
+-#ifdef _OPENMP
+-#include <omp.h>
+-#endif
+-
+ /* --- primary SpaSM routines and data structures --- */
+ 
+ typedef int spasm_GFp;
+@@ -257,4 +261,8 @@ static inline int spasm_row_weight(const
+ 	int *Ap = A->p;
+ 	return Ap[i + 1] - Ap[i];
+ }
++
++#ifdef __cplusplus
++}
++#endif
+ #endif

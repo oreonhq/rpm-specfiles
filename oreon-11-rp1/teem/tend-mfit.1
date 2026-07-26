@@ -1,0 +1,129 @@
+.TH TEND\-MFIT "1" "April 2021" "" "User Commands"
+.SH NAME
+tend\-mfit \- estimate models from a set of DW images
+.SH SYNOPSIS
+.B tend\ mfit
+.RB [ \-v
+.RI < verbose >]
+.B \-m
+.RI < model >
+.RB [ \-ns
+.RI < #\ starts >]
+.RB [ \-ml ]
+.RB [ \-sigma
+.RI < sigma >]
+.RB [ \-eps
+.RI < eps >]
+.RB [ \-mini
+.RI < min\ iters >]
+.RB [ \-maxi
+.RI < max\ iters >]
+.B \-knownB0
+.RI < bool >
+.RB [ \-t
+.RI < type >]
+.RB [ \-i
+.RI < dwi >]
+.RB [ \-o
+.RI < nout >]
+.RB [ \-eo
+.RI < filename >]
+.RB [ \-co
+.RI < filename >]
+.RB [ \-io
+.RI < filename >]
+.SH OPTIONS
+.TP
+.B \-v\fR <\fIverbose\fR>
+verbosity level
+.RI ( int )
+default:
+.RB \(lq 0 \(rq
+.TP
+.B \-m\fR <\fImodel\fR>
+which model to fit.
+Use optional
+.RB \(lq b0+ \(rq
+prefix to indicate that the
+.B B0
+image should also be saved (independent of whether it was known or had to be
+estimated, according to
+.RB \(lq \-knownB0 \(rq).
+.RI ( string )
+.TP
+.B \-ns\fR <\fI#\ starts\fR>
+number of random starting points at which to initialize fitting
+.RI ( unsigned\ int )
+default:
+.RB \(lq 1 \(rq
+.TP
+.B \-ml
+do ML fitting, rather than least-squares, which also requires setting
+.RB \(lq \-sigma \(rq
+.TP
+.B \-sigma\fR <\fIsigma\fR>
+Gaussian/Rician noise parameter
+.RI ( double )
+.TP
+.B \-eps\fR <\fIeps\fR>
+convergence epsilon
+.RI ( double )
+default:
+.RB \(lq 0.01 \(rq
+.TP
+.B \-mini\fR <\fImin\ iters\fR>
+minimum required # iterations for fitting.
+.RI ( unsigned\ int )
+default:
+.RB \(lq 3 \(rq
+.TP
+.B \-maxi\fR <\fImax\ iters\fR>
+maximum allowable # iterations for fitting.
+.RI ( unsigned\ int )
+default:
+.RB \(lq 100 \(rq
+.TP
+.B \-knownB0\fR <\fIbool\fR>
+Indicates if the
+.B B=0
+non-diffusion-weighted reference image is known
+.RB (\(lq true \(rq)
+because it appears one or more times amongst the DWIs, or, if it has to be
+estimated along with the other model parameters
+.RB (\(lq false \(rq)
+.RI ( bool )
+.TP
+.B \-t\fR <\fItype\fR>
+output type of model parameters; default:
+.RB \(lq float \(rq
+.TP
+.B \-i\fR <\fIdwi\fR>
+all the diffusion-weighted images in one 4D
+.IR nrrd ;
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-o\fR <\fInout\fR>
+output parameter vector image
+.RI ( string )
+default:
+.RB \(lq \- \(rq
+.TP
+.B \-eo\fR <\fIfilename\fR>
+Giving a filename here allows you to save out the per-sample fitting error.
+By default, no such error is saved.
+.RI ( string )
+.TP
+.B \-co\fR <\fIfilename\fR>
+Giving a filename here allows you to save out the per-sample convergence
+fraction.
+By default, no such error is saved.
+.RI ( string )
+.TP
+.B \-io\fR <\fIfilename\fR>
+Giving a filename here allows you to save out the per-sample number of
+iterations needed for fitting.
+By default, no such error is saved.
+.RI ( string )
+.SH "SEE\ ALSO"
+.BR tend (1)

@@ -1,0 +1,11 @@
+--- setup.py~	2021-01-07 09:30:52.000000000 -0600
++++ setup.py	2021-02-23 11:32:14.766853522 -0600
+@@ -138,7 +138,7 @@
+     def initialize_options (self):
+         build_ext_base.initialize_options(self)
+         self.poppler_version = None
+-        self.qmake_bin = 'qmake'
++        self.qmake_bin = 'qmake-qt5'
+         self.sip_bin = None
+         self.qt_include_dir = None
+         self.pyqt_sip_dir = None

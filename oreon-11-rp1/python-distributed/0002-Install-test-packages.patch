@@ -1,0 +1,49 @@
+From 9048a26c6dbf399ddf8dee9b80ee87f6dc0d5df6 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 25 Jul 2022 19:18:50 -0400
+Subject: [PATCH 2/7] Install test packages
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ MANIFEST.in    | 4 +++-
+ pyproject.toml | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 4ea47d70..d7af3820 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -9,7 +9,9 @@ recursive-include distributed *.svg
+ recursive-include distributed *.ico
+ recursive-include distributed *.yaml
+ recursive-include docs *.rst
+-recursive-exclude distributed **/tests/*
++recursive-include distributed/tests *.egg
++recursive-include distributed/tests *.pem
++recursive-include distributed/tests *.pyz
+ 
+ exclude distributed/pytest_resourceleaks.py
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 8179887a..bafc6a0b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -60,7 +60,6 @@ dask-scheduler = "distributed.cli.dask_scheduler:main"
+ dask-worker = "distributed.cli.dask_worker:main"
+ 
+ [tool.setuptools.packages.find]
+-exclude = ["*tests*"]
+ namespaces = false
+ 
+ [tool.setuptools.package-data]
+@@ -97,6 +96,7 @@ ignore = [
+     "RUF043", # Pattern passed to `match=` contains metacharacters but is neither escaped nor raw
+     "RUF059", # Unpacked variable is never used
+ ]
++"distributed.tests" = ["*.pem"]
+ 
+ [tool.ruff.lint.extend-per-file-ignores]
+ "**__init__.py" = ["F401", "F811"]
+-- 
+2.52.0
+

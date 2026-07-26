@@ -1,0 +1,15 @@
+From: "Jan ONDREJ (SAL)" <ondrejj(at)salstar.sk>
+Date: Tue, 19 Nov 2024 07:48:25 +0100
+Subject: [PATCH] Fix /run/ tmp directory creation. On upgrade this message was
+ displayed previously:
+
+Scriptlet output:
+/usr/lib/tmpfiles.d/rtpproxy.conf:1: Line references path below legacy directory
+
+diff --git a/rpm/rtpproxy.tmpfiles.conf b/rpm/rtpproxy.tmpfiles.conf
+index 5e4143f8..a58cf5bf 100644
+--- a/rpm/rtpproxy.tmpfiles.conf
++++ b/rpm/rtpproxy.tmpfiles.conf
+@@ -1 +1 @@
+-d /var/run/rtpproxy 0755 rtpproxy rtpproxy
++d /run/rtpproxy 0755 rtpproxy rtpproxy

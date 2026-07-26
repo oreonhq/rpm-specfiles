@@ -1,0 +1,25 @@
+From 8ef11ff40514ea9cdb973e4f8486fcc26f5eadcf Mon Sep 17 00:00:00 2001
+From: Timon Engelke <timon.engelke@online.de>
+Date: Thu, 3 Apr 2025 21:31:06 +0200
+Subject: [PATCH] ci: modernize github workflow
+
+---
+ .github/workflows/workflow.yml | 46 +++++++++++++++++++++++++++++-----
+ docs/conf.py                   |  2 +-
+ tests/test_code_format.py      | 16 ------------
+ 3 files changed, 41 insertions(+), 23 deletions(-)
+ delete mode 100644 tests/test_code_format.py
+
+diff --git a/docs/conf.py b/docs/conf.py
+index 2106a275..a9d4f5d6 100644
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -275,7 +275,7 @@
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++intersphinx_mapping = {'python': ('http://docs.python.org/', None)}
+ 
+ # programoutput options
+ #programoutput_use_ansi = True

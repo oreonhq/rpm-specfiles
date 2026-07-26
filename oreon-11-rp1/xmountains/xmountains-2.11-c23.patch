@@ -1,0 +1,61 @@
+diff --git a/X_graphics.c b/X_graphics.c
+index 3b5d7b2..ceef856 100644
+--- a/X_graphics.c
++++ b/X_graphics.c
+@@ -80,8 +80,7 @@ TRUE,
+ void finish_artist();
+ 
+ /*{{{void zap_events(int snooze)*/
+-void zap_events(snooze)
+-int snooze;
++void zap_events()
+ {
+   XEvent event;
+   XExposeEvent *expose = (XExposeEvent *)&event;
+@@ -427,7 +426,7 @@ Gun *blue;
+     XMapWindow(dpy, win );
+   }
+   XClearWindow(dpy,win);
+-  zap_events(0);
++  zap_events();
+   
+   gptr->graph_width = graph_width;
+   gptr->graph_height = graph_height;
+diff --git a/xmountains.c b/xmountains.c
+index 6968b92..108b492 100644
+--- a/xmountains.c
++++ b/xmountains.c
+@@ -5,6 +5,7 @@
+ #include <signal.h>
+ #include <sys/types.h>
+ #include <unistd.h>
++#include <X11/Xlib.h>
+ #include "crinkle.h"
+ #include "paint.h"
+ #include "patchlevel.h"
+@@ -78,7 +79,6 @@ int my_getopt (int argc, char **argv, char *pat)
+ }
+ /* }}} */
+ 
+-double atof();
+ #ifdef ANSI
+ void init_graphics (int, Window, int,int, Graph *, Gun *, Gun *, Gun *);
+ void clear_col( int );
+@@ -95,7 +95,7 @@ void scroll_screen ();
+ void zap_events();
+ #endif
+ 
+-void finish_prog();
++void finish_prog(int);
+ 
+ int s_height=768, s_width=1024;
+ int mapwid;
+@@ -483,7 +483,7 @@ int main (int argc, char **argv)
+     
+ extern int quit_xmount;
+ 
+-void finish_prog()
++void finish_prog(int)
+ {
+   /* The next time zap_events is called the program will quit */
+   quit_xmount=TRUE;

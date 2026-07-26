@@ -1,0 +1,20 @@
+Include <ctype.h> for the isprint function.  This avoids an implicit
+function declaration and prepares for future compilers which require
+that all called functions are declared.  Implicit function
+declarations are a C language feature that has been removed from the
+language in 1999.
+
+Submitted upstream: <https://sourceforge.net/p/sblim/bugs/2766/>
+
+diff --git a/util/Linux_SysfsAttributeUtil.c b/util/Linux_SysfsAttributeUtil.c
+index 2e75b9edd8932ce2..45a57b4ea65a1fb7 100644
+--- a/util/Linux_SysfsAttributeUtil.c
++++ b/util/Linux_SysfsAttributeUtil.c
+@@ -29,6 +29,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <unistd.h>
++#include <ctype.h>
+ 
+ 
+ /* ---------------------------------------------------------------------------

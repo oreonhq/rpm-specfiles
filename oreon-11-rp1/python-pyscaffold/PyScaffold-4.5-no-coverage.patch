@@ -1,0 +1,22 @@
+diff -Naur PyScaffold-4.5-original/setup.cfg PyScaffold-4.5/setup.cfg
+--- PyScaffold-4.5-original/setup.cfg	2023-06-20 12:24:51.000000000 -0400
++++ PyScaffold-4.5/setup.cfg	2023-06-20 14:57:18.276518430 -0400
+@@ -76,10 +76,8 @@
+ 	tox         # system tests use tox inside tox
+ 	pre-commit  # system tests run pre-commit
+ 	sphinx      # system tests build docs
+-	flake8      # system tests run flake8
+ 	virtualenv  # virtualenv as dependency for the venv extension in `-e fast`
+ 	pytest
+-	pytest-cov
+ 	pytest-xdist
+ 	pytest-randomly
+ 
+@@ -101,7 +99,6 @@
+ 
+ [tool:pytest]
+ addopts = 
+-	--cov pyscaffold --cov-config .coveragerc --cov-report term-missing
+ 	--verbose
+ norecursedirs = 
+ 	dist

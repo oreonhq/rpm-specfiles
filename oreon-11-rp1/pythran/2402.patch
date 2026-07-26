@@ -1,0 +1,39 @@
+From a660da74a63039f33402162dd8907fae9ba4617d Mon Sep 17 00:00:00 2001
+From: serge-sans-paille <serge.guelton@telecom-bretagne.eu>
+Date: Wed, 28 Jan 2026 11:34:14 +0100
+Subject: [PATCH] [ply] Make pythran compatible with top-of-tree PLY version
+
+Fix #2393
+---
+ pythran/spec.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/pythran/spec.py b/pythran/spec.py
+index 17e844f0e..1398bb4d2 100644
+--- a/pythran/spec.py
++++ b/pythran/spec.py
+@@ -6,6 +6,7 @@
+ 
+ from collections import defaultdict
+ from itertools import product, chain
++import inspect
+ import re
+ import ply.lex as lex
+ import ply.yacc as yacc
+@@ -523,10 +524,12 @@ def p_error(self, p):
+ 
+     def __init__(self):
+         self.lexer = lex.lex(module=self, debug=False)
+-        # Do not write the table for better compatibility across ply version
+-        self.parser = yacc.yacc(module=self,
+-                                debug=False,
+-                                write_tables=False)
++
++        yacc_kwargs = {'module': self, 'debug': False}
++        # ply post-3.11 version removed the write_tables parameter
++        if 'write_tables' in inspect.signature(yacc.yacc).parameters:
++            yacc_kwargs['write_tables'] = False
++        self.parser = yacc.yacc(**yacc_kwargs)
+ 
+     def __call__(self, text, input_file=None):
+         self.exports = defaultdict(tuple)

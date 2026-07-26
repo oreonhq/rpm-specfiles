@@ -1,0 +1,39 @@
+diff -up ./src/Search.php.rpm ./src/Search.php
+--- ./src/Search.php.rpm	2021-12-20 10:47:08.194216239 +0100
++++ ./src/Search.php	2021-12-20 10:47:52.898097362 +0100
+@@ -32,7 +32,7 @@ class Search
+      *
+      * @var string
+      */
+-    public static $DATA_DIR = __DIR__ . self::DS . '..' . self::DS . 'dist' . self::DS;
++    public static $DATA_DIR = '/usr/share/php-williamdes-mariadb-mysql-kbs/dist/';
+ 
+     /**
+      * Load data from disk
+diff -up ./test/SearchTest.php.rpm ./test/SearchTest.php
+--- ./test/SearchTest.php.rpm	2021-12-20 10:47:08.194216239 +0100
++++ ./test/SearchTest.php	2021-12-20 10:48:23.905014907 +0100
+@@ -182,4 +182,23 @@ class SearchTest extends TestCase
+         $this->assertEquals('boolean', $type);
+     }
+ 
++    /**
++     * test RPM Layout
++     *
++     * @runInSeparateProcess
++     *
++     * @return void
++     */
++    public function testLayout(): void
++    {
++        if (!getenv("RPM_BUILDROOT")) {
++            $this->markTestSkipped("No RPM_BUILDROOT");
++        }
++        Search::$loaded = false;
++        Search::$DATA_DIR = getenv("RPM_BUILDROOT") . Search::$DATA_DIR;
++        $found = Search::getByName("max_connections", Search::MYSQL);
++        $this->assertStringContainsString('php-williamdes-mariadb-mysql-kb', Search::$DATA_DIR);
++        $this->assertStringContainsString(getenv("RPM_BUILDROOT"), Search::$DATA_DIR);
++        $this->assertTrue(Search::$loaded);
++    }
+ }

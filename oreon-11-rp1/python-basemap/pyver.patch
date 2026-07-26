@@ -1,0 +1,30 @@
+--- basemap-2.0.0/setup.py~	2025-06-13 09:10:27.000000000 -0500
++++ basemap-2.0.0/setup.py	2025-07-10 13:33:42.701014995 -0500
+@@ -208,7 +208,7 @@
+     "python_requires":
+         ", ".join([
+             ">=3.9",
+-            "<3.14",
++            "<=3.15",
+         ]),
+     "install_requires":
+         get_content("dep/requirements.txt", splitlines=True),
+--- basemap-2.0.0/dep/requirements.txt~	2025-06-13 09:10:27.000000000 -0500
++++ basemap-2.0.0/dep/requirements.txt	2025-08-01 11:35:36.799689115 -0500
+@@ -5,4 +5,4 @@
+ matplotlib >= 3.4, < 3.11
+ 
+ pyproj >= 3.0, < 3.8
+-pyshp >= 2.0, < 2.4
++pyshp >= 2.0, < 4
+--- basemap-2.0.0/dep/requirements.txt~	2026-01-02 14:28:46.004063803 -0600
++++ basemap-2.0.0/dep/requirements.txt	2026-01-02 14:30:37.484654766 -0600
+@@ -1,7 +1,7 @@
+ basemap_data >= 2.0, < 3.0
+ packaging >= 20.5, < 26.0
+ 
+-numpy >= 2.0, < 2.4
++numpy >= 2.0, < 2.5
+ matplotlib >= 3.4, < 3.11
+ 
+ pyproj >= 3.0, < 3.8

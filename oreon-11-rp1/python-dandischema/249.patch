@@ -1,0 +1,29 @@
+From 37f7505591a4a86d5d86e3d65be1ead4fae422b2 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sat, 17 Aug 2024 19:24:27 +0200
+Subject: [PATCH] Exclude tests from wheel
+
+It's generally not desired to install tests together with the module.
+This change does just that and keeps everything else unchanged. Tests
+are still included in the sdist.
+---
+ setup.cfg | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 9ccdf35..e7290db 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -36,10 +36,11 @@ install_requires =
+     zarr_checksum
+ zip_safe = False
+ packages = find_namespace:
+-include_package_data = True
++include_package_data = False
+ 
+ [options.packages.find]
+ include = dandischema*
++exclude = *tests*
+ 
+ [options.extras_require]
+ # I bet will come handy

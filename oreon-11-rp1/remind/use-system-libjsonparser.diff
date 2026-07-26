@@ -1,0 +1,46 @@
+From: =?utf-8?b?0L3QsNCx?= <nabijaczleweli@gmail.com>
+Date: Tue, 12 May 2020 03:14:11 +0200
+Subject: Use system libjsonparser
+
+---
+ src/Makefile.in | 6 +++---
+ src/rem2ps.c    | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index b6283dd..fb04b7b 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -44,8 +44,8 @@ test: all
+ 
+ $(REMINDOBJS): $(REMINDHDRS)
+ 
+-rem2ps: rem2ps.o dynbuf.o json.o
+-	@CC@ @CFLAGS@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o json.o -lm
++rem2ps: rem2ps.o dynbuf.o
++	@CC@ @CFLAGS@ @LDFLAGS@ $(LDEXTRA) -o rem2ps rem2ps.o dynbuf.o -ljsonparser -lm
+ 
+ remind: $(REMINDOBJS)
+ 	@CC@ @CFLAGS@ @LDFLAGS@ $(LDEXTRA) -o remind $(REMINDOBJS) @LIBS@
+@@ -78,7 +78,7 @@ clobber:
+ 	rm -f *.o *~ remind rem2ps test.out core *.bak
+ 
+ depend:
+-	gccmakedep @DEFS@ $(REMINDSRCS) rem2ps.c json.c
++	gccmakedep @DEFS@ $(REMINDSRCS) rem2ps.c
+ 
+ # The next targets are not very useful to you.  I use them to build
+ # distributions, etc.
+diff --git a/src/rem2ps.c b/src/rem2ps.c
+index de97baf..a46a676 100644
+--- a/src/rem2ps.c
++++ b/src/rem2ps.c
+@@ -21,7 +21,7 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include "rem2ps.h"
+-#include "json.h"
++#include "json-parser/json.h"
+ 
+ #define NEW(type) (malloc(sizeof(type)))
+ 

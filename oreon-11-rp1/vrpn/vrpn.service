@@ -1,0 +1,10 @@
+[Unit]
+Description=VRPN server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/vrpn_server -f /etc/vrpn.cfg
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,60 @@
+From 5d61825625f0dacad18c211687df45884f2eba94 Mon Sep 17 00:00:00 2001
+From: David Shea <reallylongword@gmail.com>
+Date: Wed, 10 Jul 2024 09:49:01 -0400
+Subject: [PATCH] Remove test dependencies on linters
+
+---
+ pyproject.toml | 17 -----------------
+ tox.ini        |  3 ---
+ 2 files changed, 20 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 3ec9664..6ea6a77 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -62,27 +62,10 @@ doc = [
+ 	# local
+ ]
+ 
+-check = [
+-	"pytest-checkdocs >= 2.4",
+-	"pytest-ruff >= 0.2.1; sys_platform != 'cygwin'",
+-]
+-
+ cover = [
+ 	"pytest-cov",
+ ]
+ 
+-enabler = [
+-	"pytest-enabler >= 2.2",
+-]
+-
+-type = [
+-	# upstream
+-	"pytest-mypy",
+-
+-	# local
+-]
+-
+-
+ [tool.setuptools_scm]
+ 
+ 
+diff --git a/tox.ini b/tox.ini
+index 1424305..4b2c874 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -8,10 +8,7 @@ commands =
+ usedevelop = True
+ extras =
+ 	test
+-	check
+ 	cover
+-	enabler
+-	type
+ 
+ [testenv:diffcov]
+ description = run tests and check that diff from main is covered
+-- 
+2.48.1
+

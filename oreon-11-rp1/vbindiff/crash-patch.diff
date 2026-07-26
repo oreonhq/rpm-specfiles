@@ -1,0 +1,11 @@
+diff -up vbindiff-3.0_beta4/vbindiff.cpp.crash_patch vbindiff-3.0_beta4/vbindiff.cpp
+--- vbindiff-3.0_beta4/vbindiff.cpp.crash_patch	2008-07-27 02:52:17.000000000 +0200
++++ vbindiff-3.0_beta4/vbindiff.cpp	2013-12-27 11:55:15.488238681 +0100
+@@ -487,6 +487,7 @@ void FileDisplay::display()
+ 
+       buf[index++] = displayTable[data->line[i][j]];
+     }
++    if (index < 0) index = 0; // in case nothing was printed in this line
+     memset(buf + index, ' ', sizeof(buf) - index - 1);
+     memset(str, ' ', screenWidth - (str - buf2));
+ 

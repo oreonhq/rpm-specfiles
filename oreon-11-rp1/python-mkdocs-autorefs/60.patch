@@ -1,0 +1,23 @@
+From ec3e06a19f057ff6053f7f35ec855514ee623fb7 Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Fri, 13 Dec 2024 12:22:20 +0000
+Subject: [PATCH] Fix test_reference_implicit_with_code_inlinehilite_python
+
+Fix the test with the latest pymdownx
+---
+ tests/test_references.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_references.py b/tests/test_references.py
+index 6fdf24e..95e0469 100644
+--- a/tests/test_references.py
++++ b/tests/test_references.py
+@@ -113,7 +113,7 @@ def test_reference_implicit_with_code_inlinehilite_python() -> None:
+         extensions={"pymdownx.inlinehilite": {"style_plain_text": "python"}, "pymdownx.highlight": {}},
+         url_map={"pathlib.Path": "pathlib.html#Path"},
+         source="This [`pathlib.Path`][].",
+-        output='<p>This <a class="autorefs autorefs-internal" href="pathlib.html#Path"><code class="highlight">pathlib.Path</code></a>.</p>',
++        output='<p>This <a class="autorefs autorefs-internal" href="pathlib.html#Path"><code class="language-python highlight">pathlib.Path</code></a>.</p>',
+     )
+ 
+ 

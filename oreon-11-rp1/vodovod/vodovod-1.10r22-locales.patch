@@ -1,0 +1,2279 @@
+Index: vodovod.svn/Makefile
+===================================================================
+--- vodovod.svn/Makefile	(revision 23)
++++ vodovod.svn/Makefile	(working copy)
+@@ -20,7 +20,7 @@
+ 
+ PROGRAM = vodovod
+ PACKAGE = $(PROGRAM)
+-LANGUAGES = cs sr sv zh en
++LANGUAGES = cs sk sr sv zh en
+ OBJECTS = game.o map.o resource.o main.o allmenus.o njamfont.o sutils.o menu.o hiscore.o effects.o config.o keys.o
+ CXX ?= g++
+ CXXFLAGS ?= 
+Index: vodovod.svn/allmenus.cpp
+===================================================================
+--- vodovod.svn/allmenus.cpp	(revision 23)
++++ vodovod.svn/allmenus.cpp	(working copy)
+@@ -355,6 +355,7 @@
+     options.push_back(_("ENGLISH"));
+     options.push_back(_("CZECH"));
+     options.push_back(_("SERBIAN"));
++    options.push_back(_("SLOVAK"));
+     options.push_back(_("SWEDISH"));
+     options.push_back(_("SIMPLIFIED CHINESE"));
+ }
+@@ -362,7 +363,7 @@
+ bool LanguageMenu::onEnter()
+ {
+     const char *languages[] = {
+-        "", "en_US.utf8", "cs_CZ.utf8", "sr_RS.utf8", "sv_SE.utf8", "zh_CN.utf8"
++        "", "en_US.utf8", "cs_CZ.utf8", "sr_RS.utf8", "sk_SK.utf8", "sv_SE.utf8", "zh_CN.utf8"
+     };
+     setlocale(LC_ALL, languages[indicator]);
+     return false;
+Index: vodovod.svn/po/cs.po
+===================================================================
+--- vodovod.svn/po/cs.po	(revision 23)
++++ vodovod.svn/po/cs.po	(working copy)
+@@ -2,15 +2,16 @@
+ # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+ # This file is distributed under the same license as the PACKAGE package.
+ #
+-# Karel Volný <kvolny@redhat.com>, 2008.
++# Karel Volný <kvolny@redhat.com>, 2008, 2014.
+ msgid ""
+ msgstr ""
+ "Project-Id-Version: cs\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: 2008-03-05 19:41+0100\n"
+ "Last-Translator: Karel Volný <kvolny@redhat.com>\n"
+ "Language-Team: Czech <kde-czech-apps@lists.sf.net>\n"
++"Language: cs\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+@@ -39,7 +40,7 @@
+ 
+ #: allmenus.cpp:95
+ msgid "OF THE SCREEN WITH THE TANK AT THE BOTTOM. YOU HAVE TIME TO "
+-msgstr "S NÁDRŽÍ UMÍSTĚNOU VESPOD OBRAZOVKY. POTRUBNÍ SYSTÉM JE TŘEBA"
++msgstr "S NÁDRŽÍ UMÍSTĚNOU VESPOD OBRAZOVKY. POTRUBNÍ SYSTÉM JE NUTNO"
+ 
+ #: allmenus.cpp:96
+ msgid "CONSTRUCT THE INITIAL PIPELINE BEFORE THE MAN ENTERS THE HOUSE."
+@@ -47,7 +48,7 @@
+ 
+ #: allmenus.cpp:98
+ msgid "FOR EACH LEVEL YOU GET A LIMITED NUMBER OF PIPES, SO USE THEM"
+-msgstr "V KAŽDÉ ÚROVNI JE POUZE OMEZENÉ MNOŽSTVÍ TRUBEK, PROTO JE TŘEBA"
++msgstr "V KAŽDÉM KOLE JE POUZE OMEZENÉ MNOŽSTVÍ TRUBEK, PROTO JE TŘEBA"
+ 
+ #: allmenus.cpp:99
+ msgid "WISELY. IF YOU MAKE A MISTAKE, YOU CAN PLACE ANOTHER PIPE OVER IT."
+@@ -55,15 +56,15 @@
+ 
+ #: allmenus.cpp:102
+ msgid "SPECIALS:"
+-msgstr "ZVLÁŠTNOSTI:"
++msgstr "ZVLÁŠTNÍ POLE:"
+ 
+ #: allmenus.cpp:104
+ msgid "BLOCKED AREA.   YOU CANNOT PLACE PIPES ON THOSE FIELDS."
+-msgstr "ZÁTARAS.   NA TOTO POLE NELZE UMÍSŤOVAT POTRUBÍ."
++msgstr "ZÁTARAS.       NA TOTO POLE NELZE UMÍSŤOVAT POTRUBÍ."
+ 
+ #: allmenus.cpp:106
+ msgid "CHECKPOINT.     YOUR PIPELINE MUST GO THROUGH THIS FIELD."
+-msgstr "KONTROLNÍ BOD.     PŘES TOTO POLE POTRUBÍ MUSÍ PROCHÁZET."
++msgstr "KONTROLNÍ BOD. PŘES TOTO POLE POTRUBÍ MUSÍ PROCHÁZET."
+ 
+ #: allmenus.cpp:108
+ msgid "HOLE IN GROUND. SLOWS DOWN THE FLOW."
+@@ -79,11 +80,11 @@
+ 
+ #: allmenus.cpp:164
+ msgid "   NAME               LEVEL   POINTS"
+-msgstr "   JMÉNO             ÚROVEŇ     BODY"
++msgstr "   JMÉNO               KOLO     BODY"
+ 
+ #: allmenus.cpp:183
+ msgid "MILAN BABUSKOV PRESENTS"
+-msgstr "MILAN BABUSKOV UVÁDÍ"
++msgstr "MILAN BABUŠKOV UVÁDÍ"
+ 
+ #: allmenus.cpp:184
+ msgid "VODOVOD"
+@@ -103,35 +104,35 @@
+ 
+ #: allmenus.cpp:214 allmenus.cpp:256
+ msgid "FULLSCREEN  ON"
+-msgstr ""
++msgstr "NA CELOU OBRAZOVKU  ZAPNUTO"
+ 
+ #: allmenus.cpp:214 allmenus.cpp:256
+ msgid "FULLSCREEN  OFF"
+-msgstr ""
++msgstr "NA CELOU OBRAZOVKU  VYPNUTO"
+ 
+ #: allmenus.cpp:215 allmenus.cpp:261
+ msgid "GRID        ON"
+-msgstr "MŘÍŽKA      ZAPNUTO"
++msgstr "MŘÍŽKA              ZAPNUTA"
+ 
+ #: allmenus.cpp:215 allmenus.cpp:261
+ msgid "GRID        OFF"
+-msgstr "MŘÍŽKA      VYPNUTO"
++msgstr "MŘÍŽKA              VYPNUTA"
+ 
+ #: allmenus.cpp:220 allmenus.cpp:273
+ msgid "MUSIC       "
+-msgstr "HUDBA       "
++msgstr "HUDBA               "
+ 
+ #: allmenus.cpp:225 allmenus.cpp:273
+ msgid "SFX         "
+-msgstr ""
++msgstr "ZVUKOVÉ EFEKTY      "
+ 
+ #: allmenus.cpp:228
+ msgid "CONFIGURE CONTROLS"
+-msgstr ""
++msgstr "NASTAVIT OVLÁDÁNÍ"
+ 
+ #: allmenus.cpp:229
+ msgid "SELECT LANGUAGE"
+-msgstr ""
++msgstr "VYBRAT JAZYK"
+ 
+ #. only 2 brick types per level + trash at bottom
+ #: allmenus.cpp:230 allmenus.cpp:331
+@@ -140,40 +141,40 @@
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "LEFT  "
+-msgstr "VLEVO "
++msgstr "VLEVO  "
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "RIGHT "
+-msgstr "VPRAVO"
++msgstr "VPRAVO "
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "DOWN  "
+-msgstr "DOLŮ  "
++msgstr "DOLŮ   "
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "UP    "
+-msgstr "NAHORU"
++msgstr "NAHORU "
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "DROP  "
+-msgstr ""
++msgstr "POLOŽIT"
+ 
+ #: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
+ msgid "FLOOD "
+-msgstr ""
++msgstr "ZATOPIT"
+ 
+ #: allmenus.cpp:297
+ msgid "DONE"
+-msgstr ""
++msgstr "HOTOVO"
+ 
+ #. ask user to press new key
+ #: allmenus.cpp:309
+ msgid "PRESS KEY FOR "
+-msgstr ""
++msgstr "STLAČTE KLÁVESU PRO "
+ 
+ #: allmenus.cpp:327
+ msgid "SKILL LEVEL"
+-msgstr ""
++msgstr "OBTÍŽNOST:"
+ 
+ #: allmenus.cpp:328
+ msgid "BEGINNER"
+@@ -189,50 +190,54 @@
+ 
+ #: allmenus.cpp:354
+ msgid "DEFAULT"
+-msgstr ""
++msgstr "VÝCHOZÍ"
+ 
+ #: allmenus.cpp:355
+ msgid "ENGLISH"
+-msgstr ""
++msgstr "ANGLIČTINA"
+ 
+ #: allmenus.cpp:356
+ msgid "CZECH"
+-msgstr ""
++msgstr "ČEŠTINA"
+ 
+ #: allmenus.cpp:357
+ msgid "SERBIAN"
+-msgstr ""
++msgstr "SRBŠTINA"
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr "SLOVENŠTINA"
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+-msgstr ""
++msgstr "ŠVÉDŠTINA"
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+-msgstr ""
++msgstr "ZJEDNODUŠENÁ ČÍNŠTINA"
+ 
+ #: game.cpp:94
+-#, fuzzy, c-format
++#, c-format
+ msgid "LEVEL %d"
+-msgstr "ÚROVEŇ %d"
++msgstr "%d. KOLO"
+ 
+ #: game.cpp:112
+ msgid "LEVEL COMPLETE"
+-msgstr ""
++msgstr "KOLO DOKONČENO"
+ 
+ #: game.cpp:114
+ msgid "PRESS ANY KEY"
+-msgstr ""
++msgstr "STLAČTE LIBOVOLNOU KLÁVESU"
+ 
+ #. slow gives 30 pts
+ #: game.cpp:145
+ msgid "SLOW"
+-msgstr ""
++msgstr "ZPOMALENO"
+ 
+ #: game.cpp:199
+-#, fuzzy, c-format
++#, c-format
+ msgid "LEVEL:  %8d"
+-msgstr "ÚROVEŇ: %8d"
++msgstr "KOLO:   %8d"
+ 
+ #: game.cpp:201
+ #, c-format
+@@ -242,19 +247,19 @@
+ #: game.cpp:203
+ #, c-format
+ msgid "PIPES LEFT: %4d"
+-msgstr ""
++msgstr "TRUBKY:     %4d"
+ 
+ #: game.cpp:260
+ msgid "GAME PAUSED"
+-msgstr ""
++msgstr "HRA POZASTAVENA"
+ 
+ #: game.cpp:304
+ msgid "GAME OVER * PRESS ANY KEY"
+-msgstr ""
++msgstr "KONEC HRY * STLAČTE LIBOVOLNOU KLÁVESU"
+ 
+ #: game.cpp:342
+ msgid "*** NEW HISCORE ***"
+-msgstr ""
++msgstr "*** NOVÝ REKORD ***"
+ 
+ #: hiscore.cpp:118
+ #, c-format
+@@ -267,7 +272,7 @@
+ 
+ #: keys.cpp:113
+ msgid "UNKNOWN"
+-msgstr ""
++msgstr "NEZNÁMÁ"
+ 
+ #: keys.cpp:114
+ msgid "BACKSPACE"
+@@ -275,7 +280,7 @@
+ 
+ #: keys.cpp:115
+ msgid "TAB"
+-msgstr ""
++msgstr "TABULÁTOR"
+ 
+ #: keys.cpp:116
+ msgid "CLEAR"
+@@ -287,495 +292,495 @@
+ 
+ #: keys.cpp:118
+ msgid "PAUSE"
+-msgstr ""
++msgstr "PAUZA"
+ 
+ #: keys.cpp:119
+ msgid "ESCAPE"
+-msgstr ""
++msgstr "ESCAPE"
+ 
+ #: keys.cpp:120
+ msgid "SPACE"
+-msgstr ""
++msgstr "MEZERNÍK"
+ 
+ #: keys.cpp:121
+ msgid "EXCLAIM"
+-msgstr ""
++msgstr "VYKŘIČNÍK"
+ 
+ #: keys.cpp:122
+ msgid "QUOTEDBL"
+-msgstr ""
++msgstr "UVOZOVKY"
+ 
+ #: keys.cpp:123
+ msgid "HASH"
+-msgstr ""
++msgstr "MŘÍŽ"
+ 
+ #: keys.cpp:124
+ msgid "DOLLAR"
+-msgstr ""
++msgstr "DOLAR"
+ 
+ #: keys.cpp:125
+ msgid "AMPERSAND"
+-msgstr ""
++msgstr "AMPERSAND"
+ 
+ #: keys.cpp:126
+ msgid "QUOTE"
+-msgstr ""
++msgstr "APOSTROF"
+ 
+ #: keys.cpp:127
+ msgid "LEFTPAREN"
+-msgstr ""
++msgstr "LEVÁ ZÁVORKA"
+ 
+ #: keys.cpp:128
+ msgid "RIGHTPAREN"
+-msgstr ""
++msgstr "PRAVÁ ZÁVORKA"
+ 
+ #: keys.cpp:129
+ msgid "ASTERISK"
+-msgstr ""
++msgstr "HVĚZDIČKA"
+ 
+ #: keys.cpp:130
+ msgid "PLUS"
+-msgstr ""
++msgstr "PLUS"
+ 
+ #: keys.cpp:131
+ msgid "COMMA"
+-msgstr ""
++msgstr "ČÁRKA"
+ 
+ #: keys.cpp:132
+ msgid "MINUS"
+-msgstr ""
++msgstr "MÍNUS"
+ 
+ #: keys.cpp:133
+ msgid "PERIOD"
+-msgstr ""
++msgstr "TEČKA"
+ 
+ #: keys.cpp:134
+ msgid "SLASH"
+-msgstr ""
++msgstr "LOMÍTKO"
+ 
+ #: keys.cpp:135
+ msgid "0"
+-msgstr ""
++msgstr "0"
+ 
+ #: keys.cpp:136
+ msgid "1"
+-msgstr ""
++msgstr "1"
+ 
+ #: keys.cpp:137
+ msgid "2"
+-msgstr ""
++msgstr "2"
+ 
+ #: keys.cpp:138
+ msgid "3"
+-msgstr ""
++msgstr "3"
+ 
+ #: keys.cpp:139
+ msgid "4"
+-msgstr ""
++msgstr "4"
+ 
+ #: keys.cpp:140
+ msgid "5"
+-msgstr ""
++msgstr "5"
+ 
+ #: keys.cpp:141
+ msgid "6"
+-msgstr ""
++msgstr "6"
+ 
+ #: keys.cpp:142
+ msgid "7"
+-msgstr ""
++msgstr "7"
+ 
+ #: keys.cpp:143
+ msgid "8"
+-msgstr ""
++msgstr "8"
+ 
+ #: keys.cpp:144
+ msgid "9"
+-msgstr ""
++msgstr "9"
+ 
+ #: keys.cpp:145
+ msgid "COLON"
+-msgstr ""
++msgstr "DVOJTEČKA"
+ 
+ #: keys.cpp:146
+ msgid "SEMICOLON"
+-msgstr ""
++msgstr "STŘEDNÍK"
+ 
+ #: keys.cpp:147
+ msgid "LESS"
+-msgstr ""
++msgstr "MENŠÍTKO"
+ 
+ #: keys.cpp:148
+ msgid "EQUALS"
+-msgstr ""
++msgstr "ROVNÍTKO"
+ 
+ #: keys.cpp:149
+ msgid "GREATER"
+-msgstr ""
++msgstr "VĚTŠÍTKO"
+ 
+ #: keys.cpp:150
+ msgid "QUESTION"
+-msgstr ""
++msgstr "OTAZNÍK"
+ 
+ #: keys.cpp:151
+ msgid "AT"
+-msgstr ""
++msgstr "ZAVINÁČ"
+ 
+ #: keys.cpp:152
+ msgid "LEFTBRACKET"
+-msgstr ""
++msgstr "LEVÁ HRANATÁ ZÁVORKA"
+ 
+ #: keys.cpp:153
+ msgid "BACKSLASH"
+-msgstr ""
++msgstr "ZPĚTNÉ LOMÍTKO"
+ 
+ #: keys.cpp:154
+ msgid "RIGHTBRACKET"
+-msgstr ""
++msgstr "PRAVÁ HRANATÁ ZÁVORKA"
+ 
+ #: keys.cpp:155
+ msgid "CARET"
+-msgstr ""
++msgstr "STŘÍŠKA"
+ 
+ #: keys.cpp:156
+ msgid "UNDERSCORE"
+-msgstr ""
++msgstr "PODTRŽÍTKO"
+ 
+ #: keys.cpp:157
+ msgid "BACKQUOTE"
+-msgstr ""
++msgstr "TUPÝ PŘÍZVUK"
+ 
+ #: keys.cpp:158
+ msgid "A"
+-msgstr ""
++msgstr "A"
+ 
+ #: keys.cpp:159
+ msgid "B"
+-msgstr ""
++msgstr "B"
+ 
+ #: keys.cpp:160
+ msgid "C"
+-msgstr ""
++msgstr "C"
+ 
+ #: keys.cpp:161
+ msgid "D"
+-msgstr ""
++msgstr "D"
+ 
+ #: keys.cpp:162
+ msgid "E"
+-msgstr ""
++msgstr "E"
+ 
+ #: keys.cpp:163
+ msgid "F"
+-msgstr ""
++msgstr "F"
+ 
+ #: keys.cpp:164
+ msgid "G"
+-msgstr ""
++msgstr "G"
+ 
+ #: keys.cpp:165
+ msgid "H"
+-msgstr ""
++msgstr "H"
+ 
+ #: keys.cpp:166
+ msgid "I"
+-msgstr ""
++msgstr "I"
+ 
+ #: keys.cpp:167
+ msgid "J"
+-msgstr ""
++msgstr "J"
+ 
+ #: keys.cpp:168
+ msgid "K"
+-msgstr ""
++msgstr "K"
+ 
+ #: keys.cpp:169
+ msgid "L"
+-msgstr ""
++msgstr "L"
+ 
+ #: keys.cpp:170
+ msgid "M"
+-msgstr ""
++msgstr "M"
+ 
+ #: keys.cpp:171
+ msgid "N"
+-msgstr ""
++msgstr "N"
+ 
+ #: keys.cpp:172
+ msgid "O"
+-msgstr ""
++msgstr "O"
+ 
+ #: keys.cpp:173
+ msgid "P"
+-msgstr ""
++msgstr "P"
+ 
+ #: keys.cpp:174
+ msgid "Q"
+-msgstr ""
++msgstr "Q"
+ 
+ #: keys.cpp:175
+ msgid "R"
+-msgstr ""
++msgstr "R"
+ 
+ #: keys.cpp:176
+ msgid "S"
+-msgstr ""
++msgstr "S"
+ 
+ #: keys.cpp:177
+ msgid "T"
+-msgstr ""
++msgstr "T"
+ 
+ #: keys.cpp:178
+ msgid "U"
+-msgstr ""
++msgstr "U"
+ 
+ #: keys.cpp:179
+ msgid "V"
+-msgstr ""
++msgstr "V"
+ 
+ #: keys.cpp:180
+ msgid "W"
+-msgstr ""
++msgstr "W"
+ 
+ #: keys.cpp:181
+ msgid "X"
+-msgstr ""
++msgstr "X"
+ 
+ #: keys.cpp:182
+ msgid "Y"
+-msgstr ""
++msgstr "Y"
+ 
+ #: keys.cpp:183
+ msgid "Z"
+-msgstr ""
++msgstr "Z"
+ 
+ #: keys.cpp:184
+ msgid "DELETE"
+-msgstr ""
++msgstr "DELETE"
+ 
+ #: keys.cpp:185
+ msgid "KEYPAD0"
+-msgstr ""
++msgstr "NUMERICKÁ_0"
+ 
+ #: keys.cpp:186
+ msgid "KEYPAD1"
+-msgstr ""
++msgstr "NUMERICKÁ_1"
+ 
+ #: keys.cpp:187
+ msgid "KEYPAD2"
+-msgstr ""
++msgstr "NUMERICKÁ_2"
+ 
+ #: keys.cpp:188
+ msgid "KEYPAD3"
+-msgstr ""
++msgstr "NUMERICKÁ_3"
+ 
+ #: keys.cpp:189
+ msgid "KEYPAD4"
+-msgstr ""
++msgstr "NUMERICKÁ_4"
+ 
+ #: keys.cpp:190
+ msgid "KEYPAD5"
+-msgstr ""
++msgstr "NUMERICKÁ_5"
+ 
+ #: keys.cpp:191
+ msgid "KEYPAD6"
+-msgstr ""
++msgstr "NUMERICKÁ_6"
+ 
+ #: keys.cpp:192
+ msgid "KEYPAD7"
+-msgstr ""
++msgstr "NUMERICKÁ_7"
+ 
+ #: keys.cpp:193
+ msgid "KEYPAD8"
+-msgstr ""
++msgstr "NUMERICKÁ_8"
+ 
+ #: keys.cpp:194
+ msgid "KEYPAD9"
+-msgstr ""
++msgstr "NUMERICKÁ_9"
+ 
+ #: keys.cpp:195
+ msgid "KEYPAD_PERIOD"
+-msgstr ""
++msgstr "NUMERICKÁ_TEČKA"
+ 
+ #: keys.cpp:196
+ msgid "KEYPAD_DIVIDE"
+-msgstr ""
++msgstr "NUMERICKÁ_DĚLENO"
+ 
+ #: keys.cpp:197
+ msgid "KEYPAD_MULTIPLY"
+-msgstr ""
++msgstr "NUMERICKÁ_KRÁT"
+ 
+ #: keys.cpp:198
+ msgid "KEYPAD_MINUS"
+-msgstr ""
++msgstr "NUMERICKÁ_MÍNUS"
+ 
+ #: keys.cpp:199
+ msgid "KEYPAD_PLUS"
+-msgstr ""
++msgstr "NUMERICKÁ_PLUS"
+ 
+ #: keys.cpp:200
+ msgid "KEYPAD_ENTER"
+-msgstr ""
++msgstr "NUMERICKÁ_ENTER"
+ 
+ #: keys.cpp:201
+ msgid "KEYPAD_EQUALS"
+-msgstr ""
++msgstr "NUMERICKÁ_ROVNÍTKO"
+ 
+ #: keys.cpp:202 keys.cpp:248
+ msgid "UP"
+-msgstr ""
++msgstr "NAHORU"
+ 
+ #: keys.cpp:203 keys.cpp:248
+ msgid "DOWN"
+-msgstr ""
++msgstr "DOLŮ"
+ 
+ #: keys.cpp:204 keys.cpp:248
+ msgid "RIGHT"
+-msgstr ""
++msgstr "VPRAVO"
+ 
+ #: keys.cpp:205 keys.cpp:248
+ msgid "LEFT"
+-msgstr ""
++msgstr "VLEVO"
+ 
+ #: keys.cpp:206
+ msgid "INSERT"
+-msgstr ""
++msgstr "INSERT"
+ 
+ #: keys.cpp:207
+ msgid "HOME"
+-msgstr ""
++msgstr "HOME"
+ 
+ #: keys.cpp:208
+ msgid "END"
+-msgstr ""
++msgstr "END"
+ 
+ #: keys.cpp:209
+ msgid "PAGEUP"
+-msgstr ""
++msgstr "PAGE UP"
+ 
+ #: keys.cpp:210
+ msgid "PAGEDOWN"
+-msgstr ""
++msgstr "PAGE DOWN"
+ 
+ #: keys.cpp:211
+ msgid "F1"
+-msgstr ""
++msgstr "F1"
+ 
+ #: keys.cpp:212
+ msgid "F2"
+-msgstr ""
++msgstr "F2"
+ 
+ #: keys.cpp:213
+ msgid "F3"
+-msgstr ""
++msgstr "F3"
+ 
+ #: keys.cpp:214
+ msgid "F4"
+-msgstr ""
++msgstr "F4"
+ 
+ #: keys.cpp:215
+ msgid "F5"
+-msgstr ""
++msgstr "F5"
+ 
+ #: keys.cpp:216
+ msgid "F6"
+-msgstr ""
++msgstr "F6"
+ 
+ #: keys.cpp:217
+ msgid "F7"
+-msgstr ""
++msgstr "F7"
+ 
+ #: keys.cpp:218
+ msgid "F8"
+-msgstr ""
++msgstr "F8"
+ 
+ #: keys.cpp:219
+ msgid "F9"
+-msgstr ""
++msgstr "F9"
+ 
+ #: keys.cpp:220
+ msgid "F10"
+-msgstr ""
++msgstr "F10"
+ 
+ #: keys.cpp:221
+ msgid "F11"
+-msgstr ""
++msgstr "F11"
+ 
+ #: keys.cpp:222
+ msgid "F12"
+-msgstr ""
++msgstr "F12"
+ 
+ #: keys.cpp:223
+ msgid "F13"
+-msgstr ""
++msgstr "F13"
+ 
+ #: keys.cpp:224
+ msgid "F14"
+-msgstr ""
++msgstr "F14"
+ 
+ #: keys.cpp:225
+ msgid "F15"
+-msgstr ""
++msgstr "F15"
+ 
+ #: keys.cpp:226
+ msgid "NUMLOCK"
+-msgstr ""
++msgstr "NUMLOCK"
+ 
+ #: keys.cpp:227
+ msgid "CAPSLOCK"
+-msgstr ""
++msgstr "CAPSLOCK"
+ 
+ #: keys.cpp:228
+ msgid "SCROLLOCK"
+-msgstr ""
++msgstr "SCROLLOCK"
+ 
+ #: keys.cpp:229
+ msgid "RSHIFT"
+-msgstr ""
++msgstr "PRAVÝ SHIFT"
+ 
+ #: keys.cpp:230
+ msgid "LSHIFT"
+-msgstr ""
++msgstr "LEVÝ SHIFT"
+ 
+ #: keys.cpp:231
+ msgid "RCTRL"
+-msgstr ""
++msgstr "PRAVÝ CONTROL"
+ 
+ #: keys.cpp:232
+ msgid "LCTRL"
+-msgstr ""
++msgstr "LEVÝ CONTROL"
+ 
+ #: keys.cpp:233
+ msgid "RALT"
+-msgstr ""
++msgstr "PRAVÝ ALT"
+ 
+ #: keys.cpp:234
+ msgid "LALT"
+-msgstr ""
++msgstr "LEVÝ ALT"
+ 
+ #: keys.cpp:235
+ msgid "RMETA"
+-msgstr ""
++msgstr "PRAVÁ META"
+ 
+ #: keys.cpp:236
+ msgid "LMETA"
+-msgstr ""
++msgstr "LEVÁ META"
+ 
+ #: keys.cpp:238
+ msgid "PRINT"
+-msgstr ""
++msgstr "PRINTSCREEN"
+ 
+ #: keys.cpp:239
+ msgid "SYSREQ"
+-msgstr ""
++msgstr "SYSREQ"
+ 
+ #: keys.cpp:240
+ msgid "BREAK"
+-msgstr ""
++msgstr "BREAK"
+ 
+ #: keys.cpp:241
+ msgid "MENU"
+-msgstr ""
++msgstr "NABÍDKA"
+ 
+ #: keys.cpp:250
+ msgid "JOY "
+@@ -783,11 +788,11 @@
+ 
+ #: keys.cpp:255
+ msgid "BUTTON "
+-msgstr ""
++msgstr "TLAČÍTKO"
+ 
+ #: keys.cpp:262
+ msgid "KEY "
+-msgstr ""
++msgstr "KLÁVESA"
+ 
+ #: main.cpp:69
+ #, c-format
+@@ -828,16 +833,16 @@
+ #: main.cpp:103
+ #, c-format
+ msgid "Initializing TTF subsystem..."
+-msgstr ""
++msgstr "Inicializuje se subsytém pro TTF..."
+ 
+ #: main.cpp:106
+-#, fuzzy, c-format
++#, c-format
+ msgid "Error initializing SDL_TTF: %s\n"
+-msgstr "Chyba při inicializaci SDL: %s\n"
++msgstr "Chyba při inicializaci SDL_TTF: %s\n"
+ 
+ #: main.cpp:107
+ msgid "Cannot initialize TTF"
+-msgstr ""
++msgstr "Nelze inicializovat TTF"
+ 
+ #: main.cpp:167
+ #, c-format
+@@ -869,14 +874,12 @@
+ msgstr "OK.\n"
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
+-msgstr ""
++msgid "Failed to create text image."
++msgstr "Selhalo vytváření obrázku z textu."
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
+-msgstr ""
++msgid "Failed to blit font character image."
++msgstr "Selhal blokový transfer obrazu znaku."
+ 
+ #: resource.cpp:33
+ #, c-format
+@@ -886,7 +889,7 @@
+ #: resource.cpp:37
+ #, c-format
+ msgid "Loading sfx %s..."
+-msgstr "Nahrává se zvukový efekt %s..."
++msgstr "Nahrává se zvukový efekt: %s..."
+ 
+ #: resource.cpp:45
+ #, c-format
+@@ -901,7 +904,7 @@
+ #: resource.cpp:66
+ #, c-format
+ msgid "Loading music %s (%s)..."
+-msgstr "Nahrává se hudba %s (%s)..."
++msgstr "Nahrává se hudba: %s (%s)..."
+ 
+ #: resource.cpp:74
+ #, c-format
+@@ -916,7 +919,7 @@
+ #: resource.cpp:95
+ #, c-format
+ msgid "Loading graphics %s (%s)..."
+-msgstr "Nahrává se grafika %s (%s)..."
++msgstr "Nahrává se grafika: %s (%s)..."
+ 
+ #: resource.cpp:103
+ #, c-format
+@@ -996,9 +999,3 @@
+ #, c-format
+ msgid "Trying video mode 800x600x%d..."
+ msgstr "Zkouší se videorežim 800×600×%d..."
+-
+-#~ msgid "Couldn't convert font image: %s\n"
+-#~ msgstr "Nelze zkonvertovat obrázek s fontem: %s\n"
+-
+-#~ msgid "TEXT OUTPUT WARNING: Character: %c (code: %d) was not found.\n"
+-#~ msgstr "VAROVÁNÍ TEXTOVÉHO VÝSTUPU: Znak %c (kód: %d) nebyl nalezen.\n"
+Index: vodovod.svn/po/en.po
+===================================================================
+--- vodovod.svn/po/en.po	(revision 23)
++++ vodovod.svn/po/en.po	(working copy)
+@@ -8,10 +8,11 @@
+ msgstr ""
+ "Project-Id-Version: en\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: 2009-11-24 18:25+0100\n"
+ "Last-Translator: Milan Babuskov <mbabuskov@yahoo.com>\n"
+ "Language-Team: English US <mbabuskov@yahoo.com>\n"
++"Language: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+@@ -203,10 +204,14 @@
+ msgstr ""
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+ msgstr ""
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+ msgstr ""
+ 
+@@ -866,13 +871,11 @@
+ msgstr ""
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
++msgid "Failed to create text image."
+ msgstr ""
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
++msgid "Failed to blit font character image."
+ msgstr ""
+ 
+ #: resource.cpp:33
+Index: vodovod.svn/po/sk.po
+===================================================================
+--- vodovod.svn/po/sk.po	(revision 0)
++++ vodovod.svn/po/sk.po	(working copy)
+@@ -0,0 +1,1002 @@
++# translation of sk.po to Slovak
++# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
++# This file is distributed under the same license as the PACKAGE package.
++#
++# Kristína Irová <kira22@seznam.cz>, 2008.
++msgid ""
++msgstr ""
++"Project-Id-Version: sk\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
++"PO-Revision-Date: 2008-03-10 22:27+0100\n"
++"Last-Translator: Kristína Irová <kira22@seznam.cz>\n"
++"Language-Team: Slovak <sk@li.org>\n"
++"Language: sk\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: KBabel 1.11.4\n"
++"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
++
++#: allmenus.cpp:42 allmenus.cpp:61
++msgid "START NEW GAME"
++msgstr "SPUSTIŤ NOVÚ HRU"
++
++#: allmenus.cpp:43 allmenus.cpp:62
++msgid "OPTIONS"
++msgstr "NASTAVENIE"
++
++#: allmenus.cpp:44 allmenus.cpp:63 keys.cpp:237
++msgid "HELP"
++msgstr "NÁPOVEDA"
++
++#: allmenus.cpp:45 allmenus.cpp:64
++msgid "EXIT"
++msgstr "KONIEC"
++
++#: allmenus.cpp:94
++msgid "GOAL OF THE GAME IS TO USE PIPES TO CONNECT THE HOUSE AT THE TOP"
++msgstr "CIEĽOM HRY JE PREPOJIŤ POTRUBIE MEDZI DOMČEKOM V HORNEJ ČASTI"
++
++#: allmenus.cpp:95
++msgid "OF THE SCREEN WITH THE TANK AT THE BOTTOM. YOU HAVE TIME TO "
++msgstr "OBRAZOVKY S NÁDRŽOU V SPODNEJ ČASTI OBRAZOVKY."
++
++#: allmenus.cpp:96
++msgid "CONSTRUCT THE INITIAL PIPELINE BEFORE THE MAN ENTERS THE HOUSE."
++msgstr "ZAČAŤ STAVIAŤ JE NUTNÉ SKÔR NEŽ POSTAVA VSTÚPI DO DOMČEKA."
++
++#: allmenus.cpp:98
++msgid "FOR EACH LEVEL YOU GET A LIMITED NUMBER OF PIPES, SO USE THEM"
++msgstr "V KAŽDOM KOLE JE OBMEDZENÉ MNOŽSTVO TRUBIEK, PRETO JE POTREBNÉ "
++
++#: allmenus.cpp:99
++msgid "WISELY. IF YOU MAKE A MISTAKE, YOU CAN PLACE ANOTHER PIPE OVER IT."
++msgstr "SKLADAŤ POTRUBIE S ROZVAHOU. PRI OMYLE SA TRUBKA DÁ NAHRADIŤ INOU."
++
++#: allmenus.cpp:102
++msgid "SPECIALS:"
++msgstr "ZVLÁŠTNÉ POLIA:"
++
++#: allmenus.cpp:104
++msgid "BLOCKED AREA.   YOU CANNOT PLACE PIPES ON THOSE FIELDS."
++msgstr "ZÁTARASY.      NA TOTO POLE SA NEDÁ UMIESTNIŤ POTRUBIE."
++
++#: allmenus.cpp:106
++msgid "CHECKPOINT.     YOUR PIPELINE MUST GO THROUGH THIS FIELD."
++msgstr "KONTROLNÝ BOD. CEZ TOTO POLE POTRUBIE MUSÍ PRECHÁDZAŤ."
++
++#: allmenus.cpp:108
++msgid "HOLE IN GROUND. SLOWS DOWN THE FLOW."
++msgstr "DIERA V ZEMI.  SPOMALUJE PRIETOK VODY."
++
++#: allmenus.cpp:110
++msgid "PRESS ANY KEY TO GO BACK"
++msgstr "PRE NÁVRAT STLAČTE ĽUBOVOĽNÚ KLÁVESU"
++
++#: allmenus.cpp:163
++msgid "TOP 15 PLAYERS"
++msgstr "15 NAJLEPŠÍCH HRÁČOV"
++
++#: allmenus.cpp:164
++msgid "   NAME               LEVEL   POINTS"
++msgstr "   MENO               LEVEL     BODY"
++
++#: allmenus.cpp:183
++msgid "MILAN BABUSKOV PRESENTS"
++msgstr "MILAN BABUŠKOV UVÁDZA"
++
++#: allmenus.cpp:184
++msgid "VODOVOD"
++msgstr "VODOVOD"
++
++#: allmenus.cpp:185
++msgid "VERSION "
++msgstr "VERZIA "
++
++#: allmenus.cpp:188
++msgid "CONSTRUCT THE PIPELINE BEFORE WATER RUNS FREE"
++msgstr "VYBUDUJTE POTRUBNÝ SYSTÉM SKÔR NEŽ VODA ODTEČIE"
++
++#: allmenus.cpp:189
++msgid "HAVE FUN PLAYING"
++msgstr "PRÍJEMNÚ HRU!"
++
++#: allmenus.cpp:214 allmenus.cpp:256
++msgid "FULLSCREEN  ON"
++msgstr "NA CELÚ OBRAZOVKU  ZAPNUTÉ"
++
++#: allmenus.cpp:214 allmenus.cpp:256
++msgid "FULLSCREEN  OFF"
++msgstr "NA CELÚ OBRAZOVKU  VYPNUTÉ"
++
++#: allmenus.cpp:215 allmenus.cpp:261
++msgid "GRID        ON"
++msgstr "MRIEŽKA            ZAPNUTÁ"
++
++#: allmenus.cpp:215 allmenus.cpp:261
++msgid "GRID        OFF"
++msgstr "MRIEŽKA            VYPNUTÁ"
++
++#: allmenus.cpp:220 allmenus.cpp:273
++msgid "MUSIC       "
++msgstr "HUDBA              "
++
++#: allmenus.cpp:225 allmenus.cpp:273
++msgid "SFX         "
++msgstr "ZVUKOVÉ EFEKTY     "
++
++#: allmenus.cpp:228
++msgid "CONFIGURE CONTROLS"
++msgstr "NASTAVIŤ OVLÁDANIE"
++
++#: allmenus.cpp:229
++msgid "SELECT LANGUAGE"
++msgstr "VYBRAŤ JAZYK"
++
++#. only 2 brick types per level + trash at bottom
++#: allmenus.cpp:230 allmenus.cpp:331
++msgid "BACK"
++msgstr "SPÄŤ"
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "LEFT  "
++msgstr "DOĽAVA  "
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "RIGHT "
++msgstr "DOPRAVA "
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "DOWN  "
++msgstr "DOLE    "
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "UP    "
++msgstr "HORE    "
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "DROP  "
++msgstr "POLOŽIŤ "
++
++#: allmenus.cpp:287 allmenus.cpp:306 config.cpp:34 config.cpp:141
++msgid "FLOOD "
++msgstr "ZAPLAVIŤ"
++
++#: allmenus.cpp:297
++msgid "DONE"
++msgstr "HOTOVO"
++
++#. ask user to press new key
++#: allmenus.cpp:309
++msgid "PRESS KEY FOR "
++msgstr "STLAČTE KLÁVESU PRE "
++
++#: allmenus.cpp:327
++msgid "SKILL LEVEL"
++msgstr "OBTIAŽNOSŤ:"
++
++#: allmenus.cpp:328
++msgid "BEGINNER"
++msgstr "ZAČIATOČNÍK"
++
++#: allmenus.cpp:329
++msgid "TOOLMAN"
++msgstr "INŠTALATÉR"
++
++#: allmenus.cpp:330
++msgid "MASTER PLUMBER"
++msgstr "MAJSTER INŠTALATÉR"
++
++#: allmenus.cpp:354
++msgid "DEFAULT"
++msgstr "VÝCHODZIE"
++
++#: allmenus.cpp:355
++msgid "ENGLISH"
++msgstr "ANGLIČTINA"
++
++#: allmenus.cpp:356
++msgid "CZECH"
++msgstr "ČEŠTINA"
++
++# СРПСКИ ЈЕЗИК
++#: allmenus.cpp:357
++msgid "SERBIAN"
++msgstr "SRBČINA"
++
++#: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
++msgid "SWEDISH"
++msgstr "ŠVÉDČINA"
++
++#: allmenus.cpp:360
++msgid "SIMPLIFIED CHINESE"
++msgstr "ZJEDNODUŠENÁ ČÍNŠTINA"
++
++#: game.cpp:94
++#, c-format
++msgid "LEVEL %d"
++msgstr "%d. LEVEL"
++
++#: game.cpp:112
++msgid "LEVEL COMPLETE"
++msgstr "LEVEL DOKONČENÝ"
++
++#: game.cpp:114
++msgid "PRESS ANY KEY"
++msgstr "STLAČTE ĽUBOVOĽNÚ KLÁVESU"
++
++#. slow gives 30 pts
++#: game.cpp:145
++msgid "SLOW"
++msgstr "SPOMALENÉ"
++
++#: game.cpp:199
++#, c-format
++msgid "LEVEL:  %8d"
++msgstr "LEVEL:  %8d"
++
++#: game.cpp:201
++#, c-format
++msgid "POINTS: %8d"
++msgstr "BODY:   %8d"
++
++#: game.cpp:203
++#, c-format
++msgid "PIPES LEFT: %4d"
++msgstr "TRUBKY:     %4d"
++
++#: game.cpp:260
++msgid "GAME PAUSED"
++msgstr "PAUZA"
++
++#: game.cpp:304
++msgid "GAME OVER * PRESS ANY KEY"
++msgstr "KONIEC HRY * STLAČTE ĽUBOVOĽNÚ KLÁVESU"
++
++#: game.cpp:342
++msgid "*** NEW HISCORE ***"
++msgstr "*** NOVÝ REKORD ***"
++
++#: hiscore.cpp:118
++#, c-format
++msgid "Unable to write hiscore file!\n"
++msgstr "Nedá sa zapísať súbor s najlepšími výsledkami!\n"
++
++#: keys.cpp:98 sutils.cpp:214
++msgid "Close button of window clicked"
++msgstr "Kliknuté na tlačítko pre zavrenie okna"
++
++#: keys.cpp:113
++msgid "UNKNOWN"
++msgstr "NEZNÁMÁ"
++
++#: keys.cpp:114
++msgid "BACKSPACE"
++msgstr "BACKSPACE"
++
++#: keys.cpp:115
++msgid "TAB"
++msgstr "TABULÁTOR"
++
++#: keys.cpp:116
++msgid "CLEAR"
++msgstr ""
++
++#: keys.cpp:117
++msgid "RETURN"
++msgstr "ENTER"
++
++#: keys.cpp:118
++msgid "PAUSE"
++msgstr "PAUZA"
++
++#: keys.cpp:119
++msgid "ESCAPE"
++msgstr "ESCAPE"
++
++#: keys.cpp:120
++msgid "SPACE"
++msgstr "MEDZERNÍK"
++
++#: keys.cpp:121
++msgid "EXCLAIM"
++msgstr "VYKRIČNÍK"
++
++#: keys.cpp:122
++msgid "QUOTEDBL"
++msgstr "ÚVODZOVKY"
++
++#: keys.cpp:123
++msgid "HASH"
++msgstr "MRIEŽKA"
++
++#: keys.cpp:124
++msgid "DOLLAR"
++msgstr "DOLÁR"
++
++#: keys.cpp:125
++msgid "AMPERSAND"
++msgstr "AMPERSAND"
++
++#: keys.cpp:126
++msgid "QUOTE"
++msgstr "APOSTROF"
++
++#: keys.cpp:127
++msgid "LEFTPAREN"
++msgstr "ĽAVÁ ZÁTVORKA"
++
++#: keys.cpp:128
++msgid "RIGHTPAREN"
++msgstr "PRAVÁ ZÁTVORKA"
++
++#: keys.cpp:129
++msgid "ASTERISK"
++msgstr "HVIEZDIČKA"
++
++#: keys.cpp:130
++msgid "PLUS"
++msgstr "PLUS"
++
++#: keys.cpp:131
++msgid "COMMA"
++msgstr "ČIARKA"
++
++#: keys.cpp:132
++msgid "MINUS"
++msgstr "MÍNUS"
++
++#: keys.cpp:133
++msgid "PERIOD"
++msgstr "BODKA"
++
++#: keys.cpp:134
++msgid "SLASH"
++msgstr "LOMÍTKO"
++
++#: keys.cpp:135
++msgid "0"
++msgstr "0"
++
++#: keys.cpp:136
++msgid "1"
++msgstr "1"
++
++#: keys.cpp:137
++msgid "2"
++msgstr "2"
++
++#: keys.cpp:138
++msgid "3"
++msgstr "3"
++
++#: keys.cpp:139
++msgid "4"
++msgstr "4"
++
++#: keys.cpp:140
++msgid "5"
++msgstr "5"
++
++#: keys.cpp:141
++msgid "6"
++msgstr "6"
++
++#: keys.cpp:142
++msgid "7"
++msgstr "7"
++
++#: keys.cpp:143
++msgid "8"
++msgstr "8"
++
++#: keys.cpp:144
++msgid "9"
++msgstr "9"
++
++#: keys.cpp:145
++msgid "COLON"
++msgstr "DVOJBODKA"
++
++#: keys.cpp:146
++msgid "SEMICOLON"
++msgstr "BODKOČIARKA"
++
++#: keys.cpp:147
++msgid "LESS"
++msgstr "ZMENŠIŤ"
++
++#: keys.cpp:148
++msgid "EQUALS"
++msgstr "ROVNÁ SA"
++
++#: keys.cpp:149
++msgid "GREATER"
++msgstr "ZVÄČŠIŤ"
++
++#: keys.cpp:150
++msgid "QUESTION"
++msgstr "OTAZNÍK"
++
++#: keys.cpp:151
++msgid "AT"
++msgstr "ZAVINÁČ"
++
++#: keys.cpp:152
++msgid "LEFTBRACKET"
++msgstr "ĽAVÁ HRANATÁ ZÁTVORKA"
++
++#: keys.cpp:153
++msgid "BACKSLASH"
++msgstr "OPAČNÉ LOMÍTKO"
++
++#: keys.cpp:154
++msgid "RIGHTBRACKET"
++msgstr "PRAVÁ HRANATÁ ZÁTVORKA"
++
++#: keys.cpp:155
++msgid "CARET"
++msgstr "STRIEŠKA"
++
++#: keys.cpp:156
++msgid "UNDERSCORE"
++msgstr "PODTRŽÍTKO"
++
++#: keys.cpp:157
++msgid "BACKQUOTE"
++msgstr ""
++
++#: keys.cpp:158
++msgid "A"
++msgstr "A"
++
++#: keys.cpp:159
++msgid "B"
++msgstr "B"
++
++#: keys.cpp:160
++msgid "C"
++msgstr "C"
++
++#: keys.cpp:161
++msgid "D"
++msgstr "D"
++
++#: keys.cpp:162
++msgid "E"
++msgstr "E"
++
++#: keys.cpp:163
++msgid "F"
++msgstr "F"
++
++#: keys.cpp:164
++msgid "G"
++msgstr "G"
++
++#: keys.cpp:165
++msgid "H"
++msgstr "H"
++
++#: keys.cpp:166
++msgid "I"
++msgstr "I"
++
++#: keys.cpp:167
++msgid "J"
++msgstr "J"
++
++#: keys.cpp:168
++msgid "K"
++msgstr "K"
++
++#: keys.cpp:169
++msgid "L"
++msgstr "L"
++
++#: keys.cpp:170
++msgid "M"
++msgstr "M"
++
++#: keys.cpp:171
++msgid "N"
++msgstr "N"
++
++#: keys.cpp:172
++msgid "O"
++msgstr "O"
++
++#: keys.cpp:173
++msgid "P"
++msgstr "P"
++
++#: keys.cpp:174
++msgid "Q"
++msgstr "Q"
++
++#: keys.cpp:175
++msgid "R"
++msgstr "R"
++
++#: keys.cpp:176
++msgid "S"
++msgstr "S"
++
++#: keys.cpp:177
++msgid "T"
++msgstr "T"
++
++#: keys.cpp:178
++msgid "U"
++msgstr "U"
++
++#: keys.cpp:179
++msgid "V"
++msgstr "V"
++
++#: keys.cpp:180
++msgid "W"
++msgstr "W"
++
++#: keys.cpp:181
++msgid "X"
++msgstr "X"
++
++#: keys.cpp:182
++msgid "Y"
++msgstr "Y"
++
++#: keys.cpp:183
++msgid "Z"
++msgstr "Z"
++
++#: keys.cpp:184
++msgid "DELETE"
++msgstr "DELETE"
++
++#: keys.cpp:185
++msgid "KEYPAD0"
++msgstr "NUMERICKÁ_0"
++
++#: keys.cpp:186
++msgid "KEYPAD1"
++msgstr "NUMERICKÁ_1"
++
++#: keys.cpp:187
++msgid "KEYPAD2"
++msgstr "NUMERICKÁ_2"
++
++#: keys.cpp:188
++msgid "KEYPAD3"
++msgstr "NUMERICKÁ_3"
++
++#: keys.cpp:189
++msgid "KEYPAD4"
++msgstr "NUMERICKÁ_4"
++
++#: keys.cpp:190
++msgid "KEYPAD5"
++msgstr "NUMERICKÁ_5"
++
++#: keys.cpp:191
++msgid "KEYPAD6"
++msgstr "NUMERICKÁ_6"
++
++#: keys.cpp:192
++msgid "KEYPAD7"
++msgstr "NUMERICKÁ_7"
++
++#: keys.cpp:193
++msgid "KEYPAD8"
++msgstr "NUMERICKÁ_8"
++
++#: keys.cpp:194
++msgid "KEYPAD9"
++msgstr "NUMERICKÁ_9"
++
++#: keys.cpp:195
++msgid "KEYPAD_PERIOD"
++msgstr "NUMERICKÁ_BODKA"
++
++#: keys.cpp:196
++msgid "KEYPAD_DIVIDE"
++msgstr "NUMERICKÁ_DELENO"
++
++#: keys.cpp:197
++msgid "KEYPAD_MULTIPLY"
++msgstr "NUMERICKÁ_KRÁT"
++
++#: keys.cpp:198
++msgid "KEYPAD_MINUS"
++msgstr "NUMERICKÁ_MÍNUS"
++
++#: keys.cpp:199
++msgid "KEYPAD_PLUS"
++msgstr "NUMERICKÁ_PLUS"
++
++#: keys.cpp:200
++msgid "KEYPAD_ENTER"
++msgstr "NUMERICKÁ_ENTER"
++
++#: keys.cpp:201
++msgid "KEYPAD_EQUALS"
++msgstr "NUMERICKÁ_ROVNÁ SA"
++
++#: keys.cpp:202 keys.cpp:248
++msgid "UP"
++msgstr "ŠIPKA HORE"
++
++#: keys.cpp:203 keys.cpp:248
++msgid "DOWN"
++msgstr "ŠIPKA DOLE"
++
++#: keys.cpp:204 keys.cpp:248
++msgid "RIGHT"
++msgstr "ŠIPKA DOPRAVA"
++
++#: keys.cpp:205 keys.cpp:248
++msgid "LEFT"
++msgstr "ŠIPKA DOĽAVA"
++
++#: keys.cpp:206
++msgid "INSERT"
++msgstr "INSERT"
++
++#: keys.cpp:207
++msgid "HOME"
++msgstr "HOME"
++
++#: keys.cpp:208
++msgid "END"
++msgstr "END"
++
++#: keys.cpp:209
++msgid "PAGEUP"
++msgstr "PAGE UP"
++
++#: keys.cpp:210
++msgid "PAGEDOWN"
++msgstr "PAGE DOWN"
++
++#: keys.cpp:211
++msgid "F1"
++msgstr "F1"
++
++#: keys.cpp:212
++msgid "F2"
++msgstr "F2"
++
++#: keys.cpp:213
++msgid "F3"
++msgstr "F3"
++
++#: keys.cpp:214
++msgid "F4"
++msgstr "F4"
++
++#: keys.cpp:215
++msgid "F5"
++msgstr "F5"
++
++#: keys.cpp:216
++msgid "F6"
++msgstr "F6"
++
++#: keys.cpp:217
++msgid "F7"
++msgstr "F7"
++
++#: keys.cpp:218
++msgid "F8"
++msgstr "F8"
++
++#: keys.cpp:219
++msgid "F9"
++msgstr "F9"
++
++#: keys.cpp:220
++msgid "F10"
++msgstr "F10"
++
++#: keys.cpp:221
++msgid "F11"
++msgstr "F11"
++
++#: keys.cpp:222
++msgid "F12"
++msgstr "F12"
++
++#: keys.cpp:223
++msgid "F13"
++msgstr "F13"
++
++#: keys.cpp:224
++msgid "F14"
++msgstr "F14"
++
++#: keys.cpp:225
++msgid "F15"
++msgstr "F15"
++
++#: keys.cpp:226
++msgid "NUMLOCK"
++msgstr "NUMLOCK"
++
++#: keys.cpp:227
++msgid "CAPSLOCK"
++msgstr "CAPSLOCK"
++
++#: keys.cpp:228
++msgid "SCROLLOCK"
++msgstr "SCROLLOCK"
++
++#: keys.cpp:229
++msgid "RSHIFT"
++msgstr "PRAVÝ SHIFT"
++
++#: keys.cpp:230
++msgid "LSHIFT"
++msgstr "ĽAVÝ SHIFT"
++
++#: keys.cpp:231
++msgid "RCTRL"
++msgstr "PRAVÝ CONTROL"
++
++#: keys.cpp:232
++msgid "LCTRL"
++msgstr "ĽAVÝ CONTROL"
++
++#: keys.cpp:233
++msgid "RALT"
++msgstr "PRAVÝ ALT"
++
++#: keys.cpp:234
++msgid "LALT"
++msgstr "ĽAVÝ ALT"
++
++#: keys.cpp:235
++msgid "RMETA"
++msgstr "PRAVÁ META"
++
++#: keys.cpp:236
++msgid "LMETA"
++msgstr "ĽAVÁ META"
++
++#: keys.cpp:238
++msgid "PRINT"
++msgstr "PRINTSCREEN"
++
++#: keys.cpp:239
++msgid "SYSREQ"
++msgstr "SYSREQ"
++
++#: keys.cpp:240
++msgid "BREAK"
++msgstr "BREAK"
++
++#: keys.cpp:241
++msgid "MENU"
++msgstr "PONUKA"
++
++#: keys.cpp:250
++msgid "JOY "
++msgstr ""
++
++#: keys.cpp:255
++msgid "BUTTON "
++msgstr "TLAČÍTKO"
++
++#: keys.cpp:262
++msgid "KEY "
++msgstr "KLÁVESA"
++
++#: main.cpp:69
++#, c-format
++msgid "Opening audio.\n"
++msgstr "Inicializuje sa zvukové zariadenie.\n"
++
++#: main.cpp:72
++#, c-format
++msgid "Mix_OpenAudio: %s\n"
++msgstr "Mix_OpenAudio: %s\n"
++
++#: main.cpp:77
++#, c-format
++msgid "Reserving channels for sfx..."
++msgstr "Rezervujú sa kanály pre zvukové efekty..."
++
++#: main.cpp:78
++#, c-format
++msgid "(%d of 4).\n"
++msgstr "(%d ze 4).\n"
++
++#: main.cpp:92
++#, c-format
++msgid "Initializing SDL: VIDEO, AUDIO & JOYSTICK..."
++msgstr "Inicializuje sa SDL: OBRAZ, ZVUK & JOYSTICK ..."
++
++#: main.cpp:95
++#, c-format
++msgid "Error initializing SDL: %s\n"
++msgstr "Chyba pri inicializaci SDL: %s\n"
++
++#: main.cpp:98 main.cpp:109 resource.cpp:50 resource.cpp:79 resource.cpp:119
++#: sutils.cpp:383
++#, c-format
++msgid "Ok.\n"
++msgstr "Ok.\n"
++
++#: main.cpp:103
++#, c-format
++msgid "Initializing TTF subsystem..."
++msgstr "Inicializuje sa subsytém pre TTF..."
++
++#: main.cpp:106
++#, c-format
++msgid "Error initializing SDL_TTF: %s\n"
++msgstr "Chyba při inicializaci SDL_TTF: %s\n"
++
++#: main.cpp:107
++msgid "Cannot initialize TTF"
++msgstr "Nedá sa inicializovat TTF"
++
++#: main.cpp:167
++#, c-format
++msgid ""
++"\n"
++"Exiting: %s\n"
++msgstr ""
++"\n"
++"Končím: %s\n"
++
++#: menu.cpp:133
++msgid "Cannot make a copy of background"
++msgstr "Nedása urobiťt kópia pozadia"
++
++#: njamfont.cpp:40
++#, c-format
++msgid "Loading font..."
++msgstr "Nahrává sa font..."
++
++#: njamfont.cpp:48
++#, c-format
++msgid "FAILED.\n"
++msgstr "ZLYHALO.\n"
++
++#: njamfont.cpp:52 resource.cpp:140 resource.cpp:146 resource.cpp:152
++#: sutils.cpp:112
++#, c-format
++msgid "OK.\n"
++msgstr "OK.\n"
++
++#: njamfont.cpp:118
++msgid "Failed to create text image."
++msgstr "Zlyhalo vytváranie obrázku z textu."
++
++#: njamfont.cpp:127
++msgid "Failed to blit font character image."
++msgstr "Zlyhal bitový transfer znaku z fontu."
++
++#: resource.cpp:33
++#, c-format
++msgid "Uninitialized sfx: %s\n"
++msgstr "Neinicializovaný zvukový efekt: %s\n"
++
++#: resource.cpp:37
++#, c-format
++msgid "Loading sfx %s..."
++msgstr "Nahrává sa zvukový efekt: %s..."
++
++#: resource.cpp:45
++#, c-format
++msgid "ERROR: Mix_LoadWAV(): %s\n"
++msgstr "CHYBA: Mix_LoadWAV(): %s\n"
++
++#: resource.cpp:62
++#, c-format
++msgid "Uninitialized music: %s\n"
++msgstr "Neinicializovaná hudba: %s\n"
++
++#: resource.cpp:66
++#, c-format
++msgid "Loading music %s (%s)..."
++msgstr "Nahrává sa hudba: %s (%s)..."
++
++#: resource.cpp:74
++#, c-format
++msgid "ERROR: Mix_LoadMUS(): %s\n"
++msgstr "CHYBA: Mix_LoadMUS(): %s\n"
++
++#: resource.cpp:91
++#, c-format
++msgid "Uninitialized graphics: %s\n"
++msgstr "Neinicializovaná grafika: %s\n"
++
++#: resource.cpp:95
++#, c-format
++msgid "Loading graphics %s (%s)..."
++msgstr "Nahrává sa grafika: %s (%s)..."
++
++#: resource.cpp:103
++#, c-format
++msgid " failed. Error: %s\n"
++msgstr " zlyhalo. Chyba: %s\n"
++
++#: resource.cpp:106
++#, c-format
++msgid "OK. Converting..."
++msgstr "OK. Konvertuje sa..."
++
++#: resource.cpp:112 sutils.cpp:379
++#, c-format
++msgid "failed: %s\n"
++msgstr "zlyhalo: %s\n"
++
++#: resource.cpp:135
++#, c-format
++msgid "Releasing resources...\n"
++msgstr "Uvolňujú sa zdroje...\n"
++
++#: resource.cpp:138
++#, c-format
++msgid "Freeing gfx resource: %s..."
++msgstr "Uvolňuje sa grafika: %s..."
++
++#: resource.cpp:144
++#, c-format
++msgid "Freeing sfx resource: %s..."
++msgstr "Uvolňuje sa zvuk: %s..."
++
++#: resource.cpp:150
++#, c-format
++msgid "Freeing music resource: %s (0x%08x)..."
++msgstr "Uvolňuje sa hudba: %s (0x%08x)..."
++
++#: sutils.cpp:101
++#, c-format
++msgid "Loading image: %s ..."
++msgstr "Nahrává sa obrázok: %s..."
++
++#: sutils.cpp:109
++#, c-format
++msgid ""
++"FAILED.\n"
++"Error: %s\n"
++msgstr ""
++"ZLYHALO.\n"
++"Chyba: %s\n"
++
++#: sutils.cpp:119
++#, c-format
++msgid "Couldn't convert image: %s\n"
++msgstr "Nedá  sa konvertovať obrázok: %s\n"
++
++#: sutils.cpp:157
++#, c-format
++msgid "sutils.cpp: Can't lock surface: %s\n"
++msgstr "sutils.cpp: Nedá sa uzamknuť povrch: %s\n"
++
++#: sutils.cpp:253
++#, c-format
++msgid "njamutils.cpp: Can't lock surface: %s\n"
++msgstr "njamutils.cpp: Nedá sa uzamknuť povrch: %s\n"
++
++#: sutils.cpp:357
++#, c-format
++msgid "ERROR: Mix_PlayMusic: %s\n"
++msgstr "CHYBA: Mix_PlayMusic: %s\n"
++
++#: sutils.cpp:371
++#, c-format
++msgid "Setting video mode...\n"
++msgstr "Nastavuje sa videorežim...\n"
++
++#: sutils.cpp:375
++#, c-format
++msgid "Trying video mode 800x600x%d..."
++msgstr "Skúša sa videorežim 800×600×%d..."
+Index: vodovod.svn/po/sr.po
+===================================================================
+--- vodovod.svn/po/sr.po	(revision 23)
++++ vodovod.svn/po/sr.po	(working copy)
+@@ -8,10 +8,11 @@
+ msgstr ""
+ "Project-Id-Version: PACKAGE VERSION\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+ "Last-Translator: Milan Babuskov <mbabuskov@yahoo.com>\n"
+ "Language-Team: LANGUAGE <LL@li.org>\n"
++"Language: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+@@ -204,10 +205,14 @@
+ msgstr ""
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+ msgstr ""
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+ msgstr ""
+ 
+@@ -867,13 +872,11 @@
+ msgstr ""
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
++msgid "Failed to create text image."
+ msgstr ""
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
++msgid "Failed to blit font character image."
+ msgstr ""
+ 
+ #: resource.cpp:33
+Index: vodovod.svn/po/sv.po
+===================================================================
+--- vodovod.svn/po/sv.po	(revision 23)
++++ vodovod.svn/po/sv.po	(working copy)
+@@ -2,10 +2,11 @@
+ msgstr ""
+ "Project-Id-Version: Vodovod svn 19\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: 2009-01-19 19:10+0100\n"
+ "Last-Translator: \n"
+ "Language-Team: \n"
++"Language: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+@@ -199,10 +200,14 @@
+ msgstr "SERBISKA"
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+ msgstr ""
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+ msgstr ""
+ 
+@@ -864,14 +869,14 @@
+ msgstr "OK.\n"
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
++#, fuzzy
++msgid "Failed to create text image."
+ msgstr "Misslyckades med att skapa textbild.\n"
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
+-msgstr ""
++#, fuzzy
++msgid "Failed to blit font character image."
++msgstr "Misslyckades med att skapa textbild.\n"
+ 
+ #: resource.cpp:33
+ #, c-format
+Index: vodovod.svn/po/vodovod.pot
+===================================================================
+--- vodovod.svn/po/vodovod.pot	(revision 23)
++++ vodovod.svn/po/vodovod.pot	(working copy)
+@@ -8,10 +8,11 @@
+ msgstr ""
+ "Project-Id-Version: PACKAGE VERSION\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+ "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+ "Language-Team: LANGUAGE <LL@li.org>\n"
++"Language: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=CHARSET\n"
+ "Content-Transfer-Encoding: 8bit\n"
+@@ -203,10 +204,14 @@
+ msgstr ""
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+ msgstr ""
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+ msgstr ""
+ 
+@@ -866,13 +871,11 @@
+ msgstr ""
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
++msgid "Failed to create text image."
+ msgstr ""
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
++msgid "Failed to blit font character image."
+ msgstr ""
+ 
+ #: resource.cpp:33
+Index: vodovod.svn/po/zh.po
+===================================================================
+--- vodovod.svn/po/zh.po	(revision 23)
++++ vodovod.svn/po/zh.po	(working copy)
+@@ -7,10 +7,11 @@
+ msgstr ""
+ "Project-Id-Version: 1.1.X\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2009-11-24 18:25+0100\n"
++"POT-Creation-Date: 2014-02-03 18:00+0100\n"
+ "PO-Revision-Date: 2009-11-20 07:40+1100\n"
+ "Last-Translator: jiero <lililjlj@gmail.com>\n"
+ "Language-Team: Simplified Chinese <i10n>\n"
++"Language: \n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: UTF-8\n"
+@@ -202,10 +203,14 @@
+ msgstr "塞尔维亚语"
+ 
+ #: allmenus.cpp:358
++msgid "SLOVAK"
++msgstr ""
++
++#: allmenus.cpp:359
+ msgid "SWEDISH"
+ msgstr "瑞典语"
+ 
+-#: allmenus.cpp:359
++#: allmenus.cpp:360
+ msgid "SIMPLIFIED CHINESE"
+ msgstr "简体中文"
+ 
+@@ -865,13 +870,11 @@
+ msgstr "好了。\n"
+ 
+ #: njamfont.cpp:118
+-#, c-format
+-msgid "Failed to create text image.\n"
++msgid "Failed to create text image."
+ msgstr ""
+ 
+ #: njamfont.cpp:127
+-#, c-format
+-msgid "Failed to blit font character image.\n"
++msgid "Failed to blit font character image."
+ msgstr ""
+ 
+ #: resource.cpp:33

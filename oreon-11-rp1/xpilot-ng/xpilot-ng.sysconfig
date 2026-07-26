@@ -1,0 +1,25 @@
+#
+# xpilot-ng-server(6) options. Pick a custom port here if needed, for example.
+#
+
+# This option activates a public server.  This will advertise your
+# xpilot server to the public xpilot metadirectory and keep xpilot
+# running continuosly.
+# The following two lines have the same effect:
+#XPILOTD_OPTIONS="-expand PublicSettings"
+#XPILOTD_OPTIONS="-idleRun -noQuit -reportToMetaServer"
+
+# You should allow one UDP port per client connection.
+# 100 ports should be more than plenty.  Don't forget to
+# update the firewall rules to allow incoming UDP traffic
+# on this port range.
+#XPILOTD_OPTIONS="-clientPortStart 32200 -clientPortEnd 32299"
+
+
+# Normally xpilot will look in /usr/share/xpilot-ng for the
+# configuration files.  This is fine for user-initiated servers.
+# But for the system xpilot server we want to allow a different set
+# of defaults.
+# Also, explicitly disable reporting to the metaserver.  Use
+# -expand PublicSettings or -reportToMetaserver to enable.
+XPILOTD_OPTIONS="-noQuit +reportToMetaServer -defaultsFileName /etc/xpilot-ng/defaults.txt -passwordFileName /etc/xpilot-ng/password.txt"

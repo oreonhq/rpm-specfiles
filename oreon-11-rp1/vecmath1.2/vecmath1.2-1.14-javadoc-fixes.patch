@@ -1,0 +1,463 @@
+diff -up vecmath1.2-1.14/javax/vecmath/AxisAngle4d.java~ vecmath1.2-1.14/javax/vecmath/AxisAngle4d.java
+--- vecmath1.2-1.14/javax/vecmath/AxisAngle4d.java~	1999-11-25 11:55:37.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/AxisAngle4d.java	2015-06-22 14:15:10.137368155 +0200
+@@ -199,7 +199,7 @@ public class AxisAngle4d implements Seri
+ 
+     /**
+       * Sets the value of this axis angle to the value of axis angle t1.
+-      * @param t1 the axis angle to be copied
++      * @param a1 the axis angle to be copied
+       */
+     public final void set(AxisAngle4d a1) {
+ 	x = a1.x;
+@@ -210,7 +210,7 @@ public class AxisAngle4d implements Seri
+ 
+     /**
+       * Sets the value of this axis angle to the value of axis angle t1.
+-      * @param t1 the axis angle to be copied
++      * @param a1 the axis angle to be copied
+       */
+     public final void set(AxisAngle4f a1) {
+ 	x = (float)(a1.x);
+diff -up vecmath1.2-1.14/javax/vecmath/AxisAngle4f.java~ vecmath1.2-1.14/javax/vecmath/AxisAngle4f.java
+--- vecmath1.2-1.14/javax/vecmath/AxisAngle4f.java~	1999-11-25 11:55:37.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/AxisAngle4f.java	2015-06-22 14:15:56.054201972 +0200
+@@ -196,7 +196,7 @@ public class AxisAngle4f implements Seri
+ 
+     /**
+       * Sets the value of this axis angle to the value of axis angle t1.
+-      * @param t1 the axis angle to be copied
++      * @param a1 the axis angle to be copied
+       */
+     public final void set(AxisAngle4f a1) {
+ 	x = a1.x;
+@@ -207,7 +207,7 @@ public class AxisAngle4f implements Seri
+ 
+     /**
+       * Sets the value of this axis angle to the value of axis angle t1.
+-      * @param t1 the axis angle to be copied
++      * @param a1 the axis angle to be copied
+       */
+     public final void set(AxisAngle4d a1) {
+ 	x = (float)(a1.x);
+diff -up vecmath1.2-1.14/javax/vecmath/Color3b.java~ vecmath1.2-1.14/javax/vecmath/Color3b.java
+--- vecmath1.2-1.14/javax/vecmath/Color3b.java~	1999-11-25 11:55:30.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Color3b.java	2015-06-22 14:16:54.612714718 +0200
+@@ -67,7 +67,7 @@ public class Color3b extends Tuple3b imp
+ 
+     /**
+       * Constructs and initializes a Color3b from input array of length 3.
+-      * @param t the array of length 3 containing c1 c2 c3 in order
++      * @param c the array of length 3 containing c1 c2 c3 in order
+       */
+     public Color3b(byte c[]) {
+ 	// ArrayIndexOutOfBounds is thrown if t.length < 3
+@@ -76,7 +76,7 @@ public class Color3b extends Tuple3b imp
+ 
+     /**
+       * Constructs and initializes a Color3b from the specified Color3b.
+-      * @param c the Color3b containing the initialization x y z data
++      * @param c1 the Color3b containing the initialization x y z data
+       */
+     public Color3b(Color3b c1) {
+ 	super(c1);
+diff -up vecmath1.2-1.14/javax/vecmath/Color3f.java~ vecmath1.2-1.14/javax/vecmath/Color3f.java
+--- vecmath1.2-1.14/javax/vecmath/Color3f.java~	1999-11-25 11:55:32.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Color3f.java	2015-06-22 14:30:38.970785346 +0200
+@@ -77,7 +77,7 @@ public class Color3f extends Tuple3f imp
+ 
+     /**
+       * Constructs and initializes a Color3f from the specified Color3f.
+-      * @param c the Color3f containing the initialization x y z data
++      * @param c1 the Color3f containing the initialization x y z data
+       */
+     public Color3f(Color3f c1) {
+ 	super(c1);
+diff -up vecmath1.2-1.14/javax/vecmath/Color4b.java~ vecmath1.2-1.14/javax/vecmath/Color4b.java
+--- vecmath1.2-1.14/javax/vecmath/Color4b.java~	1999-11-25 11:55:33.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Color4b.java	2015-06-22 14:18:15.058671573 +0200
+@@ -77,7 +77,7 @@ public class Color4b extends Tuple4b imp
+ 
+     /**
+       * Constructs and initializes a Color4b from the specified Color4b.
+-      * @param c the Color4b containing the initialization x y z w data
++      * @param c1 the Color4b containing the initialization x y z w data
+       */
+     public Color4b(Color4b c1) {
+ 	super(c1);
+diff -up vecmath1.2-1.14/javax/vecmath/Color4f.java~ vecmath1.2-1.14/javax/vecmath/Color4f.java
+--- vecmath1.2-1.14/javax/vecmath/Color4f.java~	1999-11-25 11:55:35.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Color4f.java	2015-06-22 14:18:39.458051884 +0200
+@@ -75,7 +75,7 @@ public class Color4f extends Tuple4f imp
+ 
+     /**
+       * Constructs and initializes a Color4f from the specified Color4f.
+-      * @param c the Color4f containing the initialization x y z w data
++      * @param c1 the Color4f containing the initialization x y z w data
+       */
+     public Color4f(Color4f c1) {
+ 	super(c1);
+diff -up vecmath1.2-1.14/javax/vecmath/GMatrix.java~ vecmath1.2-1.14/javax/vecmath/GMatrix.java
+--- vecmath1.2-1.14/javax/vecmath/GMatrix.java~	1999-11-25 11:55:38.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/GMatrix.java	2015-06-22 14:19:37.328582103 +0200
+@@ -805,7 +805,7 @@ public class GMatrix implements Serializ
+     /**
+      * Copy the values from the array into the specified column of this
+      * matrix. 
+-     * @param row the column of this matrix into which the array values
++     * @param col the column of this matrix into which the array values
+      * will be copied.
+      * @param array the source array
+      */
+@@ -825,7 +825,7 @@ public class GMatrix implements Serializ
+      * Copy the values from the array into the specified column of this
+      * matrix.
+      *
+-     * @param row the column of this matrix into which the vector values
++     * @param col the column of this matrix into which the vector values
+      * will be copied.
+      * @param vector the source vector
+      */
+@@ -1081,9 +1081,9 @@ public class GMatrix implements Serializ
+      * then the inverse of this matrix is: inverse(this) = V*diag(1/w)*tranpose(U), 
+      * where diag(1/w) is the same matrix as W except that the reciprocal of each 
+      * of the diagonal components is used. 
+-     * @param U The computed U matrix in the equation this = U*W*transpose(V) 
+-     * @param W The computed W matrix in the equation this = U*W*transpose(V) 
+-     * @param V The computed V matrix in the equation this = U*W*transpose(V) 
++     * @param u The computed U matrix in the equation this = U*W*transpose(V) 
++     * @param w The computed W matrix in the equation this = U*W*transpose(V) 
++     * @param v The computed V matrix in the equation this = U*W*transpose(V) 
+      * @return The rank of this matrix. 
+      */
+     public final int SVD(GMatrix u, GMatrix w, GMatrix v)  {
+diff -up vecmath1.2-1.14/javax/vecmath/GVector.java~ vecmath1.2-1.14/javax/vecmath/GVector.java
+--- vecmath1.2-1.14/javax/vecmath/GVector.java~	1999-11-25 11:55:38.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/GVector.java	2015-06-22 14:22:06.538792502 +0200
+@@ -104,7 +104,7 @@ public class GVector implements Serializ
+      * Constructs a new GVector and copies the initial values from 
+      * the Tuple 
+      *
+-     * @param   vector the source for the new GVector's initial values 
++     * @param tuple the source for the new GVector's initial values 
+      */
+     public GVector(Tuple2f tuple) {
+ 	this(2);
+@@ -114,7 +114,7 @@ public class GVector implements Serializ
+     /**
+      * Constructs a new GVector and copies the initial values from 
+      * the Tuple 
+-     * @param   vector the source for the new GVector's initial values 
++     * @param tuple the source for the new GVector's initial values 
+      */
+     public GVector(Tuple3f tuple) {
+ 	this(3);
+@@ -124,7 +124,7 @@ public class GVector implements Serializ
+     /**
+      * Constructs a new GVector and copies the initial values from 
+      * the Tuple 
+-     * @param   vector the source for the new GVector's initial values 
++     * @param tuple the source for the new GVector's initial values 
+      */
+     public GVector(Tuple3d tuple)  {
+ 	this(3);
+@@ -134,7 +134,7 @@ public class GVector implements Serializ
+     /**
+      * Constructs a new GVector and copies the initial values from 
+      * the Tuple 
+-     * @param   vector the source for the new GVector's initial values 
++     * @param tuple the source for the new GVector's initial values 
+      */
+     public GVector(Tuple4f tuple) {
+ 	this(4);
+@@ -144,7 +144,7 @@ public class GVector implements Serializ
+     /**
+      * Constructs a new GVector and copies the initial values from 
+      * the Tuple 
+-     * @param   vector the source for the new GVector's initial values 
++     * @param tuple the source for the new GVector's initial values 
+      */
+     public GVector(Tuple4d tuple) {
+ 	this(4);
+@@ -399,7 +399,7 @@ public class GVector implements Serializ
+      * increased no data values will be lost. If the size is 
+      * decreased, only those data values whose vector positions 
+      * were eliminated will be lost.
+-     * @param   length number of desired elements in this vector 
++     * @param newSize number of desired elements in this vector 
+      */
+     public final void setSize(int newSize) {
+         if (newSize < 0)
+diff -up vecmath1.2-1.14/javax/vecmath/Matrix3d.java~ vecmath1.2-1.14/javax/vecmath/Matrix3d.java
+--- vecmath1.2-1.14/javax/vecmath/Matrix3d.java~	1999-11-25 11:55:36.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Matrix3d.java	2015-06-22 14:31:13.481909673 +0200
+@@ -552,7 +552,7 @@ public class Matrix3d implements Seriali
+       * Adds a scalar to each component of the matrix m1 and places
+       * the result into this. Matrix m1 is not modified.
+       * @param scalar The scalar adder.
+-      * @parm m1 The original matrix values.
++      * @param m1 The original matrix values.
+       */
+     public final void add(double scalar, Matrix3d m1) {
+ 	set(m1);
+@@ -1093,7 +1093,7 @@ public class Matrix3d implements Seriali
+     /**
+      * Transform the vector vec using this Matrix3d and place the
+      * result back into vec.
+-     * @param vec the double precision vector to be transformed
++     * @param t the double precision vector to be transformed
+      */
+     public final void transform(Tuple3d t)  {
+ 	transform(t, t);
+@@ -1102,7 +1102,7 @@ public class Matrix3d implements Seriali
+     /**
+      * Transform the vector vec using this Matrix3d and place the
+      * result into vecOut.
+-     * @paramt the double precision vector to be transformed
++     * @param t the double precision vector to be transformed
+      * @param result the vector into which the transformed values are placed
+      */
+     public final void transform(Tuple3d t, Tuple3d result) {
+diff -up vecmath1.2-1.14/javax/vecmath/Matrix3f.java~ vecmath1.2-1.14/javax/vecmath/Matrix3f.java
+--- vecmath1.2-1.14/javax/vecmath/Matrix3f.java~	1999-11-25 11:55:37.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Matrix3f.java	2015-06-22 14:31:29.401505735 +0200
+@@ -549,7 +549,7 @@ public class Matrix3f implements Seriali
+       * Adds a scalar to each component of the matrix m1 and places
+       * the result into this. Matrix m1 is not modified.
+       * @param scalar The scalar adder.
+-      * @parm m1 The original matrix values.
++      * @param m1 The original matrix values.
+       */
+     public final void add(float scalar, Matrix3f m1) {
+ 	set(m1);
+@@ -1079,7 +1079,7 @@ public class Matrix3f implements Seriali
+     /**
+      * Transform the vector vec using this Matrix3f and place the
+      * result back into vec.
+-     * @param vec the single precision vector to be transformed
++     * @param t the single precision vector to be transformed
+      */
+     public final void transform(Tuple3f t)  {
+ 	// alias-safe
+@@ -1089,7 +1089,7 @@ public class Matrix3f implements Seriali
+     /**
+      * Transform the vector vec using this Matrix3f and place the
+      * result into vecOut.
+-     * @paramt the single precision vector to be transformed
++     * @param t the single precision vector to be transformed
+      * @param result the vector into which the transformed values are placed
+      */
+     public final void transform(Tuple3f t, Tuple3f result) {
+diff -up vecmath1.2-1.14/javax/vecmath/Matrix4d.java~ vecmath1.2-1.14/javax/vecmath/Matrix4d.java
+--- vecmath1.2-1.14/javax/vecmath/Matrix4d.java~	1999-11-25 11:55:36.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Matrix4d.java	2015-06-22 14:24:09.368672900 +0200
+@@ -879,7 +879,7 @@ public class Matrix4d implements Seriali
+       * Adds a scalar to each component of the matrix m1 and places
+       * the result into this. Matrix m1 is not modified.
+       * @param scalar The scalar adder.
+-      * @parm m1 The original matrix values.
++      * @param m1 The original matrix values.
+       */
+     public final void add(double scalar, Matrix4d m1) {
+ 	set(m1);
+diff -up vecmath1.2-1.14/javax/vecmath/Matrix4f.java~ vecmath1.2-1.14/javax/vecmath/Matrix4f.java
+--- vecmath1.2-1.14/javax/vecmath/Matrix4f.java~	1999-11-25 11:55:37.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Matrix4f.java	2015-06-22 14:24:12.599590842 +0200
+@@ -802,7 +802,7 @@ public class Matrix4f implements Seriali
+       * Adds a scalar to each component of the matrix m1 and places
+       * the result into this. Matrix m1 is not modified.
+       * @param scalar The scalar adder.
+-      * @parm m1 The original matrix values.
++      * @param m1 The original matrix values.
+       */
+     public final void add(float scalar, Matrix4f m1) {
+ 	set(m1);
+diff -up vecmath1.2-1.14/javax/vecmath/Quat4d.java~ vecmath1.2-1.14/javax/vecmath/Quat4d.java
+--- vecmath1.2-1.14/javax/vecmath/Quat4d.java~	1999-11-25 11:55:38.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Quat4d.java	2015-06-22 14:29:09.102065641 +0200
+@@ -69,7 +69,7 @@ public class Quat4d extends Tuple4d impl
+   
+     /**
+      * Constructs and initializes a Quat4d from the array of length 4.
+-     * @param v the array of length 4 containing xyzw in order
++     * @param q the array of length 4 containing xyzw in order
+      */
+     public Quat4d(double q[]) {
+ 	super(q);
+diff -up vecmath1.2-1.14/javax/vecmath/Quat4f.java~ vecmath1.2-1.14/javax/vecmath/Quat4f.java
+--- vecmath1.2-1.14/javax/vecmath/Quat4f.java~	1999-11-25 11:55:38.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Quat4f.java	2015-06-22 14:32:25.511082032 +0200
+@@ -72,7 +72,7 @@ public class Quat4f extends Tuple4f impl
+   
+     /**
+      * Constructs and initializes a Quat4f from the array of length 4.
+-     * @param v the array of length 4 containing xyzw in order
++     * @param q the array of length 4 containing xyzw in order
+      */
+     public Quat4f(float q[]) {
+ 	super(q);
+diff -up vecmath1.2-1.14/javax/vecmath/TexCoord2f.java~ vecmath1.2-1.14/javax/vecmath/TexCoord2f.java
+--- vecmath1.2-1.14/javax/vecmath/TexCoord2f.java~	1999-11-25 11:55:04.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/TexCoord2f.java	2015-06-22 14:29:42.556216788 +0200
+@@ -68,7 +68,7 @@ public class TexCoord2f extends Tuple2f
+ 
+     /**
+       * Constructs and initializes a TexCoord2f from the specified array.
+-      * @param p the array of length 2 containing xy in order
++      * @param v the array of length 2 containing xy in order
+       */
+     public TexCoord2f(float v[]) {
+ 	super(v);
+diff -up vecmath1.2-1.14/javax/vecmath/TexCoord3f.java~ vecmath1.2-1.14/javax/vecmath/TexCoord3f.java
+--- vecmath1.2-1.14/javax/vecmath/TexCoord3f.java~	1999-11-25 11:55:04.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/TexCoord3f.java	2015-06-22 14:29:45.628138842 +0200
+@@ -66,7 +66,7 @@ public class TexCoord3f extends Tuple3f
+ 
+     /**
+       * Constructs and initializes a TexCoord3f from the specified array.
+-      * @param p the array of length 3 containing xyz in order
++      * @param v the array of length 3 containing xyz in order
+       */
+     public TexCoord3f(float v[]) {
+ 	super(v);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple2d.java~ vecmath1.2-1.14/javax/vecmath/Tuple2d.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple2d.java~	1999-11-25 11:55:01.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple2d.java	2015-06-22 14:24:47.381707455 +0200
+@@ -318,7 +318,7 @@ public abstract class Tuple2d implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(double min, Tuple2d t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple2f.java~ vecmath1.2-1.14/javax/vecmath/Tuple2f.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple2f.java~	1999-11-25 11:55:01.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple2f.java	2015-06-22 14:25:27.123698099 +0200
+@@ -333,7 +333,7 @@ public abstract class Tuple2f implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(float min, Tuple2f t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple3d.java~ vecmath1.2-1.14/javax/vecmath/Tuple3d.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple3d.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple3d.java	2015-06-22 14:26:09.091633159 +0200
+@@ -416,7 +416,7 @@ public abstract class Tuple3d implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       * @deprecated As of Java3D API 1.1 Beta02
+       */
+     public final void clampMin(float min, Tuple3d t) {
+@@ -493,7 +493,7 @@ public abstract class Tuple3d implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(double min, Tuple3d t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple3f.java~ vecmath1.2-1.14/javax/vecmath/Tuple3f.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple3f.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple3f.java	2015-06-22 14:16:54.052728940 +0200
+@@ -363,7 +363,7 @@ public abstract class Tuple3f implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(float min, Tuple3f t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple3i.java~ vecmath1.2-1.14/javax/vecmath/Tuple3i.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple3i.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple3i.java	2015-06-22 14:31:58.615764464 +0200
+@@ -164,7 +164,7 @@ public abstract class Tuple3i implements
+ 
+     /**
+       * Sets the value of this tuple to the sum of itself and t1.
+-      * @param t is the other tuple
++      * @param t1 is the other tuple
+       */
+     public final void add(Tuple3i t1) {
+ 	x += t1.x;
+@@ -185,7 +185,7 @@ public abstract class Tuple3i implements
+ 
+     /**
+       * Sets the value of this tuple to the difference of itself and t1.
+-      * @param t is the other tuple
++      * @param t1 is the other tuple
+       */
+     public final void sub(Tuple3i t1) {
+ 	x -= t1.x;
+@@ -250,7 +250,7 @@ public abstract class Tuple3i implements
+       * Sets the value of this tuple to the scalar multiplication of itself
+       * and then adds tuple t1 (this = s*this + t1).
+       * @param s the scalar value
+-      * @param t the tuple to be added
++      * @param t1 the tuple to be added
+       */
+     public final void scaleAdd(int s, Tuple3i t1) {
+ 	x = s*x + t1.x;
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple4d.java~ vecmath1.2-1.14/javax/vecmath/Tuple4d.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple4d.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple4d.java	2015-06-22 14:28:02.479756091 +0200
+@@ -386,7 +386,7 @@ public abstract class Tuple4d implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(double min, Tuple4d t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple4f.java~ vecmath1.2-1.14/javax/vecmath/Tuple4f.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple4f.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple4f.java	2015-06-22 14:18:14.226692703 +0200
+@@ -382,7 +382,7 @@ public abstract class Tuple4f implements
+       * Clamps the minimum value of the tuple parameter to the min parameter
+       * and places the values into this tuple.
+       * @param min the lowest value in the tuple after clamping
+-      * @parm t the source tuple, which will not be modified
++      * @param t the source tuple, which will not be modified
+       */
+     public final void clampMin(float min, Tuple4f t) {
+ 	set(t);
+diff -up vecmath1.2-1.14/javax/vecmath/Tuple4i.java~ vecmath1.2-1.14/javax/vecmath/Tuple4i.java
+--- vecmath1.2-1.14/javax/vecmath/Tuple4i.java~	1999-11-25 11:55:02.000000000 +0100
++++ vecmath1.2-1.14/javax/vecmath/Tuple4i.java	2015-06-22 14:28:31.327024131 +0200
+@@ -181,7 +181,7 @@ public abstract class Tuple4i implements
+ 
+     /**
+       * Sets the value of this tuple to the sum of itself and t1.
+-      * @param t is the other tuple
++      * @param t1 is the other tuple
+       */
+     public final void add(Tuple4i t1) {
+ 	x += t1.x;
+@@ -204,7 +204,7 @@ public abstract class Tuple4i implements
+ 
+     /**
+       * Sets the value of this tuple to the difference of itself and t1.
+-      * @param t is the other tuple
++      * @param t1 is the other tuple
+       */
+     public final void sub(Tuple4i t1) {
+ 	x -= t1.x;
+@@ -275,7 +275,7 @@ public abstract class Tuple4i implements
+       * Sets the value of this tuple to the scalar multiplication of itself
+       * and then adds tuple t1 (this = s*this + t1).
+       * @param s the scalar value
+-      * @param t the tuple to be added
++      * @param t1 the tuple to be added
+       */
+     public final void scaleAdd(int s, Tuple4i t1) {
+ 	x = s*x + t1.x;

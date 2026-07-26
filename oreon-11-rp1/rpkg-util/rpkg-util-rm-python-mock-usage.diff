@@ -1,0 +1,54 @@
+--- a/tests/unit/test_git_client.py
++++ b/tests/unit/test_git_client.py
+@@ -3,7 +3,7 @@ import shutil
+ import pytest
+ 
+ from munch import Munch
+-from mock import patch, Mock, call
++from unittest.mock import patch, Mock, call
+ from tempfile import mkdtemp
+ 
+ from . import base
+--- a/tests/unit/test_init.py
++++ b/tests/unit/test_init.py
+@@ -7,7 +7,7 @@ import pytest
+ import shutil
+ 
+ from tempfile import NamedTemporaryFile, mkdtemp
+-from mock import Mock, patch, call
++from unittest.mock import Mock, patch, call
+ from munch import Munch
+ 
+ from . import base
+--- a/tests/unit/test_lookaside.py
++++ b/tests/unit/test_lookaside.py
+@@ -5,7 +5,7 @@ import shutil
+ 
+ from munch import Munch
+ from tempfile import mkdtemp, NamedTemporaryFile
+-from mock import patch, Mock, call
++from unittest.mock import patch, Mock, call
+ 
+ from . import base
+ 
+--- a/tests/unit/test_rpm_package.py
++++ b/tests/unit/test_rpm_package.py
+@@ -4,7 +4,7 @@ import shutil
+ 
+ from munch import Munch
+ from tempfile import mkdtemp, mkstemp
+-from mock import patch, Mock
++from unittest.mock import patch, Mock
+ 
+ from . import base
+ from .spec_templates import SPEC_TEMPLATE, SPEC_WITH_PATCH_TEMPLATE,\
+--- a/tests/unit/test_utils.py
++++ b/tests/unit/test_utils.py
+@@ -1,6 +1,6 @@
+ import subprocess
+ 
+-from mock import Mock, patch, call
++from unittest.mock import Mock, patch, call
+ 
+ from rpkglib import utils, errors
+ from . import base

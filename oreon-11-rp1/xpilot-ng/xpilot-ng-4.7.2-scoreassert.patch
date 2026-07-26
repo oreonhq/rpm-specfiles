@@ -1,0 +1,19 @@
+--- a/src/server/score.c.orig	2006-10-20 11:38:01.000000000 -0700
++++ b/src/server/score.c	2006-10-20 12:44:30.000000000 -0700
+@@ -257,9 +257,13 @@
+ 		sc = Rate(cannon->score, Get_Score(victim))
+ 		    * options.cannonKillScoreMult;
+ 	    else {
+-		assert(((object_t *) extra)->id == NO_ID);
+-		sc = Rate(UNOWNED_SCORE, Get_Score(victim))
+-		    * options.cannonKillScoreMult;
++		//assert(((object_t *) extra)->id == NO_ID);
++		if ( ((object_t *) extra)->id != NO_ID) {
++                    fprintf(stderr, "((object_t *) extra)->id == NO_ID assertion failed\n");
++                } else {
++                    sc = Rate(UNOWNED_SCORE, Get_Score(victim))
++                        * options.cannonKillScoreMult;
++                }
+ 	    }
+ 	} else if (((object_t *) extra)->id == NO_ID) {
+ 	    sc = Rate(0.0,

@@ -1,0 +1,259 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9d8c1fc..196fa16 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1789,7 +1789,7 @@ install (FILES
+ 
+ install (FILES
+   ALLCALL7.TXT
+-  DESTINATION ${CMAKE_INSTALL_BINDIR}
++  DESTINATION ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}
+   #COMPONENT runtime
+   )
+ 
+@@ -1802,7 +1802,7 @@ install (DIRECTORY
+ 
+ install (DIRECTORY
+   ${PROJECT_SOURCE_DIR}/sounds
+-  DESTINATION ${CMAKE_INSTALL_BINDIR}
++  DESTINATION ${CMAKE_INSTALL_DATADIR}/${CMAKE_PROJECT_NAME}
+   #COMPONENT runtime
+   )
+ 
+diff --git a/lib/ft8var/cwfilter.f90 b/lib/ft8var/cwfilter.f90
+index d8a6404..cdf93b8 100644
+--- a/lib/ft8var/cwfilter.f90
++++ b/lib/ft8var/cwfilter.f90
+@@ -17,7 +17,7 @@ subroutine cwfilter(first)
+ !note that with new, larger ALLCALL7.TXT files, dimensions of various ncall arrays may need to be increased in jt65_mod9.f90
+ !on 20250709 callj dim was increased from 9000 to 10000 when updated ALLCALL7.TXT file was added
+   if(first) then
+-    open(24,file='ALLCALL7.TXT',status='unknown') ! accepting Australian 7-char callsigns
++    open(24,file='/usr/share/wsjtx/ALLCALL7.TXT',status='unknown') ! accepting Australian 7-char callsigns
+     do i=1,MAXC
+       read(24,1004,end=20) line
+ 1004  format(a80)
+diff --git a/widgets/displaytext.cpp b/widgets/displaytext.cpp
+index cd6c527..0166554 100644
+--- a/widgets/displaytext.cpp
++++ b/widgets/displaytext.cpp
+@@ -943,18 +943,18 @@ void DisplayText::AudioAlerts()
+         QFile *effect11 = new QFile(this);
+         QFile *effect12 = new QFile(this);
+         QFile *effect13 = new QFile(this);
+-        effect2->setFileName(QString("%1/%2").arg(binPath, "/sounds/MyCall.wav"));
+-        effect3->setFileName(QString("%1/%2").arg(binPath, "/sounds/DXCC.wav"));
+-        effect4->setFileName(QString("%1/%2").arg(binPath, "/sounds/DXCCOnBand.wav"));
+-        effect5->setFileName(QString("%1/%2").arg(binPath, "/sounds/Continent.wav"));
+-        effect6->setFileName(QString("%1/%2").arg(binPath, "/sounds/ContinentOnBand.wav"));
+-        effect7->setFileName(QString("%1/%2").arg(binPath, "/sounds/CQZone.wav"));
+-        effect8->setFileName(QString("%1/%2").arg(binPath, "/sounds/CQZoneOnBand.wav"));
+-        effect9->setFileName(QString("%1/%2").arg(binPath, "/sounds/ITUZone.wav"));
+-        effect10->setFileName(QString("%1/%2").arg(binPath, "/sounds/ITUZoneOnBand.wav"));
+-        effect11->setFileName(QString("%1/%2").arg(binPath, "/sounds/Grid.wav"));
+-        effect12->setFileName(QString("%1/%2").arg(binPath, "/sounds/GridOnBand.wav"));
+-        effect13->setFileName(QString("%1/%2").arg(binPath, "/sounds/CQ.wav"));
++        effect2->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/MyCall.wav"));
++        effect3->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/DXCC.wav"));
++        effect4->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/DXCCOnBand.wav"));
++        effect5->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/Continent.wav"));
++        effect6->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/ContinentOnBand.wav"));
++        effect7->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/CQZone.wav"));
++        effect8->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/CQZoneOnBand.wav"));
++        effect9->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/ITUZone.wav"));
++        effect10->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/ITUZoneOnBand.wav"));
++        effect11->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/Grid.wav"));
++        effect12->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/GridOnBand.wav"));
++        effect13->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/CQ.wav"));
+         static int startIndex = 0;
+         int nextStartIndex = startIndex +1;
+         switch (startIndex) {
+@@ -965,7 +965,7 @@ void DisplayText::AudioAlerts()
+                 effect2->open(QIODevice::ReadOnly);
+                 audio->start(effect2);
+ #else
+-                QSound::play(binPath + "/sounds/MyCall.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/MyCall.wav");  // for Linux and macOS
+ #endif
+ 
+                 play_MyCall = false;
+@@ -983,7 +983,7 @@ void DisplayText::AudioAlerts()
+                 effect3->open(QIODevice::ReadOnly);
+                 audio->start(effect3);
+ #else
+-                QSound::play(binPath + "/sounds/DXCC.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/DXCC.wav");  // for Linux and macOS
+ #endif
+ 
+                 play_DXCC = false;
+@@ -1001,7 +1001,7 @@ void DisplayText::AudioAlerts()
+                 effect4->open(QIODevice::ReadOnly);
+                 audio->start(effect4);
+ #else
+-                QSound::play(binPath + "/sounds/DXCCOnBand.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/DXCCOnBand.wav");  // for Linux and macOS
+ #endif
+ 
+                 play_DXCCOB = false;
+@@ -1019,7 +1019,7 @@ void DisplayText::AudioAlerts()
+                 effect5->open(QIODevice::ReadOnly);
+                 audio->start(effect5);
+ #else
+-                QSound::play(binPath + "/sounds/Continent.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/Continent.wav");  // for Linux and macOS
+ #endif
+                 play_Continent = false;
+                 play_ContinentOB = false;
+@@ -1039,7 +1039,7 @@ void DisplayText::AudioAlerts()
+                 effect6->open(QIODevice::ReadOnly);
+                 audio->start(effect6);
+ #else
+-                QSound::play(binPath + "/sounds/ContinentOnBand.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/ContinentOnBand.wav");  // for Linux and macOS
+ #endif
+                 play_ContinentOB = false;
+                 play_GridOB = false;
+@@ -1058,7 +1058,7 @@ void DisplayText::AudioAlerts()
+                 effect7->open(QIODevice::ReadOnly);
+                 audio->start(effect7);
+ #else
+-                QSound::play(binPath + "/sounds/CQZone.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/CQZone.wav");  // for Linux and macOS
+ #endif
+                 play_CQZ = false;
+                 play_CQZOB = false;
+@@ -1075,7 +1075,7 @@ void DisplayText::AudioAlerts()
+                 effect8->open(QIODevice::ReadOnly);
+                 audio->start(effect8);
+ #else
+-                QSound::play(binPath + "/sounds/CQZoneOnBand.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/CQZoneOnBand.wav");  // for Linux and macOS
+ #endif
+                 play_CQZOB = false;
+                 alertsTimer.start (1800);
+@@ -1091,7 +1091,7 @@ void DisplayText::AudioAlerts()
+                 effect9->open(QIODevice::ReadOnly);
+                 audio->start(effect9);
+ #else
+-                QSound::play(binPath + "/sounds/ITUZone.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/ITUZone.wav");  // for Linux and macOS
+ #endif
+                 play_ITUZ = false;
+                 play_ITUZOB = false;
+@@ -1109,7 +1109,7 @@ void DisplayText::AudioAlerts()
+                 effect10->open(QIODevice::ReadOnly);
+                 audio->start(effect10);
+ #else
+-                QSound::play(binPath + "/sounds/ITUZoneOnBand.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/ITUZoneOnBand.wav");  // for Linux and macOS
+ #endif
+                 play_ITUZOB = false;
+                 play_GridOB = false;
+@@ -1126,7 +1126,7 @@ void DisplayText::AudioAlerts()
+                 effect11->open(QIODevice::ReadOnly);
+                 audio->start(effect11);
+ #else
+-                QSound::play(binPath + "/sounds/Grid.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/Grid.wav");  // for Linux and macOS
+ #endif
+                 play_Grid = false;
+                 play_GridOB = false;
+@@ -1143,7 +1143,7 @@ void DisplayText::AudioAlerts()
+                 effect12->open(QIODevice::ReadOnly);
+                 audio->start(effect12);
+ #else
+-                QSound::play(binPath + "/sounds/GridOnBand.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/GridOnBand.wav");  // for Linux and macOS
+ #endif
+                 play_GridOB = false;
+                 alertsTimer.start (1500);
+@@ -1159,7 +1159,7 @@ void DisplayText::AudioAlerts()
+                 effect13->open(QIODevice::ReadOnly);
+                 audio->start(effect13);
+ #else
+-                QSound::play(binPath + "/sounds/CQ.wav");  // for Linux and macOS
++                QSound::play("/usr/share/wsjtx/sounds/CQ.wav");  // for Linux and macOS
+ #endif
+                 play_CQ = false;
+                 alertsTimer.start (1000);
+diff --git a/widgets/mainwindow.cpp b/widgets/mainwindow.cpp
+index f7819b0..7fcd709 100644
+--- a/widgets/mainwindow.cpp
++++ b//widgets/mainwindow.cpp
+@@ -1998,7 +1998,7 @@ void MainWindow::readSettings()
+       QAudioOutput* audio;
+       audio = new QAudioOutput(format, this);
+       QFile *effect = new QFile(this);
+-      effect->setFileName(QString("%1/%2").arg(binPath, "/sounds/Testing.wav"));
++      effect->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/Testing.wav"));
+       effect->open(QIODevice::ReadOnly);
+       audio->start(effect);
+   }
+@@ -3326,12 +3326,12 @@ void MainWindow::fastSink(qint64 frames)
+         audio = new QAudioOutput(format, this);
+         connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+         QFile *effect1 = new QFile(this);
+-        effect1->setFileName(QString("%1/%2").arg(binPath, "/sounds/DXcall.wav"));
++        effect1->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/DXcall.wav"));
+         effect1->open(QIODevice::ReadOnly);
+         audio->start(effect1);
+ #else
+         QString binPath = QCoreApplication::applicationDirPath();
+-        QSound::play(binPath + "/sounds/DXcall.wav");  // for Linux and macOS
++        QSound::play("/usr/share/wsjtx/sounds/DXcall.wav");  // for Linux and macOS
+ #endif
+         play_DXcall = false;
+       }
+@@ -7096,12 +7096,12 @@ void MainWindow::readFromStdout()                             //readFromStdout
+             audio = new QAudioOutput(format, this);
+             connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+             QFile *effect1 = new QFile(this);
+-            effect1->setFileName(QString("%1/%2").arg(binPath, "/sounds/DXcall.wav"));
++            effect1->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/DXcall.wav"));
+             effect1->open(QIODevice::ReadOnly);
+             audio->start(effect1);
+ #else
+             QString binPath = QCoreApplication::applicationDirPath();
+-            QSound::play(binPath + "/sounds/DXcall.wav");  // for Linux and macOS
++            QSound::play("/usr/share/wsjtx/sounds/DXcall.wav");  // for Linux and macOS
+ #endif
+             play_DXcall = false;
+           }
+@@ -10252,12 +10252,12 @@ void MainWindow::mousePressEvent(QMouseEvent *event)    // mouse press events
+       QAudioOutput* audio;
+       audio = new QAudioOutput(format, this);
+       QFile *effect = new QFile(this);
+-      effect->setFileName(QString("%1/%2").arg(binPath, "/sounds/Testing_long.wav"));
++      effect->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/Testing_long.wav"));
+       effect->open(QIODevice::ReadOnly);
+       audio->start(effect);
+ #else
+       QString binPath = QCoreApplication::applicationDirPath();
+-      QSound::play(binPath + "/sounds/Testing_long.wav");  // for Linux and macOS
++      QSound::play("/usr/share/wsjtx/sounds/Testing_long.wav");  // for Linux and macOS
+ #endif
+     }
+     ui->pbBandHopping->clearFocus();
+@@ -16987,7 +16987,7 @@ void MainWindow::on_actionErase_Ignore_List_triggered()
+ 
+ void MainWindow::read_ALLCALL7()
+ {
+-  static QFile AllCall7File {"ALLCALL7.TXT"};
++  static QFile AllCall7File {"/usr/share/wsjtx/ALLCALL7.TXT"};
+   QTextStream AllCall7Stream(&AllCall7File);
+   if(AllCall7File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+     while (!AllCall7Stream.atEnd()) {
+@@ -17034,11 +17034,11 @@ void MainWindow::alertQSYmessage ()
+   audio = new QAudioOutput(format, this);
+   connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+   QFile *effect1 = new QFile(this);
+-  effect1->setFileName(QString("%1/%2").arg(binPath, "/sounds/Message.wav"));
++  effect1->setFileName(QString("%1/%2").arg("/usr/share/wsjtx", "/sounds/Message.wav"));
+   effect1->open(QIODevice::ReadOnly);
+   audio->start(effect1);
+ #else
+   QString binPath = QCoreApplication::applicationDirPath();
+-  QSound::play(binPath + "/sounds/Message.wav");  // for Linux and macOS
++  QSound::play("/usr/share/wsjtx/sounds/Message.wav");  // for Linux and macOS
+ #endif
+ }

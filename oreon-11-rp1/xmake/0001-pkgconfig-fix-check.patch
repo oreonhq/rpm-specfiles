@@ -1,0 +1,13 @@
+diff --git a/core/xmake.sh b/core/xmake.sh
+index fdb7966..b63bf38 100755
+--- a/core/xmake.sh
++++ b/core/xmake.sh
+@@ -160,7 +160,7 @@ option_find_lz4() {
+ # the sv option
+ option "sv"
+     add_cfuncs "semver_tryn"
+-    add_cincludes "semver.h"
++    add_cincludes "sv/semver.h"
+     add_links "sv"
+     before_check "option_find_sv"
+ option_end

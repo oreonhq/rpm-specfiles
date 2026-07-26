@@ -1,0 +1,32 @@
+diff -up slashem-0.0.8E0F1/win/gl/gl_image.c.libpng slashem-0.0.8E0F1/win/gl/gl_image.c
+--- slashem-0.0.8E0F1/win/gl/gl_image.c.libpng	2006-12-30 14:04:53.000000000 +0100
++++ slashem-0.0.8E0F1/win/gl/gl_image.c	2012-01-15 01:13:55.000000000 +0100
+@@ -495,7 +495,7 @@ unsigned char *sdlgl_load_png_file(const
+   /* set error handling since we are using the setjmp/longjmp method
+    * (this is the normal method of doing things with libpng).
+    */
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))
+   {
+     sdlgl_warning("Problem within LibPNG (unknown)\n");
+     goto failed;
+diff -up slashem-0.0.8E0F1/win/share/tile2png.c.libpng slashem-0.0.8E0F1/win/share/tile2png.c
+--- slashem-0.0.8E0F1/win/share/tile2png.c.libpng	2012-01-15 01:14:08.000000000 +0100
++++ slashem-0.0.8E0F1/win/share/tile2png.c	2012-01-15 01:25:02.000000000 +0100
+@@ -26,6 +26,7 @@
+ #undef blue
+ 
+ #include <png.h>
++#include <zlib.h>
+ #include <assert.h>
+ 
+ 
+@@ -104,7 +105,7 @@ void save_png(const char *filename, int
+   /* set error handling since we are using the setjmp/longjmp method
+    * (this is the normal method of doing things with libpng).
+    */
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))
+   {
+     fprintf(stderr, "tile2png: Unknown problem while writing PNG.\n");
+     goto failed;

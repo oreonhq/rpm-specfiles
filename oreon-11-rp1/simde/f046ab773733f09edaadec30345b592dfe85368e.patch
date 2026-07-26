@@ -1,0 +1,131 @@
+From f046ab773733f09edaadec30345b592dfe85368e Mon Sep 17 00:00:00 2001
+From: Carlos Alberto Lopez Perez <clopez@igalia.com>
+Date: Mon, 6 May 2024 20:03:49 +0100
+Subject: [PATCH] neon: avoid warnings when "__ARM_NEON_FP" is not defined.
+
+WebKit project recently imported simde 0.8.2
+Since then the build for Aarch64 targeting RPi4 boards has started
+giving lot of warnings related to the simde header:
+
+  warning: "__ARM_NEON_FP" is not defined, evaluates to 0 [-Wundef]
+
+Add a check to ensure that __ARM_NEON_FP is defined.
+
+Related: https://bugs.webkit.org/show_bug.cgi?id=273789
+---
+ simde/arm/neon/maxnm.h | 10 +++++-----
+ simde/arm/neon/minnm.h | 10 +++++-----
+ simde/simde-features.h |  2 +-
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/simde/arm/neon/maxnm.h b/simde/arm/neon/maxnm.h
+index 8101dd2ca..8bee88054 100644
+--- a/simde/arm/neon/maxnm.h
++++ b/simde/arm/neon/maxnm.h
+@@ -39,7 +39,7 @@ SIMDE_BEGIN_DECLS_
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16_t
+ simde_vmaxnmh_f16(simde_float16_t a, simde_float16_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vmaxnmh_f16(a, b);
+   #else
+     #if defined(simde_math_fmaxf)
+@@ -69,7 +69,7 @@ simde_vmaxnmh_f16(simde_float16_t a, simde_float16_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16x4_t
+ simde_vmaxnm_f16(simde_float16x4_t a, simde_float16x4_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vmaxnm_f16(a, b);
+   #else
+     simde_float16x4_private
+@@ -93,7 +93,7 @@ simde_vmaxnm_f16(simde_float16x4_t a, simde_float16x4_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16x8_t
+ simde_vmaxnmq_f16(simde_float16x8_t a, simde_float16x8_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vmaxnmq_f16(a, b);
+   #else
+     simde_float16x8_private
+@@ -117,7 +117,7 @@ simde_vmaxnmq_f16(simde_float16x8_t a, simde_float16x8_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float32x2_t
+ simde_vmaxnm_f32(simde_float32x2_t a, simde_float32x2_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6)
+     return vmaxnm_f32(a, b);
+   #else
+     simde_float32x2_private
+@@ -189,7 +189,7 @@ simde_vmaxnm_f64(simde_float64x1_t a, simde_float64x1_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float32x4_t
+ simde_vmaxnmq_f32(simde_float32x4_t a, simde_float32x4_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6)
+     return vmaxnmq_f32(a, b);
+   #elif defined(SIMDE_POWER_ALTIVEC_P6_NATIVE)
+     return vec_max(a, b);
+diff --git a/simde/arm/neon/minnm.h b/simde/arm/neon/minnm.h
+index 341a3150c..1f0a003e4 100644
+--- a/simde/arm/neon/minnm.h
++++ b/simde/arm/neon/minnm.h
+@@ -39,7 +39,7 @@ SIMDE_BEGIN_DECLS_
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16_t
+ simde_vminnmh_f16(simde_float16_t a, simde_float16_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vminnmh_f16(a, b);
+   #else
+     #if defined(simde_math_fminf)
+@@ -69,7 +69,7 @@ simde_vminnmh_f16(simde_float16_t a, simde_float16_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16x4_t
+ simde_vminnm_f16(simde_float16x4_t a, simde_float16x4_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vminnm_f16(a, b);
+   #else
+     simde_float16x4_private
+@@ -93,7 +93,7 @@ simde_vminnm_f16(simde_float16x4_t a, simde_float16x4_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float32x2_t
+ simde_vminnm_f32(simde_float32x2_t a, simde_float32x2_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6)
+     return vminnm_f32(a, b);
+   #else
+     simde_float32x2_private
+@@ -165,7 +165,7 @@ simde_vminnm_f64(simde_float64x1_t a, simde_float64x1_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float16x8_t
+ simde_vminnmq_f16(simde_float16x8_t a, simde_float16x8_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6) && defined(SIMDE_ARM_NEON_FP16)
+     return vminnmq_f16(a, b);
+   #else
+     simde_float16x8_private
+@@ -189,7 +189,7 @@ simde_vminnmq_f16(simde_float16x8_t a, simde_float16x8_t b) {
+ SIMDE_FUNCTION_ATTRIBUTES
+ simde_float32x4_t
+ simde_vminnmq_f32(simde_float32x4_t a, simde_float32x4_t b) {
+-  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && (__ARM_NEON_FP >= 6)
++  #if defined(SIMDE_ARM_NEON_A32V8_NATIVE) && defined(__ARM_NEON_FP) && (__ARM_NEON_FP >= 6)
+     return vminnmq_f32(a, b);
+   #elif SIMDE_NATURAL_VECTOR_SIZE_GE(128) && defined(SIMDE_FAST_NANS)
+     return simde_vbslq_f32(simde_vcleq_f32(a, b), a, b);
+diff --git a/simde/simde-features.h b/simde/simde-features.h
+index 7b622ead3..2b630a6b3 100644
+--- a/simde/simde-features.h
++++ b/simde/simde-features.h
+@@ -349,7 +349,7 @@
+ #endif
+ 
+ #if !defined(SIMDE_ARM_NEON_A32V8_NATIVE) && !defined(SIMDE_ARM_NEON_A32V8_NO_NATIVE) && !defined(SIMDE_NO_NATIVE)
+-  #if defined(SIMDE_ARCH_ARM_NEON) && SIMDE_ARCH_ARM_CHECK(8,0) && (__ARM_NEON_FP & 0x02)
++  #if defined(SIMDE_ARCH_ARM_NEON) && SIMDE_ARCH_ARM_CHECK(8,0) && defined (__ARM_NEON_FP) && (__ARM_NEON_FP & 0x02)
+     #define SIMDE_ARM_NEON_A32V8_NATIVE
+   #endif
+ #endif

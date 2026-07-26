@@ -1,0 +1,10 @@
+--- build.xml~	2004-02-18 19:29:30.000000000 +0100
++++ build.xml	2014-08-16 20:09:01.315829986 +0200
+@@ -1,7 +1,6 @@
+ 
+ <project default="compile" name="snip">
+ 
+-	<taskdef name="snip" classname="com.martiansoftware.snip.Snip" classpath="build"/>
+ 
+ 	<property name="version" value="0.11" />
+ 	<property name="jarname" value="snip-${version}.jar"/>

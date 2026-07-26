@@ -1,0 +1,11 @@
+--- pygsl-2.6.2/tests/rng_test.py.orig	2025-04-11 00:02:29.000000000 -0600
++++ pygsl-2.6.2/tests/rng_test.py	2025-04-21 14:41:04.087189203 -0600
+@@ -298,7 +298,7 @@ class _rng_distributions(unittest.TestCa
+ 
+     def test_multinomial(self):
+         phi = (0.2,0.2,0.2,0.4)
+-        n = self.rng.multinomial(10, phi)
++        n = self.rng.multinomial(10, phi, 1)
+         array_check(n, np.uint32, [1, len(phi)])
+ 
+         n_sample = 3

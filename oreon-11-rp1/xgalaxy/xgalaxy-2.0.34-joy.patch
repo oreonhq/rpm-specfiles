@@ -1,0 +1,14 @@
+--- xgalaga-2.0.34/linux-joystick.c.joy	2006-06-01 09:16:10.000000000 +0200
++++ xgalaga-2.0.34/linux-joystick.c	2006-06-01 09:22:10.000000000 +0200
+@@ -6,10 +6,10 @@
+  * Distribute under the terms of the GPL.
+  */
+ #ifdef __linux__
++#include <sys/types.h>
+ #include <linux/joystick.h>
+ #include <unistd.h>
+ #include <stdio.h>
+-#include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ #include <fcntl.h>

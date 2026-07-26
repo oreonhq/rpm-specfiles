@@ -1,0 +1,38 @@
+.TH UNU\-PERMUTE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-permute \- permute ordering of axes
+.SH SYNOPSIS
+.B unu\ permute
+.BR \-p , \-\-permute
+.RI < ax0 \  ax1 \ ...>
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Permute ordering of axes.
+The permutation gives the new ordering of the old axes (in 0-based numbering).
+For example, the permutation 0->1, 1->2, 2->0 would be
+.RB \(lq 2\ 0\ 1 \(rq.
+.IP \(bu +2n
+Uses
+.B nrrdAxesPermute
+.SH OPTIONS
+.TP
+.B \-p\fR\ <\fIax0\fR \fIax1\fR\ ...>\ ,\ \fB\-\-permute\fR\ <\fIax0\fR \fIax1\fR\ ...>
+new axis ordering
+(1 or more
+.IR unsigned\ int s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

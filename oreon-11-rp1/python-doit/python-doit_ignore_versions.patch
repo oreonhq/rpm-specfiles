@@ -1,0 +1,9 @@
+diff -ur a/dev_requirements.txt b/dev_requirements.txt
+--- a/dev_requirements.txt	2022-04-16 10:19:29.000000000 +0100
++++ b/dev_requirements.txt	2024-02-01 23:58:16.462230694 +0000
+@@ -6,5 +6,4 @@
+ pycodestyle
+ pytest>=7.1.0
+ coverage>=6.0
+-doit-py>=0.4.0
+ tomli; python_version<"3.11"

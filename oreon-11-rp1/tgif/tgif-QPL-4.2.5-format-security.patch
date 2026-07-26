@@ -1,0 +1,664 @@
+--- tgif-QPL-4.2.5/arc.c.format	2011-06-28 11:04:56.000000000 +0900
++++ tgif-QPL-4.2.5/arc.c	2013-12-04 10:01:49.568114857 +0900
+@@ -53,6 +53,7 @@
+ #include "strtbl.e"
+ #include "util.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ #define EXPAND_BBOX(bbox,x,y) \
+    if ((x)<(bbox)->ltx) (bbox)->ltx=(x); if ((y)<(bbox)->lty) (bbox)->lty=(y); \
+@@ -2041,7 +2042,7 @@ void ReadArcObj(FP, Inbuf, ObjPtr)
+    }
+ 
+    if (dir == ARC_CCW && angle2 < 0) {
+-      sprintf(gszMsgBox, TgLoadString(STID_WARN_INCONSIST_ARC_DIR));
++      strcpy(gszMsgBox, TgLoadString(STID_WARN_INCONSIST_ARC_DIR));
+       if (PRTGIF) {
+          fprintf(stderr, "%s\n", gszMsgBox);
+       } else {
+@@ -2050,7 +2051,7 @@ void ReadArcObj(FP, Inbuf, ObjPtr)
+       SetFileModified(TRUE);
+       dir = ARC_CW;
+    } else if (dir == ARC_CW && angle2 > 0) {
+-      sprintf(gszMsgBox, TgLoadString(STID_WARN_INCONSIST_ARC_DIR));
++      strcpy(gszMsgBox, TgLoadString(STID_WARN_INCONSIST_ARC_DIR));
+       if (PRTGIF) {
+          fprintf(stderr, "%s\n", gszMsgBox);
+       } else {
+--- tgif-QPL-4.2.5/auxtext.c.format	2011-06-28 11:04:56.000000000 +0900
++++ tgif-QPL-4.2.5/auxtext.c	2013-12-04 10:05:19.997447447 +0900
+@@ -46,6 +46,7 @@
+ #include "util.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ GC	rotateGC=NULL;
+ Pixmap	textBackingBitmap=None, textBackingBgBitmap=None;
+@@ -113,7 +114,7 @@ int InputOctalString(pszBuf, pnBufSize)
+    if (canvasFontDoubleByte) {
+       sprintf(gszMsgBox, TgLoadString(STID_INPUT_OCTAL_STR), "\\244\\244");
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_INPUT_STR));
++      strcpy(gszMsgBox, TgLoadString(STID_INPUT_STR));
+    }
+    Dialog(gszMsgBox, TgLoadCachedString(CSTID_DLG_ACCEPT_CANCEL), szSpec);
+    UtilTrimBlanks(szSpec);
+--- tgif-QPL-4.2.5/cutpaste.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/cutpaste.c	2013-12-04 10:06:43.131060861 +0900
+@@ -72,6 +72,7 @@
+ #include "util.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ int	copyingToCutBuffer=FALSE;
+ int	pastingFile=FALSE;
+@@ -200,7 +201,7 @@ int WriteBufToCutBuffer(buf, bytes_to_wr
+          lastKeyOrBtnEvInfo.time);
+    if (XGetSelectionOwner(mainDisplay, XA_PRIMARY) != mainWindow) {
+       setselowner_failed = TRUE;
+-      sprintf(gszMsgBox, TgLoadString(STID_CANT_ACQUIRE_X_SELECTION));
++      strcpy(gszMsgBox, TgLoadString(STID_CANT_ACQUIRE_X_SELECTION));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+    } else {
+       startSelectionOwnershipTimeValid = TRUE;
+@@ -349,10 +350,10 @@ int CopyObjectToCutBuffer(force)
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+    } else {
+       if (!WriteBufToCutBuffer(cut_buffer, stat.st_size, FALSE, FALSE, NULL)) {
+-         sprintf(gszMsgBox, TgLoadString(STID_COPY_FAILED_OBJ_MAYBE_TOO_BIG));
++         strcpy(gszMsgBox, TgLoadString(STID_COPY_FAILED_OBJ_MAYBE_TOO_BIG));
+          MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       } else {
+-         sprintf(gszMsgBox, TgLoadString(STID_COPY_BUFFER_UPDATED));
++         strcpy(gszMsgBox, TgLoadString(STID_COPY_BUFFER_UPDATED));
+          Msg(gszMsgBox);
+       }
+    }
+--- tgif-QPL-4.2.5/drawing.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/drawing.c	2013-12-04 10:08:14.192591285 +0900
+@@ -87,6 +87,7 @@
+ #include "wb.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ #define O_VIS 4
+ #define O_INVIS 4
+@@ -3339,7 +3340,7 @@ void EditIndexedAttrInEditor(index)
+ 
+    SaveStatusStrings();
+    if (*attr_ptr->attr_name.s == '\0') {
+-      sprintf(title, TgLoadString(STID_EDIT_UNNAME_ATTR_DOTS));
++      strcpy(title, TgLoadString(STID_EDIT_UNNAME_ATTR_DOTS));
+       sprintf(cmd, gszEditorCmd, title, tfi.tmp_fname);
+       sprintf(gszMsgBox, TgLoadString(STID_EDIT_UNNAME_ATTR_WITH_CMD), cmd);
+    } else {
+@@ -3460,7 +3461,7 @@ void EditIndexedAttrGroupInEditor(index)
+    }
+    SaveStatusStrings();
+    if (*attr_ptr->attr_name.s == '\0') {
+-      sprintf(title, TgLoadString(STID_EDIT_UNNAME_ATTR_DOTS));
++      strcpy(title, TgLoadString(STID_EDIT_UNNAME_ATTR_DOTS));
+       sprintf(cmd, gszEditorCmd, title, tfi.tmp_fname);
+       sprintf(gszMsgBox, TgLoadString(STID_EDIT_UNNAME_ATTR_WITH_CMD), cmd);
+    } else {
+--- tgif-QPL-4.2.5/edit.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/edit.c	2013-12-04 10:09:47.119337642 +0900
+@@ -73,6 +73,7 @@
+ #include "util.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ struct SelRec *outerSelForFind=NULL;
+ struct SelRec *innerSelForFind=NULL;
+@@ -1138,7 +1139,7 @@ void MakeRegularPolygon()
+             INFO_MB);
+       return;
+    }
+-   sprintf(gszMsgBox, TgLoadString(STID_VERTEX_AT_3_OCLOCK_YNC));
++   strcpy(gszMsgBox, TgLoadString(STID_VERTEX_AT_3_OCLOCK_YNC));
+    if ((vertex_at_right=MsgBox(gszMsgBox, TOOL_NAME, YNC_MB)) ==
+          MB_ID_CANCEL) {
+       return;
+@@ -6104,7 +6105,7 @@ void RemoveObjectShadow()
+       return;
+    }
+    if (CountObjectWithShadow() == 0) {
+-      sprintf(gszMsgBox, TgLoadString(STID_NO_OBJ_SHADOW_FOUND));
++      strcpy(gszMsgBox, TgLoadString(STID_NO_OBJ_SHADOW_FOUND));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       return;
+    }
+--- tgif-QPL-4.2.5/eps.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/eps.c	2013-12-04 10:13:22.699268832 +0900
+@@ -670,7 +670,7 @@ FILE *GetTiffEPSIInfo(fp, pszEPS, file_b
+          }
+          fclose(xbm_fp);
+          if (writeFileFailed) {
+-            fprintf(stderr, TgLoadString(STID_FAIL_TO_WRITE_TO_STDOUT));
++            fprintf(stderr, "%s", TgLoadString(STID_FAIL_TO_WRITE_TO_STDOUT));
+          }
+          unlink(xbm_fname);
+          *xbm_fname = '\0';
+--- tgif-QPL-4.2.5/exec.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/exec.c	2013-12-04 10:13:45.343887675 +0900
+@@ -85,6 +85,7 @@
+ #include "xpixmap.e"
+ #include "xprtfltr.e"
+ #include "z_intrf.e"
++#include <string.h>
+ 
+ int execAnimating=FALSE;
+ int execAnimateRedraw=FALSE;
+@@ -1753,7 +1754,7 @@ int CheckExecInterrupt(orig_cmd)
+    if (ESCPressed() || (check_any_button && XCheckMaskEvent(mainDisplay,
+          ButtonPressMask | KeyPressMask, &ev)) || CheckInterrupt(TRUE)) {
+       if (orig_cmd == NULL) {
+-         sprintf(gszMsgBox, TgLoadString(STID_USER_INTR));
++         strcpy(gszMsgBox, TgLoadString(STID_USER_INTR));
+       } else {
+          sprintf(gszMsgBox, TgLoadString(STID_FUNC_USER_INTR), orig_cmd);
+       }
+--- tgif-QPL-4.2.5/file.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/file.c	2013-12-04 10:16:32.516221408 +0900
+@@ -87,6 +87,7 @@
+ #include "xbitmap.e"
+ #include "xpixmap.e"
+ #include "xprtfltr.e"
++#include <string.h>
+ 
+ #ifdef _METRIC_PIX_PER_INCH
+ #define METRIC_PIX_PER_INCH 127
+@@ -4376,7 +4377,7 @@ int ImportGivenFile(file_name, group_and
+          sprintf(gszMsgBox, TgLoadString(STID_FILE_VER_ABORT_IMPORT),
+                fileVersion, TOOL_NAME, homePageURL);
+       } else {
+-         sprintf(gszMsgBox, TgLoadString(STID_FILE_CORRUPTED_ABORT_IMPORT));
++         strcpy(gszMsgBox, TgLoadString(STID_FILE_CORRUPTED_ABORT_IMPORT));
+       }
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       SetDefaultCursor(mainWindow);
+@@ -4862,7 +4863,7 @@ int LoadFile(FullName, ObjFile, GzippedO
+          sprintf(gszMsgBox, TgLoadString(STID_FILE_VER_ABORT_OPEN),
+                fileVersion, TOOL_NAME, homePageURL);
+       } else {
+-         sprintf(gszMsgBox, TgLoadString(STID_FILE_CORRUPTED_ABORT_OPEN));
++         strcpy(gszMsgBox, TgLoadString(STID_FILE_CORRUPTED_ABORT_OPEN));
+       }
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       DrawPaperBoundary(drawWindow);
+@@ -6609,7 +6610,7 @@ int DoGenDump(FileName)
+          whereToPrint == HTML_FILE || whereToPrint == PNG_FILE ||
+          whereToPrint == JPEG_FILE || whereToPrint == PPM_FILE) {
+       if (topObj == NULL) {
+-         sprintf(gszMsgBox, TgLoadString(STID_NO_OBJ_TO_EXPORT));
++         strcpy(gszMsgBox, TgLoadString(STID_NO_OBJ_TO_EXPORT));
+          if (PRTGIF) {
+             fprintf(stderr, "%s\n", gszMsgBox);
+          } else {
+@@ -7646,7 +7647,7 @@ int DoGenDump(FileName)
+          SetOutputFileName(ps_file, TEXT_FILE_EXT, NULL, &FileName);
+       } else {
+          if (!curFileDefined) {
+-            sprintf(gszMsgBox, TgLoadString(STID_NO_CUR_FILE_CANNOT_GEN_TEXT));
++            strcpy(gszMsgBox, TgLoadString(STID_NO_CUR_FILE_CANNOT_GEN_TEXT));
+             MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+             unlink(tmpFile);
+             return FALSE;
+@@ -8675,7 +8676,7 @@ void SetTemplate()
+       }
+       sprintf(file_name, "%s%c%s", path, DIR_SEP, name);
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_SELECT_FILE_AS_TEMPLATE));
++      strcpy(gszMsgBox, TgLoadString(STID_SELECT_FILE_AS_TEMPLATE));
+       if (SelectFileNameToImport(gszMsgBox, OBJ_FILE_EXT, file_name) ==
+             INVALID) {
+          return;
+--- tgif-QPL-4.2.5/grid.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/grid.c	2013-12-04 10:17:33.560277288 +0900
+@@ -51,6 +51,7 @@
+ #include "util.e"
+ #include "wb.e"
+ #include "xprtfltr.e"
++#include <string.h>
+ 
+ #define ENGLISH_GRID_STEP 8
+ #define METRIC_GRID_STEP 5
+@@ -358,7 +359,7 @@ void ToggleRightMargin()
+       sprintf(gszMsgBox, TgLoadString(STID_RIGHT_MARGIN_IS), buf);
+       Msg(gszMsgBox);
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_RIGHT_MARGIN_DISABLED));
++      strcpy(gszMsgBox, TgLoadString(STID_RIGHT_MARGIN_DISABLED));
+       Msg(gszMsgBox);
+    }
+ }
+--- tgif-QPL-4.2.5/imgproc.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/imgproc.c	2013-12-04 10:23:12.840460491 +0900
+@@ -62,6 +62,7 @@
+ #include "xbitmap.e"
+ #include "xpixmap.e"
+ #include "z_intrf.e"
++#include <string.h>
+ 
+ #define HISTOGRAMCOUNT(i) (gpHistogram[(i)].pixel)
+ #define HISTOGRAMRED(i) (gpHistogram[(i)].red)
+@@ -9102,7 +9103,8 @@ int SetupReplaceColorInfo(obj_ptr, prci)
+             }
+          }
+          if (!found) {
+-            snprintf(gszMsgBox, sizeof(gszMsgBox), TgLoadString(STID_CANNOT_FIND_GOOD_TRANSPIX));
++            strncpy(gszMsgBox, TgLoadString(STID_CANNOT_FIND_GOOD_TRANSPIX), sizeof(gszMsgBox));
++            gszMsgBox[sizeof(gszMsgBox) - 1] = 0;
+             MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+             return FALSE;
+          }
+@@ -9753,7 +9755,7 @@ void ToggleFloodReplaceColorThreshold()
+             fillReplaceBlueThresh);
+       Msg(gszMsgBox);
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_FLOOD_REPLACE_DISABLED));
++      strcpy(gszMsgBox, TgLoadString(STID_FLOOD_REPLACE_DISABLED));
+       Msg(gszMsgBox);
+    }
+ }
+--- tgif-QPL-4.2.5/import.c.format	2011-06-28 11:04:57.000000000 +0900
++++ tgif-QPL-4.2.5/import.c	2013-12-04 11:08:17.558213212 +0900
+@@ -66,6 +66,7 @@
+ #include "xbitmap.e"
+ #include "xpixmap.e"
+ #include "z_intrf.e"
++#include <string.h>
+ 
+ typedef struct ImportInfoRec {
+    char *name, *ext, *cmd;
+@@ -2674,7 +2675,7 @@ void ImportGIFToXPixmapDeck()
+    memset(&ii, 0, sizeof(struct ImportInfoRec));
+ 
+    /* pick an animated GIF file */
+-   sprintf(szTop, TgLoadString(STID_SEL_ANIM_GIF_FILE_TO_IMPORT));
++   strcpy(szTop, TgLoadString(STID_SEL_ANIM_GIF_FILE_TO_IMPORT));
+    importingFile = TRUE;
+    *gif_fname = *tmp_fname = '\0';
+    if (importFromLibrary) {
+--- tgif-QPL-4.2.5/page.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/page.c	2013-12-04 11:11:38.581459620 +0900
+@@ -62,6 +62,7 @@
+ #include "xprtfltr.e"
+ 
+ #include "xbm/leftend.xbm"
++#include <string.h>
+ 
+ struct PageRec	*firstPage=NULL, *lastPage=NULL, *curPage=NULL;
+ int		curPageNum=1, lastPageNum=1;
+@@ -1583,7 +1584,7 @@ void DeletePages()
+    if (spi.num_pages_specified == lastPageNum) {
+       MsgBox(TgLoadString(STID_CANT_DEL_ALL_PAGES), TOOL_NAME, INFO_MB);
+    } else if (spi.num_pages_specified > 0) {
+-      sprintf(gszMsgBox, TgLoadString(spi.num_pages_specified > 1 ?
++      strcpy(gszMsgBox, TgLoadString(spi.num_pages_specified > 1 ?
+             STID_DELETE_A_PAGE_CAUSE_FLUSH :
+             STID_DELETE_PAGES_PAGE_CAUSE_FLUSH));
+       if (firstCmd == NULL || OkToFlushUndoBuffer(gszMsgBox)) {
+--- tgif-QPL-4.2.5/pattern.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/pattern.c	2013-12-04 11:14:00.603883545 +0900
+@@ -49,6 +49,7 @@
+ #include "strtbl.e"
+ #include "text.e"
+ #include "util.e"
++#include <string.h>
+ 
+ int     objFill=NONEPAT;
+ int     transPat=FALSE;
+@@ -1738,16 +1739,16 @@ void ChangeAllSelLineType(TypeIndex, Hig
+    *gszMsgBox = '\0';
+    switch (curSpline) {
+    case LT_STRAIGHT:
+-      sprintf(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_STRAIGHT));
++      strcpy(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_STRAIGHT));
+       break;
+    case LT_SPLINE:
+-      sprintf(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_SPLINE));
++      strcpy(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_SPLINE));
+       break;
+    case LT_INTSPLINE:
+-      sprintf(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_INTSPLINE));
++      strcpy(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_INTSPLINE));
+       break;
+    case LT_STRUCT_SPLINE:
+-      sprintf(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_STRUCT_SPLINE));
++      strcpy(gszMsgBox, TgLoadString(STID_LINE_TYPE_IS_STRUCT_SPLINE));
+       break;
+    }
+    Msg(gszMsgBox);
+@@ -2290,7 +2291,7 @@ TgMenu *CreateLineDashMenu(parent_menu,
+       item_info->menu_str = (char*)(Pixmap*)(&lineDashPixmap[i]);
+       item_info->shortcut_str = NULL;
+       if (i == 0) {
+-         sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_DASH_PAT_NO_DASH));
++         strcpy(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_DASH_PAT_NO_DASH));
+       } else {
+          sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_DASH_PAT_PAT_NUM),
+                i);
+@@ -2507,13 +2508,13 @@ TgMenu *CreatePenMenu(parent_menu, x, y,
+       item_info->shortcut_str = NULL;
+       switch (i) {
+       case NONEPAT:
+-         sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_NONE));
++         strcpy(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_NONE));
+          break;
+       case SOLIDPAT:
+-         sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_SOLID));
++         strcpy(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_SOLID));
+          break;
+       case BACKPAT:
+-         sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_BACKGROUND));
++         strcpy(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_BACKGROUND));
+          break;
+       default:
+          sprintf(gszMsgBox, TgLoadCachedString(CSTID_SET_PEN_TO_PAT_NUM), i);
+--- tgif-QPL-4.2.5/poly.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/poly.c	2013-12-04 11:15:57.377387816 +0900
+@@ -57,6 +57,7 @@
+ #include "strtbl.e"
+ #include "util.e"
+ #include "xpixmap.e"
++#include <stdio.h>
+ 
+ #define RETREAT (0.8)
+ 
+@@ -5506,7 +5507,7 @@ void ReadPolyObj(FP, Inbuf, ObjPtr)
+       smooth[0] = smooth[num_pts-1] = FALSE;
+       SetFileModified(TRUE);
+ 
+-      sprintf(gszMsgBox, TgLoadCachedString(CSTID_BAD_SMOOTHHINGE_POLY_FIXED));
++      strcpy(gszMsgBox, TgLoadCachedString(CSTID_BAD_SMOOTHHINGE_POLY_FIXED));
+       if (PRTGIF) {
+          fprintf(stderr, "%s\n", gszMsgBox);
+       } else {
+--- tgif-QPL-4.2.5/scroll.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/scroll.c	2013-12-04 11:16:52.500762618 +0900
+@@ -45,6 +45,7 @@
+ #include "util.e"
+ 
+ #include "xbm/scrl_up.xbm"
++#include <string.h>
+ 
+ #define FAKE_CM 80
+ 
+@@ -1559,13 +1560,13 @@ void ChangeScrollMode(ModeIndex)
+ 
+    switch (smoothScrollingCanvas) {
+    case SMOOTH_SCROLLING:
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_UPD_WIN_SMOOTH_SCROLL));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_UPD_WIN_SMOOTH_SCROLL));
+       break;
+    case JUMP_SCROLLING:
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_UPD_WIN_JUMP_SCROLL));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_UPD_WIN_JUMP_SCROLL));
+       break;
+    case NO_UPDATE_SCROLLING:
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_NOT_UPD_WIN_SCROLL));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_NOT_UPD_WIN_SCROLL));
+       break;
+    }
+    Msg(gszMsgBox);
+--- tgif-QPL-4.2.5/shape.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/shape.c	2013-12-04 11:18:04.716114094 +0900
+@@ -56,6 +56,7 @@
+ #include "strtbl.e"
+ #include "text.e"
+ #include "util.e"
++#include <string.h>
+ 
+ int numShapes=MAXSHAPES;
+ int curShape=(-1);
+@@ -1111,7 +1112,7 @@ void CreateShape()
+ 
+    if ((objFill == NONEPAT || (objFill == BACKPAT && transPat)) &&
+          (shapeShadowDx != 0 || shapeShadowDy != 0)) {
+-      sprintf(gszMsgBox, TgLoadString(objFill==NONEPAT ?
++      strcpy(gszMsgBox, TgLoadString(objFill==NONEPAT ?
+             STID_CREATE_SHADOW_SHAPE_NO_FILL :
+             STID_CREATE_SHADOW_SHAPE_TRAN_FILL));
+       switch (MsgBox(gszMsgBox, TOOL_NAME, YNC_MB)) {
+--- tgif-QPL-4.2.5/special.c.format	2011-06-28 11:04:58.000000000 +0900
++++ tgif-QPL-4.2.5/special.c	2013-12-04 11:20:16.395342522 +0900
+@@ -70,6 +70,7 @@
+ #include "util.e"
+ #include "version.e"
+ #include "wb.e"
++#include <string.h>
+ 
+ int placingTopObj=FALSE;
+ int connectingPortsByWire=FALSE;
+@@ -1292,15 +1293,15 @@ void ConnectPortsToBroadcastWire()
+    if (*existing_signal_name == '\0') {
+       if (signal_name_diff) {
+          /* conflicting signal names */
+-         sprintf(gszMsgBox, TgLoadString(STID_CONFLICT_SIG_NAME_ENT_NEW));
++         strcpy(gszMsgBox, TgLoadString(STID_CONFLICT_SIG_NAME_ENT_NEW));
+       } else {
+          /* all ports have no signal names */
+-         sprintf(gszMsgBox, TgLoadString(STID_PLS_ENT_SIG_NAME));
++         strcpy(gszMsgBox, TgLoadString(STID_PLS_ENT_SIG_NAME));
+       }
+    } else {
+       UtilStrCpyN(new_signal_name, sizeof(new_signal_name),
+             existing_signal_name);
+-      sprintf(gszMsgBox, TgLoadString(STID_PLS_ENT_SIG_NAME));
++      strcpy(gszMsgBox, TgLoadString(STID_PLS_ENT_SIG_NAME));
+    }
+    if (!(*new_signal_name != '\0' && already_has_broadcast_signal_name)) {
+       UtilTrimBlanks(new_signal_name);
+@@ -3090,7 +3091,7 @@ void ExportToTable()
+             }
+          }
+          if (ok) {
+-            sprintf(&buf[cur_len], gszMsgBox);
++            strcpy(&buf[cur_len], gszMsgBox);
+             cur_len += len;
+          }
+       }
+@@ -3127,7 +3128,7 @@ void ExportToTable()
+ void ToggleShowWireSignalName()
+ {
+    showWireSignalName = !showWireSignalName;
+-   sprintf(gszMsgBox, TgLoadString(showWireSignalName ?
++   strcpy(gszMsgBox, TgLoadString(showWireSignalName ?
+          STID_WILL_SHOW_WIRE_SIGNAL_NAME : STID_WILL_HIDE_WIRE_SIGNAL_NAME));
+    Msg(gszMsgBox);
+ }
+--- tgif-QPL-4.2.5/stream.c.format	2011-06-28 11:04:59.000000000 +0900
++++ tgif-QPL-4.2.5/stream.c	2013-12-04 11:22:15.267089935 +0900
+@@ -37,6 +37,7 @@
+ #include "stream.e"
+ #include "strtbl.e"
+ #include "util.e"
++#include <string.h>
+ 
+ static int gnMultipartReplace=FALSE;
+ static int gnPossibleMultipartReplace=TRUE;
+@@ -669,7 +670,7 @@ void FakeUserAgent(buf)
+       *prev_agent = '\0';
+       GetUserAgent(prev_agent, sizeof(prev_agent));
+       if (*prev_agent == '\0') {
+-         sprintf(gszMsgBox, TgLoadString(STID_ENTER_USERAGENT_FOR_HTTP));
++         strcpy(gszMsgBox, TgLoadString(STID_ENTER_USERAGENT_FOR_HTTP));
+       } else {
+          sprintf(gszMsgBox, TgLoadString(STID_ENTER_USERAGENT_FOR_HTTP_CUR),
+                prev_agent);
+@@ -685,7 +686,7 @@ void FakeUserAgent(buf)
+    *prev_agent = '\0';
+    GetUserAgent(prev_agent, sizeof(prev_agent));
+    if (*prev_agent == '\0') {
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_USE_DEF_USERAGENT_HTTP));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_USE_DEF_USERAGENT_HTTP));
+    } else {
+       sprintf(gszMsgBox, TgLoadString(STID_WILL_USE_NAMED_USERAGENT_HTTP),
+             prev_agent);
+@@ -708,7 +709,7 @@ void FakeReferer(buf)
+       if (len > 0 && spec[len-1] == ')') spec[len-1] = '\0';
+    } else {
+       if (gpszFakedReferer == NULL) {
+-         sprintf(gszMsgBox, TgLoadString(STID_ENTER_REFERRER_FOR_HTTP));
++         strcpy(gszMsgBox, TgLoadString(STID_ENTER_REFERRER_FOR_HTTP));
+       } else {
+          sprintf(gszMsgBox, TgLoadString(STID_ENTER_REFERRER_FOR_HTTP_CUR),
+                gpszFakedReferer);
+@@ -727,7 +728,7 @@ void FakeReferer(buf)
+    UtilTrimBlanks(spec);
+    HttpFakeReferer(spec);
+    if (gpszFakedReferer == NULL) {
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_NOT_USE_REFERRER_HTTP));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_NOT_USE_REFERRER_HTTP));
+    } else {
+       sprintf(gszMsgBox, TgLoadString(STID_WILL_USE_NAMED_REFERRER_HTTP),
+             gpszFakedReferer);
+@@ -738,7 +739,7 @@ void FakeReferer(buf)
+ void ToggleKeepAlive()
+ {
+    gnHttpKeepAlive = (!gnHttpKeepAlive);
+-   sprintf(gszMsgBox, TgLoadString(gnHttpKeepAlive ?
++   strcpy(gszMsgBox, TgLoadString(gnHttpKeepAlive ?
+          STID_WILL_USE_KEEP_ALIVE_HTTP : STID_NOT_WILL_USE_KEEP_ALIVE_HTTP));
+    Msg(gszMsgBox);
+ }
+--- tgif-QPL-4.2.5/text.c.format	2011-06-28 11:04:59.000000000 +0900
++++ tgif-QPL-4.2.5/text.c	2013-12-04 11:26:06.450826454 +0900
+@@ -71,6 +71,7 @@
+ #include "wb.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ #define ADVANCE_LEFT (TRUE)
+ #define ADVANCE_RIGHT (FALSE)
+@@ -3749,9 +3750,9 @@ void HandleCopyInDrawTextMode()
+          copy_db_utf8_str && (double_byte_font_index != INVALID), NULL);
+ 
+    if (copy_failed) {
+-      sprintf(gszMsgBox, TgLoadString(STID_COPY_FAIL_SEL_STR_MAY_TOO_LNG));
++      strcpy(gszMsgBox, TgLoadString(STID_COPY_FAIL_SEL_STR_MAY_TOO_LNG));
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_COPY_BUFFER_UPDATED));
++      strcpy(gszMsgBox, TgLoadString(STID_COPY_BUFFER_UPDATED));
+    }
+    Msg(gszMsgBox);
+    free(cut_buffer);
+--- tgif-QPL-4.2.5/tgcwdl.c.format	2011-06-28 11:04:59.000000000 +0900
++++ tgif-QPL-4.2.5/tgcwdl.c	2013-12-04 11:23:05.576908258 +0900
+@@ -50,6 +50,7 @@
+ #include "util.e"
+ #include "xbitmap.e"
+ #include "xpixmap.e"
++#include <string.h>
+ 
+ ColorWheelInfo gColorWheelInfo;
+ 
+@@ -1727,7 +1728,7 @@ TidgetInfo *CreateTdgtColorWheelDialogBo
+ 
+    TidgetSetFocusWindow(None);
+    if (!colorDisplay || mainVisual->class != TrueColor) {
+-      sprintf(gszMsgBox, TgLoadString(STID_COLOR_WHEEL_NOT_AVAIL));
++      strcpy(gszMsgBox, TgLoadString(STID_COLOR_WHEEL_NOT_AVAIL));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       free(pcwdi);
+       return NULL;
+--- tgif-QPL-4.2.5/tgisdl.c.format	2011-06-28 11:04:59.000000000 +0900
++++ tgif-QPL-4.2.5/tgisdl.c	2013-12-04 11:24:56.618750303 +0900
+@@ -41,6 +41,7 @@
+ #include "tidget.e"
+ #include "tgisdl.e"
+ #include "util.e"
++#include <string.h>
+ 
+ InsertSymbolInfo gInsertSymbolInfo;
+ 
+@@ -808,7 +809,7 @@ TidgetInfo *CreateTdgtInsertSymbolDialog
+ 
+    TidgetSetFocusWindow(None);
+    if (!colorDisplay || mainVisual->class != TrueColor) {
+-      sprintf(gszMsgBox, TgLoadString(STID_COLOR_WHEEL_NOT_AVAIL));
++      strcpy(gszMsgBox, TgLoadString(STID_COLOR_WHEEL_NOT_AVAIL));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       free(pisdi);
+       return NULL;
+--- tgif-QPL-4.2.5/wb.c.format	2011-06-28 11:04:59.000000000 +0900
++++ tgif-QPL-4.2.5/wb.c	2013-12-04 11:27:33.957946515 +0900
+@@ -67,6 +67,7 @@
+ #include "wb_seg.e"
+ #include "xpixmap.e"
+ #include "z_intrf.e"
++#include <stdio.h>
+ 
+ struct WhiteBoardRec	gstWBInfo;
+ 
+@@ -2283,7 +2284,7 @@ void UnpackCurrentTGWBState(p_cur_state)
+    *content_type = '\0';
+    if (!GetContentInfoFromBuf(buf, content_type, sizeof(content_type),
+          &content_length, &buf_data_start)) {
+-      sprintf(gszMsgBox, TgLoadString(STID_JOIN_WB_IN_FAILED_NO_CONTTYPE));
++      strcpy(gszMsgBox, TgLoadString(STID_JOIN_WB_IN_FAILED_NO_CONTTYPE));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+       return;
+    }
+@@ -2512,7 +2513,7 @@ void UnpackCurrentTGWBState(p_cur_state)
+       gstWBInfo.join_session_in_progress = TRUE;
+    } else {
+       CleanUpWBCmds();
+-      sprintf(gszMsgBox, TgLoadString(STID_JOIN_WB_IN_PROGRESS_FAILED));
++      strcpy(gszMsgBox, TgLoadString(STID_JOIN_WB_IN_PROGRESS_FAILED));
+       MsgBox(gszMsgBox, TOOL_NAME, INFO_MB);
+    }
+    if (need_to_free_buf) UtilFree(buf);
+--- tgif-QPL-4.2.5/xbitmap.c.format	2011-06-28 11:05:00.000000000 +0900
++++ tgif-QPL-4.2.5/xbitmap.c	2013-12-04 11:29:31.527543277 +0900
+@@ -64,6 +64,7 @@
+ #include "xpixmap.e"
+ #include "xprtfltr.e"
+ #include "z_intrf.e"
++#include <string.h>
+ 
+ GC xbmGC=NULL;
+ 
+@@ -147,7 +148,7 @@ void SetHtmlExportTemplate()
+    char spec[MAXSTRING<<1];
+ 
+    if (*gszHhtmlExportTemplate == '\0') {
+-      sprintf(gszMsgBox, TgLoadString(STID_ENTER_HTML_TEMPLATE));
++      strcpy(gszMsgBox, TgLoadString(STID_ENTER_HTML_TEMPLATE));
+    } else {
+       sprintf(gszMsgBox, TgLoadString(STID_ENTER_HTML_TEMPLATE_CUR_IS),
+             gszHhtmlExportTemplate);
+@@ -172,7 +173,7 @@ void SetHtmlExportTemplate()
+    }
+    UtilStrCpyN(gszHhtmlExportTemplate, sizeof(gszHhtmlExportTemplate), spec);
+    if (*gszHhtmlExportTemplate == '\0') {
+-      sprintf(gszMsgBox, TgLoadString(STID_NO_HTML_TEMPLATE_FILE));
++      strcpy(gszMsgBox, TgLoadString(STID_NO_HTML_TEMPLATE_FILE));
+    } else {
+       sprintf(gszMsgBox, TgLoadString(STID_HTML_TEMPLATE_SET_TO_GIVEN),
+             gszHhtmlExportTemplate);
+@@ -421,7 +422,7 @@ void ExportThresholdBitmap()
+       sprintf(gszMsgBox, TgLoadString(STID_WILL_USE_GIVE_SMPLE_THRESHOLD),
+             bitmapThresholdStr);
+    } else {
+-      sprintf(gszMsgBox, TgLoadString(STID_WILL_NOT_USE_SIMPLE_THRESHOLD));
++      strcpy(gszMsgBox, TgLoadString(STID_WILL_NOT_USE_SIMPLE_THRESHOLD));
+    }
+    Msg(gszMsgBox);
+ }
+@@ -3153,7 +3154,7 @@ void GenerateTemplateHtmlVar(map_fp, var
+       } else if ((attr_ptr=FindFileAttrWithName("title=")) != NULL) {
+          fprintf(map_fp, "%s", attr_ptr->attr_value.s);
+       } else {
+-         fprintf(map_fp, TgLoadCachedString(CSTID_PARANED_UNKNOWN));
++         fprintf(map_fp, "%s", TgLoadCachedString(CSTID_PARANED_UNKNOWN));
+       }
+       break;
+    case TGV_MAP_WIDTH: fprintf(map_fp, "%1d", RbX-LtX); break;

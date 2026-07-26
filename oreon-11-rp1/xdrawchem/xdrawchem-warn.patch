@@ -1,0 +1,70 @@
+diff -up xdrawchem-qt5/xdrawchem/boat6.xpm.warn xdrawchem-qt5/xdrawchem/boat6.xpm
+--- xdrawchem-qt5/xdrawchem/boat6.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/boat6.xpm	2019-11-28 14:36:43.994079602 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char *boat6[] = {
++static const char *boat6[] = {
+ /* width height num_colors chars_per_pixel */
+ "    24    24        2            1",
+ /* colors */
+diff -up xdrawchem-qt5/xdrawchem/down.xpm.warn xdrawchem-qt5/xdrawchem/down.xpm
+--- xdrawchem-qt5/xdrawchem/down.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/down.xpm	2019-11-28 14:37:27.063468230 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char *down[] = {
++static const char *down[] = {
+ /* width height num_colors chars_per_pixel */
+ "    71    23        2            1",
+ /* colors */
+diff -up xdrawchem-qt5/xdrawchem/newman-anti.xpm.warn xdrawchem-qt5/xdrawchem/newman-anti.xpm
+--- xdrawchem-qt5/xdrawchem/newman-anti.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/newman-anti.xpm	2019-11-28 14:37:36.423552688 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char * newman_anti_xpm[] = {
++static const char * newman_anti_xpm[] = {
+ "57 60 2 1",
+ " 	c None",
+ ".	c #000000",
+diff -up xdrawchem-qt5/xdrawchem/newman-eclipse.xpm.warn xdrawchem-qt5/xdrawchem/newman-eclipse.xpm
+--- xdrawchem-qt5/xdrawchem/newman-eclipse.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/newman-eclipse.xpm	2019-11-28 14:37:03.403254737 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char * newman_eclipse_xpm[] = {
++static const char * newman_eclipse_xpm[] = {
+ "52 52 2 1",
+ " 	c None",
+ ".	c #000000",
+diff -up xdrawchem-qt5/xdrawchem/newman.xpm.warn xdrawchem-qt5/xdrawchem/newman.xpm
+--- xdrawchem-qt5/xdrawchem/newman.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/newman.xpm	2019-11-28 14:37:52.983702117 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char * newman_xpm[] = {
++static const char * newman_xpm[] = {
+ "36 38 2 1",
+ " 	c None",
+ ".	c #000000",
+diff -up xdrawchem-qt5/xdrawchem/p_orbital.xpm.warn xdrawchem-qt5/xdrawchem/p_orbital.xpm
+--- xdrawchem-qt5/xdrawchem/p_orbital.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/p_orbital.xpm	2019-11-28 14:37:44.666627067 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char * p_orbital_xpm[] = {
++static const char * p_orbital_xpm[] = {
+ "16 20 3 1",
+ " 	g None",
+ ".	g #FFFFFF",
+diff -up xdrawchem-qt5/xdrawchem/up.xpm.warn xdrawchem-qt5/xdrawchem/up.xpm
+--- xdrawchem-qt5/xdrawchem/up.xpm.warn	2017-01-09 13:25:32.000000000 +0100
++++ xdrawchem-qt5/xdrawchem/up.xpm	2019-11-28 14:37:14.391353885 +0100
+@@ -1,5 +1,5 @@
+ /* XPM */
+-static char *up[] = {
++static const char *up[] = {
+ /* width height num_colors chars_per_pixel */
+ "    64    24        2            1",
+ /* colors */

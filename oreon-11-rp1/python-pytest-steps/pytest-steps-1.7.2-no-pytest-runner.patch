@@ -1,0 +1,12 @@
+diff -Naur pytest-steps-1.7.2-original/setup.py pytest-steps-1.7.2/setup.py
+--- pytest-steps-1.7.2-original/setup.py	2020-01-16 11:15:13.000000000 -0500
++++ pytest-steps-1.7.2/setup.py	2025-02-20 14:04:48.833475271 -0500
+@@ -13,7 +13,7 @@
+ # *************** Dependencies *********
+ INSTALL_REQUIRES = ['makefun>=1.5', 'wrapt', 'functools32;python_version<"3.2"', 'funcsigs;python_version<"3.3"', 'six']
+ DEPENDENCY_LINKS = []
+-SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'six']
++SETUP_REQUIRES = ['setuptools_scm', 'six']
+ TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-harvest>=1.4.0', 'pytest-cases']
+ EXTRAS_REQUIRE = {}
+ 

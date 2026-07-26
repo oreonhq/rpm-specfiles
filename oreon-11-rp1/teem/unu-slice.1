@@ -1,0 +1,66 @@
+.TH UNU\-SLICE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-slice \- slice along one or more axes at given positions
+.SH SYNOPSIS
+.B unu\ slice
+.BR \-a , \-\-axis
+.RI < axis \ ...>
+.BR \-p , \-\-position
+.RI < pos \ ...>
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Slice along one or more axes at given positions.
+Output
+.I nrrd
+dimension is less than input
+.I nrrd
+dimension by the number of slice axes (except when the input is or gets down to
+1\-D).
+Can slice on all axes in order to sample a single value from the array.
+Per-axis information is preserved.
+.IP \(bu +2n
+Uses
+.B nrrdSlice
+(possibly called multiple times)
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIaxis\fR\ ...>\ ,\ \fB\-\-axis\fR\ <\fIaxis\fR\ ...>
+single axis or multiple axes to slice along.
+Giving multiple axes here leads to doing multiple slices (at the corresponding
+positions given with
+.RB \(lq \-p \(rq.
+Multiple axes should be identified in terms of the axis numbering of the
+original
+.IR nrrd ;
+as the slices are done (in the given ordering) the actual slice axis will be
+different if previous slices were on lower-numbered (faster) axes.
+(1 or more
+.IR unsigned\ ints )
+.TP
+.B \-p\fR\ <\fIpos\fR>\ ,\ \fB\-\-position\fR\ <\fIpos\fR>
+position(s) to slice at:
+.RS +7n
+.IP \(bu 2
+.RI < int >
+gives 0-based index
+.IP \(bu 2
+.BR M\- <\fIint\fR>
+give index relative to the last sample on the axis
+.RB ( M== \fI#samples \-1 ).
+.RE
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1)

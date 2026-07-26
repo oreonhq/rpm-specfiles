@@ -1,0 +1,24 @@
+--- a/fakeredis/commands_mixins/scripting_mixin.py
++++ b/fakeredis/commands_mixins/scripting_mixin.py
+@@ -30,7 +30,20 @@
+ LUA_VERSION = os.getenv("FAKEREDIS_LUA_VERSION", "5.1")
+ 
+ with lupa.allow_lua_module_loading():
+-    LUA_MODULE = importlib.import_module(__LUA_RUNTIMES_MAP[LUA_VERSION])
++    try:
++        LUA_MODULE = importlib.import_module(__LUA_RUNTIMES_MAP[LUA_VERSION])
++    except ImportError:
++        # Original fakeredis code expects this to resolve to any of Lua 5.X versions,
++        # but since python3-lupa ships without the bundled Lua sources, and we have no
++        # ability to indicate where the sources should be loaded from, we are simply
++        # referencing `lupa` here and letting the `LuaRuntime()` to figure out the
++        # rest. Usually, this will point out to Lua 5.1.
++        LUA_MODULE = lupa
++        import warnings
++
++        warnings.warn(""""\
++Lua runtime notice: fakeredis expects any Lua 5.x, but python3-lupa ships without bundled Lua sources and no source path can be specified. Falling back to lupa.LuaRuntime() auto-detection (usually Lua 5.1). Lua version may vary.
++""")
+ 
+ LOGGER = logging.getLogger("fakeredis")
+ REDIS_LOG_LEVELS = {

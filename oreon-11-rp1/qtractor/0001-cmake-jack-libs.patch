@@ -1,0 +1,21 @@
+The pipewire-jack library is relocated to avoid collision with the
+standalone jack implementation, but the way the former's jack.pc is
+modified doesn't conform to this check.  However, the find_library is
+unnecessary, as pkg_check_modules provides everything needed to link.
+
+diff -up ./CMakeLists.txt.orig ./CMakeLists.txt
+--- ./CMakeLists.txt.orig	2024-08-28 06:20:39.553102100 -0400
++++ ./CMakeLists.txt	2025-10-17 10:52:14.472114536 -0400
+@@ -306,11 +306,8 @@ include (FindPkgConfig)
+ # Check for JACK libraries.
+ pkg_check_modules (JACK REQUIRED IMPORTED_TARGET jack>=0.100.0)
+ if (JACK_FOUND)
+-  find_library (JACK_LIBRARY NAMES ${JACK_LIBRARIES} HINTS ${JACK_LIBDIR})
+-endif ()
+-if (JACK_LIBRARY)
+   set (CONFIG_LIBJACK 1)
+-  set (CMAKE_REQUIRED_LIBRARIES "${JACK_LIBRARY};${CMAKE_REQUIRED_LIBRARIES}")
++  set (CMAKE_REQUIRED_LIBRARIES "${JACK_LIBRARIES};${CMAKE_REQUIRED_LIBRARIES}")
+   # Check for JACK session event callback availability.
+   if (CONFIG_JACK_SESSION)
+     check_function_exists (jack_set_session_callback CONFIG_JACK_SESSION)

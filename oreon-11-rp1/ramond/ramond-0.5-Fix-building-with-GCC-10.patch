@@ -1,0 +1,66 @@
+From 7a626a4d89784b8429b702b34dff8e6d8a68b9dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 23 Jan 2020 14:49:57 +0100
+Subject: [PATCH] Fix building with GCC 10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 10 defaults to -fno-common and as a result linking fails on
+a global variable defined multiple times:
+
+/usr/bin/gcc log.o xmlparser.o main.o -o ramond  `pcap-config --libs` `apr-1-config --link-ld --libs ` `xml2-config --libs`
+/usr/bin/ld: xmlparser.o:/home/test/fedora/ramond/ramond/src/log.h:26: multiple definition of `log_file'; log.o:/home/test/fedora/ramond/ramond/src/log.h:26: first defined here
+/usr/bin/ld: main.o:/home/test/fedora/ramond/ramond/src/main.h:43: multiple definition of `log_file'; log.o:/home/test/fedora/ramond/ramond/src/log.h:26: first defined here
+collect2: error: ld returned 1 exit status
+
+This patch moves the log_file definition to src/main.c.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/log.h  | 2 +-
+ src/main.c | 1 +
+ src/main.h | 2 --
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/log.h b/src/log.h
+index ee3460b..a8238b6 100644
+--- a/src/log.h
++++ b/src/log.h
+@@ -23,7 +23,7 @@
+ #define RAMOND_ACTION  	"\004"
+ 
+ 
+-FILE *log_file;
++extern FILE *log_file;
+ void LOG(const char *fmt, ...);
+ 
+ #endif
+diff --git a/src/main.c b/src/main.c
+index 82bae27..dba3c4e 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -1,6 +1,7 @@
+ #include "main.h"
+ #include "log.h"
+ 
++FILE *log_file;
+ apr_pool_t *masterPool;
+ struct configuration *config;
+ 
+diff --git a/src/main.h b/src/main.h
+index 26de811..f329a76 100644
+--- a/src/main.h
++++ b/src/main.h
+@@ -40,8 +40,6 @@ struct nd_opt_route_info     /* route information */
+ #ifndef _MAIN_H
+ #define _MAIN_H
+ 
+-FILE *log_file;
+-
+ #endif
+ 
+ 
+-- 
+2.21.1
+

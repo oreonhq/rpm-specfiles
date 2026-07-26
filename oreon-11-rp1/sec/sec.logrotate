@@ -1,0 +1,8 @@
+/var/log/sec {
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+        /usr/bin/systemctl kill --signal=USR2 --kill-whom=main sec.service 2>/dev/null || true
+    endscript
+}

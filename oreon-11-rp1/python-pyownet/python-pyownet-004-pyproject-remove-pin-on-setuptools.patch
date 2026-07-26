@@ -1,0 +1,22 @@
+From 283ed229908135a565bb327a2808bc9993cbb029 Mon Sep 17 00:00:00 2001
+From: Tomasz Torcz <tomek@pipebreaker.pl>
+Date: Thu, 31 Jul 2025 07:58:48 +0200
+Subject: [PATCH] pyproject: remove pin on setuptools
+
+It is not relevant for python3. Was set due to https://github.com/miccoli/pyownet/issues/12
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 5a2e0eb..dd8d7e6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,3 +1,3 @@
+ [build-system]
+-requires = ["setuptools<58.0", "wheel>=0.37.1"]
++requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+-- 
+2.50.1
+

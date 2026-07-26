@@ -1,0 +1,15 @@
+--- font.c.a-urasim	2006-04-22 21:47:42.000000000 +0900
++++ font.c	2006-04-22 21:48:34.000000000 +0900
+@@ -975,10 +975,10 @@
+                   (nOdd || ((*psz)&0x80) == nDoubleByte);
+                   psz++, nSubStrIndex++) {
+                if (nOdd) {
+-                  gpszTmpStr16[nDoubleByteIndex].byte2 = (unsigned char)(*psz);
++                  gpszTmpStr16[nDoubleByteIndex].byte2 = (unsigned char)(*psz) & 0x7f;
+                   nDoubleByteIndex++;
+                } else {
+-                  gpszTmpStr16[nDoubleByteIndex].byte1 = (unsigned char)(*psz);
++                  gpszTmpStr16[nDoubleByteIndex].byte1 = (unsigned char)(*psz) & 0x7f;
+                }
+                nOdd = !nOdd;
+             }

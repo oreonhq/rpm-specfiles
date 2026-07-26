@@ -1,0 +1,26 @@
+diff --git a/CMake/common/Common.cmake b/CMake/common/Common.cmake
+index 833201e..4b103f0 100644
+--- a/CMake/common/Common.cmake
++++ b/CMake/common/Common.cmake
+@@ -12,7 +12,7 @@ if(CMAKE_INSTALL_PREFIX STREQUAL PROJECT_BINARY_DIR)
+   message(FATAL_ERROR "Cannot install into build directory")
+ endif()
+ 
+-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ include(CMakeCompatibility)
+ 
+ if(EXISTS ${PROJECT_SOURCE_DIR}/CMake/${PROJECT_NAME}.cmake)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f5498c8..eedffe0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Copyright (c) 2011 Daniel Pfeifer <daniel@pfeifer-mail.de>
+ #               2011-2014 Stefan.Eilemann@epfl.ch
+ 
+-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ project(vmmlib)
+ 
+ set(VERSION_MAJOR 1)

@@ -1,0 +1,34 @@
+From 0a64f19ad90c0bbf7e10a4c6d4da17107c4ac1de Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Fri, 20 Dec 2024 03:37:37 -0600
+Subject: [PATCH] Fix aw-cli command
+
+The aw-cli entry point is part of the wheel, but is non-functional
+without the aw_cli package and the click dependency.
+---
+ pyproject.toml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6d0c51c..d6acc51 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -9,6 +9,7 @@ homepage = "https://activitywatch.net/"
+ repository = "https://github.com/ActivityWatch/aw-core/"
+ documentation = "https://docs.activitywatch.net/"
+ packages = [
++    { include = "aw_cli" },
+     { include = "aw_core" },
+     { include = "aw_datastore" },
+     { include = "aw_transform" },
+@@ -29,6 +30,7 @@ strict-rfc3339 = "^0.7"
+ tomlkit = "*"
+ deprecation = "*"
+ timeslot = "*"
++click = "*"
+ 
+ [tool.poetry.group.dev.dependencies]
+ mypy = "*"
+-- 
+2.47.1
+

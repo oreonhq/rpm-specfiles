@@ -1,0 +1,50 @@
+From 350b3a1327396839b6c78d335fc9c6197737598b Mon Sep 17 00:00:00 2001
+From: Lars Kanis <lars.kanis@sincnovation.com>
+Date: Mon, 3 Nov 2025 14:54:07 +0100
+Subject: [PATCH] Fix Ractor tests on FFI::DynamicLibrary
+
+To have an instance variable makes the object non-shareable even when frozen on ruby-3.5.0dev.
+
+Error was:
+
+1) FFI::DynamicLibrary should be shareable for Ractor
+     Failure/Error:
+       res = Ractor.new(libtest) do |libtest2|
+         libtest2.find_symbol("testClosureVrV").address
+       end.value
+
+     Ractor::Error:
+       can not copy FFI::DynamicLibrary object.
+       ./spec/ffi/dynamic_library_spec.rb:13:in 'Ractor.new'
+       ./spec/ffi/dynamic_library_spec.rb:13:in 'block (2 levels) in <top (required)>'
+
+  2) FFI::DynamicLibrary Symbol should be shareable for Ractor
+     Failure/Error: expect(Ractor.shareable?(symbol)).to be true
+
+       expected true
+            got false
+       ./spec/ffi/dynamic_library_spec.rb:57:in 'block (3 levels) in <top (required)>'
+---
+ spec/ffi/dynamic_library_spec.rb | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/spec/ffi/dynamic_library_spec.rb b/spec/ffi/dynamic_library_spec.rb
+index 768b2b577..16da205eb 100644
+--- a/spec/ffi/dynamic_library_spec.rb
++++ b/spec/ffi/dynamic_library_spec.rb
+@@ -10,6 +10,7 @@
+     libtest = FFI::DynamicLibrary.open(TestLibrary::PATH,
+         FFI::DynamicLibrary::RTLD_LAZY | FFI::DynamicLibrary::RTLD_GLOBAL)
+ 
++    Ractor.make_shareable(libtest)
+     res = Ractor.new(libtest) do |libtest2|
+       libtest2.find_symbol("testClosureVrV").address
+     end.value
+@@ -54,6 +55,7 @@
+ 
+     it "should be shareable for Ractor", :ractor do
+       symbol = @libtest.find_symbol("gvar_gstruct_set")
++      Ractor.make_shareable(symbol)
+       expect(Ractor.shareable?(symbol)).to be true
+     end
+   end

@@ -1,0 +1,31 @@
+From b6411e6464ccdd6f45a10b60792e181b00a514b7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 11 Dec 2014 09:33:20 +0100
+Subject: [PATCH] Do not strip binaries
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/Makefile.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 0159e4a..9129636 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -207,8 +207,8 @@ installslang:
+ installlocales:
+ 	-cd ../po; $(MAKE) DESTDIR=$(DESTDIR) LOCALEDIR=$(LOCALEDIR) install 
+ installbin:
+-	$(INSTALL) -m 755 -s $(OBJDIR)/slrn $(DEST_BINDIR)
+-	-$(INSTALL) -m 755 -s $(OBJDIR)/slrnpull $(DEST_BINDIR)
++	$(INSTALL) -m 755 $(OBJDIR)/slrn $(DEST_BINDIR)
++	-$(INSTALL) -m 755 $(OBJDIR)/slrnpull $(DEST_BINDIR)
+ install: all installdirs installbin installdocs installslang installlocales
+ 
+ # The symlinks target is for my own private use.  It simply creates the object
+-- 
+1.9.3
+

@@ -1,0 +1,101 @@
+.TH SPEC2NII "1" "July 2024" "" "User Commands"
+.SH NAME
+.B spec2nii
+\(en convert raw spectroscopy data to NIfTI format
+.SH SYNOPSIS
+.B spec2nii
+.RB [ \-h ]
+.RB [ \-v ]
+.RB { auto , twix , dicom , rda , uih , philips , philips_dl , philips_dcm , ge , text , jmrui , raw , bruker , varian , anon , dump , extract , insert }\ ...
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.B auto
+Attempt automatic identification and conversion.
+.TP
+.B twix
+Convert from Siemens .dat twix format.
+.TP
+.B dicom
+Convert from Siemens DICOM format.
+.TP
+.B rda
+Convert from Siemens spectroscopy .rda format.
+.TP
+.B uih
+Convert from UIH DICOM format.
+.TP
+.B philips
+Convert from Philips spar/sdat format.
+.TP
+.B philips_dl
+Convert from Philips data/list format.
+.TP
+.B philips_dcm
+Convert from Philips DICOM format.
+.TP
+.B ge
+Convert from GE p-file format.
+.TP
+.B text
+Convert from plain text format.
+.TP
+.B jmrui
+Convert from jMRUI text or binary formats.
+.TP
+.B raw
+Convert from LCModel RAW text format.
+.TP
+.B bruker
+Convert from Bruker data format.
+.TP
+.B varian
+Convert from the Varian/OpenVnmrJ data format
+.TP
+.B anon
+Anonymise existing NIfTI-MRS file.
+.TP
+.B dump
+Dump contents of headers from existing NIfTI-MRS file.
+.TP
+.B extract
+Generate json sidecar from existing NIfTI-MRS file.
+.TP
+.B insert
+Insert json formatted file into existing NIfTI-MRS file.
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit
+.TP
+.B \-V\fR,\ \fB\-\-version
+Show program\(cqs version number and exit
+.SH NOTES
+If you use
+.BR spec2nii (1)
+please cite:
+.IP
+Clarke WT, Bell TK, Emir UE, Mikkelsen M,
+Oeltzschner G, Shamaei A, Soher BJ, Wilson M.
+NIfTI-MRS: A standard data format for magnetic resonance spectroscopy.
+Magn Reson Med. 2022.
+doi: 10.1002/mrm.29418.
+.SH "SEE\ ALSO"
+.BR spec2nii\-auto (1),
+.BR spec2nii\-twix (1),
+.BR spec2nii\-dicom (1),
+.BR spec2nii\-rda (1),
+.BR spec2nii\-uih (1),
+.BR spec2nii\-philips (1),
+.BR spec2nii\-philips_dl (1),
+.BR spec2nii\-philips_dcm (1),
+.BR spec2nii\-ge (1),
+.BR spec2nii\-text (1),
+.BR spec2nii\-jmrui (1),
+.BR spec2nii\-raw (1),
+.BR spec2nii\-bruker (1),
+.BR spec2nii\-varian (1),
+.BR spec2nii\-anon (1),
+.BR spec2nii\-dump (1),
+.BR spec2nii\-extract (1),
+.BR spec2nii\-insert (1)

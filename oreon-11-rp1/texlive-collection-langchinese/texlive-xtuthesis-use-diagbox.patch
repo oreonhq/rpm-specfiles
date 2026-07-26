@@ -1,0 +1,12 @@
+diff -up tex/latex/xtuthesis/xtuformat.sty.use-diagbox tex/latex/xtuthesis/xtuformat.sty
+--- tex/latex/xtuthesis/xtuformat.sty.use-diagbox	2025-09-15 16:26:06.196010746 -0400
++++ tex/latex/xtuthesis/xtuformat.sty	2025-09-15 16:36:32.078454583 -0400
+@@ -15,7 +15,7 @@
+             headheight=1.2cm,headsep=0.07cm,footskip=1.27cm]{geometry}                     % 简单灵活的页面设置界面
+ \RequirePackage{amscd}
+ \RequirePackage[linesnumbered,ruled,vlined]{algorithm2e}
+-\RequirePackage{slashbox}
++\RequirePackage{diagbox}
+ \RequirePackage{cite}
+ \RequirePackage{xtuformat}
+ \RequirePackage[labelsep=space]{caption}

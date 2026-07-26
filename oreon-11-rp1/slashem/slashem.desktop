@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Slash'EM
+Comment=Slash'EM is a single player dungeon exploration game
+Exec=slashem
+Icon=slashem
+Terminal=true
+Type=Application
+Categories=Game;AdventureGame;RolePlaying;X-Fedora;

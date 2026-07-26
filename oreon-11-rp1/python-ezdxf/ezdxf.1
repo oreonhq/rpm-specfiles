@@ -1,0 +1,192 @@
+.TH EZDXF "1" "May 2024" "" "User Commands"
+.SH NAME
+.B ezdxf
+\(en command launcher for the Python package \(lqezdxf\(rq
+.SH SYNOPSIS
+.B ezdxf
+.RB [ \-h ]
+.RB [ \-V ]
+.RB [ \-f ]
+.RB [ \-v ]
+.RB [ \-\-config\ \fICONFIG ]
+.RB [ \-\-log\ \fILOG ]
+.RB { audit , draw , view , browse , browse\-acis , strip , config , info , hpgl }\ ...
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.B audit
+Audit and repair DXF files
+.TP
+.B draw
+Draw and convert DXF files by the Matplotlib backend
+.TP
+.B view
+PyQt DXF file viewer
+.TP
+.B browse
+PyQt DXF structure browser for DXF debugging and curious people
+.TP
+.B browse\-acis
+PyQt ACIS entity content browser for SAT/SAB debugging
+.TP
+.B strip
+Strip comments and
+.B THUMBNAILIMAGE
+section from DXF files
+.TP
+.B config
+Manage config files
+.TP
+.B info
+Show information and optional stats of DXF files as loaded by
+.BR ezdxf (1).
+This may not represent the original content of the file;
+use
+.BR ezdxf\-browse (1)
+to see the original content.
+.TP
+.B hpgl
+View and/or convert HPGL/2 plot files to various formats
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.B \-V\fR,\ \fB\-\-version
+show version and exit
+.TP
+.B \-f\fR,\ \fB\-\-fonts
+rebuild the system font cache and print all fonts found
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+give more output
+.TP
+.B \-\-config\ \fICONFIG
+path to a config file
+.TP
+.B \-\-log\ \fILOG
+path to a verbose appending log,
+.B stderr
+logs to the standard error stream
+.SH ENVIRONMENT
+.TP
+.B EZDXF_DISABLE_C_EXT
+Set environment variable
+.B EZDXF_DISABLE_C_EXT
+to
+.B 1
+or
+.B True
+to disable the usage of the C-extensions.
+.TP
+.B EZDXF_TEST_FILES
+Path to the
+.B ezdxf
+test files required by some tests, for instance the
+.I CADKit
+sample files should be located in the
+.B EZDXF_TEST_FILES/CADKitSamples
+folder.
+See also option
+.BR ezdxf.options.test_files .
+.TP
+.B EZDXF_CONFIG_FILE
+Specifies a user config file which will be loaded automatically after the
+default config files at the first import of
+.BR ezdxf .
+See the
+.B FILES
+section.
+.TP
+.B XDG_CONFIG_HOME
+When searching for a default config file in the user home directory,
+.BR ezdxf (1)
+follows the
+.I XDG Base Directory specification
+if the environment variable
+.B XDG_CONFIG_HOME is set.
+See the
+.B FILES
+section.
+.SH FILES
+The default config files are loaded from the user home directory as
+.BR ~/.config/ezdxf/ezdxf.ini ,
+and the current working directory as
+.BR ./ezdxf.ini .
+A custom config file can be specified by the environment variable
+.BR EZDXF_CONFIG_FILE .
+.BR ezdxf (1)
+follows the
+.I XDG Base Directory specification
+if the environment variable
+.B XDG_CONFIG_HOME is set.
+.P
+The config file loading order:
+.IP 1. +3n
+user home directory:
+.B ~/.config/ezdxf/ezdxf.ini
+.IP 2. +3n
+current working directory:
+.B ./ezdxf.ini
+.IP 3. +3n
+config file specified by
+.B EZDXF_CONFIG_FILE
+.P
+A configuration file that is loaded later
+does not replace the previously loaded ones,
+only the existing options in the newly loaded file
+are added to the configuration
+and can overwrite existing options.
+.SH EXAMPLES
+.P
+Show the
+.BR ezdxf (1)
+version and configuration:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ \-Vv
+.B \:
+.B ezdxf\ v0.16.5b0\ @\ d:\[rs]source\[rs]ezdxf.git\[rs]src\[rs]ezdxf
+.B Python\ version:\ 3.9.6\ (tags/v3.9.6:db3ff76,\ Jun\ 28\ 2021,\ 15:26:21)\ [MSC\ v.1929\ 64\ bit\ (AMD64)]
+.B using\ C\-extensions:\ yes
+.B using\ Matplotlib:\ yes
+.B \:
+.B Configuration:
+.B [core]
+.B default_dimension_text_style\ =\ OpenSansCondensed\-Light
+.B test_files\ =\ D:\[rs]Source\[rs]dxftest
+.B font_cache_directory\ =
+.B load_proxy_graphics\ =\ true
+.B store_proxy_graphics\ =\ true
+.B log_unprocessed_tags\ =\ false
+.B filter_invalid_xdata_group_codes\ =\ true
+.B write_fixed_meta_data_for_testing\ =\ false
+.B disable_c_ext\ =\ false
+.B \:
+.B [browse\-command]
+.B text_editor\ =\ "C:\[rs]Program\[rs] Files\[rs]Notepad++\[rs]notepad++.exe"\ "{filename}"\ \-n{num}
+.B \:
+.B \:
+.B Environment\ Variables:
+.B EZDXF_DISABLE_C_EXT=
+.B EZDXF_TEST_FILES=D:\[rs]Source\[rs]dxftest
+.B EZDXF_CONFIG_FILE=
+.B \:
+.B Existing\ Configuration\ Files:
+.B C:\[rs]Users\[rs]manfred\[rs].config\[rs]ezdxf\[rs]ezdxf.ini
+.EE
+.in
+.SH "SEE\ ALSO"
+.UR https://pypi.org/project/ezdxf/
+.UE
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-draw (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

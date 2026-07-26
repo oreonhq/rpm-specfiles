@@ -1,0 +1,57 @@
+%global source0_hash e8168c4c854e43c2143cd978c09c9e53dd3dd585ddb9961848e278aa3421e431
+
+Name:           python-cmdkit
+Version:        2.7.7
+Release:        10%{?dist}
+Summary:        A library for developing command-line applications in Python
+License:        Apache-2.0
+URL:            https://cmdkit.readthedocs.io/
+Source:         https://github.com/glentner/CmdKit/archive/v%{version}/CmdKit-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+
+# for tests
+BuildRequires:  python3-pytest
+BuildRequires:  python3-hypothesis
+BuildRequires:  python3-yaml
+BuildRequires:  python3-tomli-w
+
+Patch:          loosen-tomli-version.patch
+
+%description
+%summary
+
+%package -n python3-cmdkit
+Summary:        %{summary}
+
+%description -n python3-cmdkit
+%summary
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n CmdKit-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files cmdkit
+
+%check
+%pytest
+
+%files -n python3-cmdkit -f %{pyproject_files}
+%doc README.*
+%license LICENSE
+
+%pyproject_extras_subpkg -n python3-cmdkit toml
+
+%changelog
+%autochangelog

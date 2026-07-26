@@ -1,0 +1,36 @@
+diff -Naur promptml-0.7.1.orig/PKG-INFO promptml-0.7.1/PKG-INFO
+--- promptml-0.7.1.orig/PKG-INFO	2020-02-02 01:00:00.000000000 +0100
++++ promptml-0.7.1/PKG-INFO	2025-11-23 10:45:54.093103128 +0100
+@@ -19,8 +19,8 @@
+ Classifier: Programming Language :: Python :: Implementation :: CPython
+ Classifier: Programming Language :: Python :: Implementation :: PyPy
+ Requires-Python: >=3.8
+-Requires-Dist: lark==1.1.9
+-Requires-Dist: pyyaml==6.0.1
++Requires-Dist: lark>=1.1.9
++Requires-Dist: pyyaml>=6.0.1
+ Description-Content-Type: text/markdown
+ 
+ # PromptML (Prompt Markup Language)
+diff -Naur promptml-0.7.1.orig/pyproject.toml promptml-0.7.1/pyproject.toml
+--- promptml-0.7.1.orig/pyproject.toml	2020-02-02 01:00:00.000000000 +0100
++++ promptml-0.7.1/pyproject.toml	2025-11-23 23:17:02.957128005 +0100
+@@ -26,8 +26,8 @@
+   "Programming Language :: Python :: Implementation :: PyPy",
+ ]
+ dependencies = [
+-  "lark==1.1.9",
+-  "PyYAML==6.0.1",
++  "lark>=1.1.9",
++  "PyYAML>=6.0.1",
+ ]
+ 
+ [project.urls]
+diff -Naur promptml-0.7.1.orig/requirements.txt promptml-0.7.1/requirements.txt
+--- promptml-0.7.1.orig/requirements.txt	2020-02-02 01:00:00.000000000 +0100
++++ promptml-0.7.1/requirements.txt	2025-11-23 10:40:21.087399578 +0100
+@@ -1,2 +1,2 @@
+-lark==1.1.9
+-PyYAML==6.0.1
++lark>=1.1.9
++PyYAML>=6.0.1

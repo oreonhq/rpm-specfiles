@@ -1,0 +1,13 @@
+diff --git a/src/robotfindskitten.c b/src/robotfindskitten.c
+index d411d44..73da184 100644
+--- a/src/robotfindskitten.c
++++ b/src/robotfindskitten.c
+@@ -173,7 +173,7 @@ static void add_message ( char *msg, size_t len ) {
+ 
+ static void read_file ( char *fname ) {
+ 	int fd;
+-	char ch, *buff, *buff2;
++	char ch, *buff=NULL, *buff2;
+ 	size_t len, alloc;
+ 
+ 	len = 0;

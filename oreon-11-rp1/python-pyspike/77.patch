@@ -1,0 +1,18 @@
+From a01597f6d550f6a3af16f1225cd307d34277e492 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 25 Feb 2024 14:40:13 -0500
+Subject: [PATCH] In setup.cfg, replace deprecated metadata.description-file
+
+Use metadata.description_file instead.
+---
+ setup.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 2aee194..c855aaa 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,2 +1,2 @@
+ [metadata]
+-description-file = Readme.rst
++description_file = Readme.rst

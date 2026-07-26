@@ -1,0 +1,70 @@
+diff '--color=auto' -Naur /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/lib/vagrant.rb /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/lib/vagrant.rb
+--- /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/lib/vagrant.rb	2023-02-16 13:41:49.267357857 +0100
++++ /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/lib/vagrant.rb	2023-03-17 16:47:49.956035219 +0100
+@@ -46,19 +46,19 @@
+ require "vagrant/plugin/manager"
+ 
+ # Update the load path so our protos can be located
+-$LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs").to_s
+-$LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto").to_s
+-$LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto/vagrant_plugin_sdk").to_s
++# $LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs").to_s
++# $LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto").to_s
++# $LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto/vagrant_plugin_sdk").to_s
+ 
+ # Load our protos so they are available
+-require 'vagrant/protobufs/proto/vagrant_server/server_pb'
+-require 'vagrant/protobufs/proto/vagrant_server/server_services_pb'
+-require 'vagrant/protobufs/proto/ruby_vagrant/ruby-server_pb'
+-require 'vagrant/protobufs/proto/ruby_vagrant/ruby-server_services_pb'
+-require 'vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_pb'
+-require 'vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_services_pb'
+-require 'vagrant/protobufs/proto/plugin/grpc_broker_pb'
+-require 'vagrant/protobufs/proto/plugin/grpc_broker_services_pb'
++# require 'vagrant/protobufs/proto/vagrant_server/server_pb'
++# require 'vagrant/protobufs/proto/vagrant_server/server_services_pb'
++# require 'vagrant/protobufs/proto/ruby_vagrant/ruby-server_pb'
++# require 'vagrant/protobufs/proto/ruby_vagrant/ruby-server_services_pb'
++# require 'vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_pb'
++# require 'vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_services_pb'
++# require 'vagrant/protobufs/proto/plugin/grpc_broker_pb'
++# require 'vagrant/protobufs/proto/plugin/grpc_broker_services_pb'
+ 
+ # Enable logging if it is requested. We do this before
+ # anything else so that we can setup the output before
+diff '--color=auto' -Naur /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/commands/serve/command.rb /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/commands/serve/command.rb
+--- /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/commands/serve/command.rb	2023-02-16 13:41:49.358357676 +0100
++++ /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/commands/serve/command.rb	2023-03-17 16:57:02.859959067 +0100
+@@ -3,9 +3,9 @@
+ module VagrantPlugins
+   module CommandServe
+     # Simple constant aliases to reduce namespace typing
+-    SDK = Hashicorp::Vagrant::Sdk
+-    SRV = Hashicorp::Vagrant
+-    Empty = ::Google::Protobuf::Empty
++    # SDK = Hashicorp::Vagrant::Sdk
++    # SRV = Hashicorp::Vagrant
++    Empty = []
+ 
+     autoload :Broker, Vagrant.source_root.join("plugins/commands/serve/broker").to_s
+     autoload :Client, Vagrant.source_root.join("plugins/commands/serve/client").to_s
+diff '--color=auto' -Naur /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/kernel_v2/config/vm.rb /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/kernel_v2/config/vm.rb
+--- /var/lib/mock/fedora-rawhide-x86_64/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/kernel_v2/config/vm.rb	2023-02-16 13:41:49.475357444 +0100
++++ /var/lib/mock/vagrant-rebase/root/builddir/build/BUILDROOT/vagrant-2.3.4-1.fc39.x86_64/usr/share/vagrant/gems/gems/vagrant-2.3.4/plugins/kernel_v2/config/vm.rb	2023-03-17 16:48:26.940189713 +0100
+@@ -11,11 +11,11 @@
+ require "vagrant/util/map_command_options"
+ require "vagrant/util/map_command_options"
+ 
+-$LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto").to_s
+-
+-require "vagrant/protobufs/proto/protostructure_pb"
+-require "vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_pb"
+-require "vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_services_pb"
++# $LOAD_PATH << Vagrant.source_root.join("lib/vagrant/protobufs/proto").to_s
++#
++# require "vagrant/protobufs/proto/protostructure_pb"
++# require "vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_pb"
++# require "vagrant/protobufs/proto/vagrant_plugin_sdk/plugin_services_pb"
+ 
+ # Include mappers
+ require Vagrant.source_root.join("plugins/commands/serve/command").to_s

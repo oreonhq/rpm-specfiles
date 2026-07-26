@@ -1,0 +1,171 @@
+diff --git a/tclOpts.h b/tclOpts.h
+index 1f98fc6..ae27407 100644
+--- a/tclOpts.h
++++ b/tclOpts.h
+@@ -26,7 +26,7 @@
+ 
+ #define OPTSTR(option, var)			\
+     OPT_PROLOG(option)				\
+-    var = Tcl_GetStringFromObj(objv[idx], NULL);\
++    var = Tcl_GetStringFromObj(objv[idx], (Tcl_Size *)NULL);\
+     OPT_POSTLOG()
+ 
+ #define OPTINT(option, var)			\
+diff --git a/tls.c b/tls.c
+index 56437b9..fd43564 100644
+--- a/tls.c
++++ b/tls.c
+@@ -248,7 +248,7 @@ static int
+ VerifyCallback(int ok, X509_STORE_CTX *ctx) {
+     Tcl_Obj *cmdPtr, *result;
+     char *errStr, *string;
+-    int length;
++    Tcl_Size length;
+     SSL   *ssl		= (SSL*)X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+     X509  *cert		= X509_STORE_CTX_get_current_cert(ctx);
+     State *statePtr	= (State*)SSL_get_app_data(ssl);
+@@ -355,7 +355,7 @@ Tls_Error(State *statePtr, char *msg) {
+     if (msg && *msg) {
+ 	Tcl_SetErrorCode(statePtr->interp, "SSL", msg, (char *)NULL);
+     } else {
+-	msg = Tcl_GetStringFromObj(Tcl_GetObjResult(statePtr->interp), NULL);
++	msg = Tcl_GetStringFromObj(Tcl_GetObjResult(statePtr->interp), (Tcl_Size *)NULL);
+     }
+     statePtr->err = msg;
+ 
+@@ -645,7 +645,7 @@ static int HandshakeObjCmd(ClientData clientData, Tcl_Interp *interp, int objc,
+ 		return(TCL_ERROR);
+ 	}
+ 
+-	chan = Tcl_GetChannel(interp, Tcl_GetStringFromObj(objv[1], NULL), NULL);
++	chan = Tcl_GetChannel(interp, Tcl_GetStringFromObj(objv[1], (Tcl_Size *)NULL), NULL);
+ 	if (chan == (Tcl_Channel) NULL) {
+ 		return(TCL_ERROR);
+ 	}
+@@ -720,15 +720,16 @@ ImportObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
+     Tcl_Obj *script	        = NULL;
+     Tcl_Obj *password	        = NULL;
+     Tcl_DString upperChannelTranslation, upperChannelBlocking, upperChannelEncoding, upperChannelEOFChar;
+-    int idx, len;
++    int idx;
++    Tcl_Size len;
+     int flags		        = TLS_TCL_INIT;
+     int server		        = 0;	/* is connection incoming or outgoing? */
+     char *keyfile	        = NULL;
+     char *certfile	        = NULL;
+     unsigned char *key  	= NULL;
+-    int key_len                 = 0;
++    Tcl_Size key_len            = 0;
+     unsigned char *cert         = NULL;
+-    int cert_len                = 0;
++    Tcl_Size cert_len           = 0;
+     char *ciphers	        = NULL;
+     char *CAfile	        = NULL;
+     char *CAdir		        = NULL;
+@@ -768,7 +769,7 @@ ImportObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
+ 	return TCL_ERROR;
+     }
+ 
+-    chan = Tcl_GetChannel(interp, Tcl_GetStringFromObj(objv[1], NULL), NULL);
++    chan = Tcl_GetChannel(interp, Tcl_GetStringFromObj(objv[1], (Tcl_Size *)NULL), NULL);
+     if (chan == (Tcl_Channel) NULL) {
+ 	return TCL_ERROR;
+     }
+@@ -779,7 +780,7 @@ ImportObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
+     chan = Tcl_GetTopChannel(chan);
+ 
+     for (idx = 2; idx < objc; idx++) {
+-	char *opt = Tcl_GetStringFromObj(objv[idx], NULL);
++	char *opt = Tcl_GetStringFromObj(objv[idx], (Tcl_Size *)NULL);
+ 
+ 	if (opt[0] != '-')
+ 	    break;
+@@ -1380,12 +1381,12 @@ StatusObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
+ 
+     switch (objc) {
+ 	case 2:
+-	    channelName = Tcl_GetStringFromObj(objv[1], NULL);
++	    channelName = Tcl_GetStringFromObj(objv[1], (Tcl_Size *)NULL);
+ 	    break;
+ 
+ 	case 3:
+ 	    if (!strcmp (Tcl_GetString (objv[1]), "-local")) {
+-		channelName = Tcl_GetStringFromObj(objv[2], NULL);
++		channelName = Tcl_GetStringFromObj(objv[2], (Tcl_Size *)NULL);
+ 		break;
+ 	    }
+ 	    /* else fall-through ... */
+@@ -1442,6 +1443,7 @@ StatusObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const
+     return TCL_OK;
+ 	clientData = clientData;
+ }
++
+ 
+ /*
+  *-------------------------------------------------------------------
+@@ -1488,7 +1490,7 @@ static int
+ MiscObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]) {
+     static const char *commands [] = { "req", "strreq", NULL };
+     enum command { C_REQ, C_STRREQ, C_DUMMY };
+-    int cmd;
++    Tcl_Size cmd;
+ 
+     dprintf("Called");
+ 
+@@ -1507,7 +1510,8 @@ MiscObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const o
+ 	    X509 *cert=NULL;
+ 	    X509_NAME *name=NULL;
+ 	    Tcl_Obj **listv;
+-	    int listc,i;
++	    Tcl_Size listc;
++	    int i;
+ 
+ 	    BIO *out=NULL;
+ 
+@@ -1527,8 +1531,7 @@ MiscObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const o
+ 	    pemout=Tcl_GetString(objv[4]);
+ 
+ 	    if (objc>=6) {
+-		if (Tcl_ListObjGetElements(interp, objv[5],
+-			&listc, &listv) != TCL_OK) {
++		if (Tcl_ListObjGetElements(interp, objv[5], &listc, &listv) != TCL_OK) {
+ 		    return TCL_ERROR;
+ 		}
+ 
+@@ -1648,7 +1651,7 @@ MiscObjCmd(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *const o
+  *-------------------------------------------------------------------
+  */
+ void
+-Tls_Free( char *blockPtr )
++Tls_Free( tls_free_type *blockPtr )
+ {
+     State *statePtr = (State *)blockPtr;
+ 
+diff --git a/tlsInt.h b/tlsInt.h
+index 6f053c5..1d02bd1 100644
+--- a/tlsInt.h
++++ b/tlsInt.h
+@@ -31,7 +31,22 @@
+ 
+ /* Handle TCL 8.6 CONST changes */
+ #ifndef CONST86
+-#define CONST86
++#   if TCL_MAJOR_VERSION > 8
++#	define CONST86 const
++#   else
++#	define CONST86
++#   endif
++#endif
++
++/*
++ * Backwards compatibility for size type change
++ */
++#if TCL_MAJOR_VERSION < 9 && TCL_MINOR_VERSION < 7
++    #ifndef Tcl_Size
++        typedef int Tcl_Size;
++    #endif
++
++    #define TCL_SIZE_MODIFIER ""
+ #endif
+ 
+ #ifdef NO_PATENTS

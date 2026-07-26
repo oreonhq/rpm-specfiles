@@ -1,0 +1,43 @@
+.\" Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.TH "TOGA2" "6" "July 29, 2006" "" ""
+.SH "NAME"
+toga2 \- toga2 is a UCI\-only chess engine.
+.SH "SYNOPSIS"
+.B toga2
+.SH "DESCRIPTION"
+This manual page documents briefly the
+.B toga2
+program.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBtoga2\fP is an UCI\-only chess engine.
+
+toga2 and other UCI engines can be used with XBoard or WinBoard (or other xboard\-compatible interfaces) with the help of PolyGlot (UCI\-to\-xboard adapter). Another well known frontend is KDE knights, which has a UCI capable interface.
+
+.SH "OPTIONS"
+These program does NOT follow the usual GNU command line syntax, but can be fed with options with a personal config file which can be read by the polyglot helper software. The author himself says "You are advised to skip this section unless you are completely crazy about computer chess." For a complete description of these UCI commands, see the readme files.
+.TP
+.SH "SEE ALSO"
+Further documentation in /usr/share/doc/toga2/readme.txt
+.SH "AUTHOR"
+The base program fruit was written by Fabien Letouzey <fabien_letouzey@hotmail.com> and toga2 by Thomas Gaksch <toga2@gmx.net>. The Sourcecode including binaries for several architectures can be found at: http://www.uciengines.de/UCI-Engines/TogaII/togaii.html and http://alpha.uhasselt.be/Research/Algebra/Toga/posix_versions/
+.PP
+This manual page was written by Oliver Korff <ok@xynyx.de>,
+for the Debian project (but may be used by others).

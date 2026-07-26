@@ -1,0 +1,11 @@
+diff -up sunwait-20041208/main.c.string sunwait-20041208/main.c
+--- sunwait-20041208/main.c.string	2015-03-01 16:33:09.812066357 -0700
++++ sunwait-20041208/main.c	2015-03-01 16:33:48.484287120 -0700
+@@ -3,6 +3,7 @@
+ /* Licensed under the Gnu General Public License */
+ #include <stdio.h>
+ #include <stdlib.h> 
++#include <string.h>
+ #include <math.h>
+ #include <time.h>
+ 

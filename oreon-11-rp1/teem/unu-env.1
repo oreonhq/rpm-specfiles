@@ -1,0 +1,184 @@
+.TH UNU\-ENV "1" "April 2021" "" "User Commands"
+.SH NAME
+unu\-env \- list relevant environment variables and their values
+.SH SYNOPSIS
+.B unu\ env
+.SH DESCRIPTION
+List relevant environment variables and their values.
+These environment variables provide a way of setting global variables that can
+affect the way Nrrd (and
+.BR unu (1))
+operates.
+.IP \(bu +2n
+Uses
+.BR nrrdGetenvBool ,
+.BR nrrdGetenvEnum ,
+.BR nrrdGetenvInt ,
+and
+.B nrrdGetenvUInt
+.IP
+Each variable in the listing below starts with the name of the environment
+variable
+.RB (\(lq NRRD_ ...\(rq),
+what type of value it represents (e.g.\:
+.RI \(lq int \(rq,
+.RI \(lq bool \(rq),
+what the corresponding Nrrd global variable is set to, and a description of the
+variable.
+In the
+.BR unu\-env (1)
+command output, the listing also includes what the environment variable is
+currently set to.
+.IP
+.I Bool
+variables may be set to true simply by setting the environment variable;
+setting the value to
+.RI \(lq true \(rq
+or
+.RI \(lq false \(rq
+sets the
+.I bool
+accordingly.
+.I Enum
+variables may be set by setting the environment variable to any string that
+parses as one of the
+.I enum
+values.
+.I Int
+and
+.I unsigned\ int
+variables are set via a string parse-able as a numeric value.
+.IP
+In addition to the the
+.RB \(lq NRRD_ \(rq
+environment variables, there is this one,
+.BR UNRRDU_QUIET_QUIT ;
+see the
+.B ENVIRONMENT
+section below.
+.SH ENVIRONMENT
+.TP
+.B UNRRDU_QUIET_QUIT
+Determines whether
+.BR unu (1)
+exits quietly (without error and usage info) when it fails because an input
+.I nrrd
+read immediately hit
+.B EOF
+(as happens when many
+.BR unu (1)
+invocations are piped together).
+This is currently detected by seeing if the error message ends with 
+.RB \(lq [nrrd]\ _nrrdRead:\ immediately\ hit\ EOF \(rq.
+.TP
+.B NRRD_STATE_KEYVALUEPAIRS_PROPAGATE \fR(\fIbool\fR)
+.RB ( nrrdStateKeyValuePairsPropagate \ ==\  true )
+.IP
+When
+.BR true ,
+key/value pairs are copied from input
+.I nrrd
+to output
+.I nrrd
+just like other basic info that hasn\(cqt just been modified (e.g. type,
+dimension, block size).
+.TP
+.B NRRD_DEFAULT_CENTER \fR(\fIcentering\ enum\fR)
+.RB ( nrrdDefaultCenter \ ==\  cell )
+.IP
+The type of sample centering to use when none has been set but one has to be
+chosen for some operation (e.g. resampling).
+.TP
+.B NRRD_DEFAULT_WRITE_ENCODING_TYPE \fR(\fIencoding\ enum\fR)
+.RB ( nrrdDefaultWriteEncodingType \ ==\  raw )
+.IP
+When writing
+.IR nrrd s,
+what encoding to use.
+Only
+.BR unu\-save (1)
+affords explicit control of output encoding.
+.TP
+.B NRRD_STATE_KIND_NOOP \fR(\fIbool\fR)
+.RB ( nrrdStateKindNoop \ ==\  false )
+.IP
+When true, Nrrd makes not even the slightest effort to be smart about setting
+the
+.RB \(lq kind \(rq
+field of an axis after some operation that modified its samples.
+.TP
+.B NRRD_STATE_VERBOSE_IO \fR(\fIint\fR)
+.RB ( nrrdStateVerboseIO \ ==\  1 )
+.IP
+The verbosity level of Nrrd input/output operations.
+.TP
+.B NRRD_DEFAULT_WRITE_BARE_TEXT \fR(\fIbool\fR)
+.RB ( nrrdDefaultWriteBareText \ ==\  1 )
+.IP
+When
+.BR false ,
+text files used for saving
+.IR nrrd s
+start with comment
+.RB (\(lq #\ ... \(rq)
+lines containing
+.I nrrd
+fields.
+.TP
+.B NRRD_STATE_MEASURE_TYPE \fR(\fIenum\fR)
+.RB ( nrrdStateMeasureType \ ==\  float )
+.IP
+For measurements
+.RB ( unu\-project (1))
+like sum and product, the type of the output result, when one hasn\(cqt been
+explicitly requested.
+.TP
+.B NRRD_STATE_MEASURE_MODE_BINS \fR(\fIint\fR)
+.RB ( nrrdStateMeasureModeBins \ ==\  1024 )
+.IP
+When measuring mode but without a given histogram, how many bins to use in the
+temporary internal histogram.
+.TP
+.B NRRD_STATE_MEASURE_HISTO_TYPE \fR(\fIenum\fR)
+.RB ( nrrdStateMeasureHistoType \ ==\  float )
+.IP
+Output type for most measurements of histograms, when one hasn\(cqt been
+explicitly requested
+.TP
+.B NRRD_STATE_ALWAYS_SET_CONTENT \fR(\fIbool\fR)
+.RB ( nrrdStateAlwaysSetContent \ ==\  true )
+.IP
+If
+.BR true ,
+the output content string is set even when the input content string is not set.
+.TP
+.B NRRD_STATE_DISABLE_CONTENT \fR(\fIbool\fR)
+.RB ( nrrdStateDisableContent \ ==\  false )
+.IP
+If
+.BR true ,
+output content is never set.
+.TP
+.B NRRD_DEFAULT_WRITE_CHARS_PER_LINE \fR(\fIunsigned\ int\fR)
+.RB ( nrrdDefaultWriteCharsPerLine \ ==\  75 )
+.IP
+When using text encoding, maximum # characters allowed per line.
+.TP
+.B NRRD_DEFAULT_WRITE_VALS_PER_LINE \fR(\fIunsigned\ int\fR)
+.RB ( nrrdDefaultWriteValsPerLine \ ==\  8 )
+.IP
+When using text encoding, maximum # values allowed per line
+.TP
+.B NRRD_STATE_GRAYSCALE_IMAGE_3D \fR(\fIbool\fR)
+.RB ( nrrdStateGrayscaleImage3D \ ==\  false )
+.IP
+If
+.BR true ,
+reading a 2-D grayscale image results in a 3-D image with a single
+sample
+.RB ( size = 1 )
+on the first (fastest) axis.
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-project (1),
+.BR unu\-save (1)

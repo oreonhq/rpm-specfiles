@@ -1,0 +1,27 @@
+From 914543a4f30de53cd33c2961e8791bf44d29aedf Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Wed, 4 Sep 2024 15:04:27 +0200
+Subject: [PATCH] Remove requirement for accum buffers
+
+Mesa's swrast with dril does not expose these anymore, so the tests
+fail trying to find a matching config.
+---
+ lib/opengl/test_case.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/opengl/test_case.rb b/lib/opengl/test_case.rb
+index e14dac3..4acf91e 100644
+--- a/lib/opengl/test_case.rb
++++ b/lib/opengl/test_case.rb
+@@ -39,7 +39,7 @@ class OpenGL::TestCase < MiniTest::Unit::TestCase
+ 
+   glutInit
+   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL |
+-                      GLUT_ACCUM | GLUT_ALPHA)
++                      GLUT_ALPHA)
+ 
+   def setup
+     glutInitWindowPosition 1, 1
+-- 
+2.46.0
+

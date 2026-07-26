@@ -1,0 +1,28 @@
+diff -r -U4 The-Powder-Toy-97.0.351b--orig/resources/powder.man The-Powder-Toy-97.0.351b--patched/resources/powder.man
+--- The-Powder-Toy-97.0.351b--orig/resources/powder.man	2022-12-27 18:41:23.000000000 +0100
++++ The-Powder-Toy-97.0.351b--patched/resources/powder.man	2022-12-28 20:29:11.123215432 +0100
+@@ -1,11 +1,11 @@
+-.TH POWDER 6 "2019-09-25" "" "Games manual"
++.TH POWDERTOY 6 "2019-09-25" "" "Games manual"
+ .
+ .SH NAME
+-powder \- a physics sandbox game
++powdertoy \- a physics sandbox game
+ .
+ .SH SYNOPSIS
+-.SY powder
++.SY powdertoy
+ [\fIOPTIONS...\fR]
+ .YS
+ .
+ .SH DESCRIPTION
+diff -r -U4 The-Powder-Toy-97.0.351b--orig/resources/powder.template.desktop The-Powder-Toy-97.0.351b--patched/resources/powder.template.desktop
+--- The-Powder-Toy-97.0.351b--orig/resources/powder.template.desktop	2022-12-27 18:41:23.000000000 +0100
++++ The-Powder-Toy-97.0.351b--patched/resources/powder.template.desktop	2022-12-28 20:28:49.485089371 +0100
+@@ -4,5 +4,5 @@
+ Comment=@APPCOMMENT@
+ MimeType=application/vnd.powdertoy.save;x-scheme-handler/ptsave;
+ Categories=Game;Simulation;
+ Exec=@APPEXE@ %u
+-Icon=@APPVENDOR@-@APPEXE@
++Icon=@APPEXE@

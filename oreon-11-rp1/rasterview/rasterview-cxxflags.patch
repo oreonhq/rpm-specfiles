@@ -1,0 +1,22 @@
+--- rasterview-1.9.1/configure.ac.orig	2025-01-01 00:00:00.000000000 +0000
++++ rasterview-1.9.1/configure.ac	2025-01-01 00:00:00.000000000 +0000
+@@ -30,7 +30,7 @@ dnl default unless the user asks for deb
+ CFLAGS="${CFLAGS:=}"
+ AC_SUBST([CFLAGS])
+
+-CXXFLAGS="${CPPFLAGS:=}"
++CPPFLAGS="${CPPFLAGS:=}"
+ AC_SUBST([CPPFLAGS])
+
+ CXXFLAGS="${CXXFLAGS:=}"
+--- rasterview-1.9.1/configure.orig	2025-01-01 00:00:00.000000000 +0000
++++ rasterview-1.9.1/configure	2025-01-01 00:00:00.000000000 +0000
+@@ -2447,7 +2447,7 @@
+ CFLAGS="${CFLAGS:=}"
+
+
+-CXXFLAGS="${CPPFLAGS:=}"
++CPPFLAGS="${CPPFLAGS:=}"
+
+
+ CXXFLAGS="${CXXFLAGS:=}"

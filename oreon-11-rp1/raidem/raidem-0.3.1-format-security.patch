@@ -1,0 +1,13 @@
+Index: raidem-0.3.1-src/src/input-joystick.m
+===================================================================
+--- raidem-0.3.1-src.orig/src/input-joystick.m
++++ raidem-0.3.1-src/src/input-joystick.m
+@@ -272,7 +272,7 @@ BOOL joy_enabled = YES;
+ 	/* Process the commands. */
+ 	if (streq(cmd, "name")) {
+ 	    assert([btok type] == TOKEN_STRING);
+-	    snprintf(name, sizeof name, [btok getString]);
++	    memcpy(name, [btok getString], MIN(strlen([btok getString]) + 1, sizeof(name)));
+ 	}
+ 	else {
+ 	    assert([btok type] == TOKEN_FIXNUM);

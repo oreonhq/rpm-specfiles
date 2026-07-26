@@ -1,0 +1,35 @@
+Test creation of a binary file
+before running this program, enter wgrib land.grb -d 1
+                                                                
+                                                  xx    xxxx    
+   x                                             xx xxxxxxxxx   
+              xxxxxxxxxxxxx                 xx x xxx   xxxxxx   
+   xxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxx xx  xxx  xx  
+ xxx xxxxxxxxxxxxxxxxxxxxxxx x      x  xxxxxxxxx   x            
+  xxxxxxxxxxxxxxxxxxxxxxx   x            xxxxxxxxxxxxx          
+xxxxxxxxxxxxxxxxxxxxxxxxx                 xxxxxxxxxxx x         
+x x x   x xxxxxxxxxxxxxx                  xxxxxxxxxx           x
+    xxxxx xxxxxxxxxxxx   x                 xxxxxxxx            x
+xxx x  xxxxxxxxxxxxxxx                      xxxxxx             x
+xxxxxxxxxx xxxxxxxxxxx                       xx               xx
+xxxxxxx xxx  xxx xx                           x x             xx
+xxxxxxxxx     x   xx                            xx            xx
+xxxxxxxxx                                          xxx        xx
+  xxxxxxx           x                              xxxx         
+  xxxxxx            x    x                        xxxxxxx       
+   xxxxx                                          xxxxxxxx      
+   xxxxx                x                          xxxxxxx      
+   xxxx x             xxxxx                         xxxxx       
+   xxx               xxxxxxx                        xxxx        
+    xx               xxxxxxx                        xxx         
+                         xx                        xxx          
+                                                   xx           
+                                                   xx           
+                                                    x           
+                                                                
+                                                                
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx                      x         x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx        xxxxxxxxxxxxxx       xxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx       xxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+should see continents -- if you do, it works

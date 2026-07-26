@@ -1,0 +1,29 @@
+diff -Naur a/retis/Cargo.toml b/retis/Cargo.toml
+--- a/retis/Cargo.toml	2026-01-30 15:27:54.435045733 +0100
++++ b/retis/Cargo.toml	2026-01-30 15:29:19.323936351 +0100
+@@ -35,7 +35,7 @@
+ cargo-platform = "0.3"
+ clap = { version = "4.0", features = ["derive", "string", "wrap_help"] }
+ clap_complete = "4.4"
+-elf = "0.8"
++elf = "0.7"
+ events = {version = "1.5", path = "../retis-events", package="retis-events" }
+ flate2 = "1.0"
+ libbpf-rs = "0.25"
+diff -Naur a/retis/src/core/user/proc.rs b/retis/src/core/user/proc.rs
+--- a/retis/src/core/user/proc.rs	2026-01-30 15:27:54.433794934 +0100
++++ b/retis/src/core/user/proc.rs	2026-01-30 15:30:56.763812406 +0100
+@@ -79,11 +79,11 @@
+                     Note::Unknown(note) => note,
+                     _ => bail!("Unexpected note variant found"),
+                 };
+-                if note.n_type != STAPSDT_TYPE || note.name_str()? != "stapsdt" {
++                if note.n_type != STAPSDT_TYPE || note.name.ne("stapsdt") {
+                     bail!(
+                         "Unexpected note type and name: {}/{}",
+                         note.n_type,
+-                        note.name_str()?
++                        note.name
+                     );
+                 }
+

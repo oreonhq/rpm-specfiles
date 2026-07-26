@@ -1,0 +1,11 @@
+--- urjtag-20111215-git-e1a4227/urjtag/src/cmd/cmd_bfin.c.orig	2014-09-16 16:28:04.803187159 +0100
++++ urjtag-20111215-git-e1a4227/urjtag/src/cmd/cmd_bfin.c	2014-09-16 16:28:30.823651190 +0100
+@@ -16,7 +16,7 @@
+  * 02111-1307, USA.
+  */
+ 
+-
++#define _SYS_UCONTEXT_H
+ #include "sysdep.h"
+ 
+ #include <stdio.h>

@@ -1,0 +1,32 @@
+From 302ed8a1aa012552529d5abd30f4b40b0b429580 Mon Sep 17 00:00:00 2001
+From: volconst <20997907+volconst@users.noreply.github.com>
+Date: Sat, 7 May 2022 12:32:48 +0300
+Subject: [PATCH] Fix TypeError when adjusting speed, flow rate
+
+Fixes #1258
+---
+ printrun/gui/controls.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/printrun/gui/controls.py b/printrun/gui/controls.py
+index c4f2877a8..929c25abc 100644
+--- a/printrun/gui/controls.py
++++ b/printrun/gui/controls.py
+@@ -197,7 +197,7 @@ def speedslider_set(event):
+     def speedslider_spin(event):
+         value = root.speed_spin.GetValue()
+         root.speed_setbtn.SetBackgroundColour("red")
+-        root.speed_slider.SetValue(value)
++        root.speed_slider.SetValue(int(value))
+     root.speed_spin.Bind(wx.EVT_SPINCTRLDOUBLE, speedslider_spin)
+ 
+     def speedslider_scroll(event):
+@@ -231,7 +231,7 @@ def flowslider_set(event):
+     def flowslider_spin(event):
+         value = root.flow_spin.GetValue()
+         root.flow_setbtn.SetBackgroundColour("red")
+-        root.flow_slider.SetValue(value)
++        root.flow_slider.SetValue(int(value))
+     root.flow_spin.Bind(wx.EVT_SPINCTRLDOUBLE, flowslider_spin)
+ 
+     def flowslider_scroll(event):

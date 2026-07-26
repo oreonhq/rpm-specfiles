@@ -1,0 +1,28 @@
+From 8b05839b5f628f354ed652cf90d9a0aefa944b5e Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 26 Jan 2026 23:31:14 +0000
+Subject: [PATCH] Remove pytest-runner
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It is deprecated and only useful with the “setup.py” test command, which
+in turn was removed in setuptools 72.
+
+Fixes #430.
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index c9cdfc4d..08f5de08 100644
+--- a/setup.py
++++ b/setup.py
+@@ -62,7 +62,6 @@
+     scripts=["pygal_gen.py"],
+     keywords=[
+         "svg", "chart", "graph", "diagram", "plot", "histogram", "kiviat"],
+-    setup_requires=['pytest-runner'],
+     install_requires=['importlib-metadata'],  # TODO: remove this (see #545, #546)
+     package_data={'pygal': ['css/*', 'graph/maps/*.svg']},
+     extras_require={

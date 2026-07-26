@@ -1,0 +1,12 @@
+diff -ruN wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2-orig/wl-gammactl.desktop wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2/wl-gammactl.desktop
+--- wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2-orig/wl-gammactl.desktop	1970-01-01 10:00:00.000000000 +1000
++++ wl-gammactl-611846ce8f5f6e7fe1afb100416cceb8af54afb2/wl-gammactl.desktop	2020-05-05 08:45:24.019713635 +1000
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Type=Application
++Name=wl-gammactl
++Comment=Set contrast, brightness and gamma for wayland compositors
++Exec=wl-gammactl
++Icon=wl-gammactl
++Terminal=false
++Categories=Settings;HardwareSettings;

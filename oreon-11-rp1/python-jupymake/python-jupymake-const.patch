@@ -1,0 +1,27 @@
+Fixes these warnings:
+
+  JuPyMake.cpp: In function ‘PyObject* GetContextHelp(PyObject*, PyObject*, PyObject*)’:
+  JuPyMake.cpp:162:30: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    162 |     static char* kwlist[] = {"input", "position", "full", "html", NULL};
+        |                              ^~~~~~~
+  JuPyMake.cpp:162:39: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    162 |     static char* kwlist[] = {"input", "position", "full", "html", NULL};
+        |                                       ^~~~~~~~~~
+  JuPyMake.cpp:162:51: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    162 |     static char* kwlist[] = {"input", "position", "full", "html", NULL};
+        |                                                   ^~~~~~
+  JuPyMake.cpp:162:59: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+    162 |     static char* kwlist[] = {"input", "position", "full", "html", NULL};
+        |                                                           ^~~~~~
+
+--- JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp.orig	2025-09-30 08:47:12.798012318 -0600
++++ JuPyMake-a6987c8bb455c172e80eed7b5b62a7c13bf85815/JuPyMake.cpp	2025-09-30 11:20:35.319525241 -0600
+@@ -159,7 +159,7 @@ GetContextHelp(PyObject* self, PyObject*
+     int          position = -1;
+     int          full = false;
+     int          html = false;
+-    static char* kwlist[] = {"input", "position", "full", "html", NULL};
++    static const char* kwlist[] = {"input", "position", "full", "html", NULL};
+     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "s|iii", kwlist,
+                                      &input_string, &position, &full, &html))
+         return NULL;

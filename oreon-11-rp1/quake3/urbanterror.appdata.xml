@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>urbanterror.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and proprietary</project_license>
+  <name>Urban Terror</name>
+  <summary>FPS best be described as a Hollywood tactical shooter</summary>
+  <description>
+    <p>
+     Urban Terror could best be described as a Hollywood tactical shooter; it is
+     realism based to a certain extent (environments/weapons/player models), but
+     also goes by the motto "fun over realism" (fast gameplay and lots of
+     action). This combination of reality and action results in a very unique,
+     enjoyable and addictive game.
+    </p>
+    <p>
+     Urban Terror uses the Open Source ioquake3 engine, however the Urban Terror
+     datafiles are not freely redistributable. This package will install an
+     Urban Terror menu entry, which will automatically download the necessary
+     datafiles (2GB!) the first time you start Urban Terror.
+    </p>
+  </description>
+  <url type="homepage">http://www.urbanterror.info/</url>
+  <screenshots>
+    <screenshot type="default">http://www.urbanterror.info/files/static/images/pics/presentation/shot0007.jpg</screenshot>
+    <screenshot>http://www.urbanterror.info/files/static/images/pics/presentation/shot0010.jpg</screenshot>
+    <screenshot>http://www.urbanterror.info/files/static/images/pics/presentation/shot0011.jpg</screenshot>
+    <screenshot>http://www.urbanterror.info/files/static/images/pics/presentation/shot0018.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

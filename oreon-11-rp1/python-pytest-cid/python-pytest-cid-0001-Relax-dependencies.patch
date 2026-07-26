@@ -1,0 +1,32 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 26 Aug 2024 22:09:06 +0200
+Subject: [PATCH] Relax dependencies
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e6be487..14119aa 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -14,7 +14,7 @@ description-file = "README.md"
+ 
+ requires-python = ">=3.5"
+ requires = [
+-	"pytest >= 5.0, < 7.0",
++	"pytest >= 5.0",
+ 	"py-cid"
+ ]
+ 
+diff --git a/tox.ini b/tox.ini
+index a7f0d98..c86d7a1 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -11,7 +11,7 @@ isolated_build = true
+ 
+ [testenv]
+ deps =
+-	pytest-cov ~= 2.6
++	pytest-cov >= 2.6
+ commands = pytest {posargs:tests}
+ 
+ [testenv:styleck]

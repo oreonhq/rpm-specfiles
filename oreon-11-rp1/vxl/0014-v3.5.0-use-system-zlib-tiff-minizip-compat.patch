@@ -1,0 +1,52 @@
+From ea6a4cc7095db5e98728849f6db505952704ca37 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Mon, 22 Jan 2024 11:40:35 +0000
+Subject: [PATCH 14/18] v3.5.0: use system zlib, tiff, minizip-compat
+
+---
+ contrib/brl/bseg/bmdl/CMakeLists.txt     | 7 +++++++
+ contrib/brl/bseg/bmdl/pro/CMakeLists.txt | 4 ++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/contrib/brl/bseg/bmdl/CMakeLists.txt b/contrib/brl/bseg/bmdl/CMakeLists.txt
+index 4890d2ab29..8db0d2ca1c 100644
+--- a/contrib/brl/bseg/bmdl/CMakeLists.txt
++++ b/contrib/brl/bseg/bmdl/CMakeLists.txt
+@@ -1,5 +1,12 @@
+ # This is brl/seg/bmdl/CMakeLists.txt
+ 
++FIND_PACKAGE( ZLIB QUIET )
++if(ZLIB_FOUND)
++  include_directories( ${ZLIB_INCLUDE_DIR} )
++  include_directories( ${BRL_INCLUDE_DIR}/b3p )
++  add_definitions(-DHAS_ZLIB=1)
++endif()
++
+ if(HAS_GEOTIFF)
+   include_directories( ${GEOTIFF_INCLUDE_DIR} )
+ 
+diff --git a/contrib/brl/bseg/bmdl/pro/CMakeLists.txt b/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
+index 7c73fe1bb0..cc30626c09 100644
+--- a/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
++++ b/contrib/brl/bseg/bmdl/pro/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # This is contrib/brl/bseg/bmdl/pro/CMakeLists.txt
+ # bmdl's Process Library
+ 
+-include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
++FIND_PACKAGE( ZLIB QUIET )
+ if(ZLIB_FOUND)
+   include_directories( ${ZLIB_INCLUDE_DIR} )
+   include_directories( ${BRL_INCLUDE_DIR}/b3p )
+@@ -12,7 +12,7 @@ endif()
+ FIND_PACKAGE(EXPAT REQUIRED)
+ FIND_PACKAGE(EXPATPP REQUIRED)
+ if(EXPAT_FOUND)
+-  include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
++  FIND_PACKAGE(TIFF)
+   if(TIFF_FOUND)
+     include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+     if(GEOTIFF_FOUND)
+-- 
+2.46.1
+

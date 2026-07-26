@@ -1,0 +1,30 @@
+From 65a7b35a6004d17673654912ede801de6d3d3a91 Mon Sep 17 00:00:00 2001
+From: Rob Crittenden <rcritten@redhat.com>
+Date: Wed, 25 Oct 2023 09:52:21 -0400
+Subject: [PATCH] Python.h no longer includes unistd.h, do it manually
+
+According to https://docs.python.org/3.13/whatsnew/3.13.html:
+
+Python.h no longer includes the <unistd.h> standard header file.
+If needed, it should now be included explicitly.
+For example, it provides the functions: read(), write(), close(),
+isatty(), lseek(), getpid(), getcwd(), sysconf() and getpagesize().
+---
+ src/kerberosgss.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/kerberosgss.c b/src/kerberosgss.c
+index c82a5e4..4cf3310 100644
+--- a/src/kerberosgss.c
++++ b/src/kerberosgss.c
+@@ -23,6 +23,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <arpa/inet.h>
++#include <unistd.h>
+ 
+ static void set_gss_error(OM_uint32 err_maj, OM_uint32 err_min);
+ 
+-- 
+2.41.0
+

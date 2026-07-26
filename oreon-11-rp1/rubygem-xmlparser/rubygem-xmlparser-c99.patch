@@ -1,0 +1,790 @@
+This fixes a bunch of int-conversion issues, and one
+incompatible-pointer-types problem.  All look harmless.
+
+diff -U8 -ur xmlparser-0.7.2.1.orig/ext/xmlparser.c xmlparser-0.7.2.1/ext/xmlparser.c
+--- xmlparser-0.7.2.1.orig/ext/xmlparser.c	2024-01-03 13:58:26.478011326 +0100
++++ xmlparser-0.7.2.1/ext/xmlparser.c	2024-01-03 14:16:12.772290860 +0100
+@@ -223,17 +223,17 @@
+ /* Event handlers for iterator */
+ static void
+ iterStartElementHandler(void *recv,
+ 			const XML_Char *name, const XML_Char **atts)
+ {
+   XMLParser* parser;
+   VALUE attrhash;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+ #ifdef NEW_EXPAT
+   parser->lastAttrs = atts;
+ #endif
+   attrhash = rb_hash_new();
+   while (*atts) {
+     const char* key = *atts++;
+     const char* val = *atts++;
+     rb_hash_aset(attrhash,
+@@ -249,63 +249,63 @@
+   }
+ }
+ 
+ static void
+ iterEndElementHandler(void *recv,
+ 		      const XML_Char *name)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symEND_ELEM,
+ 		       TO_(ENC_(rb_str_new2((char*)name))), Qnil, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterCharacterDataHandler(void *recv,
+ 			 const XML_Char *s,
+ 		       int len)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symCDATA,
+ 		       Qnil, TO_(ENC_(rb_str_new((char*)s, len))), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterProcessingInstructionHandler(void *recv,
+ 				 const XML_Char *target,
+ 				 const XML_Char *data)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symPI,
+ 		       TO_(ENC_(rb_str_new2((char*)target))),
+ 		       TO_(ENC_(rb_str_new2((char*)data))), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterDefaultHandler(void *recv,
+ 		   const XML_Char *s,
+ 		   int len)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symDEFAULT,
+ 		       Qnil, TO_(ENC_(rb_str_new((char*)s, len))), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     /* XML_DefaultCurrent shoould not call in defaultHandler */
+     /* XML_DefaultCurrent(parser->parser); */
+   }
+ }
+@@ -316,17 +316,17 @@
+ 			      const XML_Char *base,
+ 			      const XML_Char *systemId,
+ 			      const XML_Char *publicId,
+ 			      const XML_Char *notationName)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(4, (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 		       TO_(ENC_(rb_str_new2((char*)systemId))),
+ 		       (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil),
+ 		       TO_(ENC_(rb_str_new2((char*)notationName))));
+   rb_yield(rb_ary_new3(4, symUNPARSED_ENTITY_DECL,
+ 		       TO_(ENC_(rb_str_new2((char*)entityName))),
+ 		       valary, recv));
+   if (parser->defaultCurrent) {
+@@ -340,17 +340,17 @@
+ 			const XML_Char *notationName,
+ 			const XML_Char *base,
+ 			const XML_Char *systemId,
+ 			const XML_Char *publicId)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(3,
+ 		       (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 		       (systemId ? TO_(ENC_(rb_str_new2((char*)systemId))) : Qnil),
+ 		       (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil));
+   rb_yield(rb_ary_new3(4, symNOTATION_DECL,
+ 		       TO_(ENC_(rb_str_new2((char*)notationName))),
+ 		       valary, recv));
+   if (parser->defaultCurrent) {
+@@ -390,71 +390,71 @@
+ }
+ 
+ #ifdef NEW_EXPAT
+ static void
+ iterCommentHandler(void *recv,
+ 		   const XML_Char *s)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symCOMMENT,
+ 		       Qnil, TO_(ENC_(rb_str_new2((char*)s))), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterStartCdataSectionHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symSTART_CDATA, Qnil, Qnil, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterEndCdataSectionHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symEND_CDATA, Qnil, Qnil, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterStartNamespaceDeclHandler(void *recv,
+ 			      const XML_Char *prefix,
+ 			      const XML_Char *uri)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symSTART_NAMESPACE_DECL,
+ 		       (prefix ? TO_(ENC_(rb_str_new2((char*)prefix))) : Qnil),
+ 		       (uri ? TO_(ENC_(rb_str_new2((char*)uri))) : Qnil), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterEndNamespaceDeclHandler(void *recv,
+ 			    const XML_Char *prefix)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symEND_NAMESPACE_DECL,
+ 		       (prefix ? TO_(ENC_(rb_str_new2((char*)prefix))) : Qnil),
+ 		       Qnil, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+@@ -471,17 +471,17 @@
+ #else
+ iterStartDoctypeDeclHandler(void *recv,
+ 			    const XML_Char *doctypeName)
+ #endif
+ {
+   XMLParser* parser;
+   VALUE valary = Qnil;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+ #ifdef HAVE_EXPAT_H
+   valary = rb_ary_new3(3,
+ 		       (sysid ? TO_(ENC_(rb_str_new2((char*)sysid))) : Qnil),
+ 		       (pubid ? TO_(ENC_(rb_str_new2((char*)pubid))) : Qnil),
+ 		       (has_internal_subset ? Qtrue : Qfalse));
+ #endif
+   rb_yield(rb_ary_new3(4, symSTART_DOCTYPE_DECL,
+ 		       TO_(ENC_(rb_str_new2((char*)doctypeName))),
+@@ -491,17 +491,17 @@
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+ 
+ static void
+ iterEndDoctypeDeclHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symEND_DOCTYPE_DECL,
+ 		       Qnil,
+ 		       Qnil, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+@@ -543,17 +543,17 @@
+ 
+ static void
+ iterElementDeclHandler(void *recv,
+ 		       const XML_Char *name,
+ 		       XML_Content *model)
+ {
+   XMLParser* parser;
+   VALUE content;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   content = makeContentArray(parser, model);
+   rb_yield(rb_ary_new3(4, symELEMENT_DECL,
+ 		       TO_(ENC_(rb_str_new2(name))),
+ 		       content, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+@@ -565,17 +565,17 @@
+ 			const XML_Char *attname,
+ 			const XML_Char *att_type,
+ 			const XML_Char *dflt,
+ 			int isrequired)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(4,
+ 		       TO_(ENC_(rb_str_new2((char*)attname))),
+ 		       TO_(ENC_(rb_str_new2((char*)att_type))),
+ 		       (dflt ? TO_(ENC_(rb_str_new2((char*)dflt))) : Qnil),
+ 		       (isrequired ? Qtrue : Qfalse));
+   rb_yield(rb_ary_new3(4, symATTLIST_DECL,
+ 		       TO_(ENC_(rb_str_new2(elname))),
+ 		       valary, recv));
+@@ -589,17 +589,17 @@
+ iterXmlDeclHandler (void *recv,
+ 		    const XML_Char *version,
+ 		    const XML_Char *encoding,
+ 		    int standalone)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(3,
+ 		       (version ? TO_(ENC_(rb_str_new2(version))) : Qnil),
+ 		       (encoding ? TO_(ENC_(rb_str_new2((char*)encoding))) : Qnil),
+ 		       INT2FIX(standalone));
+   rb_yield(rb_ary_new3(4, symXML_DECL,
+ 		       Qnil,
+ 		       valary, recv));
+   if (parser->defaultCurrent) {
+@@ -617,17 +617,17 @@
+ 		       const XML_Char *base,
+ 		       const XML_Char *systemId,
+ 		       const XML_Char *publicId,
+ 		       const XML_Char *notationName)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(6,
+ 		       (is_parameter_entity ? Qtrue : Qfalse),
+ 		       TO_(ENC_(rb_str_new((char*)value, value_length))),
+ 		       (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 		       (systemId ? TO_(ENC_(rb_str_new2((char*)systemId))) : Qnil),
+ 		       (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil),
+ 		       (notationName ? TO_(ENC_(rb_str_new2((char*)notationName)))
+ 			: Qnil));
+@@ -648,17 +648,17 @@
+ 				    const XML_Char *entityName,
+ 				    const XML_Char *base,
+ 				    const XML_Char *systemId,
+ 				    const XML_Char *publicId)
+ {
+   XMLParser* parser;
+   VALUE valary;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   valary = rb_ary_new3(3, (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 		       TO_(ENC_(rb_str_new2((char*)systemId))),
+ 		       (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil));
+   rb_yield(rb_ary_new3(4, symEXTERNAL_PARSED_ENTITY_DECL,
+ 		       TO_(ENC_(rb_str_new2((char*)entityName))),
+ 		       valary, recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+@@ -668,17 +668,17 @@
+ 
+ static void
+ iterInternalParsedEntityDeclHandler(void *recv,
+ 				    const XML_Char *entityName,
+ 				    const XML_Char *replacementText,
+ 				    int replacementTextLength)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symINTERNAL_PARSED_ENTITY_DECL,
+ 		       TO_(ENC_(rb_str_new2((char*)entityName))),
+ 		       TO_(ENC_(rb_str_new((char*)replacementText,
+                                            replacementTextLength))), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+@@ -687,17 +687,17 @@
+ 
+ #ifdef HAVE_XML_SETSKIPPEDENTITYHANDLER
+ static void
+ iterSkippedEntityHandler(void *recv,
+ 			 const XML_Char *entityName,
+ 			 int is_parameter_entity)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_yield(rb_ary_new3(4, symSKIPPED_ENTITY,
+ 		       TO_(ENC_(rb_str_new2((char*)entityName))),
+ 		       INT2FIX(is_parameter_entity), recv));
+   if (parser->defaultCurrent) {
+     parser->defaultCurrent = 0;
+     XML_DefaultCurrent(parser->parser);
+   }
+ }
+@@ -708,17 +708,17 @@
+ /* Event handlers for instance method */
+ static void
+ myStartElementHandler(void *recv,
+ 		      const XML_Char *name, const XML_Char **atts)
+ {
+   XMLParser* parser;
+   VALUE attrhash;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+ #ifdef NEW_EXPAT
+   parser->lastAttrs = atts;
+ #endif
+   attrhash = rb_hash_new();
+   while (*atts) {
+     const char* key = *atts++;
+     const char* val = *atts++;
+     rb_hash_aset(attrhash,
+@@ -729,95 +729,95 @@
+ 	     TO_(ENC_(rb_str_new2((char*)name))), attrhash);
+ }
+ 
+ static void
+ myEndElementHandler(void *recv,
+ 		    const XML_Char *name)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_endElementHandler, 1,
+ 	     TO_(ENC_(rb_str_new2((char*)name))));
+ }
+ 
+ static void
+ myCharacterDataHandler(void *recv,
+ 		       const XML_Char *s,
+ 		       int len)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_characterDataHandler, 1,
+ 	     TO_(ENC_(rb_str_new((char*)s, len))));
+ }
+ 
+ static void
+ myProcessingInstructionHandler(void *recv,
+ 			       const XML_Char *target,
+ 			       const XML_Char *data)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_processingInstructionHandler, 2,
+ 	     TO_(ENC_(rb_str_new2((char*)target))),
+ 	     TO_(ENC_(rb_str_new2((char*)data))));
+ }
+ 
+ static void
+ myDefaultHandler(void *recv,
+ 		 const XML_Char *s,
+ 		 int len)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_defaultHandler, 1,
+ 	     TO_(ENC_(rb_str_new((char*)s, len))));
+ }
+ 
+ #ifdef NEW_EXPAT
+ static void
+ myDefaultExpandHandler(void *recv,
+ 		 const XML_Char *s,
+ 		 int len)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_defaultExpandHandler, 1,
+ 	     TO_(ENC_(rb_str_new((char*)s, len))));
+ }
+ #endif
+ 
+ void
+ myUnparsedEntityDeclHandler(void *recv,
+ 			    const XML_Char *entityName,
+ 			    const XML_Char *base,
+ 			    const XML_Char *systemId,
+ 			    const XML_Char *publicId,
+ 			    const XML_Char *notationName)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_unparsedEntityDeclHandler, 5,
+ 	     TO_(ENC_(rb_str_new2((char*)entityName))),
+ 	     (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 	     TO_(ENC_(rb_str_new2((char*)systemId))),
+ 	     (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil),
+ 	     TO_(ENC_(rb_str_new2((char*)notationName))));
+ }
+ 
+ void
+ myNotationDeclHandler(void *recv,
+ 		      const XML_Char *notationName,
+ 		      const XML_Char *base,
+ 		      const XML_Char *systemId,
+ 		      const XML_Char *publicId)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_notationDeclHandler, 4,
+ 	     TO_(ENC_(rb_str_new2((char*)notationName))),
+ 	     (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 	     (systemId ? TO_(ENC_(rb_str_new2((char*)systemId))) : Qnil),
+ 	     (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil));
+ }
+ 
+ int
+@@ -827,83 +827,83 @@
+ 			   const XML_Char *systemId,
+ 			   const XML_Char *publicId)
+ {
+   XMLParser* parser;
+   VALUE recv;
+   VALUE ret;
+ 
+   recv = (VALUE)XML_GetUserData(xmlparser);
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   ret = rb_funcall(recv, id_externalEntityRefHandler, 4,
+ 		   (context ? TO_(ENC_(rb_str_new2((char*)context))): Qnil),
+ 		   (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 		   (systemId ? TO_(ENC_(rb_str_new2((char*)systemId))) : Qnil),
+ 		   (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil));
+   /* The error status in this handler should be returned
+      by the exception. */
+   return Qnil;
+ }
+ 
+ #ifdef NEW_EXPAT
+ static void
+ myCommentHandler(void *recv,
+ 		 const XML_Char *s)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_commentHandler, 1,
+ 	     TO_(ENC_(rb_str_new2((char*)s))));
+ }
+ 
+ static void
+ myStartCdataSectionHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_startCdataSectionHandler, 0);
+ }
+ 
+ static void
+ myEndCdataSectionHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_endCdataSectionHandler, 0);
+ }
+ 
+ static void
+ myStartNamespaceDeclHandler(void *recv,
+ 			    const XML_Char *prefix,
+ 			    const XML_Char *uri)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_startNamespaceDeclHandler, 2,
+ 	     (prefix ? TO_(ENC_(rb_str_new2((char*)prefix))) : Qnil),
+ 	     (uri ? TO_(ENC_(rb_str_new2((char*)uri))) : Qnil));
+ }
+ 
+ static void
+ myEndNamespaceDeclHandler(void *recv,
+ 			  const XML_Char *prefix)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_endNamespaceDeclHandler, 1,
+ 	     (prefix ? TO_(ENC_(rb_str_new2((char*)prefix))) : Qnil));
+ }
+ 
+ static int
+ myNotStandaloneHandler(void *recv)
+ {
+   XMLParser* parser;
+   VALUE v;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   v = rb_funcall((VALUE)recv, id_notStandaloneHandler, 0);
+   Check_Type(v, T_FIXNUM);
+   return FIX2INT(v);
+ }
+ #endif
+ 
+ #ifdef HAVE_XML_SETPARAMENTITYPARSING
+ static void
+@@ -914,17 +914,17 @@
+ 			  const XML_Char *pubid,
+ 			  int has_internal_subset)
+ #else
+ myStartDoctypeDeclHandler(void *recv,
+ 			  const XML_Char *doctypeName)
+ #endif
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+ #ifdef HAVE_EXPAT_H
+   rb_funcall((VALUE)recv, id_startDoctypeDeclHandler, 4,
+ 	     TO_(ENC_(rb_str_new2((char*)doctypeName))),
+ 	     (sysid ? TO_(ENC_(rb_str_new2((char*)sysid))) : Qnil),
+ 	     (pubid ? TO_(ENC_(rb_str_new2((char*)pubid))) : Qnil),
+ 	     (has_internal_subset ? Qtrue : Qfalse));
+ #else
+   rb_funcall((VALUE)recv, id_startDoctypeDeclHandler, 4,
+@@ -932,63 +932,63 @@
+ 	     Qnil, Qnil, Qfalse);
+ #endif
+ }
+ 
+ static void
+ myEndDoctypeDeclHandler(void *recv)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_endDoctypeDeclHandler, 0);
+ }
+ #endif
+ 
+ 
+ #ifdef HAVE_EXPAT_H
+ 
+ static void
+ myElementDeclHandler(void *recv,
+ 		     const XML_Char *name,
+ 		     XML_Content *model)
+ {
+   XMLParser* parser;
+   VALUE content;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   content = makeContentArray(parser, model);
+   rb_funcall((VALUE)recv, id_elementDeclHandler, 2,
+ 	     TO_(ENC_(rb_str_new2(name))), content);
+ }
+ 
+ static void
+ myAttlistDeclHandler (void *recv,
+ 		      const XML_Char *elname,
+ 		      const XML_Char *attname,
+ 		      const XML_Char *att_type,
+ 		      const XML_Char *dflt,
+ 		      int isrequired)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_attlistDeclHandler, 5,
+ 	     TO_(ENC_(rb_str_new2(elname))),
+ 	     TO_(ENC_(rb_str_new2((char*)attname))),
+ 	     TO_(ENC_(rb_str_new2((char*)att_type))),
+ 	     (dflt ? TO_(ENC_(rb_str_new2((char*)dflt))) : Qnil),
+ 	     (isrequired ? Qtrue : Qfalse));
+ }
+ 
+ static void
+ myXmlDeclHandler (void *recv,
+ 		  const XML_Char *version,
+ 		  const XML_Char *encoding,
+ 		  int standalone)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_xmlDeclHandler, 3,
+ 	     (version ? TO_(ENC_(rb_str_new2(version))) : Qnil),
+ 	     (encoding ? TO_(ENC_(rb_str_new2((char*)encoding))) : Qnil),
+ 	     INT2FIX(standalone));
+ }
+ 
+ static void
+ myEntityDeclHandler (void *recv,
+@@ -997,17 +997,17 @@
+ 		     const XML_Char *value,
+ 		     int value_length,
+ 		     const XML_Char *base,
+ 		     const XML_Char *systemId,
+ 		     const XML_Char *publicId,
+ 		     const XML_Char *notationName)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_entityDeclHandler, 7,
+ 	     TO_(ENC_(rb_str_new2(entityName))),
+ 	     (is_parameter_entity ? Qtrue : Qfalse),
+ 	     TO_(ENC_(rb_str_new((char*)value, value_length))),
+ 	     (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 	     (systemId ? TO_(ENC_(rb_str_new2((char*)systemId))) : Qnil),
+ 	     (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil),
+ 	     (notationName ? TO_(ENC_(rb_str_new2((char*)notationName)))
+@@ -1020,32 +1020,32 @@
+ static void
+ myExternalParsedEntityDeclHandler(void *recv,
+ 				  const XML_Char *entityName,
+ 				  const XML_Char *base,
+ 				  const XML_Char *systemId,
+ 				  const XML_Char *publicId)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_externalParsedEntityDeclHandler, 4,
+ 	     TO_(ENC_(rb_str_new2((char*)entityName))),
+ 	     (base ? TO_(ENC_(rb_str_new2((char*)base))) : Qnil),
+ 	     TO_(ENC_(rb_str_new2((char*)systemId))),
+ 	     (publicId ? TO_(ENC_(rb_str_new2((char*)publicId))) : Qnil));
+ }
+ 
+ static void
+ myInternalParsedEntityDeclHandler(void *recv,
+ 				  const XML_Char *entityName,
+ 				  const XML_Char *replacementText,
+ 				  int replacementTextLength)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_internalParsedEntityDeclHandler, 2,
+ 	     TO_(ENC_(rb_str_new2((char*)entityName))),
+ 	     TO_(ENC_(rb_str_new((char*)replacementText,
+                                  replacementTextLength))));
+ }
+ #endif
+ 
+ 
+@@ -1291,17 +1291,17 @@
+ static int
+ myUnknownEncodingHandler(void *recv,
+ 			 const XML_Char *name,
+ 			 XML_Encoding *info)
+ {
+   XMLParser* parser;
+   VALUE ret;
+ 
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   parser->detectedEncoding = name;
+ 
+   if (!rb_method_boundp(CLASS_OF((VALUE)recv), id_unknownEncoding, 0))
+ #ifndef XML_ENC_PATH
+     return 0;
+ #else
+   {
+     Encinfo* enc;
+@@ -1347,17 +1347,17 @@
+ 
+ #ifdef HAVE_XML_SETSKIPPEDENTITYHANDLER
+ static void
+ mySkippedEntityHandler(void *recv,
+ 		       const XML_Char *entityName,
+ 		       int is_parameter_entity)
+ {
+   XMLParser* parser;
+-  GET_PARSER(recv, parser);
++  GET_PARSER((VALUE)recv, parser);
+   rb_funcall((VALUE)recv, id_skippedEntityHandler, 2,
+ 	     TO_(ENC_(rb_str_new2((char*)entityName))),
+ 	     INT2FIX(is_parameter_entity));
+ }
+ #endif
+ 
+ 
+ /* constructor */
+@@ -1492,17 +1492,17 @@
+   parser->detectedEncoding = NULL;
+ 
+   rb_obj_call_init(obj, argc, argv);
+ 
+   return obj;
+ }
+ 
+ static VALUE
+-XMLParser_initialize(VALUE obj)
++XMLParser_initialize(int argc, VALUE* argv, VALUE obj)
+ {
+   return Qnil;
+ }
+ 
+ #ifdef HAVE_XML_PARSERRESET
+ static VALUE
+ XMLParser_reset(int argc, VALUE* argv, VALUE obj)
+ {

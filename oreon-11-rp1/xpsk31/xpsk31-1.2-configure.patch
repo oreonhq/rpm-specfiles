@@ -1,0 +1,21 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-SUBDIRS = src po
++SUBDIRS = src 
+ 
+ EXTRA_DIST = \
+ 			 autogen.sh \
+--- a/configure.ac
++++ b/configure.ac
+@@ -19,7 +19,7 @@ AC_MSG_RESULT($enable_cflags_setting)
+ test "x$enable_cflags_setting" = xyes && CFLAGS=""
+ 
+ # Checks for programs.
+-AC_PROG_CXX
++#AC_PROG_CXX
+ AC_PROG_CC
+ AC_PROG_MAKE_SET
+ 

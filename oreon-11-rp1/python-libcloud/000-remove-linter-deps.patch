@@ -1,0 +1,46 @@
+diff -up apache-libcloud-3.6.0/requirements-tests.txt_patched apache-libcloud-3.6.0/requirements-tests.txt
+--- apache-libcloud-3.6.0/requirements-tests.txt_patched	2022-07-30 21:45:35.012824729 -0500
++++ apache-libcloud-3.6.0/requirements-tests.txt	2022-07-30 21:47:05.510409349 -0500
+@@ -1,15 +1,2 @@
+-pep8==1.7.1
+-flake8==4.0.1
+-astroid==2.11.4
+-pylint==2.13.8
+-codecov==2.1.12
+-coverage==4.5.4
+ requests>=2.27.1
+ requests_mock==1.9.3
+-pytest==7.0.1
+-pytest-xdist==2.5.0
+-pytest-benchmark[histogram]==3.4.1
+-cryptography==36.0.1
+-# NOTE: Only needed by nttcis loadbalancer driver
+-pyopenssl==21.0.0
+-more-itertools==8.11.0
+diff -up apache-libcloud-3.6.0/tox.ini_patched apache-libcloud-3.6.0/tox.ini
+--- apache-libcloud-3.6.0/tox.ini_patched	2022-07-30 21:45:44.749995227 -0500
++++ apache-libcloud-3.6.0/tox.ini	2022-07-30 21:47:34.183911411 -0500
+@@ -9,7 +9,6 @@ passenv = TERM CI GITHUB_* DOCKER_*
+ deps =
+     -r{toxinidir}/requirements-tests.txt
+     fasteners
+-    libvirt-python==7.9.0
+ basepython =
+     pypypy3: pypy3
+     pypyjion: pyjion
+@@ -323,7 +322,6 @@ deps =
+     paramiko==2.9.2
+     pyopenssl==21.0.0
+     python-dateutil
+-    libvirt-python==7.9.0
+     fasteners
+ setenv =
+   CRYPTOGRAPHY_ALLOW_OPENSSL_102=1
+@@ -336,7 +334,6 @@ deps =
+     -r{toxinidir}/requirements-tests.txt
+     paramiko==2.9.2
+     pyopenssl==21.0.0
+-    libvirt-python==7.9.0
+     fasteners
+ setenv =
+   CRYPTOGRAPHY_ALLOW_OPENSSL_102=1

@@ -1,0 +1,26 @@
+From 5c99b5adefab4304d9a5707206fd13634a813265 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Tue, 27 Feb 2024 22:22:05 -0500
+Subject: [PATCH] Install into python.platlibdir
+
+This installs into the correct directory in distributions which separate
+pure Python modules and archful Python modules into separate directories.
+---
+ meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/meson.build b/meson.build
+index e6aa192..891b664 100644
+--- a/meson.build
++++ b/meson.build
+@@ -81,6 +81,7 @@ if opt_python_bindings
+     python.find_installation('python3').dependency()
+     py_installation = python.find_installation(
+         'python3',
++        pure: false,
+         modules: ['pybind11']
+     )
+     if not py_installation.found()
+-- 
+2.43.2
+

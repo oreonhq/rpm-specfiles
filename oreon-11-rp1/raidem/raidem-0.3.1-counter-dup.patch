@@ -1,0 +1,11 @@
+--- src/newmenu.m.orig	2020-02-08 13:52:32.310099634 -0600
++++ src/newmenu.m	2020-02-08 14:41:35.574227140 -0600
+@@ -80,7 +80,7 @@
+ 
+ /*--------------------------------------------------------------*/
+ 
+-volatile int counter;
++extern volatile int counter;
+ static volatile int idle_counter;
+ static void ticker(void) { counter++; idle_counter++; }
+ 

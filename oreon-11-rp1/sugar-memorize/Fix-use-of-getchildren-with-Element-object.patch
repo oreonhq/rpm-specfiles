@@ -1,0 +1,41 @@
+From fe395f9b8d55a012dbae91a5a98e03b46cbcec31 Mon Sep 17 00:00:00 2001
+From: Ibiam Chihurumnaya <ibiamchihurumnaya@gmail.com>
+Date: Thu, 1 Apr 2021 18:42:55 +0100
+Subject: [PATCH] Fix use of getchildren with Element object (#31)
+
+getchildren() was deprecated from Python version 3.2 so using it with
+later Python versions throws an AttributeError and the activity fails
+to start because of this, noticed while testing on Fedora 34 Beta with
+Python version 3.9, activity failed to start with error;
+
+1617191045.608474 ERROR root: Read: Error parsing file 'xml.etree.ElementTree.Element' object has no attribute 'getchildren'
+1617191045.608657 ERROR root:  Reading setup file /usr/share/sugar/activities/Memorize.activity/demos/addition.zip
+
+Traceback (most recent call last):
+  File "/usr/share/sugar/activities/Memorize.activity/activity.py", line 465, in change_game
+    self.game.change_game(widget, game_name, size, mode, title, color)
+  File "/usr/share/sugar/activities/Memorize.activity/game.py", line 330, in change_game
+    size = int(self.model.data['size'])
+KeyError: 'size'
+
+Signed-off-by: Ibiam Chihurumnaya <ibiamchihurumnaya@gmail.com>
+---
+ model.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/model.py b/model.py
+index 83c6e83..5cb5b3a 100644
+--- a/model.py
++++ b/model.py
+@@ -222,7 +222,7 @@ class Model(object):
+                                                     language)
+ 
+                 idpair = 0
+-                for elem in memorize_elem.getchildren():
++                for elem in list(memorize_elem):
+                     attributes = elem.attrib
+                     pair = Pair()
+                     for attribute in list(attributes.keys()):
+-- 
+2.20.1
+

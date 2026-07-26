@@ -1,0 +1,24 @@
+diff -up xmakemol-5.16/edit.c.pointertype xmakemol-5.16/edit.c
+--- xmakemol-5.16/edit.c.pointertype	2005-03-07 10:14:44.000000000 +0000
++++ xmakemol-5.16/edit.c	2024-01-30 11:08:10.690500512 +0000
+@@ -1758,7 +1758,7 @@ make_scale_coords_dialog (Widget parent)
+ 
+   int n = 0;
+   Widget atob, btoa, child, rc;
+-  XmString label = "";
++  XmString label = XmStringCreateSimple("");
+ 
+   if (! scale_coords_dialog)
+     {
+diff -up xmakemol-5.16/frames.c.pointertype xmakemol-5.16/frames.c
+--- xmakemol-5.16/frames.c.pointertype	2007-08-25 11:20:29.000000000 +0000
++++ xmakemol-5.16/frames.c	2024-01-30 15:34:46.934021294 +0000
+@@ -106,7 +106,7 @@ make_frame_dlg(Widget parent)
+   Widget *kids;
+ #endif
+ 
+-  XmString label = "";
++  XmString label = XmStringCreateSimple("");
+ 
+   if (! frames_dialog) {
+ 

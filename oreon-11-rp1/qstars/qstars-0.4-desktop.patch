@@ -1,0 +1,19 @@
+--- qstars.desktop.orig	2004-01-07 13:26:08.000000000 +0900
++++ qstars.desktop	2007-10-02 00:21:50.000000000 +0900
+@@ -1,13 +1,15 @@
+ [Desktop Entry]
++Encoding=UTF-8
+ Type=Application
+ Name=QStars
+ Exec=qstars
+ Icon=kscreensaver
++X-KDE-Category=Miscellaneous
+ Actions=Setup;InWindow;Root
+ 
+ [Desktop Action Setup]
+ Name=Setup...
+-Exec=qstars -setup
++Exec=qstars.setup
+ Icon=kscreensaver
+  
+ [Desktop Action InWindow]

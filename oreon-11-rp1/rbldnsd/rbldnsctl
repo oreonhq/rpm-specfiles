@@ -1,0 +1,175 @@
+#!/bin/bash
+#
+# rbldnsctl : helper script for managing rbldnsd instances with systemd
+#
+# Configuration is via the RBLDNSD variable in /etc/sysconfig/rbldnsd,
+# exactly as used with the traditional sysv initscript.
+#
+# Usage:
+#
+# rbldnsctl create
+#   Creates unit files /etc/systemd/system/rbldnsd-<instance>.service
+#   for each configured rbldnsd instance
+#
+# rbldnsctl enable
+#   Enables (via systemctl) all configured rbldnsd instances to start
+#   at boot time
+#
+# rbldnsctl disable
+#   Disables (via systemctl) all configured rbldnsd instances from
+#   starting at boot time
+#
+# rbldnsctl start
+#   Starts (via systemctl) all configured rbldnsd instances immediately
+#
+# rbldnsctl stop
+#   Stop (via systemctl) all configured rbldnsd instances immediately
+#
+# rbldnsctl reload
+#   Reloads (via systemctl) all configured rbldnsd instances immediately
+#
+# rbldnsctl restart
+#   Restarts (via systemctl) all configured rbldnsd instances immediately
+#
+# rbldnsctl condrestart
+# rbldnsctl try-restart
+#   Restarts (via systemctl) all configured rbldnsd instances immediately,
+#   if they are already running
+#
+# rbldnsctl status
+#   Shows status of all configured rbldnsd instances
+#
+PATH=/sbin:/bin:/usr/bin:/usr/sbin
+
+# Get config and check that RBLDNSD is set
+[ -f /etc/sysconfig/rbldnsd ] && . /etc/sysconfig/rbldnsd
+
+# Check that configuration has been set up (RBLDNSD set in /etc/sysconfig/rbldnsd)
+if [ -z "$RBLDNSD" ]; then
+	echo "rbldnsctl: RBLDNSD not configured in /etc/sysconfig/rbldnsd" >&2
+	exit 6
+fi
+
+# Set an exit status
+set_status() {
+	exit $1
+}
+
+# Process multiple instances of the daemon (see /etc/sysconfig/rbldnsd)
+for_all_daemons() {
+	ret=0
+	while read name args; do
+		# For a single instance (name = "-"), use "single" as name
+		case "$name" in
+			""|\#*)	continue;;
+			-)	name=single;;
+			*)	;;
+		esac
+		# Process this instance
+		$1
+		thisret=$?
+		if [ "$1" = "check_one_daemon" -o "$1" = "reload_one_daemon" ]; then
+			if [ $thisret -ne 0 ]; then
+				ret=$thisret
+			fi
+		else
+			if [ $thisret -ne 0 ]; then
+				ret=1
+			fi
+		fi
+	done < <(echo "$RBLDNSD")
+	set_status $ret
+}
+
+start_one_daemon() {
+	/usr/bin/systemctl start "rbldnsd-${name}.service"
+}
+
+stop_one_daemon() {
+	/usr/bin/systemctl stop "rbldnsd-${name}.service"
+}
+
+reload_one_daemon() {
+	/usr/bin/systemctl reload "rbldnsd-${name}.service"
+}
+
+check_one_daemon() {
+	/usr/bin/systemctl status "rbldnsd-${name}.service"
+}
+
+restart_one_daemon() {
+	/usr/bin/systemctl restart "rbldnsd-${name}.service"
+}
+
+condrestart_one_daemon() {
+	/usr/bin/systemctl try-restart "rbldnsd-${name}.service"
+}
+
+create_one_daemon() {
+	{
+		awk '/^\[Unit\]/, 1 == 2' /etc/systemd/rbldnsd.conf
+		cat <<-END_OF_UNIT
+		[Unit]
+		Description=DNSBL (rbldnsd) ${name} instance
+	
+		[Service]
+		ExecStart=/sbin/rbldnsd -n ${args}
+		END_OF_UNIT
+	} > "/etc/systemd/system/rbldnsd-${name}.service"
+	echo "Created unit file /etc/systemd/system/rbldnsd-${name}.service"
+}
+
+enable_one_daemon() {
+	/usr/bin/systemctl enable "rbldnsd-${name}.service"
+}
+
+disable_one_daemon() {
+	/usr/bin/systemctl disable "rbldnsd-${name}.service"
+}
+
+# See how we were called.
+case "$1" in
+	create)
+		for_all_daemons create_one_daemon
+		RETVAL=$?
+		/usr/bin/systemctl daemon-reload
+		;;
+	enable)
+		for_all_daemons enable_one_daemon
+		RETVAL=$?
+		;;
+	disable)
+		for_all_daemons disable_one_daemon
+		RETVAL=$?
+		;;
+	start)
+		for_all_daemons start_one_daemon
+		RETVAL=$?
+		;;
+	restart)
+		for_all_daemons restart_one_daemon
+		RETVAL=$?
+		;;
+	reload)
+		for_all_daemons reload_one_daemon
+		RETVAL=$?
+		;;
+	stop)
+		for_all_daemons stop_one_daemon
+		RETVAL=$?
+		;;
+	status)
+		for_all_daemons check_one_daemon
+		RETVAL=$?
+		;;
+	condrestart|try-restart)
+		for_all_daemons condrestart_one_daemon
+		RETVAL=$?
+		;;
+	*)
+		echo $"Usage: $0 {create|enable|disable|start|stop|restart|try-restart|reload|status}" >&2
+		RETVAL=1
+		;;
+esac
+
+exit $RETVAL

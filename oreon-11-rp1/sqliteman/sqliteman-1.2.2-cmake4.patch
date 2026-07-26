@@ -1,0 +1,78 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d9fd041..2e639e6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,12 +3,7 @@
+ # for more info about available options read: README
+ #
+ 
+-CMAKE_MINIMUM_REQUIRED( VERSION 2.4.3 )
+-# sets for bleeding edge cmake
+-if(COMMAND cmake_policy)
+-    cmake_policy(SET CMP0003 OLD)
+-    cmake_policy(SET CMP0005 OLD)
+-endif(COMMAND cmake_policy)
++CMAKE_MINIMUM_REQUIRED( VERSION 3.10 )
+ 
+ #Pretty colors
+ SET(CMAKE_COLOR_MAKEFILE ON)
+@@ -29,6 +24,8 @@ SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}${VERSION_SUFFIX}
+ 
+ SET (EXE_NAME "sqliteman")
+ 
++include(GNUInstallDirs)
++
+ MESSAGE(STATUS "Sqliteman ${VERSION} will be installed into ${CMAKE_INSTALL_PREFIX}")
+ 
+ # set platform dependent stuff - e.g. sqlite3 binary name
+@@ -53,12 +50,12 @@ ENDIF (WANT_RESOURCES)
+ 
+ 
+ # defines for compiler based on the previous setup
+-ADD_DEFINITIONS("-DTRANSLATION_DIR=\\\"${TRANSLATION_DIR}\\\"")
+-ADD_DEFINITIONS("-DDOC_DIR=\\\"${DOC_DIR}\\\"")
+-ADD_DEFINITIONS("-DICON_DIR=\\\"${ICON_DIR}\\\"")
++ADD_DEFINITIONS("-DTRANSLATION_DIR=\"${TRANSLATION_DIR}\"")
++ADD_DEFINITIONS("-DDOC_DIR=\"${DOC_DIR}\"")
++ADD_DEFINITIONS("-DICON_DIR=\"${ICON_DIR}\"")
+ # defines for compiler
+-ADD_DEFINITIONS("-DSQLITE_BINARY=\\\"${SQLITE_BIN}\\\"")
+-ADD_DEFINITIONS("-DSQLITEMAN_VERSION=\\\"${VERSION}\\\"")
++ADD_DEFINITIONS("-DSQLITE_BINARY=\"${SQLITE_BIN}\"")
++ADD_DEFINITIONS("-DSQLITEMAN_VERSION=\"${VERSION}\"")
+ IF (WANT_RESOURCES)
+     ADD_DEFINITIONS("-DWANT_RESOURCES")
+ ENDIF (WANT_RESOURCES)
+diff --git a/sqliteman/doc/en/CMakeLists.txt b/sqliteman/doc/en/CMakeLists.txt
+index 59d9c99..7a6698f 100644
+--- a/sqliteman/doc/en/CMakeLists.txt
++++ b/sqliteman/doc/en/CMakeLists.txt
+@@ -1,14 +1,15 @@
+-INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/sqliteman/doc/en/
+-        DESTINATION ${DOC_DIR}/en/
+-        USE_SOURCE_PERMISSIONS
+-          PATTERN ".svn" EXCLUDE
+-          PATTERN "CMakeFiles" EXCLUDE
+-          PATTERN "Makefile" EXCLUDE
+-          PATTERN "cmake_install.cmake" EXCLUDE
+-          PATTERN "CMakeCache.txt" EXCLUDE
+-          PATTERN "CMakeLists.txt" EXCLUDE
+-          PATTERN "install_manifest.txt" EXCLUDE
+-          PATTERN "*.html"
+-          PATTERN "*.css"
+-          PATTERN "*.png"
++INSTALL(DIRECTORY
++  ${CMAKE_SOURCE_DIR}/sqliteman/doc/en/
++  DESTINATION ${CMAKE_INSTALL_DATADIR}/sqliteman/doc/en
++  USE_SOURCE_PERMISSIONS
++  PATTERN ".svn" EXCLUDE
++  PATTERN "CMakeFiles" EXCLUDE
++  PATTERN "Makefile" EXCLUDE
++  PATTERN "cmake_install.cmake" EXCLUDE
++  PATTERN "CMakeCache.txt" EXCLUDE
++  PATTERN "CMakeLists.txt" EXCLUDE
++  PATTERN "install_manifest.txt" EXCLUDE
++  PATTERN "*.html"
++  PATTERN "*.css"
++  PATTERN "*.png"
+ )

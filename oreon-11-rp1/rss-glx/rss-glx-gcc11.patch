@@ -1,0 +1,12 @@
+diff --git a/src/Implicit/impSurface.h b/src/Implicit/impSurface.h
+index 41fab81..ecb692a 100644
+--- a/src/Implicit/impSurface.h
++++ b/src/Implicit/impSurface.h
+@@ -27,6 +27,7 @@
+ #endif
+ #include <vector>
+ #include <GL/gl.h>
++#include <cstddef>
+ 
+ 
+ class impSurface{

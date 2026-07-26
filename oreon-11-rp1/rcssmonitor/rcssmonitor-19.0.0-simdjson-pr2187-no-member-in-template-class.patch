@@ -1,0 +1,21 @@
+--- rcssmonitor-19.0.0.orig/rcss/rcg/simdjson/simdjson.h	2024-03-25 11:30:02.000000000 +0900
++++ rcssmonitor-19.0.0/rcss/rcg/simdjson/simdjson.h	2026-01-29 16:53:23.385452174 +0900
+@@ -6260,15 +6260,15 @@ public:
+   simdjson_inline void one_char(char c);
+ 
+   simdjson_inline void call_print_newline() {
+-      this->print_newline();
++      static_cast<formatter*>(this)->print_newline();
+   }
+ 
+   simdjson_inline void call_print_indents(size_t depth) {
+-      this->print_indents(depth);
++      static_cast<formatter*>(this)->print_indents(depth);
+   }
+ 
+   simdjson_inline void call_print_space() {
+-      this->print_space();
++      static_cast<formatter*>(this)->print_space();
+   }
+ 
+ protected:

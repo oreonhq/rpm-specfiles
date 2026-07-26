@@ -1,0 +1,12 @@
+/var/log/radsecproxy/radsecproxy.log {
+	missingok
+	compress
+	delaycompress
+	notifempty
+	postrotate
+		/bin/systemctl --quiet is-active radsecproxy.service && /bin/systemctl reload radsecproxy.service || true
+	endscript
+	create 0640 radsecproxy radsecproxy
+	sharedscripts
+	su radsecproxy radsecproxy
+}

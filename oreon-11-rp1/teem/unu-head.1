@@ -1,0 +1,34 @@
+.TH UNU\-HEAD "1" "May 2021" "" "User Commands"
+.SH NAME
+unu\-head \- print header of one or more \fInrrd\fR files
+.SH SYNOPSIS
+.B unu\ head
+.RI < nin1 \ ...>
+.SH DESCRIPTION
+Print header of one or more
+.I nrrd
+files.
+The value of this is simply to print the contents of
+.I nrrd
+headers.
+This avoids the use of
+.RB \(lq head\ \-\fIN \(rq,
+where
+.I N
+has to be determined manually, which always risks printing raw binary data
+(following the header) to screen, which tends to clobber terminal settings,
+make pointless beeps, and be annoying.
+.IP \(bu +2n
+Uses
+.B nrrdOneLine
+.SH OPTIONS
+.TP
+.RI < nin1 \ ...>
+input
+.IR nrrd (s)
+(1 or more
+.IR string s)
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-data (1),
+.BR head (1)

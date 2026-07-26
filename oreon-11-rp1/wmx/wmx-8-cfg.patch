@@ -1,0 +1,81 @@
+diff -NarU5 wmx-8.orig/Config.h wmx-8/Config.h
+--- wmx-8.orig/Config.h	2014-11-16 14:34:19.000000000 -0500
++++ wmx-8/Config.h	2014-11-20 09:41:54.238623357 -0500
+@@ -77,11 +77,11 @@
+ // Spawn a temporary new shell between the wm and each new process?
+ #define CONFIG_EXEC_USING_SHELL   False
+ 
+ // What to run to get a new window (from the "New" menu option)
+ #define CONFIG_NEW_WINDOW_LABEL "New"
+-#define CONFIG_NEW_WINDOW_COMMAND "x-terminal-emulator"
++#define CONFIG_NEW_WINDOW_COMMAND "/usr/bin/xterm"
+ #define CONFIG_NEW_WINDOW_COMMAND_OPTIONS 0
+ // or, for example,
+ //#define CONFIG_NEW_WINDOW_COMMAND_OPTIONS "-ls","-sb","-sl","1024",0
+ // alternatively,
+ #define CONFIG_DISABLE_NEW_WINDOW_COMMAND (DynamicConfig::config.disableNew())
+@@ -92,11 +92,11 @@
+  
+ // Directory under $HOME in which to look for commands for the
+ // middle-button menu
+ #define CONFIG_COMMAND_MENU       ".wmx"
+ // only used if COMMAND_MENU is not found; ignored if invalid directory:
+-#define CONFIG_SYSTEM_COMMAND_MENU	"/usr/local/lib/wmx/menu"
++#define CONFIG_SYSTEM_COMMAND_MENU	"/usr/share/wmx"
+ // append screennumber to COMMAND_MENU directory;
+ // use non screen style as fallback
+ #define CONFIG_ADD_SCREEN_TO_COMMAND_MENU False
+  
+ // Focus possibilities.
+@@ -125,11 +125,11 @@
+ 
+ // Number of pixels off the screen you have to push a window
+ // before the manager notices the window is off-screen (the higher
+ // the value, the easier it is to place windows at the screen edges)
+ 
+-#define CONFIG_BUMP_DISTANCE      16
++#define CONFIG_BUMP_DISTANCE      32
+ 
+ // If CONFIG_BUMP_EVERYWHERE is defined, windows will "bump" against
+ // other window edges as well as the edges of the screen
+ 
+ #define CONFIG_BUMP_EVERYWHERE    True
+@@ -192,11 +192,11 @@
+ 
+ // This is the key for wm controls: e.g. Alt/Left and Alt/Right to
+ // flip channels, and Alt/Tab to switch windows.  (On my 105-key
+ // PC keyboard, Meta_L corresponds to the left Windows key.)
+ 
+-#define CONFIG_ALT_KEY            XK_Super_L
++#define CONFIG_ALT_KEY            XK_Meta_L
+ 
+ // And these define the rest of the keyboard controls, when the above
+ // modifier is pressed; they're keysyms as defined in <X11/keysym.h>
+ // and <X11/keysymdef.h>
+ 
+@@ -335,11 +335,11 @@
+ #define CONFIG_MENU_BORDERS       "black"
+ 
+ // Pixel width for the bit of frame to the left of the window and the
+ // sum of the two bits at the top
+ 
+-#define CONFIG_FRAME_THICKNESS    8
++#define CONFIG_FRAME_THICKNESS    6
+ 
+ 
+ // ========================
+ // Section IV. Flashy stuff
+ // ========================
+@@ -348,11 +348,11 @@
+ // in ./background.xpm; if USE_PIXMAP_MENUS is also True, the menus
+ // will be too.  The latter screws up in palette-based visuals, but
+ // should be okay in true-colour.
+ 
+ #define CONFIG_USE_PIXMAPS        True
+-#define CONFIG_USE_PIXMAP_MENUS   True
++#define CONFIG_USE_PIXMAP_MENUS   False
+ 
+ // Set CHANNEL_SURF for multi-channel switching; CHANNEL_CLICK_SIZE is
+ // how close you have to middle-button-click to the top-right corner
+ // of the root window before the channel change happens.  Set
+ // USE_CHANNEL_KEYS if you want Alt-F1, Alt-F2 etc for quick channel

@@ -1,0 +1,115 @@
+.TH EZDXF\-DRAW "1" "March 2024" "" "User Commands"
+.B ezdxf\ draw
+\(en draw and convert DXF files by the Matplotlib backend
+.SH SYNOPSIS
+.B ezdxf\ draw
+.RB [ \-h ]
+.RB [ \-\-backend\  { matplotlib , qt , mupdf , custom_svg }]
+.RB [ \-\-formats ]
+.RB [ \-l\ \fILAYOUT ]
+.RB [ \-\-background\  { DEFAULT , WHITE , BLACK , PAPERSPACE , MODELSPACE , OFF , CUSTOM }]
+.RB [ \-\-all\-layers\-visible ]
+.RB [ \-\-all\-entities\-visible ]
+.RB [ \-o\ \fIOUT ]
+.RB [ \-\-dpi\ \fIDPI ]
+.RB [ \-f ]
+.RB [ \-v ]
+.RI [ FILE ]
+.SH OPTIONS
+.SS "POSITIONAL\ ARGUMENTS"
+.TP
+.I FILE
+DXF file to view or convert
+.SS "OPTIONAL\ ARGUMENTS"
+.TP
+.B \-h\fR,\ \fB\-\-help
+show a help message and exit
+.TP
+.BR \-\-backends\  { matplotlib , qt , mupdf , custom_svg }
+choose the backend to use for rendering
+.TP
+.B \-\-formats
+show all supported export formats and exit
+.TP
+.B \-l\ \fILAYOUT\fR, \fB\-\-layout\ \fILAYOUT
+select the layout to draw, default is
+.RB \(lq Model \(rq
+.TP
+.BR \-\-background\  { DEFAULT , WHITE , BLACK , PAPERSPACE , MODELSPACE , OFF , CUSTOM }
+choose the background color to use
+.TP
+.B \-\-all\-layers\-visible
+draw all layers including the ones marked as invisible
+.TP
+.B \-\-all\-layers\-visible
+draw all entities including the ones marked as invisible
+(some entities are individually marked as invisible
+even if the layer is visible)
+.TP
+.B \-o\ \fIOUT\fR,\ \fB\-\-out\ \fIOUT
+output filename for export
+.TP
+.B \-\-dpi\ \fIDPI
+target render resolution, default is
+.B 300
+.TP
+.B \-f\fR,\ \fB\-\-force
+overwrite the destination if it already exists
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+give more output
+.SH ENVIRONMENT
+See
+.BR ezdxf (1).
+.SH FILES
+See
+.BR ezdxf (1).
+.SH EXAMPLES
+.P
+Convert the DXF file
+.RB \(lq gear.dxf \(rq
+into a SVG file by the
+.I Matplotlib
+backend:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ draw\ \-o\ gear.svg\ gear.dxf
+.EE
+.in
+.P
+Show all output formats supported by the
+.I Matplotlib
+backend on your system.
+This output may vary:
+.P
+.in +7n
+.EX
+.B $\ ezdxf\ draw\ \-\-formats
+.B \:
+.B eps:\ Encapsulated\ Postscript
+.B jpg:\ Joint\ Photographic\ Experts\ Group
+.B jpeg:\ Joint\ Photographic\ Experts\ Group
+.B pdf:\ Portable\ Document\ Format
+.B pgf:\ PGF\ code\ for\ LaTeX
+.B png:\ Portable\ Network\ Graphics
+.B ps:\ Postscript
+.B raw:\ Raw\ RGBA\ bitmap
+.B rgba:\ Raw\ RGBA\ bitmap
+.B svg:\ Scalable\ Vector\ Graphics
+.B svgz:\ Scalable\ Vector\ Graphics
+.B tif:\ Tagged\ Image\ File\ Format
+.B tiff:\ Tagged\ Image\ File\ Format
+.EE
+.in
+.SH "SEE\ ALSO"
+.BR ezdxf (1)
+.P
+.BR ezdxf\-audit (1),
+.BR ezdxf\-view (1),
+.BR ezdxf\-browse (1),
+.BR ezdxf\-browse\-acis (1),
+.BR ezdxf\-strip (1),
+.BR ezdxf\-config (1),
+.BR ezdxf\-info (1),
+.BR ezdxf\-hpgl (1)

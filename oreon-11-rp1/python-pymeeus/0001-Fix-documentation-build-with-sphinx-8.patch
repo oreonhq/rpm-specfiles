@@ -1,0 +1,22 @@
+From 4da77aafea0f76bb3fbefa5773e683f8d7461df8 Mon Sep 17 00:00:00 2001
+From: Vojtech Trefny <vtrefny@redhat.com>
+Date: Wed, 9 Jul 2025 12:50:44 +0200
+Subject: [PATCH] Fix documentation build with sphinx 8
+
+---
+ docs/source/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/source/conf.py b/docs/source/conf.py
+index 8552b55..5bad42f 100644
+--- a/docs/source/conf.py
++++ b/docs/source/conf.py
+@@ -197,4 +197,4 @@ epub_exclude_files = ['search.html']
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'https://docs.python.org/': None}
++intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+-- 
+2.50.0
+

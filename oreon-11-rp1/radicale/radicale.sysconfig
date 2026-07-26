@@ -1,0 +1,10 @@
+### Store environment extensions here for "radicale" honored by systemd unit file
+
+## location of configuration file
+#RADICALE_CONFIG="/path/to/my/radicale/config"
+
+## custom PYTHONPATH to use not the packaged files (may require to set SELinux to permissive)
+#PYTHONPATH="/path/to/my/python/modules/"
+
+## custom log format (usually no change required)
+#RADICALE_LOG_FORMAT=verbose|journal

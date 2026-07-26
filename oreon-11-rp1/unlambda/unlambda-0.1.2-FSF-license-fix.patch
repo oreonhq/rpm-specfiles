@@ -1,0 +1,33 @@
+diff -up unlambda-0.1.2/Language/Unlambda.hs.fix unlambda-0.1.2/Language/Unlambda.hs
+--- unlambda-0.1.2/Language/Unlambda.hs.fix	2012-10-26 16:20:40.397173788 +0530
++++ unlambda-0.1.2/Language/Unlambda.hs	2012-10-26 16:23:15.926170223 +0530
+@@ -19,7 +19,7 @@ GNU General Public License for more deta
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ -}
+ 
+ module Language.Unlambda where
+diff -up unlambda-0.1.2/LICENSE.fix unlambda-0.1.2/LICENSE
+--- unlambda-0.1.2/LICENSE.fix	2012-10-26 16:20:35.517174668 +0530
++++ unlambda-0.1.2/LICENSE	2012-10-26 16:22:44.604170767 +0530
+@@ -2,7 +2,7 @@
+ 		       Version 2, June 1991
+ 
+  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++     51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+@@ -305,7 +305,7 @@ the "copyright" line and a pointer to wh
+ 
+     You should have received a copy of the GNU General Public License
+     along with this program; if not, write to the Free Software
+-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ 
+ 
+ Also add information on how to contact you by electronic and paper mail.

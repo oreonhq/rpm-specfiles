@@ -1,0 +1,19 @@
+Avoid calling exit without declaring it.  This is generic code
+produced by autoconf, and (theoretical) reconfiguring using
+autoconf will fix it, so configure is not updated.
+
+diff --git a/unix/configure b/unix/configure
+index 0f32568077698c86..0c0d93a986180a69 100755
+--- a/unix/configure
++++ b/unix/configure
+@@ -2947,8 +2947,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

@@ -1,0 +1,164 @@
+%global source0_hash eb72702ed0a36d043f2075a9d5a4545556da1b8dab4d67d85fca92f37aeb04a8
+
+Name:           xbae
+Version:        4.60.4
+Release:        45%{?dist}
+Summary:        Motif matrix, caption and text input widgets
+# all the files are covered by the MIT license, except DebugUtil.c LGPLv2+
+License:        LGPL-2.0-or-later
+URL:            http://xbae.sourceforge.net/
+Source0:        http://downloads.sourceforge.net/xbae/xbae-%{version}.tar.gz
+# this fixes the link of the example using Wcl, it shouldn't be of use
+# now that Wcl isn't buildrequired, but it is still better.
+Patch0:         xbae-link_Mri_with_lXmp.diff
+Patch1:         xbae-4.60.4-multilib.patch
+Patch2:         xbae-configure-c99.patch
+Patch3:         pointer-types.patch
+
+BuildRequires: make
+BuildRequires:  gcc
+# libXp-devel and libXext-devel are required by openmotif-devel or
+# lesstif-devel
+BuildRequires:  libXpm-devel 
+# needed for examples
+BuildRequires:  libXmu-devel
+
+%if 0%{?rhel}
+BuildRequires:  openmotif-devel
+%else
+BuildRequires:  motif-devel
+# to be sure that we link against lesstif even if openmotif provides the same
+# soname
+#Requires:       lesstif
+%endif
+# Wcl-devel should only needed by an example, which adds the Xbae widgets 
+# to Wcl, so there is no real need for it.
+#BuildRequires:  Wcl-devel
+
+# name with capitalized X was used for the xbae package shipped up to FC-1
+Provides:       Xbae = %{version}-%{release}
+Obsoletes:      Xbae < %{version}-%{release}
+
+%description
+XbaeMatrix is a free Motif(R) table widget (also compatible with the free 
+LessTif) which presents an editable array of string data to the user in a 
+scrollable table similar to a spreadsheet. The rows and columns of the Matrix 
+may optionally be labelled. A number of "fixed" and "trailing fixed" rows 
+or columns may be specified.
+
+The XbaeCaption widget is a simple Motif manager widget that associates 
+a label with a child.
+
+In addition the XbaeInput widget is being distributed, a text input field 
+that provides generic customised data entry and formatting for strings.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name} = %{version}-%{release}
+%if 0%{?rhel}
+Requires:       openmotif-devel 
+%else
+Requires:       motif-devel
+%endif
+Requires:       libXpm-devel
+# for the aclocal directory
+Requires:       automake
+Provides:       Xbae-devel = %{version}-%{release}
+Obsoletes:      Xbae-devel < %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q
+%patch -P 0 -p1
+%patch -P 1 -p1 -b .multilib
+%patch -P 2 -p1
+%patch -P 3 -p0
+
+for file in COPYING ChangeLog NEWS; do
+ iconv -f latin1 -t utf8 < $file > $file.utf8
+ touch -c -r $file $file.utf8
+ mv $file.utf8 $file
+done
+
+%build
+export CFLAGS="$CFLAGS -std=gnu17"
+%configure --disable-static --disable-dependency-tracking
+make %{?_smp_mflags}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} INSTALL='install -p'
+# fix timestamps for configure generated man pages
+pushd src
+for file in XbaeCaption.3 XbaeInput.3 XbaeMatrix.3; do
+  touch -r $file.in $RPM_BUILD_ROOT%{_mandir}/man3/$file
+done
+popd
+# and include file
+touch -r NEWS $RPM_BUILD_ROOT%{_includedir}/Xbae/patchlevel.h
+
+# the configure test doesn't find the aclocal dir, so we install
+# the .m4 file by hand
+install -d -m755 $RPM_BUILD_ROOT%{_datadir}/aclocal
+install -p -m644 ac_find_xbae.m4 $RPM_BUILD_ROOT%{_datadir}/aclocal
+
+rm $RPM_BUILD_ROOT%{_libdir}/libXbae.la
+
+# prepare the main docs
+# Use systematically __dist_* to avoid directory name clash.
+rm -rf __dist_Xbae-docs
+mv $RPM_BUILD_ROOT%{_datadir}/Xbae/ __dist_Xbae-docs
+# remove duplicate files already in %%doc
+rm __dist_Xbae-docs/README
+rm __dist_Xbae-docs/NEWS
+# examples for builderXcessory are arch specific, this avoids clash of
+# doc files between arches
+mv __dist_Xbae-docs/examples/builderXcessory __dist_Xbae-docs/examples/builderXcessory-%{_arch}
+
+# first clean examples
+rm -rf __dist_examples
+cp -pr examples __dist_examples
+make -C __dist_examples clean
+find __dist_examples -name '*akefile*' -exec rm {} \;
+rm __dist_examples/extest
+rm __dist_examples/testall
+
+for file in __dist_examples/*/*.c __dist_examples/README; do
+ iconv -f latin1 -t utf8 < $file > $file.utf8
+ touch -c -r $file $file.utf8
+ mv $file.utf8 $file
+done
+
+# the builderXcessory directory is duplicated in the main doc and in the
+# example code. The master dir is considered to be in the main doc.
+# the README is better with the main examples doc, not in code examples
+mv __dist_examples/builderXcessory/README __dist_Xbae-docs/examples/builderXcessory-%{_arch}/
+# remove the duplicate dir and replace it with a link
+rm -rf __dist_examples/builderXcessory/
+ln -s ../examples/builderXcessory-%{_arch}/ __dist_examples/builderXcessory-%{_arch}
+
+# then put the examples in a code_examples directory
+rm -rf __dist_code_examples
+mkdir __dist_code_examples
+mv __dist_examples __dist_code_examples/code_examples
+
+%ldconfig_scriptlets
+
+%files
+%doc AUTHORS ChangeLog NEWS COPYING README
+%{_libdir}/libXbae.so.*
+
+%files devel
+%doc __dist_Xbae-docs/* __dist_code_examples/code_examples
+%{_includedir}/Xbae/
+%{_libdir}/libXbae.so
+%{_mandir}/man*/Xbae*
+%{_datadir}/aclocal/*
+
+%changelog
+%autochangelog

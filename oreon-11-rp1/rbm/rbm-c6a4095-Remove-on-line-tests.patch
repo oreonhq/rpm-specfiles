@@ -1,0 +1,142 @@
+From 40ab75e661d88bbf8aef60c41fd5950aec611d48 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 26 Jun 2023 16:39:37 +0200
+Subject: [PATCH] Remove on-line tests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+These tests downloads files from the Internet and thus fail in an
+isolated environment.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ test.pl                                 | 39 +------------------------
+ test/projects/mozmill-automation/config | 15 ----------
+ test/projects/shasum/config             | 28 ------------------
+ 3 files changed, 1 insertion(+), 81 deletions(-)
+ delete mode 100644 test/projects/mozmill-automation/config
+ delete mode 100644 test/projects/shasum/config
+
+diff --git a/test.pl b/test.pl
+index 31968f3..0bc4db2 100755
+--- a/test.pl
++++ b/test.pl
+@@ -1,7 +1,7 @@
+ #!/usr/bin/perl -w
+ use strict;
+ use Path::Tiny;
+-use Test::More tests => 45;
++use Test::More tests => 39;
+ use lib 'lib/';
+ 
+ sub set_target {
+@@ -236,21 +236,6 @@ my @tests = (
+           'out/m3-output' => "1 - build\n___m3\n"
+         },
+     },
+-    {
+-        name => 'mercurial repo',
+-        target => [],
+-        config => [ 'mozmill-automation', 't' ],
+-        expected => '432611daa42c7608d32b04c89ac26fbcea6a61663419aa88ead87116e212a004',
+-    },
+-    {
+-        name => 'mercurial repo build',
+-        target => [],
+-        build => [ 'mozmill-automation', 'build' ],
+-        files => {
+-            'out/mozmill-automation-bbad7215c713_sha256sum.txt' =>
+-            "ceeda3cd3285b6ed53233dc65e3beac82f2b284402a80ef6c1fcdf5b9861f068  s.txt\n",
+-        },
+-    },
+     {
+         name => 'build using files and directories as input',
+         target => [],
+@@ -260,28 +245,6 @@ my @tests = (
+             "1\n2\n3\n4\n1\n2\n",
+         },
+     },
+-    {
+-        name => 'sha256sum input_files',
+-        target => [ 'sha256sum' ],
+-        build  => [ 'shasum', 'build' ],
+-        files  => {},
+-    },
+-    {
+-        name => 'sha512sum input_files',
+-        target => [ 'sha512sum' ],
+-        build  => [ 'shasum', 'build' ],
+-        files  => {},
+-    },
+-    {
+-        name => 'wrong sha256sum input_files',
+-        target => [ 'wrong_sha256sum' ],
+-        fail_build  => [ 'shasum', 'build' ],
+-    },
+-    {
+-        name => 'wrong sha512sum input_files',
+-        target => [ 'wrong_sha512sum' ],
+-        fail_build  => [ 'shasum', 'build' ],
+-    },
+ );
+ 
+ foreach my $test (@tests) {
+diff --git a/test/projects/mozmill-automation/config b/test/projects/mozmill-automation/config
+deleted file mode 100644
+index afe4c6a..0000000
+--- a/test/projects/mozmill-automation/config
++++ /dev/null
+@@ -1,15 +0,0 @@
+-version: '[% c("abbrev") %]'
+-hg_url: https://hg.mozilla.org/qa/mozmill-automation/
+-hg_hash: bbad7215c713
+-compress_tar: ''
+-t: '[% sha256(exec("cat testrun_remote.py")) %]'
+-build: |
+-  #!/bin/sh
+-  mkdir t
+-  tar -C t -xf mozmill-automation-bbad7215c713.tar
+-  files=$(find t | sort)
+-  for file in $files
+-  do
+-    sha256sum $file >> s.txt
+-  done
+-  sha256sum s.txt > [% dest_dir %]/[% project %]-[% c("version") %]_sha256sum.txt
+diff --git a/test/projects/shasum/config b/test/projects/shasum/config
+deleted file mode 100644
+index 9270318..0000000
+--- a/test/projects/shasum/config
++++ /dev/null
+@@ -1,28 +0,0 @@
+-# vim: filetype=yaml sw=2
+-debug: 1
+-filename: 'shasum_project-[% c("input_files_id") %]'
+-build: |
+-  #!/bin/sh
+-  echo ok > [% dest_dir _ '/' _ c("filename") %]
+-
+-targets:
+-  sha256sum:
+-    input_files:
+-      - filename: sha256sums-signed-build.txt
+-        URL: https://archive.torproject.org/tor-package-archive/torbrowser/13.0.15/sha256sums-signed-build.txt
+-        sha256sum: 380c611762cf02a89a5885e7182ce17fc653f6b910c00ce50295c03c488b13ac
+-  sha512sum:
+-    input_files:
+-      - filename: sha256sums-signed-build.txt
+-        URL: https://archive.torproject.org/tor-package-archive/torbrowser/13.0.15/sha256sums-signed-build.txt
+-        sha512sum: 5a1a5199f2135dd75bfeddafc25a62ce473083d371b13f90582b5faf3a3e7c415c4b4990d4927d8a468dca88bc8376fb55143020e7dadcc69b316f6212a7f825
+-  wrong_sha256sum:
+-    input_files:
+-      - filename: sha256sums-signed-build.txt
+-        URL: https://archive.torproject.org/tor-package-archive/torbrowser/13.0.15/sha256sums-signed-build.txt
+-        sha256sum: aaa
+-  wrong_sha512sum:
+-    input_files:
+-      - filename: sha256sums-signed-build.txt
+-        URL: https://archive.torproject.org/tor-package-archive/torbrowser/13.0.15/sha256sums-signed-build.txt
+-        sha512sum: aaa
+-- 
+2.47.1
+

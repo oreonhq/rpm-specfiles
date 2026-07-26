@@ -1,0 +1,137 @@
+*** WildMagic5/SampleGraphics/makeapp.orig.wm5	2014-07-03 15:28:38.000000000 +0200
+--- WildMagic5/SampleGraphics/makeapp.wm5	2015-11-03 20:16:43.549751779 +0100
+***************
+*** 14,27 ****
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm 
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+--- 14,28 ----
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm
+! LDFLAGS := @@LDFLAGS@@
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LDFLAGS) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+*** WildMagic5/SampleImagics/makeapp.orig.wm5	2014-07-03 15:16:42.000000000 +0200
+--- WildMagic5/SampleImagics/makeapp.wm5	2015-11-03 23:11:25.265498486 +0100
+***************
+*** 14,27 ****
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm 
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+--- 14,28 ----
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm
+! LDFLAGS := @@LDFLAGS@@
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LDFLAGS) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+*** WildMagic5/SampleMathematics/makeapp.orig.wm5	2014-07-03 15:16:46.000000000 +0200
+--- WildMagic5/SampleMathematics/makeapp.wm5	2015-11-03 23:14:30.180591232 +0100
+***************
+*** 14,27 ****
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm 
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+--- 14,28 ----
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm
+! LDFLAGS := @@LDFLAGS@@
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LDFLAGS) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+*** WildMagic5/SamplePhysics/makeapp.orig.wm5	2014-07-03 15:16:50.000000000 +0200
+--- WildMagic5/SamplePhysics/makeapp.wm5	2015-11-03 23:16:35.620872821 +0100
+***************
+*** 14,27 ****
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm 
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+--- 14,28 ----
+  OBJ := $(SRC:%.cpp=$(CFG)/%.o)
+  LIBPATH := -L ../../SDK/Library/$(CFG)
+  WLIBS := -lWm5Applications -lWm5Graphics -lWm5Imagics -lWm5Physics -lWm5Mathematics -lWm5Core
+  XLIBS := -lX11 -lXext
+  GLIBS := -lGL -lGLU
+! LIBS := $(WLIBS) $(XLIBS) $(GLIBS) -lpthread -lm
+! LDFLAGS := @@LDFLAGS@@
+  
+  build : $(OBJ)
+! 	$(CC) $(LIBPATH) $(OBJ) -o $(APP).$(CFG) $(LDFLAGS) $(LIBS)
+  
+  $(CFG)/%.o : %.cpp
+  	@mkdir -p $(CFG)
+  	$(CC) $(CFLAGS) $(INCPATH) $< -o $@
+  
+

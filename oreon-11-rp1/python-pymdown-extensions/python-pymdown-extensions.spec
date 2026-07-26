@@ -1,0 +1,71 @@
+%global source0_hash 71dac4fca63fabeffd3eb9038b756161a33ec6e8d230853d3cecf562155ab3de
+
+%global pypi_name pymdown-extensions
+
+Name:           python-%{pypi_name}
+Version:        10.16
+Release:        %autorelease
+Summary:        Extension pack for Python Markdown
+
+# Most of the package is MIT except two files (highlight.py and superfences.py)
+License:        MIT and BSD-2-Clause
+URL:            https://facelessuser.github.io/pymdown-extensions
+Source:         %{pypi_source pymdown_extensions}
+# Conditional compatibility for markdown 3.5 for el10 based on
+# https://github.com/facelessuser/pymdown-extensions/commit/722461c65829ed6bf45ae83934c04b2dbb691e12
+Patch:          pymdown-extensions-markdown-3.5.patch
+
+BuildArch:      noarch
+ 
+%description
+PyMdown Extensions (pymdownx) is a collection of extensions for Python
+Markdown.
+
+%package -n     python3-%{pypi_name}
+Summary:        %{summary}
+
+BuildRequires:  python3-devel
+
+%description -n python3-%{pypi_name}
+PyMdown Extensions (pymdownx) is a collection of extensions for Python
+Markdown.
+
+%pyproject_extras_subpkg -n python3-pymdown-extensions extra
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n pymdown_extensions-%{version} -p1
+
+# Drop invalid entry that breaks the pyproject macros
+sed -i '/\.\[extra\]/d' pyproject.toml
+
+# Don't run mypy and drop its unpackaged typing deps
+sed -e '/^mypy/d' -e '/^types-/d' -i requirements/test.txt
+sed -i '/"{envpython}" -m mypy/d' pyproject.toml
+
+# EL10 only has markdown 3.5
+# https://issues.redhat.com/browse/RHEL-74397
+%if 0%{?el10}
+sed -i 's/"Markdown>=3.6"/"Markdown>=3.5"/' pyproject.toml
+%endif
+
+%generate_buildrequires
+%pyproject_buildrequires -t -x extra
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files pymdownx
+
+%check
+%tox
+
+%files -n python3-%{pypi_name} -f %{pyproject_files}
+%license LICENSE.md
+%doc README.md
+
+%changelog
+%autochangelog

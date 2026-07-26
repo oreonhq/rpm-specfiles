@@ -1,0 +1,13 @@
+diff --git a/host/lib/utils/paths.cpp b/host/lib/utils/paths.cpp
+index 2eac87e..2a3a3f1 100644
+--- a/host/lib/utils/paths.cpp
++++ b/host/lib/utils/paths.cpp
+@@ -283,7 +283,7 @@ std::string uhd::get_pkg_data_path()
+ 
+ std::string uhd::get_lib_path(void)
+ {
+-    fs::path runtime_libfile_path = boost::dll::this_line_location();
++    fs::path runtime_libfile_path = "/usr" / boost::dll::this_line_location();
+     // Normalize before decomposing path so result is reliable
+     fs::path lib_path = runtime_libfile_path.lexically_normal().parent_path();
+     return lib_path.string();

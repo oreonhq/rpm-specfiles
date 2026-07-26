@@ -1,0 +1,47 @@
+.TH UNU\-AXMERGE "1" "August 2021" "" "User Commands"
+.SH NAME
+unu\-axmerge \- merge two adjacent axes into one
+.SH SYNOPSIS
+.B unu\ axmerge
+.BR \-a , \-\-axis
+.RI < ax0 \ ...>
+.RB [ \-i , \-\-input
+.RI < nin >]
+.RB [ \-o , \-\-output
+.RI < nout >]
+.SH DESCRIPTION
+Merge two adjacent axes into one.
+A more general version of
+.BR unu\-axdelete (1).
+The underlying linear ordering of the samples is unchanged, and the information
+about the other axes is shifted downwards as needed.
+.IP \(bu +2n
+Uses
+.B nrrdAxesMerge
+.SH OPTIONS
+.TP
+.B \-a\fR\ <\fIax0\fR\ ...>\ ,\ \fB\-\-axis\fR\ <\fIax0\fR\ ...>
+axis (or axes) to merge.
+Each axis index identified is the lower of the pair of axes that will be
+merged.
+Saying
+.RB \(lq \-a\ 2 \(rq
+means to merge axis 2 and axis 3 into axis 2.
+If multiple merges are to be done, the indices listed here are for the axes
+prior to any merging.
+(1 or more
+.IR int s)
+.TP
+.B \-i\fR\ <\fInin\fR>\ ,\ \fB\-\-input\fR\ <\fInin\fR>
+input
+.I nrrd
+.TP
+.B \-o\fR\ <\fInout\fR>\ ,\ \fB\-\-output\fR\ <\fInout\fR>
+output
+.I nrrd
+.RI ( string );
+default:
+.RB \(lq \- \(rq
+.SH "SEE\ ALSO"
+.BR unu (1),
+.BR unu\-axdelete (1)

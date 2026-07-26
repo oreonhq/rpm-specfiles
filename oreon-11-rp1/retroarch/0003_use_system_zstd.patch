@@ -1,0 +1,37 @@
+diff --git a/Makefile.common b/Makefile.common
+index 57dabf5eac..dddf4e3e20 100644
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -1960,31 +1954,8 @@ ifeq ($(HAVE_7ZIP),1)
+ endif
+ 
+ ifeq ($(HAVE_ZSTD),1)
+-   INCLUDE_DIRS += -I$(DEPS_DIR)/zstd/lib
+    DEFINES += -DHAVE_ZSTD -DZSTD_DISABLE_ASM
+-   ZSOBJ = $(DEPS_DIR)/zstd/lib/common/entropy_common.o \
+-           $(DEPS_DIR)/zstd/lib/common/error_private.o \
+-           $(DEPS_DIR)/zstd/lib/common/fse_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/common/zstd_common.o \
+-           $(DEPS_DIR)/zstd/lib/common/xxhash.o \
+-           $(DEPS_DIR)/zstd/lib/compress/fse_compress.o \
+-           $(DEPS_DIR)/zstd/lib/compress/hist.o \
+-           $(DEPS_DIR)/zstd/lib/compress/huf_compress.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_compress.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_literals.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_sequences.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_superblock.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_double_fast.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_fast.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_lazy.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_ldm.o \
+-           $(DEPS_DIR)/zstd/lib/compress/zstd_opt.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/huf_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_ddict.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress_block.o
+-
+-   OBJ +=  $(ZSOBJ)
++   LIBS += -lzstd
+ endif
+ 
+ ifeq ($(HAVE_IBXM), 1)

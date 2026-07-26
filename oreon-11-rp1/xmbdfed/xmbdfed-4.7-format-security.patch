@@ -1,0 +1,37 @@
+diff -up xmbdfed-4.7/bdf.c.format-security xmbdfed-4.7/bdf.c
+--- xmbdfed-4.7/bdf.c.format-security	2013-12-09 15:40:40.203739949 -0500
++++ xmbdfed-4.7/bdf.c	2013-12-09 15:42:58.267547079 -0500
+@@ -3058,14 +3058,14 @@ void *data;
+         bpr = ((c->bbx.width * font->bpp) + 7) >> 3;
+         for (j = 0; bpr != 0 && j < c->bytes; j++) {
+             if (j && j % bpr == 0)
+-              fprintf(out, eol);
++              fprintf(out, "%s", eol);
+             fprintf(out, "%02X", c->bitmap[j]);
+         }
+         /*
+          * Handle empty bitmaps like this.
+          */
+         if (c->bbx.height > 0)
+-          fprintf(out, eol);
++          fprintf(out, "%s", eol);
+         fprintf(out, "ENDCHAR%s", eol);
+ 
+         /*
+@@ -3130,14 +3130,14 @@ void *data;
+         bpr = ((c->bbx.width * font->bpp) + 7) >> 3;
+         for (j = 0; bpr != 0 && j < c->bytes; j++) {
+             if (j && j % bpr == 0)
+-              fprintf(out, eol);
++              fprintf(out, "%s", eol);
+             fprintf(out, "%02X", c->bitmap[j]);
+         }
+         /*
+          * Handle empty bitmaps like this.
+          */
+         if (c->bbx.height > 0)
+-          fprintf(out, eol);
++          fprintf(out, "%s", eol);
+         fprintf(out, "ENDCHAR%s", eol);
+ 
+         /*

@@ -1,0 +1,31 @@
+From 823de65e22cf328228736907657aaec765e7c306 Mon Sep 17 00:00:00 2001
+From: Tom Hughes <tom@compton.nu>
+Date: Mon, 23 Nov 2015 12:12:32 +0000
+Subject: [PATCH 2/5] Allow more variation in comparisons
+
+---
+ test/python_tests/render_test.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/python_tests/render_test.py b/test/python_tests/render_test.py
+index 83e9268be..d92b7ad7f 100644
+--- a/test/python_tests/render_test.py
++++ b/test/python_tests/render_test.py
+@@ -2,7 +2,7 @@ import sys, os
+ import tempfile
+ import mapnik
+ import pytest
+-from .utilities import execution_path
++from .utilities import execution_path, images_almost_equal
+ 
+ @pytest.fixture(scope="module")
+ def setup():
+@@ -254,4 +254,4 @@ if 'shape' in mapnik.DatasourceCache.plugin_names():
+             # color png
+             actual = mapnik.Image.open(actual_file)
+             expected = mapnik.Image.open(expected_file)
+-            assert actual.to_string('png32') == expected.to_string('png32'), 'failed comparing actual (%s) and expected (%s)' % (actual_file, expected_file)
++            images_almost_equal(actual, expected, 2)
+-- 
+2.51.1
+

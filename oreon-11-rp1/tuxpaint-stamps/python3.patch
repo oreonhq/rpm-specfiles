@@ -1,0 +1,43 @@
+--- po/po2txt.py.bak	2017-10-09 18:46:35.000000000 -0500
++++ po/po2txt.py	2023-10-20 10:42:52.573713415 -0500
+@@ -7,14 +7,14 @@
+        fnlist = os.path.splitext(fname)
+        # change the file ext name to .txt whan ready.
+        if fnlist[1] == ".txt":
+-           print ">> " + fname
++           print(">> " + fname)
+            # open txt file to read.
+            txtFile = open(os.path.join(dirname, fname), 'rb')
+            # get first line : the stamp description.
+            searchText_unescaped = txtFile.readline()[:-1]
+            searchText = string.replace(searchText_unescaped, '"', '\\"')
+            fullsearchText = "msgid \"" + searchText + "\"\n"
+-	   print "  " + searchText_unescaped
++	   print("  " + searchText_unescaped)
+            if searchText in msgidsList:
+                # reopen txt file to write.
+                txtFile = open(os.path.join(dirname, fname), 'wb')
+@@ -45,9 +45,9 @@
+ def parsePOT(potFileName):
+    try:
+        potFile = open(potFileName, 'rb')
+-   except IOError, e:
+-       print "Unable to open the file:" , potFileName, e
+-   print potFileName
++   except IOError as e:
++       print("Unable to open the file:" , potFileName, e)
++   print(potFileName)
+    # pass the pot header
+    while len(potFile.readline()) > 1 : pass
+    # parse filename and msgid
+--- po/txt2pot.py.bak	2017-10-09 18:46:35.000000000 -0500
++++ po/txt2pot.py	2023-10-20 10:43:01.248674152 -0500
+@@ -59,7 +59,7 @@
+ 
+ if __name__ == '__main__':
+     poFile = open('./tuxpaint-stamps.pot', 'wb')
+-    print ">>", poFile.name
++    print(">>", poFile.name)
+     poFile.write(poHeader)
+     os.path.walk('../stamps/', lister, None)
+     poFile.close()

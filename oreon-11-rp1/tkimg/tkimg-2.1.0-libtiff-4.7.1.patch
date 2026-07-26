@@ -1,0 +1,47 @@
+diff -up Img-2.1.0/tiff/tiffJpeg.c.tiff471 Img-2.1.0/tiff/tiffJpeg.c
+--- Img-2.1.0/tiff/tiffJpeg.c.tiff471	2025-12-18 18:31:04.494084375 -0500
++++ Img-2.1.0/tiff/tiffJpeg.c	2025-12-18 18:32:05.111315331 -0500
+@@ -203,13 +203,13 @@ static int DecodeRowError(TIFF *tif, uin
+ 
+ static const TIFFField jpegFields[] = {
+     {TIFFTAG_JPEGTABLES, -3, -3, TIFF_UNDEFINED, 0, TIFF_SETGET_C32_UINT8,
+-     TIFF_SETGET_C32_UINT8, FIELD_JPEGTABLES, FALSE, TRUE, "JPEGTables", NULL},
++     FIELD_JPEGTABLES, FALSE, TRUE, "JPEGTables", NULL},
+     {TIFFTAG_JPEGQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT,
+-     TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, TRUE, FALSE, "", NULL},
++     FIELD_PSEUDO, TRUE, FALSE, "", NULL},
+     {TIFFTAG_JPEGCOLORMODE, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT,
+-     TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, FALSE, FALSE, "", NULL},
++     FIELD_PSEUDO, FALSE, FALSE, "", NULL},
+     {TIFFTAG_JPEGTABLESMODE, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT,
+-     TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, FALSE, FALSE, "", NULL}};
++     FIELD_PSEUDO, FALSE, FALSE, "", NULL}};
+ 
+ /*
+  * libjpeg interface layer.
+diff -up Img-2.1.0/tiff/tiffPixar.c.tiff471 Img-2.1.0/tiff/tiffPixar.c
+--- Img-2.1.0/tiff/tiffPixar.c.tiff471	2024-10-28 17:32:46.000000000 -0400
++++ Img-2.1.0/tiff/tiffPixar.c	2025-12-18 18:28:36.511191772 -0500
+@@ -1387,8 +1387,8 @@ PixarLogVGetField(TIFF* tif, uint32_t ta
+ }
+ 
+ static const TIFFField pixarlogFields[] = {
+-    {TIFFTAG_PIXARLOGDATAFMT, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, FALSE, FALSE, "", NULL},
+-    {TIFFTAG_PIXARLOGQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, FALSE, FALSE, "", NULL}
++    {TIFFTAG_PIXARLOGDATAFMT, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, FIELD_PSEUDO, FALSE, FALSE, "", NULL},
++    {TIFFTAG_PIXARLOGQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, FIELD_PSEUDO, FALSE, FALSE, "", NULL}
+ };
+ 
+ int
+diff -up Img-2.1.0/tiff/tiffZip.c.tiff471 Img-2.1.0/tiff/tiffZip.c
+--- Img-2.1.0/tiff/tiffZip.c.tiff471	2025-12-18 18:30:01.657088909 -0500
++++ Img-2.1.0/tiff/tiffZip.c	2025-12-18 18:30:57.954738967 -0500
+@@ -619,7 +619,7 @@ static void ZipFree( voidpf opaque, void
+ }
+ 
+ static const TIFFField zipFields[] = {
+-    { TIFFTAG_ZIPQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, TRUE, FALSE, "", NULL },
++    { TIFFTAG_ZIPQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, FIELD_PSEUDO, TRUE, FALSE, "", NULL },
+ };
+ 
+ int
